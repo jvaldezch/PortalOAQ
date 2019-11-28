@@ -1,0 +1,128 @@
+<style>
+    .rTable {
+        display: table;
+        width: 100%;
+    }
+    .rTableRow {
+        display: table-row;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #ddd;
+    }
+    .rTableCell, .rTableHead {
+        display: table-cell;
+        padding: 0;
+        padding-right: 5px;
+        border: none;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #ddd;
+        font-weight: bold;
+    }
+    .rTableFoot {
+        display: table-footer-group;
+        font-weight: bold;
+        background-color: #ddd;
+    }
+    .rTableBody {
+        display: table-row-group;
+    }
+</style>
+<div class="traffic-clear-5"></div>
+<form id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 150px">
+                <label>Fecha:</label>
+            </th>
+            <td>
+                <input type="text" class="traffic-input-date" id="fecha" name="fecha" value="<?= $this->fecha ?>" />
+            </td>
+            <td rowspan="3">
+                <button type="submit" class="traffic-btn traffic-btn-right">
+                    <i class="fas fa-search"></i> Buscar</button>
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 150px">
+                <label for="pedimento">Pedimento:</label>
+            </th>
+            <td>
+                <input type="text" class="traffic-input-small" id="pedimento" name="pedimento" value="<?= $this->pedimento ?>" />
+            </td>            
+        </tr>
+        <tr>
+            <th style="width: 150px">
+                <label for="pedimento">Nombre archivo:</label>
+            </th>
+            <td>
+                <input type="text" class="traffic-input-small" id="nombreArchivo" name="nombreArchivo" value="<?= $this->nombreArchivo ?>" />
+            </td>            
+        </tr>
+        <tr>
+            <th>
+                <label for="noCerrados">No cerrados:</label>                
+            </th>
+            <td colspan="2">
+                <input type="checkbox" name="noCerrados" id="noCerrados" />
+            </td>
+        </tr>
+    </table>
+</form>
+<table class="traffic-table traffic-table-left hover" id="customersList">
+    <thead>
+        <tr>
+            <th style="width: 65px">Patente</th>
+            <th style="width: 65px">Aduana</th>
+            <th style="width: 125px">Nombre archivo</th>
+            <th>
+                &nbsp;
+            </th>
+            <th style="width: 125px">Fecha</th>
+            <th style="width: 50px">Juliano</th>
+            <th style="text-align: left">Usuario</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->arr) && !empty($this->arr)) { ?>
+            <?php foreach ($this->arr as $item) { ?>
+                <tr>
+                    <td style="text-align: center"><?= $item["patente"] ?></td>
+                    <td style="text-align: center"><?= $item["aduana"] ?></td>
+                    <td style="text-align: center">
+                        <a class="openFileTab" href="/operaciones/validador/abrir-archivo?id=<?= $item["id"] ?>" title="Abrir archivo."><?= $item["archivoNombre"] ?></a>
+                    </td>
+                    <td>
+                        <?= $this->informacionArchivo($item["archivoNombre"], $item["id"]); ?>
+                    </td>
+                    <td style="text-align: center"><?= date("Y-m-d H:i a", strtotime($item["creado"])) ?></td>
+                    <td style="text-align: center"><?= (int) date("z", strtotime($item["creado"])) + 1 ?></td>
+                    <td><?= $item["usuario"] ?></td>
+                    <td></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<div class="jqmWindow" id="file" style="width: 900px; margin-left: -450px">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>
+<?php if(isset($this->noCerrados)) {?>
+<script type="text/javascript">
+    $("#noCerrados").prop("checked", "true");
+</script>
+<?php } ?>

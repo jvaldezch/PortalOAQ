@@ -1,0 +1,10 @@
+<?php
+if(isset($this->directory)) {
+    echo "DIR: " . $this->directory . "\n";
+    if (isset($this->data)) {
+        foreach ($this->data as $item) {
+            echo $item["patente"] . "\t" . $item["aduana"] . "\t" . $item["archivoNombre"] . "\t" . $item["diaJuliano"] . "\t" . $item["archivoNum"] . "\t" . $item["hash"] . "\t" . $item["creado"] . "\n";
+        }
+    }
+    echo "\n";
+}

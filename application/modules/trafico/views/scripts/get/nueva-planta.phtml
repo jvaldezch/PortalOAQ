@@ -1,0 +1,58 @@
+<form id="formNewPlant" method="post" action="/trafico/post/planta-guardar">
+    <input type="hidden" name="idCliente" value="<?= $this->idCliente ?>" />
+    <?php if (isset($this->idPlanta)) { ?>
+        <input type="hidden" name="idPlanta" value="<?= $this->idPlanta ?>" />
+    <?php } ?>
+    <table class="traffic-table traffic-table-left">
+        <tbody>
+            <tr>
+                <th style="width: 100px; text-align: right">CLAVE:</th>
+                <td>
+                    <input type="text" name="clave" id="clave" <?= isset($this->clave) ? "value=\"{$this->clave}\" readonly=\"true\"" : "" ?> class="traffic-input-small" tabindex="1">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">UBICACIÓN:</th>
+                <td>
+                    <input type="text" name="ubicacion" id="ubicacion" value="<?= isset($this->ubicacion) ? $this->ubicacion : "" ?>" class="traffic-input-medium" tabindex="1">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">DESCRIPCIÓN:</th>
+                <td>
+                    <input type="text" name="descripcion" id="descripcion" value="<?= isset($this->descripcion) ? $this->descripcion : "" ?>" class="traffic-input-medium" tabindex="1">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">
+    
+    $("#formNewPlant").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorClass: "traffic-error-span",
+        rules: {
+            clave: { required: true },
+            ubicacion: { required: true }
+        },
+        messages: {
+            clave: "[Campo necesario]",
+            ubicacion: "[Campo necesario]"
+        }
+    });
+    
+    $(document).on("input", "#clave, #ubicacion, #descripcion", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

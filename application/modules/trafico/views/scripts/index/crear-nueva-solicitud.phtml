@@ -1,0 +1,47 @@
+<?php if (!isset($this->error)) { ?>
+    <?php if (isset($this->form)) { ?>
+        <form method="post" action="<?= $this->url ?>" id="form-requests">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="4" class="invoice-title">NUEVA SOLICITUD DE ANTICIPO</th>                    
+                </tr>
+                <tr>
+                    <th style="text-align: left; width: 370px"><label for="cliente">ADUANA:</label></th>
+                    <th colspan="2" style="text-align: left"><label for="aduana">CLIENTE:</label></th>
+                    <th style="text-align: left"><label for="planta">PLANTA:</label></th>
+                </tr>            
+                <tr>
+                    <td class="traffic-td-left"><?= $this->form->aduana ?></td>
+                    <td colspan="2" class="traffic-td-left"><div id="divcustoms"><?= $this->form->cliente ?></div></td>
+                    <td class="traffic-td-left"><div id="divplanta"><?= $this->form->planta ?></div></td>
+                </tr>
+                <tr>
+                    <th style="text-align: left"><label for="operacion">TIPO OPERACIÓN:</label></th>
+                    <th style="text-align: left; width: 120px"><label for="pedimento">PEDIMENTO:</label></th>
+                    <th style="text-align: left"><label for="referencia">REFERENCIA:</label></th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr>
+                    <td class="traffic-td-left"><div id="divops"><?= $this->form->operacion ?></div></td>
+                    <td><?= $this->form->pedimento ?></td>
+                    <td><?= $this->form->referencia ?></td>
+                    <td>
+                        <div class="control-group">
+                            <button id="add-request" class="traffic-btn traffic-btn-right">
+                                <i class="fas fa-plus-circle"></i> Agregar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>   
+        <iframe src="/trafico/data/mis-solicitudes" id="requests-frame"></iframe>
+    <?php } ?>
+    <div class="traffic-clear-5"></div>
+    <a href="/trafico/index/ultimas-solicitudes" class="traffic-btn">
+        <i class="fas fa-angle-double-left"></i> Regresar
+    </a>    
+    <div class="traffic-clear-5"></div>
+<?php } else { ?>
+    <h3 style="margin-left: 5px; line-height: 20px; margin-top: 20px">ERROR 505<br><span style="font-size: 16px"><?= $this->error ?></span></h3>
+<?php } ?>

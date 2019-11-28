@@ -1,0 +1,32 @@
+<table>
+    <thead>
+        <tr>
+            <?php if (isset($this->titulos)) { ?>
+                <?php foreach ($this->titulos as $k => $v) { ?>
+                    <th><?= $k ?></th>
+                <?php } ?>
+            <?php } ?>            
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) && !empty($this->data)) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <?php foreach ($this->titulos as $k => $v) { ?>
+                        <td>
+                            <?php if (isset($item[$v])) { ?>
+                                <?= $item[$v] ?>
+                            <?php } else { ?>
+                                &nbsp;
+                            <?php } ?>
+                        </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="<?= count($this->titulos) ?>">No existen resultados para los parámetros proporcioandos.</td>                    
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

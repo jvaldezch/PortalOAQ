@@ -1,0 +1,35 @@
+<div class="pagination pagination-small">
+    <ul>
+        <?php if (isset($this->previous)): ?>
+        <li><a href="<?= $this->url(array('page' => $this->first)); ?>">«</a></li>
+        <?php else: ?>
+        <li class="disabled"><a>«</a></li>
+        <?php endif; ?>
+        
+        <?php if (isset($this->previous)): ?>
+        <li><a href="<?= $this->url(array('page' => $this->previous)); ?>">Ant.</a></li>
+        <?php else: ?>
+        <li class="disabled"><a>Ant.</a></li>
+        <?php endif; ?>
+        
+        <?php foreach ($this->pagesInRange as $page): ?>
+        <?php if ($page != $this->current): ?>
+        <li><a href="<?= $this->url(array('page' => $page)); ?>"><?= $page; ?></a></li>
+        <?php else: ?>
+        <li class="disabled"><a><?= $page; ?></a></li>
+        <?php endif; ?>
+        <?php endforeach; ?>
+            
+        <?php if (isset($this->next)): ?>
+        <li><a href="<?= $this->url(array('page' => $this->next)); ?>">Sig.</a></li>
+        <?php else: ?>
+        <li class="disabled"><a>Sig.</a></li>
+        <?php endif; ?>
+        
+        <?php if (isset($this->next)): ?>
+        <li><a href="<?= $this->url(array('page' => $this->last)); ?>">»</a></li>
+        <?php else: ?>
+        <li class="disabled"><a>»</a></li>
+        <?php endif; ?>
+    </ul>
+</div>

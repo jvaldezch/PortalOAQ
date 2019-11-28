@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: sans-serif;
+            }
+            table {
+                border-collapse: collapse;
+                margin-bottom: 5px;
+                width: 850px;
+            }
+            table td, table th {
+                font-size: 12px;
+                border: 1px #999 solid;
+                padding: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="7"><?= $this->directory ?></th>
+                </tr>
+                <tr>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Archivo</th>
+                    <th>Dia Juliano</th>
+                    <th>Archivo Num.</th>
+                    <th>Hash</th>
+                    <th>Creado</th>
+                </tr>                
+            </thead>
+            <tbody>
+                <?php if (isset($this->data)) { ?> 
+                    <?php foreach ($this->data as $item) { ?> 
+                        <tr>
+                            <td><?= $item["patente"] ?></td>
+                            <td><?= $item["aduana"] ?></td>
+                            <td><?= $item["archivoNombre"] ?></td>
+                            <td><?= $item["diaJuliano"] ?></td>
+                            <td><?= $item["archivoNum"] ?></td>
+                            <td><?= $item["hash"] ?></td>
+                            <td><?= $item["creado"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } ?>
+            </tbody>
+        </table>
+    </body>
+</html>
+

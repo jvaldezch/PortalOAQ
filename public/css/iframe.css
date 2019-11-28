@@ -1,0 +1,11 @@
+#requests-frame,
+#concepts-frame,
+#report-frame,
+#iframe {
+  border: 1px solid #ddd;
+  height: 250px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+/*# sourceMappingURL=iframe.css.map */

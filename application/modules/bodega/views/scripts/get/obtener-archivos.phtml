@@ -1,0 +1,47 @@
+<div style="overflow-y: scroll; max-height: 450px; border: 1px #c6d7e7 solid">    
+    <table class="traffic-table hover">
+        <tr>
+            <th>&nbsp;</th>
+            <th>Nombre de archivo</th>
+            <th>Tipo de archivo</th>
+            <th>VU</th>
+            <th>Creado</th>
+            <th>Usuario</th>
+            <th style="width: 90px;">
+                <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                    <i onclick="loadFiles();" id="loadInvoices" class="fas fa-sync-alt" style="cursor: pointer"></i>
+                </div>
+            </th>
+        </tr>
+        <?php foreach ($this->archivos as $item) { ?>
+            <tr>
+                <td>
+                    <?= (file_exists($item["ubicacion"])) ? '' : '<div style="color: red"><i class="fas fa-exclamation" title="El archivo no existe"></i></div>' ?>
+                </td>
+                <td class="traffic-td-left">
+                    <a class="traffic-a" onclick="descargarArchivo('/archivo/get/descargar-archivo?id=<?= $item["id"] ?>')">
+                        <?= $item["nom_archivo"] ?>
+                    </a>
+                    <?php if (file_exists($item["ubicacion"]) && preg_match('/.pdf$/', $item["nom_archivo"])) { ?>
+                        <img src="/images/icons/eye-24-gray.png" class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer; float: right" />
+                    <?php } ?>
+                </td>
+                <td class="traffic-td-left">
+                    <div id="edit_<?= $item["id"] ?>">
+                        <p>
+                            <?= wordwrap($this->tipoArchivo($item["tipo_archivo"]), 50, "<br />\n") ?>
+                        </p>
+                    </div>
+                </td>
+                <td><?= $item["edocument"] ?></td>
+                <td style="width: 120px;"><?= date('d/m/Y H:i a', strtotime($item["creado"])) ?></td>
+                <td style="width: 150px;"><?= ucwords(strtolower($item["usuario"])) ?></td>
+                <td>
+                    <div id="icon_<?= $item["id"] ?>">
+                        <?= $this->archivosIconos($item["id"], $item["tipo_archivo"], isset($this->canDelete) ? true : null, $item["nom_archivo"]) ?>            
+                    </div>
+                </td>
+            </tr>            
+        <?php } ?>
+    </table>
+</div>

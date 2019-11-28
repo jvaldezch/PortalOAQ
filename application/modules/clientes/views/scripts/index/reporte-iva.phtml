@@ -1,0 +1,22 @@
+<form id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="5" class="traffic-table-title">REPORTE DE I.V.A.</th>
+        </tr>
+        <tr>
+            <th style="width: 200px">Aduana:</th>
+            <th style="width: 130px">Año:</th>
+            <th style="width: 130px">Mes:</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td><?= $this->form->aduana ?></td>
+            <td><?= $this->form->year ?></td>
+            <td><?= $this->form->mes ?></td>
+            <td>
+                <button class="traffic-btn-add traffic-btn-right" id="submit">Generar reporte</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<div id="report"></div>

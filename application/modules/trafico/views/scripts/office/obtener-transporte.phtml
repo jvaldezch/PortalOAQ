@@ -1,0 +1,19 @@
+<table class="traffic-table">
+    <tr>
+        <th>Transportista</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php if (isset($this->data) && !empty($this->data)) { ?>
+        <?php foreach ($this->data as $item) { ?>
+            <tr>
+                <td class="traffic-td-left"><?= $item["nombre"] ?></td>
+                <td class="traffic-td-left" style="width: 28px">
+                    <div class="traffic-icon traffic-icon-delete" onclick="removerTransporte(<?= $item["idAduana"] ?>,<?= $item["id"] ?>);"></div>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="2"><em>No tiene transportistas asignados.</em></td>
+        </tr>
+    <?php } ?>
+</table>

@@ -1,0 +1,68 @@
+
+<div style="max-height: 400px; overflow: auto">
+    <form id="formFileType">
+        <input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->idTrafico ?>" />
+        <input type="hidden" id="idArchivo" name="idArchivo" value="<?= $this->idArchivo ?>" />
+        <table class="traffic-table">
+            <tbody>
+                <tr>
+                    <th>
+                        Nombre:
+                    </th>
+                    <td style="text-align: left">
+                        <?= $this->archivo["nom_archivo"] ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 120px">
+                        <label for="tipo_documento">Tipo de archivo:</label>
+                    </th>
+                    <td style="text-align: left">
+                        <?php if (isset($this->documentos)) { ?>
+                            <?php foreach ($this->documentos as $item) { ?>
+                                <div style="position: relative; margin-bottom: 3px">
+                                    <div style="width: 24px; position: absolute; top: 0; left: 0;">
+                                        <input type="radio" name="tipo_documento" value="<?= $item["id"] ?>" />
+                                    </div>
+                                    <div style="margin-left: 24px;">
+                                        <p><?= $item["id"] . ' ' . $item["nombre"] ?></p>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Convertir a formato VUCEM:
+                    </th>
+                    <td style="text-align: left">
+                        <input type="checkbox" name="convert" id="convert" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+<div>
+<script>
+    $("#formFileType").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("label[for='" + element.attr("name") + "']")
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "errorlabel",
+        rules: {
+            "tipo_documento": {
+                required: true
+            }
+        },
+        messages: {
+            "tipo_documento": {
+                required: " No se ha seleccionado un tipo de archivo."
+            }
+        }
+    });
+</script>

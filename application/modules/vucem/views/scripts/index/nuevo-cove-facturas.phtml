@@ -1,0 +1,134 @@
+<div class="traffic-cols" style="min-height: 80px">
+    <?php if (isset($this->error)) { ?>
+        <div class="alert alert-error" style="margin-left: 20px; margin-top:20px">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4 style="border: 0; background: none; text-align: left">¡Error!</h4>
+            <?= $this->error ?>
+        </div>
+    <?php } ?>
+    <div class="alert alert-error" style="margin-top:10px; margin-bottom: 10px; display: none" id="errors">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p id="error-message"><strong>Error</strong>: Encontrado.</p>
+    </div>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="13" class="traffic-table-title">FACTURAS POR ENVIAR</th>                
+            </tr>
+            <tr>
+                <th style="width: 45px">&nbsp;</th>
+                <th>
+                    <input type="checkbox" id="selectAllCove" />
+                </th>
+                <th style="width: 110px">Pedimento</th>
+                <th>Factura</th>
+                <th style="width: 80px">Fecha Fac.</th>
+                <th style="width: 24px">Sub</th>
+                <th style="text-align: left">Cliente</th>
+                <th style="text-align: left">Proveedor</th>
+                <th style="width: 100px">Firmante</th>
+                <th style="width: 24px">&nbsp;</th>
+                <th style="width: 24px">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->data) && !empty($this->data)) { ?>
+                <?php foreach ($this->data as $item) { ?>
+                    <tr id="row_<?= $item["id"] ?>">
+                        <td>
+                            <div style="font-size:1.3em; color: #2f3b58; float: right; margin-right: 5px">
+                                <a href="/vucem/index/agregar-nueva-factura?uuid=<?= $item["IdFact"] ?>" title="Editar factura." style="color: #2f3b58;">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <i class="far fa-eye viewInvoice" data-id="<?= $item["IdFact"] ?>" style="cursor: pointer"></i>
+                            </div>
+                        </td>
+                        <td style="text-align: center">
+                            <input type="checkbox" name="coveInvoice" onclick="setSendFact('<?= $item["IdFact"] ?>')" value="<?= $item["IdFact"] ?>"<?= ($item["enviar"] == 1) ? " checked=\"true\"" : "" ?>>
+                        </td>
+                        <td style="text-align: center"><?= $item["Patente"] . '-' . $item["Aduana"] . '-' . $item["Pedimento"] ?></td>
+                        <td style="text-align: center"><?= $item["NumFactura"] ?></td>
+                        <td style="text-align: center"><?= date('Y/m/d', strtotime($item["FechaFactura"])) ?></td>
+                        <td style="text-align: center">
+                            <input type="checkbox" onclick="setSubDivision('<?= $item["IdFact"] ?>')" value="<?= $item["IdFact"] ?>"<?= ($item["Subdivision"] == 1) ? " checked=\"true\"" : "" ?>>
+                        </td>
+                        <td><?= $item["CteNombre"] ?></td>
+                        <td><?= $item["ProNombre"] ?></td>
+                        <td style="text-align: center"><?= $item["firmante"] ?></td>
+                        <td>
+                            <?php if (isset($item["IdFact"]) && $item["IdFact"] != '') { ?>
+                                <i class="fas fa-trash-alt" onclick="removeInvoiceId('<?= $item["id"] ?>');" style="cursor: pointer; font-size:1.3em; color: #2f3b58;"></i>
+                            <?php } else { ?>
+                                <i class="fas fa-trash-alt" onclick="removeInvoiceId('<?= $item["id"] ?>');" style="cursor: pointer; font-size:1.3em; color: #2f3b58;"></i>
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <i class="fab fa-uniregistry" onclick="sendVucem(<?= $item["id"] ?>);" style="cursor: pointer; font-size:1.3em; color: #2f3b58;" title="Transmitir a VUCEM"></i>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="13" style="text-align: center"><em>No tiene facturas precargadas.</em></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <div id="table-container_1-filter" class="modal hide">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+            <h3>Filter Options</h3>
+        </div>
+        <div class="modal-body">
+            <form method="post">
+                <fieldset>
+                    <legend>Legend text</legend>
+                    <div class="control-group">
+                        <label class="control-label" for="input01">Text input</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="input01">
+                            <p class="help-block">Supporting help text</p>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn">Close</a>
+            <a href="#" class="btn btn-primary">Save changes</a>
+        </div>
+    </div>    
+</div>
+<div class="traffic-clear-10"></div>
+<?php if ($this->sysname == 'sitawin') { ?>
+    <div style="float:right">
+        <table class="traffic-table">
+            <tr>
+                <td style="text-align: right">Pedimento:</td>
+                <td><input type="text" id="numpedimento" autocomplete="off" style="width: 80px; text-align: center"></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">SLAM:</td>
+                <td><input type="text" id="numreferencia" autocomplete="off" style="width: 80px; text-align: center"></td>
+            </tr>
+        </table>        
+    </div>
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<a href="javascript:window.history.back();" class="traffic-btn" tabindex="99">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<a href="<?= $this->url(array('action' => 'agregar-nueva-factura')) ?>" class="traffic-btn">
+    <i class="far fa-keyboard"></i>&nbsp;Capturar
+</a>
+<a href="javascript:void(0);" id="uploadTemplate" class="traffic-btn">
+    <i class="fas fa-table"></i>&nbsp;Plantilla
+</a>
+<a href="javascript:void(0);" id="other" class="traffic-btn">
+    <i class="fas fa-cogs"></i>&nbsp;Otro sistema
+</a>
+<a href="#" class="traffic-btn traffic-btn-right" id="finishCove">
+    Finalizar&nbsp;<i class="fas fa-angle-double-right"></i>
+</a>
+<div class="traffic-clear-5"></div>
+<p style="font-size: 11px"><?= $this->info ?></p>

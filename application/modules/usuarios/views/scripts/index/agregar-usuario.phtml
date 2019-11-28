@@ -1,0 +1,64 @@
+<ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
+    <li><a href="#information" data-toggle="tab">Datos usuario</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="information">
+        <form method="post" id="formUsuario">
+            <table id="user-data" class="traffic-table traffic-table-left">
+                <tr>
+                    <th style="width: 150px; text-align: right"><label for="nombre">Nombre del usuario:</label></th>
+                    <td><?= $this->form->nombre ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="email">Email:</label></th>
+                    <td><?= $this->form->email ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="usuario">Usuario:</label></th>
+                    <td><?= $this->form->usuario ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="empresa">Empresa:</label></th>
+                    <td><?= $this->form->empresa ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="patenteUsuario">Patente:</label></th>
+                    <td><?= $this->form->patenteUsuario ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="aduanaUsuario">Aduana:</label></th>
+                    <td><?= $this->form->aduanaUsuario ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="departamento">Departamento:</label></th>
+                    <td><?= $this->form->departamento ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="rol">Rol:</label></th>
+                    <td><?= $this->form->rol ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="password">Contraseña:</label></th>
+                    <td><?= $this->form->password ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="confirm">Repetir Contraseña:</label></th>
+                    <td><?= $this->form->confirm ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="sispedimentos">Sistema de pedimentos:</label></th>
+                    <td><?= $this->form->sispedimentos ?></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <div id="error-messages"></div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div class="traffic-clear-5"></div>
+        <button id="submit" class="traffic-btn traffic-btn-right" style="">Agregar usuario</button>
+        <a href="/usuarios/index/usuarios" class="traffic-btn">&Lt; Regresar</a>
+    </div><!-- information -->
+</div>

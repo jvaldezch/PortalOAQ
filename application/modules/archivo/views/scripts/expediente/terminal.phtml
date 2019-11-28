@@ -1,0 +1,42 @@
+<style>
+    .dg-nocheck .datagrid-cell-check{
+        display: none;
+    }
+</style>
+<div id="mm" class="easyui-menu" style="width:180px;">
+    <div onclick="javascript:analizar();">Analizar</div>
+    <div onclick="javascript:enviarRepositorio();">Enviar a repositorio</div>
+    <div onclick="javascript:descargarArchivo();">Descargar archivo</div>
+    <div onclick="javascript:borrarRepositorio();">Borrar</div>
+    <div class="menu-sep"></div>
+    <div>Salir</div>
+</div>
+<div style="padding: 10px; border: 1px #ddd solid; width: 150px; float: left; height: 623px">
+    <form id="filterForm" method="post" enctype="multipart/form-data">
+        <div>
+            <div>
+                <label for="name">Fecha inicio:</label>
+                <input id="fechaInicio" name="fechaInicio" type="text" class="easyui-datebox" required="required" style="width:150px">
+            </div>
+            <div>
+                <label for="name">Fecha fin:</label>
+                <input id="fechaFin" name="fechaFin" type="text" class="easyui-datebox" required="required" style="width:150px">
+            </div>
+            <div style="text-align:right;padding:5px 0">
+                <span style="font-size: 12px">Sin datos:</span>&nbsp;
+                <input class="easyui-switchbutton" name="switchData" id="switchData" data-options="onText:'Yes',offText:'No'">
+            </div>  
+            <div style="text-align:right;padding:5px 0">
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="updateGrid()" style="width:100%">Actualizar</a>
+            </div>
+            <div style="text-align:right;padding:5px 0">
+                <a href="javascript:void(0)" class="easyui-linkbutton c1" onclick="downloadZip()" style="width:100%">Descargar</a>
+            </div>
+            <div style="text-align:right;padding:5px 0">
+                <a href="javascript:void(0)" class="easyui-linkbutton c8" onclick="reporte()" style="width:100%">Reporte</a>
+            </div>
+        </div>
+    </form>
+</div>
+<table id="invoices"></table>
+<div id="dd"></div>

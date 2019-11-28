@@ -1,0 +1,114 @@
+@font: Helvetica, Arial, sans-serif;
+@fontsize: 12px;
+
+.traffic-btn-right {
+    float: right !important;
+    margin-right: 2px;
+}
+
+.traffic-btn {
+    line-height: 15px;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-family: @font;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 5px 10px;
+    background-color: #c7d0d3;
+    background: #c7d0d3;
+    border: 1px solid #94a1a6;
+    border: 0;
+    min-height: 15px;
+    text-decoration: none;
+    color: #333;
+    min-width: 75px;
+    text-align: center;
+    margin-right: 2px;
+    margin-left: 2px;
+    margin-bottom: 2px;
+}
+
+.traffic-btn-func (@backcolor: #c7d0d3, @fontcolor: #fff) {
+    .traffic-btn;
+    color: @fontcolor;
+    border: 0;
+    background-color: @backcolor !important;
+    background: @backcolor !important;
+    &:hover {
+        background-color: @backcolor + #222222;
+        background: @backcolor + #222222;
+        text-decoration: none;
+        color: @fontcolor;
+    }
+    &:focus {
+        background-color: @backcolor + #222222;
+        background: @backcolor + #222222;
+        text-decoration: none;
+        color: @fontcolor;
+    }
+}
+
+.traffic-btn-disabled {
+    .traffic-btn-func (#f1f1f1, #aaaaaa);
+}
+.traffic-btn-save {
+    .traffic-btn-func (#006633);
+}
+.traffic-btn-add {
+    .traffic-btn-func (#53b151);
+}
+.traffic-btn-print {
+    .traffic-btn-func (#330099);
+}
+.traffic-btn-back {
+    .traffic-btn-func (#f4a123);
+}
+.traffic-btn-create {
+    .traffic-btn-func (#39968d);
+}
+.traffic-btn-search {
+    .traffic-btn-func (#6699ff);
+}
+.traffic-btn-import {
+    .traffic-btn-func (#cc4b2b);
+}
+.traffic-btn-close {
+    .traffic-btn-func (#ad0129);
+}
+.traffic-btn-primary {
+    .traffic-btn-func (#006dcc);
+}
+.traffic-btn-white {
+    .traffic-btn-func (#f3f3f3);
+    color: #333;
+}
+.traffic-btn-success {
+    .traffic-btn-func (#49afcd);
+}
+
+.traffic-btn-add:disabled,
+.traffic-btn-print:disabled,
+.traffic-btn-create:disabled,
+.traffic-btn-search:disabled,
+.traffic-btn-save:disabled,
+.traffic-btn-small:disabled,
+.traffic-btn-success:disabled,
+.traffic-btn-white:disabled,
+.traffic-btn-primary:disabled {
+    .traffic-btn-func (#c7d0d3);
+    cursor: pointer;
+}
+
+.traffic-btn-small {
+    font-size: 10px;
+    line-height: 12px;
+    border-radius: 2px;
+    padding: 3px 3px;
+    min-height: 12px;
+    text-decoration: none;
+    min-width: 75px;
+    font-weight: normal;
+}

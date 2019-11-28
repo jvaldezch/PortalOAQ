@@ -1,0 +1,143 @@
+<div class="traffic-clear-10"></div>
+<div style="height: 500px; overflow: auto" class="wrapper">
+    <table class="traffic-table traffic-table-left traffic-table-fixed">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>REFERENCIA</th>
+                <th>PEDIMENTO</th>
+                <th>CVE_PED_</th>
+                <th>F.ENTRADA</th>
+                <th>FECHA.PAG.OR</th>
+                <th>T.C.</th>
+                <th>IE</th>
+                <th>TRANS.ARRIBO</th>
+                <th>TRANS.SALIDA</th>
+                <th>TRANS.ENTRADA</th>
+                <th>SEGUROS</th>
+                <th>FLETES</th>
+                <th>EMBALAJES</th>
+                <th>OTROS.INCRE</th>
+                <th>PESO BRUTO</th>
+                <th>BULTOS</th>
+                <th>CVECLI</th>
+                <th>PED.TEMPORAL</th>
+                <th>NUM.FACT.</th>
+                <th>FEC.FACT.</th>
+                <th>INCOTERM</th>
+                <th>MON.FAC</th>
+                <th>VAL.USD.FACT</th>
+                <th>VAL.MON.EXT.FACT</th>
+                <th>PAIS FACT.</th>
+                <th>CVEPROV</th>
+                <th>F.VINCULA</th>
+                <th>FAC.EQV.</th>
+                <th>FACEMIL</th>
+                <th>IDEN.PED.</th>
+                <th>CODPROD</th>
+                <th>FRACCION</th>
+                <th>DESC</th>
+                <th>VAL.COM.</th>
+                <th>MONEDA</th>
+                <th>F_EQV</th>
+                <th>CANT.FACT.</th>
+                <th>UMC</th>
+                <th>CANT.TAR.</th>
+                <th>UMT</th>
+                <th>PAI.ORI.</th>
+                <th>PAI.COM.</th>
+                <th>PAIVEN</th>
+                <th>CERTTLC</th>
+                <th>PROSEC</th>
+                <th>VALORAC</th>
+                <th>VINCUL</th>
+                <th>OBS.FRACC.</th>
+                <th>DESC.COVE</th>
+                <th>CANT.OMA</th>
+                <th>OMA</th>
+                <th>IDEN.FRACC.</th>
+                <th>ADU.DESC.</th>
+                <th>SECC.DESC.</th>
+                <th>ANO DESC.</th>
+                <th>PAT.DESC.</th>
+                <th>PED.DESC.</th>
+                <th>CVE.DESC.</th>
+                <th>FEC.DESC.</th>
+                <th>FRACCION DESC.</th>
+                <th>CANTIDAD DESC.</th>
+                <th>UNIDAD DESC.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->pedimentos)) { ?>
+                <?php foreach ($this->pedimentos as $item) { ?>
+                    <tr>
+                        <td><?= $item["ID"] ?></td>
+                        <td><?= $item["REF_NUEVA"] ?></td>
+                        <td><?= $item["PED_NUEVO"] ?></td>
+                        <td><?= $item["CVE_PED_"] ?></td>
+                        <td><?= $item["F_ENTRADA"] ?></td>
+                        <td><?= $item["FECHA_PAG_OR"] ?></td>
+                        <td><?= $item["T_C"] ?></td>
+                        <td><?= $item["IE"] ?></td>
+                        <td><?= $item["TRANS_ARRIBO"] ?></td>
+                        <td><?= $item["TRANS_SALIDA"] ?></td>
+                        <td><?= $item["TRANS_ENTRADA"] ?></td>
+                        <td><?= $item["SEGUROS"] ?></td>
+                        <td><?= $item["FLETES"] ?></td>
+                        <td><?= $item["EMBALAJES"] ?></td>
+                        <td><?= $item["OTROS_INCRE"] ?></td>
+                        <td><?= $item["PESO_BRUTO"] ?></td>
+                        <td><?= $item["BULTOS"] ?></td>
+                        <td><?= $item["CVE_CLI"] ?></td>
+                        <td><?= $item["PED_TEMPORAL"] ?></td>
+                        <td><?= $item["NUM_FACT"] ?></td>
+                        <td><?= $item["FECFAC"] ?></td>
+                        <td><?= $item["INCOTERM"] ?></td>
+                        <td><?= $item["MONFAC"] ?></td>
+                        <td><?= $item["VAL_USD_FACT"] ?></td>
+                        <td><?= $item["VAL_MON_EXT_FACT"] ?></td>
+                        <td><?= $item["PAIS_FACT"] ?></td>
+                        <td><?= $item["CVE_PROV"] ?></td>
+                        <td><?= $item["FVINCULA"] ?></td>
+                        <td><?= $item["FACEQ"] ?></td>
+                        <td><?= $item["FACEMIL"] ?></td>
+                        <td><?= $item["IDEN_PED"] ?></td>
+                        <td><?= $item["CODPROD"] ?></td>
+                        <td><?= $item["FRACCION"] ?></td>
+                        <td><?= $item["DESC1"] ?></td>
+                        <td><?= $item["VAL_COM"] ?></td>
+                        <td><?= $item["MONEDA"] ?></td>
+                        <td><?= $item["F_EQV"] ?></td>
+                        <td><?= $item["CANT_FACT"] ?></td>
+                        <td><?= $item["UMC"] ?></td>
+                        <td><?= $item["CANT_TAR"] ?></td>
+                        <td><?= $item["UMT"] ?></td>
+                        <td><?= $item["PAI_ORI"] ?></td>
+                        <td><?= $item["PAI_COM"] ?></td>
+                        <td><?= $item["PAIVEN"] ?></td>
+                        <td><?= $item["CERTTLC"] ?></td>
+                        <td><?= $item["PROSEC"] ?></td>
+                        <td><?= $item["VALORAC"] ?></td>
+                        <td><?= $item["VINCUL"] ?></td>
+                        <td><?= $item["OBS_FRACC"] ?></td>
+                        <td><?= $item["DESC_COVE"] ?></td>
+                        <td><?= $item["CANT_OMA"] ?></td>
+                        <td><?= $item["OMA"] ?></td>
+                        <td><?= $item["IDEN_FRACC"] ?></td>
+                        <td><?= $item["ADU_DESC"] ?></td>
+                        <td><?= $item["SECC_DESC"] ?></td>
+                        <td><?= $item["ANO_DESC"] ?></td>
+                        <td><?= $item["PAT_DESC"] ?></td>
+                        <td><?= $item["PED_DESC"] ?></td>
+                        <td><?= $item["CVE_DESC"] ?></td>
+                        <td><?= $item["FECHA_DESC"] ?></td>
+                        <td><?= $item["FRACCION_DESC"] ?></td>
+                        <td><?= $item["CANTIDAD_DESC"] ?></td>
+                        <td><?= $item["UNIDAD_DESC"] ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>

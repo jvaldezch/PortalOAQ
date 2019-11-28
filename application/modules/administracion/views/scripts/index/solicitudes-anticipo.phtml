@@ -1,0 +1,195 @@
+<div class="traffic-cols">
+    <div class="traffic-col-50">
+        <form method="get" id="form-search-request" action="/administracion/index/solicitudes-anticipo">
+            <table class="traffic-table">
+                <tr>
+                    <th colspan="2" class="traffic-table-title">BUSCAR</th>                    
+                </tr>
+                <tr>
+                    <th style="width: 280px">Buscar (Factura/BL/Guía/Contenedor...):</th>
+                    <td class="traffic-td-left">
+                        <?= $this->form->buscar ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 280px">ADUANA:</th>
+                    <td class="traffic-td-left">
+                        <?php if (isset($this->filters) && !empty($this->filters)) { ?>
+                            <select id="aduanas" name="aduanas" class="traffic-select-medium">
+                                <option value="">---</option>
+                                <?php foreach($this->filters as $item) { ?>
+                                    <option value="<?= $item["id"] ?>"><?= $item["patente"] . "-" . $item["aduana"] . ", " . $item["nombre"] ?></option>
+                                <?php } ?>
+                            </select>
+                            <button id="applyFilter" style="border-radius: 2px; border: 1px #999 solid">Filtrar</button>
+                        <?php } else { ?>
+                            &nbsp;
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="search-request" class="traffic-btn traffic-btn-right">
+                            <i class="fas fa-search"></i> Buscar</button>
+                    </td>
+                </tr>
+            </table>
+        </form>        
+    </div>
+    <div class="traffic-col-50">
+        <form method="get" id="form-layouts" action="">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="3" class="traffic-table-title">REPORTES</th>                    
+                </tr>
+                <tr>
+                    <td><label for="layout">Tipo de reporte:</label></td>
+                    <td>
+                        <div class="traffic-radio-block">
+                            <div class="traffic-radio-input">
+                                <input type="radio" name="layout" id="layout" value="1">&nbsp;<p>Vencido</p>
+                            </div>
+                            <div class="traffic-radio-input">
+                                <input type="radio" name="layout" id="layout" value="2">&nbsp;<p>Enviado/Depositado</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button id="generate-layout" class="traffic-btn traffic-btn-right">
+                            <i class="fas fa-table"></i> Reporte</button>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fecha Inicio:</td>
+                    <td colspan="2">
+                        <input type="text" name="fecha-inicio" id="fecha-inicio" class="traffic-input-date" value="<?= date('Y-m-d') ?>" > <i class="far fa-calendar-alt"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fecha Fin:</td>
+                    <td colspan="2">
+                        <input type="text" name="fecha-fin" id="fecha-fin" class="traffic-input-date" value="<?= date('Y-m-d') ?>" > <i class="far fa-calendar-alt"></i>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>En tesorería</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-yellow"></div><span>Por autorizar</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i><span style="padding-left: 3px">Importación</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-up" style="color: #2e963a"></i><span style="padding-left: 3px">Exportación</span>
+    </div>
+</div>
+<div class="checkbox-group">
+    <div class="checkbox">
+        <input id="depositado" name="depositado" type="checkbox">
+        <label class="checkbox-label">No depositado</label>
+    </div>
+    <div class="checkbox">
+        <input id="complementos" name="complementos" type="checkbox">
+        <label class="checkbox-label">Complementos</label>
+    </div>
+    <div class="checkbox">
+        <input id="pendiente" name="pendiente" type="checkbox">
+        <label class="checkbox-label">Pendientes de revisión</label>
+    </div>
+    <div class="checkbox">
+        <input id="warning" name="warning" type="checkbox">
+        <label class="checkbox-label">ETA vencido</label>
+    </div>
+</div>
+<div class="traffic-clear-5"></div>
+<!--<input type="submit" id="multiple" value="Múltiples depósitos" class="traffic-btn">-->
+<button type="submit" id="multiple" class="traffic-btn">
+    <i class="fas fa-tasks"></i> Múltiples depósitos</button>
+<?php if(isset($this->multiple)) { ?>
+    <!--<input type="button" id="approve" value="Aprobar múltiples" class="traffic-btn">-->
+    <button type="submit" id="approve" class="traffic-btn">
+        <i class="fas fa-tasks"></i> Aprobar múltiples</button>
+<?php } ?>
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <tr>
+            <th colspan="14" class="traffic-table-title">SOLICITUDES DE ANTICIPOS</th>                    
+        </tr>
+        <tr>
+            <th>T/O</th>
+            <th><input type="checkbox" id="selectAll"></th>
+            <th>&nbsp;</th>
+            <th>Fecha ETA</th>
+            <th>Fecha Elab.</th>
+            <th>Referencia</th>
+            <th>Operación</th>
+            <th>Esquema</th>
+            <th>Cliente</th>
+            <th>BL</th>
+            <th>Total</th>
+            <th style="width: 95px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator)) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <tr>
+                    <td style="text-align: center"><?= ($item["tipoOperacion"] == 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>' : '<i class="fas fa-arrow-circle-up" style="color: #2e963a"></i>' ?></td>
+                    <td>
+                        <?php if(isset($item["deposito"]) && (int)$item["deposito"] == 1) { ?>
+                            &nbsp;
+                        <?php } else { ?>
+                            <input type="checkbox" class="singleRequest" data-id="<?= $item["id"] ?>">
+                        <?php } ?>
+                    </td>
+                    <td><?= $this->estatus($item["autorizada"], $item["tramite"], $item["deposito"]) ?></td>
+                    <td style="text-align: center"><?= $this->eta($item["fechaEta"], $item["deposito"]) ?></td>
+                    <td style="text-align: center"><?= $this->myHelpers->dateSpanish($item["creado"]) ?></td>
+                    <td style="text-align: center">
+                        <a href="/administracion/index/ver-solicitud?id=<?= $item["id"] ?>">
+                            <?= $item["referencia"] ?>
+                        </a>
+                    </td>
+                    <td style="text-align: center">
+                        <a href="/administracion/index/ver-solicitud?id=<?= $item["id"] ?>">
+                            <?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?>
+                        </a>
+                    </td>
+                    <td><?= $item["esquemaFondo"] ?></td>
+                    <td><?= $item["nombreCliente"] ?></td>
+                    <td><?= $item["bl"] ?></td>
+                    <td><?= $this->currency(($item["subtotal"] - $item["anticipo"]), 90) ?></td>
+                    <td>
+                        <div style="width: 32px; float: right">
+                            <a href="/administracion/index/ver-solicitud?id=<?= $item["id"] ?>">
+                                <i class="fas fa-folder-open" style="font-size: 1.3em; color: #2f3b58"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+                <?php if(isset($this->total)) { ?>
+                <tr>
+                    <td colspan="10" style="text-align: right; font-weight: bold">
+                        TOTAL:
+                    </td>
+                    <td><?= $this->currency($this->total) ?></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="14" style="text-align: center">
+                    <em>No hubo resultados para la búsqueda realizada.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?= (isset($this->paginator)) ? $this->paginationSize($this->paginator->getItemCountPerPage()) : "" ?><?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding") : null ?>

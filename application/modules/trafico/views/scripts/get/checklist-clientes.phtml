@@ -1,0 +1,120 @@
+<form id="formChecklist" enctype="application/x-www-form-urlencoded" style="overflow-y: auto; height: 450px">
+    <?php if (isset($this->idCliente)) { ?>
+        <input type="hidden" value="<?= $this->idCliente ?>" name="idCliente" />
+    <?php } ?>
+    <table class="traffic-table traffic-table-left">
+        <?php if (isset($this->preguntas)) { ?>
+            <?php
+            $i = 1;
+            $title = '';
+            foreach ($this->preguntas as $item) {
+                ?>
+                <?php
+                if ($title != $item["tipo"]) {
+                    $title = $item["tipo"];
+                    ?>
+                    <tr>
+                        <th colspan="2" class="traffic-tablae-subtitle"><?= $item["tipo"] ?></th>
+                        <th>Si</th>
+                        <th>N/A</th>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <td><?= $i++ ?></td>
+                    <td><?= $item["documento"] ?></td>
+                    <td style="text-align: center; width: 40px">
+                        <input type="radio" value="1" name="<?= $item["nombre"] ?>">
+                    </td>
+                    <td style="text-align: center; width: 40px">
+                        <input type="radio" value="0" name="<?= $item["nombre"] ?>">
+                    </td>
+                </tr>
+            <?php } ?>
+            <tr>
+                <td colspan="5">
+                    Observaciones:<br>
+                    <textarea name="observaciones" id="observaciones" class="traffic-textarea-large"><?= isset($this->observaciones) ? $this->observaciones : "" ?></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" class="traffic-tablae-subtitle">&nbsp;</th>
+                <th>Si</th>
+                <th>No</th>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right">
+                    <strong>Expediente completo:&nbsp;</strong>
+                </td>
+                <td style="text-align: center">                
+                    <input type="radio" value="1" name="completo" <?= isset($this->completo) && $this->completo == "1" ? "checked=\"checked\"" : "" ?>>
+                </td>
+                <td style="text-align: center">
+                    <input type="radio" value="0" name="completo" <?= isset($this->completo) && $this->completo == "0" ? "checked=\"checked\"" : "" ?>>
+                </td>
+            </tr>
+        <?php } else { ?>
+            <tr>
+                <td colspan="3">No existe checklist para esta aduana.</td>
+            </tr>
+        <?php } ?>
+    </table>
+</form>
+<div class="traffic-clear-10"></div>
+<a id="saveChecklist" class="traffic-btn traffic-btn-right">
+    <i class="far fa-save"></i> Guardar</a>
+<a id="printChecklist" class="traffic-btn traffic-btn-right" href="#" target="_blank" style="display: none">
+    <i class="fas fa-print"></i> Imprimir</a>
+<a id="closeModalChecklist" class="traffic-btn">
+    <i class="far fa-window-close"></i> Cerrar</a>
+<script type="text/javascript">
+
+<?php foreach ($this->preguntas as $item) { ?>
+            $(document).on("change", "input:radio[name='<?= $item["nombre"] ?>']", function () {
+                $("input:radio[name='<?= $item["nombre"] ?>']").removeAttr("checked");
+                $("input:radio[name='<?= $item["nombre"] ?>']").filter("[value='" + $(this).val() + "']").attr("checked", true).
+                        prop("checked", true);
+            });
+<?php } ?>
+
+<?php if (isset($this->data)) { ?>
+            var checklist = JSON.parse('[<?= json_encode($this->data) ?>]');
+            $.each(checklist[0], function (key, value) {
+                $("input:radio[name='" + key + "']").filter("[value='" + value + "']").attr("checked", true);
+            });
+            $("#printChecklist")
+                    .attr("href", "/trafico/get/imprimir-checklist-clientes?id=<?= $this->idCliente ?>&download=false")
+                    .show();
+<?php } ?>
+
+    $(document.body).on("click", "#closeModalChecklist", function (ev) {
+        ev.preventDefault();
+        $("#checklistModal").html('Please wait... <img src="/images/loader.gif" alt="loading" />');
+        $("#checklistModal").jqmHide();
+    });
+
+    $(document).one("click", "#saveChecklist", function (ev) {
+        ev.preventDefault();
+        $(this).addClass("traffic-btn-disabled")
+                .removeClass("traffic-btn-success");
+        $("#formChecklist").ajaxSubmit({
+            url: "/trafico/post/guardar-checklist-cliente",
+            type: "post",
+            dataType: "json",
+            success: function (res) {
+                if (res.success === true) {
+                    $('#checklistModal').jqmHide();
+                }
+            }
+        });
+    });
+
+    $(document).on("input", "#observaciones", function () {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+
+</script>

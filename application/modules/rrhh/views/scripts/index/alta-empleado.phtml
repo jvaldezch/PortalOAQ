@@ -1,0 +1,36 @@
+<form id="information">
+    <input type="hidden" id="idEmpleado" name="idEmpleado" value="<?= $this->idEmpleado ?>">
+    <table class="traffic-table traffic-table-left">
+        <?php
+        $array = array(
+            "nombre" => "Nombre(s):",
+            "apellido" => "Apellido(s):",
+        );
+        foreach ($array as $k => $v) {
+            ?>
+            <tr>
+                <th style="text-align: right; width: 130px">
+                    <label for="<?= $k ?>"><?= $v ?></label>
+                </th>
+                <td>
+                    <input type="text" id="<?= $k ?>" name="<?= $k ?>" class="traffic-input-medium"/>
+                </td>
+            </tr>
+        <?php } ?>
+        <?php if (isset($this->empresas)) { ?>
+            <tr>
+                <th>Empresa:</th>    
+                <td>
+                    <select id="idEmpresa" name="idEmpresa" class="traffic-select-large">
+                        <?php foreach ($this->empresas as $k => $v) { ?>
+                            <option value="<?= $k ?>"><?= $v ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</form>
+<div class="traffic-clear-5"></div>
+<button id="save" class="traffic-btn-save traffic-btn-right">Guardar</button>
+<a href="/rrhh/index/index" class="traffic-btn-back">&Lt; Regresar</a>

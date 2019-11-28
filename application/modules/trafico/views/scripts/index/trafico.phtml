@@ -1,0 +1,179 @@
+<style type="text/css">
+    .mensajero {
+        cursor: pointer;
+        margin-right: 3px;
+    }
+</style>
+<form method="get" id="form-search-request" action="/trafico/index/trafico">
+    <table class="traffic-table">
+        <tr>
+            <th style="width: 150px">Buscar:</th>
+            <td class="traffic-td-left">
+                <?= $this->form->buscar ?>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="idAduana" style="display: inline">Aduana:&nbsp;</label>
+            </th>
+            <td style="text-align: left">
+                <?php if (isset($this->filters) && !empty($this->filters)) { ?>
+                    <select id="idAduana" name="idAduana" class="traffic-select-medium">
+                        <option value="">Todas</option>
+                        <?php foreach ($this->filters as $item) { ?>
+                            <option value="<?= $item["id"] ?>" <?= (isset($this->idAduana) && $this->idAduana == $item["id"]) ? "selected=\"selected\"" : "" ?>><?= $item["patente"] . "-" . $item["aduana"] . ", " . $item["nombre"] ?></option>
+                        <?php } ?>
+                    </select>
+                <?php } else { ?>
+                    &nbsp;
+                <?php } ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Clave de pedimento:</th>
+            <td class="traffic-td-left">
+                <?= $this->form->cvePedimento ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <button id="search-request" class="traffic-btn-search traffic-btn-right">Buscar</button>
+                <button id="reporte" class="traffic-btn-import traffic-btn-right" href="/trafico/get/reporte-trafico">Reporte</button>
+                <img src="/images/icons/message-new.png" id="allMessages" style="float: right; margin-right: 5px; cursor: pointer" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <div class="semaphore-black"></div><span>En captura</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-yellow"></div><span>Proforma</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>Pagado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Liberado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-red"></div><span>Urgente</span>
+    </div>
+    <div class="semaphore-holder">
+        <img src="/images/icons/impo.png" /><span style="padding-left: 3px">Importación</span>
+    </div>
+    <div class="semaphore-holder">
+        <img src="/images/icons/expo.png" /><span style="padding-left: 3px">Exportación</span>
+    </div>
+</div>
+<div class="checkbox-group">
+    <div class="checkbox">
+        <input id="allOperations" name="allOperations" type="checkbox">
+        <label class="checkbox-label">Todas las operaciones</label>
+    </div>
+    <div class="checkbox">
+        <input id="pagadas" name="pagadas" type="checkbox">
+        <label class="checkbox-label">Mostrar pagados</label>
+    </div>
+    <div class="checkbox">
+        <input id="liberadas" name="liberadas" type="checkbox">
+        <label class="checkbox-label">Mostrar liberados</label>
+    </div>
+    <div class="checkbox">
+        <input id="impos" name="impos" type="checkbox">
+        <label class="checkbox-label">Impos</label>
+    </div>
+    <div class="checkbox">
+        <input id="expos" name="expos" type="checkbox">
+        <label class="checkbox-label">Expos</label>
+    </div>
+</div>
+<table class="traffic-table hover">
+    <tr>
+        <th style="width: 35px">T/O</th>
+        <th style="width: 24px">
+            <input type="checkbox" id="selectAll" />
+        </th>
+        <th style="width: 130px">Pedimento</th>
+        <th style="width: 120px">Referencia</th>
+        <th style="width: 35px">Cve.</th>
+        <th style="width: 35px">Reg.</th>
+        <th style="width: 40px">Con.</th>
+        <th style="text-align: left">RFC Cliente</th>
+        <th style="width: 80px">ETA</th>
+        <th style="width: 150px">Usuario</th>
+        <th style="width: 70px">&nbsp;</th>
+    </tr>
+    <?php if ($this->paginator) { ?>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr>
+                <td><?= ($item["ie"] == 'TOCE.IMP') ? '<img src="/images/icons/impo.png" />' : '<img src="/images/icons/expo.png" />' ?></td>
+                <td>
+                    <input type="checkbox" id="<?= $item["id"] ?>" class="operation" />
+                </td>
+                <td>                    
+                    <a href="/trafico/index/editar-trafico?id=<?= $item["id"] ?>" title="Editar tráfico.">
+                        <?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?>
+                    </a>
+                </td>
+                <td><?= $item["referencia"] ?></td>
+                <td><?= $item["cvePedimento"] ?></td>
+                <td><?= $item["regimen"] ?></td>
+                <td><?= ($item["consolidado"] == "0") ? "N" : "S" ?></td>
+                <td style="text-align: left"><?= $item["nombreCliente"] ?></td>
+                <td>
+                    <?php if (isset($item["fechaEta"])) {
+                        $diff = round((time() - strtotime($item["fechaEta"])) / (60 * 60 * 24));
+                    } ?>
+                    <?php if (isset($diff) && $diff > 0) { ?>
+                        <span class="traffic-eta-red"><?= date("Y-m-d", strtotime($item["fechaEta"])) ?></span>
+                    <?php } else if (isset($diff) && $diff == 0) { ?>
+                        <span class="traffic-eta-yellow"><?= date("Y-m-d", strtotime($item["fechaEta"])) ?></span>
+                    <?php } else if (isset($diff) && $diff < 0) { ?>
+                        <?= date("Y-m-d", strtotime($item["fechaEta"])) ?>
+                    <?php } ?>
+                </td>
+                <td><?= ucwords($item["nombre"]) ?></td>
+                <td>
+                    <?php if ($item["estatus"] == 1) { ?>
+                        <div class="semaphore-black"></div>
+                    <?php } else if ($item["estatus"] == 2) { ?>
+                        <div class="semaphore-blue"></div>
+                    <?php } else if ($item["estatus"] == 3) { ?>
+                        <div class="semaphore-green"></div>
+                    <?php } else if ($item["estatus"] == 5) { ?>
+                        <div class="semaphore-yellow"></div>
+                    <?php } else if ($item["estatus"] == 6) { ?>
+                        <div class="semaphore-red"></div>
+                    <?php } ?>
+                    <a href="/trafico/index/editar-trafico?id=<?= $item["id"] ?>" title="Editar tráfico.">
+                        <div class="traffic-icon traffic-icon-folder"></div>
+                    </a>
+                    <img src="/images/icons/message.png" class="mensajero" data-id="<?= $item["id"] ?>" />
+                    <?php if (isset($item["mensajesNoLeidos"])) { ?>
+                        <?php if ($item["mensajesNoLeidos"] > 0) { ?>
+                            <img src="/images/icons/message-new.png" class="mensajero" data-id="<?= $item["id"] ?>" />
+                        <?php } else { ?>
+                            <img src="/images/icons/message.png" class="mensajero" data-id="<?= $item["id"] ?>" />
+                        <?php } ?>
+                    <?php } ?>
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="11">
+                <em>No hay registros en la base de datos o su usuario no tiene aduanas asignadas.</em>
+            </td>
+        </tr>
+    <?php } ?>
+</table>
+<div class="traffic-clear-10"></div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding") : null ?>
+<a href="/trafico/index/crear-trafico" class="traffic-btn-create traffic-btn-right">Nuevo tráfico</a>
+<button id="ownOperations" class="traffic-btn-primary traffic-btn-right">Asignarme operación</button>
+<div class="traffic-clear-20"></div>
+<div class="jqmWindow" id="reporteModal">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>

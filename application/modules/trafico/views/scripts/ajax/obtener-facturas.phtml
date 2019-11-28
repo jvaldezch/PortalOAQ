@@ -1,0 +1,99 @@
+<?php if (isset($this->data) && !empty($this->data)) { ?>    
+    <?php foreach ($this->data as $item) { ?>
+        <tr>
+            <td>
+                <?php if (isset($item["idFactura"]) && $item["idFactura"] !== null) { ?>
+                    <?php if ($item["cove"] === null || $item["cove"] === '') { ?>
+                        <input type="checkbox" class="invoice" value="<?= $item["id"] ?>" />
+                    <?php } ?>
+                <?php } ?>
+            </td>
+            <td style="text-align: left">
+                <?php if ($item["coveAdenda"] !== null && $item["cove"] == null) { ?>
+                    <img src="/images/icons/adenda_sincove.png" style="float: right" title="Adenda de factura o COVE."/>
+                <?php } ?>
+                <?php if ($item["coveAdenda"] !== null && $item["cove"] !== null) { ?>
+                    <img src="/images/icons/adenda_concove.png" style="float: right" title="Adenda creada."/>
+                <?php } ?>
+                <a class="editInvoice" data-id="<?= $item["id"] ?>"><?= $item["numFactura"] ?></a>
+            </td>
+            <td>
+                <?php if ($item["cove"] !== null) { ?>
+                    <?php if ($item["coveAdenda"] === null) { ?>
+                        <a class="traffic-link" onclick="verCove(<?= $item["idFactura"] ?>, '<?= $item["cove"] ?>');" style="cursor:pointer"><?= $item["cove"] ?></a>
+                    <?php } else { ?>
+                        <a class="traffic-link" onclick="verCove(<?= $item["idFactura"] ?>, '<?= $item["cove"] ?>');" style="cursor:pointer"><?= $item["coveAdenda"] ?></a>
+                    <?php } ?>
+                    <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                        <i class="fas fa-flag" onclick="javascript:crearAdenda(<?= $item["id"] ?>)" title="Crear adenda de COVE." style="cursor: pointer"></i>
+                    </div>
+                <?php } ?>
+            </td>
+            <td style="text-align: right;">
+                <span style="float:left;"><span style="font-family: sans-serif">$</span></span><?= number_format($item["valorMonExt"], 2, '.', ',') ?>
+            </td>
+            <td><?= $item["divisa"] ?></td>
+            <td>
+                <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                    <?php if ($item["cove"] == null) { ?>
+                        <i class="fas fa-download" onclick="javascript:importarFactura(<?= $item["id"] ?>);" style="cursor: pointer" title="Importar factura"></i>
+                        &nbsp;
+                    <?php } ?>
+                    <?php if ($item["pdfFactura"] == null) { ?>
+                        <i class="fas fa-cloud-upload-alt" onclick="javascript:subirFactura(<?= $item["id"] ?>);" style="cursor: pointer; margin-right: 5px" title="Subir factura PDF"></i>
+                    <?php } ?>
+                    <?php if (!isset($this->noBorrar)) { ?>
+                        <i class="fas fa-trash-alt" onclick="javascript:borrarFactura(<?= $item["id"] ?>);" style="cursor: pointer" title="Borrar factura"></i>
+                    <?php } ?>
+                </div>
+            </td>
+        </tr>
+    <?php } ?>
+<?php } else { ?>
+        <tr>
+            <td colspan="6" style="text-align: center">
+                <em>No hay facturas capturadas.</em>
+            </td>
+        </tr>
+<?php } ?>
+<style type="text/css">
+    #sendToVucem {
+        float: right; 
+        padding: 2px;
+        cursor: pointer;
+    }
+    .editInvoice {
+        display: block;
+        cursor: pointer;
+        text-align: left;
+        padding-left: 16px;
+        text-decoration: none;
+    }
+    .editInvoice:hover {
+        background-image: url('/images/icons/pen.png');
+        background-repeat: no-repeat;
+        text-decoration: none;
+    }
+</style>
+<script type="text/javascript">
+        
+    $.contextMenu({
+        selector: ".editInvoice",
+        callback: function (key, options) {
+            if(key === "edit") {
+                $(this).trigger("click");
+            }
+            if(key === "delete") {
+            }
+            if(key === "vucem") {
+                
+            }
+        },
+        items: {
+            "edit": {name: "Editar", icon: "edit"},
+            "delete": {name: "Eliminar", icon: "delete"},
+            "vucem": {name: "Enviar a VUCEM"}
+        }
+    });
+    
+</script>

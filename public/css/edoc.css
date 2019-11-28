@@ -1,0 +1,61 @@
+/* 
+    Document   : cove
+    Created on : 24/06/2013, 12:28:26 PM
+    Author     : Jaime E. Valdez <jvaldezch@gmail.com>
+    Description:
+*/
+body {
+    font-family: sans-serif;    
+    font-size: 11px;
+}
+table {
+    border-spacing:0;
+    border-collapse:collapse;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px #CCCCCC solid;
+}
+table td,
+table th {
+    text-align: left;
+    padding: 2px 3px;
+    font-size: 10px;
+    max-width: 100%;
+}
+table th {
+    border: 0;
+    /*border-top: 1px #CCCCCC solid;*/
+}
+table td {
+    border: 0;
+    /*border-bottom: 1px #CCCCCC solid;*/
+}
+h1, h2, h3, p {
+    color: #003399;
+    margin: 0;
+}
+h3 {
+    text-align: center;
+}
+p {
+    font-weight: bold;
+    margin-top: 5px;
+    color: #000;
+    font-weight: normal;
+}
+p span {
+    font-weight: normal;
+    color: #222;
+}
+p.legend {
+    font-size: 11px;
+    color: #222;
+    font-weight: normal;
+}
+table th {
+    background: #EEEEEE;
+}
+td.signature {
+    font-size: 10px;
+}
+

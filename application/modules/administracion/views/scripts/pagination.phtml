@@ -1,0 +1,42 @@
+<div style="clear:both;">
+    <ul class="pagination light">
+        <!-- First page link -->
+        <?php if (isset($this->previous)): ?>
+            <a href="<?= $this->url(array('page' => $this->first)); ?>" class="next"><i class="icon-fast-backward"></i></a>
+        <?php else: ?>
+            <a><i class="icon-fast-backward"></i></a>
+        <?php endif; ?>
+            
+        <!-- Previous page link -->    
+        <?php if (isset($this->previous)): ?>
+            <a href="<?= $this->url(array('page' => $this->previous)); ?>" class="next"><i class="icon-backward"></i></a>
+        <?php else: ?>
+            <a><i class="icon-backward"></i></a>
+        <?php endif; ?>
+            
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php if ($page != $this->current): ?>
+                <a href="<?= $this->url(array('page' => $page)); ?>"><?= $page; ?></a>
+            <?php else: ?>
+                <a class="current"><?= $page; ?></a>
+            <?php endif; ?>
+        <?php endforeach; ?>
+                
+        <!-- Next page link -->
+        <?php if (isset($this->next)): ?>
+            <a href="<?= $this->url(array('page' => $this->next)); ?>" class="next"><i class="icon-forward"></i></a>
+        <?php else: ?>
+            <a><i class="icon-forward"></i></a>
+        <?php endif; ?>
+            
+        <!-- Last page link -->
+        <?php if (isset($this->next)): ?>
+              <a href="<?= $this->url(array('page' => $this->last)); ?>" class="next"><i class="icon-fast-forward"></i></a>
+        <?php else: ?>
+            <a class="disabled"><i class="icon-fast-forward"></i></a>
+        <?php endif; ?>
+            <a class="legend">&nbsp; Página <?= $this->current; ?> de <?= $this->last; ?></a>
+    </ul>
+</div>
+<div style="clear: both"></div>

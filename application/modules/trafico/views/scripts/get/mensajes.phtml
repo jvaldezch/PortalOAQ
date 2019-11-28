@@ -1,0 +1,65 @@
+<style>
+    .rTable {
+        display: table;
+        width: 100%;
+        font-size: 12px;
+    }
+    .rTableRow {
+        display: table-row;
+        vertical-align: top;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #f4f4f4;
+    }
+    .rTableCell, .rTableHead {
+        display: table-cell;
+        padding: 2px 2px;
+        border: 1px solid #f4f4f4;
+        vertical-align: text-top;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+    .rTableFoot {
+        display: table-footer-group;
+        font-weight: bold;
+        background-color: #f4f4f4;
+    }
+    .rTableBody {
+        display: table-row-group;
+    }
+    .message {
+
+    }
+</style>
+<input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->idTrafico ?>" />
+<div class="rTable">
+    <div class="rTableRow">
+        <div class="rTableHead" style="width: 120px"><strong>OPERACIÓN:</strong></div>
+        <div class="rTableHead" style="width: 110px"><strong>REFERENCIA:</strong></div>
+        <div class="rTableHead" style="width: 110px"><strong>DE:</strong></div>
+        <div class="rTableHead" style="width: 110px"><strong>PARA:</strong></div>
+        <div class="rTableHead"><strong>MENSAJE:</strong></div>
+        <div class="rTableHead" style="width: 125px"><strong>ENVIADO:</strong></div>
+    </div>
+    <?php if (isset($this->arr)) { ?>
+        <?php foreach ($this->arr as $item) { ?>
+            <div class="rTableRow">
+                <div class="rTableCell"><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></div>
+                <div class="rTableCell"><a href="/trafico/index/editar-trafico?id=<?= $item["idTrafico"] ?>"><?= $item["referencia"] ?></a></div>
+                <div class="rTableCell"><?= $item["usuarioDe"] ?></div>
+                <div class="rTableCell"><?= $item["usuarioPara"] ?></div>
+                <div class="rTableCell">
+                    <?= $item["mensaje"] ?>
+                    <?php if(isset($item["nombreArchivo"])) { ?>
+                        <br><img src="/images/icons/attachment.gif"><span style="font-size: 11px"><a href="/archivo/data/descargar-archivo-temporal?id=<?= $item["idArchivo"] ?>"><?= $item["nombreArchivo"] ?></a></span>
+                    <?php } ?>
+                </div>
+                <div class="rTableHead"><?= date("Y-m-d H:i a", strtotime($item["creado"])) ?></div>
+            </div>
+        <?php } ?>
+    <?php } ?>
+</div>

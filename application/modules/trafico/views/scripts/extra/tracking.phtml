@@ -1,0 +1,31 @@
+<div id="div-tracking">
+    <form id="form-tracking" method="post" action="/trafico/ajax/agregar-guia">
+        <?= $this->inputHidden('hidden','guia') ?>
+        <?= $this->inputHidden('hidden','idTrafico', $this->idTrafico) ?>
+        <table class="traffic-table">
+            <tr>
+                <th colspan="4" class="invoice-title">GUÍAS</th>
+            </tr>
+            <tr>
+                <th><label for="transportista">Transportista:</label></th>
+                <th><label for="tipoguia">Tipo:</label></th>
+                <th><label for="number">Guía:</label></th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td><?= $this->transportistas($this->basico["idAduana"],1,"transportista") ?></td>
+                <td><select id="tipoguia" name="tipoguia">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="M">Master</option>
+                        <option value="H">House</option>
+                </select></td>
+                <td><input type="text" id="number" name="number" ></td>
+                <td><input type="submit" id="add-tracking-number" class="traffic-btn traffic-btn-add traffic-btn-right" value="Agregar guía"></td>
+            </tr>
+        </table>
+    </form>
+    <div class="div-frame">
+        <!--<iframe src="/trafico/data/view-tracking-numbers?id=<?= $this->basico["id"] ?>" id="tracking-frame"></iframe>-->
+        <iframe src="" id="tracking-frame"></iframe>
+    </div>
+</div><!-- div-tracking -->

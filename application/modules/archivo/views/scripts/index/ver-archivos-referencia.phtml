@@ -1,0 +1,216 @@
+<style>
+    label.error {
+        color: red;
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+</style>
+<fieldset>
+    <legend>Archivos de patente <b><?= $this->patente ?></b>, aduana <b><?= $this->aduana ?></b> referencia <b><?= $this->referencia ?></b></legend>    
+    <?= $this->form ?>
+    <div id="files">&nbsp;</div>
+    <script type="text/javascript">
+        var options = {
+            beforeSend: function () {
+                $("#upload-status").html('<img src="/images/loader.gif" />');
+            },
+            complete: function (xhr) {
+                $('#upload-status').html("&nbsp;");
+                var obj = jQuery.parseJSON(xhr.responseText);
+                if (obj.success === true) {
+                    window.location.href = "/archivo/index/ver-archivos-referencia?ref=<?= $this->referencia ?>&patente=<?= $this->patente ?>&aduana=<?= $this->aduana ?>";
+                } else if (obj.success === false) {
+                    alert("Ocurrio un error al enviar archivo.");
+                }
+            }
+        };
+        $(document).ready(function() {
+            if($("#rfc").val() === '') {
+                $("#submit").attr("disabled", "disabled");
+            }
+            $("#customer-form").validate({
+                rules: {
+                    rfc: {
+                        required: true,
+                        minlength: 10
+                    }
+                },
+                messages: {
+                    rfc: {
+                        required: "Proporcionar el RFC",
+                        minlength: "Minimo 10 caracteres"
+                    }
+                }
+            });
+            $("#submit").click(function(e){
+                e.preventDefault();
+                if($("#customer-form").valid()) {
+                    $("#submit").removeAttr("disabled");
+                    $("#files-to-upload").ajaxSubmit(options);
+                }
+            });
+        });
+    </script>    
+    <table>            
+        <tr>
+            <td><form action="/archivo/ajax/new-file-upload" method="post" enctype="multipart/form-data" id="files-to-upload">
+                    <input type="hidden" id="rfc-hidden" name="rfc-hidden" />
+                    <input id="lefile" type="file" name="file" style="display:none">
+                    <div class="input-append">
+                        <input id="fake" class="input-large" name="filename" type="text">
+                        <a class="btn btn-success" onclick="$('input[id=lefile]').click();">Seleccionar archivo...</a>
+                    </div>
+                    <div style="clear: both"></div>
+                    <input type="submit" class="btn btn-primary" id="submit" value="Subir archivo">
+                </form>
+            <td><div id="upload-status">&nbsp;</div></td>
+        </tr>            
+    </table>
+</fieldset>
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadFiles();
+    });
+    $('input[id=lefile]').change(function () {
+        $('#fake').val($(this).val());
+    });
+    $('body').on('click', '.openfile', function (e) {
+        e.preventDefault();
+//        console.log($(this).attr('href'));
+        window.open($(this).attr('href'), '_blank', 'toolbar=0,location=0,menubar=0,height=550,width=800,scrollbars=yes');
+    });
+    function loadFiles() {
+        $.ajax({
+            url: "/archivo/ajax/referencia-cargar-archivos",
+            context: document.body
+        }).done(function (data) {
+            $("#files").html(data);
+        });
+    }
+    function deleteFile(value) {
+        var resp = confirm("¿Esta seguro que desea borrar el archivo?");
+        if (resp === true) {
+            $.ajax({
+                url: "/archivo/ajax/remove-file",
+                context: document.body,
+                data: {id: value},
+                type: 'GET'
+            }).done(function (data) {
+                var obj = jQuery.parseJSON(data);
+                if (obj.success === true) {
+                    window.location.href = "/archivo/index/ver-archivos-referencia?ref=<?= $this->referencia ?>&patente=<?= $this->patente ?>&aduana=<?= $this->aduana ?>";
+                } else if (obj.success === false) {
+                    alert("Ocurrio un error al enviar archivo.");
+                }
+            });
+        }
+    }
+    function editFile(value) {
+        $.ajax({
+            beforeSend: function () {
+                $("#icon_" + value).html('<a style="cursor:pointer;" onclick="changeFile(' + value + ')"><img src="/images/icons/save.png" /></a>');
+            },
+            url: "/archivo/ajax/file-types",
+            context: document.body,
+            data: {id: value},
+            type: 'GET'
+        }).done(function (data) {
+            $("#edit_" + value).html(data);
+        });
+    }
+    function changeFile(value) {
+        $.ajax({
+            url: "/archivo/ajax/change-file-type",
+            context: document.body,
+            data: {id: value, type: $("#select_" + value).val()},
+            type: 'GET'
+        }).done(function (data) {
+            var obj = jQuery.parseJSON(data);
+            if (obj.success === true) {
+                window.location.href = "/archivo/index/ver-archivos-referencia?ref=<?= $this->referencia ?>&patente=<?= $this->patente ?>&aduana=<?= $this->aduana ?>";
+            } else if (obj.success === false) {
+                alert("Ocurrio un error al guardar cambios.");
+            }
+        });
+    }
+    function sendVucem(value) {
+        $.ajax({
+            url: "/archivo/ajax/verify-file-type",
+            context: document.body,
+            data: {id: value},
+            type: 'GET'
+        }).done(function (data) {
+            var obj = jQuery.parseJSON(data);
+            if (obj.success === true) {
+                var url = '/archivo/index/datos-edoc?id=' + value;
+                if (url.indexOf('#') === 0) {
+                    $(url).modal('open');
+                } else {
+                    $.get(url, function (data) {
+                        $('<div class="modal hide fade" style="width: 950px; margin-left: -475px">' + data + '</div>')
+                                .modal()
+                                .on('hidden', function () {
+                                    $(this).remove();
+                                });
+                    }).success(function () {
+                        $('input:text:visible:first').focus();
+                    });
+                }
+            } else if (obj.success === false) {
+                alert("El tipo de archivo no puede ser enviado.");
+            }
+        });
+    }
+    var elementsText = ["rfc", 'nombre'];
+    $.each(elementsText, function(index, value) {
+        $('#' + value).keyup(function() {
+            $(this).val($(this).val().toUpperCase());
+        });
+    });
+    $("#rfc").keypress(function() {
+        if ($(this).val().length > 9) {
+            $("#submit").removeAttr("disabled");
+        } else if ($(this).val().length <= 8) {
+            $("#submit").attr("disabled", "disabled");
+        }
+    }).blur(function() {
+        if ($(this).val().length > 9) {
+            $("#submit").removeAttr("disabled");
+        }
+    });
+    $("#customer-list").click(function() {
+        $('#myModal').modal({
+            remote: '/administracion/index/clientes'
+        });
+    });
+    $('#nombre').typeahead({
+        source: function(query, process) {
+            return $.ajax({
+                url: '/comercializacion/index/json-customers-by-name',
+                type: 'get',
+                data: {name: query},
+                dataType: 'json',
+                success: function(res) {
+                    return process(res);
+                }
+            });
+        }
+    }).change(function() {
+        $("#rfc").val('');
+    });
+    $('#nombre').change(function() {
+        $.ajax({
+            url: '/comercializacion/index/json-customer-rfc-by-name',
+            type: 'get',
+            data: {name: $("#nombre").val()},
+            dataType: 'json',
+            success: function(res) {
+                if (res) {
+                    $("#rfc").val(res);
+                    $("#rfc-hidden").val(res);
+                    $("#submit").removeAttr("disabled");
+                }
+            }
+        });
+    });
+</script>

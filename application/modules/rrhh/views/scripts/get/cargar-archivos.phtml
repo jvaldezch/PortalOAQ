@@ -1,0 +1,52 @@
+<div style="overflow-y: scroll; max-height: 450px; border: 1px #c6d7e7 solid">    
+    <table class="traffic-table">
+        <tr>
+            <th>&nbsp;</th>
+            <th>Nombre de archivo</th>
+            <th>Tipo de archivo</th>
+            <th>Creado</th>
+            <th>Usuario</th>
+            <th>
+                <!--<div class="traffic-icon traffic-icon-reload traffic-btn-right" onclick="cargarArchivos();"></div>-->
+                <i class="fas fa-sync-alt" onclick="cargarArchivos();" style="font-size:1.3em; color: #2f3b58; float: right; margin: 3px"></i>
+            </th>
+        </tr>
+        <?php if (isset($this->archivos) && !empty($this->archivos)) { ?>           
+            <?php foreach ($this->archivos as $item) { ?>
+                <tr>
+                    <td><?= (file_exists($item["ubicacion"])) ? '' : '<span><a title="El archivo no existe en el sistema, volver a subir." style="margin-left: 3px; color:red; cursor: pointer;"><strong>!</strong></a></span>' ?></td>
+                    <td class="traffic-td-left">
+                        <a class="traffic-a" onclick="descargarArchivo('/rrhh/get/descargar-archivo?id=<?= $item["id"] ?>')">
+                            <?= $item["nombreArchivo"] ?>
+                        </a>
+                        <?php if (file_exists($item["ubicacion"]) && preg_match('/.pdf/', $item["nombreArchivo"])) { ?>
+                            <img src="/images/icons/eye-24-gray.png" class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer; float: right" />
+                        <?php } ?>
+                    </td>
+                    <td class="traffic-td-left" style="width: 370px">
+                        <div id="edit_<?= $item["id"] ?>">
+                            <p><?= wordwrap($this->tipoArchivo($item["tipoArchivo"]), 50, "<br />\n") ?></p>
+                        </div>
+                    </td>
+                    <td style="width: 120px;">
+                        <?= date('d/m/Y H:i a', strtotime($item["creado"])) ?>
+                    </td>
+                    <td style="width: 150px;">
+                        <?= ucwords(strtolower($item["usuario"])) ?>
+                    </td>
+                    <td style="width: 60px;">
+                        <div id="icon_<?= $item["id"] ?>">
+                            <?= $this->archivosIconos($item["id"], $item["tipoArchivo"], isset($this->canDelete) ? true : null) ?>            
+                        </div>
+                    </td>
+                </tr>            
+            <?php } ?>        
+        <?php } else { ?>
+            <tr>
+                <td colspan="6">
+                    <em>El empleado no tiene archivos.</em>
+                </td>
+            </tr>
+        <?php } ?>        
+    </table>
+</div>

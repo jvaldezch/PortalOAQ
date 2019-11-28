@@ -1,0 +1,50 @@
+<fieldset>
+    <legend>Pedimentos pagados</legend>
+    <?php $this->form->setAction($this->url()) ?>
+    <?= $this->form ?>
+    <?php if(isset($this->data)) { ?>
+    <ul id="download-links">
+        <li>Descargar este reporte en: <img src="/images/icons/ms-excel.png" />&nbsp;<a href="/administracion/index/excel-pedimentos-pagados">Excel</a>&nbsp;</li>
+    </ul>
+    <table class="table table-striped table-bordered table-hover small">
+        <thead>
+            <tr>
+                <th>RFC</th>
+                <th>Razón Social</th>
+                <th>Ene</th>
+                <th>Feb</th>
+                <th>Mar</th>
+                <th>Abr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jul</th>
+                <th>Ago</th>
+                <th>Sep</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dic</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->data as $item) { ?>
+            <tr>
+                <td><?= $item["RFCCTE"] ?></td>
+                <td><?= utf8_encode($item["NOMCLI"]) ?></td>
+                <td><?= $item["Ene"] ?></td>
+                <td><?= $item["Feb"] ?></td>
+                <td><?= $item["Mar"] ?></td>
+                <td><?= $item["Abr"] ?></td>
+                <td><?= $item["May"] ?></td>
+                <td><?= $item["Jun"] ?></td>
+                <td><?= $item["Jul"] ?></td>
+                <td><?= $item["Ago"] ?></td>
+                <td><?= $item["Sep"] ?></td>
+                <td><?= $item["Oct"] ?></td>
+                <td><?= $item["Nov"] ?></td>
+                <td><?= $item["Dic"] ?></td>                    
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <?php } ?>
+</fieldset>

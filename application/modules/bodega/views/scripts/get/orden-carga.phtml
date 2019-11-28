@@ -1,0 +1,49 @@
+<p style="font-size: 12px">Asignar orden de carga a las siguientes referencias:</p>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th style="text-align: left">Referencia</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data)) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td><?= $item["referencia"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td>
+                    <em>No hay referencias disponibles.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<br>
+<form id="loadOrder">
+    <input type="hidden" name="ids" id="ids" value="<?= $this->ids ?>" />
+    <p style="font-size: 12px">Número de orden de carga: </p>
+    <input type="text" class="traffic-input-medium" name="ordenCarga" id="ordenCarga" />
+</form>
+<script type="text/javascript">
+    
+    $("#loadOrder").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            ordenCarga: {required: true}
+        },
+        messages: {
+            ordenCarga: "SE REQUIERE ORDEN DE CARGA"
+        }
+    });
+    
+</script>

@@ -1,0 +1,95 @@
+<div class="traffic-clear-5"></div>
+<div class="row-fluid">
+    <div class="notice notice-sm" style="border-left: 6px solid #0177c1">
+        <span id="coves">0</span> <strong>COVES</strong>
+    </div>
+    <div class="notice notice-sm" style="border-left: 6px solid #0587d8">
+        <span id="edocs">0</span> <strong>EDOCS</strong>
+    </div>
+    <div class="notice notice-sm" style="border-left: 6px solid #0ecad1">
+        <span id="expedientes">0</span> <strong>EXPEDIENTES</strong>
+    </div>
+    <div class="notice notice-sm notice-info" style="border-left: 6px solid #45abcd">
+        <span id="pagados">0</span> <strong>PAGADOS</strong>
+    </div>
+    <div class="notice notice-sm notice-success" style="border-left: 6px solid #75cd45">
+        <span id="liberados">0</span> <strong>LIBERADOS</strong>
+    </div>
+    <div class="notice notice-sm notice-warning" style="border-left: 6px solid #feaf20">
+        <span id="transmitidos">0</span> <strong>M3 TRANSMITIDOS</strong>
+    </div>
+    <div class="notice notice-sm notice-warning" style="border-left: 6px solid #e39a17">
+        <span id="firmas">0</span> <strong>FIRMAS VAL.</strong>
+    </div>
+    <div class="notice notice-sm notice-warning" style="border-left: 6px solid #c78918">
+        <span id="pagos">0</span> <strong>PAGOS VAL.</strong>
+    </div>
+    <div class="notice notice-sm" style="border-left: 6px solid #0177c1">
+        <span id="terminal">0</span> <strong>FACT. TERMINAL</strong>
+    </div>
+    <div class="notice notice-sm notice-info" style="border-left: 6px solid #45abcd">
+        <span id="ftp">0</span> <strong>FTP</strong>
+    </div>
+    <div class="notice notice-sm notice-info" style="border-left: 6px solid #990099">
+        <span id="facturacion">0</span> <strong style="color: #990099">FACTURACIÓN</strong>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6" style="padding-left: 5px">
+        <?php foreach ($this->menu as $item) { ?>
+            <?php foreach (json_decode($item["menus"]) as $m) { ?>
+                <?php if($m->link == "/trafico/index/traficos") { ?>
+                    <h5 style="margin: 0">TRAFICOS</h5>
+                    <?= '<div class="btn-menu" data-url="/trafico/index/traficos"><img src="/images/menus/traffic.png" /><p>Tráficos</p></div>' ?>
+                    <?= (!in_array($this->rol, array("inhouse", "corresponsal"))) ? '<div class="btn-menu" data-url="/trafico/index/trafico-aereo"><img src="/images/menus/plane.png" /><p>Aéreo</p></div>' : '' ?>
+                    <?= (!in_array($this->rol, array("inhouse", "corresponsal"))) ? '<div class="btn-menu" data-url="/trafico/index/trafico-terrestre"><img src="/images/menus/truck.png" /><p>Terrestre</p></div>' : '' ?>
+                    <?= (!in_array($this->rol, array("inhouse", "corresponsal"))) ? '<div class="btn-menu" data-url="/trafico/index/trafico-maritimo"><img src="/images/menus/ship.png" /><p>Marítimo</p></div>' : '' ?>
+                    <?= (!in_array($this->rol, array("inhouse", "corresponsal"))) ? '<div class="btn-menu" data-url="/trafico/index/trafico-ops-especiales"><img src="/images/menus/operaciones.png" /><p>Operaciones Especiales</p></div>' : '' ?>
+                <?php } ?>
+            <?php } ?>        
+            <div class="traffic-clear-5"></div>
+        <?php } ?>
+        <?php foreach ($this->menu as $item) { ?>
+            <h5 style="margin: 0"><?= mb_strtoupper($item["moduloNombre"], "UTF-8") ?></h5>
+            <?php foreach (json_decode($item["menus"]) as $m) { ?>
+                <?= $this->menuIcono($m->link, $m->title) ?>
+            <?php } ?>
+        <?php } ?>
+    </div>
+    <div class="span2" style="padding-left: 5px; margin-top: 15px">
+        <table>
+            <thead>
+                <tr>
+                    <th style="padding: 2px 4px; background-color: #d5d5d5">MIS TRAFICOS</th>
+                </tr>
+            </thead>
+            <tbody id="myTraffics"></tbody>
+        </table>
+    </div>
+    <div class="span4" style="padding-left: 5px">
+        <svg id="indicators" height="200" width="300" style="position: relative; display: inline-block"></svg>
+        <svg id="customs" height="200" width="300" style="position: relative; display: inline-block"></svg>
+    </div>
+</div>
+<div class="row-fluid-mobile">
+    <div class="span12">
+        <h5>TRÁFICO</h5>
+        <ul class="mobile-menu">
+            <li>
+                <a href="/mobile/traficos/index">Tráficos</a>
+            </li>
+            <li>
+                <a href="/mobile/bodega/index">Bodega</a>                
+            </li>
+        </ul>
+        <h5>USUARIOS</h5>
+        <ul class="mobile-menu">
+            <li>
+                <a href="/mobile/usuarios/index"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<script src="/js/common/d3/d3.v4.min.js" charset="utf-8"></script>
+<script src="/js/principal/index/index.js" charset="utf-8"></script>
+<div class="traffic-clear-5"></div>

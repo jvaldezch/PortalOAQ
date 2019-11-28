@@ -1,0 +1,54 @@
+<form id="formContacts" method="post" action="/trafico/ajax/agregar-contacto-cliente">
+    <?= $this->form->idCliente ?>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="2" class="traffic-table-title">CONTACTOS</th>
+        </tr>
+        <tr>
+            <th>
+                <label for="nombre">Nombre del contacto:</label>
+            </th>
+            <td><?= $this->form->nombre ?></td>                
+        </tr>
+        <tr>
+            <th>
+                <label for="email">Email:</label>
+            </th>
+            <td><?= $this->form->email ?></td>
+        </tr>
+        <tr>
+            <th>
+                <label for="tipoContacto">Tipo de contacto:</label>
+            </th>
+            <td><?= $this->form->tipoContacto ?></td>
+        </tr>
+        <tr>
+            <th>
+                <label for="idPlanta">Planta:</label>
+            </th>
+            <td><?= $this->form->idPlanta ?></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    $("#formContacts").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error-span",
+        rules: {
+            nombre: "required",
+            email: "required",
+            tipoContacto: "required"
+        },
+        messages: {
+            nombre: "[Nombre es necesario]",
+            email: "[Email es necesario]",
+            tipoContacto: "[Campo necesario]"
+        }
+    });
+</script>

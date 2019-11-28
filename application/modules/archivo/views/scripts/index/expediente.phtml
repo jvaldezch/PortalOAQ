@@ -1,0 +1,132 @@
+<?php if (isset($this->error)) { ?>
+    <div id="errors" class="alert alert-error" style="margin: 3px">
+        <?= $this->error ?>
+    </div>
+<?php } else { ?>
+    <form id="form" method="post">
+        <input type="hidden" id="id" name="id" value="<?= $this->id ?>" >
+        <input type="hidden" name="idTrafico" id="idTrafico" <?= isset($this->idTrafico) ? "value=\"{$this->idTrafico}\"" : "" ?> >
+        <table class="traffic-table">
+            <tr>
+                <th colspan="7" class="traffic-table-title">EXPEDIENTE DIGITAL</th>
+            </tr>
+            <tr>
+                <td colspan="7">
+                    <div style="float: left; background-color: yellow; color: red; display: none" id="no_traffic">
+                        <em>El expediente no tiene tráfico asociado.</em>
+                    </div>
+                    <div class="checkbox-group" style="padding-top: 2px; padding-right: 10px; float: right">      
+                        <div class="checkbox">
+                            <input id="mvhcCliente" data-id="<?= $this->idTrafico ?>" name="mvhcCliente" style="margin-right:5px" type="checkbox">
+                            <label class="checkbox-label" style="line-height: 16px; padding-left:5px">MV/HC N/A</label>
+                        </div>
+                        <div class="checkbox">
+                            <input id="mvhcFirmado" data-id="<?= $this->idTrafico ?>" name="mvhcFirmado" style="margin-right:5px" type="checkbox">
+                            <label class="checkbox-label" style="line-height: 16px; padding-left:5px">MV/HC Firmada</label>
+                        </div>
+                        <div class="checkbox">
+                            <input id="mvhcEnviada" data-id="<?= $this->idTrafico ?>" name="mvhcEnviada" style="margin-right:5px" type="checkbox">
+                            <label class="checkbox-label" style="line-height: 16px; padding-left:5px">MV/HC Enviada</label>
+                        </div>
+                        <div class="text" style="float:right; margin-left: 10px; font-size: 11px">
+                            Num. guía:&nbsp;<input type="text" name="mvhcGuia" id="mvhcGuia" class="traffic-input-medium" style="height: 14px"/>&nbsp;
+                            <i id="saveMvhcNumGuia" data-id="<?= $this->idTrafico ?>" class="fas fa-save" style="font-size: 1.2em; cursor: pointer"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th style="width: 60px;">Patente</th>
+                <th style="width: 60px;">Aduana</th>
+                <th style="width: 60px;">Pedimento</th>
+                <th style="width: 120px;">Referencia</th>
+                <th style="width: 110px;">RFC Cliente</th>
+                <th colspan="2">&nbsp;</th>
+            </tr>
+            <tr>
+                <td><?= $this->form->patente ?></td>
+                <td><?= $this->form->aduana ?></td>
+                <td><?= $this->form->pedimento ?></td>
+                <td><?= $this->form->referencia ?></td>
+                <td><?= $this->form->rfc_cliente ?></td>
+                <td colspan="2">
+                    <?php if (!isset($this->disableUpload)) { ?>
+                        <div style="font-size:1.4em; color: #2f3b58; float: left; margin-right: 5px; margin-top: 2px">
+                            <i class="fas fa-pencil-alt" id="editRepo" style="cursor: pointer" title="Enviar email"></i>
+                            &nbsp;
+                            <?php if (!isset($this->empty)) { ?>
+                                <i class="fas fa-cut" id="deleteRepo" data-id="<?= $this->id ?>" title="Borrar la referencia."></i>
+                                &nbsp;
+                            <?php } else { ?>
+                                <i class="fas fa-trash-alt" id="deleteRepo" data-id="<?= $this->id ?>" title="Borrar la referencia."></i>
+                            <?php } ?>
+                        </div>
+                        <?php if (isset($this->reload)) { ?>
+                            <button data-id="<?= $this->id ?>" id="recargarDirectorio" class="traffic-btn traffic-btn-right" style="width: 30px; min-width: 25px">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        <?php } ?>
+                        <button id="checklist" class="traffic-btn traffic-btn-right">
+                            <i class="fas fa-clipboard-list"></i> Checklist
+                        </button>
+                        <button class="traffic-btn traffic-btn-right" id="help" href="/trafico/get/ayuda-documentos" style="width: 30px; min-width: 25px">
+                            <i class="fas fa-question"></i>
+                        </button>
+                    <?php } ?>
+                    <?php if (!isset($this->disableUpload) && !isset($this->noFtp)) { ?>
+                        <button class="traffic-btn traffic-btn-right" id="permalink" data-id="<?= $this->id ?>">
+                            <i class="fas fa-link"></i> Permalink
+                        </button>
+                    <?php } ?>
+                    <a href="javascript:void(0)" class="traffic-btn traffic-btn-right" style="min-width: 5px; cursor: pointer">
+                        <i class="far fa-envelope" id="sendEmail" data-id="<?= $this->id ?>" style="cursor: pointer" title="Enviar email"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <?php if (!isset($this->disableUpload)) { ?>
+            <table class="traffic-table">
+                <tr>
+                    <th colspan="3" class="traffic-table-title">ARCHIVO</th>
+                </tr>
+                <tr>
+                    <th>Seleccionar archivo</th>
+                    <td style="text-align: left">
+                        <input type="file" name="file[]" id="file" class="required" multiple />
+                    </td>
+                    <td>
+                        <button type="submit" id="submit" class="traffic-btn traffic-btn-right">
+                            <i class="fas fa-upload"></i> Subir archivo
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        <?php } ?>
+    </form>
+    <?php if (!isset($this->disableUpload)) { ?>
+        <div class="progress progress-striped active">
+            <div class="bar bar-success"></div >
+            <div class="percent">0%</div >
+        </div>
+    <?php } ?>
+    <div id="files"></div>
+    <div class="traffic-clear-5"></div>
+    <?php if(!isset($this->downloadZip)) { ?>
+        <a href="/archivo/get/descargar-carpeta?id=<?= $this->id ?>" class="traffic-btn traffic-btn-right">
+            <i class="fas fa-cloud-download-alt"></i> Descargar todo
+        </a>
+    <?php } else { ?>
+        <span style="color: red; padding-left: 10px; font-size: 11px"><?= $this->downloadZip["message"] . " " . $this->downloadZip["size"] ?></span>
+        <a id="ftpLink" data-id="<?= $this->id ?>" class="traffic-btn traffic-btn-right">LINK FTP</a>
+    <?php } ?>
+    <?php if (!isset($this->disableUpload) && !isset($this->noFtp)) { ?>
+        <a id="enviarFtp" class="traffic-btn traffic-btn-right" style="width: 50px; padding-left: 0; padding-right: 0; min-width: 50px">FTP</a>
+    <?php } ?>
+<?php } ?>
+<div id="photos" style="clear: both"></div>
+<div class="traffic-clear-5"></div>
+<!--<a onclick="window.history.back();" class="traffic-btn-back">&laquo;&nbsp;Regresar</a>-->
+<a onclick="window.history.back();" class="traffic-btn" tabindex="99">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<div class="traffic-clear-5"></div>

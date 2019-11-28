@@ -1,0 +1,48 @@
+<form id="form">
+    <input type="hidden" name="idEmpresa" value="<?= $this->idEmpresa ?>" />                            
+    <input type="hidden" name="idDepto" value="<?= $this->idDepto ?>" />                            
+    <input type="hidden" name="idPuesto" value="<?= $this->idPuesto ?>" />                            
+    <table>
+        <tr>
+            <td>Supervisor:</td>
+            <td><?= $this->supervisor ?></td>
+        </tr>
+        <tr>
+            <td>Descripción:</td>
+            <td>
+                <textarea name="descripcionPuesto" id="descripcionPuesto" class="traffic-textarea-small"><?= isset($this->descripcionPuesto) ? $this->descripcionPuesto : '' ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" id="submit" class="traffic-btn-small traffic-btn-save traffic-btn-right">Guardar</button>                
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+    
+    $(document.body).on("click", "#submit", function (ev) {
+        ev.preventDefault();
+        $("#form").ajaxSubmit({
+            url: '/rrhh/post/guardar-puesto',
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+                if (res.success === true) {
+                    $.toast({text: "<strong>Guardado</strong>", bgColor: "green", stack : 3, position : "bottom-right"});
+                }
+            }
+        });
+    });
+    
+    $(document.body).on("input", "#descripcion", function (evt) {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

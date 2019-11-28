@@ -1,0 +1,34 @@
+<table>
+    <thead>
+        <tr>
+            <?php if (isset($this->titulos["titulos"])) { ?>
+                <?php foreach ($this->titulos["titulos"] as $k => $v) { ?>
+                    <th><?= $k ?></th>
+                <?php } ?>
+            <?php } ?>            
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) && !empty($this->data)) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <?php foreach ($this->titulos["titulos"] as $k => $v) { ?>
+                        <?php if (isset($item[$v]) && !isset($this->titulos["numbers"][$v]) && !isset($this->titulos["dates"][$v])) { ?>
+                            <td><?= $item[$v] ?></td>
+                        <?php } elseif (isset($item[$v]) && isset($this->titulos["numbers"][$v]) && !isset($this->titulos["dates"][$v])) { ?>
+                            <td style="text-align: right"><?= number_format($item[$v], $this->titulos["numbers"][$v]) ?></td>
+                        <?php } elseif (isset($item[$v]) && !isset($this->titulos["numbers"][$v]) && isset($this->titulos["dates"][$v])) { ?>
+                            <td style="text-align: center"><?= date($this->titulos["dates"][$v], strtotime($item[$v])) ?></td>
+                        <?php } else { ?>
+                            <td>&nbsp;</td>
+                        <?php } ?>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="<?= count($this->titulos["titulos"]) ?>">No existen resultados para los parámetros proporcioandos.</td>                    
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

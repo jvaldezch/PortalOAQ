@@ -1,0 +1,81 @@
+<form id="frmPackage">
+    <input type="hidden" name="idBulto" id="idBulto" value="<?= $this->data["id"] ?>" />
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>UUID</th>
+                <td><?= $this->data["uuid"] ?></td>
+            </tr>
+            <tr>
+                <th>Daño</th>
+                <td>
+                    <input type="checkbox" name="damage" <?= (isset($this->data["dano"]) && $this->data["dano"] == 1) ? 'checked="true"' : '' ?>/>
+                </td>
+            </tr>
+            <tr>
+                <th>Escaneado</th>
+                <td>
+                    <input type="checkbox" name="escaneado" <?= (isset($this->data["escaneado"]) && $this->data["escaneado"] == 1) ? 'checked="true"' : '' ?>/>
+                </td>
+            </tr>
+            <tr>
+                <th>Descargado</th>
+                <td>
+                    <input type="text" id="bulto_descarga" name="bulto_descarga" class="traffic-input-date" value="<?= isset($this->data["descarga"]) ? date("Y-m-d H:i", strtotime($this->data["descarga"])) : '' ?>" style="width: 100px !important" />
+                </td>
+            </tr>
+            <tr>
+                <th>Cargado</th>
+                <td>
+                    <input type="text" id="bulto_carga" name="bulto_carga" class="traffic-input-date" value="<?= isset($this->data["carga"]) ? date("Y-m-d H:i", strtotime($this->data["carga"])) : '' ?>" style="width: 100px !important" />
+                </td>
+            </tr>
+            <tr>
+                <th>Revisión</th>
+                <td>
+                    <input type="text" id="bulto_revision" name="bulto_revision" class="traffic-input-date" value="<?= isset($this->data["revision"]) ? date("Y-m-d H:i", strtotime($this->data["revision"])) : '' ?>" style="width: 100px !important" />
+                </td>
+            </tr>
+            <tr>
+                <th>Escaneado</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Mercancia</th>
+                <td>
+                    <textarea id="mercancia" name="mercancia" class="traffic-textarea-medium"><?= $this->data["mercancia"] ?></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>Observación</th>
+                <td>
+                    <textarea id="observacion" name="observacion" class="traffic-textarea-medium"><?= $this->data["observacion"] ?></textarea>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script type="text/javascript">
+    
+    $(document.body).on("input", "#mercancia, #observacion", function (evt) {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+        
+    $("#frmPackage input[class=traffic-input-date]").datetimepicker({
+        format:'YYYY-MM-DD H:mm',
+        formatTime:'H:mm',
+        formatDate:'YYYY-MM-DD'
+    });
+    
+</script>

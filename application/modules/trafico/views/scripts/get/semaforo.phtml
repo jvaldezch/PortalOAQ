@@ -1,0 +1,51 @@
+<form action="/trafico/post/pedimento-estatus" id="formSemaphore"> 
+    <input type="hidden" name="idTrafico" value="<?= $this->idTrafico ?>"> 
+    <div class="radio"> 
+        <label for="optradio">
+            <input type="radio" id="greenselect" name="optradio" value="1">
+            <div class="semaphore-green"></div>VERDE EN PRIMERA SELECCIÓN
+        </label> 
+    </div> 
+    <div class="radio"> 
+        <label>
+            <input type="radio" id="redselect" name="optradio" value="2">
+            <div class="semaphore-red"></div>ROJO EN PRIMERA SELECCIÓN
+        </label> 
+    </div> 
+    <div class="textarea"> 
+        <label for="observaciones">Observaciones:</label> 
+        <textarea name="observaciones" id="observaciones" style="width: 320px; height: 100px"><?= isset($this->observaciones) ? $this->observaciones : "" ?></textarea>
+    </div> 
+</form>
+<script type="text/javascript">
+    $("#formSemaphore").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorClass: "traffic-error-span",
+        rules: {
+            observaciones: {
+                required: "#redselect:checked"
+            }
+        },
+        messages: {
+            observaciones: "[Campo necesario]"
+        }
+    });
+    
+    $(document).on("input", "#observaciones", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+    <?php if (isset($this->semaforo)) { ?>
+        $("input[name=optradio][value='<?= $this->semaforo ?>']").attr('checked', 'checked');
+    <?php } ?>
+</script>

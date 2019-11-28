@@ -1,0 +1,42 @@
+<div id="modalWindow">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Enviar por correo</h3>
+    </div>
+    <div class="modal-body">
+        <?php if($this->emails) { ?>
+        <h4>El correo será enviado a los siguiente destinatarios.</h4><br />
+        <table class="table">
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+            </tr>
+            <?php foreach($this->emails as $email) { ?>
+            <tr>
+                <td><?= $email['nombre'] ?></td>
+                <td><?= $email['email'] ?></td>
+            </tr>
+            <?php } ?>
+        </table>
+        <?php } else { ?>
+        <h4  style="padding-bottom: 50px">Lo sentimos no existen correos para destinatarios; debe filtar primero los resultados.</h4>
+        <?php } ?>
+    </div>
+    <div class="modal-footer">
+      <?php if($this->emails) { ?>
+        <a id="send" class="btn btn-primary">Enviar por correo</a>
+      <?php } ?>
+      <a id="closeModal" class="btn" data-dismiss="modal">Cerrar</a>
+    </div>
+</div>
+<script>
+    $("a#send").click(function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: "/administracion/index/send-email",
+            cache: false
+        }).done(function(html) {
+            $('#closeModal').trigger('click');
+        });
+    });
+</script>

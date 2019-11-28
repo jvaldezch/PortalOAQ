@@ -1,0 +1,39 @@
+<table class="traffic-table traffic-table-left" id="inhouseTable">
+    <thead>
+        <tr>
+            <th style="width: 80px">RFC</th>
+            <th>Nombre</th>
+            <th style="width: 40px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($this->data) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td><?= $item["rfc"] ?></td>
+                    <td><?= $item["nombre"] ?></td>
+                    <td>
+                        <i class="far fa-trash-alt" onclick="parent.borrarInhouseRfc('<?= $item["id"] ?>');" style="font-size: 1.3em; color: #2f3b58; cursor: pointer"></i>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="3" style="text-align: center"><em>El usuario no tiene clientes asignados.</em></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php if ($this->data) { ?>
+    <script type="text/javascript">
+        $("#inhouseTable").dataTable({
+            "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
+            "sPaginationType": "bootstrap",
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ registros por página"
+            },
+            "iDisplayLength": 10,
+            "aaSorting": [[10, "desc"]]
+        });
+    </script>
+<?php } ?>

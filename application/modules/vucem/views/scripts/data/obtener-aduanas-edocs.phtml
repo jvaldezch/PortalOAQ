@@ -1,0 +1,56 @@
+<div id="modalWindow">
+    <div class="modal-body"style="padding: 0; overflow: hidden">
+        <table class="traffic-table traffic-table-left" style="border: none; border-top-right-radius: 6px; border-top-left-radius: 6px">
+            <thead>
+                <tr>
+                    <th colspan="2" style="border: none; border-top-right-radius: 6px; border-top-left-radius: 6px; height: 30px; vertical-align: middle">Aduana disponibles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($this->aduanas) { ?>
+                    <?php foreach ($this->aduanas as $item) { ?>
+                        <tr>
+                            <td style="text-align: center"><input type="radio" name="aduana" id="no" value="<?= $item["patente"] ?>,<?= $item["aduana"] ?>" style="margin-bottom: 5px" /></td>
+                            <td><?= $item["ubicacion"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="2">No tiene aduanas asignadas para el RFC seleccionado.</td>
+                    </tr>
+            <?php } ?>
+            </tbody>            
+        </table>
+    </div>
+    <div class="modal-footer" style="padding: 10px 6px 6px;">
+        <a id="closeModal" class="traffic-btn traffic-btn-right" data-dismiss="modal">
+            <i class="fas fa-times"></i>&nbsp;Cerrar
+        </a>
+    </div>
+</div>
+<script>
+    $("input[name='aduana']").click(function () {
+        var Selection = $(this).val();
+        var n = Selection.split(",");
+        $("#patente").val(n[0]);
+        $("#aduana").val(n[1]);
+        if ($("#firmante").val() !== 'MALL640523749') {
+            $("#rfc").val('OAQ030623UL8');
+            $("#nombre").val('ORGANIZACION ADUANAL DE QUERETARO, S.C.');
+        }
+        $('#closeModal').trigger('click');
+    });
+    $("#select").click(function () {
+        if ($("input[name='aduana']:checked").val()) {
+            var Selection = $("input[name='aduana']:checked").val();
+            var n = Selection.split(",");
+            $("#patente").val(n[0]);
+            $("#aduana").val(n[1]);
+            if ($("#firmante").val() !== 'MALL640523749') {
+                $("#rfc").val('OAQ030623UL8');
+                $("#nombre").val('ORGANIZACION ADUANAL DE QUERETARO, S.C.');
+            }
+            $('#closeModal').trigger('click');
+        }
+    });
+</script>

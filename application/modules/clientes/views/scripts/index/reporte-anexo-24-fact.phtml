@@ -1,0 +1,73 @@
+<fieldset>
+    <legend>Reporte Anexo 24</legend>
+    <?= $this->form ?>
+    <?PHP if(isset($this->paginator)) { ?>
+    <ul id="download-links">
+        <li>Descargar este reporte en: <img src="/images/icons/ms-excel.png" />&nbsp;<a href="/clientes/data/excel-reporte-anexo-24">Excel</a></li>
+    </ul>
+    <?= (isset($this->paginator)) ? $this->paginationControl($this->data,'Sliding', 'pagination.phtml') : '&nbsp;' ?>
+    <table class="table table-striped table-bordered table-hover small">
+        <thead>
+            <tr>
+                <th>Impo/Expo</th>
+                <th>Factura</th>
+                <th>CodigoP</th>
+                <th>FechaF</th>
+                <th>FMoneda</th>
+                <th>NumParte</th>
+                <th>Descripcion</th>
+                <th>TipoBien</th>
+                <th>FraccionImpo</th>
+                <th>Tasa</th>
+                <th>TipoTasa</th>
+                <th>Unidad</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Conversion</th>
+                <th>Origen</th>
+                <th>Vendedor</th>
+                <th>Fpago</th>
+                <th>Incoterm</th>
+                <th>Cove</th>
+                <th>AcuerdoCom</th>
+                <th>TLC</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?PHP foreach($this->paginator as $item) { ?>
+            <tr>
+                <td><?= $item["Importacion"] ?></td>
+                <td><?= $item["Factura"] ?></td>
+                <td><?= $item["CodigoP"] ?></td>
+                <td><?= $item["FechaF"] ?></td>
+                <td><?= $item["FMoneda"] ?></td>
+                <td><?= $item["NumParte"] ?></td>
+                <td><?= $item["Descripcion"] ?></td>
+                <td><?= $item["TipoBien"] ?></td>
+                <td><?= $item["FraccionImpo"] ?></td>
+                <td><?= $item["Tasa"] ?></td>
+                <td><?= $item["TipoTasa"] ?></td>
+                <td><?= $item["Unidad"] ?></td>
+                <td><?= $item["Precio"] ?></td>
+                <td><?= $item["Cantidad"] ?></td>
+                <td><?= $item["Conversion"] ?></td>
+                <td><?= $item["Origen"] ?></td>
+                <td><?= $item["Vendedor"] ?></td>
+                <td><?= $item["Fpago"] ?></td>
+                <td><?= $item["Incoterm"] ?></td>
+                <td><?= $item["Cove"] ?></td>
+                <td><?= $item["AcuerdoCom"] ?></td>
+                <td><?= $item["TLC"] ?></td>
+            </tr>
+            <?PHP } ?>
+        </tbody>
+    </table>
+    <?= (isset($this->paginator)) ? $this->paginationControl($this->data,'Sliding', 'pagination.phtml') : '&nbsp;' ?>
+    <?PHP } elseif($this->error) { ?>
+    <div class="alert alert-block">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4>¡Advertencia!</h4>
+        <?= $this->error ?>
+    </div>
+    <?PHP } ?>
+</fieldset>

@@ -1,0 +1,241 @@
+<?php
+$duracion = array(
+    "15" => "15 min",
+    "30" => "30 min",
+    "45" => "45 min",
+    "60" => "1 hr",
+    "75" => "1 hr 15 min",
+    "90" => "1 hr 30 min",
+    "105" => "1 hr 45 min",
+    "120" => "2 hr",
+    "135" => "2 hr 15 min",
+    "150" => "2 hr 30 min",
+    "165" => "2 hr 45 min",
+    "180" => "3 hr",
+    "195" => "3 hr 15 min",
+    "210" => "3 hr 30 min",
+    "225" => "3 hr 45 min",
+    "240" => "4 hr",
+    "255" => "4 hr 15 min",
+    "270" => "4 hr 30 min",
+    "285" => "4 hr 45 min",
+    "300" => "5 hr",
+    "315" => "5 hr 15 min",
+    "330" => "5 hr 30 min",
+    "345" => "5 hr 45 min",
+    "360" => "6 hr",
+    "375" => "6 hr 15 min",
+    "390" => "6 hr 30 min",
+    "405" => "6 hr 45 min",
+    "420" => "7 hr",
+    "435" => "7 hr 15 min",
+    "450" => "7 hr 30 min",
+    "465" => "7 hr 45 min",
+    "480" => "8 hr"
+);
+?>
+<?php if (isset($this->idDepto)) { ?>
+    <?php if ($this->idDepto == 1) { // admin ?>
+        <table class="activities-form" style="width: 100%">
+            <tr>
+                <th style="text-align: left; width: 150px">Total de envios:</th>
+                <th>
+                    <input type="text" id="totalEnvios" name="totalEnvios" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Saldo al final:</th>
+                <th>
+                    <input type="text" id="saldoFinal" name="saldoFinal" class="traffic-input-small" />
+                </th>
+            </tr>
+            <tr>
+                <th>Total de expedientes facturados:</th>
+                <th>
+                    <input type="text" id="expedientesFacturados" name="expedientesFacturados" class="traffic-input-small" />
+                </th>
+                <th style="text-align: right">Facturas canceladas:</th>
+                <th>
+                    <input type="text" id="facturasCanceladas" name="facturasCanceladas" class="traffic-input-small" />
+                </th>
+            </tr>
+            <tr>
+                <th>Expedientes archivados:</th>
+                <th>
+                    <input type="text" id="expedientesArchivados" name="expedientesArchivados" class="traffic-input-small" />
+                </th>
+                <th style="text-align: right">Duración:</th>
+                <th style="width: 90px">
+                    <select id="duracion" name="duracion" class="traffic-select-xs" style="width: 110px !important">
+                        <option value="">---</option>
+                        <?php foreach($duracion as $k => $v) { ?>
+                            <option value="<?= $k ?>"><?= $v ?></option>
+                        <?php } ?>
+                    </select>
+                </th>
+            </tr>
+        </table>
+    <?php } ?>
+    <?php if ($this->idDepto == 3) { // comer ?>
+        <table class="activities-form" style="width: 100%">
+            <tr>
+                <th style="text-align: left; width: 150px">Cliente:</th>
+                <th colspan="3">
+                    <select id="idCliente" name="idCliente" class="traffic-select-large">
+                        <option value="">---</option>
+                        <?php if (isset($this->clientes)) { ?>
+                            <?php foreach ($this->clientes as $item) { ?>
+                                <option value="<?= $item["id"] ?>"><?= mb_strtoupper($item["nombre"]) ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th>Visitas:</th>
+                <th>
+                    <input type="text" id="visitas" name="visitas" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Llamadas:</th>
+                <th>
+                    <input type="text" id="llamadas" name="llamadas" class="traffic-input-small"/>
+                </th>
+            </tr>
+            <tr>
+                <th>Quejas:</th>
+                <th>
+                    <input type="text" id="quejas" name="quejas" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Documentos:</th>
+                <th>
+                    <input type="text" id="documentos" name="documentos" class="traffic-input-small"/>
+                </th>
+            </tr>
+            <tr>
+                <th style="text-align: right" colspan="3">Duración:</th>
+                <th style="width: 90px">
+                    <select id="duracion" name="duracion" class="traffic-select-xs" style="width: 110px !important">
+                        <option value="">---</option>
+                        <?php foreach($duracion as $k => $v) { ?>
+                            <option value="<?= $k ?>"><?= $v ?></option>
+                        <?php } ?>
+                    </select>
+                </th>
+            </tr>
+        </table>
+    <?php } ?>
+    <?php if ($this->idDepto == 5 || $this->idDepto == 4) { // operaciones ?>
+        <table class="activities-form" style="width: 100%">
+            <tr>
+                <th style="text-align: left; width: 150px">Pedimentos modulados:</th>
+                <th>
+                    <input type="text" id="pedimentosModulados" name="pedimentosModulados" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Pedimentos pagados:</th>
+                <th>
+                    <input type="text" id="pedimentosPagados" name="pedimentosPagados" class="traffic-input-small"/>
+                </th>
+            </tr>
+            <tr>
+                <th>Cantidad verdes:</th>
+                <th>
+                    <input type="text" id="cantidadVerdes" name="cantidadVerdes" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Cantidad rojos:</th>
+                <th>
+                    <input type="text" id="cantidadRojos" name="cantidadRojos" class="traffic-input-small"/>
+                </th>
+            </tr>
+            <tr>
+                <th>Quejas:</th>
+                <th>
+                    <input type="text" id="quejas" name="quejas" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Consultas:</th>
+                <th>
+                    <input type="text" id="consultas" name="consultas" class="traffic-input-small"/>
+                </th>
+            </tr>
+            <tr>
+                <th>Multas:</th>
+                <th>
+                    <input type="text" id="multas" name="multas" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Duración:</th>
+                <th style="width: 90px">
+                    <select id="duracion" name="duracion" class="traffic-select-xs" style="width: 110px !important">
+                        <option value="">---</option>
+                        <?php foreach($duracion as $k => $v) { ?>
+                            <option value="<?= $k ?>"><?= $v ?></option>
+                        <?php } ?>
+                    </select>
+                </th>
+            </tr>
+        </table>
+    <?php } ?>
+    <?php if ($this->idDepto == 7) { // ti ?>
+        <table class="activities-form" style="width: 100%">
+            <tr>
+                <th style="text-align: left; width: 150px">Tipo actividad:</th>
+                <th colspan="3">
+                    <select id="tipoActividad" name="tipoActividad" class="traffic-select-large">
+                        <option value="">---</option>
+                        <?php if (isset($this->misActividades)) { ?>
+                            <?php foreach ($this->misActividades as $item) { ?>
+                                <option value="<?= $item["id"] ?>"><?= mb_strtoupper($item["descripcion"]) ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th>Cliente:</th>
+                <th colspan="3">
+                    <select id="idCliente" name="idCliente" class="traffic-select-large">
+                        <option value="">---</option>
+                        <?php if (isset($this->clientes)) { ?>
+                            <?php foreach ($this->clientes as $item) { ?>
+                                <option value="<?= $item["id"] ?>"><?= mb_strtoupper($item["nombre"]) ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th>Total de tickets:</th>
+                <th>
+                    <input type="text" id="totalTickets" name="totalTickets" class="traffic-input-small"/>
+                </th>
+                <th style="text-align: right">Duración:</th>
+                <th style="width: 90px">
+                    <select id="duracion" name="duracion" class="traffic-select-xs" style="width: 110px !important">
+                        <option value="">---</option>
+                        <?php foreach($duracion as $k => $v) { ?>
+                            <option value="<?= $k ?>"><?= $v ?></option>
+                        <?php } ?>
+                    </select>
+                </th>
+            </tr>
+        </table>
+        <script type="text/javascript">
+            $("#activityForm").validate({
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("#" + element.attr("id"))
+                            .after(error);
+                },
+                errorElement: "span",
+                errorClass: "traffic-error",
+                rules: {
+                    idDepto: "required",
+                    tipoActividad: "required"
+                },
+                messages: {
+                    idDepto: "Necesario.",
+                    tipoActividad: "Necesario."
+                }
+            });            
+        </script>
+    <?php } ?>
+<?php } else { ?>
+<?php } ?>
+<script type="text/javascript"></script>

@@ -1,0 +1,96 @@
+<fieldset style="width:100%">
+    <legend>Pedimentos Pagados (M3)</legend>
+    <?= $this->form ?>
+    <?php
+    if ((!isset($this->validacion) && !isset($this->paid) && !isset($this->respuesta)) && (isset($this->pagados) && !empty($this->pagados))) {
+    echo '<table class="table table-striped table-bordered table-hover small">';
+    echo "<tr>";
+    echo "<th{$th}>#</th>";
+    echo "<th{$th}>idArchivoPago</th>";
+    echo "<th{$th}>patente</th>";
+    echo "<th{$th}>aduana</th>";
+    echo "<th{$th}>pedimento</th>";
+    echo "<th{$th}>cveDoc</th>";
+    echo "<th{$th}>tipoMovimiento</th>";
+    echo "<th{$th}>rfcImportador</th>";
+    echo "<th{$th}>firmaBanco</th>";
+    echo "<th{$th}>firmaValidacion</th>";
+    echo "<th{$th}>FechaPago</th>";
+    echo "<th{$th}>&nbsp;</th>";
+    echo "</tr>";
+    $i = 1;
+    if(isset($this->pagados)) {
+        foreach ($this->pagados as $item) {
+            if (isset($item["detalle"]["idArchivoM3"])) {
+                $a = $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'ver-archivo-pedimento')) . '?patente=' . $item["patente"] . '&aduana=' . $item["aduana"] . '&pedimento=' . $item["pedimento"] . '&archivo=' . $item["detalle"]["idArchivoM3"];
+                $d = "";
+                if ($item["detalle"]["idArchivoM3"]) {
+                    $d = "|&nbsp;<a href=\"" . $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'descargar-m3-pedimento')) . '?patente=' . $item["patente"] . '&aduana=' . $item["aduana"] . '&pedimento=' . $item["pedimento"] . '&archivo=' . $item["detalle"]["idArchivoM3"] . "\">".(isset($item["detalle"]["archivoNombreM3"]) ? $item["detalle"]["archivoNombreM3"] : 'Descargar M3')."</a>&nbsp;";
+                }
+                $p = "";
+                if ($item["idArchivoValidacion"]) {
+                    $p = "|&nbsp;<a href=\"" . $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'descargar-pago-pedimento')) . '?patente=' . $item["patente"] . '&aduana=' . $item["aduana"] . '&pedimento=' . $item["pedimento"] . '&archivo=' . $item["idArchivoPago"] . "\">Descargar Pago</a>&nbsp;";
+                }
+                $v = "";
+                if ($item["idArchivoValidacion"]) {
+                    $v = "|&nbsp;<a href=\"" . $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'descargar-archivo-validacion')) . '?patente=' . $item["patente"] . '&aduana=' . $item["aduana"] . '&pedimento=' . $item["pedimento"] . '&archivo=' . $item["idArchivoValidacion"] . "\">Descargar Validación</a>&nbsp;";
+                }
+                $e = "";
+                if ($item["idArchivoResultado"]) {
+                    $e = "|&nbsp;<a href=\"" . $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'descargar-resultados')) . '?patente=' . $item["patente"] . '&aduana=' . $item["aduana"] . '&pedimento=' . $item["pedimento"] . '&archivo=' . $item["idArchivoResultado"] . "\">Descargar E</a>";
+                }
+                echo "<tr>";
+                echo "<td>" . $i++ . "</td>";
+                echo "<td>{$item["idArchivoPago"]}</td>";
+                echo "<td>{$item["patente"]}</td>";
+                echo "<td>{$item["detalle"]["aduana"]}</td>";
+                echo "<td>{$item["pedimento"]}</td>";
+                echo "<td>{$item["detalle"]["cveDoc"]}</td>";
+                echo "<td>{$item["detalle"]["tipoMovimiento"]}</td>";
+                echo "<td>{$item["rfcImportador"]}</td>";
+                echo "<td>{$item["firmaBanco"]}</td>";
+                echo "<td>{$item["firmaValidacion"]}</td>";
+                echo "<td>" . date('Y-m-d', strtotime($item["fechaPago"])) . "</td>";
+                echo "<td><a href=\"{$a}\" target=\"_blank\">Ver archivo</a>&nbsp;{$d}{$p}{$v}{$e}";
+                echo "</tr>";
+            } else {
+                continue;
+            }
+        }
+    }
+    echo "</table>";
+    
+    } elseif(isset($this->validacion) || isset($this->respuesta) || isset($this->paid)) {        
+        echo '<table class="table table-striped table-bordered table-hover small">'
+                . '<tr>'
+                . "<th{$th}>Año</th>"
+                . "<th{$th}>Patente</th>"
+                . "<th{$th}>Aduana</th>"
+                . "<th{$th}>Nombre Archivo</th>"
+                . "<th{$th}>Creado</th>"
+                . '</tr>';
+        if(isset($this->pagados)) {
+            foreach ($this->pagados as $item) {
+                if(isset($this->validacion)) {
+                    $url = $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'descargar-m3-pedimento'));
+                }
+                if(isset($this->respuesta)) {
+                    $url = $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'descargar-archivo-validacion'));
+                }
+                if(isset($this->paid)) {
+                    $url = $this->url(array('module' => $this->module, 'controller' => $this->controller, 'action' => 'descargar-pago-pedimento'));
+                }
+                echo '<tr>'
+                . '<td>'.$item["year"].'</td>'
+                . '<td>'.$item["patente"].'</td>'
+                . '<td>'.$item["aduana"].'</td>'
+                . "<td><a href=\"" . $url . '?patente=' . $item["patente"] . '&aduana=' . $item["aduana"] . '&pedimento=' . $item["pedimento"] . '&archivo=' . $item["id"] . "\">".$item["archivoNombre"].'</a></td>'
+                . '<td>'.$item["creado"].'</td>'
+                . '</tr>';
+            }
+        }
+        echo '</table>';        
+    }
+    ?>
+</fieldset>
+<script type="text/javascript" src="/js/archivo/cuentas-de-gasto.js"></script>

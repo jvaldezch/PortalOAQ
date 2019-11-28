@@ -1,0 +1,220 @@
+<style>
+    .tt-hint,
+    .tt-dropdown-menu {
+        width:100%;        
+    }
+</style>
+<div class="traffic-clear-5"></div>
+<a href="javascript:window.history.back();" class="traffic-btn" tabindex="99">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<?php if (isset($this->uuidFactura)) { ?>
+    <a href="/automatizacion/vucem/print-invoice?uuid=<?= $this->uuidFactura ?>&download=true" class="traffic-btn traffic-btn-right">
+        <i class="fas fa-print"></i> Imprimir en PDF
+    </a>
+    <a href="/automatizacion/vucem/proforma?uuid=<?= $this->uuidFactura ?>" target="_blank" class="traffic-btn traffic-btn-right">
+        <i class="far fa-file-pdf"></i> Proforma
+    </a>
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<div id="error-messages"></div>
+<form id="invoice-data">
+    <?= $this->form->IdFact ?>
+    <table class="traffic-table traffic-table-light">
+        <tr>
+            <th>Firma (FEA)</th>
+            <th>Tipo</th>
+            <th>Patente</th>
+            <th>Aduana</th>                
+            <th>Pedimento *</th>
+            <th>Referencia *</th>
+            <th>Número factura *</th>
+            <th>Factor Ajuste</th>
+            <th>&nbsp;</th>            
+        </tr>
+        <tr>
+            <td><?= $this->form->firmante ?></td>
+            <td><?= $this->form->TipoOperacion ?></td>
+            <td><?= $this->form->Patente ?></td>
+            <td><?= $this->form->Aduana ?></td>
+            <td><?= $this->form->Pedimento ?></td>
+            <td><?= $this->form->Referencia ?></td>
+            <td><?= $this->form->NumFactura ?></td>
+            <td><?= $this->form->FactFacAju ?></td>
+            <td><div class="control-group" style="float:right;">
+                    <button id="save-header" tabindex="4" class="traffic-btn traffic-btn-right traffic-btn-small">Guardar enc.</button></div>
+            </td>
+        </tr>
+    </table>        
+    <table class="traffic-table traffic-table-light traffic-table-left">
+        <tr>
+            <th>Fecha Factura (yyyy-mm-dd)</th>
+            <td colspan="3"><?= $this->form->FechaFactura ?><img src="/images/icons/calendar.png" onclick="show_cal('FechaFactura');" style="margin-left: 5px;"></td>
+            <th>Certificado de origen</th>
+            <td colspan="3"><?= $this->form->CertificadoOrigen ?></td>
+        </tr>
+        <tr>
+            <th>Subdivisión</th>
+            <td colspan="3"><?= $this->form->Subdivision ?></td>
+            <th>Número de exportador</th>
+            <td colspan="3"><?= $this->form->NumExportador ?></td>
+        </tr>
+        <tr>
+            <th colspan="4" class="traffic-table-subtitle">EMISOR</th>
+            <th colspan="4" class="traffic-table-subtitle">DESTINATARIO</th>
+        </tr>        
+        <tr>
+            <th>RFC/TaxId *</th>
+            <td colspan="3"><?= $this->form->ProTaxID ?><?= $this->form->CvePro ?></td>
+            <th>RFC/TaxId *</th>            
+            <td colspan="3"><?= $this->form->CteRfc ?><?= $this->form->CveCli ?></td>
+        </tr>
+        <tr>
+            <th>Identificador *</th>
+            <td colspan="3"><?= $this->form->ProIden ?></td>
+            <th>Identificador *</th>
+            <td colspan="3"><?= $this->form->CteIden ?></td>
+        </tr>        
+        <tr>
+            <th>Nombre *</th>
+            <td colspan="3"><?= $this->form->ProNombre ?></td>
+            <th>Nombre *</th>
+            <td colspan="3"><?= $this->form->CteNombre ?></td>
+        </tr>
+        <tr>
+            <th>Calle *</th>
+            <td colspan="3"><?= $this->form->ProCalle ?></td>
+            <th>Calle *</th>
+            <td colspan="3"><?= $this->form->CteCalle ?></td>
+        </tr>
+        <tr>
+            <th>Num. Exterior</th>
+            <td><?= $this->form->ProNumExt ?></td>
+            <th>Num. Interior</th>
+            <td><?= $this->form->ProNumInt ?></td>
+            <th>Num. Exterior</th>
+            <td><?= $this->form->CteNumExt ?></td>
+            <th>Num. Interior</th>
+            <td><?= $this->form->CteNumInt ?></td>
+        </tr>
+        <tr>
+            <th>Colonia</th>
+            <td colspan="3"><?= $this->form->ProColonia ?></td>
+            <th>Colonia</th>
+            <td colspan="3"><?= $this->form->CteColonia ?></td>
+        </tr>
+        <tr>
+            <th>Localidad</th>
+            <td colspan="3"><?= $this->form->ProLocalidad ?></td>
+            <th>Localidad</th>
+            <td colspan="3"><?= $this->form->CteLocalidad ?></td>
+        </tr>
+        <tr>
+            <th>Municipio</th>
+            <td colspan="3"><?= $this->form->ProMun ?></td>
+            <th>Municipio</th>
+            <td colspan="3"><?= $this->form->CteMun ?></td>
+        </tr>
+        <tr>
+            <th>Estado</th>
+            <td colspan="3"><?= $this->form->ProEdo ?></td>
+            <th>Estado</th>
+            <td colspan="3"><?= $this->form->CteEdo ?></td>
+        </tr>
+        <tr>
+            <th>C.P.</th>
+            <td colspan="3"><?= $this->form->ProCP ?></td>
+            <th>C.P.</th>
+            <td colspan="3"><?= $this->form->CteCP ?></td>
+        </tr>
+        <tr>
+            <th>Pais</th>
+            <td colspan="3"><?= $this->form->ProPais ?></td>
+            <th>Pais</th>
+            <td colspan="3"><?= $this->form->CtePais ?></td>
+        </tr>
+        <tr>
+            <th>Observaciones</th>
+            <td colspan="7"><?= $this->form->Observaciones ?></td>            
+        </tr>
+        <tr>
+            <td colspan="8">
+                <div class="control-group" style="float:right;">
+                    <button id="invoice-save" class="traffic-btn traffic-btn-right">
+                        <i class="far fa-save"></i> Guardar factura
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+<?php if (isset($this->uuidFactura)) { ?>
+    <form id="invoice-products">
+        <?= $this->formprod->ID_FACT ?><?= $this->formprod->ID_PROD ?>
+        <table  class="traffic-table traffic-table-light traffic-table-left">
+            <tr>
+                <th colspan="13" class="traffic-table-subtitle">PRODUCTO</th>
+            </tr>
+            <tr>
+                <th>Orden</th>
+                <th>Fracción</th>
+                <th>Num. Parte</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>P.Unit.</th>
+                <th>Moneda</th>
+                <th>Val. Comercial</th>            
+                <th>F. Equivalencia</th>
+                <th>Val. Dolares</th>
+                <th>UMC</th>
+                <th>OMA</th>
+            </tr>
+            <tr>
+                <td><?= $this->formprod->ORDEN ?></td>
+                <td><?= $this->formprod->CODIGO ?></td>
+                <td>
+                    <!--<img src="/images/icons/add-icon.png" style="display: inline; float:right;" />-->
+                    <?= $this->formprod->PARTE ?>
+                </td>
+                <td><?= $this->formprod->DESC_COVE ?></td>
+                <td><?= $this->formprod->CANTFAC ?></td>
+                <td><?= $this->formprod->PREUNI ?></td>            
+                <td><?= $this->formprod->MONVAL ?></td>
+                <td><?= $this->formprod->VALCOM ?></td>            
+                <td><?= $this->formprod->VALCEQ ?></td>
+                <td><?= $this->formprod->VALDLS ?></td>
+                <td><?= $this->formprod->UMC ?></td>
+                <td><?= $this->formprod->UMC_OMA ?></td>            
+            </tr>
+            <tr>
+                <th colspan="3">Marca</th>            
+                <th colspan="2">Modelo</th>            
+                <th colspan="2">Submodelo</th>            
+                <th colspan="2">Num. Serie</th>            
+                <th colspan="6">&nbsp;</th>            
+            </tr>
+            <tr>
+                <td colspan="3"><?= $this->formprod->MARCA ?></td>
+                <td colspan="2"><?= $this->formprod->MODELO ?></td>
+                <td colspan="2"><?= $this->formprod->SUBMODELO ?></td>
+                <td colspan="2"><?= $this->formprod->NUMSERIE ?></td>            
+                <td colspan="6">
+                    <div class="control-group">
+                        <button id="invoice-product" class="traffic-btn traffic-btn-right">
+                            <i class="far fa-save"></i> Guardar producto
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="13" class="traffic-table-subtitle">PRODUCTOS</th>
+            </tr>
+        </table>
+    </form>
+    <iframe src="/vucem/data/view-invoice-products" id="iframe"></iframe>
+    <div class="traffic-clear-5"></div>
+    <a href="javascript:window.history.back();" class="traffic-btn" tabindex="99">
+        <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+    </a>
+    <div class="traffic-clear-5"></div>
+<?php } ?>

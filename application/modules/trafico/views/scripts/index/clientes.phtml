@@ -1,0 +1,154 @@
+<table class="traffic-table">
+    <tr>
+        <td class="traffic-td-left">                            
+            <form method="get" action="/trafico/index/clientes" id="customer-search">
+                <input type="text" name="busqueda" id="busqueda" value="<?= isset($this->busqueda) ? $this->busqueda : "" ?>" autocomplete="off" class="traffic-input-large">
+                <button class="traffic-btn" style="float: none; display: inline-block">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </form>
+        </td>
+        <td>
+            <a href="/trafico/index/nuevo-cliente" class="traffic-btn traffic-btn-right">
+                <i class="far fa-file"></i> Nuevo cliente
+            </a>
+            <a class="traffic-btn traffic-btn-right" id="reporte" href="/trafico/get/reporte-clientes">
+                <i class="fas fa-table"></i> Reporte
+            </a>
+            <a href="/trafico/index/nueva-tarifa" class="traffic-btn traffic-btn-right">
+                <i class="far fa-file"></i> Nueva tarifa
+            </a>
+        </td>
+    </tr>
+</table>
+<div class="semaphoreBox">
+    <div style="float: left; margin-right: 5px"><div class="traffic-icon traffic-icon-vucem"></div>&nbsp;Sellos VUCEM</div>    
+    <div class="semaphore-holder">
+        <div class="semaphore-grey"></div><span>Cliente inactivo</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>Expediente no completo</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Expediente completo</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-orange"></div><span>Tarifa firmada</span>
+    </div>
+</div>
+<div class="traffic-radio-block" style="padding-left: 10px; padding-bottom: 5px; float: left; display: table-cell">
+    <div class="traffic-radio-input">
+        <input type="radio" value="0" id="filter" name="filter">&nbsp;<p>Todos</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="1" id="filter" name="filter">&nbsp;<p>Clientes Ináctivos</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="3" id="filter" name="filter">&nbsp;<p>Solo clientes activos</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="4" id="filter" name="filter">&nbsp;<p>Tarifa firmada</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="5" id="filter" name="filter">&nbsp;<p>Expediente completo</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="6" id="filter" name="filter">&nbsp;<p>Expediente no completo</p>
+    </div>
+</div>
+<div class="traffic-radio-block" style="padding-left: 10px; padding-bottom: 5px; float: left; display: table-cell">
+    <div class="traffic-radio-input">
+        <input type="radio" value="10" id="filter" name="filter">&nbsp;<p>Directo</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="99" id="filter" name="filter">&nbsp;<p>Prospectos</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="20" id="filter" name="filter">&nbsp;<p>Tercero</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="30" id="filter" name="filter">&nbsp;<p>Comisionista</p>
+    </div>
+    <div class="traffic-radio-input">
+        <input type="radio" value="40" id="filter" name="filter">&nbsp;<p>Corresponsal</p>
+    </div>
+</div>
+<div class="traffic-cols">
+    <div style="float: left; width: 70%">
+        <table class="traffic-table">
+            <tr>
+                <th style="width: 30px">&nbsp;</th>
+                <th style="width: 100px">RFC</th>
+                <th>Nombre</th>
+            </tr>
+        </table>
+        <div id="customer-list" style="height: 450px; overflow-y: auto; border-bottom: 1px #999 solid">
+            <table class="traffic-table hover">
+                <?php if (isset($this->paginator) && !empty($this->paginator)) { ?>
+                    <?php foreach ($this->paginator as $item) { ?>
+                        <tr>
+                            <td style="width: 30px">
+                                <?= ($item["activo"] == 0) ? '<div class="semaphore-grey"></div>' : "" ?>
+                                <?= (isset($item["estatusTarifa"]) && $item["estatusTarifa"] == 2) ? '<div class="semaphore-orange"></div>' : "" ?>
+                                <?= (isset($item["expedienteCompleto"]) && $item["expedienteCompleto"] != 1) ? '<div class="semaphore-blue"></div>' : "" ?>
+                                <?= (isset($item["expedienteCompleto"]) && $item["expedienteCompleto"] == 1) ? '<div class="semaphore-green"></div>' : "" ?>
+                            </td>
+                            <td style="width: 100px"><?= $item["rfc"] ?></td>
+                            <td class="traffic-td-left">
+                                <a href="/trafico/index/datos-cliente?id=<?= $item['id'] ?>"><?= $item["nombre"] ?></a>
+                            </td>
+                            <td style="width: 51px">
+                                <div style="width: 50px; float: left">                           
+                                    <div style="width: 24px; float: left">
+                                        <!--<a href="/trafico/index/datos-cliente?id=<?= $item['id'] ?>"><div class="traffic-icon traffic-icon-folder"></div></a>-->
+                                        <a href="/trafico/index/datos-cliente?id=<?= $item['id'] ?>" style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
+                                            <i class="fas fa-folder-open"></i>
+                                        </a>
+                                    </div>
+                                    <div style="width: 24px; float: left">
+                                        <?= isset($item["vucem"]) ? '<a><div class="traffic-icon traffic-icon-vucem"></div></a>' : '' ?>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="4">
+                            <em>No hubo resultados.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
+        <?= (isset($this->paginator)) ? $this->paginationSize($this->paginator->getItemCountPerPage()) : "" ?><?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding") : null ?>    
+    </div>
+    <div style="float: left; width: 30%; height: 450px; overflow-y: auto;">
+        <table class="traffic-table traffic-table-left">
+            <thead>                
+                <tr>
+                    <th>Alertas/Actividad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->alertas) && !empty($this->alertas)) { ?>
+                    <?php foreach ($this->alertas as $item) { ?>
+                        <tr>
+                            <td>
+                                <p style="font-size: 10px !important; line-height: 12px"><?= trim(strtoupper($item["usuario"]) . " " . $item["mensaje"] . " DE CLIENTE ID <a style=\"font-size: 10px !important; line-height: 12px\" href=\"/trafico/index/datos-cliente?id={$item["idCliente"]}\">" . $item["idCliente"] . "</a> " . $item["creado"]) ?></p>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="2" style="text-align: center"><em>No hay alertas en el sistema por el momento.</em></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div><!-- traffic-cols -->
+<div class="traffic-clear-10"></div>
+<div class="jqmWindow" id="reporteModal">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>

@@ -1,0 +1,158 @@
+<form id="frmProvider">
+    <input type="hidden" name="idTrafico" id="idTrafico" value="<?= $this->idTrafico ?>" />
+    <input type="hidden" name="idCliente" id="idCliente" value="<?= $this->idCliente ?>" />
+    <?php if (isset($this->idProv)) { ?>
+        <input type="hidden" name="idProv" id="idProv" value="<?= $this->idProv ?>" />
+    <?php } ?>
+    <table class="traffic-table">
+        <tbody>
+            <tr>
+                <td style="font-weight: bold">Proveedor / Destinatario</td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Cve. CASA:&nbsp;</label>
+                    <input style="float: left; width: 50px" type="text" name="claveCasa" id="claveCasa" value="<?= $this->claveCasa ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Cve. SLAM:&nbsp;</label>
+                    <input style="float: left; width: 50px" type="text" name="claveSlam" id="claveSlam" value="<?= $this->claveSlam ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Cve. Aduanet:&nbsp;</label>
+                    <input style="float: left; width: 50px" type="text" name="claveAduanet" id="claveAduanet" value="<?= $this->claveAduanet ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Cve. SITA:&nbsp;</label>
+                    <input style="float: left; width: 50px" type="text" name="claveSita" id="claveSita" value="<?= $this->claveSita ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Nombre:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 390px" type="text" name="nombre" id="nombre" value="<?= $this->nombre ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Iden:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 100px" type="text" name="identificador" id="identificador" value="<?= $this->identificador ?>">
+                    <label style="float: left; width: 65px; text-align: right">Tipo Iden.:<span style="color:red"> *</span></label>
+                    <select name="tipoIdentificador" id="tipoIdentificador" style="float: left; width: 110px">
+                        <option value="">---</option>
+                        <option value="0"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 0) ? ' selected="true"' : '' ?>>Tax ID</option>
+                        <option value="1"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 1) ? ' selected="true"' : '' ?>>RFC</option>
+                        <option value="2"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 2) ? ' selected="true"' : '' ?>>CURP</option>
+                        <option value="3"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 3) ? ' selected="true"' : '' ?>>Sin Tax ID</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Calle:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 250px" type="text" name="calle" id="calle" value="<?= $this->calle ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Num. Ext.:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 70px" type="text" name="numExt" id="numExt" value="<?= $this->numExt ?>">
+                    <label style="float: left; width: 60px; text-align: right">Num. Int.:&nbsp;</label>
+                    <input style="float: left; width: 70px" type="text" name="numInt" id="numInt" value="<?= $this->numInt ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Colonia:&nbsp;</label>
+                    <input style="float: left; width: 250px" type="text" name="colonia" id="colonia" value="<?= $this->colonia ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Loc. (Cd.):&nbsp;</label>
+                    <input style="float: left; width: 250px" type="text" name="localidad" id="localidad" value="<?= $this->localidad ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Municipio:&nbsp;</label>
+                    <input style="float: left; width: 250px" type="text" name="municipio" id="municipio" value="<?= $this->municipio ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Estado:&nbsp;</label>
+                    <input style="float: left; width: 250px" type="text" name="estado" id="estado" value="<?= $this->estado ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">CP:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 70px" type="text" name="codigoPostal" id="codigoPostal" value="<?= $this->codigoPostal ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">País:&nbsp;<span style="color:red"> *</span></label>
+                    <select name="pais" id="pais" style="float: left; width: 250px">
+                        <option value="">---</option>
+                        <?php if(isset($this->paisSelect)) {?>
+                            <?php foreach ($this->paisSelect as $item) {?>
+                                <option value="<?= $item["cve_pais"] ?>" <?= (isset($this->pais) && ($this->pais == $item["cve_pais"])) ? ' selected="true"' : '' ?>><?= $item["cve_pais"] . " - " . $item["nombre"] ?></option>                        
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    <span style="color:red"> *</span> Campos obligatorios.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script type="text/javascript">
+    
+    $("#frmProvider").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "errorlabel",
+        rules: {
+            nombre: {required: true},
+            calle: {required: true},
+            numExt: {required: true},
+            codigoPostal: {required: true},
+            pais: {required: true}
+        },
+        messages: {
+            nombre: "SE REQUIERE",
+            calle: "SE REQUIERE",
+            numExt: "SE REQUIERE",
+            codigoPostal: "SE REQUIERE",
+            pais: "SE REQUIERE"
+        }
+    });
+    
+    $(document.body).on("input", "#nombre, #calle, #numInt, #numExt, #colonia, #municipio, #estado, #codigoPostal, #localidad", function (evt) {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

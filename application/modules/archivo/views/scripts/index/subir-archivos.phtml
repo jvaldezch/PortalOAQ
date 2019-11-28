@@ -1,0 +1,139 @@
+<style>
+    /*table td button {
+        margin-top: 10px;
+    }*/
+</style>
+<fieldset>
+    <legend>Archivos de patente <b><?= $this->patente ?></b>, aduana <b><?= $this->aduana ?></b>, referencia <b><?= $this->referencia ?></b></legend>
+    <form id="fileupload" action="/archivo/index/upload-files" method="POST" enctype="multipart/form-data">
+        <noscript><input type="hidden" name="redirect" value="/archivo/index/upload-files"></noscript>
+        <div class="row fileupload-buttonbar">
+            <div class="span7">
+                <span class="btn fileinput-button">
+                    <i class="icon-plus"></i>
+                    <span>Seleccionar...</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <button type="submit" class="btn btn-success start">
+                    <i class="icon-white icon-upload"></i>
+                    <span>Subir todo</span>
+                </button>
+                <button type="reset" class="btn cancel">
+                    <i class="icon-ban-circle"></i>
+                    <span>Cancelar</span>
+                </button>
+                <button type="button" class="btn delete">
+                    <i class="icon-trash"></i>
+                    <span>Borrar</span>
+                </button>
+                <input type="checkbox" class="toggle">
+                <span class="fileupload-loading"></span>
+            </div>
+            <div class="span5 fileupload-progress fade">
+                <div class="progress progress-info active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="bar" style="width:0%;"></div>
+                </div>
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <table role="presentation" class="table small"><tbody class="files"></tbody></table>
+        <button id="fileConfirmation" type="submit" class="btn btn-info" style="font-family: 'Calibri',Helvetica,Arial;"><i class="icon-white icon-ok"></i>&nbsp;Confirmar archivos</button>
+        <a href="<?= $this->referer ?>" class="btn btn-primary" style="float:left; margin-right: 10px; font-family: 'Calibri',Helvetica,Arial;"><i class="icon-white icon-arrow-left"></i>&nbsp;Regresar</a>
+        <input type="hidden" name="referencia" value="<?= $this->referencia ?>" />
+        <input type="hidden" name="patente" value="<?= $this->patente ?>" />
+        <input type="hidden" name="aduana" value="<?= $this->aduana ?>" />
+        <input type="hidden" name="year" value="<?= $this->year ?>" />
+    </form>
+    <!-- The template to display files available for upload -->
+    <script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-upload fade">
+            <td>
+                <p class="name">{%=file.name%}</p>
+                {% if (file.error) { %}
+                    <div><span class="label label-important">Error</span> {%=file.error%}</div>
+                {% } %}
+            </td>
+            <td style="width: 250px">
+                <p class="size">{%=o.formatFileSize(file.size)%}</p>
+                {% if (!o.files.error) { %}
+                    <div class="progress progress-info active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+                {% } %}
+            </td>
+            <td>
+                {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+                    <button class="btn btn-success start" style="margin-top: 10px;">
+                        <i class="icon-white icon-upload"></i>
+                        <span>Subir</span>
+                    </button>
+                {% } %}
+                {% if (!i) { %}
+                    <button class="btn cancel" style="margin-top: 10px;">
+                        <i class="icon-ban-circle"></i>
+                        <span>Cancelar</span>
+                    </button>
+                {% } %}
+            </td>
+        </tr>
+    {% } %}
+    </script>
+    <!-- The template to display files available for download -->
+    <script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-download fade">
+            <td>
+                <p class="name">
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                    <input type="hidden" name="files_to_upload_{%=i%}" value="{%=file.name%}" />
+                </p>
+                {% if (file.error) { %}
+                    <div><span class="label label-important">Error</span> {%=file.error%}</div>
+                {% } %}
+            </td>
+            <td><select class="doctype" name="file_type_{%=i%}" style="width: 350px">
+                <option value="0">-- Seleccionar --</option>
+                <?php foreach ($this->documentos as $item) { ?>
+                <option value="<?= $item['id'] ?>"><?= $item['nombre'] ?></option>    
+                <?php } ?>
+            </select><span class="warning" style="color:red; font-size: 11px"></span></td>
+            <td>
+                <button class="btn delete" data-type="{%=file.deleteType%}" data-url="{%='/archivo/index/upload-files?file='+file.name %}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <i class="icon-trash"></i>
+                    <span>Borrar</span>
+                </button>
+                <input type="checkbox" name="delete" value="1" class="toggle">
+            </td>
+        </tr>
+    {% } %}
+    </script>
+    <script type="text/javascript">    
+        $("#fileConfirmation").click(function(event){
+            event.preventDefault();
+            $('span.warning').each(function(){
+                $(this).html('');
+            });
+            var exists = false;
+            $('.doctype').each(function(){
+                if (this.value == '0') {
+                    exists = true;
+                    $(this).parent().find("span.warning").text(" Debe seleccionar tipo.");
+                }
+            });
+            if(exists == true) {
+                alert('Debe seleccionar el tipo de archivo.');
+            } else {
+                $.ajax({
+                    url: '/archivo/index/confirmar-archivos',
+                    type: 'post',
+                    dataType: 'json',
+                    data: $('form#fileupload').serialize(),
+                    success: function(data) {                    
+                        if(data.success == true) {
+                            window.location.href = '<?= $this->referer ?>';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</fieldset>

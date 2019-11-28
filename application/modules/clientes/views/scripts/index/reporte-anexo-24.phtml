@@ -1,0 +1,45 @@
+<table class="traffic-table traffic-table-left hover">
+    <tr>
+        <th style="width: 70px">Patente</th>
+        <th style="width: 70px">Aduana</th>
+        <th>Nombre</th>
+        <th style="width: 100px">Año</th>
+        <th style="width: 100px">Mes</th>
+        <th style="width: 100px">Encabezado</th>
+        <th style="width: 100px">Extendido</th>
+        <?php if ((isset($this->cnh))) { ?>
+            <th>CNH</th>
+        <?php } ?>
+    </tr>
+    <?php if (isset($this->arr)) { ?>
+        <?php foreach ($this->arr as $k => $item) { ?>
+            <tr>
+                <td style="text-align: center"><?= $item["patente"] ?></td>
+                <td style="text-align: center"><?= $item["aduana"] ?></td>
+                <td><?= $item["nombre"] ?></td>
+                <td><?= $this->selectYear("selectyear_" . $k) ?></td>
+                <td><?= $this->selectMonth("selectmonth_" . $k) ?></td>
+                <td style="text-align: center">
+                    <a class="traffic-btn" onclick="verReporte(<?= $this->idCliente ?>, <?= $k ?>, 'encabezado');">
+                        <i class="far fa-eye"></i> Ver
+                    </a>
+                </td>
+                <td style="text-align: center">
+                    <a class="traffic-btn" onclick="verReporte(<?= $this->idCliente ?>, <?= $k ?>, 'anexo');">
+                        <i class="far fa-eye"></i> Ver
+                    </a>
+                </td>
+                <?php if ((isset($this->cnh))) { ?>
+                    <td style="text-align: center">
+                        <a style="margin: auto; width: 30px; min-width: 30px; float: none" class="traffic-btn-save" onclick="viewReport(<?= $item["patente"] ?>, <?= $item["aduana"] ?>, 'cnh', '<?= $this->rfc ?>')">Ver</a>
+                    </td>
+                <?php } ?>
+            </tr>
+        <?php } ?>
+    <?php } ?>
+</table>
+<div class="traffic-clear-10"></div>
+<a onclick="window.history.back();" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<div class="traffic-clear-20"></div>

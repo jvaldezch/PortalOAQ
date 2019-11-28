@@ -1,0 +1,32 @@
+<div class="traffic-pagination">
+    <ul>
+        <?php if (isset($this->first)): ?>
+            <li class="active"><a href="<?= $this->url() ?>?page=<?= $this->first ?>">«</a></li>
+        <?php else: ?>
+            <li class="disabled"><a>«</a></li>
+        <?php endif ?>
+        <?php if (isset($this->previous)): ?>
+            <li class="active"><a href="<?= $this->url() ?>?page=<?= $this->previous ?>">Ant</a></li>
+        <?php else: ?>
+            <li class="disabled"><a>Ant.</a></li>
+        <?php endif ?>
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php if ($page != $this->current): ?>
+                <li class="active"><a href="<?= $this->url() ?>?page=<?= $page ?>"><?= $page ?></a></li>
+            <?php else: ?>
+                <li class="disabled"><a><?= $page ?></a></li>
+            <?php endif ?>
+        <?php endforeach ?>
+        <?php if (isset($this->next)): ?>
+            <li class="active"><a href="<?= $this->url() ?>?page=<?= $this->next ?>">Sig</a></li>
+        <?php else: ?>
+            <li class="disabled"><a>Sig.</a></li>
+        <?php endif ?>
+
+        <?php if (isset($this->last)): ?>
+            <li class="active"><a href="<?= $this->url() ?>?page=<?= $this->last ?>">»</a></li>
+        <?php else: ?>
+            <li class="disabled"><a>»</a></li>
+        <?php endif ?>
+    </ul>
+</div>

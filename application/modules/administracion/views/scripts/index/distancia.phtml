@@ -1,0 +1,64 @@
+<div class="traffic-cols">
+    <div class="traffic-col-50">
+        <form id="origen">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="2" class="traffic-table-subtitle">ORIGEN:</th>
+                </tr>
+                <tr>
+                    <th>Estado:</th>
+                    <td><?= $this->form->estado ?></td>
+                </tr>
+                <tr>
+                    <th>Municipio:</th>
+                    <td><?= $this->form->municipio ?></td>
+                </tr>
+                <tr>
+                    <th>Localidad:</th>
+                    <td><?= $this->form->localidad ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2">                        
+                        <div id="mapOrigen" style="height: 350px; width: 100%; display: none"></div>
+                    </td>
+                </tr>
+            </table>
+        </form>        
+    </div>    
+    <div class="traffic-col-50">
+        <form id="destino">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="2" class="traffic-table-subtitle">DESTINO:</th>
+                </tr>
+                <tr>
+                    <th>Estado:</th>
+                    <td><?= $this->form->estado ?></td>
+                </tr>
+                <tr>
+                    <th>Municipio:</th>
+                    <td><?= $this->form->municipio ?></td>
+                </tr>
+                <tr>
+                    <th>Localidad:</th>
+                    <td><?= $this->form->localidad ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2">                     
+                        <div id="mapDestino" style="height: 350px; width: 100%; display: none"></div>
+                    </td>
+                </tr>
+            </table>
+        </form>        
+    </div>    
+</div>
+<button id="viewMap" class="traffic-btn-create">Ver mapa</button>
+<div class="traffic-cols">
+    <div class="traffic-col-50">
+        <div id="map" style="height: 450px; width: 100%"></div>
+    </div>
+    <div class="traffic-col-50">
+        <div id="result" style="padding-left: 5px"></div>
+    </div>
+</div>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0tBtLiyXoblArAav01Uunm2Ti8wgs0Js"></script>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="cache-control" content="max-age=0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <title>Reportes</title>
+        <style type="text/css">
+            body {margin:0;padding:0; font-family:sans-serif;}
+            table {border-collapse:collapse; }
+            table th, table td {font-size: 12px; border: 1px #555 solid; padding: 2px 5px;}
+            table th {background: #f1f1f1;}
+            h1,h2,h3 {margin: 0; padding:0;}
+            .download {
+                -moz-box-shadow:inset 0px 1px 0px 0px #9acc85;
+                -webkit-box-shadow:inset 0px 1px 0px 0px #9acc85;
+                box-shadow:inset 0px 1px 0px 0px #9acc85;
+                background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #74ad5a), color-stop(1, #68a54b));
+                background:-moz-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+                background:-webkit-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+                background:-o-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+                background:-ms-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+                background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#74ad5a", endColorstr="#68a54b",GradientType=0);
+                background-color:#74ad5a;
+                border:1px solid #3b6e22;
+                display:inline-block;
+                cursor:pointer;
+                color:#ffffff;
+                font-family:Arial;
+                font-size:13px;
+                font-weight:bold;
+                padding:3px 6px;
+                text-decoration:none;
+            }
+            .download:hover {
+                background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #68a54b), color-stop(1, #74ad5a));
+                background:-moz-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+                background:-webkit-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+                background:-o-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+                background:-ms-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+                background:linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#68a54b", endColorstr="#74ad5a",GradientType=0);
+                background-color:#68a54b;
+            }
+            .download:active {
+                position:relative;
+                top:1px;
+            }
+        </style>
+        <link href="/less/traffic-module.css" media="screen" rel="stylesheet" type="text/css" >
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Paginas</th>
+                    <th>Referencia</th>
+                    <th>Pedimento</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Seccion</th>
+                    <th>Tpo.Oper</th>
+                    <th>Cve</th>
+                    <th>Regimen</th>
+                    <th>Dest / Orig</th>
+                    <th>Tpo.Cambio</th>
+                    <th>Peso KG</th>
+                    <th>Transporte Entrada/Salida</th>
+                    <th>Transporte Arribo</th>
+                    <th>Transporte Salida</th>
+                    <th>Valor Dolares</th>
+                    <th>Valor Aduana</th>
+                    <th>Valor Comercial</th>
+                    <th>Empresa</th>
+                    <th>Seguros</th>
+                    <th>Seguro</th>
+                    <th>Flete</th>
+                    <th>Embalajes</th>
+                    <th>Incrementales</th>
+                    <th>Bls</th>
+                    <th>Fecha Entrada</th>
+                    <th>Fecha Pago</th>
+                    <th>IGI</th>
+                    <th>IVA</th>
+                    <th>DTA</th>
+                    <th>PRV</th>
+                    <th>Multas</th>
+                    <th>Recargos</th>
+                    <th>CC</th>
+                    <th>Art 303</th>
+                    <th>RT</th>
+                    <th>Otros</th>
+                    <th>ISAN</th>
+                    <th>IEPS</th>
+                    <th>Forma Pago IGI</th>
+                    <th>Forma Pago IVA</th>
+                    <th>Forma Pago DTA</th>
+                    <th>Forma Pago PRV</th>
+                    <th>Forma Pago Multas</th>
+                    <th>Forma Pago Recargos</th>
+                    <th>Forma Pago CC</th>
+                    <th>Forma Pago Art 302</th>
+                    <th>Forma Pago RT</th>
+                    <th>Forma Pago Otros</th>
+                    <th>Forma Pago ISAN</th>
+                    <th>Forma Pago IEPS</th>
+                    <th>Total</th>
+                    <th>Proveedor</th>
+                    <th>Vinculacion</th>
+                    <th>No. Guia Mstr</th>
+                    <th>No. Guia House</th>
+                    <th>Talon Flete</th>
+                    <th>Observaciones</th>
+                    <th>Fecha Despacho Puerto</th>
+                    <th>Fecha Embarque</th>
+                    <th>Fecha Prevalidacion</th>
+                    <th>Fecha Revision</th>
+                    <th>Transportista</th>
+                    <th>Consolidador</th>
+                    <th>Moneda</th>
+                    <th>R1 o A3</th>
+                    <th>Pedimento Original</th>
+                    <th>RFC</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->content) && !empty($this->content)) { ?>
+                    <?php foreach ($this->content as $item) { ?>
+                        <?php foreach ($item["facturas"] as $inv) { ?>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td><?= $item["referencia"] ?></td>
+                                <td><?= $item["pedimento"] ?></td>
+                                <td><?= $item["patente"] ?></td>
+                                <td><?= substr($item["aduana"], 0, 2) ?></td>
+                                <td><?= substr($item["aduana"], -1) ?></td>
+                                <td><?= ($item["ie"] == "1") ? "IMP" : "EXP" ?></td>
+                                <td><?= $item["cvePedimento"] ?></td>
+                                <td><?= $item["regimen"] ?></td>
+                                <td><?= $item["destino"] ?></td>
+                                <td><?= $item["tipoCambio"] ?></td>
+                                <td><?= $item["peso"] ?></td>
+                                <td><?= $item["transporteEntrada"] ?></td>
+                                <td><?= $item["transporteArribo"] ?></td>
+                                <td><?= $item["transporteSalida"] ?></td>
+                                <td><?= number_format($item["valorDolares"], 2) ?></td>
+                                <td><?= number_format($item["valorAduana"], 2) ?></td>
+                                <td><?= number_format($item["valorComercial"], 2) ?></td>
+                                <td>&nbsp;</td>
+                                <td><?php
+                                    if ($item["cvePedimento"] == "A1") {
+                                        echo number_format($item["valorComercial"], 2);
+                                    } else { 
+                                        echo "0";
+                                    }
+                                ?></td>
+                                <td><?= number_format($item["seguros"], 2) ?></td>
+                                <td><?= number_format($item["fletes"], 2) ?></td>
+                                <td><?= number_format($item["embalajes"], 2) ?></td>
+                                <td><?= number_format($item["otrosIncrementables"], 2) ?></td>
+                                <td>&nbsp;</td>
+                                <td><?= $item["fechaEntrada"] ?></td>
+                                <td><?= $item["fechaPago"] ?></td>
+                                <td><?= $item["igi"] ?></td>
+                                <td><?= $item["iva"] ?></td>
+                                <td><?= $item["dta"] ?></td>
+                                <td><?= $item["prev"] ?></td>
+                                <td><?= !isset($item["multas"]) ? "0" : $item["multas"] ?></td>
+                                <td><?= !isset($item["recargos"]) ? "0" : $item["recargos"] ?></td>
+                                <td><?= $item["cnt"] ?></td>
+                                <td><?= !isset($item["art"]) ? "NA" : $item["art"] ?></td>
+                                <td><?= !isset($item["rt"]) ? "NA" : $item["rt"] ?></td>
+                                <td><?= !isset($item["otros"]) ? "NA" : $item["otros"] ?></td>
+                                <td><?= !isset($item["isan"]) ? "NA" : $item["ieps"] ?></td>
+                                <td><?= !isset($item["ieps"]) ? "NA" : $item["ieps"] ?></td>
+                                <td><?= !isset($item["formaIgi"]) ? "NA" : $item["formaIgi"] ?></td>
+                                <td><?= !isset($item["formaIva"]) ? "NA" : $item["formaIva"] ?></td>
+                                <td><?= !isset($item["formaDta"]) ? "NA" : $item["formaDta"] ?></td>
+                                <td><?= !isset($item["formaPrev"]) ? "NA" : $item["formaPrev"] ?></td>
+                                <td><?= !isset($item["formaMultas"]) ? "NA" : $item["formaMultas"] ?></td>
+                                <td><?= !isset($item["formaRecargos"]) ? "NA" : $item["formaRecargos"] ?></td>
+                                <td><?= !isset($item["formaCnt"]) ? "NA" : $item["formaCnt"] ?></td>
+                                <td><?= !isset($item["formaArt"]) ? "NA" : $item["formaArt"] ?></td>
+                                <td><?= !isset($item["formaRt"]) ? "NA" : $item["formaRt"] ?></td>
+                                <td><?= !isset($item["formaOtros"]) ? "NA" : $item["formaOtros"] ?></td>
+                                <td><?= !isset($item["formaIeps"]) ? "NA" : $item["formaIeps"] ?></td>
+                                <td><?= !isset($item["formaIsan"]) ? "NA" : $item["formaIsan"] ?></td>
+                                <td><?= !isset($item["totalEfectivo"]) ? "NA" : $item["totalEfectivo"] ?></td>
+                                <td><?= $inv["proveedor"] ?></td>
+                                <td><?= $inv["vinculacion"] ?></td>
+                                <td><?= isset($item["guias"][0]) ? $item["guias"][0]["guia"] : "NA" ?></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td><?= $item["fechaPago"] ?></td>
+                                <td><?= $item["fechaPago"] ?></td>
+                                <td><?= $item["fechaPago"] ?></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td><?= $inv["divisa"] ?></td>
+                                <td>&nbsp;</td>
+                                <td><?= $item["pedimentoOriginal"] ?></td>
+                                <td><?= $item["rfcCliente"] ?></td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td>No hay registros</td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </body>
+</html>

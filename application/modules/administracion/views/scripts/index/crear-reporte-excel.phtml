@@ -1,0 +1,164 @@
+<?php
+header("Content-Type: application/vnd.ms-excel");
+header("Expires: 0");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("content-disposition: attachment;filename={$this->rfc}-{$this->fechaIni}-{$this->fechaFin}.xls");
+$sumTotal = 0;
+$sumIva = 0;
+$sumSubTotal = 0;
+$sumAnticipo = 0;
+$sumHonorarios = 0;
+$sumValorAduana = 0;
+$sumManiobras = 0;
+$sumGastosComp = 0;
+$sumImpAduanales = 0;
+$sumRevalidacion = 0;
+
+$style1 = 'style="background: #C5D9F1; border: 1px #000 solid;"';
+$style2 = 'style="border-top: 2px #000 solid;"';
+?>
+<style>
+    table {
+        font-family: Arial;
+        font-size: 14px;
+        border-spacing:0;
+        border-collapse:collapse;
+    }
+    table td,
+    table th {
+        border: 1px #ddd solid;
+        padding: 4px;
+    }
+</style>
+<table>
+    <tr>
+        <th <?= $style1 ?>>Cliente</th>
+        <td><?= $this->nombre ?></td>
+        <th <?= $style1 ?>>RFC</th>
+        <td><?= $this->rfc ?></td>
+    </tr>
+    <tr>
+        <th <?= $style1 ?>>Fecha inicio</th>
+        <td><?= $this->fechaIni ?></td>
+        <th <?= $style1 ?>>Fecha final</th>
+        <td><?= $this->fechaFin ?></td>
+    </tr>
+</table>
+<table>
+    <thead>
+        <tr style="background: #C5D9F1; border: 2px #444 solid;">
+            <th <?= $style1 ?>>#</th>
+            <th <?= $style1 ?>>Referencia</th>
+            <th <?= $style1 ?>># Factura OAQ</th>
+            <th <?= $style1 ?>>Pedimento</th>
+            <th <?= $style1 ?>>Patente</th>
+            <th <?= $style1 ?>>Aduana</th>
+            <th <?= $style1 ?>>Fecha Pedimento</th>
+            <th <?= $style1 ?>>Anticipo</th>
+            <th <?= $style1 ?>>Honorarios</th>
+            <th <?= $style1 ?>>Valor Aduana</th>
+            <th <?= $style1 ?>>Factura Pedimento</th>
+            <th <?= $style1 ?>>Bultos/Piezas</th>
+            <th <?= $style1 ?>>Maniobras</th>
+            <th <?= $style1 ?>>Gastos complementarios</th>
+            <th <?= $style1 ?>>Impuestos Aduanales</th>
+            <th <?= $style1 ?>>Revalidación</th>
+            <th <?= $style1 ?>>Sub Total</th>
+            <th <?= $style1 ?>>IVA</th>
+            <th <?= $style1 ?>>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if($this->facturas) { $i=1; ?>
+        <?php foreach ($this->facturas as $factura) { ?>
+        <tr>
+            <td><?= $i++ ?></td>
+            <td><?= $factura['referencia'] ?></td>
+            <td><?= $factura['factura'] ?></td>
+            <td><?= $factura['pedimento'] ?></td>
+            <td><?= $factura['patente'] ?></td>
+            <td><?= $factura['aduana'] ?></td>
+            <td><?= $factura['fecha_pedimento'] ?></td>
+            <td align="right"><?= new Zend_Currency(array('value' => $factura['anticipo'],'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td align="right"><?= new Zend_Currency(array('value' => $factura['honorarios'],'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td align="right"><?= new Zend_Currency(array('value' => $factura['valor_aduana'],'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td><?= $factura['ref_factura'] ?></td>
+            <td><?= $factura['bultos'] ?></td>
+            <td align="right"><?php
+                if(isset($factura['maniobras'])) {
+                    echo new Zend_Currency(array('value' => $factura['maniobras'],'currency' => 'USD','format'   => 'en',));
+                } else {
+                    echo '<span style="color: #ddd">n/d</span>';
+                }
+            ?></td>
+            <td align="right"><?php
+                if(isset($factura['gastos_complementarios'])) {
+                    echo new Zend_Currency(array('value' => $factura['gastos_complementarios'],'currency' => 'USD','format'   => 'en',));
+                } else {
+                    echo '<span style="color: #ddd">n/d</span>';
+                }
+            ?></td>
+            <td align="right"><?php
+                if(isset($factura['impuestos_aduanales'])) {
+                    echo new Zend_Currency(array('value' => $factura['impuestos_aduanales'],'currency' => 'USD','format'   => 'en',));
+                } else {
+                    echo '<span style="color: #ddd">n/d</span>';
+                }
+            ?></td>
+            <td align="right"><?php
+                if(isset($factura['revalidacion'])) {
+                    echo new Zend_Currency(array('value' => $factura['revalidacion'],'currency' => 'USD','format'   => 'en',));
+                } else {
+                    echo '<span style="color: #ddd">n/d</span>';
+                }
+            ?></td>
+            <td align="right"><?= new Zend_Currency(array('value' => $factura['subtotal'],'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td align="right"><?= new Zend_Currency(array('value' => $factura['iva'],'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td align="right"><?= new Zend_Currency(array('value' => $factura['total'],'currency' => 'USD','format'   => 'en',)) ?></td>
+        </tr>
+        <?php
+            $sumTotal = $sumTotal + $factura['total'];
+            $sumIva = $sumIva + $factura['iva'];
+            $sumSubTotal = $sumSubTotal + $factura['subtotal'];
+            $sumValorAduana = $sumValorAduana + $factura['valor_aduana'];
+            $sumHonorarios = $sumHonorarios + $factura['honorarios'];
+            $sumAnticipo = $sumAnticipo + $factura['anticipo'];
+            
+            if(isset($factura['revalidacion'])) {
+                $sumRevalidacion = $sumRevalidacion + $factura['revalidacion'];
+            }
+            if(isset($factura['impuestos_aduanales'])) {
+                $sumImpAduanales = $sumImpAduanales + $factura['impuestos_aduanales'];
+            }
+            if(isset($factura['gastos_complementarios'])) {
+                $sumGastosComp = $sumGastosComp + $factura['gastos_complementarios'];
+            }
+            if(isset($factura['maniobras'])) {
+                $sumManiobras = $sumManiobras + $factura['maniobras'];
+            }
+        ?>
+        <?php }?>
+        <tr style="border-top: 2px #444 solid">
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumAnticipo,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumHonorarios,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumValorAduana,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?>>&nbsp;</td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumManiobras,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumGastosComp,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumImpAduanales,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumRevalidacion,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumSubTotal,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumIva,'currency' => 'USD','format'   => 'en',)) ?></td>
+            <td <?= $style2 ?> align="right"><?= new Zend_Currency(array('value' => $sumTotal,'currency' => 'USD','format'   => 'en',)) ?></td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>

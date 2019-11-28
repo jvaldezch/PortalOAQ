@@ -1,0 +1,40 @@
+<table class="traffic-table">
+    <tr>
+        <th colspan="7" class="traffic-table-title">BANCOS</th>
+    </tr>
+    <tr>
+        <th>Descripción</th>
+        <th>Banco</th>
+        <th>Cuenta</th>
+        <th>Sucursal</th>
+        <th>CLABE</th>
+        <th>Default</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php if (isset($this->data) && !empty($this->data)) { ?>
+        <?php foreach ($this->data as $item) { ?>
+            <tr>
+                <td><?= $item["descripcion"] ?></td>
+                <td><?= $item["nombre"] ?></td>
+                <td><?= $item["cuenta"] ?></td>
+                <td><?= $item["sucursal"] ?></td>
+                <td><?= $item["clabe"] ?></td>
+                <td>
+                    <?php if(isset($this->bancoDefault) && $this->bancoDefault["id"] == $item["id"]) { ?>
+                        <input type="radio" name="banks[]" class="setDefaultBank" data-id="<?= $item["id"] ?>" checked="true" />
+                    <?php } else { ?>                    
+                        <input type="radio" name="banks[]" class="setDefaultBank" data-id="<?= $item["id"] ?>" />
+                    <?php }  ?>
+                </td>
+                <td>
+                    <div class="traffic-icon traffic-icon-edit" onclick="editarBanco(<?= $this->id ?>,<?= $item["id"] ?>);"></div>
+                    <div class="traffic-icon traffic-icon-delete" onclick="removerBanco(<?= $this->id ?>,<?= $item["id"] ?>);"></div>
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="7"><em>No tiene bancos asignados.</em></td>
+        </tr>
+    <?php } ?>
+</table>

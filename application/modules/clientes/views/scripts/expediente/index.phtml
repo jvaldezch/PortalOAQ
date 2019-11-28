@@ -1,0 +1,30 @@
+<table class="traffic-table traffic-table-left hover">    
+    <thead>
+        <tr>
+            <th class="traffic-table-subtitle" colspan="3" style="font-size: 16px !important">OPERACIÓN: <?= $this->aduana ?>-<?= $this->patente ?>-<?= $this->pedimento ?>, REFERENCIA AGENTE ADUANAL: <?= $this->referencia ?></th>            
+        </tr>
+        <tr>
+            <th class="traffic-table-subtitle" style="text-align: left">Archivo</th>
+            <th class="traffic-table-subtitle" style="text-align: left">Tipo</th>
+            <th class="traffic-table-subtitle">Creado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->files)) { ?>
+            <?php foreach ($this->files as $k => $item) { ?>
+                <tr>
+                    <td>
+                        <?php if (file_exists($item["ubicacion"])) { ?>
+                            <a class="traffic-a" href="/clientes/expediente/descargar-archivo?id=<?= $item["id"] ?>"><?= $item["nom_archivo"] ?></a>
+                        <?php } else { ?>
+                            <p><?= $item["nom_archivo"] ?></>
+                        <?php } ?>
+                    </td>
+                    <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                    <td style="width: 120px; text-align: center"><?= date('d/m/Y', strtotime($item["creado"])) ?>&nbsp;</td>                    
+                </tr>
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>
+<a href="/clientes/expediente/descargar-carpeta?code=<?= urlencode($this->code) ?>" class="traffic-btn-back traffic-btn-right">Descargar todo</a>

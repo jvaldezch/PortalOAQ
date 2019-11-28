@@ -1,0 +1,92 @@
+.traffic-pagination * {
+  font-size: 10px;
+}
+.traffic-pagination {
+  margin: 5px 0;
+}
+.traffic-pagination ul {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: inline-block;
+  margin-bottom: 0;
+  margin-left: 0;
+  float: left;
+}
+.traffic-pagination ul > li > a,
+.traffic-pagination ul > li > span {
+  border-radius: 2px;
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  /*    background-color: #ebf0f3;*/
+  background-color: #fff;
+  border-color: #ddd;
+  border-image: none;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+  float: left;
+  line-height: 12px;
+  padding: 4px 6px;
+  text-decoration: none;
+  margin: 0 1px;
+}
+.traffic-pagination ul > li {
+  display: inline;
+}
+.traffic-pagination li a {
+  font-size: 10px;
+}
+.traffic-pagination li {
+  margin: 0;
+  padding: 0;
+  line-height: 12px;
+}
+.traffic-pagination ul > .disabled > span,
+.traffic-pagination ul > .disabled > a,
+.traffic-pagination ul > .disabled > a:hover,
+.traffic-pagination ul > .disabled > a:focus {
+  background-color: #fefefe;
+  color: #aaa;
+  cursor: default;
+}
+.traffic-pagination ul li > span,
+.traffic-pagination ul li > a,
+.traffic-pagination ul li > a:hover,
+.traffic-pagination ul li > a:focus {
+  background-color: #fbfed9;
+  color: #070249;
+  cursor: pointer;
+}
+.traffic-pagination ul .active > span,
+.traffic-pagination ul .active > a {
+  /*    border-color: #827dc4;*/
+  background-color: #f3f7fa;
+  border-color: #bac5c9;
+  border-image: none;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+}
+.traffic-pagination ul .active > span:focus,
+.traffic-pagination ul .active > a:focus {
+  /*        background-color: #dce6e5 + #111111;
+        border-color: #827dc4 + #222222;        */
+  background-color: #fbfed9;
+}
+/*.traffic-pagination ul .active > a:hover, .traffic-pagination ul .active > a:focus {
+}*/
+.traffic-pagination-size {
+  font-size: 12px;
+  font-family: sans-serif;
+  float: left;
+  line-height: 11px;
+  height: 22px;
+  width: 50px;
+  margin: 5px;
+}
+.traffic-pagination,
+.traffic-pagination ul li,
+.traffic-pagination ul li a {
+  font-family: sans-serif !important;
+  font-size: 11px !important;
+}
+/*# sourceMappingURL=pagination.css.map */

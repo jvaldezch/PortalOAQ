@@ -1,0 +1,28 @@
+<p>Favor de seleccionar la referencia master:</p><br>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th style="width: 32px">&nbsp;</th>
+            <th style="text-align: left">Referencia</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data)) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td>
+                        <input type="radio" name="master" value="<?= $item["idTrafico"] ?>" />
+                    </td>
+                    <td><?= $item["referencia"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td>
+                    <em>No hay referencias disponibles.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<input type="hidden" id="ids" name="ids" value="<?= implode(",", $this->ids) ?>" >

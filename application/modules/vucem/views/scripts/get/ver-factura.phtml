@@ -1,0 +1,171 @@
+<div style="max-height: 550px; overflow-y: auto">
+    <style>
+        .tt-hint,
+        .tt-dropdown-menu {
+            width:100%;        
+        }
+    </style>
+    <form id="invoice-data">
+        <?= $this->form->IdFact ?>
+        <table class="traffic-table traffic-table-light">
+            <tr>
+                <th>Tipo</th>
+                <th>Patente</th>
+                <th>Aduana</th>                
+                <th>Pedimento</th>
+                <th>Referencia</th>
+                <th>Núm. factura</th>
+                <th>Factor Ajuste</th>  
+            </tr>
+            <tr>
+                <td><?= $this->form->TipoOperacion->getValue() ?></td>
+                <td><?= $this->form->Patente->getValue() ?></td>
+                <td><?= $this->form->Aduana->getValue() ?></td>
+                <td><?= $this->form->Pedimento->getValue() ?></td>
+                <td><?= $this->form->Referencia->getValue() ?></td>
+                <td><?= $this->form->NumFactura->getValue() ?></td>
+                <td><?= $this->form->FactFacAju->getValue() ?></td>
+            </tr>
+        </table>        
+        <table class="traffic-table traffic-table-light traffic-table-left">
+            <tr>
+                <th style="width: 120px">Fecha</th>
+                <td colspan="3"><?= $this->form->FechaFactura->getValue() ?></td>
+                <th style="width: 120px">Cert. de origen</th>
+                <td colspan="3"><?= $this->form->CertificadoOrigen->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Subdivisión</th>
+                <td colspan="3"><?= $this->form->Subdivision->getValue() ?></td>
+                <th>Núm. de expor.</th>
+                <td colspan="3"><?= $this->form->NumExportador->getValue() ?></td>
+            </tr>
+            <tr>
+                <th colspan="4" class="traffic-table-subtitle">EMISOR</th>
+                <th colspan="4" class="traffic-table-subtitle">DESTINATARIO</th>
+            </tr>        
+            <tr>
+                <th>RFC/TaxId *</th>
+                <td colspan="3"><?= $this->form->ProTaxID->getValue() ?><?= $this->form->CvePro->getValue() ?></td>
+                <th>RFC/TaxId *</th>            
+                <td colspan="3"><?= $this->form->CteRfc->getValue() ?><?= $this->form->CveCli->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Identificador *</th>
+                <td colspan="3"><?= $this->form->ProIden->getValue() ?></td>
+                <th>Identificador *</th>
+                <td colspan="3"><?= $this->form->CteIden->getValue() ?></td>
+            </tr>        
+            <tr>
+                <th>Nombre *</th>
+                <td colspan="3"><?= $this->form->ProNombre->getValue() ?></td>
+                <th>Nombre *</th>
+                <td colspan="3"><?= $this->form->CteNombre->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Calle *</th>
+                <td colspan="3"><?= $this->form->ProCalle->getValue() ?></td>
+                <th>Calle *</th>
+                <td colspan="3"><?= $this->form->CteCalle->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Num. Ext.</th>
+                <td><?= $this->form->ProNumExt->getValue() ?></td>
+                <th style="width: 80px">Num. Int.</th>
+                <td><?= $this->form->ProNumInt->getValue() ?></td>
+                <th>Num. Ext.</th>
+                <td><?= $this->form->CteNumExt->getValue() ?></td>
+                <th style="width: 80px">Num. Int.</th>
+                <td><?= $this->form->CteNumInt->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Colonia</th>
+                <td colspan="3"><?= $this->form->ProColonia->getValue() ?></td>
+                <th>Colonia</th>
+                <td colspan="3"><?= $this->form->CteColonia->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Localidad</th>
+                <td colspan="3"><?= $this->form->ProLocalidad->getValue() ?></td>
+                <th>Localidad</th>
+                <td colspan="3"><?= $this->form->CteLocalidad->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Municipio</th>
+                <td colspan="3"><?= $this->form->ProMun->getValue() ?></td>
+                <th>Municipio</th>
+                <td colspan="3"><?= $this->form->CteMun->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td colspan="3"><?= $this->form->ProEdo->getValue() ?></td>
+                <th>Estado</th>
+                <td colspan="3"><?= $this->form->CteEdo->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>C.P.</th>
+                <td colspan="3"><?= $this->form->ProCP->getValue() ?></td>
+                <th>C.P.</th>
+                <td colspan="3"><?= $this->form->CteCP->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Pais</th>
+                <td colspan="3"><?= $this->form->ProPais->getValue() ?></td>
+                <th>Pais</th>
+                <td colspan="3"><?= $this->form->CtePais->getValue() ?></td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td colspan="7"><?= $this->form->Observaciones->getValue() ?></td>            
+            </tr>
+        </table>
+    </form>
+    <?php if (isset($this->products)) { ?>
+        <table class="traffic-table">            
+            <tr>
+                <th>Orden</th>
+                <th>Fracc.</th>
+                <th>Num. Parte</th>
+                <th>Desc.</th>
+                <th>P.Unit.</th>
+                <th>Val. Com.</th>
+                <th>Div.</th>
+                <th>F. Equi.</th>
+                <th>Val. Dlls</th>
+                <th>Cant.</th>
+                <th>UMC</th>
+                <th>OMA</th>
+            </tr>     
+            <?php 
+            $valcom = 0;
+            $valusd = 0;
+            foreach($this->products as $item) { ?>
+            <tr>
+                <td><?= $item["ORDEN"] ?></td>
+                <td><?= $item["CODIGO"] ?></td>
+                <td><?= $item["PARTE"] ?></td>
+                <td><?= $item["DESC_COVE"] ?></td>
+                <td><?= number_format($item["PREUNI"], 4) ?></td>
+                <td style="text-align: right;"><span style="float:left">$</span><span><?= number_format($item["VALCOM"],4,'.',',') ?></span></td>
+                <td style="text-align: center;"><?= $item["MONVAL"] ?></td>
+                <td style="text-align: center;"><?= number_format($item["VALCEQ"],4,'.',',') ?></td>
+                <td style="text-align: right;"><span style="float:left">$</span><?= number_format($item["VALDLS"],4,'.',',') ?></td>
+                <td style="text-align: right;"><?= number_format($item["CANTFAC"],4,'.',',') ?></td>
+                <td><?= $item["UMC"] ?></td>
+                <td><?= $item["UMC_OMA"] ?></td>
+                <?php 
+                $valcom += $item["VALCOM"];
+                $valusd += $item["VALDLS"];
+                ?>
+            </tr>
+            <?php } ?>
+            <tr>
+                <td colspan="5" style="text-align: right"><strong>Total:</strong></td>
+                <td class="total" style="text-align: right;"><span style="float:left">$</span><?= number_format($valcom,4,'.',',') ?></td>
+                <td colspan="2" style="text-align: right"><strong>Total:</strong></td>
+                <td class="total" style="text-align: right;"><span style="float:left">$</span><?= number_format($valusd,4,'.',',') ?></td>
+                <td colspan="3">&nbsp;</td>
+            </tr>
+        </table>
+    <?php } ?>
+</div>

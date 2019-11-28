@@ -1,0 +1,55 @@
+<form enctype="multipart/form-data" method="POST" id="editInvoicePdf">
+    <input type="hidden" id="idRepositorio" name="idRepositorio" value="<?= $this->idRepositorio ?>" />
+    <input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->idTrafico ?>" />
+    <input type="hidden" id="idFactura" name="idFactura" value="<?= $this->idFactura ?>" />
+    <label>Num. Factura:</label>
+    <input type="text" id="numeroFactura" name="numeroFactura" value="<?= $this->numeroFactura ?>" class="traffic-input-medium" />
+    <label>Proveedor:</label>
+    <input type="text" id="nombreProveedor" name="nombreProveedor" value="<?= $this->nombreProveedor ?>" class="traffic-input-large" />
+    <div class="traffic-clear-5"></div>
+    
+</form>
+<script type="text/javascript">    
+    
+    $("#selected").html('');
+    
+    $(document.body).on('change', '#files', function () {
+        var files = $(this).prop("files");
+        var names = $.map(files, function(val) {
+            var nomProveedor = $("#uploadInvoicePdf #nombreProveedor").val();
+            $("#selected").append('<p style="font-size: 12px; margin: 2px 0 2px 0">' + 
+                    'FO_' + $("#uploadInvoicePdf #numeroFactura").val() + '_' + nomProveedor.replace(' ', '_') + '.pdf' + '</p>');
+            return val.name; 
+        });
+    });
+    
+    $('#editInvoicePdf').validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest('form')
+                    .find('#' + element.attr('id'))
+                    .after(error);
+        },
+        ignore:'',
+        errorElement: 'span',
+        errorClass: 'traffic-error',
+        rules: {
+            'numeroFactura': {required: true},
+            'nombreProveedor': {required: true}
+        },
+        messages: {
+            'numeroFactura': {required: "Se requiere seleccionar archivo(s) XML."},
+            'nombreProveedor': {required: "Se requiere seleccionar archivo(s) XML."}
+        }
+    });
+
+    $(document).on("input", "#numeroFactura, #nombreProveedor", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

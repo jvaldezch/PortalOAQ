@@ -1,0 +1,38 @@
+<div style="padding: 10px; border: 1px #95B8E7 solid; width: 270px; float: left; height: 540px">
+    <form id="ff" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="name">Tipo de reporte:</label>
+            <select id="tipoReporte" class="easyui-combobox" name="tipoReporte" style="width:250px" data-options="required: true">
+                <option value="">---</option>
+                <option value="12">Tiempos facturación vs pedimento</option>
+<!--                <option value="10">Detalle de cuenta por pagar (Marron)</option>
+                <option value="11">Detalle de cuenta por pagar (Asociación)</option>-->
+            </select>
+        </div>
+        <div>
+            <label for="name">Aduana:</label>
+            <input id="idAduana" class="easyui-combobox" name="idAduana"  style="width:250px" data-options="
+                   valueField: 'id',
+                   textField: 'aduana',
+                   required: true,
+                   panelHeight: 250,
+                   panelWidth: 400,
+                   url: '/trafico/crud/aduanas'" />
+        </div>
+        <div>
+            <label for="name">Fecha inicio:</label>
+            <input id="fechaInicio" name="fechaInicio" type="text" class="easyui-datebox" required="required" style="width:150px">
+        </div>
+        <div>
+            <label for="name">Fecha fin:</label>
+            <input id="fechaFin" name="fechaFin" type="text" class="easyui-datebox" required="required" style="width:150px">
+        </div>
+        <div style="text-align:right;padding:5px 0">
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">Generar</a>
+        </div>
+    </form>
+    <div id="container" style="height: 300px; width: 265px; border: 1px #f4f4f4 solid"></div>
+</div>
+<div style="margin-left: 280px;">
+    <table id="dg"></table>
+</div>

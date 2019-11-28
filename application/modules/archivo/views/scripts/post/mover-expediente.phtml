@@ -1,0 +1,168 @@
+<div style="height: 400px; overflow-y: auto">
+<?php if (!isset($this->empty)) { ?>
+    <p style="font-family: sans-serif; font-size: 12px"><span style="font-weight: 600; color: red">Importante</span>: Todos los elementos de la referencia origen serán eliminados y formaran parte de la referencia destino. Esta operación es irreversible.</p>
+    <form id="formSource" method="post">
+        <table class="traffic-table traffic-table-left">
+            <tr>
+                <th colspan="4" class="traffic-table-subtitle">REFERENCIA ORIGEN</th>
+            </tr>
+            <tr>
+                <th style="width: 100px; text-align: right">Patente</th>
+                <td style="width: 130px"><?= $this->formSource->patente ?></td>
+                <th style="width: 130px; text-align: right">Pedimento</th>
+                <td colspan="2"><?= $this->formSource->pedimento ?></td>
+            </tr>
+            <tr>            
+                <th style="text-align: right">Aduana</th>
+                <td><div id="customs"><?= $this->aduanas("aduana", (int) $this->patente, (int) $this->aduana) ?></div></td>
+                <th style="text-align: right">Referencia</th>
+                <td colspan="2"><?= $this->formSource->referencia ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right">RFC Cliente</th>
+                <td colspan="3"><?= $this->formSource->rfc_cliente ?></td>
+            </tr>
+        </table>    
+        <div class="traffic-clear-5"></div>
+    </form>
+    <form id="formDestiny" method="post">
+        <input type="hidden" name="id" value="<?= $this->id ?>" />
+        <table class="traffic-table traffic-table-left">
+            <tr>
+                <th colspan="4" class="traffic-table-subtitle">REFERENCIA DESTINO</th>
+            </tr>
+            <tr>
+                <th style="width: 100px; text-align: right">Patente</th>
+                <td style="width: 130px"><?= $this->formDestiny->patente ?></td>
+                <th style="width: 130px; text-align: right">Pedimento</th>
+                <td colspan="2"><?= $this->formDestiny->pedimento ?></td>
+            </tr>
+            <tr>            
+                <th style="text-align: right">Aduana</th>
+                <td><div id="customs"><?= $this->aduanas("aduana", (int) $this->patente, (int) $this->aduana) ?></div></td>
+                <th style="text-align: right">Referencia</th>
+                <td colspan="2"><?= $this->formDestiny->referencia ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right">RFC Cliente</th>
+                <td><?= $this->formDestiny->rfc_cliente ?></td>            
+                <th style="text-align: right">NOMBRE CLIENTE</th>
+                <td><?= $this->formDestiny->nombre ?></td>
+            </tr>
+        </table>    
+        <div class="traffic-clear-5"></div>
+    </form>
+<?php } else { ?>
+    <p>La referencia no cuenta con archivos.</p>
+<?php } ?>
+</div>
+<script type="text/javascript">
+    
+    $("#formDestiny #nombre").typeahead({
+        source: function (query, process) {
+            return $.ajax({
+                url: "/trafico/get/clientes",
+                type: "get",
+                data: {name: query},
+                dataType: "json",
+                success: function (res) {
+                    return process(res);
+                }
+            });
+        }
+    }).change(function () {
+        $("#formDestiny #rfc_cliente").val("");
+    });
+    
+    $(document.body).on("change", "#formDestiny #nombre", function () {
+        $.ajax({
+            url: "/trafico/get/rfc-de-cliente",
+            type: "get",
+            data: {name: $("#formDestiny #nombre").val()},
+            dataType: "json",
+            success: function (res) {
+                if (res) {
+                    $("#formDestiny #rfc_cliente").val(res[0]["rfc"]);
+                }
+            }
+        });
+    });
+    
+    $.validator.addMethod("regx", function (value, element, regexpr) {
+        return regexpr.test(value);
+    }, "RFC no es válido.");
+
+    $("#formDestiny").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            aduana: {
+                required: true
+            },
+            pedimento: {
+                required: true,
+                minlength: 7,
+                maxlength: 7,
+                digits: true
+            },
+            referencia: {
+                required: true,
+                minlength: 4
+            },
+            rfc_cliente: {
+                required: true,
+                minlength: 10,
+                regx: /^[A-Z]{3,4}([0-9]{2})([0-9]{2})([0-9]{2})?[A-Z0-9]{3,4}/
+            }
+        },
+        messages: {
+            aduana: {
+                required: "Proporcionar aduana"
+            },
+            pedimento: {
+                required: "Campo necesario",
+                minlength: "Pedimento debe ser de 7 digitos",
+                maxlength: "Pedimento dede ser de 7 digitos",
+                digits: "No debe contener letras"
+            },
+            referencia: {
+                required: "Proporcionar referencia",
+                minlength: "Minimo 4 carácteres"
+            },
+            rfc_cliente: {
+                required: "Proporcionar el RFC del cliente",
+                minlength: "Minimo 10 caracteres"
+            }
+        }
+    });
+
+    $(document).on("change", "#formDestiny #patente", function () {
+        $.ajax({
+            url: "/archivo/ajax/obtener-aduanas",
+            data: {patente: $(this).val(), id: $("#id").val()},
+            type: "post",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                if (data.success === true) {
+                    $("#formDestiny #customs").html(data.html);
+                }
+            }
+        });
+    });
+    
+    $("#formDestiny #nombre").on("input", function (evt) {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+</script>

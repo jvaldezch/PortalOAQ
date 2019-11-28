@@ -1,0 +1,70 @@
+<table class="traffic-table">
+    <tr>
+        <th>
+            <strong>FOTOS</strong>
+            <?php if (isset($this->gallery) && !empty($this->gallery)) { ?>
+                <?php if (isset($this->uri)) { ?>
+                    <a href="<?= $this->uri ?>?id=<?= $this->idTrafico ?>" id="downloadPhotos" class="traffic-btn traffic-btn-right traffic-btn-small">
+                        <i class="fas fa-cloud-download-alt"></i> Descargar fotos
+                    </a>
+                <?php } else { ?>
+                    <a href="/trafico/get/download-photos?id=<?= $this->idTrafico ?>" id="downloadPhotos" class="traffic-btn traffic-btn-right traffic-btn-small">
+                        <i class="fas fa-cloud-download-alt"></i> Descargar fotos
+                    </a>
+                <?php } ?>
+            <?php } ?>
+            <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                <i onclick="loadPhotos();" id="loadInvoices" class="fas fa-sync-alt" style="cursor: pointer"></i>
+            </div>
+        </th>
+    </tr>           
+</table>
+<?php if (isset($this->gallery)) { ?>
+    <?php foreach ($this->gallery as $item) { ?>
+        <?php if (file_exists($item["carpeta"] . DIRECTORY_SEPARATOR . $item["miniatura"])) { ?>
+            <div style="float: left; margin: 2px; border: 1px #999 solid; padding: 2px; background-color: #fff; min-width: 150px; min-height: 120px">
+                <div>
+                    <a title="Trafico Image <?= $item["id"] ?>" style="max-width: 180px" class="image-link traffic-thumb" href="/trafico/data/read-image?id=<?= $item["id"] ?>&time=<?= microtime() ?>" data-id="<?= $item["id"] ?>">
+                        <?php if (isset($item['miniatura'])) { ?>
+                            <img class="view-photo" style="max-width: 150px" src="/trafico/data/read-thumbnail?id=<?= $item["id"] ?>&time=<?= microtime() ?>" >
+                        <?php } else { ?>
+                            <img class="view-photo" src="/images/not_available.gif" width="150px" >
+                        <?php } ?>
+                    </a>
+                </div>
+                <div>
+                    <div style="float: left; font-size: 11px">
+                        <?= isset($item["nombre"]) ? $item["nombre"] : strtolower($item["imagen"]) ?>
+                    </div>
+                    <?php if (!isset($this->borrar)) { ?>
+                    <div style="float: right">
+                        <div class="traffic-icon traffic-icon-delete" style="cursor: pointer" onclick="borrarImagen(<?= $item["id"] ?>);"></div>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        <?php } else { ?>
+            <div style="float: left; margin: 2px; border: 1px #999 solid; padding: 2px; background-color: #fff; min-width: 150px; min-height: 120px">
+                <div>
+                    <a title="Image not found!" class="traffic-thumb">                            
+                        <img class="traffic-img-notavailable">
+                    </a>
+                </div>
+                <div>
+                    <div style="float: left; font-size: 11px">
+                        <?= isset($item["nombre"]) ? $item["nombre"] : strtolower($item["imagen"]) ?>
+                    </div>
+                    <?php if (!isset($this->borrar)) { ?>
+                    <div style="float: right">
+                        <div class="traffic-icon traffic-icon-delete" style="cursor: pointer" onclick="borrarImagen(<?= $item["id"] ?>);"></div>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        <?php } ?>
+    <?php } ?>
+<?php } else { ?>
+    <p>
+        <em>No tiene imágenes cargadas</em>
+    </p>
+<?php } ?>

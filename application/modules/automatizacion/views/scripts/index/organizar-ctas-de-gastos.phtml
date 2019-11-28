@@ -1,0 +1,57 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        table td,
+        table th {
+            border: 1px #ddd solid;
+            padding: 2px 5px;
+        }
+    </style>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Type</th>
+                    <th>Num</th>
+                    <th>Referencia</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Año</th>
+                    <th>Folder</th>
+                    <th>Destino</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->files as $item) { ?>                
+                <tr>
+                    <td><?= $item['filename'] ?></td>
+                    <td><?= $item['type'] ?></td>
+                    <td><?= $item['num'] ?></td>
+                    <td><?= $item['referencia'] ?></td>
+                    <td><?= $item['patente'] ?></td>
+                    <td><?= $item['aduana'] ?></td>
+                    <td><?= $item['year'] ?></td>
+                    <td><?= $item['path'] ?></td>
+                    <td><?= $item['moveto'] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </body>
+</html>

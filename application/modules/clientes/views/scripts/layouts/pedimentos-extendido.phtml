@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Extendido <?= $this->aduana ?></title>
+    </head>
+    <style>body {margin:0;padding:0; font-family:sans-serif;}
+        table {border-collapse:collapse; }
+        table th, table td {font-size: 12px; border: 1px #555 solid; padding: 2px 5px;}
+        table th {background: #f1f1f1;
+        }
+        h1,h2,h3 {
+            margin: 0; padding:0;
+        }
+        .download {
+            -moz-box-shadow:inset 0px 1px 0px 0px #9acc85;
+            -webkit-box-shadow:inset 0px 1px 0px 0px #9acc85;
+            box-shadow:inset 0px 1px 0px 0px #9acc85;
+            background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #74ad5a), color-stop(1, #68a54b));
+            background:-moz-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+            background:-webkit-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+            background:-o-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+            background:-ms-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+            background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#74ad5a", endColorstr="#68a54b",GradientType=0);
+            background-color:#74ad5a;
+            border:1px solid #3b6e22;
+            display:inline-block;
+            cursor:pointer;
+            color:#ffffff;
+            font-family:Arial;
+            font-size:13px;
+            font-weight:bold;
+            padding:3px 6px;
+            text-decoration:none;
+        }
+        .download:hover {
+            background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #68a54b), color-stop(1, #74ad5a));
+            background:-moz-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+            background:-webkit-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+            background:-o-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+            background:-ms-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+            background:linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#68a54b", endColorstr="#74ad5a",GradientType=0);
+            background-color:#68a54b;
+        }
+        .download:active {
+            position:relative;
+            top:1px;
+        }
+    </style>
+</head>
+<body>
+    <?php if(isset($this->excelUrl)) { ?>
+        <a href="/clientes/data/ver-reporte-anexo?<?= $this->excelUrl ?>&download=true" class="download" style="margin: 1px 1px 3px 1px">Descarga Excel</a>
+    <?php } ?>
+    <table id="table2excel">
+        <table>
+            <tr>
+                <th>Referencia</th>
+                <th>Operacion</th>
+                <th>Patente</th>
+                <th>Aduana</th>
+                <th>Pedimento</th>
+                <th>Trafico</th>
+                <th>TransporteEntrada</th>
+                <th>TransporteArribo</th>
+                <th>TransporteSalida</th>
+                <th>FechaEntrada</th>
+                <th>FechaPago</th>
+                <th>FirmaValidacion</th>
+                <th>FirmaBanco</th>
+                <th>TipoCambio</th>
+                <th>CvePed</th>
+                <th>Regimen</th>
+                <th>AduanaEntrada</th>
+                <th>ValorDolares</th>
+                <th>ValorAduana</th>
+                <th>Fletes</th>
+                <th>Seguros</th>
+                <th>Embalajes</th>
+                <th>OtrosIncrementales</th>
+                <th>DTA</th>
+                <th>IVA</th>
+                <th>IGI</th>
+                <th>PREV</th>
+                <th>CNT</th>
+                <th>TotalEfectivo</th>
+                <th>PesoBruto</th>
+                <th>Bultos</th>
+                <th>Guías</th>
+                <th>Planta</th>
+                <th>NumFactura</th>
+                <th>Cove</th>
+                <th>FechaFactura</th>
+                <th>Incoterm</th>
+                <th>ValorFacturaUsd</th>
+                <th>ValorFacturaMonExt</th>
+                <th>NomProveedor</th>
+                <th>TaxId</th>
+                <th>PaisFactura</th>
+                <th>Divisa</th>
+                <th>FactorMonExt</th>
+                <th>NumParte</th>
+                <th>Descripcion</th>
+                <th>Fraccion</th>
+                <th>OrdenFraccion</th>
+                <th>PrecioUnitario</th>
+                <th>ValorMonExt</th>
+                <th>ValorAduanaMXN</th>
+                <th>UMC</th>
+                <th>CantUMC</th>
+                <th>UMT</th>
+                <th>CantUMT</th>
+                <th>PaisOrigen</th>
+                <th>TLC</th>
+                <th>TLCAN</th>
+                <th>TLCUE</th>
+                <th>PROSEC</th>
+                <th>TasaAdvalorem</th>
+                <th>PaisVendedor</th>
+                <th>PatenteOrig</th>
+                <th>PedimentoOrig</th>
+                <th>AduanaOrig</th> 
+            </tr>
+            <?php if (isset($this->data)) { ?>
+                <?php foreach ($this->data as $item) { 
+                    if ((trim($item["NumParte"]) !== '' && $item["NumParte"] != null)) {
+                        $numParte = $item["NumParte"];
+                    } elseif ((isset($item["Observacion"]) && $item["Observacion"] != '' && $item["Observacion"] != 'false') && ($item["CvePed"] == 'A1')) {
+                        $numParte = $item["Observacion"];
+                    } else {
+                        $numParte = "";
+                    }
+                    if ($item["Divisa"] === 'USD' && ($item["FactorMonExt"] === '' || $item["FactorMonExt"] === null)) {
+                        $factorMonExt = '1.0000';
+                    } else {
+                        $factorMonExt = $item["FactorMonExt"];
+                    }
+                    ?>
+                    <tr>
+                        <td><?= $item["Referencia"] ?></td>
+                        <td><?= $item["Operacion"] ?></td>
+                        <td><?= $item["Patente"] ?></td>
+                        <td><?= $item["Aduana"] ?></td>
+                        <td><?= $item["Pedimento"] ?></td>
+                        <td><?= $item["Trafico"] ?></td>
+                        <td><?= $item["TransporteEntrada"] ?></td>
+                        <td><?= $item["TransporteArribo"] ?></td>
+                        <td><?= $item["TransporteSalida"] ?></td>
+                        <td><?= $item["FechaEntrada"] ?></td>
+                        <td><?= $item["FechaPago"] ?></td>
+                        <td><?= $item["FirmaValidacion"] ?></td>
+                        <td><?= $item["FirmaBanco"] ?></td>
+                        <td><?= $item["TipoCambio"] ?></td>
+                        <td><?= $item["CvePed"] ?></td>
+                        <td><?= $item["Regimen"] ?></td>
+                        <td class="numeric"><?= $item["AduanaEntrada"] ?></td>
+                        <td class="numeric"><?= $item["ValorDolares"] ?></td>
+                        <td class="numeric"><?= $item["ValorAduana"] ?></td>
+                        <td class="numeric"><?= $item["Fletes"] ?></td>
+                        <td class="numeric"><?= $item["Seguros"] ?></td>
+                        <td class="numeric"><?= $item["Embalajes"] ?></td>
+                        <td class="numeric"><?= $item["OtrosIncrementales"] ?></td>
+                        <td class="numeric"><?= $item["DTA"] ?></td>
+                        <td class="numeric"><?= $item["IVA"] ?></td>
+                        <td class="numeric"><?= $item["IGI"] ?></td>
+                        <td class="numeric"><?= $item["PREV"] ?></td>
+                        <td class="numeric"><?= $item["CNT"] ?></td>
+                        <td class="numeric"><?= $item["TotalEfectivo"] ?></td>
+                        <td class="numeric"><?= $item["PesoBruto"] ?></td>
+                        <td class="numeric"><?= $item["Bultos"] ?></td>
+                        <?php 
+                            $guias = "";
+                            if(isset($item["Guias"])) {
+                                $guias .= $item["Guias"];
+                            }
+                            if(isset($item["Contenedores"])) {
+                                $guias .= $item["Contenedores"];
+                            }
+                        ?>
+                        <td><?= $guias ?></td>
+                        <td><?= $item["Planta"] ?></td>
+                        <td><?= $item["NumFactura"] ?></td>
+                        <td><?= $item["Cove"] ?></td>
+                        <td><?= (isset($item["FechaFactura"])) ? $item["FechaFactura"] : "" ?></td>
+                        <td><?= $item["Incoterm"] ?></td>
+                        <td class="numeric"><?= $item["ValorFacturaUsd"] ?></td>
+                        <td class="numeric"><?= $item["ValorFacturaMonExt"] ?></td>
+                        <td><?= $item["NomProveedor"] ?></td>
+                        <td><?= $item["TaxId"] ?></td>
+                        <td><?= $item["PaisFactura"] ?></td>
+                        <td><?= $item["Divisa"] ?></td>
+                        <td class="numeric"><?= $factorMonExt ?></td>
+                        <td><?= $numParte ?></td>
+                        <td><?= $item["Descripcion"] ?></td>
+                        <td><?= $item["Fraccion"] ?></td>
+                        <td><?= $item["OrdenFraccion"] ?></td>
+                        <td style="text-align:right;"><?= (isset($item["ValorMonExt"])) ? number_format($item["ValorMonExt"] / $item["CantUMC"], 4) : "" ?></td>
+                        <td class="numeric"><?= $item["ValorMonExt"] ?></td>
+                        <td class="numeric"><?= $item["ValorAduanaMXN"] ?></td>
+                        <td><?= $item["UMC"] ?></td>
+                        <td class="numeric"><?= $item["CantUMC"] ?></td>
+                        <td><?= $item["UMT"] ?></td>
+                        <td class="numeric"><?= $item["CantUMT"] ?></td>
+                        <td><?= $item["PaisOrigen"] ?></td>
+                        <td><?= isset($item["TLC"]) ? $item["TLC"] : "" ?></td>
+                        <td><?= isset($item["TLCAN"]) ? $item["TLCAN"] : "" ?></td>
+                        <td><?= isset($item["TLCUE"]) ? $item["TLCUE"] : "" ?></td>
+                        <td><?= isset($item["PROSEC"]) ? $item["PROSEC"] : "" ?></td>
+                        <td class="numeric"><?= $item["TasaAdvalorem"] ?></td>
+                        <td><?= $item["PaisVendedor"] ?></td>
+                        <td><?= $item["PatenteOrig"] ?></td>
+                        <td><?= $item["PedimentoOrig"] ?></td>
+                        <td><?= $item["AduanaOrig"] ?></td>
+                    </tr>
+                <?php 
+                unset($numParte);
+                } // foreach ?>
+            <?php } ?>
+        </table>
+</body>
+</html>

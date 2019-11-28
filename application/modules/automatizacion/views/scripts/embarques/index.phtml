@@ -1,0 +1,30 @@
+<h3 class="sub-header">Monitor de Embarques</h3>
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>Operación</th>
+                <th>I/E</th>
+                <th>Referencia</th>
+                <th>Fecha</th>
+                <th>Estatus</th>
+                <th>RFC</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->data)) { ?>
+                <?php foreach ($this->data as $item) { ?>
+                    <tr<?= $this->tableRow($item["estatus"]) ?>>
+                        <td><?= $item["aduana"] . '-' . $item["patente"] . '-' . $this->pedimento($item["pedimento"]) ?></td>
+                        <td><?= $item["impExp"] ?></td>
+                        <td><?= $item["referencia"] ?></td>
+                        <td><?= date('d/m/Y', strtotime($item["fechaTrafico"])) ?></td>
+                        <td><?= $item["estatus"] ?></td>
+                        <td><?= $item["rfcCliente"] ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+

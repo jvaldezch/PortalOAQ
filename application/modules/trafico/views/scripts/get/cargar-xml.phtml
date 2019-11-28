@@ -1,0 +1,44 @@
+<div class="traffic-clear-5"></div>
+<div id="selected"></div>
+<form enctype="multipart/form-data" method="POST" id="uploadForm">
+    <input type="hidden" name="idTrafico" value="<?= $this->idTrafico ?>" />
+    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+    <input type="file" id="cdfis" name="cdfis[]" style="display:none" multiple="">
+    <div class="input-append">
+        <input id="filenames" class="traffic-input-large" name="filename" type="text">
+        <div class="traffic-clear-5"></div>
+        <a class="traffic-btn-add" onclick="$('input[id=cdfis]').click();">Seleccionar archivo(s)...</a>
+    </div>
+</form>
+<script type="text/javascript">
+    
+    $("#selected").html('');
+    
+    $(document.body).on('change', '#cdfis', function () {
+        var files = $(this).prop("files");
+        var names = $.map(files, function(val) { 
+            $("#selected").append('<p style="font-size: 11px; margin: 2px">' + val.name + '</p>');
+            return val.name; 
+        });
+        $("#filenames").val($(this).val());
+    });
+    
+    $('#uploadForm').validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest('form')
+                    .find('#' + element.attr('id'))
+                    .after(error);
+        },
+        ignore:'',
+        errorElement: 'span',
+        errorClass: 'traffic-error',
+        rules: {
+            'cdfis[]': {required: true}
+        },
+        messages: {
+            'cdfis[]': {required: "Se requiere seleccionar archivo(s) XML."}
+        }
+    });
+    
+</script>

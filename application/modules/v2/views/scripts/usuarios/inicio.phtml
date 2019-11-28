@@ -1,0 +1,19 @@
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Usuario</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr>
+                <td><?= $item["id"] ?></td>
+                <td><?= $item["usuario"] ?></td>
+                <td>&nbsp;</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?= (isset($this->paginator)) ? $this->paginationSize($this->paginator->getItemCountPerPage()) : "" ?><?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding") : null ?>

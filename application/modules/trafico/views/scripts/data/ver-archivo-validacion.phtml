@@ -1,0 +1,21 @@
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <th>Nombre de archivo</th>
+        <td><?= $this->nomArchivo ?></td>
+    </tr>
+    <tr>
+        <th>Contenido</th>
+        <td>
+            <textarea style="width: 550px; height: 400px; font-family: consolas; line-height: 11px; font-size: 11px"><?= $this->contenido ?></textarea>
+        </td>
+    </tr>
+</table>
+<div class="traffic-clear-5"></div>
+<a class="traffic-btn-close" id="closeModal">Cerrar</a>
+<div class="traffic-clear-5"></div>
+<script>
+    $("#closeModal").click(function () {
+        $("#modalRegister").html('Please wait... <div class="traffic-icon traffic-loader"></div>');
+        $("#modalRegister").jqmHide();
+    });
+</script>

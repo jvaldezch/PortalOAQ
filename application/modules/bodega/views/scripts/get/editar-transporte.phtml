@@ -1,0 +1,52 @@
+<form id="frmProvider">
+    <input type="hidden" name="idCliente" id="idCliente" value="<?= $this->idCliente ?>" />
+    <?php if (isset($this->idProv)) { ?>
+        <input type="hidden" name="idProveedor" id="idProveedor" value="<?= $this->idProveedor ?>" />
+    <?php } ?>
+    <table class="traffic-table">
+        <tbody>
+            <tr>
+                <td style="font-weight: bold">Proveedor / Destinatario</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</form>
+
+<script type="text/javascript">
+    
+    $("#frmTransport").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "errorlabel",
+        rules: {
+            nombre: {required: true},
+            calle: {required: true},
+            numExt: {required: true},
+            codigoPostal: {required: true},
+            pais: {required: true}
+        },
+        messages: {
+            nombre: "SE REQUIERE",
+            calle: "SE REQUIERE",
+            numExt: "SE REQUIERE",
+            codigoPostal: "SE REQUIERE",
+            pais: "SE REQUIERE"
+        }
+    });
+    
+    $(document.body).on("input", "#nombre, #calle, #numInt, #numExt, #colonia, #municipio, #estado, #codigoPostal, #localidad", function (evt) {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

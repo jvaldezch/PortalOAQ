@@ -1,0 +1,35 @@
+<form id="form" method="post" action="/usuarios/ajax/agregar-prefijo">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2" class="traffic-table-title">PREFIJOS PARA TIPOS DE DOCUMENTOS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th><label for="idDocumento">Documento:</label></th>
+                <td>
+                    <select id="idDocumento" name="idDocumento" class="traffic-select">
+                        <option value="">---</option>
+                        <?php foreach ($this->data as $item) { ?>
+                            <option value="<?= $item["id"] ?>"><?= $item["nombre"] ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="prefijo">Prefijo:</label></th>
+                <td>
+                    <input type="text" name="prefijo" id="prefijo"><div id="prefijoError"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <button class="traffic-btn traffic-btn-save" id="submit">Agregar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div id="result"></div>

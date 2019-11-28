@@ -1,0 +1,80 @@
+<?php if (isset($this->form)) { ?>
+    <form method="post" id="form">
+        <input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->idTrafico ?>" />
+        <table class="traffic-table traffic-table-left">
+            <tr>
+                <th colspan="4" class="invoice-title">MODIFICAR ENTRADA</th>
+            </tr>            
+            <tr>
+                <th style="text-align: right"><label for="idBodega">BODEGA:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <?= $this->form->idBodega ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="width: 150px; text-align: right"><label for="idCliente">CLIENTE:<span style="color: red">*</span></label></th>
+                <td style="width: 360px">
+                    <?= $this->form->idCliente ?>
+                </td>
+                <td>
+                    <label style="display: table-cell; float: left; font-weight: bold">RFC SOCIEDAD: </label>                
+                </td>
+                <td>
+                    <input type="text" id="rfcSociedad" value="" disabled="disabled" style="width: 150px"/>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="proveedor">PROVEEDOR:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <?= $this->form->proveedor ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="planta">PLANTA:</label></th>
+                <td colspan="3">
+                    <div id="divplanta"><?= $this->form->planta ?></div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="referencia">REFERENCIA:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <?= $this->form->referencia ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="blGuia">BL / GUÍA:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <?= $this->form->blGuia ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="contenedorCaja">CONTENEDOR / CAJA:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <?= $this->form->contenedorCaja ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="lineaTransporte">LÍNEA / TRANSPORTE:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <?= $this->form->lineaTransporte ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="bultos">BULTOS:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <?= $this->form->bultos ?>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div class="traffic-clear-5"></div>
+    <button id="submit" class="traffic-btn traffic-btn-right">
+        <i class="far fa-save"></i> GUARDAR</button>
+<?php } else { ?>
+    <div class="traffic-clear-5"></div>
+    <span class="traffic-eta-yellow">El pedimento ha sido pagado y no puede ser modificado.</span>
+    <div class="traffic-clear-5"></div>
+<?php } ?>
+<a href="/bodega/index/editar-entrada?id=<?= $this->idTrafico ?>" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i> Regresar</a>
+<div class="traffic-clear"></div>

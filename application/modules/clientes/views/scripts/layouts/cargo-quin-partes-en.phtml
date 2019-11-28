@@ -1,0 +1,37 @@
+<?php if (isset($this->data)) { ?>
+    <table class="traffic-tab-table">
+        <thead>
+            <tr>
+                <th>NP</th>
+                <th>Tariff Quantity</th>
+                <th>UMC PED</th>
+                <th>NP</th>
+                <th>Invoice Aquantity</th>
+                <th>UM / OMA</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $i = 1;
+            foreach ($this->data as $item) {
+                if ($i & 1) {
+                    $style = "background-color: #fefefe;";
+                } else {
+                    $style = "background-color: #f3f3f3;";
+                }
+                $i++;
+                ?>
+                <tr style="<?= $style ?>">
+                    <td><?= $item["numParte"] ?></td>
+                    <td><?= $item["cantidadFactura"] ?></td>
+                    <td><?= $item["umc"] ?></td>
+                    <td><?= $item["numParte"] ?></td>
+                    <td><?= $item["cantidadOma"] ?></td>
+                    <td><?= $item["oma"] ?></td>
+                    <td><?= ($item["cantidadFactura"] - $item["cantidadOma"]) ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>

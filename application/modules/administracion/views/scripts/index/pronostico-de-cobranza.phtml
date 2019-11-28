@@ -1,0 +1,188 @@
+<form action="<?= $this->url() ?>" method="get" enctype="application/x-www-form-urlencoded" id="form">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2" class="traffic-table-title">PRONOSTICO DE COBRANZA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><label for="rfc">RFC:</label></td>
+                <td><?= $this->form->rfc ?></td>
+            </tr>
+            <tr>
+                <td><label for="nombre">Nombre:</label></td>
+                <td><?= $this->form->nombre ?></td>
+            </tr>
+            <tr>
+                <td><label for="fechaIni">Fecha Inicio:</label></td>
+                <td><?= $this->form->fechaIni ?> <i class="far fa-calendar-alt" style="font-size: 1.2em"></i></td>
+            </tr>
+            <tr>
+                <td><label for="desglose">Desglose:</label></td>
+                <td><?= $this->form->desglose ?></td>
+            </tr>
+            <tr>
+                <td><label for="sum">Sumarizado:</label></td>
+                <td><?= $this->form->sum ?></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div class="traffic-clear-5"></div>
+<?= isset($this->paginator) ? $this->paginationControl($this->paginator)  . "<a class=\"traffic-btn-save traffic-btn-small traffic-btn-right\" href=\"/administracion/index/excel-pronostico-de-cobranza?" . $this->params . "\">Excel</a>" : "" ?>
+<div class="traffic-clear-5"></div>
+<?php if ((int) $this->sum == 0 && (int) $this->desglose == 0) { ?>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Plazo (días)</th>
+                <th>Retraso (días)</th>
+                <th>Relación de Cta.</th>
+                <th>Factura</th>
+                <th>Fecha Factura</th>
+                <th>Fecha Acuse</th>
+                <th>Fecha pronóstico</th>
+                <th>Referencia</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($this->paginator)) { ?>
+                <?php foreach ($this->paginator as $item) { ?>
+                    <tr>
+                        <td><?= utf8_decode($item['Nombre']) ?></td>
+                        <td><?= isset($item['Plazo']) ? $item['Plazo'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['Vencimiento']) ? $item['Vencimiento'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['RelacionID']) ? $item['RelacionID'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['FolioID']) ? $item['FolioID'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['FechaFactura']) ? $item['FechaFactura'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['FechaAcuse']) ? $item['FechaAcuse'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['FechaPronostico']) ? $item['FechaPronostico'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['Referencia']) ? $item['Referencia'] : '&nbsp;' ?></td>
+                        <td align="right" style="text-align: right">$ <?= number_format($item['Total'], 2, '.', ',') ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="10" style="text-align: center">
+                        <em>No hubo resultados.</em>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>
+<?php if ((int) $this->sum == 1 && (int) $this->desglose == 0) { ?>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($this->paginator)) { ?>
+                <?php foreach ($this->paginator as $item) { ?>
+                    <tr>
+                        <td><?= $item['Nombre'] ?></td>
+                        <td align="right" style="text-align: right">$<?= number_format($item['Total'], 2, '.', ',') ?></td>
+                    </tr>
+                <?php } ?>  
+            <?php } else { ?>
+                <tr>
+                    <td colspan="2" style="text-align: center">
+                        <em>No hubo resultados.</em>
+                    </td>
+                </tr>
+            <?php } ?>  
+        </tbody>
+    </table>
+<?php } ?>
+<?php if ((int) $this->sum == 0 && (int) $this->desglose == 1) { ?>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Relación de Cta.</th>
+                <th>Factura</th>
+                <th>Fecha Factura</th>
+                <th>Fecha Acuse</th>
+                <th>Referencia</th>            
+                <th>Comprobados</th>
+                <th>Complementarios</th>
+                <th>Honorarios</th>
+                <th>IVA</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($this->paginator)) { ?>
+                <?php foreach ($this->paginator as $item) { ?>
+                    <tr>
+                        <td><?= utf8_decode($item['Nombre']) ?></td>
+                        <td><?= isset($item['RelacionID']) ? $item['RelacionID'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['FolioID']) ? $item['FolioID'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['FechaFactura']) ? $item['FechaFactura'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['FechaAcuse']) ? $item['FechaAcuse'] : '&nbsp;' ?></td>
+                        <td><?= isset($item['Referencia']) ? $item['Referencia'] : '&nbsp;' ?></td>         
+                        <td align="right" style="text-align: right"><?= isset($item['Comprobados']) ? '$ ' . number_format($item['Comprobados'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td align="right" style="text-align: right"><?= isset($item['Complementarios']) ? '$ ' . number_format($item['Complementarios'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td align="right" style="text-align: right"><?= isset($item['Honorarios']) ? '$ ' . number_format($item['Honorarios'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td align="right" style="text-align: right"><?= isset($item['IVA']) ? '$ ' . number_format($item['IVA'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td align="right" style="text-align: right"><?= isset($item['Total']) ? '$ ' . number_format($item['Total'], 2, '.', ',') : '&nbsp;' ?></td>
+                    </tr>
+                <?php } ?>  
+            <?php } else { ?>
+                <tr>
+                    <td colspan="11" style="text-align: center">
+                        <em>No hubo resultados.</em>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>
+<?php if ((int) $this->sum == 1 && (int) $this->desglose == 1) { ?>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th>Cliente</th>            
+                <th>Comprobados</th>
+                <th>Complementarios</th>
+                <th>Honorarios</th>
+                <th>IVA</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($this->paginator)) { ?>
+                <?php foreach ($this->paginator as $item) { ?>
+                    <tr>
+                        <td><?= $item['Cliente'] ?></td>            
+                        <td style="text-align: right"><?= isset($item['Comprobados']) ? '$ ' . number_format($item['Comprobados'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td style="text-align: right"><?= isset($item['Complementarios']) ? '$ ' . number_format($item['Complementarios'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td style="text-align: right"><?= isset($item['Honorarios']) ? '$ ' . number_format($item['Honorarios'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td style="text-align: right"><?= isset($item['IVA']) ? '$ ' . number_format($item['IVA'], 2, '.', ',') : '&nbsp;' ?></td>
+                        <td style="text-align: right"><?= isset($item['Total']) ? '$ ' . number_format($item['Total'], 2, '.', ',') : '&nbsp;' ?></td>
+                    </tr>
+                <?php } ?>  
+            <?php } else { ?>
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        <em>No hubo resultados.</em>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<?= isset($this->paginator) ? $this->paginationControl($this->paginator) : "" ?>
+<div class="traffic-clear-5"></div>
+<button id="submit" class="traffic-btn traffic-btn-right">
+    <i class="fas fa-table"></i> Generar reporte</button>
+<a onclick="window.history.back();" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar</a>
+<div class="traffic-clear-10"></div>

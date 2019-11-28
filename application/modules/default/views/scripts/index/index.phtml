@@ -1,0 +1,36 @@
+<div align="center">
+    <form id="formLogin" method="post">
+        <h1>Login</h1>
+        <p>
+            <input type="text" name="username" id="username" value="<?= isset($this->username) ? $this->username : "" ?>" placeholder="Usuario" autocomplete="off" />
+        </p>
+        <p>
+            <input type="password" name="password" id="password" placeholder="Contraseña" />
+        </p>
+        <p>
+            <select name="empresa" id="empresa" class="disabled" disabled="disabled">
+                <?php if (isset($this->empresas)) { ?>
+                    <?php foreach ($this->empresas as $item) { ?>
+                        <option value="<?= $item["id"] ?>"><?= $item["identificador"] ?></option>
+                    <?php } ?>
+                <?php } ?>
+            </select>
+        </p>
+        <p>
+            <input type="button" id="submit" type="button" value="Entrar">
+        </p>
+        <p style="margin-top: 5px">
+            <a href="/default/index/olvide-password">¿Ólvido su contraseña?</a>
+        </p>
+        <p style="margin-top: 10px; margin-bottom: 10px">
+            <a href="/soporte" target="_blank">Genera un ticket aqui</a>.
+        </p>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        setTimeout(function(){
+            $("input[name='username']").focus();
+        }, 200);
+    });
+</script>

@@ -1,0 +1,42 @@
+<?php if(isset($this->id)) { ?>
+    <input type="hidden" id="id" name="id" value="<?= $this->id ?>" />
+<?php } ?>
+<?php if(isset($this->fecha)) { ?>
+    <input type="hidden" id="fecha" name="fecha" value="<?= $this->fecha ?>" />
+<?php } ?>
+<input type="hidden" id="idUsuario" name="idUsuario" value="<?= $this->idUsuario ?>" />
+<textarea name="activityContent" style="width: 100%; height: 350px"><?= isset($this->contenido) ? $this->contenido : "" ?></textarea>
+<script type="text/javascript">
+    
+    tinyMCE.init({
+        mode : "textareas",
+        theme : "advanced",
+        plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+        theme_advanced_buttons1 : "save,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+        theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+        theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+        theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : false,
+        save_onsavecallback : "guardarActividad",
+        content_css : "/tinymce/tiny_mce/tinymce.css"
+    });
+    
+    function guardarActividad(html) {
+        var id = $("#id").val();
+        $.ajax({
+            url: "/principal/post/actividad",
+            type: "post",
+            dataType: "json",
+            data: {id: id, idUsuario: $("#idUsuario").val(), fecha: $("#fecha").val(), contenido: html.getContent()},
+            timeout: 3000,
+            success: function (res) {
+                if (res.success === true) {
+                }
+            }
+        });
+    }
+    
+</script>

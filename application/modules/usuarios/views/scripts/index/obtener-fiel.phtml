@@ -1,0 +1,57 @@
+<div id="modalWindow">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>FIEL disponible para Ventanilla Única</h3>
+    </div>
+    <div class="modal-body">
+        <?php if($this->fiel) { ?>
+        <table class="table table-striped table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Razón social</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>RFC</th>                    
+                    <th>Figura</th>
+                    <th>Tipo</th> 
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->fiel as $item) { ?>
+                <tr>
+                    <td>&nbsp;<a class="assign-firm" href="/usuarios/index/asignar-fiel?id=<?= $this->userId ?>&idfirmante=<?= $item["id"] ?>&rfc=<?= $item["rfc"] ?>&patente=<?= $item["patente"] ?>&aduana=<?= $item["aduana"] ?>"><i class="icon-plus-sign"></i></a>&nbsp;</td>
+                    <td><?= $item["razon"] ?></td>
+                    <td><?= $item["patente"] ?></td>
+                    <td><?= $item["aduana"] ?></td>
+                    <td><?= $item["rfc"] ?></td>
+                    <td><?= $item["figura"] ?></td>
+                    <td><?= $item["tipo"] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>            
+        </table>
+        <?php } else { ?>
+        <h4>No hay FIEL para asignar.</h4>
+        <?php } ?>
+    </div>
+    <div class="modal-footer">
+      <a id="closeModal" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
+    </div>
+</div>
+<script>
+    $(".assign-firm").click(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('href'),
+            cache: false,
+            dataType: 'json'
+        }).success(function(data) {
+            if(data.success == true) {
+                alert('Permiso asignado.');  
+                window.location.href = "/usuarios/index/editar-usuario?id=<?= $this->userId ?>";
+            }
+
+        });
+    });
+</script>

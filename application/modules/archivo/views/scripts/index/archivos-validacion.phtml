@@ -1,0 +1,98 @@
+<form action="<?= $this->url() ?>" method="get" id="form">
+    <table class="traffic-table">
+        <thead>
+            <tr>
+                <th><label for="fecha">Fecha Inicio:</label></th>
+                <th><label for="aduana">Aduana:</label></th>
+                <th><label for="pedimento">Pedimento:</label></th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><?= $this->form->fecha ?></td>
+                <td><?= $this->form->aduana ?></td>
+                <td><?= $this->form->pedimento ?></td>
+                <td>
+                    <button type="submit" class="traffic-btn traffic-btn-search">Buscar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Aduana</th>
+            <th>Archivo</th>
+            <th>Respuesta</th>
+            <th>Validación</th>
+            <th>Pagos</th>
+            <th>Info.</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <?php if (isset($this->paginator)) { ?>
+        <?php
+        foreach ($this->paginator as $item) {
+            $d[] = $item["id"];
+            ?>
+            <tr>
+                <td><?= $item["patente"] . '-' . $item["aduana"] ?></td>
+                <td><a style="cursor: pointer" class="showRegister" data-url="/trafico/data/ver-archivo-validacion?id=<?= $item["id"] ?>"><?= $item["archivoNombre"] ?></a></td>
+                <td>
+                    <?php if (isset($item["validacion"]) && !empty($item["validacion"])) {
+                        $d[] = $item["validacion"]["id"];
+                        ?>
+                        <a style="cursor: pointer" class="showRegister" data-url="/trafico/data/ver-archivo-validacion?id=<?= $item["validacion"]["id"] ?>"><?= $item["validacion"]["archivoNombre"] ?></a>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (isset($item["firma"]) && !empty($item["firma"])) {
+                        $d[] = $item["firma"]["id"];
+                        ?>
+                        <a style="cursor: pointer" class="showRegister" data-url="/trafico/data/ver-archivo-validacion?id=<?= $item["firma"]["id"] ?>"><?= $item["firma"]["archivoNombre"] ?></a>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if ((isset($item["pagos"]) && !empty($item["pagos"])) && (isset($item["firma"]) && !empty($item["firma"]))) {
+                        $d[] = $item["pagos"]["idArchivoValidacion"];
+                        ?>
+                        <a style="cursor: pointer" class="showRegister" data-url="/trafico/data/ver-archivo-validacion?id=<?= $item["pagos"]["idArchivoValidacion"] ?>"><?= $item["pagos"]["archivoNombre"] ?></a>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if (isset($item["pedimentos"]) && !empty($item["pedimentos"])) { ?>
+            <?php foreach ($item["pedimentos"] as $p) { ?>
+                            <p><?= $p["pedimento"] . " " . $p["rfcCliente"] . " " . $p["cveDoc"] . " " . (($p["tipoMovimiento"] == "1") ? "IMPO" : "EXPO") ?></p>
+            <?php } ?>
+        <?php } ?>
+                </td>
+                <td>
+                    <div class="traffic-icon traffic-icon-save" onclick="descarga([<?= implode(',', $d) ?>]);"></div>
+                </td>
+            </tr>
+            <?php unset($d);
+        } ?>
+<?php } else { ?>
+        <tr>
+            <td colspan="7">NO HUBO RESULTADOS PARA LA BÚSQUEDA REALIZADA</td>
+        </tr>
+<?php } ?>
+</table>
+<div class="jqmWindow" id="modalRegister" style="top: 10%" name="jqmodal">
+    Please wait... <div class="traffic-icon traffic-loader"></div>
+</div>
+<script>
+    $("#modalRegister").jqm({
+        ajax: "@data-url",
+        modal: true,
+        overlay: 80,
+        trigger: "a.showRegister",
+        onShow: function (hash) {
+            windowHeight = jQuery(window).height();
+            linkOffset = jQuery("html").scrollTop();
+            hash.w.css('top', linkOffset + (windowHeight * .1)).show();
+        }
+    });
+</script>

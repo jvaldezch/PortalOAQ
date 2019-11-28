@@ -1,0 +1,21 @@
+<div style="height: 400px">
+    <table class="traffic-table traffic-table-left hover">
+        <thead>
+            <tr>
+                <th>Clave</th>
+                <th>Desc. Inglés</th>
+                <th>Desc. Español</th>
+                <th>UMC</th>
+            </tr>
+        </thead>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr>
+                <td><?= $item["unidad_medida"] ?></td>
+                <td><?= $item["desc_en"] ?></td>
+                <td><?= $item["desc_es"] ?></td>
+                <td><?= $item["umc"] ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding", "paginacion.phtml", array("function" => $this->funcion, "busqueda" => $this->busqueda)) : null ?>

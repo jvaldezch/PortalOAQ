@@ -1,0 +1,269 @@
+@font: sans-serif;
+@fontsize: 12px;
+@bcolor: #bbbbbb;
+
+form,
+input[type='text'],
+input[type='hidden'],
+select,
+.control-group,
+textarea {
+    margin: 0;  
+}
+
+form {
+    padding: 0;
+}
+
+input[type="text"],
+select {
+    font-family: @font !important;
+    font-size: @fontsize !important;
+    border: 1px @bcolor solid;
+    border-radius: 2px;
+    line-height: 12px;
+    margin: 0;  
+    padding: 0;
+}
+input[type="text"] {    
+    padding: 1px 4px;
+}
+input[readonly] {
+    background-color: #eee !important;
+    background: #eee !important;
+}
+
+.traffic-input,
+.traffic-textarea,
+.traffic-select {
+    border-radius: 2px !important;
+    border: 1px @bcolor solid !important;
+    font-family: @font !important;
+    font-size: @fontsize !important;
+    background-color: #fffffa !important;
+    color: #333 !important;
+    padding: 2px 4px !important;
+    margin: 0 !important;
+    &:read-only {
+        background-color: #bbb;
+    }
+}
+.traffic-select {
+    height: 18px !important;
+}
+.traffic-select {
+    height: 24px !important;
+}
+
+.traffic-select > option {
+    color: #333;
+}
+
+.traffic-textarea {
+    padding: 2px;    
+    line-height: 14px;
+}
+
+.traffic-textarea-small {
+    .traffic-textarea;
+    height: 50px !important;
+    width: 200px !important;
+}
+
+.traffic-textarea-medium {
+    .traffic-textarea;
+    height: 80px !important;
+    width: 300px !important;
+}
+
+.traffic-textarea-large {
+    .traffic-textarea;
+    height: 100px;
+    width: 400px;
+}
+
+.traffic-input-tiny {
+    .traffic-input;
+    width: 20px;
+}
+
+.traffic-input-xs {
+    .traffic-input;
+    width: 50px;
+}
+
+.traffic-input-date {
+    .traffic-input;
+    width: 75px !important;
+    text-align: center;
+}
+
+.traffic-input-small {
+    .traffic-input;
+    width: 100px;
+}
+
+.traffic-input-medium {
+    .traffic-input;
+    width: 200px;
+}
+
+.traffic-input-large {
+    .traffic-input;
+    width: 350px !important;
+}
+
+.traffic-select-xs {
+    .traffic-select;
+    width: 50px !important;
+}
+
+.traffic-select-small {
+    .traffic-select;
+    width: 120px !important;
+}
+
+.traffic-select-medium {
+    .traffic-select;
+    width: 200px !important;
+}
+
+.traffic-select-large {
+    .traffic-select;
+    width: 350px !important;
+}
+
+.traffic-input-readonly {
+    background: none;
+    background-color: #ffffcc !important;
+}
+
+.traffic-select-xs > option,
+.traffic-select-small > option,
+.traffic-select-medium > option,
+.traffic-select-large > option {
+    font-family: @font !important;
+    font-size: @fontsize !important;
+    padding: 3px 3px !important;
+    color: #333 !important;
+    border-bottom: 1px #f1f1f1 solid !important;
+    margin: 0;
+}
+
+.traffic-radio-block .traffic-radio-input {
+    font-family: @font;
+    font-size: @fontsize;
+    display: block;    
+}
+.traffic-radio-block .traffic-radio-input > input,
+.traffic-radio-block .traffic-radio-input > p,
+.traffic-radio-block .traffic-radio-label {    
+    float:left;    
+}
+.traffic-radio-block .traffic-radio-input > p {    
+    padding-left: 7px;
+    font-family: @font;
+    font-size: @fontsize;
+    display: inline-block;
+}
+.traffic-radio-block .traffic-radio-label {
+    padding: 0 3px;
+    padding-top: 1px;
+    font-family: @font;
+    font-size: @fontsize;    
+}
+.traffic-date-input {
+    width: 80px;
+}
+
+.linedwrap {
+    border: 1px solid #c0c0c0;
+    padding: 3px;
+}
+
+.linedwrap .lines {
+    border-right: 1px solid #c0c0c0;
+    float: left;
+    margin-right: 10px;
+    margin-top: 0;
+    overflow: hidden;
+    width: 50px;
+}
+
+.linedwrap .codelines {
+    padding-top: 5px;
+}
+.linedtextarea textarea {
+    border: 0 none;
+    padding-right: 0.3em;
+    padding-top: 0.3em;
+}
+.linedtextarea textarea, .linedwrap .codelines .lineno {
+    font-family: monospace;
+    font-size: 10pt;
+    line-height: normal !important;
+}
+
+.linedwrap .codelines .lineno {
+    color: #aaaaaa;
+    padding-right: 0.5em;
+    padding-top: 0;
+    text-align: right;
+    white-space: nowrap;
+}
+
+
+.traffic-radio-block .traffic-radio-input {
+    display: block;
+    font-family: sans-serif;
+    font-size: 11px;
+}
+
+
+.traffic-radio-block .traffic-radio-input > p {
+    font-family: sans-serif;
+    font-size: 11px;
+    padding-left: 7px;
+}
+
+.traffic-radio-block .traffic-radio-input > input, 
+.traffic-radio-block .traffic-radio-input > p, 
+.traffic-radio-block .traffic-radio-label {
+    display: inline-block;
+    float: left;
+}
+
+input:disabled,
+select:disabled {
+    background: #f4f4f4 !important;
+    background-color: #f4f4f4 !important;
+    color: #222222 !important;
+}
+
+.checkbox-group {
+    float: left;
+    display: table-cell;
+    height: 24px;
+    padding-top: 10px;
+}
+
+.checkbox-group .checkbox {
+    float: left;
+    margin: 0;
+    padding-left: 5px;
+}
+
+.checkbox-group .checkbox input[type=checkbox] {
+    float: left;
+    margin: 0;
+    padding: 2px 2px; 
+    margin-top: 1px;
+}
+
+.checkbox-group .checkbox .checkbox-label {
+    float: left;
+    font-size: 11px !important; 
+    line-height: 11px;
+    display: inline-block; 
+    padding: 2px 4px;
+}

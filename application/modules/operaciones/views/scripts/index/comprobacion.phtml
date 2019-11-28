@@ -1,0 +1,84 @@
+<?php
+header("Content-Type: application/vnd.ms-excel");
+header("Expires: 0");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("content-disposition: attachment;filename=materiales_vs_descargos.xls");
+?>
+<style>
+    table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+    table td,
+    table th {
+        border: 1px #999 solid;
+        padding: 2px 5px;
+    }
+</style>
+<!--<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>REFERENCIA</th>
+            <th>PRODUCTO</th>
+            <th>COMPONENTE</th>
+            <th>DESCRIPCION</th>
+            <th>CLAVE</th>
+            <th>FECHA</th>
+            <th>PEDIMENTO IMPO</th>
+            <th>FECHA IMPO</th>
+            <th>F. VENCIMIENTO</th>
+            <th>COMPONENT ID</th>
+            <th>CLASS DESCRIPTION</th>
+            <th>CANTIDAD TOTAL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        //$i = 1;
+        //foreach($this->referencias as $referencia): ?>
+        <tr>
+            
+        </tr>
+        <?php //$i++; endforeach; ?>
+    </tbody>
+</table>-->
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>CODIGO DE MATERIAL</th>
+            <th>REFERENCIA</th>
+            <th>SALDO</th>
+            <th>FECHA</th>
+            <th>FACTURA IMP.</th>
+            <th>PROVEEDOR</th>
+            <th>PEDIMENTO IMP.</th>
+            <th>FECHA IMP.</th>
+            <th>CLAVE IMP.</th>
+            <th>FRACCION IMP.</th>
+            <th>PARTIDA</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $i = 1;
+        foreach($this->referencias as $referencia): ?>
+        <tr>
+            <td><?= $i ?></td>
+            <td><?= $referencia['CODIGODEMATERIAL'] ?></td>
+            <td><?= $referencia['REFERENCIA'] ?></td>
+            <td><?= $referencia['SALDO'] ?></td>
+            <td><?= $referencia['FECHA'] ?></td>
+            <td><?= $referencia['FACTURAIMP'] ?></td>
+            <td><?= $referencia['PROVEEDOR'] ?></td>
+            <td><?= $referencia['PEDIMENTOIMP'] ?></td>
+            <td><?= $referencia['FECHAIMP'] ?></td>
+            <td><?= $referencia['CLAVEIMP'] ?></td>
+            <td><?= $referencia['FRACCIONIMP'] ?></td>
+            <td><?= $referencia['PARTIDA'] ?></td>
+        </tr>
+        <?php $i++; endforeach; ?>
+    </tbody>
+</table>

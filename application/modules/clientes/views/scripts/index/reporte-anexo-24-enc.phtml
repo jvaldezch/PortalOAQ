@@ -1,0 +1,63 @@
+<fieldset>
+    <legend>Reporte Anexo 24</legend>
+    <?= $this->form ?>
+    <?PHP if(isset($this->paginator)) { ?>
+    <ul id="download-links">
+        <li>Descargar este reporte en: <img src="/images/icons/ms-excel.png" />&nbsp;<a href="/clientes/data/excel-reporte-anexo-24">Excel</a></li>
+    </ul>
+    <?= (isset($this->paginator)) ? $this->paginationControl($this->data,'Sliding', 'pagination.phtml') : '&nbsp;' ?>
+    <table class="table table-striped table-bordered table-hover small">
+        <thead>
+            <tr>
+                <th>Impo/Expo</th> 
+                <th>Aduana</th>
+                <th>Fecha</th>
+                <th>TipoCambio</th>
+                <th>IVA</th>
+                <th>Clave</th>
+                <th>Fletes</th>
+                <th>Seguros</th>
+                <th>Embalajes</th>
+                <th>Otros</th>
+                <th>DTA</th>
+                <th>Valor Comercial</th>
+                <th>Valor Aduana</th>
+                <th>Observaciones</th>
+                <th>Consolidado</th>
+                <th>Virtual</th>
+                <th>Prev</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?PHP foreach($this->paginator as $item) { ?>
+            <tr>
+                <td><?= $item["Importacion"] ?></td>
+                <td><?= $item["Aduanas"] ?></td>
+                <td><?= $item["Fecha"] ?></td>
+                <td><?= $item["TipoCambio"] ?></td>
+                <td><?= $item["IVA"] ?></td>
+                <td><?= $item["Clave"] ?></td>
+                <td><?= $item["Fletes"] ?></td>
+                <td><?= $item["Seguros"] ?></td>
+                <td><?= $item["Embalajes"] ?></td>
+                <td><?= $item["Otros"] ?></td>
+                <td><?= $item["DTA"] ?></td>
+                <td><?= $item["ValorCom"] ?></td>
+                <td><?= $item["ValorAd"] ?></td>
+                <td><?= $item["Observaciones"] ?></td>
+                <td><?= $item["Consolidado"] ?></td>
+                <td><?= $item["Virtual"] ?></td>
+                <td><?= $item["Prev"] ?></td>
+            </tr>
+            <?PHP } ?>
+        </tbody>
+    </table>
+    <?= (isset($this->paginator)) ? $this->paginationControl($this->data,'Sliding', 'pagination.phtml') : '&nbsp;' ?>
+    <?PHP } elseif($this->error) { ?>
+    <div class="alert alert-block">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4>¡Advertencia!</h4>
+        <?= $this->error ?>
+    </div>
+    <?PHP } ?>
+</fieldset>

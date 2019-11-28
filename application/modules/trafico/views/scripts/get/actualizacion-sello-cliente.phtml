@@ -1,0 +1,99 @@
+<div style="overflow-x: auto">
+    <form id="formUpdateKey" method="post">
+        <input type="hidden" id="idCliente" name="idCliente" value="<?= $this->idCliente ?>" />
+        <input type="hidden" id="idSello" name="idSello" value="<?= $this->id ?>" />
+        <table class="traffic-table traffic-table-left hover">
+            <tbody>
+                <tr>
+                    <th>Password Servicios Web:</th>
+                    <td>
+                        <input type="text" name="pwdws" id="pwd-ws" class="traffic-input-large" style="width: 520px !important">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" id="updateKey" class="traffic-btn traffic-btn-small traffic-btn-right">Actualizar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <table class="traffic-table">
+        <thead>
+            <tr>
+                <th class="traffic-table-title" colspan="7">
+                    MODULO ANTERIOR VUCEM (POR PATENTE Y ADUANA)
+                </th>                    
+            </tr>
+            <tr>
+                <th>Patente</th>
+                <th>Certificado</th>
+                <th>.Key</th>
+                <th>Sha</th>
+                <th style="width: 130px">Creado</th>
+                <th>
+                    <input type="checkbox" class="select-sellos" name="select-sellos" />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->firmantes) && !empty($this->firmantes)) { ?>
+                <?php foreach ($this->firmantes as $item) { ?>
+                    <tr>
+                        <td><?= $item["aduana"] . '-' . $item["patente"] ?></td>
+                        <td><?= $item["certificado_nom"] ?></td>
+                        <td><?= $item["key_nom"] ?></td>
+                        <td><?= $item["sha"] ?></td>
+                        <td><?= $item["creado"] ?></td>
+                        <td>
+                            <input type="checkbox" value="<?= $item["id"] ?>" class="archivo-sello" name="archivo-sello" />
+                        </td>
+                    </tr>
+                <?php } ?>            
+                <tr>
+                    <td colspan="6">
+                        <button type="submit" id="updateKeys" class="traffic-btn traffic-btn-small traffic-btn-right" style="float: right">Actualizar</button>
+                    </td>
+                </tr>
+            <?php } else { ?>
+                <tr>
+                    <td style="text-align: center" colspan="6">
+                        <em>El sello no esta asignado en el modulo anterior.</em>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <table class="traffic-table">
+        <thead>
+            <tr>
+                <th class="traffic-table-title" colspan="3">
+                    BITACORA
+                </th>                    
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th style="width: 130px">Creado</th>
+                <th style="width: 130px">Usuario</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->logs) && !empty($this->logs)) { ?>
+                <?php foreach ($this->logs as $item) { ?>
+                    <tr>
+                        <td style="text-align: left"><?= $item["bitacora"] ?></td>
+                        <td><?= $item["creado"] ?></td>
+                        <td><?= $item["creadoPor"] ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td style="text-align: center" colspan="3">
+                        <em>No información en la bitacora.</em>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript" src="/js/trafico/get/actualizacion-sello-cliente.js?<?= time() ?>"></script>

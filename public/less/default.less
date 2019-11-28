@@ -1,0 +1,157 @@
+/* 
+    Document   : default
+    Created on : Apr 11, 2013, 6:46:15 PM
+    Author     : Jaime E. Valdez <jvaldezch at gmail.com>
+*/
+
+@font: sans-serif;
+@fontsize: 12px;
+
+* {
+    font-family: @font;
+}
+root { 
+    display: block;
+}
+body,
+html {
+    font-family: @font;
+    margin: 0;
+    padding: 0;
+}
+body {
+    border-bottom: 0;
+}
+p, img, h1, h2, h3, h4, ul, ul li {
+    font-family: @font;
+    margin: 0;
+    padding: 0;
+}
+#clear {
+    clear: both;
+}
+#wrap,
+#footer {
+    font-family: @font;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: @fontsize;
+}
+#wrap {
+    font-family: @font;
+    border-bottom: 1px #888 solid;
+    min-height: 140px;
+}
+
+#login p {
+    font-family: @font;
+    font-size: @fontsize;
+    margin: 10px 10px;
+}
+#login p a {
+    font-family: @font;
+    font-weight: bold;
+    text-decoration: none;
+    color: #073d75;
+}
+#login p a:hover {
+    border-bottom: 1px #F00 dotted;
+}
+#login #loader {
+    float: left;
+    display: inline-block;
+    padding-top: 13px;
+}
+
+#login-front span#warning,
+#forgot-password span#warning {
+    font-size: @fontsize;
+    color: red;
+}
+#login-front label,
+#forgot-password label {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+#login-front input,
+#forgot-password input {
+    font-family: @font;
+    font-size: @fontsize;
+    margin: 10px;
+    font-size: 14px;
+}
+#login-front input[type=text],
+#login-front input[type=password],
+#forgot-password input[type=text],
+#forgot-password input[type=password] {
+    width: 250px;
+    padding: 7px;    
+}
+
+#login-front input[type=submit],
+#forgot-password input[type=submit] {
+    background: #073d75;
+    color: #fff;
+    padding: 5px 10px;
+    border: 2px #073d75 solid;
+    display: inline-block;
+    float: left;
+}
+
+#login-front input[type=submit]:hover,
+#forgot-password input[type=submit]:hover {
+    border: 2px #00b3ff solid;
+    cursor: pointer;
+}
+
+#front-img img,
+#front-img h2 {
+    float: left;
+}
+#front-img h2 {
+    font-family: @font;
+    color: #fff;
+    display: inline-block;
+    width: 50px;
+    padding: 10px;
+}
+
+.column-50 > * {
+    font-size: @fontsize;
+}
+
+.column-50 {
+    font-size: @fontsize;
+    width: 48%;
+    float: left;
+    margin-right: 5px;
+    margin-left: 5px;
+    min-height: 150px;
+}
+
+ul#copyright,
+ul#help {
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+}
+ul#copyright li,
+ul#help li {
+    list-style: none;
+    display: inline-block;
+    margin: 0;
+}
+ul#copyright li {
+    margin-right: 20px;
+    float: left;
+}
+ul#help li {
+    margin-left: 20px;
+    float: right;
+}
+.mainbox {
+    font-family: @font;
+    background: #073d75; border: 1px #bbb solid;
+}

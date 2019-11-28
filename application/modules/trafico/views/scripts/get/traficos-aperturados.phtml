@@ -1,0 +1,491 @@
+<?php 
+   
+function semaforo($value) {
+    if ((int) $value == 1) {
+        return 'Verde';
+    }
+    if ((int) $value == 2) {
+        return 'Rojo';
+    }
+    return '';
+}
+
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tráficos aperturados</title>
+        <link href="/css/reportes.css?<?= time() ?>" media="screen" rel="stylesheet" type="text/css" >
+        <link href="/easyui/themes/default/easyui.css" media="screen" rel="stylesheet" type="text/css" >
+        <link href="/easyui/themes/icon.css" media="screen" rel="stylesheet" type="text/css" >
+        <script type="text/javascript" src="/js/common/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="/easyui/locale/easyui-lang-es.js"></script>
+        
+    </head>
+    <body>
+        
+        <table>
+            <tr>
+                <td>
+                    <div id="cc" class="easyui-calendar" style="width:180px;height:180px;"></div>
+                </td>
+                <td valign="top">
+                    <strong>CLIENTE</strong>:<br>
+                    <select name="idCliente" id="idCliente" class="traffic-select-large">
+                        <option value="">-- Seleccionar --</option>
+                        <?php if (isset($this->clientes)) { ?>
+                            <?php foreach ($this->clientes as $item) { ?>
+                                <option value="<?= $item['id'] ?>" <?= (isset($this->idCliente) && (int) $this->idCliente == (int) $item['id']) ? ' selected="true"' : '' ?>><?= $item['nombre'] ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                    <br>
+                    <strong>ADUANA</strong>:<br>
+                    <select name="idAduana" id="idAduana" class="traffic-select-medium">
+                        <option value="">-- Seleccionar --</option>
+                        <?php if (isset($this->aduanas)) { ?>
+                            <?php foreach ($this->aduanas as $item) { ?>
+                                <option value="<?= $item['id'] ?>" <?= (isset($this->idAduana) && (int) $this->idAduana == (int) $item['id']) ? ' selected="true"' : '' ?>><?= $item['patente'] . '-' . $item['aduana'] . ' '  . $item['nombre'] ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                    <br>
+                    <strong>IMPO/EXPO</strong>:<br>
+                    <select name="tipoOperacion" id="tipoOperacion" class="traffic-select-medium">
+                        <option value="">-- Todas --</option>
+                        <option value="TOCE.IMP">Importación</option>
+                        <option value="TOCE.EXP">Exportación</option>
+                    </select>
+                    <br><br>
+                    <button type="submit" id="submit">Filtrar</button>
+                </td>
+            </tr>
+        </table>
+        <script type="text/javascript">
+            
+            Number.prototype.pad = function(size) {
+                var s = String(this);
+                while (s.length < (size || 2)) {s = "0" + s;}
+                return s;
+            };
+
+            $('#cc').calendar({
+                current: new Date(<?= date('Y',strtotime($this->fecha)) ?>, <?= date('m',strtotime($this->fecha)) - 1 ?>, <?= date('d',strtotime($this->fecha)) ?>),
+                onSelect: function(date) {
+                    var fecha = date.getFullYear()+"-"+(date.getMonth()+1).pad()+"-"+date.getDate().pad();
+                    var uri = '<?= $this->url ?>?fecha=' + fecha + '&tipo=<?= $this->tipo ?>';
+                    window.location.href = uri;
+                }
+            });
+            
+        </script>
+        <a href="/trafico/crud/traficos-aperturados?fecha=<?= $this->fecha ?>&tipo=<?= $this->tipo ?>&idCliente=<?= $this->idCliente ?>&idAduana=<?= $this->idAduana ?>&tipoOperacion=<?= $this->tipoOperacion ?>&excel=true" class="download" style="margin: 1px 1px 3px 1px">Descarga Excel</a>
+        <?php if ($this->tipo == 50) { ?>
+        <table class="table table-striped table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th>I/E</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Cve.</th>
+                    <th>Nombre Cliente</th>
+                    <th>Contenedor / Caja</th>
+                    <th>Fecha Pago</th>
+                    <th>Fecha Liberación</th>
+                    <th>Semáforo</th>
+                    <th>Observaciones</th>
+                    <th>Expediente</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->results)) { ?>
+                    <?php foreach ($this->results as $item) { ?>
+                        <tr>
+                            <td><?= $item["ie"] ?></td>
+                            <td><?= $item["patente"] ?></td>
+                            <td><?= $item["aduana"] ?></td>
+                            <td><?= $item["pedimento"] ?></td>
+                            <td><?= $item["referencia"] ?></td>
+                            <td><?= $item["cvePedimento"] ?></td>
+                            <td><?= $item["nombreCliente"] ?></td>
+                            <td><?= $item["contenedorCaja"] ?></td>
+                            <td><?= isset($item["fechaPago"]) ? date("Y-m-d", strtotime($item["fechaPago"])) : '' ?></td>
+                            <td><?= isset($item["fechaLiberacion"]) ? date("Y-m-d", strtotime($item["fechaLiberacion"])) : '' ?></td>
+                            <td><?= semaforo($item["semaforo"]) ?></td>
+                            <td><?= $item["observacionSemaforo"] ?></td>
+                            <td><?= ((int) $item["revisionOperaciones"] == 1) ? 'Sí' : 'No' ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="13">
+                            <em>No se encontraton resultados para la búsqueda.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } ?>
+        <?php if ($this->tipo == 51) { ?>
+        <table class="table table-striped table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th>I/E</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Cve.</th>
+                    <th>Nombre Cliente</th>
+                    <th>Usuario</th>
+                    <th>F. Notificación</th>
+                    <th>F. Envio Documentos</th>
+                    <th>BL/Guía</th>
+                    <th>Alcamen</th>
+                    <th>F. ETA Destino</th>
+                    <th>F. Revalidación</th>
+                    <th>F. Previo</th>
+                    <th>F. Proforma</th>
+                    <th>F. VoBo.</th>
+                    <th>F. Entrada</th>
+                    <th>F. Presentación</th>
+                    <th>F. Pago</th>
+                    <th>F. Liberación</th>
+                    <th>F. Facturación</th>
+                    <th>Planta</th>
+                    <th>Días Despacho</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->results)) { ?>
+                    <?php foreach ($this->results as $item) { ?>
+                        <tr>
+                            <td><?= $item["ie"] ?></td>
+                            <td><?= $item["patente"] ?></td>
+                            <td><?= $item["aduana"] ?></td>
+                            <td><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></td>
+                            <td><?= $item["referencia"] ?></td>
+                            <td><?= $item["cvePedimento"] ?></td>
+                            <td><?= $item["nombreCliente"] ?></td>
+                            <td><?= $item["nombre"] ?></td>
+                            <td><?= $item["fechaNotificacion"] ?></td>
+                            <td><?= $item["fechaEnvioDocumentos"] ?></td>
+                            <td><?= $item["blGuia"] ?></td>
+                            <td><?= $item["almacen"] ?></td>
+                            <td><?= $item["fechaEtaAlmacen"] ?></td>
+                            <td><?= $item["fechaRevalidacion"] ?></td>
+                            <td><?= $item["fechaPrevio"] ?></td>
+                            <td><?= $item["fechaEnvioProforma"] ?></td>
+                            <td><?= $item["fechaVistoBueno"] ?></td>
+                            <td><?= $item["fechaEntrada"] ?></td>
+                            <td><?= $item["fechaPresentacion"] ?></td>
+                            <td><?= $item["fechaPago"] ?></td>
+                            <td><?= $item["fechaLiberacion"] ?></td>
+                            <td><?= $item["fechaFacturacion"] ?></td>
+                            <td><?= $item["descripcionPlanta"] ?></td>
+                            <td><?= $item["diasDespacho"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="24">
+                            <em>No se encontraton resultados para la búsqueda.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } ?>
+        <?php if ($this->tipo == 52) { ?>
+        <table class="table table-striped table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th>I/E</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Cve.</th>
+                    <th>Nombre Cliente</th>
+                    <th>Usuario</th>
+                    <th>F. Notificación</th>
+                    <th>F. Envio Docs.</th>
+                    <th>BL</th>
+                    <th>Contenedor/CS</th>
+                    <th>ETA Puerto</th>
+                    <th>Alcamen</th>
+                    <th>ETA Almacen</th>
+                    <th>F. Revalidación</th>
+                    <th>F. Previo</th>
+                    <th>F. Proforma</th>
+                    <th>F. VoBo.</th>
+                    <th>F. Entrada</th>
+                    <th>F. Presentación</th>
+                    <th>F. Pago</th>
+                    <th>F. Liberación</th>
+                    <th>F. Facturación</th>
+                    <th>Tipo de Carga</th>
+                    <th>Planta</th>
+                    <th>Días Despacho</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->results)) { ?>
+                    <?php foreach ($this->results as $item) { ?>
+                        <tr>
+                            <td><?= $item["ie"] ?></td>
+                            <td><?= $item["patente"] ?></td>
+                            <td><?= $item["aduana"] ?></td>
+                            <td><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></td>
+                            <td><?= $item["referencia"] ?></td>
+                            <td><?= $item["cvePedimento"] ?></td>
+                            <td><?= $item["nombreCliente"] ?></td>
+                            <td><?= $item["nombre"] ?></td>
+                            <td><?= $item["fechaNotificacion"] ?></td>
+                            <td><?= $item["fechaEnvioDocumentos"] ?></td>
+                            <td><?= $item["blGuia"] ?></td>
+                            <td><?= $item["contenedorCaja"] ?></td>
+                            <td><?= $item["fechaEta"] ?></td>
+                            <td><?= $item["almacen"] ?></td>
+                            <td><?= $item["fechaEtaAlmacen"] ?></td>
+                            <td><?= $item["fechaRevalidacion"] ?></td>
+                            <td><?= $item["fechaPrevio"] ?></td>
+                            <td><?= $item["fechaEnvioProforma"] ?></td>
+                            <td><?= $item["fechaVistoBueno"] ?></td>
+                            <td><?= $item["fechaEntrada"] ?></td>
+                            <td><?= $item["fechaPresentacion"] ?></td>
+                            <td><?= $item["fechaPago"] ?></td>
+                            <td><?= $item["fechaLiberacion"] ?></td>
+                            <td><?= $item["fechaFacturacion"] ?></td>
+                            <td><?= $item["carga"] ?></td>
+                            <td><?= $item["descripcionPlanta"] ?></td>
+                            <td><?= $item["diasDespacho"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="28">
+                            <em>No se encontraton resultados para la búsqueda.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } ?>
+        <?php if ($this->tipo == 53) { ?>
+        <table class="table table-striped table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th>I/E</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Cve.</th>
+                    <th>Nombre Cliente</th>
+                    <th>Usuario</th>
+                    <th>F. Notificación</th>
+                    <th>F. Envio Documentos</th>
+                    <th>F. Proforma</th>
+                    <th>F. VoBo.</th>
+                    <th>F. Entrada</th>
+                    <th>F. Presentación</th>
+                    <th>F. Pago</th>
+                    <th>F. Liberación</th>
+                    <th>F. Facturación</th>
+                    <th>Días Despacho</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->results)) { ?>
+                    <?php foreach ($this->results as $item) { ?>
+                        <tr>
+                            <td><?= $item["ie"] ?></td>
+                            <td><?= $item["patente"] ?></td>
+                            <td><?= $item["aduana"] ?></td>
+                            <td><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></td>
+                            <td><?= $item["referencia"] ?></td>
+                            <td><?= $item["cvePedimento"] ?></td>
+                            <td><?= $item["nombreCliente"] ?></td>
+                            <td><?= $item["nombre"] ?></td>
+                            <td><?= $item["fechaNotificacion"] ?></td>
+                            <td><?= $item["fechaEnvioDocumentos"] ?></td>
+                            <td><?= $item["fechaEnvioProforma"] ?></td>
+                            <td><?= $item["fechaVistoBueno"] ?></td>
+                            <td><?= $item["fechaEntrada"] ?></td>
+                            <td><?= $item["fechaPresentacion"] ?></td>
+                            <td><?= $item["fechaPago"] ?></td>
+                            <td><?= $item["fechaLiberacion"] ?></td>
+                            <td><?= $item["fechaFacturacion"] ?></td>
+                            <td><?= $item["diasDespacho"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="18">
+                            <em>No se encontraton resultados para la búsqueda.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } ?>
+        <?php if ($this->tipo == 54) { ?>
+        <table class="table table-striped table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th>I/E</th>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Cve.</th>
+                    <th>Nombre Cliente</th>
+                    <th>Usuario</th>
+                    <th>ETA</th>
+                    <th>F. Notificación</th>
+                    <th>F. Envio Documentos</th>
+                    <th>F. Entrada</th>
+                    <th>F. Presentación</th>
+                    <th>F. Instruciones Esp.</th>
+                    <th>F. Proforma</th>
+                    <th>F. VoBo.</th>
+                    <th>F. Revalidación</th>
+                    <th>F. Previo</th>
+                    <th>F. Pago</th>
+                    <th>F. Liberación</th>
+                    <th>F. ETA Destino</th>
+                    <th>F. Facturación</th>
+                    <th>BL/Guía</th>
+                    <th>Cont./Caja</th>
+                    <th>Proveedor(es)</th>
+                    <th>Factura(s)</th>
+                    <th>Cant. Factura(s)</th>
+                    <th>Cant. Parte(s)</th>
+                    <th>Tipo de Carga</th>
+                    <th>Alcamen</th>
+                    <th>Planta</th>
+                    <th>Días Despacho</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->results)) { ?>
+                    <?php foreach ($this->results as $item) { ?>
+                        <tr>
+                            <td><?= $item["ie"] ?></td>
+                            <td><?= $item["patente"] ?></td>
+                            <td><?= $item["aduana"] ?></td>
+                            <td><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></td>
+                            <td><?= $item["referencia"] ?></td>
+                            <td><?= $item["cvePedimento"] ?></td>
+                            <td><?= $item["nombreCliente"] ?></td>
+                            <td><?= $item["nombre"] ?></td>
+                            <td><?= $item["fechaEta"] ?></td>
+                            <td><?= $item["fechaNotificacion"] ?></td>
+                            <td><?= $item["fechaEnvioDocumentos"] ?></td>
+                            <td><?= $item["fechaEntrada"] ?></td>
+                            <td><?= $item["fechaPresentacion"] ?></td>
+                            <td><?= $item["fechaInstruccionEspecial"] ?></td>
+                            <td><?= $item["fechaEnvioProforma"] ?></td>
+                            <td><?= $item["fechaVistoBueno"] ?></td>
+                            <td><?= $item["fechaRevalidacion"] ?></td>
+                            <td><?= $item["fechaPrevio"] ?></td>
+                            <td><?= $item["fechaPago"] ?></td>
+                            <td><?= $item["fechaLiberacion"] ?></td>
+                            <td><?= $item["fechaEtaAlmacen"] ?></td>
+                            <td><?= $item["fechaFacturacion"] ?></td>
+                            <td><?= $item["blGuia"] ?></td>
+                            <td><?= $item["contenedorCaja"] ?></td>
+                            <td><?= $item["proveedores"] ?></td>
+                            <td><?= $item["facturas"] ?></td>
+                            <td><?= $item["cantidadFacturas"] ?></td>
+                            <td><?= $item["cantidadPartes"] ?></td>
+                            <td><?= $item["carga"] ?></td>
+                            <td><?= $item["almacen"] ?></td>
+                            <td><?= $item["descripcionPlanta"] ?></td>
+                            <td><?= $item["diasDespacho"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="32">
+                            <em>No se encontraton resultados para la búsqueda.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } ?>
+    </body>
+    <script type="text/javascript">
+        
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+        
+        var fecha = getUrlParameter('fecha');
+        var tipo = getUrlParameter('tipo');
+        var idCliente = null;
+        var idAduana = null;
+        var tipoOperacion = null;
+        var uri;
+        
+        $(document.body).on('change', '#idCliente', function(ev) {
+            ev.preventDefault();
+            idCliente = $(this).val();
+        });
+        
+        $(document.body).on('change', '#idAduana', function(ev) {
+            ev.preventDefault();
+            idAduana = $(this).val();
+        });
+        
+        $(document.body).on('change', '#tipoOperacion', function(ev) {
+            ev.preventDefault();
+            tipoOperacion = $(this).val();
+        });
+        
+        if (getUrlParameter('idCliente')) {
+            idCliente = getUrlParameter('idCliente');
+            $("#idCliente").val(getUrlParameter('idCliente'));
+        }
+        
+        if (getUrlParameter('idAduana')) {
+            idAduana = getUrlParameter('idAduana');
+            $("#idAduana").val(getUrlParameter('idAduana'));
+        }
+        
+        if (getUrlParameter('tipoOperacion')) {
+            tipoOperacion = getUrlParameter('tipoOperacion');
+            $("#tipoOperacion").val(getUrlParameter('tipoOperacion'));
+        }
+        
+        $(document.body).on('click', '#submit', function(ev) {
+            uri = window.location.pathname + "?fecha=" + fecha + "&tipo=" + tipo;        
+            if (idCliente) {
+                uri = uri + "&idCliente=" + idCliente;
+            }            
+            if (idAduana) {
+                uri = uri + "&idAduana=" + idAduana;
+            }
+            if (tipoOperacion) {
+                uri = uri + "&tipoOperacion=" + tipoOperacion;
+            }
+            window.location.href = uri;
+        });
+
+    </script> 
+</html>

@@ -1,0 +1,37 @@
+<?php if (isset($this->form)) { ?>
+    <fieldset>
+        <form method="post" action="<?= $this->url ?>" id="form">
+            <?= $this->inputHidden("hidden", "idSolicitud", $this->id) ?>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="4" class="invoice-title">EDITAR DATOS DE SOLICITUD DE ANTICIPO</th>                    
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="aduana">ADUANA:</label></th>
+                    <td colspan="3" class="traffic-td-left"><div id="divcustoms"><?= $this->form->aduana ?></div></td>                    
+                </tr>
+                    <tr>
+                        <th style="text-align: right; width: 150px"><label for="cliente">CLIENTE:</label></th>
+                        <td class="traffic-td-left"><?= $this->form->cliente ?></td>
+                    </tr>
+                <tr>
+                    <th style="text-align: right"><label for="operacion">TIPO OPERACIÓN:</label></th>
+                    <td class="traffic-td-left"><div id="divops"><?= $this->form->operacion ?></div></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right; width: 120px"><label for="pedimento">PEDIMENTO:</label></th>
+                    <td><?= $this->form->pedimento ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right"><label for="referencia">REFERENCIA:</label></th>
+                    <td><?= $this->form->referencia ?></td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+    <div class="traffic-clear-5"></div>
+    <button id="save" class="traffic-btn-add traffic-btn-right">Guardar</button>
+    <a onclick="window.history.back();" tabindex="99" class="traffic-btn traffic-btn-back">&Lt; Regresar</a>
+<?php } else { ?>
+    <h3 style="margin-left: 5px; line-height: 20px; margin-top: 20px">ERROR 505<br><span style="font-size: 16px"><?= $this->error ?></span></h3>
+<?php } ?>

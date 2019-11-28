@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Prueba Fiel</title>
+        <meta name="description" content="">
+        <meta name="author" content="Jvaldez">
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+    <body>
+        <style>
+            body {
+                font-family: sans-serif;
+                font-size: 12px;
+            }
+            table {
+                border-collapse: collapse;
+            }
+            table td,
+            table th {
+                border: 1px #ddd solid;
+            }
+            table th {
+                text-align: justify;
+            }
+            button {
+                width: 100px;
+            }
+            span.error {
+                color: red;
+            }
+            span.nd {
+                color: gray;
+            }     
+            img.success,
+            td.req {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        <form action="/usuarios/index/prueba-fiel" method="post" id="file-form">
+            <table>
+                <tr>
+                    <td>RFC:</td>
+                    <td><input type="text" name="rfc" id="rfc" value="<?= $this->rfc ?>"></td>
+                    <td>&nbsp;</td>
+                    <td><div id="rfc-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Razón Social:</td>
+                    <td><input type="text" name="nombre" id="nombre" value="<?= $this->nombre ?>" style="width:420px"></td>
+                    <td>&nbsp;</td>
+                    <td><div id="nombre-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Patente:</td>
+                    <td><input type="text" name="patente" id="patente" value="<?= $this->patente ?>"></td>
+                    <td>&nbsp;</td>
+                    <td><div id="patente-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Aduana:</td>
+                    <td><input type="text" name="aduana" id="aduana" value="<?= $this->aduana ?>"></td>
+                    <td>&nbsp;</td>
+                    <td><div id="aduana-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Figura:</td>
+                    <td>
+                        <select name="figura" id="figura">
+                            <option value="">-- Seleccionar --</option>
+                            <option value="1"<?php if(isset($this->figura) && $this->figura == 1) { echo 'selected'; } ?>>Agente Aduanal</option>
+                            <option value="2"<?php if(isset($this->figura) && $this->figura == 2) { echo 'selected'; } ?>>Apoderado Aduanal</option>
+                            <option value="3"<?php if(isset($this->figura) && $this->figura == 3) { echo 'selected'; } ?>>Mandatario</option>
+                            <option value="5"<?php if(isset($this->figura) && $this->figura == 5) { echo 'selected'; } ?>>Importador/Exportador</option>
+                        </select>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td><div id="figura-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Password Ventanilla:</td>
+                    <td><input type="password" name="pwdvu" id="pwd-vu"></td>
+                    <td>&nbsp;</td>
+                    <td><div id="key-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Archivo .KEY</td>
+                    <td><input type="file" id="file-select" name="keyfile"/></td>                    
+                    <td><button type="submit" id="upload-button">Probar KEY</button></td>
+                    <td><div id="file-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Archivo .CER</td>
+                    <td><input type="file" id="cer-select" name="cerfile"/></td>                    
+                    <td>&nbsp;</td>
+                    <td><div id="cer-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td>Password Servicios Web:</td>
+                    <td><input type="password" name="pwdws" id="pwd-ws" style="width:420px"></td>                    
+                    <td><button type="submit" id="ws-button">Probar WS</button></td>
+                    <td><div id="ws-status">&nbsp;</div></td>
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><button id="create-button">Subir Sello</button></td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </form>
+        <table>
+            <tr>
+                <th>Requisito</th>
+                <th>Estatus</th>
+            </tr>
+            <tr>
+                <th>Contraseña Ventanilla Única</th>
+                <td class="req" id="req-pwd"><span class="nd">n/d</span>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Archivo .Key</th>
+                <td class="req" id="req-key"><span class="nd">n/d</span>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Archivo .Cer</th>
+                <td class="req" id="req-cer"><span class="nd">n/d</span>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Contraseña Servicios Web</th>
+                <td class="req" id="req-ws"><span class="nd">n/d</span>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Contraseña V.U. válida</th>
+                <td class="req" id="req-valvu"><span class="nd">n/d</span>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Contraseña S.W. válida</th>
+                <td class="req" id="req-valws"><span class="nd">n/d</span>&nbsp;</td>
+            </tr>
+        </table>
+        <script type="text/javascript">
+            // http://blog.teamtreehouse.com/uploading-files-ajax
+            <?php if(!isset($this->rfc)) { ?>
+            $("#file-form :input").prop("disabled", true);
+            <?php } ?>
+            $("#rfc").prop("disabled", false);            
+
+            function showIcon(id, icon) {
+                $("#" + id).html('<img class="success" src="/images/icons/' + icon + '.png" />');
+            }
+            function showError(id, msg) {
+                $("#" + id).html('<span class="error">' + msg + '</span>');
+            }
+            var rfc = document.getElementById('rfc');
+            var pwd = document.getElementById('pwd-vu');
+            var wsPwd = document.getElementById('pwd-ws');
+            var form = document.getElementById('file-form');
+            var fileSelect = document.getElementById('file-select');
+            var cerFileSelect = document.getElementById('cer-select');
+            var uploadButton = document.getElementById('upload-button');
+            var wsButton = document.getElementById('ws-button');
+            var createButton = document.getElementById('create-button');
+
+            var needs = ["#req-valws", "#req-valvu", "#req-ws", "#req-pwd", "#req-key", "#req-cer"];
+            var other = ["nombre", "patente", "aduana", "figura"];
+            $("#create-button").click(function(event) {                
+                event.preventDefault();
+                $("span.error").remove();
+                $.each(other, function(index, value) {                        
+                    if ( $("#"+value).val() == '' ) {
+                        $("#"+value+"-status").html('<span class="error">Debe proporcionar '+value+'.</span>');
+                        return;
+                    }
+                });
+                var check = 0;
+                $.each(needs, function(index, value) {
+                    if ($(value).find("img").length > 0) {
+                        src = $(value + " > img").attr('src');
+                        if (src.indexOf("accept") > -1) {                // if src has accept.png
+                            check++;
+                        }
+                    }
+                });
+                if (check === 6) {                    
+                    createNewKey();                    
+                } else {
+                    alert("Debe cumplir con todo los requisitos.");
+                }
+            });
+            $("#upload-button, #ws-button").click(function(event) {
+                event.preventDefault();
+                $("span.error").remove();
+            });
+            $("#rfc").change(function() {
+                $("#file-form :input").prop("disabled", false);
+            });
+            $("#pwd-vu").change(function() {
+                showIcon("req-pwd", "accept");
+            });
+            $("#pwd-ws").change(function() {
+                showIcon("req-ws", "accept");
+            });
+            $("#file-select").change(function() {
+                var val = $(this).val();
+                if (val.substring(val.lastIndexOf('.') + 1).toLowerCase() === 'key') {
+                    showIcon("req-key", "accept");
+                } else {
+                    $(this).val('');
+                    showIcon("req-key", "warn");
+                }
+            });
+            $("#cer-select").change(function() {
+                var val = $(this).val();
+                if (val.substring(val.lastIndexOf('.') + 1).toLowerCase() === 'cer') {
+                    cerFileSubmit();
+                    showIcon("req-cer", "accept");
+                } else {
+                    $(this).val('');
+                    showIcon("req-cer", "warn");
+                }
+            });
+
+            $('form :submit').click(function(event) {
+                event.preventDefault();
+                if (rfc.value.trim() === '') {
+                    showError('rfc-status', 'Debe proporcionar RFC.');
+                    return;
+                }
+                if ($(this).attr('id') === "upload-button") {
+                    if ($("#file-select").val() === '') {
+                        showError('file-status', 'Debe seleccionar un archivo .KEY.');
+                        return;
+                    }
+                    if ($("#pwd-vu").val() === '') {
+                        showError('key-status', 'Debe proporcionar contraseña Ventanilla Única.');
+                        return;
+                    }
+                    keyFileSubmit();
+                } else if ($(this).attr('id') === "ws-button") {
+                    if ($("#pwd-ws").val() === '') {
+                        showError('ws-status', 'Debe proporcionar de contraseña de Web Service.');
+                        return;
+                    }
+                    wsPasswordTest();
+                }
+
+            });
+
+            function wsPasswordTest() {
+                var formData = new FormData();
+                formData.append('ws', wsPwd.value);
+                formData.append('rfc', rfc.value);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/usuarios/index/ws-pass', true);
+                xhr.send(formData);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState < 4)                         // while waiting response from server
+                        wsButton.innerHTML = "Sending...";
+                    else if (xhr.readyState === 4) {                // 4 = Response from server has been completely loaded.
+                        if (xhr.status == 200 && xhr.status < 300)  // http status between 200 to 299 are all successful
+                            var response = xhr.responseText;
+                        document.getElementById('ws-status').innerHTML = response;
+                        wsButton.innerHTML = 'Probar WS';
+                        if (response.indexOf("error") > -1) {
+                            showIcon("req-ws", "exclamation");
+                        } else if (response.indexOf("OK") > -1) {
+                            showIcon("req-valws", "accept");
+                        }
+                    }
+                };
+            }
+
+            function createNewKey() {
+                var formData = new FormData();
+                formData.append('rfc', rfc.value);
+                formData.append('ws', wsPwd.value);
+                formData.append('pwd-vu', pwd.value);
+                formData.append('patente', $("#patente").val());
+                formData.append('aduana', $("#aduana").val());
+                formData.append('nombre', $("#nombre").val());
+                formData.append('figura', $("#figura").val());
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/usuarios/index/upload-new-key', true);
+                xhr.send(formData);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState < 4) {
+                        createButton.innerHTML = "Processing...";
+                    } else if (xhr.readyState === 4) {
+                        if (xhr.status === 200 && xhr.status < 300) {
+                            createButton.innerHTML = "Subir sello";
+                            obj = JSON.parse(xhr.responseText);
+                            if(obj.res === false) {
+                                document.getElementById('rfc-status').innerHTML = obj.rfc;
+                            } else if(obj.res === true) {
+                                form.submit();
+                            }
+                        }
+                    }
+                };
+            }
+
+            function cerFileSubmit() {
+                var files = cerFileSelect.files;
+                var formData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (!file.type.match('image.*')) {
+                        continue;
+                    }
+                }
+                formData.append('cerfile', file, file.name);
+                formData.append('rfc', rfc.value);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/usuarios/index/cer-file-upload', true);
+                xhr.send(formData);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState < 4)                         // while waiting response from server
+                        uploadButton.innerHTML = "Uploading...";
+                    else if (xhr.readyState === 4) {                // 4 = Response from server has been completely loaded.
+                        if (xhr.status == 200 && xhr.status < 300)  // http status between 200 to 299 are all successful
+                            var response = xhr.responseText;
+                        document.getElementById('cer-status').innerHTML = response;
+                        if (response.indexOf("error") > -1) {
+                            showIcon("req-cer", "exclamation");
+                        }
+                    }
+                };
+            }
+
+            function keyFileSubmit() {
+                uploadButton.innerHTML = 'Uploading...';
+                var files = fileSelect.files;
+                var formData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    if (!file.type.match('image.*')) {
+                        continue;
+                    }
+                }
+                formData.append('keyfile', file, file.name);
+                formData.append('pwd-vu', pwd.value);
+                formData.append('rfc', rfc.value);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/usuarios/index/file-upload', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        uploadButton.innerHTML = 'Probar KEY';
+                    } else {
+                        alert('An error occurred!');
+                    }
+                };
+                xhr.send(formData);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState < 4)                         // while waiting response from server
+                        uploadButton.innerHTML = "Uploading...";
+                    else if (xhr.readyState === 4) {                // 4 = Response from server has been completely loaded.
+                        if (xhr.status == 200 && xhr.status < 300)  // http status between 200 to 299 are all successful
+                            var response = xhr.responseText;
+                        document.getElementById('key-status').innerHTML = response;
+                        if (response.indexOf("error") > -1) {
+                            showIcon("req-key", "exclamation");
+                        } else if (response.indexOf("OK") > -1) {
+                            showIcon("req-valvu", "accept");
+                            showIcon("req-key", "accept");
+                        }
+                    }
+                };
+            }
+            ;
+        </script>
+    </body>
+</html>

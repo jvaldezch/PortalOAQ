@@ -1,0 +1,29 @@
+<form class="form-inline" style="margin-top: 5px" action="/mobile/bodega">
+    <div class="form-group mx-sm-3 mb-2">
+        <label for="search" class="sr-only">Buscar</label>
+        <input type="text" class="form-control" id="search" name="search" 
+               placeholder="Buscar referencia" value="<?= $this->search ?>">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+</form>
+<table class="table table-sm table-striped">
+    <thead>
+        <tr class="table-active">
+            <th scope="col">Referencias</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator)) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <tr>
+                    <td><?= $item["referencia"] ?></td>
+                    <td>
+                        <a href="/mobile/bodega/entrada?id=<?= $item['id'] ?>"><i class="fas fa-pencil-alt"></i></a>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+        <?php } ?>
+    </tbody>
+</table>

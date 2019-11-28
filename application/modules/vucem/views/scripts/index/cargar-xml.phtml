@@ -1,0 +1,30 @@
+<h4 class="traffic-section">CARGAR XML</h4>
+<?php if (isset($this->error)) { ?>
+    <div class="alert alert-error">        
+        <p><?= $this->error ?></p>
+    </div>
+<?php } ?>    
+<form enctype="multipart/form-data" action="/vucem/index/cargar-xml" method="POST">
+    <label>Referencia:</label>            
+    <input type="text" name="referencia" value="" /><br>
+    <label>Pedimento:</label>
+    <input type="text" name="pedimento" value="" /><br>
+    <label>Archivo XML:</label>
+    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+    <input id="lefile" type="file" name="file" style="display:none">
+    <div class="input-append">
+        <input id="photoCover" class="traffic-input-large" name="filename" type="text">
+        <a class="traffic-btn-add" onclick="$('input[id=lefile]').click();">Seleccionar archivo...</a>
+    </div>
+    <div class="traffic-clear-5"></div>
+    <input type="submit" class="traffic-btn-primary traffic-btn-right" value="Subir archivo" />
+</form>
+<div style="clear: both"></div>    
+<script type="text/javascript">
+    $('input[id=lefile]').change(function () {
+        $('#photoCover').val($(this).val());
+    });
+</script>
+<div class="traffic-clear-5"></div>
+<a href="<?= $this->url(array('action' => 'nuevo-cove-facturas')) ?>" class="traffic-btn traffic-btn-back">&Lt;&nbsp;Regresar</a>
+<div class="traffic-clear-20"></div>

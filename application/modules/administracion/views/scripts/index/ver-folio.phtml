@@ -1,0 +1,223 @@
+<?php 
+setlocale(LC_MONETARY, 'es_MX');
+
+function money_format($format, $number) 
+{ 
+    $regex  = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?'. 
+              '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/'; 
+    if (setlocale(LC_MONETARY, 0) == 'C') { 
+        setlocale(LC_MONETARY, ''); 
+    } 
+    $locale = localeconv(); 
+    preg_match_all($regex, $format, $matches, PREG_SET_ORDER); 
+    foreach ($matches as $fmatch) { 
+        $value = floatval($number); 
+        $flags = array( 
+            'fillchar'  => preg_match('/\=(.)/', $fmatch[1], $match) ? 
+                           $match[1] : ' ', 
+            'nogroup'   => preg_match('/\^/', $fmatch[1]) > 0, 
+            'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ? 
+                           $match[0] : '+', 
+            'nosimbol'  => preg_match('/\!/', $fmatch[1]) > 0, 
+            'isleft'    => preg_match('/\-/', $fmatch[1]) > 0 
+        ); 
+        $width      = trim($fmatch[2]) ? (int)$fmatch[2] : 0; 
+        $left       = trim($fmatch[3]) ? (int)$fmatch[3] : 0; 
+        $right      = trim($fmatch[4]) ? (int)$fmatch[4] : $locale['int_frac_digits']; 
+        $conversion = $fmatch[5]; 
+
+        $positive = true; 
+        if ($value < 0) { 
+            $positive = false; 
+            $value  *= -1; 
+        } 
+        $letter = $positive ? 'p' : 'n'; 
+
+        $prefix = $suffix = $cprefix = $csuffix = $signal = ''; 
+
+        $signal = $positive ? $locale['positive_sign'] : $locale['negative_sign']; 
+        switch (true) { 
+            case $locale["{$letter}_sign_posn"] == 1 && $flags['usesignal'] == '+': 
+                $prefix = $signal; 
+                break; 
+            case $locale["{$letter}_sign_posn"] == 2 && $flags['usesignal'] == '+': 
+                $suffix = $signal; 
+                break; 
+            case $locale["{$letter}_sign_posn"] == 3 && $flags['usesignal'] == '+': 
+                $cprefix = $signal; 
+                break; 
+            case $locale["{$letter}_sign_posn"] == 4 && $flags['usesignal'] == '+': 
+                $csuffix = $signal; 
+                break; 
+            case $flags['usesignal'] == '(': 
+            case $locale["{$letter}_sign_posn"] == 0: 
+                $prefix = '('; 
+                $suffix = ')'; 
+                break; 
+        } 
+        if (!$flags['nosimbol']) { 
+            $currency = $cprefix . 
+                        ($conversion == 'i' ? $locale['int_curr_symbol'] : $locale['currency_symbol']) . 
+                        $csuffix; 
+        } else { 
+            $currency = ''; 
+        } 
+        $space  = $locale["{$letter}_sep_by_space"] ? ' ' : ''; 
+
+        $value = number_format($value, $right, $locale['mon_decimal_point'], 
+                 $flags['nogroup'] ? '' : $locale['mon_thousands_sep']); 
+        $value = @explode($locale['mon_decimal_point'], $value); 
+
+        $n = strlen($prefix) + strlen($currency) + strlen($value[0]); 
+        if ($left > 0 && $left > $n) { 
+            $value[0] = str_repeat($flags['fillchar'], $left - $n) . $value[0]; 
+        } 
+        $value = implode($locale['mon_decimal_point'], $value); 
+        if ($locale["{$letter}_cs_precedes"]) { 
+            $value = $prefix . $currency . $space . $value . $suffix; 
+        } else { 
+            $value = $prefix . $value . $space . $currency . $suffix; 
+        } 
+        if ($width > 0) { 
+            $value = str_pad($value, $width, $flags['fillchar'], $flags['isleft'] ? 
+                     STR_PAD_RIGHT : STR_PAD_LEFT); 
+        } 
+
+        $format = str_replace($fmatch[0], $value, $format); 
+    } 
+    return $format; 
+} 
+?>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Folio</th>
+            <th>Fecha Fact.</th>
+            <th>Fecha Pago</th>
+            <th>Patente</th>
+            <th>Aduana</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th>Referencia Fact.</th>
+            <th>I/E</th>
+            <th>RFC Cliente</th>
+            <th>Nom. Cliente</th>
+            <th>RFC Proveedor</th>
+            <th>Nom. Proveedor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->invoice['folio'] ?></td>
+            <td><?= date("d/m/Y", strtotime($this->invoice['fechaFacturacion'])) ?></td>
+            <td><?= date("d/m/Y", strtotime($this->invoice['fechaPago'])) ?></td>
+            <td><?= $this->invoice['patente'] ?></td>
+            <td><?= $this->invoice['aduana'] ?></td>
+            <td><?= $this->invoice['pedimento'] ?></td>
+            <td><?= $this->invoice['referencia'] ?></td>
+            <td><?= $this->invoice['referenciaFactura'] ?></td>
+            <td><?= $this->invoice['tipoOperacion'] ?></td>
+            <td><?= $this->invoice['rfcCliente'] ?></td>
+            <td><?= $this->invoice['nomCliente'] ?></td>
+            <td><?= $this->invoice['rfcProveedor'] ?></td>
+            <td><?= $this->invoice['nomProveedor'] ?></td>
+        </tr>
+    </tbody>
+</table>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Valor Fact.</th>
+            <th>Anticipo</th>
+            <th>I.V.A.</th>
+            <th>Total</th>
+            <th>P. Honorarios</th>
+            <th>Honorarios</th>
+            <th>Tipo Cambio</th>
+            <th>Impuestos Garantizados</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['valorFactura']) ?></td>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['anticipo']) ?></td>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['iva']) ?></td>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['total']) ?></td>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['phonorarios']) ?></td>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['honorarios']) ?></td>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['tipoCambio']) ?></td>
+            <td style="text-align: right"><?= money_format('%#10n', $this->invoice['impuestosGarantizados']) ?></td>
+        </tr>
+    </tbody>
+</table>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Honorario Fijo</th>
+            <th>Forma Pago</th>
+            <th>Banco</th>
+            <th>Caja</th>
+            <th>Bultos</th>
+            <th>Contenido</th>
+            <th>Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->invoice['honorarioFijo'] ?></td>
+            <td><?= $this->invoice['formaPago'] ?></td>
+            <td><?= $this->invoice['banco'] ?></td>
+            <td><?= $this->invoice['caja'] ?></td>
+            <td><?= $this->invoice['bultos'] ?></td>
+            <td><?= $this->invoice['contenido'] ?></td>
+            <td><?= $this->invoice['observaciones'] ?></td>
+        </tr>
+    </tbody>
+</table>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th colspan="12">Conceptos</th>
+        </tr>
+        <tr>
+            <th>Reglon</th>
+            <th>Concepto</th>
+            <th>T. Concepto</th>
+            <th>Descripción</th>
+            <th>Cant.</th>
+            <th>P.U.</th>
+            <th>Importe</th>
+            <th>Divisa</th>
+            <th>Val. Dolares</th>
+            <th>I.V.A.</th>
+            <th>Descuento</th>
+            <th>Ret. I.V.A.</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->invoice['conceptos']) && !empty(isset($this->invoice['conceptos']))) { ?>
+            <?php foreach ($this->invoice['conceptos'] as $item) { ?>
+                <tr>
+                    <td><?= $item['reglon'] ?></td>
+                    <td><?= $item['nomConcepto'] ?></td>
+                    <td><?= $item['tipo'] ?></td>
+                    <td><?= $item['descripcion'] ?></td>
+                    <td><?= number_format($item['cantidad']) ?></td>
+                    <td style="text-align: right"><?= money_format('%#10n', $item['precioUnitario']) ?></td>
+                    <td style="text-align: right"><?= money_format('%#10n', $item['importe']) ?></td>
+                    <td><?= $item['divisa'] ?></td>
+                    <td style="text-align: right"><?= money_format('%#10n', $item['valorDolares']) ?></td>
+                    <td style="text-align: right"><?= money_format('%#10n', $item['iva']) ?></td>
+                    <td style="text-align: right"><?= money_format('%#10n', $item['descuento']) ?></td>
+                    <td style="text-align: right"><?= money_format('%#10n', $item['retencionIva']) ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="12">
+                    <em>Sin conceptos</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

@@ -1,0 +1,67 @@
+<form method="get" action="/clientes/index/expediente">
+    <table class="traffic-table">
+        <tr>
+            <th>Referencia</th>
+            <th>Pedimento</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td style="width: 150px">
+                <?= $this->form->referencia ?>
+            </td>
+            <td style="width: 150px">
+                <?= $this->form->pedimento ?>
+            </td>
+            <td>
+                <a href="/clientes/index/expediente" class="traffic-btn traffic-btn-right">
+                    <i class="fas fa-broom"></i> Limpiar
+                </a>
+                <button value="Buscar" type="submit" id="submit" name="submit"class="traffic-btn traffic-btn-right">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>                
+            <th style="width: 120px; text-align: left">Referencia</th>
+            <th style="width: 250px; text-align: left">Pedimento</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator)) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <tr>
+                    <td>
+                        <a href="/clientes/index/archivos-expediente?id=<?= urlencode($item['id']) ?>">
+                            <?= strtoupper($item['referencia']) ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/clientes/index/archivos-expediente?id=<?= urlencode($item['id']) ?>">
+                            <?= $item["aduana"] . '-' . $item["patente"] . (isset($item["pedimento"]) ? '-' . $item["pedimento"] : '') ?></td>
+                        </a>
+                    <td style="text-align: right">
+                        <a style="float: right" href="/clientes/index/archivos-expediente?id=<?= urlencode($item['id']) ?>">
+                            <i class="fas fa-folder-open" style="font-size: 1.3em; color: #2f3b58"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="4">No hubo resultados para búsqueda realizada.</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<div class="traffic-clear-5"></div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator) : null ?>
+<div class="traffic-clear-10"></div>
+<a onclick="window.history.back();" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<div class="traffic-clear-20"></div>

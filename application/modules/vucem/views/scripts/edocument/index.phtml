@@ -1,0 +1,142 @@
+<div class="semaphoreBox" style="float: left">
+    <div class="semaphore-holder">
+        <div class="semaphore-black"></div><span>No se completo</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>Edoc enviado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Edoc completado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-red"></div><span>Edoc con error</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-file"></i><span style="padding-left: 3px">Consultar EDocument</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-hdd"></i><span style="padding-left: 3px">Guardar en expediente</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-qrcode"></i><span style="padding-left: 3px">Enviar a pedimento</span>
+    </div>
+    <div class="traffic-clear-5"></div>
+    <div style="padding-left: 5px"><strong>Importante:</strong>&nbsp;Las horas y fechas aquí mostradas pueden diferir de la de su equipo (PC). Sin embargo <strong>no</strong> afectan el proceso de entrega y recepción en VUCEM.</div>
+</div>
+<div class="traffic-clear-5"></div>
+<a class="traffic-btn-save" onclick="downloadAllEdocuments();">Descargar</a>&nbsp;
+<a class="traffic-btn-primary" onclick="selectAllEdocuments();">Seleccionar todo</a>&nbsp;
+<a class="traffic-btn-back" onclick="unselectAllEdocuments();">Quitar selección</a>
+<div class="traffic-clear-5"></div>
+<table cellpadding="0" cellspacing="0" border="0" class="traffic-table hover" id="example">
+    <thead>
+        <tr>
+            <th style="width: 30px">&nbsp;</th>
+            <th>Acción</th>
+            <th>RFC</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th>TipDoc</th>
+            <th>Nom. Archivo</th>
+            <th>EDOC</th>
+            <th style="width: 60px">(Mb)</th>
+            <th>Enviado</th>
+            <th>Actualizado</th>
+            <th>Usuario</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->result) && !empty($this->result)) { ?>
+            <?php foreach ($this->result as $item) { ?>
+                <tr id="row_<?= $item["id"] ?>">
+                    <td>
+                        <?php if ($item["expediente"] == 1 && $item["estatus"] > 1) { ?>
+                            <input type="checkbox" name="files" value="<?= $item["edoc"] ?>" >
+                        <?php } else { ?>
+                            <?php if ($item["estatus"] == 1) { ?>
+                                <div class="traffic-icon traffic-icon-vucem" onclick="checkVucem(<?= $item["id"] ?>);"></div>
+                            <?php } else { ?>
+                                &nbsp;
+                            <?php } ?>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <?php if ((int) $item["estatus"] == 0) { ?>
+                            <a href="/vucem/edocument/ver-error?id=<?= $item["id"] ?>"><div class="semaphore-red"></div></a>
+                        <?php } ?>
+                        <?php if ((int) $item["estatus"] == 1) { ?>
+                            <div class="semaphore-blue"></div>
+                            <?php if(isset($this->delete)) { ?>
+                                <div class="traffic-icon traffic-icon-delete" onclick="borrarEdoc(<?= $item["id"] ?>);"></div>
+                            <?php } ?>
+                        <?php } ?>
+                        <?php if ((int) $item["estatus"] == 2) { ?>
+                            <div class="semaphore-green"></div>
+                            <a title="Consultar el EDOC enviado." href="/vucem/edocument/consultar?id=<?= $item["id"] ?>" style="float: left"><i class="icon icon-file"></i></a>
+                            
+                            <?php if ((int) $item["expediente"] == 0 && isset($item["solicitud"])) { ?>
+                                <a title="Mandar a expediente" data-solicitud="<?= $item["solicitud"] ?>" data-id="<?= $item["id"] ?>" class="enviarAExpediente" style="margin-left: 3px"><i class="icon-hdd" style="cursor: pointer" ></i></a>
+                            <?php } ?>
+                            <?php if ((int) $item["enPedimento"] !== 1) { ?>
+                                <i class="icon-qrcode enviarAPedimento" data-id="<?= $item["id"] ?>" style="cursor: pointer; float:left; margin-top: 4px"></i>
+                            <?php } ?>
+                        <?php } ?>
+                    </td>
+                    <td><?= $item["rfc"] ?></td>
+                    <td><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></td>
+                    <td><?= $item["referencia"] ?></td>
+                    <td><a href="#" title="<?= $this->tipoEdoc($item["tipoDoc"]) ?>"><?= $item["tipoDoc"] ?></a></td>
+                    <td style="text-align: left">
+                        <a href="/vucem/edocument/descargar-archivo?id=<?= $item["id"] ?>" class="filename" data-tooltip="<?= $item["nomArchivo"] ?>">
+                            <?php if(strlen($item["nomArchivo"]) < 25) { 
+                                    echo $item["nomArchivo"];
+                                } else { 
+                                    echo substr($item["nomArchivo"], 0, 20) . " ... .pdf";
+                                } ?>
+                        </a>
+                    </td>
+                    <td><?= $item["edoc"] ?></td>
+                    <td><?= round($item["size"] / 1024 / 1024, 2) . " mb" ?></td>
+                    <td><?= (isset($item["enviado"])) ? date("d/m/Y h:i a", strtotime($item["enviado"])) : '' ?></td>
+                    <td><?= (isset($item["actualizado"])) ? date("d/m/Y h:i a", strtotime($item["actualizado"])) : '' ?></td>
+                    <td><?= $item["usuario"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="13">
+                    <em>No hay documentos cargados en el sistema.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<a href="/vucem/edocument/digitalizar" class="traffic-btn-primary">Nuevo E-Document (múltiples)</a>
+<a href="#" id="refresh" class="traffic-btn-save traffic-btn-right"><i class="icon icon-refresh icon-white"></i>&nbsp;Actualizar E-Documents</a>
+<a href="#" id="hdd" class="traffic-btn-save traffic-btn-right" style="min-width: 30px"><i class="icon icon-hdd icon-white"></i>&nbsp;</a>
+<div class="traffic-clear-5"></div>
+<form action="<?= $this->url() ?>" method="get">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="4">BURCAR EDOCUMENTS ANTERIORES</th>
+        </tr>
+        <tr>
+            <td style="width: 220px">
+                <label style="font-weight: bold">EDOCUMENT:</label>
+                <input type="text" name="edoc" class="traffic-input-medium" value="<?= $this->edocument ?>" />
+            </td>
+            <td style="width: 220px">
+                <label style="font-weight: bold">REFERENCIA:</label>
+                <input type="text" name="referencia" class="traffic-input-medium" value="<?= $this->referencia ?>" />
+            </td>
+            <td style="width: 220px">
+                <label style="font-weight: bold">PEDIMENTO:</label>
+                <input type="text" name="pedimento" class="traffic-input-medium" value="<?= $this->pedimento ?>" />
+            </td>
+            <td style="text-align: right">
+                <input type="submit" value="Buscar" class="traffic-btn-primary traffic-btn-right" />
+                <a class="traffic-btn-save traffic-btn-right" href="/vucem/edocument/index">Limpiar</a>
+            </td>
+        </tr>
+    </table>
+</form>

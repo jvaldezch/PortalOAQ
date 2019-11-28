@@ -1,0 +1,86 @@
+<?= $this->inputHidden("hidden", "idTrafico", $this->basico["id"]) ?>
+<?= $this->inputHidden("hidden", "patente", $this->basico["patente"]) ?>
+<?= $this->inputHidden("hidden", "aduana", $this->basico["aduana"]) ?>
+<?= $this->inputHidden("hidden", "pedimento", $this->basico["pedimento"]) ?>
+<?= $this->inputHidden("hidden", "referencia", $this->basico["referencia"]) ?>
+<?= $this->inputHidden("hidden", "rfcCliente", $this->basico["rfcCliente"]) ?>
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <th colspan="6" class="invoice-title"><?= $this->basico["nombreAduana"] ?></th>
+    </tr>
+    <tr>
+        <th style="width: 75px; text-align: right">Pedimento</th>
+        <td><?= $this->basico["aduana"] . '-' . $this->basico["patente"] . '-' . $this->basico["pedimento"] ?></td>
+        <th style="text-align: right">Referencia</th>
+        <td colspan="3">
+            <?= $this->basico["referencia"] ?>
+        </td>
+    </tr>
+    <tr>
+        <th style="text-align: right">RFC Cliente</th>
+        <td><?= $this->basico["rfc"] ?></td>
+        <th style="text-align: right">Nombre</th>                
+        <td colspan="3"><?= $this->basico["nombreCliente"] ?></td>
+    </tr>
+    <tr>
+        <th style="text-align: right">Tipo Op.</th>
+        <td>
+            <?= ($this->basico["ie"] == 'TOCE.IMP') ? '<img src="/images/icons/impo.png" />' : '<img src="/images/icons/expo.png" />' ?>
+            <?= ($this->basico["ie"] == 'TOCE.IMP') ? 'IMPO' : 'EXPO' ?>
+        </td>
+        <th style="text-align: right">Cve. Ped.</th>
+        <td><?= $this->basico["cvePedimento"] ?></td>
+        <th style="text-align: right">Tipo Cam.</th>
+        <td><?= number_format($this->basico["tipoCambio"], 4) ?></td>
+    </tr>
+    <tr>
+        <th style="text-align: right">Regimen</th>
+        <td><?= $this->basico["regimen"] ?></td>                
+        <th style="text-align: right">Conso.</th>
+        <td><?= ($this->basico["consolidado"] == '0') ? 'N' : 'S' ?></td>
+        <th style="text-align: right">Rect.</th>
+        <td><?= ($this->basico["rectificacion"] == '0') ? 'N' : 'S' ?></td>
+    </tr>
+    <tr>
+        <th style="text-align: right">Pagado</th>
+        <td><?= ($this->basico["pagado"] == NULL) ? 'N' : 'S' ?></td>
+        <th style="text-align: right">Firma Val.</th>
+        <td><?= $this->basico["firmaValidacion"] ?></td>
+        <th style="text-align: right">Firma Ban.</th>
+        <td><?= $this->basico["firmaBanco"] ?></td>
+    </tr>
+    <tr>
+        <th style="text-align: right">Candado</th>
+        <td>
+            <?php if (isset($this->basico["candados"])) { ?>
+                <?php foreach ($this->basico["candados"] as $item) { ?>
+                    <?= $item["numero"] ?>
+                <?php } ?>
+            <?php } ?>
+        </td>
+        <th style="text-align: right">Placas</th>
+        <td>
+            <?= $this->basico["contenedorCaja"] ?>
+        </td>
+        <th style="text-align: right">Usuario</th>
+        <td><?= mb_strtoupper($this->basico["nombre"]) ?></td>
+    </tr>
+</table><!-- informacion -->
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th colspan="5" class="invoice-title">ARCHIVOS
+                <div class="traffic-icon traffic-icon-reload traffic-btn-right" onclick="loadFiles();"></div>
+            </th>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Nombre de archivo</th>
+            <th>Tipo de archivo</th>
+            <th>Creado</th>
+            <th>Usuario</th>
+        </tr>
+    </thead>
+    <tbody id="archivos"></tbody>
+</table>
+<div id="fotografias"></div>

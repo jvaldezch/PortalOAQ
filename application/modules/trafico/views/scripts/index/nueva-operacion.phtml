@@ -1,0 +1,50 @@
+<fieldset>
+    <legend>Nueva operación: Patente <b><?= $this->patente ?></b> Aduana <b><?= $this->aduana ?></b></legend>
+    <?= $this->form ?>
+</fieldset>
+<script>
+    $('#bootstrap-nombre').typeahead({
+        source: function(query, process) {
+        return $.ajax({
+                url: '/comercializacion/index/json-customers-by-name',
+                type: 'get',
+                data: {name: query},
+                dataType: 'json',
+                success: function(res) {
+                    return  process(res);
+                }
+            });
+        }
+    });
+    
+    $("#bootstrap-fechanotif").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fechadoc").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fecharevalidacion").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fechaarribo").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fecharecepanti").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fechaprevio").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fechappedimento").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fechaeir").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fechaexp").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+    $("#bootstrap-fechaenvio").datepicker({
+        format: 'yyyy-mm-dd'
+    });
+</script>

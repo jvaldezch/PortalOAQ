@@ -1,0 +1,81 @@
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>RFC</th>
+            <th>FTP</th>
+            <th>FTP disponible</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->rfc ?></td>
+            <td>
+                <?php if (isset($this->ftp)) { ?>
+                    Si
+                <?php } else { ?>
+                    No
+                <?php } ?>
+            </td>
+            <td>
+                <?php if (isset($this->ftp)) { ?>
+                    <?= $this->ftp_url ?>
+                <?php } ?>
+                &nbsp;<i class="fas fa-plug" style="color: #999; float: right; margin-right: 10px" id="ftp_connected"></i>
+                &nbsp;<img src="/images/load.gif" style="color: #999; float: right; margin-right: 10px; display: none" id="ftp_working" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <i class="fas fa-plug" style="color: #999"> <span style="color: #333; font-size: 9px; font-family: sans-serif; font-weight: normal">No conectado a FTP<span></i>
+                <i class="fas fa-plug" style="color: green"> <span style="color: #333; font-size: 9px; font-family: sans-serif; font-weight: normal">Conectado a FTP<span></i>
+                <i class="fas fa-plug" style="color: red"> <span style="color: #333; font-size: 9px; font-family: sans-serif; font-weight: normal">No se pudo conectar a FTP<span></i>
+                <i class="fas fa-check" style="color: #999"> <span style="color: #333; font-size: 9px; font-family: sans-serif; font-weight: normal">Por subir<span></i>
+                <i class="fas fa-check" style="color: green"> <span style="color: #333; font-size: 9px; font-family: sans-serif; font-weight: normal">Archivo en FTP<span></i>
+                <i class="fas fa-check" style="color: red"> <span style="color: #333; font-size: 9px; font-family: sans-serif; font-weight: normal">Archivo no existe<span></i>
+                <i class="fas fa-check" style="color: yellow"> <span style="color: #333; font-size: 9px; font-family: sans-serif; font-weight: normal">Ocurro algo al subir<span></i>
+            </td>
+        </tr>
+    </tbody>
+</table>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th>
+                    <!--<input type="checkbox" id="selectAllFiles" />-->
+                </th>
+                <th>Archivo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->archivos)) { ?>
+                <?php foreach($this->archivos as $item) { ?>
+                <tr>
+                    <td style="text-align: center">
+                        <!--<input type="checkbox" class="file_to_upload" value="<?= $item['id'] ?>" />-->
+                    </td>
+                    <td><?= $item['nom_archivo'] ?></td>
+                    <td><i id="ftp_file_<?= $item['id'] ?>" class="fas fa-check" style="color: #999"></i></td>
+                </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="3" style="text-align: center"><em>Todos los archivos fueron enviados al ftp.</em></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<div id="ftp_result"></div>
+<script type="text/javascript">
+    
+    $(document.body).on("click", "#selectAllFiles", function () {
+        var checkboxes = $("input[class=file_to_upload]");
+        if ($(this).is(':checked')) {
+            jc.buttons.enviar.enable();
+            checkboxes.prop('checked', true);
+        } else {
+            checkboxes.prop('checked', false);
+        }
+    });
+    
+</script>

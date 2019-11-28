@@ -1,0 +1,57 @@
+<script type="text/javascript">
+    var emailData = {};
+    emailData["emails"] = {};
+    emailData["archivos"] = {};
+</script>
+<p style="font-size: 11px">¿Desea enviar un correo electrónico con pedimentos adjuntos a los siguientes contactos?</p>
+
+<?php if (isset($this->contacts)) { ?>
+    <table style="width: 100%">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th style="text-align: left; font-size: 11px">Email</th>
+                <th style="text-align: left; font-size: 11px">Nombre receptor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->contacts as $k => $contact) { ?>
+                <tr>
+                    <td style="text-align: center"><input type="checkbox" checked="true" /></td>
+                    <td style="text-align: left; font-size: 11px"><?= $contact["email"] ?></td>
+                    <td style="text-align: left; font-size: 11px"><?= $contact["nombre"] ?></td>
+                </tr>
+                <script>emailData["emails"][<?= $k ?>] = <?= $contact["id"] ?></script>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <p style="font-size: 11px; margin: 5px 0; color: #ff3333">No hay contactos para este cliente.</p>
+<?php } ?>
+
+<p style="font-size: 11px">Con los siguiente archivos adjuntos:</p>
+
+<?php if (isset($this->archivos)) { ?>
+    <table style="width: 100%">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th style="text-align: left; font-size: 11px">Archivo</th>
+                <th style="text-align: left; font-size: 11px">Tipo Archivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->archivos as $k => $file) { ?>
+                <tr>
+                    <td style="text-align: center"><input type="checkbox" checked="true" /></td>
+                    <td style="text-align: left; font-size: 11px"><img src="/images/icons/attachment.gif" /><?= $file["nom_archivo"] ?></td>        
+                    <td style="text-align: left; font-size: 11px"><?= $file["nombre"] ?></td>        
+                </tr>
+                <script>emailData["archivos"][<?= $k ?>] = <?= $file["id"] ?></script>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <p style="font-size: 11px; margin: 5px 0; color: #ff3333">No hay archivos (pedimentos) para enviar.</p>
+<?php } ?>
+    

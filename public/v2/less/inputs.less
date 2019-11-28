@@ -1,0 +1,106 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30-dic-2016, 11:22:19
+    Author     : Jaime
+*/
+
+@import "variables";
+
+select,
+textarea,
+input[type=text] {
+    float: left;
+    background: @inputBackground;
+    font-size: @inputFontSize;
+    font-family: @inputFont;
+    height: @inputHeight;
+    box-sizing: border-box;
+    border-radius: @inputBorderRadius;
+    border: 1px solid @inputBorderColor;
+    margin-bottom: @inputMargin;
+    margin: 5px 2px;
+    padding: 0 10px 0 10px;
+    outline: none;
+}
+select {
+    cursor: pointer;
+}
+
+select,
+textarea,
+input[type=text] {
+    background: #fff;
+}
+
+select.small {
+    width: 100px;
+}
+
+select.medium {
+    width: 250px;
+}
+
+select.large {
+    width: 350px;
+}
+
+input[type=text].center {
+    text-align: center;
+}
+input[type=text].tiny {
+    width: 35px;
+}
+
+textarea.disabled,
+textarea:disabled,
+input.disabled,
+input:disabled,
+select.disabled,
+select:disabled {
+    background: @inputDisBackground;
+    border: @inputDisBorder;
+    color: @inputDisColor;
+}
+
+textarea {
+    padding: 10px 10px 10px 10px;
+    height: auto;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    padding-left:5px;
+    padding-right:5px;
+    border-radius:15px;
+    -webkit-appearance:button;
+    border: double 2px #00F;
+    background-color:#0b0095;
+    color:#FFF;
+    white-space: nowrap;
+    overflow:hidden;
+    width:15px;
+    height:10px;
+}
+
+input[type=checkbox]:checked,
+input[type=radio]:checked {
+    background-color:#000;
+    border-left-color:#06F;
+    border-right-color:#06F;
+}
+
+input[type=checkbox]:hover,
+input[type=radio]:hover {
+    box-shadow: 0px 0px 5px #555;
+}
+
+input.search {    
+    display: table-cell;
+    margin-bottom: 0;
+    margin-top: 9px;
+    margin-right: 10px;
+}

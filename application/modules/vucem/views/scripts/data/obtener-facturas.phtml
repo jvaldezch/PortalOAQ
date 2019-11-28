@@ -1,0 +1,100 @@
+<div id="modalWindow">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3 style="font-size: 14px; font-family: sans-serif; margin: 0; padding: 0; line-height: 18px">FACTURAS DEL PEDIMENTO</h3>
+    </div>
+    <div class="modal-body">
+        <?php if($this->facturas && !$this->warning) { ?>
+        <table class="traffic-table traffic-table-left">
+            <thead>
+                <tr>
+                    <th>Referencia</th>
+                    <th>Tipo</th>
+                    <th>Regimen</th>
+                    <th>Clave de pedimento</th>
+                    <th>Consolidado</th>
+                    <th>Rectificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><?= $this->pedimento["NUM_REF"] ?></td>
+                    <td><?= ($this->pedimento["IMP_EXP"] == '1') ? 'TOCE.IMP' : 'TOCE.EXP' ?></td>
+                    <td><?= $this->pedimento["REGIMEN"] ?></td>
+                    <td><?= $this->pedimento["CVEPEDIM"] ?></td>
+                    <td><?= $this->pedimento["CONSOLR"] ?></td>
+                    <td><?= $this->pedimento["RECTIF"] ?></td>    
+                </tr>
+            </tbody>
+        </table>
+        <table class="traffic-table traffic-table-left">
+            <thead>
+                <tr>
+                    <th colspan="7" class="traffic-table-subtitle">FACTURAS DEL PEDIMENTO</th>
+                </tr>
+                <tr>
+                    <th rowspan="2" style="border-bottom: 0">&nbsp;</th>
+                    <th rowspan="2" style="border-bottom: 0">Factura</th>
+                    <th colspan="2" style="border-bottom: 0">Cliente</th>
+                    <th colspan="2" style="border-bottom: 0">Proveedor</th>
+                </tr>
+                <tr>
+                    <th style="border-bottom: 0">RFC/Tax Id</th>
+                    <th style="border-bottom: 0">Nombre</th>
+                    <th style="border-bottom: 0">RFC/Tax Id</th>
+                    <th style="border-bottom: 0">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->facturas as $item) { ?>
+                <tr>
+                    <td><input type="checkbox" name="facts" value="<?= urlencode($item["NumFactura"]) ?>" /></td>
+                    <td><?= $item["NumFactura"] ?></td>
+                    <td><?= $item["CteRfc"] ?></td>
+                    <td><?= $item["CteNombre"] ?></td>
+                    <td><?= $item["ProTaxID"] ?></td>
+                    <td><?= $item["ProNombre"] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } elseif($this->warning) { ?>
+        <table class="traffic-table">            
+            <th class="traffic-table-subtitle"><?= $this->warning ?></th>
+        </table>
+        <?php } ?>
+    </div>
+    <div class="modal-footer">
+      <?php if($this->facturas) { ?>
+        <a id="selectallinvoices" class="traffic-btn traffic-btn-success"><i class="icon-white icon-check"></i>&nbsp;Seleccionar todas</a>
+        <a id="invoices" class="traffic-btn traffic-btn-primary traffic-btn-right">Seleccionar facturas</a>
+      <?php } ?>
+      <a id="closeModal" class="traffic-btn traffic-btn-close traffic-btn-right" data-dismiss="modal">Cerrar</a>
+    </div>
+</div>
+<script>
+    $("a#invoices").click(function(event) {        
+        event.preventDefault();        
+        var ids = [];
+        var boxes = $('input[name=facts]:checked');
+        if((boxes).size() > 0) {
+            $(boxes).each(function(){
+                ids.push($(this).val());
+            });
+            var facts = ids.toString();
+            facts = facts.replace(/,/g, '|');
+            $.ajax({
+                url: "/vucem/data/seleccionar-facturas?system=sitawin&ped=<?= $this->ped ?>&facts="+facts+"&tipo=<?= $this->tipoPed ?>",
+                cache: false
+            }).done(function(html) {
+                $('#closeModal').trigger('click');
+                window.location.reload();
+            });
+        }        
+    });
+    $("a#selectallinvoices").click(function(event) {
+        $('input[name=facts]').each(function() {
+            $(this).attr('checked',!$(this).attr('checked'));
+        });
+    });
+</script>

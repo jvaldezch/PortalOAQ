@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Partes</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="OAQ Web Portal">
+        <meta name="author" content="Jaime E. Valdez">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+    </head>
+    <style>
+        body {
+            font-family: sans-serif;
+            border: 0;
+            margin: 0;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        table tr {
+            background: transparent;
+        }
+        table th,
+        table td {
+            padding: 2px 3px;
+            font-size: 12px;
+            border: 1px #999 solid;
+            text-align: center;
+        }
+        table th {
+            background-color: #e1e1f9;
+            min-width: 80px;
+        }
+    </style>
+    <body>
+        <?php if (isset($this->data)) { ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NP</th>
+                        <th>Tariff Quantity</th>
+                        <th>UMC PED</th>
+                        <th>NP</th>
+                        <th>Invoice Aquantity</th>
+                        <th>UM / OMA</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $i = 1;
+                    foreach ($this->data as $item) {
+                        if ($i & 1) {
+                            $style = "background-color: #fefefe;";
+                        } else {
+                            $style = "background-color: #f3f3f3;";
+                        }
+                        $i++;
+                        ?>
+                        <tr<?= $style ?>>
+                            <td><?= $item["numParte"] ?></td>
+                            <td><?= $item["cantidadFactura"] ?></td>
+                            <td><?= $item["umc"] ?></td>
+                            <td><?= $item["numParte"] ?></td>
+                            <td><?= $item["cantidadOma"] ?></td>
+                            <td><?= $item["oma"] ?></td>
+                            <td><?= ($item["cantidadFactura"] - $item["cantidadOma"]) ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } ?>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<table class="traffic-table">
+    <tr>
+        <th>Cliente</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php if (isset($this->data) && !empty($this->data)) { ?>
+        <?php foreach ($this->data as $item) { ?>
+            <tr>
+                <td class="traffic-td-left"><div><?= $item["nombre"] ?></div></td>
+                <td class="traffic-td-left" style="width: 52px">
+                    <a href="/trafico/index/datos-cliente?id=<?= $item["idCliente"] ?>">
+                        <i class="fas fa-pencil-alt" style="font-size: 1.4em; color: #2f3b58"></i>&nbsp;
+                    </a>
+                    <i class="far fa-trash-alt" onclick="removerCliente(<?= $item["idAduana"] ?>,<?= $item["idCliente"] ?>);" style="font-size: 1.4em; color: #2f3b58"></i>
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="2"><em>No tiene clientes asignados a esta aduana.</em></td>
+        </tr>
+    <?php } ?>
+</table>

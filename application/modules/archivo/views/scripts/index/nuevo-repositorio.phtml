@@ -1,0 +1,38 @@
+<div id="errors" class="alert alert-error" style="display: none;"></div>    
+<form id="form" method="post">
+    <?= $this->form->id ?>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="6" class="traffic-table-title">DATOS EXPEDIENTE</th>
+        </tr>
+        <tr>
+            <th style="width: 150px; text-align: right">Patente</th>
+            <td colspan="3"><?= $this->form->patente ?></td>
+        </tr>
+        <tr>            
+            <th style="text-align: right">Aduana</th>
+            <td colspan="3"><div id="customs"><?= $this->aduanas("aduana") ?></div></td>
+        </tr>
+        <tr>
+            <th style="text-align: right">RFC Cliente</th>
+            <td><?= $this->form->rfc_cliente ?></td>            
+            <td style="width: 140px">
+                <label style="display: table-cell; float: left; font-weight: bold">NOMBRE CLIENTE: </label>                
+            </td>
+            <td><?= $this->form->nombre ?></td>
+        </tr>
+        <tr>            
+            <th style="text-align: right">Pedimento</th>
+            <td colspan="3"><?= $this->form->pedimento ?></td>
+        </tr>
+        <tr>            
+            <th style="text-align: right">Referencia</th>
+            <td colspan="3"><?= $this->form->referencia ?></td>
+        </tr>
+        <tr>
+        </tr>
+    </table>    
+    <div class="traffic-clear-5"></div>
+    <input type="submit" id="submit" class="traffic-btn traffic-btn-save traffic-btn-right" value="Crear referencia" tabindex="30"/>
+    <a onclick="window.history.back();" class="traffic-btn traffic-btn-back" tabindex="99">&laquo;&nbsp;Regresar</a>
+</form>

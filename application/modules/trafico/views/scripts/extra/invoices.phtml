@@ -1,0 +1,26 @@
+<form id="form-invoice" method="post" action="/trafico/ajax/agregar-factura">
+    <?= $this->inputHidden("hidden", "factura") ?>
+    <?= $this->inputHidden("hidden", "idTrafico", $this->idTrafico) ?>
+    <table class="traffic-table">
+        <tr>
+            <th colspan="5" class="invoice-title">FACTURAS</th>
+        </tr>
+        <tr>
+            <th><label for="numFactura">Num. Factura:</label></th>
+            <th><label for="proveedor">Proveedor:</label></th>
+            <th><label for="valorMonExt">Valor:</label></th>
+            <th><label for="moneda">Moneda:</label></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td><input type="text" id="numFactura" name="numFactura" ></td>
+            <td><input type="text" id="proveedor" name="proveedor" ></td>
+            <td><input type="text" id="valorMonExt" name="valorMonExt" ></td>
+            <td><?= $this->monedas("moneda") ?></td>
+            <td><input type="submit" id="add-invoice" class="traffic-btn traffic-btn-add traffic-btn-right" value="Agregar factura"></td>
+        </tr>
+    </table>
+</form>
+<div class="div-frame">  
+    <iframe src="" id="invoices-frame" ></iframe>    
+</div>

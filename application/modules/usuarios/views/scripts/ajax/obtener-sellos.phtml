@@ -1,0 +1,33 @@
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <tr>
+            <th style="width: 60px">Patente</th>
+            <th style="width: 60px">Aduana</th>
+            <th style="width: 120px">RFC</th>
+            <th>Razón social</th>
+            <th style="width: 32px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($this->permisos) { ?>
+            <?php foreach ($this->permisos as $item) { ?>
+                <tr>
+                    <td style="text-align: center"><?= $item["patente"] ?></td>
+                    <td style="text-align: center"><?= $item["aduana"] ?></td>
+                    <td style="text-align: center"><?= $item["rfc"] ?></td>
+                    <td><?= $item["razon"] ?></td>
+                    <td>
+                        <i class="far fa-trash-alt" onclick="parent.borrarPermiso('<?= $item["id"] ?>');" style="font-size: 1.3em; color: #2f3b58; cursor: pointer"></i>
+                        <!--<a style="cursor: pointer;" onclick="parent.borrarPermiso('<?= $item["id"] ?>');">-->
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="5" style="text-align: center"><em>El usuario no tiene sellos asignados.</em></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+

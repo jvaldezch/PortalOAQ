@@ -1,0 +1,58 @@
+<form method="post" id="form">
+    <input type="hidden" id="idAgente" name="idAgente" value="<?= $this->idAgente ?>" />
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <td style="width: 80px">
+                <label for="patente">Patente:</label>
+            </td>
+            <td>
+                <?= $this->form->patente ?>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="rfc">RFC:</label></td>
+            <td><?= $this->form->rfc ?></td>
+        </tr>
+        <tr>
+            <td><label for="nombre">Nombre:</label></td>
+            <td><?= $this->form->nombre ?></td>
+        </tr>
+        <tr>
+            <td colspan="6"><div id="errors"></div></td>
+        </tr>
+    </table>
+</form>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th colspan="10" class="traffic-table-title">
+                SELLOS PARA VUCEM
+                <i class="fas fa-sync-alt" onclick="obtenerSellosAgente(<?= $this->idAgente ?>);" style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px; cursor: pointer"></i>
+            </th>
+        </tr>
+        <tr>
+            <th style="text-align: left; width: 120px">Certificado</th>
+            <th style="text-align: left; width: 90px">Creado</th>
+            <th style="text-align: left; width: 120px">Creado Por</th>
+            <th style="text-align: left; width: 90px">Actualizado</th>
+            <th style="text-align: left; width: 120px">Actualizado Por</th>
+            <th style="text-align: left">2048</th>
+            <th style="text-align: left; width: 150px">Válido hasta</th>
+            <th style="text-align: left; width: 60px">Activo</th>
+            <th style="text-align: left; width: 60px">Default</th>
+            <th style="text-align: left; width: 32px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody id="sellos-agente"></tbody>
+</table>
+<div class="traffic-clear-5"></div>
+<button class="traffic-btn traffic-btn-right" id="update" tabindex="99">
+    <i class="far fa-save"></i> Guardar
+</button>
+<a class="traffic-btn traffic-btn-right" id="uploadKey">
+    <i class="fas fa-upload"></i> Subir sello
+</a>
+<a class="traffic-btn" onclick="window.history.back();">
+    <i class="fas fa-angle-double-left"></i> Regresar
+</a>
+<div class="traffic-clear-5"></div>

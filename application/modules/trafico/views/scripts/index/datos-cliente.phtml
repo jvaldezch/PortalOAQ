@@ -1,0 +1,554 @@
+<ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
+    <li><a href="#customer-information" data-toggle="tab">Información</a></li>
+    <li><a href="#customer-documents" data-toggle="tab">Documentos</a></li>
+    <li><a href="#customer-contacts" data-toggle="tab">Contactos</a></li>
+    <li><a href="#customer-vucem" data-toggle="tab">Sellos</a></li>
+    <li><a href="#customer-log" data-toggle="tab">Bitacora</a></li>
+    <li><a href="#customer-parts" data-toggle="tab">Partes</a></li>
+</ul>
+<input type="hidden" id="idCliente" name="idCliente" value="<?= $this->id ?>">
+<input type="hidden" id="rfcCliente" name="rfcCliente" value="<?= $this->data["rfc"] ?>">
+<div class="tab-content">
+    <div class="tab-pane" id="customer-information">
+        <div style="float: left; width: 50%">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="3" class="traffic-table-title">DATOS DEL CLIENTE</th>
+                </tr>
+                <tr>
+                    <th style="text-align: right; width: 90px">Razón Social:</th>
+                    <td>
+                        <?= $this->data["nombre"] ?>
+                        <a href="/trafico/index/editar-cliente?id=<?= $this->id ?>" style="float: right">
+                            <i class="fas fa-pencil-alt" style="font-size:1.4em; color: #2f3b58"></i>
+                        </a>
+                    </td>
+                    <td style="padding: 0 !important">
+                        <table class="traffic-table traffic-table-left">
+                            <tr>
+                                <td style="width: 100px">Cliente activo</td>
+                                <td>
+                                    <div class="traffic-radio-block">
+                                        <div class="traffic-radio-input">
+                                            <input type="radio" value="1" id="activate" name="activate">&nbsp;<p>Sí</p>
+                                        </div>
+                                        <div class="traffic-radio-input">
+                                            <input type="radio" value="0" id="activate" name="activate">&nbsp;<p>No</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: right">RFC:</th>
+                    <td colspan="2"><?= $this->data["rfc"] ?></td>
+                </tr>
+                <tr>
+                    <th style="text-align: right">Token (Web Service):</th>
+                    <td>
+                        <?php if(isset($this->token)) { ?>
+                            <?= $this->token ?>
+                            <a href="/webservice/index/pedimentos-pagados-enh?token=<?= $this->token ?>&rfc=<?= $this->data["rfc"] ?>&fechaIni=<?= date("Y-m-" . "01") ?>&fechaFin=<?= date("Y-m-d") ?>&aduana=640&patente=3589" target="_blank">Prueba aqui</a>
+                        <?php } ?>
+                    </td>
+                    <td style="width: 250px; padding: 0 !important">
+                        <table class="traffic-table traffic-table-left">
+                            <tr>
+                                <td style="width: 100px">WebService</td>
+                                <td>
+                                    <div class="traffic-radio-block">
+                                        <div class="traffic-radio-input">
+                                            <input type="radio" value="1" id="activateWs" name="activateWs">&nbsp;<p>Sí</p>
+                                        </div>
+                                        <div class="traffic-radio-input">
+                                            <input type="radio" value="0" id="activateWs" name="activateWs">&nbsp;<p>No</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: right">RFC de Soc.:</th>
+                    <td colspan="2">
+                        <input name="rfcSociedad" id="rfcSociedad" class="traffic-input-medium" value="<?= $this->data["rfcSociedad"] ?>" />
+                    </td>
+                </tr>
+                <?php if (isset($this->dashboard)) { ?>
+                    <tr>
+                        <th style="text-align: right">Dashboard:</th>
+                        <td colspan="2"><a href="<?= $this->dashboard ?>" target="_blank"><?= $this->dashboard ?></a></td>
+                    </tr>
+                <?php } ?>
+            </table>
+            <form id="formAccess" method="post" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" id="idCliente" name="idCliente" value="<?= $this->id ?>">
+                <table class="traffic-table traffic-table-left">
+                    <tr>
+                        <th style="text-align: right; width: 90px">SICA ID:</th>
+                        <td colspan="2">
+                            <?= $this->formAccess->sicaId ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">ACCESO WEB:</th>
+                        <td colspan="2">
+                            <?= $this->formAccess->webaccess ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">PASSWORD WEB:</th>
+                        <td colspan="2">
+                            <?= $this->formAccess->password ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">DASHBOARD:</th>
+                        <td colspan="2">
+                            <?= $this->formAccess->dashboard ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <button value="Guardar" type="submit" id="saveAccess" class="traffic-btn-right traffic-btn">
+                                <i class="far fa-save"></i> Guardar
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div style="float: left; width: 50%">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="4" class="traffic-table-title">ADUANAS POR DONDE OPERA</th>
+                </tr>
+                <tr>
+                    <th style="width: 60px">Patente</th>
+                    <th style="width: 60px">Aduana</th>
+                    <th>Ubicación</th>
+                    <th style="width: 32px">
+                        <i class="fas fa-plus-circle" id="newCustom" style="font-size:1.4em; color: #2f3b58; float: right; cursor: pointer"></i>
+                    </th>
+                </tr>
+                <?php if (isset($this->aduanas) && !empty($this->aduanas)) { ?>                                        
+                    <?php foreach ($this->aduanas as $k => $item) { ?>
+                        <tr>
+                            <td style="text-align: center"><?= $item["patente"] ?></td>
+                            <td style="text-align: center"><?= $item["aduana"] ?></td>
+                            <td colspan="2"><?= $item["nombre"] ?></td>
+                        </tr>                            
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="4" style="text-align: center"><em>El cliente no tiene asginadas aduanas.</em></td>
+                    </tr>
+                <?php } ?>
+            </table>
+            <table class="traffic-table traffic-table-left hover">
+                <thead>
+                    <tr>
+                        <th colspan="3" class="traffic-table-subtitle">PLANTAS</th>
+                        <th style="width: 50px" class="traffic-table-subtitle">
+                            <i class="fas fa-plus-circle" id="nuevaPlanta" data-id="<?= $this->id ?>" style="font-size:1.4em; color: #2f3b58; float: right; cursor: pointer"></i>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="traffic-table-subtitle" style="text-align: left; width: 60px">Clave</th>
+                        <th class="traffic-table-subtitle" style="text-align: left">Ubicación</th>
+                        <th class="traffic-table-subtitle" style="text-align: left">Descripción</th>
+                        <th class="traffic-table-subtitle">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (isset($this->plantas) && !empty($this->plantas)) { ?>
+                        <?php foreach ($this->plantas as $item) { ?>
+                            <tr>
+                                <td><?= $item["clave"] ?></td>
+                                <td><?= $item["ubicacion"] ?></td>
+                                <td><?= $item["descripcion"] ?></td>
+                                <td>
+                                    <div style="font-size:1.4em; color: #2f3b58">
+                                        <i class="fas fa-pencil-alt editarPlanta" data-cliente="<?= $this->id ?>" data-id="<?= $item["id"] ?>"></i>
+                                        <i class="far fa-trash-alt borrarPlanta" data-cliente="<?= $this->id ?>" data-id="<?= $item["id"] ?>"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <tr>
+                            <td colspan="4" style="text-align: center">
+                                <em>El cliente no tiene plantas.</em>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="traffic-clear-5"></div>
+        <div style="float: left; width: 50%">            
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th class="traffic-table-title" style="width: 30%">PECA</th>
+                    <th class="traffic-table-title" style="width: 30%">TIPO DE CLIENTE</th>
+                    <th class="traffic-table-title">ESQUEMA FONDO</th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="traffic-radio-block">
+                            <div class="traffic-radio-input">
+                                <input type="radio" name="pecaDefault" value="0" <?= ((int) $this->data["peca"] === 0) ? 'checked="true"' : '' ?>>&nbsp;<p>No</p>
+                            </div>
+                            <div class="traffic-radio-input">
+                                <input type="radio" name="pecaDefault" value="1" <?= ((int) $this->data["peca"] === 1) ? 'checked="true"' : '' ?>>&nbsp;<p>Si</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="traffic-radio-block">
+                            <?php if (isset($this->tipoCliente) && !empty($this->tipoCliente)) { ?>
+                                <?php foreach ($this->tipoCliente as $item) { ?>
+                                    <div class="traffic-radio-input">
+                                        <input type="radio" name="tipoCliente" value="<?= $item["id"] ?>" <?= ($this->data["tipoCliente"] == $item["id"]) ? "checked=\"true\"" : "" ?>>&nbsp;<p><?= $item["descripcion"] ?></p>
+                                    </div>
+                                <?php } ?>
+                            <?php } ?>
+                        </div>                            
+                    </td>
+                    <td>
+                        <div class="traffic-radio-block">
+                            <?php if (isset($this->esquemaFondos) && !empty($this->esquemaFondos)) { ?>
+                                <div class="traffic-radio-input">
+                                    <input type="radio" name="esquemaFondo" value="0" <?= ($this->data["esquema"] == 0) ? "checked=\"true\"" : "" ?>>&nbsp;<p>Ninguno</p>
+                                </div>
+                                <?php foreach ($this->esquemaFondos as $item) { ?>
+                                    <div class="traffic-radio-input">
+                                        <input type="radio" name="esquemaFondo" value="<?= $item["id"] ?>" <?= ($this->data["esquema"] == $item["id"]) ? "checked=\"true\"" : "" ?>>&nbsp;<p><?= ucfirst(mb_strtolower($item["descripcion"])) ?></p>
+                                    </div>
+                                <?php } ?>
+                            <?php } ?>
+                        </div>                            
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="float: left; width: 50%">
+            <table class="traffic-table">
+                <tr>
+                    <th class="traffic-table-title">DIRECCIÓN PARA VUCEM</th>
+                </tr>
+            </table>
+            <?= $this->address ?>
+            <button id="updateAddress" class="traffic-btn traffic-btn-right">
+                <i class="far fa-save"></i> Guardar
+            </button>            
+        </div>
+        <div class="traffic-clear-5"></div>
+        <div style="float: left; width: 100%">
+        </div>
+        <div style="font-size: 11px; margin-left: 7px">
+            <span style="background-color: #00cc66; color: #00cc66;  border-radius: 2px">C</span>&nbsp;Tarifa aprobada y vigente
+            <span style="background-color: #ff6600; color: #ff6600;  border-radius: 2px">C</span>&nbsp;Tarifa revisada
+        </div>
+        <table class="traffic-table">
+            <thead>
+                <tr>
+                    <th class="traffic-table-title" colspan="7">
+                        TARIFAS
+                    </th>                    
+                </tr>
+                <tr>
+                    <th style="width: 24px">&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th style="width: 130px">Vigencia</th>
+                    <th style="width: 130px">Creado</th>
+                    <th style="width: 130px">Aprobado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->tarifas) && !empty($this->tarifas)) { ?>
+                    <?php foreach ($this->tarifas as $item) { ?>
+                        <tr>
+                            <td>
+                                <?php if ($item["estatus"] == 2) { ?>
+                                    <span style="background-color: #00cc66; color: #00cc66;  border-radius: 2px">C</span>
+                                <?php } else if ($item["estatus"] == 1) { ?>
+                                    <span style="background-color: #ff6600; color: #ff6600;  border-radius: 2px">C</span>
+                                <?php } ?>
+                            </td>
+                            <td style="text-align: center">
+                                <?php if ($item["estatus"] == 0 || $item["estatus"] == 1) { ?>
+                                    <a href="/trafico/index/editar-tarifa?id=<?= $item["id"] ?>" title="Editar tráfico.">
+                                        <img src="/images/icons/small_edit.png" style="padding: 2px 1px;" />
+                                    </a>
+                                    <a href="/trafico/get/imprimir-tarifa?id=<?= $item["id"] ?>" target="_blank" title="Imprimir tráfico.">
+                                        <img src="/images/icons/printer.png" style="padding: 2px 1px;" />
+                                    </a>
+                                    <img src="/images/icons/upload.png" data-id="<?= $item["id"] ?>" style="padding: 2px 1px; margin-left: 3px; cursor: pointer" id="upload" />
+                                <?php } else if ($item["estatus"] == 2) { ?>
+                                    <a href="/trafico/get/imprimir-tarifa?id=<?= $item["id"] ?>" target="_blank" title="Imprimir tráfico.">
+                                        <img src="/images/icons/printer.png" style="padding: 2px 1px;" />
+                                    </a>
+                                <?php } ?>
+                            </td>
+                            <td><?= $item["tipoVigencia"] ?></td>
+                            <td><?= $item["creado"] ?></td>
+                            <td><?= $item["aprobado"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } ?>
+            </tbody>
+        </table>
+        <div class="traffic-clear-5"></div>
+        <a id="nuevaTarifa" href="/trafico/index/nueva-tarifa?idCliente=<?= $this->id ?>" title="Nueva Tarifa" class="traffic-btn traffic-btn-right">
+            <i class="far fa-file-alt"></i> Nueva Tarifa
+        </a>
+        <div class="traffic-clear-5"></div>
+    </div><!-- information -->
+    <div class="tab-pane" id="customer-vucem">
+        <table class="traffic-table traffic-table-left">
+            <thead>
+                <tr>
+                    <th colspan="9" class="traffic-table-title">
+                        SELLOS PARA VUCEM
+                        <i class="fas fa-sync-alt" onclick="obtenerSellos(<?= $this->id ?>);" style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px; cursor: pointer"></i>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="text-align: left; width: 60px">Patente</th>
+                    <th style="text-align: left">Razón Social</th>
+                    <th style="text-align: left; width: 120px">Rfc</th>
+                    <th style="text-align: left; width: 120px">Certificado</th>
+                    <th style="text-align: left; width: 150px">Válido hasta</th>
+                    <th style="text-align: left; width: 150px">Actualizado</th>
+                    <th style="text-align: left">2048</th>
+                    <th style="text-align: left; width: 60px">Default</th>
+                    <th style="text-align: left; width: 32px">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="sellos-cliente"></tbody>
+        </table>
+        <table class="traffic-table">
+            <thead>                        
+                <tr>
+                    <th colspan="4" class="traffic-table-title">RFC CONSULTA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th colspan="2" style="text-align: left">RFC CONSULTA COVE</th>
+                    <th colspan="2" style="text-align: left">RFC CONSULTA EDOC</th>
+                </tr>
+                <tr>
+                    <td style="text-align: left">
+                        <input type="" >
+                    </td>
+                    <td style="text-align: right">
+                        <button class="traffic-btn traffic-btn-small traffic-btn-right">
+                            <i class="far fa-plus-square"></i> Agregar
+                        </button>
+                    </td>
+                    <td style="text-align: left">
+                        <input type="" >
+                    </td>
+                    <td style="text-align: right">
+                        <button class="traffic-btn traffic-btn-small traffic-btn-right">
+                            <i class="far fa-plus-square"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 0">
+                        <table class="traffic-table-borderless">
+                            <?php if (isset($this->rfcConsulta) && isset($this->rfcConsulta["cove"])) { ?>
+                                <?php foreach ($this->rfcConsulta["cove"] as $k => $v) { ?>
+                                    <tr>
+                                        <td><?= $v ?></td>
+                                        <td><div onclick="removerRfcConsultaCove(<?= $k ?>);" class="traffic-icon traffic-icon-delete"></div></td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td style="text-align: center"><em>No existen RFC de consulta.</em></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </td>
+                    <td colspan="2">
+                        <table class="traffic-table-borderless traffic-table-left">
+                            <?php if (isset($this->rfcConsulta) && isset($this->rfcConsulta["edoc"])) { ?>
+                                <?php foreach ($this->rfcConsulta["edoc"] as $k => $v) { ?>
+                                    <tr>
+                                        <td><?= $v ?></td>
+                                        <td><div onclick="removerRfcConsultaEdoc(<?= $k ?>);" class="traffic-icon traffic-icon-delete"></div></td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td style="text-align: center"><em>No existen RFC de consulta.</em></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="traffic-clear-5"></div>
+    </div><!-- vucem -->
+    <div class="tab-pane" id="customer-documents">
+        <form id="formFiles" method="post" action="/trafico/post/subir-archivos-cliente" enctype="multipart/form-data">
+            <input type="hidden" id="idCliente" name="idCliente" value="<?= $this->id ?>">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="5" class="traffic-table-title">ARCHIVOS DE EXPEDIENTE CLIENTE</th>
+                </tr>
+                <tr>
+                    <th style="width: 150px; text-align: right">Seleccionar archivo</th>
+                    <td>
+                        <input type="file" name="file[]" id="file" class="required" multiple />
+                    </td>
+                    <td>
+                        <button type="submit" id="uploadFiles" class="traffic-btn traffic-btn-right">
+                            <i class="fas fa-upload"></i> Subir archivo
+                        </button>
+                        <a id="checklist" class="traffic-btn traffic-btn-right" href="/trafico/get/checklist-clientes?id=<?= $this->id ?>">
+                            <i class="fas fa-clipboard-list"></i> Checklist
+                        </a>
+                        <button class="traffic-btn traffic-btn-right" id="help" href="/trafico/get/ayuda-documentos-fiscal" style="width: 30px; min-width: 25px">
+                            <i class="fas fa-question"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div class="progress progress-striped active">
+                <div class="bar bar-success"></div >
+                <div class="percent">0%</div >
+            </div>
+        </form>
+        <div id="customerFiles"></div>
+        <div class="traffic-clear-5"></div>
+    </div><!-- documents -->
+    <div class="tab-pane" id="customer-contacts">        
+        <table class="traffic-table hover">
+            <tr>
+                <th colspan="8" class="traffic-table-title">CONTACTOS</th>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Tipo</th>
+                <th style="width: 40px">Pago</th>
+                <th style="width: 70px">Pedimento</th>
+                <th style="width: 40px">Cruce</th>
+                <th style="width: 40px">Notificacion</th>
+                <th style="width: 24px">&nbsp;</th>
+            </tr>
+            <?php if (isset($this->contactos) && !empty($this->contactos)) { ?>
+                <?php foreach ($this->contactos as $item) { ?>
+                    <tr>
+                        <td style="text-align: left"><?= $item["nombre"] ?></td>
+                        <td style="text-align: left"><?= $item["email"] ?></td>
+                        <td><?= $item["tipo"] ?></td>
+                        <td>
+                            <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="aviso" <?= ($item["aviso"] == 1) ? " checked=\"true\"" : "" ?>>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="pedimento" <?= ($item["pedimento"] == 1) ? " checked=\"true\"" : "" ?>>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="cruce" <?= ($item["cruce"] == 1) ? " checked=\"true\"" : "" ?>>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="cruce" <?= ($item["notificacion"] == 1) ? " checked=\"true\"" : "" ?>>
+                        </td>
+                        <td>
+                            <div class="traffic-icon traffic-icon-delete" onclick="removerContacto(<?= $item["id"] ?>);"></div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>                        
+                <tr>
+                    <td colspan="8"><em>El cliente no contactos.</em></td>
+                </tr>
+            <?php } ?>
+                <tr>
+                    <td colspan="8">
+                        <button class="traffic-btn traffic-btn-right" id="addContact">
+                            <i class="far fa-plus-square"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+        </table>
+    </div><!-- contacts -->
+    <div class="tab-pane" id="customer-log">
+        <table class="traffic-table traffic-table-left">
+            <thead>                
+                <tr>
+                    <th colspan="3" class="traffic-table-title">Bitacora de actividades</th>
+                </tr>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Mensaje</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->alertas) && !empty($this->alertas)) { ?>
+                    <?php foreach ($this->alertas as $item) { ?>
+                        <tr>
+                            <td style="text-align: center"><?= trim(strtoupper($item["usuario"])) ?></td>
+                            <td style="text-align: center"><?= trim(strtoupper($item["mensaje"])) ?></td>
+                            <td style="text-align: center"><?= trim(strtoupper($item["creado"])) ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="3" style="text-align: center"><em>No hay alertas en el sistema por el momento.</em></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <div class="traffic-clear-5"></div>
+    </div><!-- log -->
+    <div class="tab-pane" id="customer-parts">
+<!--        <table class="traffic-table traffic-table-left tblPartsHead">
+            <thead>                
+                <tr>
+                    <th colspan="9" class="traffic-table-title">Números de Partes
+                        <i class="fas fa-sync-alt" onclick="partes();" style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px"></i>
+                    </th>
+                </tr>
+                <tr>
+                    <th>Fracción</th>
+                    <th>Num. Parte</th>
+                    <th>Descripción</th>
+                    <th>UMC</th>
+                    <th>UMT</th>
+                    <th>OMA</th>
+                    <th>P. Origen</th>
+                    <th>P. Vendedor</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="tblParts"></tbody>
+        </table>-->
+        <table id="dg"></table>
+        <div class="traffic-clear-5"></div>
+    </div><!-- log -->
+</div>
+<div class="traffic-clear-5"></div>
+<a href="/trafico/index/clientes" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i> Regresar
+</a>
+<div class="jqmWindow" id="checklistHelp">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>
+<div class="jqmWindow" id="checklistModal">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>
+<div class="jqmWindow" id="addNewCustom" style="width: 900px; margin-left: -450px">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>

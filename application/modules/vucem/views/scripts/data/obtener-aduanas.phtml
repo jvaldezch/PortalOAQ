@@ -1,0 +1,87 @@
+<div id="modalWindow">
+    <div class="modal-body" style="padding: 0; overflow: hidden">
+        <table class="traffic-table traffic-table-left" style="border: none; border-top-right-radius: 6px; border-top-left-radius: 6px">
+            <thead>
+                <tr>
+                    <th colspan="2" style="border: none; border-top-right-radius: 6px; border-top-left-radius: 6px; height: 30px; vertical-align: middle">Aduana disponibles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($this->aduanas) { ?>
+                    <?php foreach ($this->aduanas as $item) { ?>
+                        <tr>
+                            <td style="text-align: center"><input type="radio" name="aduana" id="no" value="<?= $item["patente"] ?>,<?= $item["aduana"] ?>" style="margin-bottom: 5px" /></td>
+                            <td><?= $item["aduana"] . " " .  $item["ubicacion"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="2">No tiene aduanas asignadas para el RFC seleccionado.</td>
+                    </tr>
+                <?php } ?>
+            </tbody>            
+        </table>
+    </div>
+    <div class="modal-footer" style="padding: 10px 6px 6px;">
+        <a id="closeModal" class="traffic-btn traffic-btn-right" data-dismiss="modal">
+            <i class="fas fa-times"></i>&nbsp;Cerrar
+        </a>
+    </div>
+</div>
+<script>
+    $("input[name='aduana']").click(function () {
+        var Selection = $(this).val();
+        var n = Selection.split(",");
+        $("#Patente").val(n[0]);
+        $("#Aduana").val(n[1]);
+        if ($("#firmante").val() == 'MALL640523749') {
+            $('#tipoFigura').val(1);
+            if (Cookies.get('portalTipoOperacion') !== undefined) {
+                $('#tipoOperacion').val(Cookies.get('portalTipoOperacion'));
+            } else {
+                $('#tipoOperacion').val('TOCE.IMP');
+                Cookies.set('portalTipoOperacion', 'TOCE.IMP', { expires: 7, path: '' });
+            }
+            Cookies.set('portalCoveFigura', 1, { expires: 7, path: '' });
+        }
+        $('#closeModal').trigger('click');
+    });
+    $("#select").click(function () {
+        if ($("input[name='aduana']:checked").val()) {
+            var Selection = $("input[name='aduana']:checked").val();
+            var n = Selection.split(",");
+            $("#Patente").val(n[0]);
+            $("#Aduana").val(n[1]);
+            $('#closeModal').trigger('click');
+        }
+    });
+    $('#tipoFigura option:gt(0)').remove();
+<?php if ($this->tipoFigura == 5 || $this->tipoFigura == 4) { ?>
+        var newOptions = {"-- Seleccionar --": "",
+            "Importador": "5",
+            "Exportador": "4"
+        };
+<?php } ?>
+<?php if ($this->tipoFigura == 1) { ?>
+        var newOptions = {"-- Seleccionar --": "",
+            "Agente Aduanal": "1"
+        };
+<?php } ?>
+<?php if ($this->tipoFigura == 2) { ?>
+        var newOptions = {"-- Seleccionar --": "",
+            "Apoderado Aduanal": "2"
+        };
+<?php } ?>
+<?php if ($this->tipoFigura == 3) { ?>
+        var newOptions = {"-- Seleccionar --": "",
+            "Mandatario": "3"
+        };
+<?php } ?>
+
+    var $el = $("#tipoFigura");
+    $el.empty(); // remove old options
+    $.each(newOptions, function (key, value) {
+        $el.append($("<option></option>")
+                .attr("value", value).text(key));
+    });
+</script>

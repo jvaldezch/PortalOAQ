@@ -1,0 +1,42 @@
+<div class="traffic-clear-5"></div>
+<?php if (!isset($this->error)) { ?>
+    <table class="traffic-table hover" id="table">       
+        <thead>
+            <tr>
+                <th style="width: 40px">&nbsp;</th>
+                <th style="width: 40px">Patente</th>
+                <th style="width: 40px">Aduana</th>
+                <th style="width: 350px">Descripción</th>
+                <th style="width: 120px">Corresponsal</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->data) && !empty($this->data)) { ?>
+                <?php foreach ($this->data as $item) { ?>
+                    <tr>
+                        <td>
+                            <a href="/trafico/index/datos-oficina?id=<?= $item['id'] ?>" style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
+                                <i class="fas fa-folder-open"></i>
+                            </a>
+                        </td>
+                        <td><?= $item["patente"] ?></td>
+                        <td><?= $item["aduana"] ?></td>
+                        <td style="text-align: left">
+                            <a href="/trafico/index/datos-oficina?id=<?= $item['id'] ?>"><?= $item["nombre"] ?></a>
+                        </td>
+                        <td><?= isset($item["tipoAduana"]) ? ($item["corresponsal"] == 0) ? 'NO' : 'SI' : "" ?></td>
+                        <td style="text-align: left"><?= isset($item["tipoAduana"]) ? mb_strtoupper($this->tipoOficina($item["tipoAduana"])) : "" ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <h3 style="margin-left: 5px; line-height: 20px; margin-top: 20px">ERROR 505<br><span style="font-size: 16px"><?= $this->error ?></span></h3>
+<?php } ?>
+<div class="traffic-clear-10"></div>
+<a href="/trafico/index/nueva-oficina" class="traffic-btn traffic-btn-right">
+    <i class="far fa-file-alt"></i> Nueva oficina
+</a>
+<div class="traffic-clear-10"></div>

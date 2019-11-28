@@ -1,0 +1,53 @@
+<?php if (isset($this->paginator)) { ?>
+    <table class="traffic-table traffic-table-left hover">
+        <thead>
+            <tr>
+                <th colspan="10" class="traffic-table-title">CARTAS PORTE</th>
+            </tr>
+            <tr>                
+                <th>Folio</th>
+                <th>Fecha</th>
+                <th>RFC Cliente</th>
+                <th>Nombre</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Placas</th>
+                <th>Mercancia</th>
+                <th>Factura</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->paginator as $item) { ?>
+                <tr>
+                    <td><?= $item['id'] ?></td>
+                    <td><?= date('d/m/Y', strtotime($item['fecha'])) ?></td>
+                    <td><?= $item['rfcCliente'] ?></td>
+                    <td><?= $item['cliente'] ?></td>
+                    <td><?= $item['origen'] ?></td>
+                    <td><?= $item['destino'] ?></td>
+                    <td><?= $item['placas'] ?></td>
+                    <td><?= $item['mercancia'] ?></td>
+                    <td><?= $item['factura'] ?></td>
+                    <td style="width: 50px">
+                        <?php if ($item["facturado"] == null) { ?>
+                            <a href="/administracion/index/editar-carta-porte?folio=<?= $item["id"] ?>">
+                                &nbsp;<i class="fas fa-edit"></i></a>&nbsp;
+                        <?php } ?>
+                        <a href="/automatizacion/index/print-carta-porte?folio=<?= $item["id"] ?>" target="_blank">
+                            &nbsp;<i class="far fa-file-pdf"></i></a>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <a href="/administracion/index/carta-porte" class="traffic-btn" style="float: right;">
+        <i class="far fa-file"></i> Crear carta porte</a>
+    <?= (isset($this->paginator)) ? $this->paginationControl($this->paginator) : null ?>
+    <div class="traffic-clear-10"></div>
+<?php } else { ?>
+    <h4 style="color: #990000">No hubo resultado para la búsqueda realizada.</h4>
+    <a href="/administracion/index/carta-porte" class="btn btn-success btn-small" style="float: right;">
+        <i class="far fa-file"></i> Crear carta porte</a>
+<?php } ?>

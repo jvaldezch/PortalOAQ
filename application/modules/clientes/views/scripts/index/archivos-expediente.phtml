@@ -1,0 +1,81 @@
+<div id="errors" class="alert alert-error" style="display: none;"></div>    
+<form id="form" method="post">
+    <input type="hidden" id="id" name="id" value="<?= $this->id ?>" >
+    <?php if (isset($this->idTrafico)) { ?>
+        <input type="hidden" name="idTrafico" id="idTrafico" value="<?= $this->idTrafico ?>" >
+    <?php } ?>
+    <table class="traffic-table">
+        <tr>
+            <th colspan="7" class="traffic-table-title">EXPEDIENTE DIGITAL</th>
+        </tr>
+        <tr>
+            <th style="width: 60px;">Patente</th>
+            <th style="width: 60px;">Aduana</th>
+            <th style="width: 60px;">Pedimento</th>
+            <th style="width: 120px;">Referencia</th>
+            <th colspan="2">&nbsp;</th>
+        </tr>
+        <tr>
+            <td><?= $this->form->patente ?></td>
+            <td><?= $this->form->aduana ?></td>
+            <td><?= $this->form->pedimento ?></td>
+            <td><?= $this->form->referencia ?></td>
+            <td colspan="2" style="text-align: right">Cantidad de archivos: <?= $this->cantidad ?>&nbsp;</td>
+        </tr>
+    </table>
+</form>
+<table class="traffic-table traffic-table-left hover">            
+    <tr>
+        <th class="traffic-table-subtitle" style="width: 32px;">&nbsp;</th>
+        <th class="traffic-table-subtitle">Archivo</th>
+        <th class="traffic-table-subtitle">Tipo</th>
+        <th class="traffic-table-subtitle" style="width: 75px;">Creado</th>
+    </tr>     
+    <?php if (isset($this->files)) { ?>
+        <?php foreach ($this->files as $k => $item) { ?>
+            <tr class="hover" data-id="<?= $item["id"] ?>">
+                <td style="text-align: center"><?= (file_exists($item["ubicacion"])) ? "" : '<span><strong class="warning" style="color: red">!</strong></span>' ?></td>
+                <td>
+                    <?php if (file_exists($item["ubicacion"])) { ?>
+                        <a class="traffic-a" href="/archivo/get/descargar-archivo?id=<?= $item["id"] ?>"><?= $item["nom_archivo"] ?></a>
+                    <?php } else { ?>
+                        <p><?= $item["nom_archivo"] ?></>
+                        <?php } ?>
+                </td>
+                <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                <td><?= date('Y-m-d', strtotime($item["creado"])) ?>&nbsp;</td>
+            </tr>
+        <?php } ?> 
+    <?php } ?>
+    <?php if (isset($this->complementos) && !empty($this->complementos)) { ?>
+        <?php foreach ($this->complementos as $item) { ?>
+            <tr class="hover" data-id="<?= $item["id"] ?>">
+                <td style="text-align: center">C <?= (file_exists($item["ubicacion"])) ? "" : '<span><strong class="warning" style="color: red">!</strong></span>' ?></td>
+                <td>
+                    <?php if (file_exists($item["ubicacion"])) { ?>
+                        <a class="traffic-a" href="/archivo/get/descargar-archivo?id=<?= $item["id"] ?>"><?= $item["nom_archivo"] ?></a>
+                    <?php } else { ?>
+                        <p><?= $item["nom_archivo"] ?></>
+                        <?php } ?>
+                </td>
+                <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                <td><?= date('Y-m-d', strtotime($item["creado"])) ?>&nbsp;</td>
+            </tr>         
+        <?php } ?>
+    <?php } ?>
+</table>
+<div class="traffic-clear-5"></div>
+<?php if(!isset($this->downloadZip)) { ?>
+    <a href="/clientes/data/descargar?id=<?= $this->id ?>" class="traffic-btn traffic-btn-right">
+        <i class="fas fa-cloud-download-alt"></i> Descargar
+    </a>
+<?php } else { ?>
+    <span style="color: red; padding-left: 10px; font-size: 11px"><?= $this->downloadZip["message"] . " " . $this->downloadZip["size"] ?></span>
+    <a id="ftpLink" data-id="<?= $this->id ?>" class="traffic-btn-back traffic-btn-right">LINK FTP</a>
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<div id="photos" style="clear: both"></div>
+<div class="traffic-clear-5"></div>
+<a href="/clientes/index/expediente" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>

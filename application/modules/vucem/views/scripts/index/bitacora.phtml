@@ -1,0 +1,46 @@
+
+<div class="traffic-clear-10"></div>
+<table cellpadding="0" cellspacing="0" border="0" class="traffic-table hover" id="example">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Sello</th>
+            <th>Tráfico</th>
+            <th>Num. Factura</th>
+            <th>Nom. Archivo</th>
+            <th>T. Docto.</th>
+            <!--<th>instruccion</th>-->
+            <th>Num. Ope.</th>
+            <th>edocument</th>
+            <th>enviar</th>
+            <th>error</th>
+            <th>enviado</th>
+            <th>respuesta</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->result)) { ?>
+            <?php foreach ($this->result as $item) { ?>
+                <tr id="row_<?= $item["id"] ?>">
+                    <td><?= $item["id"] ?></td>
+                    <td><?= ($item["selloPatente"] !== null) ? $item["selloPatente"] : $item['selloRfc'] ?></td>
+                    <td>
+                        <a href="/trafico/index/editar-trafico?id=<?= $item["idTrafico"] ?>" target="_blank"><?= $item["aduana"] . '-' . $item["patente"] . '-' . $item["pedimento"] ?></a>
+                    </td>
+                    <td><?= $item["numFactura"] ?></td>
+                    <td style="text-align: left"><?= $item["nombreArchivo"] ?></td>
+                    <td><?= $item["tipoDocumento"] ?></td>
+                    <!--<td><?= $item["instruccion"] ?></td>-->
+                    <td><?= $item["numeroOperacion"] ?></td>
+                    <td><?= $item["edocument"] ?></td>
+                    <td><?= ($item["enviar"] == 1) ? '<i class="fas fa-check"></i>' : '' ?></td>
+                    <td><?= ($item["error"] == 1) ? '<i class="fas fa-check"></i>' : '' ?></td>
+                    <td><?= $item["enviado"] ?></td>
+                    <td><?= $item["respuesta"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding", "pagination.phtml", array("function" => $this->funcion, "busqueda" => $this->busqueda)) : null ?>
+<div class="traffic-clear-5"></div>

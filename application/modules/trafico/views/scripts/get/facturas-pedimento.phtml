@@ -1,0 +1,75 @@
+<style>
+    .rTable {
+        display: table;
+        width: 100%;
+        font-size: 12px;
+    }
+    .rTableRow {
+        display: table-row;
+        vertical-align: top;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #f4f4f4;
+    }
+    .rTableCell, .rTableHead {
+        display: table-cell;
+        padding: 2px 2px;
+        border: 1px solid #f4f4f4;
+        vertical-align: text-top;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+    .rTableFoot {
+        display: table-footer-group;
+        font-weight: bold;
+        background-color: #f4f4f4;
+    }
+    .rTableBody {
+        display: table-row-group;
+    }
+    .message {
+
+    }
+</style>
+<div style="height: 350px; overflow: auto">
+    <div class="rTable">
+        <div class="rTableRow">
+            <div class="rTableHead" style="width: 24px">
+                <input type="checkbox" id="allInvoices" />
+            </div>
+            <div class="rTableHead"><strong>PROV:</strong></div>
+            <div class="rTableHead"><strong>FACTURA:</strong></div>
+            <div class="rTableHead"><strong>COVE:</strong></div>
+            <div class="rTableHead"><strong>FECHA:</strong></div>
+        </div>
+        <?php if (isset($this->arr)) { ?>
+            <?php foreach ($this->arr as $item) { ?>
+                <div class="rTableRow">
+                    <div class="rTableCell">
+                        <input type="checkbox" class="invoice" data-factura="<?= $item["numFactura"] ?>" />
+                    </div>
+                    <div class="rTableCell" style="width: 75px"><?= $item["cveProveedor"] ?></div>
+                    <div class="rTableCell"><?= $item["numFactura"] ?></div>
+                    <div class="rTableCell" style="width: 110px"><?= $item["cove"] ?></div>
+                    <div class="rTableCell" style="width: 75px"><?= $item["fechaFactura"] ?></div>
+                </div>
+            <?php } ?>
+        <?php } ?>
+    </div>
+</div>
+<script type="text/javascript">
+    
+    $(document.body).on("click", "#allInvoices", function () {
+        var checkboxes = $("input[class=invoice]");
+        if ($(this).is(':checked')) {
+            checkboxes.prop("checked", true);
+        } else {
+            checkboxes.prop("checked", false);
+        }
+    });
+    
+</script>

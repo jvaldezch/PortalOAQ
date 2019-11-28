@@ -1,0 +1,30 @@
+<style>
+    div.soia {
+        
+    }
+    div.soia p,
+    div.soia p a,
+    div.soia table,
+    div.soia table td,
+    div.soia table th {
+        font-size: 11px
+    }
+    div.soia table {
+        border-collapse: collapse;
+    }
+    div.soia table tbody tr td > table {
+        width: 100%;        
+    }
+    div.soia table tbody tr td > table td,
+    div.soia table tbody tr td > table th {
+        border: 1px #999 solid;
+    }
+</style>
+<div class="soia">    
+    <?php if(isset($this->contenido)) { ?>
+        <?= $this->contenido ?>
+    <?php } ?>
+    <br>
+    <p>El contenido aqui mostrado es resultado de consulta de la siguiente URL en SOIA:</p>
+    <a href="<?= $this->uri ?>" target="_blank"><?= $this->uri ?></a>
+</div>

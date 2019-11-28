@@ -1,0 +1,64 @@
+<div style="clear: both"></div>
+<form method="post" id="form">
+    <?= $this->form->id ?>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="text-align: right; width: 150px"><label for="nombre">Nombre del usuario:</label></th>
+            <td><?= $this->form->nombre ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="email">Email:</label></th>
+            <td><?= $this->form->email ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="usuario">Usuario:</label></th>
+            <td><?= $this->form->usuario ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="empresa">Empresa:</label></th>
+            <td><?= $this->form->empresa ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="patente">Patente:</label></th>
+            <td><?= $this->form->patente ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="aduana">Aduana:</label></th>
+            <td><?= $this->form->aduana ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="rol">rol:</label></th>
+            <td><?= $this->form->rol ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="departamento">departamento:</label></th>
+            <td><?= $this->form->departamento ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="password">password:</label></th>
+            <td><?= $this->form->password ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="rptPassword">Repetir password:</label></th>
+            <td><?= $this->form->rptPassword ?></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" id="submit" class="traffic-btn-save traffic-btn-right">Guardar</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<div style="height: 10px"></div>
+<!--<div class="modal hide fade" id="myModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Contraseña actualizada</h3>
+    </div>
+    <div class="modal-body">
+        <p>Un email ha sido enviado a <b><?= $this->email ?></b> con su nueva contraseña.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" onclick="closeModal();">OK</a>
+    </div>
+</div>-->

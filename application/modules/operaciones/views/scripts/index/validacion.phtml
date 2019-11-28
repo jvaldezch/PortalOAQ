@@ -1,0 +1,88 @@
+<h4>VALIDACIÓN</h4>
+<form id="form-validation" method="post" action="<?= $this->baseUrl() ?>/operaciones/data/get-directory">
+    <table style="width: 100%;">
+        <tr>
+            <th>PATENTE:</th>
+            <th>ADUANA:</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td><?= $this->form->patente ?></td>
+            <td><div id="divcustoms"><?= $this->form->aduana ?></div></td>
+            <td>
+                <div class="control-group" style="float:right;">
+                    <button id="load-files" tabindex="5" class="btn btn-primary btn-small" style="font-size:11px; padding: 1px 3px; margin-right: 2px;">Cargar archivos</button>
+                </div>
+            </td>
+        </tr>
+    </table> 
+</form>
+<table style="width: 100%;">
+    <thead>
+        <tr>
+            <th>Archivos M3</th>
+            <th>Archivos de repuesta</th>
+            <th>Archivos de validación</th>
+            <th>Archivos para pago</th>
+            <th>Archivos de pago</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div id="files-m">
+                    <select size="10" disabled="disabled" id="archivo-m" name="archivo-m">
+                        <option>---</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div id="files-k">
+                    <select size="10" disabled="disabled" id="archivo-k" name="archivo-k">
+                        <option>---</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div id="files-r">
+                    <select size="10" disabled="disabled" id="archivo-r" name="archivo-r">
+                        <option>---</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div id="files-e">
+                    <select size="10" disabled="disabled" id="archivo-e" name="archivo-e">
+                        <option>---</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div id="files-p">
+                    <select size="10" disabled="disabled" id="archivo-p" name="archivo-p">
+                        <option>---</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="control-group" style="float:right; width: 110px;">
+                    <button id="send-file" tabindex="5" class="btn btn-success btn-small" style="font-size:11px; padding: 1px 3px; margin-right: 2px;">Validar archivo M3</button>
+                </div><br>
+                <div class="control-group" style="float:right; margin-top: 10px; width: 110px;">
+                    <button id="send-paid" tabindex="5" class="btn btn-danger btn-small" style="font-size:11px; padding: 1px 3px; margin-right: 2px;">Pago de pedimento</button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><select size="5" id="content-m" readonly="true" style="width: 220px; height: 150px;"></select></td>
+            <td><select size="5" id="content-k" readonly="true" style="width: 220px; height: 150px;"></select></td>
+            <td><select size="5" id="content-r" readonly="true" style="width: 220px; height: 150px;"></select></td>
+            <td><select size="5" id="content-e" readonly="true" style="width: 220px; height: 150px;"></select></td>
+            <td><select size="5" id="content-p" readonly="true" style="width: 220px; height: 150px;"></select></td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+<h4>Contenido del archivo</h4>
+<textarea id="validacion-respuesta" style="width: 100%; height: 250px;"></textarea>

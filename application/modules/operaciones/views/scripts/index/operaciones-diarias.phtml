@@ -1,0 +1,220 @@
+<?= $this->form ?>
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <th colspan="3" style="font-size:18px; text-align: center">PEDIMENTOS PAGADOS POR CLIENTES</th>
+    </tr>
+    <tr>
+        <td>
+            <?php if(isset($this->qrocli)) { ?>
+            <table>
+                <tr>
+                    <th colspan="2">QUERETARO</th>
+                </tr>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php 
+                $tot = 0;
+                foreach($this->qrocli as $item) { ?>
+                <tr>
+                    <td><?= $item["NomCliente"] ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php $tot += $item["TotalPagados"]; } ?>
+                <tr>
+                    <td><strong>TOTAL</strong></td>
+                    <td><?= $tot ?></td>
+                </tr>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+        <td>
+            <?php if(isset($this->aerocli)) { ?>
+            <table>
+                <tr>
+                    <th colspan="2">AEROPUERTO</th>
+                </tr>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php 
+                $tot = 0;
+                foreach($this->aerocli as $item) { ?>
+                <tr>
+                    <td><?= $item["NomCliente"] ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php $tot += $item["TotalPagados"]; } ?>
+                <tr>
+                    <td><strong>TOTAL</strong></td>
+                    <td><?= $tot ?></td>
+                </tr>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+        <td>
+            <?php if(isset($this->nlcli)) { ?>
+            <table>
+                <tr>
+                    <th colspan="2">NUEVO LAREDO</th>
+                </tr>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php 
+                $tot = 0;
+                foreach($this->nlcli as $item) { ?>
+                <tr>
+                    <td><?= $item["NomCliente"] ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php $tot += $item["TotalPagados"]; } ?>
+                <tr>
+                    <td><strong>TOTAL</strong></td>
+                    <td><?= $tot ?></td>
+                </tr>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php if(isset($this->qroie)) { ?>
+            <table>
+                <tr>
+                    <th>I/E</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php foreach($this->qroie as $item) { ?>
+                <tr>
+                    <td><?= ($item["ImpExp"] == '1') ? 'Importaciones' : 'Exportaciones' ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php } ?>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+        <td>
+            <?php if(isset($this->aeroie)) { ?>
+            <table>
+                <tr>
+                    <th>I/E</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php foreach($this->aeroie as $item) { ?>
+                <tr>
+                    <td><?= ($item["ImpExp"] == '1') ? 'Importaciones' : 'Exportaciones' ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php } ?>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+        <td>
+            <?php if(isset($this->nlie)) { ?>
+            <table>
+                <tr>
+                    <th>I/E</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php foreach($this->nlie as $item) { ?>
+                <tr>
+                    <td><?= ($item["ImpExp"] == '1') ? 'Importaciones' : 'Exportaciones' ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php } ?>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+    </tr>
+</table>
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <td style="width: 420px; background-color: #fff">
+            <div id="container-qro" style="max-width: 510px; height: 300px; margin: 0"></div>
+            <div id="container-aero" style="max-width: 510px; height: 300px; margin: 0"></div>
+            <div id="container-nl" style="max-width: 510px; height: 300px; margin: 0"></div>
+        </td>
+        <td style="width: 420px; background-color: #fff">
+            <div id="container-users-qro" style="max-width: 410px; height: 300px; margin: 0"></div>
+            <div id="container-users-aero" style="max-width: 410px; height: 300px; margin: 0"></div>
+            <div id="container-users-nl" style="max-width: 410px; height: 300px; margin: 0"></div>
+        </td>
+    </tr>
+</table>
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <th colspan="3" style="font-size:18px; text-align: center">PEDIMENTOS PAGADOS POR USUARIOS</th>
+    </tr>
+    <tr>
+        <td>
+            <?php if(isset($this->qro)) { ?>
+            <table>
+                <tr>
+                    <th colspan="2">QUERETARO</th>
+                </tr>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php foreach($this->qro as $item) { ?>
+                <tr>
+                    <td><?= $item["Usuario"] ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php } ?>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+        <td>
+            <?php if(isset($this->aero)) { ?>
+            <table>
+                <tr>
+                    <th colspan="2">AEROPUERTO</th>
+                </tr>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php foreach($this->aero as $item) { ?>
+                <tr>
+                    <td><?= $item["Usuario"] ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php } ?>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+        <td>
+            <?php if(isset($this->nl)) { ?>
+            <table>
+                <tr>
+                    <th colspan="2">NUEVO LAREDO</th>
+                </tr>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Pedimentos Pagados</th>
+                </tr>
+                <?php foreach($this->nl as $item) { ?>
+                <tr>
+                    <td><?= ($item["Usuario"] == 1) ? 'GMEJIA' : $item["Usuario"] ?></td>
+                    <td><?= $item["TotalPagados"] ?></td>
+                </tr>
+                <?php } ?>
+            </table>
+            <?php } else { ?>
+            <?php } ?>
+        </td>
+    </tr>    
+</table>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 10px;
+            font-family: sans-serif;
+        }
+        table {
+            border-collapse:collapse;
+        }
+        table th,
+        table td {
+            border: 1px #ddd solid;
+        }
+    </style>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Exportación</th>
+                    <th>TipoCambio</th>
+                    <th>CvePed</th>
+                    <th>Regimen</th>
+                    <th>FechaPed</th>
+                    <th>NumFactura</th>
+                    <th>Proveedor</th>
+                    <th>FechaFactura</th>
+                    <th>FactorMoneda</th>
+                    <th>NumParte</th>
+                    <th>Descripcion</th>
+                    <th>TipoOp</th>
+                    <th>Fraccion</th>
+                    <th>Tasa</th>
+                    <th>TipoTasa</th>
+                    <th>Unidad</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Conversion</th>
+                    <th>Origen</th>
+                    <th>Vendedor</th>
+                    <th>NotaInterna</th>
+                    <th>Incoterm</th>
+                    <th>Cove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->pedimentos as $item) { ?>
+                <tr>
+                    <td><?= $item["Exportacion"] ?></td>
+                    <td><?= $item["TipoCambio"] ?></td>
+                    <td><?= $item["CvePed"] ?></td>
+                    <td><?= $item["Regimen"] ?></td>
+                    <td><?= $item["FechaPed"] ?></td>
+                    <td><?= $item["NumFactura"] ?></td>
+                    <td><?= $item["Proveedor"] ?></td>
+                    <td><?= $item["FechaFactura"] ?></td>
+                    <td><?= ($item["FactorMoneda"] != '0') ? $item["FactorMoneda"] : '1' ?></td>
+                    <td><?= $item["NumParte"] ?></td>
+                    <td><?= $item["Descripcion"] ?></td>
+                    <td><?= $item["TipoOp"] ?></td>
+                    <td><?= $item["Fraccion"] ?></td>
+                    <td><?= $item["Tasa"] ?></td>
+                    <td><?= ($item["TipoTasa"] == '') ? 'TG' : $item["TipoTasa"] ?></td>
+                    <td><?= $item["Unidad"] ?></td>
+                    <td><?= $item["Precio"] ?></td>
+                    <td><?= $item["Cantidad"] ?></td>
+                    <td><?= ($item["Conversion"] == '') ? '1' : $item["Conversion"] ?></td>
+                    <td><?= $item["Origen"] ?></td>
+                    <td><?= $item["Vendedor"] ?></td>
+                    <td><?= $item["NotaInterna"] ?></td>
+                    <td><?= $item["Incoterm"] ?></td>
+                    <td><?= $item["Cove"] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </body>
+</html>

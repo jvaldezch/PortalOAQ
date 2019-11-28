@@ -1,0 +1,32 @@
+<table class="traffic-table">    
+    <tr>
+        <th>Num. Cuenta</th>
+        <th>Orden</th>
+        <th>Concepto</th>
+        <th>Concepto (a mostrar)</th>
+        <th>Tipo</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php if (isset($this->data) && !empty($this->data)) { ?>
+        <?php foreach ($this->data as $item) { ?>
+            <tr>
+                <td><?= $item["idCuenta"] ?></td>
+                <td>
+                    <div class="traffic-icon traffic-icon-iplus" onclick="cambiarOrden(<?= $item["idConcepto"] ?>, <?= $item["orden"] ?>, 'decrease');"></div>
+                    <span style="float: left"><?= $item["orden"] ?></span>
+                    <div class="traffic-icon traffic-icon-iminus" onclick="cambiarOrden(<?= $item["idConcepto"] ?>, <?= $item["orden"] ?>, 'increase');"></div>
+                </td>
+                <td style="text-align: left"><?= $item["nomContable"] ?></td>
+                <td style="text-align: left"><?= $item["concepto"] ?></td>
+                <td style="text-align: left"><?= $item["tipoConcepto"] ?></td>
+                <td style="width: 28px">
+                    <i class="far fa-trash-alt" onclick="removerConcepto(<?= $this->id ?>, <?= $item['idConcepto'] ?>);" style="font-size: 1.4em; color: #2f3b58"></i>
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="6"><em>No tiene conceptos asignadas.</em></td>
+        </tr>
+    <?php } ?>
+</table>

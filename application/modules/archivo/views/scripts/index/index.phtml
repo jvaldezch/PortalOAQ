@@ -1,0 +1,147 @@
+<form method="get" action="<?= $this->url ?>?referencia=<?= $this->referencia ?>">
+    <table class="traffic-table">
+        <tr>
+            <th colspan="8" class="traffic-table-title">EXPEDIENTE DIGITAL</th>
+        </tr>
+        <tr>
+            <th>Patente</th>
+            <th>Aduana</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th>RFC Cliente</th>
+            <th>Fecha inicio</th>
+            <th>Fecha fin</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td style="width: 70px">
+                <?= $this->form->patente ?>
+            </td>
+            <td style="width: 70px">
+                <?= $this->form->aduana ?>
+            </td>
+            <td style="width: 120px">
+                <?= $this->form->pedimento ?>
+            </td>
+            <td style="width: 120px">
+                <?= $this->form->referencia ?>
+            </td>
+            <td style="width: 120px">
+                <?= $this->form->rfcCliente ?>
+            </td>
+            <td>
+                <input type="text" name="fecha-inicio" id="fecha-inicio" class="traffic-date-input" value="<?= $this->fecha_inicio ?>" style="text-align: center" >
+            </td>
+            <td>
+                <input type="text" name="fecha-fin" id="fecha-fin" class="traffic-date-input" value="<?= $this->fecha_fin ?>" style="text-align: center" >
+            </td>
+            <td>
+                <a href="/archivo/index/index" class="traffic-btn traffic-btn-right">
+                    <i class="fas fa-broom"></i> Limpiar
+                </a>
+                &nbsp;
+                <?php if (!isset($this->disableUpload)) { ?>
+                    <a href="/archivo/index/nuevo-repositorio" class="traffic-btn traffic-btn-right">
+                        <i class="fas fa-file"></i> Crear referencia
+                    </a>&nbsp;
+                <?php } ?>
+                <button class="traffic-btn traffic-btn-right" value="Buscar" type="submit" id="submit" name="submit">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Expediente completo</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-orange"></div><span>Revisado operación</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>Revisado administración</span>
+    </div>
+</div>
+<div class="traffic-radio-block" style="padding-left: 10px; padding-bottom: 5px; float: left; display: table-cell">
+    <div class="traffic-radio-input" style="float: left; margin-right: 5px">
+        <input type="radio" name="filter[]" value="0">&nbsp;<p>Sin filtro</p>
+    </div>
+    <div class="traffic-radio-input" style="float: left; margin-right: 5px">
+        <input type="radio" name="filter[]" value="1">&nbsp;<p>Completos</p>
+    </div>
+    <div class="traffic-radio-input" style="float: left; margin-right: 5px">
+        <input type="radio" name="filter[]" value="2">&nbsp;<p>Rev. operación</p>
+    </div>
+    <div class="traffic-radio-input" style="float: left">
+        <input type="radio" name="filter[]" value="3">&nbsp;<p>Rev. administración</p>
+    </div>
+    <div class="traffic-radio-input" style="float: left">
+        <input type="radio" name="filter[]" value="4">&nbsp;<p>Rev. no completos</p>
+    </div>
+</div>
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <tr>
+            <th style="width: 35px; text-align: center">&nbsp;</th>
+            <th style="width: 24px; text-align: left">&nbsp;</th>
+            <th style="width: 130px;">Pedimento</th>
+            <th style="width: 120px;">Referencia</th>
+            <th style="width: 110px;">RFC</th>
+            <th style="width: 320px;">Cliente</th>
+            <th style="width: 220px;">Creado</th>
+            <th style="text-align: left">Última modificación</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator) && $this->paginator->getPages()->pageCount != 0) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <?php if (isset($item["referencia"])) { ?>
+                    <tr class="hover">
+                        <td style="text-align: center">
+                            <?php if(isset($item["completo"]) && $item["completo"] == 1) { ?>
+                                <div class="semaphore-green"></div>
+                            <?php } else { ?>
+                                <?php if(isset($item["revisionOperaciones"]) && $item["revisionOperaciones"] !== null) { ?>
+                                    <div class="semaphore-orange"></div>
+                                <?php } ?>
+                                <?php if(isset($item["revisionAdministracion"]) && $item["revisionAdministracion"] !== null) { ?>
+                                    <div class="semaphore-blue"></div>
+                                <?php } ?>
+                            <?php } ?>
+                        </td>
+                        <td style="text-align: center">
+                            <a href="/archivo/index/expediente?id=<?= $item["id"] ?>">
+                                <i class="fas fa-folder-open" style="font-size: 1.3em; color: #2f3b58"></i>
+                            </a>
+                        </td>
+                        <td style="text-align: center"><?= $item["aduana"] . '-' . $item["patente"] . '-' . $item["pedimento"] ?></td>
+                        <td style="text-align: center">
+                            <a href="/archivo/index/expediente?id=<?= $item["id"] ?>"><?= strtoupper($item['referencia']) ?></a>
+                        </td>
+                        <td style="text-align: left"><?= $item["rfcCliente"] ?></td>
+                        <td style="text-align: left"><?= $item["nombreCliente"] ?></td>
+                        <td style="text-align: left">
+                            <?= isset($item["creado"]) ? date("d/m/Y", strtotime($item["creado"])) . ", " . strtoupper($item["creadoPor"]) : "" ?>
+                        </td>
+                        <td style="text-align: left">
+                            <?= isset($item["modificado"]) ? date("d/m/Y h:i a", strtotime($item["modificado"])) . ", " . strtoupper($item["modificadoPor"]) : "" ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="10" style="text-align: center">
+                    <?php if (isset($this->error)) { ?>
+                        <em><?= $this->error ?></em>
+                    <?php } else { ?>
+                        <em>No hay registros en la base de datos o su usuario no tiene aduanas asignadas.</em>
+                    <?php } ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator) : null ?>
+<div class="traffic-clear-10"></div>

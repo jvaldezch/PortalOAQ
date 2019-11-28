@@ -1,0 +1,230 @@
+<div style="overflow-y: scroll; max-height: 550px">
+    <form id="formChecklist" enctype="application/x-www-form-urlencoded">
+        <?php if(isset($this->idTrafico)) { ?>
+            <input type="hidden" value="<?= $this->idTrafico ?>" name="idTrafico" />
+        <?php } ?>
+        <input type="hidden" value="<?= $this->patente ?>" name="patente" />
+        <input type="hidden" value="<?= $this->aduana ?>" name="aduana" />
+        <input type="hidden" value="<?= $this->pedimento ?>" name="pedimento" />
+        <input type="hidden" value="<?= $this->referencia ?>" name="referencia" />
+        <table class="traffic-table traffic-table-left">
+            <tr>
+                <th colspan="5" style="text-align: center; text-transform: uppercase; font-size: 14px">Checklist integración de expediente digital</th>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>REFERENCIA:</strong>&nbsp;<?= $this->referencia ?></td>
+                <td colspan="2"><strong>PEDIMENTO:</strong>&nbsp;<?= $this->pedimento ?></td>
+            </tr>
+            <?php if (isset($this->preguntas)) { ?>
+                <?php
+                $i = 1;
+                $title = '';
+                foreach ($this->preguntas as $item) {
+                    ?>
+                    <?php
+                    if ($title != $item["tipo"]) {
+                        $title = $item["tipo"];
+                        ?>
+                        <tr>
+                            <th colspan="2" class="traffic-tablae-subtitle"><?= $item["tipo"] ?></th>
+                            <th>Si</th>
+                            <th>N/A</th>
+                        </tr>
+                    <?php } ?>
+                    <tr>
+                        <td><?= $i++ ?></td>
+                        <td><?= $item["documento"] ?></td>
+                        <td style="text-align: center; width: 40px">
+                            <input type="radio" value="1" name="<?= $item["nombre"] ?>">
+                        </td>
+                        <td style="text-align: center; width: 40px">
+                            <input type="radio" value="0" name="<?= $item["nombre"] ?>">
+                        </td>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <td colspan="5">
+                        Observaciones:<br>
+                        <textarea name="observaciones" id="observaciones" class="traffic-textarea-large"><?= isset($this->observaciones) ? $this->observaciones : "" ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="traffic-tablae-subtitle">&nbsp;</th>
+                    <th>Si</th>
+                    <th>No</th>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right">
+                        <strong>Expediente completo:&nbsp;</strong>
+                    </td>
+                    <td style="text-align: center" colspan="2">
+                        <div style="display: block; float: left; width: 63px">
+                            <?php if(isset($this->admin)) { ?>
+                                <input type="radio" value="1" name="completo" <?= isset($this->completo) && $this->completo == "1" ? "checked=\"checked\"" : "" ?>>
+                            <?php } elseif(isset($this->operacion)) { ?>
+                                <input type="radio" value="1" name="revisionOperaciones" <?= isset($this->revOp) && $this->revOp == "1" ? "checked=\"checked\"" : "" ?>>
+                            <?php } elseif(isset($this->administracion)) { ?>
+                                <input type="radio" value="1" name="revisionAdministracion" <?= isset($this->revAdm) && $this->revAdm == "1" ? "checked=\"checked\"" : "" ?>>
+                            <?php } ?>
+                        </div>
+                        <div style="display: block; float: left; width: 63px">
+                            <?php if(isset($this->admin)) { ?>
+                                <input type="radio" value="0" name="completo" <?= isset($this->completo) && $this->completo == "0" ? "checked=\"checked\"" : "" ?>>
+                            <?php } elseif(isset($this->operacion)) { ?>
+                                <input type="radio" value="0" name="revisionOperaciones" <?= isset($this->revOp) && $this->revOp == "0" ? "checked=\"checked\"" : "" ?>>
+                            <?php } elseif(isset($this->administracion)) { ?>
+                                <input type="radio" value="0" name="revisionAdministracion" <?= isset($this->revAdm) && $this->revAdm == "0" ? "checked=\"checked\"" : "" ?>>
+                            <?php } ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="3">No existe checklist para esta aduana.</td>
+                </tr>
+            <?php } ?>
+        </table>
+    </form>
+</div>
+<div class="traffic-clear-10"></div>
+<a id="saveChecklist" class="traffic-btn-success traffic-btn-right"style="min-width: 55px !important">Guardar</a>
+<a href="/archivo/data/imprimir-checklist?patente=<?= $this->patente ?>&aduana=<?= $this->aduana ?>&referencia=<?= $this->referencia ?>&download=false" target="_blank" class="traffic-btn-add traffic-btn-right"style="min-width: 55px !important">Imprimir</a>
+<a onclick="javascript:llenarChecklist();" class="traffic-btn-primary traffic-btn-right" style="min-width: 35px !important">AUTO</a>
+<a id="closeModal" class="traffic-btn-close" style="min-width: 35px !important">Cerrar</a>
+<script>
+
+<?php foreach ($this->preguntas as $item) { ?>
+        $(document).on("change", "input:radio[name='<?= $item["nombre"] ?>']", function () {
+            $("input:radio[name='<?= $item["nombre"] ?>']").removeAttr("checked");
+            $("input:radio[name='<?= $item["nombre"] ?>']").filter("[value='" + $(this).val() + "']").attr("checked", true).
+                    prop("checked", true);
+        });
+<?php } ?>
+
+<?php if (isset($this->data)) { ?>
+        var checklist = JSON.parse('[<?= json_encode($this->data) ?>]');
+        $.each(checklist[0], function (key, value) {
+            $("input:radio[name='" + key + "']").filter("[value='" + value + "']").attr("checked", true);
+        });
+<?php } ?>
+    
+<?php 
+$arrg = array(
+    array("name" => "pedimentos", "ids" => array(1, 23, 24, 32)),
+    array("name" => "gastos", "ids" => array(2)),
+    array("name" => "factura", "ids" => array(3, 34, 170)),
+    array("name" => "cartai", "ids" => array(4)),
+    array("name" => "cartas", "ids" => array(55, 192)),
+    array("name" => "cartase", "ids" => array(18, 5, 436)),
+    array("name" => "covese", "ids" => array(6, 7, 8, 36, 171, 172, 176, 184, 185, 189, 420)),
+    array("name" => "manif", "ids" => array(10, 11)),
+    array("name" => "bill", "ids" => array(12, 38, 438)),
+    array("name" => "certi", "ids" => array(14, 35)),
+    array("name" => "coves", "ids" => array(21, 22)),
+    array("name" => "pedimentosim", "ids" => array(31, 33)),
+    array("name" => "otros", "ids" => array(25, 37, 442)),
+    array("name" => "serviex", "ids" => array(58)),
+    array("name" => "mani", "ids" => array(42, 40)),
+    array("name" => "gastosamericana", "ids" => array(59)),
+    array("name" => "gastoscorresponsal", "ids" => array(29, 30)),
+);
+?>
+    
+<?php if (isset($this->tipos)) { ?>
+    
+        Array.prototype.contains = function(obj) {
+            var i = this.length;
+            while (i--) {
+                if (this[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        
+        var tipos = JSON.parse('[<?= json_encode($this->tipos) ?>]');
+        function llenarChecklist() {
+            var arr = tipos[0];
+            $.each(arr, function (key, value) {
+                <?php foreach ($arrg as $item) { ?>
+                    if([<?= implode(",", $item["ids"]) ?>].contains(parseInt(key))) {
+                        $("input:radio[name='<?= $item["name"] ?>']").filter("[value='1']").attr("checked", true);
+                    } else if(!$("input:radio[name='<?= $item["name"] ?>']").filter("[value='1']").is(":checked")) {
+                        $("input:radio[name='<?= $item["name"] ?>']").filter("[value='0']").attr("checked", true);
+                    }
+                <?php } ?>
+            });
+        }      
+<?php } ?>
+
+    $(document.body).on("click", "#autoChecklist", function (ev) {
+        llenarChecklist();
+    });
+    
+    $(document.body).on("click", "#closeModal", function (ev) {
+        ev.preventDefault();
+        $("#autoChecklist").unbind();
+        $("#checklistModal").html('Please wait... <img src="/images/loader.gif" alt="loading" />');
+        $("#checklistModal").jqmHide();
+    });
+    
+    var not = "input:radio[name='completo'],input:radio[name='revisionOperaciones'],input:radio[name='revisionAdministracion']";
+    var radios = $("input:radio").not(not).filter("[value='1']").length;
+    var checked = 0;
+    
+    $(document.body).on("click", "input:radio", function (ev) {
+        checked = $("input:radio:checked").not(not).length;        
+    });
+    
+    $(document.body).on("mousedown", not, function (ev) {
+        ev.preventDefault();
+        var val = $(this).val();
+        if(parseInt(val) === 1) {
+            if(radios === checked) {
+                $(this).attr("checked", true);
+            } else {
+                alert("Debe seleccionar todos los elementos del cuestionario.");
+            }
+        } else {
+            $(this).attr("checked", true);
+        }
+    });
+    
+    $(document.body).on("click", "#saveChecklist", function (ev) {
+        ev.preventDefault();
+        $("#complete").show();
+        $(this).addClass("traffic-btn-disabled")
+                .removeClass("traffic-btn-success");
+        $("#formChecklist").ajaxSubmit({
+            url: "/archivo/ajax/guardar-checklist",
+            type: "post",
+            dataType: "json",
+            success: function (res) {
+                if (res.success === true) {
+                    $('#checklistModal').jqmHide();
+                }
+            }
+        });
+    });
+
+    $("input[name='completo']").click(function () {
+        if ($(this).val() === 1) {
+        }
+    });
+
+    $("#autoChecklist").qtip({
+        content: {
+            text: "Llena de forma automática el checklist."
+        }
+    });
+
+    $(document.body).on("input", "#observaciones", function () {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+
+</script>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>IMAP Emails</title>
+        <meta name="author" content="SitePoint">
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+            }
+            table {                
+                border-collapse: collapse;
+            }
+            table * {
+                margin: 0;
+                padding: 0;                
+            }
+            table td,            
+            table th {
+                vertical-align: top;
+                font-size: 11px;
+                padding: 2px 1px;
+                border: 1px #888 solid;
+            }
+        </style>
+    </head>
+    <body>
+        <?php if (isset($this->folders)) { ?>
+            <table>
+                <tr>
+                    <th>Folder:</th>
+                </tr>
+                <?php foreach ($this->folders as $key => $value) { ?>
+                    <tr>
+                        <td><?= $value ?></td>
+                    </tr>  
+                <?php } ?>
+            </table>
+        <?php } ?>
+        <?php if (isset($this->emails)) { ?>
+            <table>
+                <tr>
+                    <th>Uid</th>
+                    <th>Id</th>
+                    <th>Fecha</th>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Archivo</th>
+                    <th>Guia</th>
+                    <th>UUID</th>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Cliente</th>
+                    <th>Emisor</th>
+                    <th>Receptor</th>
+                </tr>
+                <?php foreach ($this->emails as $key => $value) { ?>
+                    <?php if(isset($value["xml"]) && !empty($value["xml"])) { ?>
+                        <?php foreach ($value["xml"] as $attach) { ?>
+                            <tr>
+                                <td><?= $value["uid"] ?></td>
+                                <td><?= $value["id"] ?></td>
+                                <td><?= date('d/m/Y H:i a', strtotime($value["fecha"])) ?></td>
+                                <td><?= $value["from"] ?></td>
+                                <td><?= html_entity_decode($value["subject"]) ?></td>
+                                <td><?= $attach["archivo"] ?></td>
+                                <td><?= $attach["guia"] ?></td>
+                                <td><?= $attach["uuid"] ?></td>
+                                <td><?= $attach["pedimento"] ?></td>
+                                <td><?= $attach["referencia"] ?></td>
+                                <td><?= $attach["rfcCliente"] ?></td>
+                                <td><?= $attach["emisor"] ?></td>
+                                <td><?= $attach["receptor"] ?></td>
+                            </tr>
+                        <?php } ?>                            
+                    <?php } ?>
+                <?php } ?>
+            </table>
+        <?php } ?>
+    </body>
+</html>

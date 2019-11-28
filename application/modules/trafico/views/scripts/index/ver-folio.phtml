@@ -1,0 +1,133 @@
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Folio</th>
+            <th>Fecha Fact.</th>
+            <th>Fecha Pago</th>
+            <th>Patente</th>
+            <th>Aduana</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th>Referencia Fact.</th>
+            <th>I/E</th>
+            <th>RFC Cliente</th>
+            <th>Nom. Cliente</th>
+            <th>RFC Proveedor</th>
+            <th>Nom. Proveedor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->invoice['folio'] ?></td>
+            <td><?= date("d/m/Y", strtotime($this->invoice['fechaFacturacion'])) ?></td>
+            <td><?= date("d/m/Y", strtotime($this->invoice['fechaPago'])) ?></td>
+            <td><?= $this->invoice['patente'] ?></td>
+            <td><?= $this->invoice['aduana'] ?></td>
+            <td><?= $this->invoice['pedimento'] ?></td>
+            <td><?= $this->invoice['referencia'] ?></td>
+            <td><?= $this->invoice['referenciaFactura'] ?></td>
+            <td><?= $this->invoice['tipoOperacion'] ?></td>
+            <td><?= $this->invoice['rfcCliente'] ?></td>
+            <td><?= $this->invoice['nomCliente'] ?></td>
+            <td><?= $this->invoice['rfcProveedor'] ?></td>
+            <td><?= $this->invoice['nomProveedor'] ?></td>
+        </tr>
+    </tbody>
+</table>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Valor Fact.</th>
+            <th>Anticipo</th>
+            <th>I.V.A.</th>
+            <th>Total</th>
+            <th>P. Honorarios</th>
+            <th>Honorarios</th>
+            <th>Tipo Cambio</th>
+            <th>Impuestos Garantizados</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->invoice['valorFactura'] ?></td>
+            <td><?= $this->invoice['anticipo'] ?></td>
+            <td><?= $this->invoice['iva'] ?></td>
+            <td><?= $this->invoice['total'] ?></td>
+            <td><?= $this->invoice['phonorarios'] ?></td>
+            <td><?= $this->invoice['honorarios'] ?></td>
+            <td><?= $this->invoice['tipoCambio'] ?></td>
+            <td><?= $this->invoice['impuestosGarantizados'] ?></td>
+        </tr>
+    </tbody>
+</table>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Honorario Fijo</th>
+            <th>Forma Pago</th>
+            <th>Banco</th>
+            <th>Caja</th>
+            <th>Bultos</th>
+            <th>Contenido</th>
+            <th>Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->invoice['honorarioFijo'] ?></td>
+            <td><?= $this->invoice['formaPago'] ?></td>
+            <td><?= $this->invoice['banco'] ?></td>
+            <td><?= $this->invoice['caja'] ?></td>
+            <td><?= $this->invoice['bultos'] ?></td>
+            <td><?= $this->invoice['contenido'] ?></td>
+            <td><?= $this->invoice['observaciones'] ?></td>
+        </tr>
+    </tbody>
+</table>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th colspan="12">Conceptos</th>
+        </tr>
+        <tr>
+            <th>Reglon</th>
+            <th>Concepto</th>
+            <th>T. Concepto</th>
+            <th>Descripción</th>
+            <th>Cant.</th>
+            <th>P.U.</th>
+            <th>Importe</th>
+            <th>Divisa</th>
+            <th>Val. Dolares</th>
+            <th>I.V.A.</th>
+            <th>Descuento</th>
+            <th>Ret. I.V.A.</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->invoice['conceptos']) && !empty(isset($this->invoice['conceptos']))) { ?>
+            <?php foreach ($this->invoice['conceptos'] as $item) { ?>
+                <tr>
+                    <td><?= $item['reglon'] ?></td>
+                    <td><?= $item['nomConcepto'] ?></td>
+                    <td><?= $item['tipo'] ?></td>
+                    <td><?= $item['descripcion'] ?></td>
+                    <td><?= $item['cantidad'] ?></td>
+                    <td><?= $item['precioUnitario'] ?></td>
+                    <td><?= $item['importe'] ?></td>
+                    <td><?= $item['divisa'] ?></td>
+                    <td><?= $item['valorDolares'] ?></td>
+                    <td><?= $item['iva'] ?></td>
+                    <td><?= $item['descuento'] ?></td>
+                    <td><?= $item['retencionIva'] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="12">
+                    <em>Sin conceptos</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

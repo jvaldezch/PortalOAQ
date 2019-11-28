@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <style>
+        body {
+            margin : 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            font-size: 12px;            
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        table td,
+        table th {
+            border: 1px #999 solid;
+            padding: 3px 5px;
+        }
+    </style>
+    <body>
+        <?php if($this->coves) { ?>
+        <table>
+            <thead>
+                <th>Pedimento</th>
+                <th>Factura</th>
+                <th>COVE</th>
+            </thead>
+            <tbody>
+                <?php foreach ($this->coves  as $item) { ?>
+                <?php foreach ($item['coves'] as $c) { ?>
+                <?php if($c['cove'] != null) { ?>
+                <tr>
+                    <td><?= $item['pedimento'] ?></td>
+                    <td><?= $c['factura'] ?></td>
+                    <td><?= $c['cove'] ?></td>
+                </tr>
+                <?php } ?>
+                <?php } ?>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } ?>
+    </body>
+</html>

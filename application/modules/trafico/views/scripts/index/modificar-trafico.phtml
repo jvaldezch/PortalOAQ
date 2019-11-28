@@ -1,0 +1,94 @@
+<?php if (isset($this->form)) { ?>
+    <form method="post" id="form">
+        <input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->idTrafico ?>" />
+        <table class="traffic-table traffic-table-left">
+            <tr>
+                <th colspan="4" class="invoice-title">CREAR NUEVO TRAFICO</th>
+            </tr>            
+            <tr>
+                <th style="width: 150px; text-align: right"><label for="idRepositorio">REPOSITORIO:</label></th>
+                <td colspan="3">
+                    <?= $this->form->idRepositorio ?>
+                    <?php if($this->form->getValue('idRepositorio') != '') { ?>
+                        <a target="_blank" href="/archivo/index/expediente?id=<?= $this->form->getValue('idRepositorio') ?>"><i class="fas fa-folder-open" style="font-size: 1.2em"></i></a>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="width: 150px; text-align: right"><label for="aduana">ADUANA:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <div style="float: right">
+                        <span style="color: red">*</span>&nbsp;<span style="font-size: 10px">Campos requeridos.</span>
+                    </div>
+                    <div id="divcustoms"><?= $this->form->aduana ?></div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="cliente">CLIENTE:<span style="color: red">*</span></label></th>
+                <td style="width: 360px">
+                    <div id="divcustomers"><?= $this->form->cliente ?></div>
+                </td>
+                <td style="width: 100px">
+                    <label style="display: table-cell; float: left; font-weight: bold">RFC SOCIEDAD: </label>                
+                </td>
+                <td>
+                    <input type="text" id="rfcSociedad" value="<?= isset($this->rfcSociedad) ? $this->rfcSociedad : "" ?>" disabled="disabled" style="width: 150px"/>
+                </td>
+            </tr>            
+            <tr>
+                <th style="text-align: right"><label for="planta">PLANTA:</label></th>
+                <td colspan="3">
+                    <div id="divplanta"><?= $this->form->planta ?></div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="operacion">TIPO OPERACIÓN:<span style="color: red">*</span></label></th>
+                <td colspan="3">
+                    <div id="divops"><?= $this->form->operacion ?></div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="cvePedimento">CVE PED:<span style="color: red">*</span></label></th>
+                <td colspan="3"><?= $this->form->cvePedimento ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="pedimento">PEDIMENTO:<span style="color: red">*</span></label></th>
+                <td colspan="3"><?= $this->form->pedimento ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="referencia">REFERENCIA:<span style="color: red">*</span></label></th>
+                <td colspan="3"><?= $this->form->referencia ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="consolidado">CONS:</label></th>
+                <td colspan="3"><?= $this->form->consolidado ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="rectificacion">RECT:</label></th>
+                <td colspan="3"><?= $this->form->rectificacion ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="tipoCambio">TIPO CAMBIO:</label></th>
+                <td colspan="3"><?= $this->form->tipoCambio ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="contenedorCaja">CONTENEDOR/CAJA:</label></th>
+                <td colspan="3"><?= $this->form->contenedorCaja ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="nombreBuque">NOMBRE DE BUQUE:</label></th>
+                <td colspan="3"><?= $this->form->nombreBuque ?></td>
+            </tr>
+        </table>
+    </form>
+    <div class="traffic-clear-5"></div>
+    <button id="submit" class="traffic-btn traffic-btn-right">
+        <i class="far fa-save"></i> GUARDAR</button>
+<?php } else { ?>
+    <div class="traffic-clear-5"></div>
+    <span class="traffic-eta-yellow">El pedimento ha sido pagado y no puede ser modificado.</span>
+    <div class="traffic-clear-5"></div>
+<?php } ?>
+<a href="/trafico/index/editar-trafico?id=<?= $this->idTrafico ?>" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i> Regresar</a>
+<div class="traffic-clear"></div>

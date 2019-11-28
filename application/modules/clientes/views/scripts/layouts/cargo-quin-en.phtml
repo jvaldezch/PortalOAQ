@@ -1,0 +1,215 @@
+<?php if (isset($this->data)) { ?>
+    <table class="traffic-tab-table">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Customs Entry Form</th>
+                <th>Importation Date</th>
+                <th>Customs</th>
+                <th>Supplier</th>
+                <th>Invoice #</th>
+                <th>AWB</th>
+                <th>P.O.</th>
+                <th>P.N.</th>
+                <th>Quantity</th>
+                <th>Item Cost</th>
+                <th>Weight kg</th>
+                <th>Arrival</th>
+                <th>Carrier</th>
+                <th>Packages</th>
+                <th>Date Crossing</th>
+                <th>Vehicle</th>
+                <th>Plates</th>
+                <th>Incoterm</th>
+                <th>#Invoice</th>
+                <th>Invoice Date</th>
+                <th>Administrative Fees MXN (without IVA)</th>
+                <th>Administrative Fees Assessment by Invoice and AWB</th>
+                <th>Administrative Fees Assessment by P.N.</th>
+                <th>Extra Freight</th>
+                <th>National Freight Assessment by Invoice and AWB</th>
+                <th>National Freight Assessment by P.N.</th>
+                <th>International Freight</th>
+                <th>International Freight Assessment by Invoice and AWB</th>
+                <th>International Freight Assessment by P.N.</th>
+                <th>Assessment Validation</th>
+                <?= $this->conceptosTitle("Revalidación", "en") ?>
+                <?= $this->conceptosTitle("Previo", "en") ?>
+                <?= $this->conceptosTitle("Manejo", "en") ?>
+                <?= $this->conceptosTitle("Almacenaje", "en") ?>
+                <?= $this->conceptosTitle("Custodia", "en") ?>
+                <?= $this->conceptosTitle("Valores", "en") ?>
+                <?= $this->conceptosTitle("Fleje", "en") ?>
+                <?= $this->impuestosTitle("PREV") ?>
+                <?= $this->impuestosTitle("DTA") ?>
+                <?= $this->impuestosTitle("CNT") ?>
+                <th>Total Logistics Unit Cost.</th>
+                <th>Total Custom Cost USD</th>
+                <th>Total Invoice Cost MXN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $i = 1;
+            foreach ($this->data as $ped) {
+                if ($i & 1) {
+                    $style = "background-color: #fefefe;";
+                } else {
+                    $style = "background-color: #f3f3f3;";
+                }
+                $i++;
+                $np = 0;
+                $cantidad = 0;
+                $parts = 0;
+                $first = true;
+                foreach ($ped["facturas"] as $fact) {                    
+                    $firsti = true;
+                    foreach ($fact["partes"] as $part) {
+                        $pn = 0;
+                        ?>
+                        <tr style="<?= $style ?>">                   
+                            <td><?= ($first == true) ? $ped["mes"] : '' ?></td>
+                            <td><?= ($first == true) ? $ped["operacion"] : '' ?></td>
+                            <td><?= ($first == true) ? $ped["fechaImportacion"] : '' ?></td>
+                            <td><?= ($first == true) ? $ped["aduana"] : '' ?></td>
+                            <td><?= ($firsti == true) ? $fact["proveedor"] : '' ?></td>
+                            <td><?= ($firsti == true) ? $fact["numFactura"] : '' ?></td>
+                            <td><?= ($first == true) ? str_replace(array(' '), '', $ped["guias"][0]["guia"]) : '' ?></td>
+                            <td>&nbsp;</td>
+                            <td><?= isset($part["numParte"]) ? $part["numParte"] : '' ?></td>
+                            <td><?= isset($part["cantidadFactura"]) ? $part["cantidadFactura"] : '' ?></td>
+                            <td><?= number_format($part["valorComercial"], 6) ?>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><?= ($first == true) ? $ped["fechaEntrada"] : '' ?></td><!-- Arrival -->
+                            <td><?= ($first == true) ? "DHL" : '' ?></td><!-- Arrival -->
+                            <td><?= ($first == true) ? $ped["bultos"] : '' ?></td>
+                            <td><?= ($first == true) ? $ped["fechaPago"] : '' ?></td><!-- Date Crossing -->
+                            <td>&nbsp;</td>
+                            <td><?= ($first == true) ? $ped["placas"] : '' ?></td>
+                            <td><?= ($firsti == true) ? $fact["incoterm"] : '' ?></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <?php 
+                                $flete = (float) ($ped["fletes"] * $ped["tipoCambio"]);
+                                $totitem = $flete / $ped["totalPartes"];
+                                $totpar = ($totitem / (int) $part["cantidadFactura"]);
+                            ?>
+                            <td><?= ($first == true) ? number_format($flete, 0) : '' ?></td>
+                            <td><?= ($first == true) ? number_format($totitem, 0) : '' ?></td>
+                            <td><?= number_format($totpar, 0) ?></td>
+                            <td><?= number_format($totpar * $part["cantidadFactura"], 0) ?></td>
+                            <?php if(($con = $this->conceptosProrrateos("REVALIDACION", $ped["conceptos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $con["html"]; $pn = $pn + $con["pn"]; } ?>
+                            <?php if(($con = $this->conceptosProrrateos("PREVIO", $ped["conceptos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $con["html"]; $pn = $pn + $con["pn"]; } ?>
+                            <?php if(($con = $this->conceptosProrrateos("MANEJO", $ped["conceptos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $con["html"]; $pn = $pn + $con["pn"]; } ?>
+                            <?php if(($con = $this->conceptosProrrateos("ALMACENAJE", $ped["conceptos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $con["html"]; $pn = $pn + $con["pn"]; } ?>
+                            <?php if(($con = $this->conceptosProrrateos("CUSTODIA", $ped["conceptos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $con["html"]; $pn = $pn + $con["pn"]; } ?>
+                            <?php if(($con = $this->conceptosProrrateos("VALORES", $ped["conceptos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $con["html"]; $pn = $pn + $con["pn"]; } ?>
+                            <?php if(($con = $this->conceptosProrrateos("FLEJE", $ped["conceptos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $con["html"]; $pn = $pn + $con["pn"]; } ?>
+                            <?php if(($im = $this->impuestosProrrateos("PREV", $ped["impuestos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $im["html"]; $pn = $pn + $im["pn"]; } ?>
+                            <?php if(($im = $this->impuestosProrrateos("DTA", $ped["impuestos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $im["html"]; $pn = $pn + $im["pn"]; } ?>
+                            <?php if(($im = $this->impuestosProrrateos("CNT", $ped["impuestos"], $part["cantidadFactura"], $fact["cantidadFactura"]))) { echo $im["html"]; $pn = $pn + $im["pn"]; } ?>
+                            <td><?= $pn ?></td><!-- Total Logistics  Unit Cost. -->
+                            <td><?= isset($ped["valorAduana"]) ? number_format($ped["valorAduana"], 2) : '' ?></td>
+                            <td><?= isset($ped["valorAduanaMxn"]) ? number_format($ped["valorAduanaMxn"], 4) : '' ?></td>
+                            <?php 
+                                if($first == true) { $first = false; } 
+                                if($firsti == true) { $firsti = false; } 
+                            ?>
+                        </tr>
+                        <?php
+                        $np = $np + 1;
+                        $cantidad = $cantidad + $part["cantidadFactura"];
+                        $parts = $parts + ($totpar * $part["cantidadFactura"]);
+                    }
+                    ?>
+        <?php } ?>
+                <tr style="<?= $style ?>">
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><?= $np ?></td>
+                    <td><?= $cantidad ?></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><?= number_format($parts , 0) ?></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><?= number_format($ped["prev"], 2) ?></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><?= number_format($ped["dta"], 2) ?></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><?= number_format($ped["cnt"], 2) ?></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+    <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>

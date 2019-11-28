@@ -1,0 +1,101 @@
+@font: sans-serif;
+@fontsize: 12px;
+@bcolor: #888888;
+
+.traffic-navbar .nav > li,
+.traffic-navbar-mobile .nav > li {
+    border-right: 1px #232d46 solid;
+}
+
+.traffic-navbar .nav > li a,
+.traffic-navbar-mobile .nav > li a {
+    color: #fff;
+    font-family: @font !important;
+    font-size: @fontsize;
+    padding: 7px;
+    text-shadow: 0 1px 0 #444444;
+    &:hover, &:focus, &:active {
+        background-color: #ad0129;
+        color: #fff;
+    }
+}
+
+.traffic-navbar-inner {
+    background-repeat: repeat-x;
+    border: 1px solid #2e3850;
+    border-radius: 0;
+    background-color: #2f3b58;
+    background: #2f3b58;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    min-height: 34px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.traffic-navbar .nav li.dropdown.active > .dropdown-toggle, 
+.traffic-navbar .nav li.dropdown.open.active > .dropdown-toggle,
+.traffic-navbar-mobile .nav li.dropdown.active > .dropdown-toggle, 
+.traffic-navbar-mobile .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: #ad0129;
+    background-image: linear-gradient(to bottom, #ad0129, #950325);
+    background-repeat: repeat-x;
+    &:hover, &:focus, &:active {
+        background-color: #ad0129;
+        color: #fff;
+    }
+}
+
+.traffic-navbar .nav li.dropdown.open > .dropdown-toggle {
+    background-color: #309bd2;
+    background-image: linear-gradient(to bottom, #309bd2, #268cc0);
+    background-repeat: repeat-x;
+    &:hover, &:focus {
+        background-color: #ad0129;
+        color: #fff;
+    }
+}
+
+.dropdown-menu > li > a {
+    clear: both;
+    color: #555 !important;
+    display: block;
+    font-weight: normal;
+    line-height: 16px;
+    padding: 7px 15px;
+    white-space: nowrap;
+    text-shadow: none !important;
+    &:hover, &:focus {
+        background-color: #ad0129 !important;
+        color: #fff !important;
+        background-image: linear-gradient(to bottom, #880000, #6b0000) !important;
+    }
+}
+
+.traffic-status-bar,
+.traffic-status-bar span.label {
+    background-color: #232d46;
+    color: #fff;
+    font-family: @font !important;
+    font-size: 12px !important;
+    min-height: 23px;
+}
+
+.traffic-status-bar span.label,
+.traffic-status-bar span.badge {
+    background-color: #999;
+    color: #fff;
+    display: inline-block;
+    font-size: 11.844px;
+    font-weight: bold;
+    line-height: 14px;
+    padding: 2px 4px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+    vertical-align: baseline;
+    white-space: nowrap;
+    border-radius: 2px;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: #e5e5e5;
+    color: #fff;
+}

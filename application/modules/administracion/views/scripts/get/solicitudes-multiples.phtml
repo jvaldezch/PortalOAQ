@@ -1,0 +1,53 @@
+<form id="form-files" method="post">
+    <input type="hidden" id="ids" name="ids" value="<?= $this->ids ?>" />
+    <table id="infoIds" class="traffic-table">
+        <thead>
+            <tr>
+                <th>Pedimento</th>
+                <th>Referencia</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td><a href="/administracion/index/ver-solicitud?id=<?= $item['id'] ?>" target="_blank"><?= $item['aduana'] . '-' . $item['patente'] . '-' . $item['pedimento'] ?></a></td>
+                    <td><?= $item['referencia'] ?></td>
+                    <td style="text-align: right"><?= $this->currency($item['total']) ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <table class="traffic-table traffic-table-left">
+        <tbody>
+            <tr>
+                <th colspan="2" class="traffic-table-title">ADJUNTAR ARCHIVO</th>
+            </tr>
+            <tr>
+                <th style="width: 300px"><label for="file[]">Seleccionar ficha de deposito o comprobante (PDF/JPG)</label></th>
+                <td><input name="file[]" id="file" class="required" multiple="" aria-required="true" type="file"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <a href="#" class="traffic-btn-close jqmClose">Cerrar</a>
+    <a id="sendMultiple" class="traffic-btn-success traffic-btn-right">Guardar</a>
+</form>
+<script>
+    $("#form-files").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("label[for='" + element.attr("id") + "']")
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            "file[]": {required: true}
+        },
+        messages: {
+            "file[]": {required: "Se requiere seleccionar un archivo"}
+        }
+    });
+</script>

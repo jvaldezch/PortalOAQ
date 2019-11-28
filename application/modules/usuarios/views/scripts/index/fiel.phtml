@@ -1,0 +1,43 @@
+<div class="traffic-clear-10"></div>
+<table class="traffic-table traffic-table-left hover" id="datatable">
+    <thead>
+        <tr>
+            <th>Patente</th>
+            <th>Aduana</th>
+            <th>RFC</th>
+            <th>Razón Social</th>
+            <th>Encriptacion</th>
+            <th>Validéz</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->data as $item) { ?>
+            <tr>
+                <td style="text-align: center"><?= $item["patente"] ?></td>
+                <td style="text-align: center"><?= $item["aduana"] ?></td>
+                <td style="text-align: center"><?= $item["rfc"] ?></td>
+                <td><?= $item["razon"] ?></td>
+                <td style="text-align: center"><?= strtoupper($item["sha"]) ?></td>
+                <td style="text-align: center">
+                    <?php if (isset($item["valido_desde"]) && isset($item["valido_hasta"])) { ?>
+                        <?php if (strtotime($item["valido_hasta"]) > time()) { ?>
+                            <?= date("d/m/Y", strtotime($item["valido_desde"])) . " - " . date("d/m/Y", strtotime($item["valido_hasta"])) ?>
+                        <?php } else { ?>
+                            <span style="color: red"><?= date("d/m/Y", strtotime($item["valido_desde"])) . " - " . date("d/m/Y", strtotime($item["valido_hasta"])) ?></span>
+                        <?php } ?>
+                    <?php } ?>
+                </td>
+                <td>
+                    <a href="/usuarios/index/editar-fiel?id=<?= $item["id"] ?>" style="font-size: 1.2em; margin-right: 5px">
+                        <i class="fas fa-pencil-alt" style="cursor: pointer"></i>
+                    </a>
+                </td>
+            </tr>    
+        <?php } ?>            
+    </tbody>
+</table>
+<a class="traffic-btn" href="/usuarios/index/nueva-fiel">
+    <i class="fas fa-file"></i> Nueva FIEL
+</a>
+<div class="traffic-clear"></div>

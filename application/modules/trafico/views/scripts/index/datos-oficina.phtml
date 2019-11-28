@@ -1,0 +1,279 @@
+<ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
+    <li><a href="#office-information" data-toggle="tab">Información</a></li>        
+    <li><a href="#office-customers" data-toggle="tab">Clientes</a></li>
+    <li><a href="#office-storages" data-toggle="tab">Almacenes</a></li>
+    <li><a href="#office-transportation" data-toggle="tab">Transportistas</a></li>
+    <li><a href="#office-shipping" data-toggle="tab"><?= isset($this->nombreNavieras) ? $this->nombreNavieras : "Navieras" ?></a></li>
+    <li><a href="#office-concepts" data-toggle="tab">Conceptos</a></li>
+    <li><a href="#office-banks" data-toggle="tab">Bancos</a></li>
+    <li><a href="#office-dates" data-toggle="tab">Fechas</a></li>
+</ul>
+<input type="hidden" id="idAduana" name="idAduana" value="<?= $this->idAduana ?>">
+<div class="tab-content">
+    <div class="tab-pane<?= !isset($this->active) ? ' active' : '' ?>" id="office-information">
+        <table class="traffic-table">
+            <tr>
+                <th colspan="6" class="traffic-table-title">DATOS OFICINA</th>
+            </tr>
+            <tr>
+                <th style="width: 30px">&nbsp;</th>
+                <th style="width: 80px">Patente</th>
+                <th style="width: 80px">Aduana</th>
+                <th style="width: 250px">Nombre</th>
+                <th style="width: 200px">Tipo</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td>
+                    <i class="fas fa-pencil-alt" onclick="javascript:location.href='/trafico/index/editar-oficina?id=<?= $this->idAduana ?>'" style="font-size:1.3em; color: #2f3b58"></i>
+                </td>
+                <td><?= $this->data["patente"] ?></td>
+                <td><?= $this->data["aduana"] ?></td>
+                <td><?= $this->data["nombre"] ?></td>
+                <td><?= mb_strtoupper($this->tipoOficina($this->data["tipoAduana"])) ?></td>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+        </table>
+        <form id="form-contacts">
+            <?= $this->form->idAduana ?>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="4" class="traffic-table-title">CONTACTOS</th>
+                </tr>
+                <tr>
+                    <td><?= $this->form->nombre ?></td>
+                    <td><?= $this->form->email ?></td>
+                    <td><?= $this->form->tipoContacto ?></td>
+                    <td>
+                        <button class="traffic-btn traffic-btn-right" id="add-contact">
+                            <i class="fas fa-plus-circle"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id="contacts" style="max-height: 350px; overflow-y: scroll"></div>
+        <div class="traffic-clear-5"></div>
+        <a href="<?= $this->backUrl ?>" class="traffic-btn"> 
+            <i class="fas fa-angle-double-left"></i> Regresar
+        </a>
+    </div><!-- information -->
+    <div class="tab-pane<?= (isset($this->active) && ($this->active == 'clientes')) ? ' active' : '' ?>" id="office-customers">
+        <form id="form-customer">
+            <?= $this->form->idAduana ?>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="2" class="traffic-table-title">CLIENTES</th>
+                </tr>
+                <tr>
+                    <td>
+                        <?= $this->form->idCliente ?>
+                    </td>
+                    <td>
+                        <a class="traffic-btn traffic-btn-right" href="/trafico/data/reporte-oficina-clientes?id=<?= $this->idAduana ?>">
+                            <i class="fas fa-table"></i> Reporte
+                        </a>
+                        <button class="traffic-btn traffic-btn-right" id="add-customer">
+                            <i class="fas fa-plus-circle"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+            </table>                
+        </form>
+        <div id="customers" style="max-height: 350px; overflow-y: scroll"></div>
+        <div class="traffic-clear-5"></div>
+        <a href="<?= $this->backUrl ?>" class="traffic-btn"> 
+            <i class="fas fa-angle-double-left"></i> Regresar
+        </a>
+    </div><!-- customers -->
+    <div class="tab-pane<?= (isset($this->active) && ($this->active == 'almacenes')) ? ' active' : '' ?>" id="office-storages">
+        <form id="form-storage">
+            <?= $this->form->idAduana ?>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="2" class="traffic-table-title">ALMACENES</th>
+                </tr>
+                <tr>
+                    <td><?= $this->form->nombreAlmacen ?></td>
+                    <td>
+                        <button class="traffic-btn traffic-btn-right" id="add-storage">
+                            <i class="fas fa-plus-circle"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id="storages" style="max-height: 350px; overflow-y: scroll"></div>
+        <div class="traffic-clear-5"></div>
+        <a href="<?= $this->backUrl ?>" class="traffic-btn"> 
+            <i class="fas fa-angle-double-left"></i> Regresar
+        </a>
+    </div><!-- storages -->
+    <div class="tab-pane<?= (isset($this->active) && ($this->active == 'transportistas')) ? ' active' : '' ?>" id="office-transportation">
+        <form id="form-transportation">
+            <?= $this->form->idAduana ?>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="2" class="traffic-table-title">TRANSPORTISTAS</th>
+                </tr>
+                <tr>
+                    <td><?= $this->form->nombreTransporte ?></th>
+                    <td>
+                        <button class="traffic-btn traffic-btn-right" id="add-transport">
+                            <i class="fas fa-plus-circle"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id="transportation" style="max-height: 350px; overflow-y: scroll"></div>
+        <div class="traffic-clear-5"></div>
+        <a href="<?= $this->backUrl ?>" class="traffic-btn"> 
+            <i class="fas fa-angle-double-left"></i> Regresar
+        </a>
+    </div><!-- transportation -->
+    <div class="tab-pane<?= (isset($this->active) && ($this->active == 'navieras')) ? ' active' : '' ?>" id="office-shipping">
+        <form id="form-shipping">
+            <?= $this->form->idAduana ?>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="2" class="traffic-table-title">NAVIERAS</th>
+                </tr>
+                <tr>
+                    <td><?= $this->form->nombreNaviera ?></td>
+                    <td>
+                        <button class="traffic-btn traffic-btn-right" id="add-shipper">
+                            <i class="fas fa-plus-circle"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id="shipping" style="max-height: 350px; overflow-y: scroll"></div>
+        <div class="traffic-clear-5"></div>
+        <a href="<?= $this->backUrl ?>" class="traffic-btn"> 
+            <i class="fas fa-angle-double-left"></i> Regresar
+        </a>
+    </div><!-- shipping -->
+    <div class="tab-pane<?= (isset($this->active) && ($this->active == 'conceptos')) ? ' active' : '' ?>" id="office-concepts">
+        <form id="form-concepts">
+            <?= $this->form->idAduana ?>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="6" class="traffic-table-title">CONCEPTOS</th>
+                </tr>
+                <tr>
+                    <td colspan="3" class="traffic-td-left">
+                        <?php echo $this->form->idTipoConcepto ?>
+                    </td>
+                    <td colspan="2"><div id="conceptos"></div></td>
+                    <td>
+                        <button class="traffic-btn traffic-btn-right" id="add-concept">
+                            <i class="fas fa-plus-circle"></i> Agregar
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id="concepts" style="max-height: 350px; overflow-y: scroll"></div>
+        <div class="traffic-clear-5"></div>
+        <a href="<?= $this->backUrl ?>" class="traffic-btn"> 
+            <i class="fas fa-angle-double-left"></i> Regresar
+        </a>
+    </div><!-- concepts -->
+    <div class="tab-pane<?= (isset($this->active) && ($this->active == 'bancos')) ? ' active' : '' ?>" id="office-banks">
+        <div class="traffic-cols">
+            <div class="traffic-col-50">
+                <form id="formBank">
+                    <?= $this->form->idAduana ?>
+                    <table class="traffic-table traffic-table-left">
+                        <tr>
+                            <th colspan="2" class="traffic-table-title">AGREGAR BANCO</th>
+                        </tr>
+                        <tr>
+                            <td><label for="descripcion">Descripción:</label></td>
+                            <td><input type="text" name="descripcion" id="descripcion" class="traffic-input-large" ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="nombreBanco">Banco:</label></td>
+                            <td>
+                                <select name="nombreBanco" id="nombreBanco" class="traffic-select-medium">
+                                    <option value="">---</option>
+                                    <?php if(isset($this->bancos)) { ?>
+                                        <?php foreach ($this->bancos as $k => $v) { ?>
+                                            <option value="<?= $v ?>"><?= $v ?></option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="cuenta">Cuenta:</label></td>
+                            <td><input type="text" name="cuenta" id="cuenta" class="traffic-input-medium" ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="sucursal">Sucursal:</label></td>
+                            <td><input type="text" name="sucursal" id="sucursal" class="traffic-input-medium" ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="clabe">Clabe:</label></td>
+                            <td><input type="text" name="clabe" id="clabe" class="traffic-input-medium" ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="razonSocial">Razon Social:</label></td>
+                            <td><input type="text" name="razonSocial" id="razonSocial" class="traffic-input-large" ></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button class="traffic-btn traffic-btn-right" id="addBank">
+                                    <i class="fas fa-plus-circle"></i> Agregar
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="traffic-col-50">
+                <div id="banks"></div>                
+            </div>
+        </div>
+        <div class="traffic-clear-5"></div>
+        <a href="<?= $this->backUrl ?>" class="traffic-btn"> 
+            <i class="fas fa-angle-double-left"></i> Regresar
+        </a>
+    </div><!-- banks -->
+    <div class="tab-pane<?= (isset($this->active) && ($this->active == 'fechas')) ? ' active' : '' ?>" id="office-dates">
+        <table class="traffic-table traffic-table-left hover">
+            <thead>
+                <tr>
+                    <th style="width: 120px">Tipo Operación</th>
+                    <th style="width: 140px">Cve. Pedimento</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->tiposFechas) && !empty($this->tiposFechas)) { ?>
+                    <?php foreach ($this->tiposFechas as $item) { ?>
+                        <tr>
+                            <td style="text-align: center"><?= $item["tipoOperacion"] ?></td>
+                            <td><?= $item["cvePedimento"] ?></td>
+                            <td>
+                                <textarea style="padding: 3px; line-height: 11px; font-size: 11px; height: 150px; width: 450px; font-family: Courier, 'New Courier', monospace, sans-serif !important;"><?= $item["fechas"] ?></textarea>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="4">
+                            <em>No hay fechas para este tipo de aduana.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div><!-- dates -->
+</div>

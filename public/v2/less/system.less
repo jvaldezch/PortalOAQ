@@ -1,0 +1,117 @@
+@import "variables"; // library.less
+
+html, 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: @font;
+    font-size: 10px;
+}
+
+body {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #fff;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.content {
+    padding: 5px;
+    padding-top: 20px;
+}
+p {
+  font-size: 11px;  
+}
+
+::-webkit-input-placeholder {
+    color: @placeholder;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    color: @placeholder;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+    color: @placeholder;  
+}
+
+:-ms-input-placeholder {  
+    color: @placeholder;  
+}
+
+span.error {
+    color: red;
+    margin: 2px 4px;
+}
+
+#column1 {
+    width:50%;
+    float: left;
+}
+#column2 {
+    margin-left: 50%;
+}
+.clear {
+    clear: both;
+}
+
+@import url("./navbar.css");
+@import url("./forms.css");
+@import url("./tables.css");
+@import url("./inputs.css");
+@import url("./buttons.css");
+@import url("./pagination.css");
+
+.newTrafficTitles,
+.newTraffic {
+    width: 100%;
+    border: 1px #e3e3e3 solid;
+    display: table-row;
+    clear: both;
+}
+.newTrafficTitles ul,
+.newTraffic ul {
+    margin: 0;
+    padding: 0;
+}
+.newTrafficTitles ul li,
+.newTraffic ul li {
+    margin: 0;
+    padding: 0;
+    float: left;
+    border: 1px #b5b5b5 solid;
+    list-style: none;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 2px 3px;
+    height: 24px;
+}
+.newTrafficTitles ul li {
+    font-weight: bold;    
+}
+
+/*.newTrafficTitles ul li {
+    border-bottom: 0;  
+}*/
+.newTrafficTitles ul li,
+.newTraffic ul li {
+    border-right: 0;  
+}
+.newTrafficTitles ul li:first-child,
+.newTraffic ul li:first-child {
+    border-right: 0;
+}
+.newTrafficTitles ul li:first-child {
+    border-top-left-radius: 4px;
+}
+.newTrafficTitles ul li:last-child,
+.newTraffic ul li:last-child {
+    border-left: 1px #b5b5b5 solid;
+    border-right: 1px #b5b5b5 solid;
+}
+.newTrafficTitles ul li:last-child {
+    border-top-right-radius: 4px;
+}

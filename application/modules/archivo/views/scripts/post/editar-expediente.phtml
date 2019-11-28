@@ -1,0 +1,132 @@
+<form id="formEdit" method="post">
+    <input type="hidden" name="id" value="<?= $this->id ?>" />
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 150px; text-align: right">Patente</th>
+            <td colspan="3"><?= $this->form->patente ?></td>
+        </tr>
+        <tr>            
+            <th style="text-align: right">Aduana</th>
+            <td colspan="3"><div id="customs"><?= $this->aduanas("aduana", (int) $this->patente, (int) $this->aduana) ?></div></td>
+        </tr>
+        <tr>
+            <th style="text-align: right">RFC Cliente</th>
+            <td><?= $this->form->rfc_cliente ?></td>            
+            <td style="width: 140px">
+                <label style="display: table-cell; float: left; font-weight: bold">NOMBRE CLIENTE: </label>                
+            </td>
+            <td><?= $this->form->nombre ?></td>
+        </tr>
+        <tr>            
+            <th style="text-align: right">Pedimento</th>
+            <td colspan="3"><?= $this->form->pedimento ?></td>
+        </tr>
+        <tr>            
+            <th style="text-align: right">Referencia</th>
+            <td colspan="3"><?= $this->form->referencia ?></td>
+        </tr>
+        <tr>
+        </tr>
+    </table>    
+    <div class="traffic-clear-5"></div>
+</form>
+<script type="text/javascript">    
+    $("#formEdit #nombre").typeahead({
+        source: function (query, process) {
+            return $.ajax({
+                url: "/trafico/get/clientes",
+                type: "get",
+                data: {name: query},
+                dataType: "json",
+                success: function (res) {
+                    return process(res);
+                }
+            });
+        }
+    }).change(function () {
+        $("#rfc_cliente").val("");
+    });
+    
+    $(document.body).on("change", "#nombre", function () {
+        $.ajax({
+            url: "/trafico/get/rfc-de-cliente",
+            type: "get",
+            data: {name: $("#formEdit #nombre").val()},
+            dataType: "json",
+            success: function (res) {
+                if (res) {
+                    $("#formEdit #rfc_cliente").val(res[0]["rfc"]);
+                }
+            }
+        });
+    });    
+    
+    $.validator.addMethod("regx", function (value, element, regexpr) {
+        return regexpr.test(value);
+    }, "RFC no es válido.");
+
+    $("#formEdit").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            aduana: {
+                required: true
+            },
+            pedimento: {
+                required: true,
+                minlength: 7,
+                maxlength: 7,
+                digits: true
+            },
+            referencia: {
+                required: true,
+                minlength: 4
+            },
+            rfc_cliente: {
+                required: true,
+                minlength: 10,
+                regx: /^[A-Z]{3,4}([0-9]{2})([0-9]{2})([0-9]{2})?[A-Z0-9]{3,4}/
+            }
+        },
+        messages: {
+            aduana: {
+                required: "Proporcionar aduana"
+            },
+            pedimento: {
+                required: "Campo necesario",
+                minlength: "Pedimento debe ser de 7 digitos",
+                maxlength: "Pedimento dede ser de 7 digitos",
+                digits: "No debe contener letras"
+            },
+            referencia: {
+                required: "Proporcionar referencia",
+                minlength: "Mínimo 4 caracteres"
+            },
+            rfc_cliente: {
+                required: "Proporcionar el RFC del cliente",
+                minlength: "Mínimo 10 caracteres"
+            }
+        }
+    });
+
+    $(document).on("change", "#formEdit #patente", function () {
+        $.ajax({
+            url: "/archivo/ajax/obtener-aduanas",
+            data: {patente: $(this).val(), id: $("#id").val()},
+            type: "post",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                if (data.success === true) {
+                    $("#formEdit #customs").html(data.html);
+                }
+            }
+        });
+    });
+</script>

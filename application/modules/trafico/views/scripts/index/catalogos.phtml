@@ -1,0 +1,34 @@
+<div class="traffic-cols">
+    <div style="min-width:300px; width: 25%; float:left; display: inline-block;">
+        <input type="hidden" name="pagina" id="pagina" />
+        <input type="hidden" name="funcion" id="funcion" />
+        <table class="traffic-table hover" style="margin-top: 28px">            
+            <thead>
+                <tr>
+                    <th>Catalogos</th>
+                </tr>
+                <tr>
+                    <td>
+                        <a id="claves" style="cursor: pointer">Claves de pedimentos</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a id="monedas" style="cursor: pointer">Monedas (US)</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a id="unidades" style="cursor: pointer">Unidades de Medida (OMA)</a>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div style="float: left; display: inline-block; width: 74%">
+        <div style="float: right; margin: 2px 0">
+            <label style="display: inline">Buscar:&nbsp;</label><input type="text" id="buscar" name="buscar" value="<?= $this->busqueda ?>" />
+        </div>  
+    </div>
+    <div style="float: left; display: inline-block; width: 74%" id="results"></div>
+</div>

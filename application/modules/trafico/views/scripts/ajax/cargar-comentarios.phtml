@@ -1,0 +1,114 @@
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th colspan="3" class="traffic-table-title">BITACORA</th>
+        </tr>
+        <tr>
+            <th style="text-align: left;">Evento</th>
+            <th style="text-align: left;">Usuario</th>
+            <th style="text-align: center; width: 110px">Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->bitacora) && !empty($this->bitacora)) { ?>
+            <?php foreach ($this->bitacora as $item) { ?>
+                <tr>
+                    <td style="font-size: 10px !important; line-height: 11px"><?= $item["bitacora"] ?></td>
+                    <td style="font-size: 10px !important; line-height: 11px"><?= $item["usuario"] ?></td>
+                    <td style="text-align: center; font-size: 10px !important; line-height: 11px"><?= date("d/m/Y h:i a", strtotime($item["creado"])) ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="3" style="text-align: center"><em>No hay mensajes en bitacora.</em></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+</div>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th colspan="3" class="traffic-table-title">COMENTARIOS</th>
+        </tr>                
+        <tr>
+            <th style="width: 150px">Usuario</th>
+            <th>Comentario/mensaje</th>
+            <th style="width: 200px">Fecha<div class="traffic-icon traffic-icon-reload traffic-btn-right" onclick="loadComments();"></div></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->comentarios) && !empty($this->comentarios)) { ?>
+            <?php foreach ($this->comentarios as $item) { ?>
+                <tr>
+                    <td>
+                        <?= mb_strtoupper($item["nombre"]) ?>
+                    </td>
+                    <td style="text-align: center">
+                        <?= $item["mensaje"] ?>
+                        <?php if(isset($item["nombreArchivo"])) { ?>
+                            <br><img src="/images/icons/attachment.gif"><span style="font-size: 11px"><a href="/archivo/data/descargar-archivo-temporal?id=<?= $item["idArchivo"] ?>"><?= $item["nombreArchivo"] ?></a></span>
+                        <?php } ?>
+                    </td>
+                    <td><?= date("d/m/Y H:i a", strtotime($item["creado"])) ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="3" style="text-align: center"><em>No hay comentarios.</em></td>
+            </tr>
+        <?php } ?>
+        <tr>
+            <td colspan="2">
+                <form id="commentsForm" method="post" enctype="multipart/form-data">                    
+                    <input type="hidden" name="idTrafico" id="idTrafico" value="<?= $this->idTrafico ?>" >
+                    <input type="file" name="filess" id="filess" visibility="hidden" style="display: none"/>
+                    <textarea id="comment" name="comment" class="traffic-textarea-medium"></textarea>
+                    <div id="attachedFiles">
+                        <?php if (isset($this->temporales) && !empty($this->temporales)) { ?>
+                            <?php foreach ($this->temporales as $item) { ?>
+                                <img src="/images/icons/attachment.gif"><span style="font-size: 11px"><a href="/archivo/data/descargar-archivo-temporal?id=<?= $item["id"] ?>"><?= $item["nombreArchivo"] ?></a></span><br>
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                </form>
+            </td>
+            <td>
+                <button id="addComment" class="traffic-btn-add traffic-btn-right">comentario</button>
+                <img src="/images/icons/message.png" class="mensajeroEnTrafico" data-id="<?= $this->idTrafico ?>" />
+                <img src="/images/icons/attachment.gif" id="attach" data-id="<?= $this->idTrafico ?>" style="float: right; padding-top: 3px; margin-right: 4px; cursor: pointer" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">    
+    $("#mensajeroEnTrafico").qtip({ 
+        content: {
+            text: "Enviar un mensaje personalizado o predeterminado."
+        }
+    });
+    
+    $("#attach").qtip({ 
+        content: {
+            text: "Adjuntar archivo."
+        }
+    });
+    
+    $("#commentsForm").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            comment: {required: true}
+        },
+        messages: {
+            comment: "SE REQUIERE COMENTARIO"
+        }
+    });
+
+</script>

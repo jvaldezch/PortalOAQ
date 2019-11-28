@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><?= $this->title ?></title>
+        <?= $this->headMeta(); ?>
+        <?= $this->headLink() ?>    
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <style>
+            .nav_menu {
+                background-color: #fefefe;
+                padding-bottom: 8px;
+                -webkit-box-shadow: 1px -1px 10px 3px rgba(0,0,0,0.43); 
+                box-shadow: 1px -1px 10px 3px rgba(0,0,0,0.43);
+                z-index: 900;
+                position: absolute;
+            }
+            #login {
+                background-color: #F7F7F7;
+                padding-top: 15px;
+                margin: 0;
+                display: none;
+                position: absolute;
+                margin-top: 60px;
+                z-index: 800;
+                width:100%;
+                -webkit-box-shadow: 1px -1px 10px 3px rgba(0,0,0,0.43); 
+                box-shadow: 1px -1px 10px 3px rgba(0,0,0,0.43);
+            }
+            #main {
+                margin-left: 0;
+                background-color: #4d6984;
+            }
+        </style>
+    </head>
+    <body class="nav-md footer_fixed">
+        <div class="container body">
+            <div class="main_container">
+                <div class="top_nav" style="margin-left: 0">
+                    <div class="nav_menu">
+                        <nav>
+                            <?php if (!isset($this->login)) { ?>
+                                <a onclick="showLogin();" style="float: right; display: block; margin-top: 20px; margin-right: 20px; cursor: pointer">
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+    <strong>Login</strong>
+                                </a>
+                            <?php } else { ?>
+                                <a onclick="logout();" style="float: right; display: block; margin-top: 20px; margin-right: 20px; cursor: pointer">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+    <strong>Logout</strong>
+                                </a>
+                            <?php } ?>
+                            <p style="float: right; display: block; margin-top: 20px; margin-right: 20px">
+                                <?= $this->nomCliente ?>
+                            </p>                            
+                            <a style="text-align: left; display: block; width: 250px" href="/dashboard/main" class="site_title">
+                                <img src="/gentelella/production/images/oaq.png" alt="<?= $this->appConfig("empresa") ?>">
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+                <div id="login">
+                    <div>
+                        <form id="loginForm" data-parsley-validate="" data-parsley-required-message="Dato necesario">
+                            <button type="submit" id="submit" class="btn btn-success pull-right" tabindex="3">Entrar</button>
+                            <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right">
+                                <input class="form-control" id="plogin" name="plogin" placeholder="Contraseña" type="password" value="" required="" data-validate-length-range="6,20" autocomplete="off" tabindex="2">
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback pull-right">
+                                <input class="form-control has-feedback-left" id="ulogin" name="ulogin" placeholder="Usuario" type="text" value="" required="" data-validate-length-range="6,20" tabindex="1">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /top navigation -->
+                <!-- /page content -->
+                <div class="right_col" role="main" style="margin-left: 0;background-color: #4d6984">
+                    <?= $this->layout()->content ?>
+                </div>
+                <!-- /page content -->
+                <!-- footer content -->
+                <footer>
+                    <div class="pull-right">
+                        <?= $this->appConfig("empresa") ?> Email: <a href="mailto:soporte@oaq.com.mx">soporte@oaq.com.mx</a> Tel.: +52 (442) 216-0870
+                    </div>
+                    <div class="clearfix"></div>
+                </footer>
+                <!-- /footer content -->
+            </div>
+        </div>	
+    </body>
+    <?= $this->headScript() ?>
+</html>

@@ -1,0 +1,65 @@
+<style>
+    .traffic-btn-small {
+        min-width: 60px;
+    }
+    .traffic-btn-small:disabled {
+        min-width: 60px;
+        font-size: 10px;
+        line-height: 12px;
+        border-radius: 2px;
+        padding: 3px 3px;
+        min-height: 12px;
+        text-decoration: none;
+        font-weight: normal;
+    }
+</style>
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <th style="text-align: right; width: 80px">Empresa:</th>
+        <td colspan="5">
+            <select id="idEmpresa" name="idEmpresa" class="traffic-select-large">
+                <?php if(isset($this->results)) { ?>
+                    <?php foreach ($this->results as $k => $v) { ?>
+                        <option value="<?= $k ?>"><?= $v ?></option>
+                    <?php } ?>
+                <?php } ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th style="text-align: left; width: 260px">Departamentos:</th>
+        <th style="text-align: left; width: 260px">Puestos:</th>
+        <th style="text-align: left; width: 260px">Actividades:</th>
+        <th>&nbsp;</th>
+    </tr>
+    <tr>
+        <td>
+            <div id="deptos" style="padding: 2px">
+                <select multiple="" style="height: 180px"></select>
+            </div>
+            <!--<button id="agregarDepto" class="traffic-btn traffic-btn-add">Agregar</button>-->
+            <button id="editarDepto" class="traffic-btn-small traffic-btn-create">Editar</button>
+            <!--<button id="borrarDepto" class="traffic-btn traffic-btn-close">Borrar</button>-->
+        </td>
+        <td>
+            <div id="puestos" style="padding: 2px">
+                <select multiple="" style="height: 180px"></select>
+            </div>
+            <button id="agregarPuesto" class="traffic-btn-small traffic-btn-add">Agregar</button>
+            <button id="editarPuesto" class="traffic-btn-small traffic-btn-create">Editar</button>
+            <button id="borrarPuesto" class="traffic-btn-small traffic-btn-close">Borrar</button>
+        </td>
+        <td>
+            <div id="actividades" style="padding: 2px">
+                <select multiple="" style="height: 180px"></select>
+            </div>
+            <button id="agregarActividad" class="traffic-btn-small traffic-btn-add">Agregar</button>
+            <button id="editarActividad" class="traffic-btn-small traffic-btn-create">Editar</button>
+            <button id="borrarActividad" class="traffic-btn-small traffic-btn-close">Borrar</button>
+        </td>
+        <td>
+            <div id="edit"></div>
+            &nbsp;
+        </td>
+    </tr>
+</table>

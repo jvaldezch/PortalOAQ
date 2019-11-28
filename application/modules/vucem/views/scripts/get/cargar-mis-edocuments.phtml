@@ -1,0 +1,71 @@
+<table class="traffic-table-iframe traffic-table-left hover">
+    <thead>        
+        <tr>
+            <th colspan="9" class="subtitle">ARCHIVOS PARA ENVIAR A VUCEM</th>
+        </tr>
+        <tr>
+            <th>
+                <input type="checkbox" id="selectAll" style="margin-left: 3px" />
+            </th>
+            <th>Firmante</th>
+            <th>RFC Consulta</th>
+            <th>Operación</th>
+            <th>Referencia</th>
+            <th>Archivo</th>
+            <th>(kb/Mb)</th>
+            <th>Tipo</th>
+            <th>&nbsp;</th>
+        </tr>     
+    </thead>
+    <tbody>        
+        <?php if (isset($this->data) && !empty($this->data)) { ?>
+            <?php foreach ($this->data as $k => $item) { ?>
+                <tr id="row_<?= $item["id"] ?>">
+                    <td style="width: 24px; padding-left: 3px">
+                        <?php if ((int) $item["estatus"] == 3) { ?>
+                            <div class="semaphore-green"></div>
+                        <?php } ?>
+                        <?php if ((int) $item["estatus"] == 4) { ?>
+                            <div class="semaphore-red"></div><div class="tooltiptext" style="display: none"><?= htmlentities($item["ultimaRespuesta"]) ?></div>
+                        <?php } ?>
+                        <?php if ($item["error"] == null) { ?>
+                            <input type="checkbox" class="edocs" value="<?= $item["id"] ?>"/>
+                        <?php } else { ?>
+                            <img src="/images/icons/scanning.png" data-id="<?= $item["id"] ?>" class="process" />
+                        <?php } ?>
+                    </td>
+                    <td style="width: 90px"><?= $item["firmante"] ?></td>
+                    <td style="width: 100px"><?= $item["rfcConsulta"] ?></td>
+                    <td style="width: 110px"><?= $item["patente"] . "-" . $item["aduana"] . "-" . $item["pedimento"] ?></td>
+                    <td style="width: 90px"><?= $item["referencia"] ?></td>
+                    <td style="text-align: left">
+                        <a class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer"><?= basename($item["nomArchivo"]) ?></a>
+                    </td>
+                    <?php if ($item["size"] > 3670016) { ?>
+                        <td style="text-align: right; padding: 0 2px; width: 90px; background-color: #ff3333; color: white"><?= $this->filesize($item["size"]) ?></td>
+                    <?php } else { ?>
+                        <td style="text-align: right; padding: 0 2px; width: 90px"><?= $this->filesize($item["size"]) ?></td>
+                    <?php } ?>
+                    </td>
+                    <td style="text-align: left"><?= isset($item["tipoArchivo"]) ? $item["tipoArchivo"] . " - " . $this->tipoEdoc($item["tipoArchivo"]) : "&nbsp;" ?></td>
+                    <td style="width: 50px; text-align: center">
+                        <div class="traffic-icon traffic-icon-delete delete" data-id="<?= $item["id"] ?>"></div>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="9" style="text-align: center"><em>No tiene documentos.</em></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(".semaphore-red").each(function () {
+        $(this).qtip({
+            content: {
+                text: $(this).next(".tooltiptext")
+            }
+        });
+    });
+</script>

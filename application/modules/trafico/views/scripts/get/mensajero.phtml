@@ -1,0 +1,111 @@
+<style>
+    .rTable {
+        display: table;
+        width: 100%;
+        font-size: 12px;
+    }
+    .rTableRow {
+        display: table-row;
+        vertical-align: top;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #f4f4f4;
+    }
+    .rTableCell, .rTableHead {
+        display: table-cell;
+        padding: 2px 2px;
+        border: 1px solid #f4f4f4;
+        vertical-align: text-top;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+    .rTableFoot {
+        display: table-footer-group;
+        font-weight: bold;
+        background-color: #f4f4f4;
+    }
+    .rTableBody {
+        display: table-row-group;
+    }
+    .message {
+
+    }
+</style>
+<input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->idTrafico ?>" />
+<div class="rTable">
+    <div class="rTableRow">
+        <div class="rTableHead" style="width: 110px"><strong>DE:</strong></div>
+        <div class="rTableHead"><strong>MENSAJE:</strong></div>
+        <div class="rTableHead" style="width: 125px"><strong>ENVIADO:</strong></div>
+    </div>
+    <?php if (isset($this->arr)) { ?>
+        <?php foreach ($this->arr as $item) { ?>
+            <div class="rTableRow" <?= ($item["leido"] == 0) ? 'style="background: #fbfed9"' : '' ?>>
+                <div class="rTableCell"><?= $item["usuarioDe"] ?></div>
+                <div class="rTableCell">
+                    <?= $item["mensaje"] ?>
+                    <?php if(isset($item["nombreArchivo"])) { ?>
+                        <br><img src="/images/icons/attachment.gif"><span style="font-size: 11px"><a href="/archivo/data/descargar-archivo-temporal?id=<?= $item["idArchivo"] ?>"><?= $item["nombreArchivo"] ?></a></span>
+                    <?php } ?>
+                </div>
+                <div class="rTableHead"><?= date("Y-m-d H:i a", strtotime($item["creado"])) ?></div>
+            </div>
+            <?php if($item["leido"] == 0) { ?>
+                <script>setViewed(<?= $item["id"] ?>, <?= $this->idTrafico ?>);</script>
+            <?php } ?>
+        <?php } ?>
+    <?php } ?>
+    <div class="rTableRow">
+        <div class="rTableCell">&nbsp;</div>
+        <div class="rTableCell">
+            <div style="float: left">
+                <form id="formMessage" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="idTrafico" value="<?= $this->idTrafico ?>"/>
+                    <input type="hidden" name="idUsuarioDe" value="<?= $this->idUsuarioDe ?>"/>
+                    <input type="hidden" name="idUsuarioPara" value="<?= $this->idUsuarioPara ?>"/>
+                    <input type="file" name="filesm" id="filesm" visibility="hidden" style="display: none"/>
+                    <label style="font-weight: bold">Mensaje establecido [opcional]:<label>
+                    <select class="traffic-select-large" name="estatus" id="estatus">
+                        <option value="">---</option>
+                        <?php foreach ($this->mensajes as $item) { ?>
+                            <option value="<?= $item["id"] ?>"><?= $item["mensaje"] ?></option>
+                        <?php } ?>
+                    </select><br>
+                    <label style="font-weight: bold">Mensaje:<label>
+                    <textarea id="mensaje" name="mensaje" class="traffic-textarea-medium mensaje"></textarea>
+                    <div id="attachedFilesm"></div>
+                </form>
+            </div>
+            <div style="float: right; padding-top: 20px">
+                <button id="sendMessage" class="traffic-btn traffic-btn-right">Enviar</button>
+                <img src="/images/icons/attachment.gif" id="attachm" data-id="<?= $this->idTrafico ?>" style="float: right; padding-top: 3px; margin-right: 4px; cursor: pointer" />
+            </div>
+        </div>
+        <div class="rTableCell">&nbsp;</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#formMessage").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            mensaje: {required: function(el) {
+                return $("#estatus").val() === "";
+              }
+            }
+        },
+        messages: {
+            mensaje: "SE REQUIERE COMENTARIO"
+        }
+    });
+</script>

@@ -1,0 +1,35 @@
+<style>
+    #datatable th.title {
+        width: 75px;
+    }
+    #datatable td {
+        padding: 2px 5px;
+        font-family:  'Consolas', sans-serif;
+    }
+    #datatable td strong {
+        font-family:  'Consolas', sans-serif;
+    }
+    #datatable td.data {
+        text-align: right;
+    }
+</style>
+<?= $this->form ?>
+<table>
+    <tr>
+        <td style="width: 520px;">
+            <div id="container-corp" style="max-width: 510px; height: 250px; margin: 0"></div>            
+            <div id="container-nl" style="max-width: 510px; height: 250px; margin: 0"></div>            
+            <div id="container-qro" style="max-width: 510px; height: 250px; margin: 0"></div>
+            <div id="container-aero" style="max-width: 510px; height: 250px; margin: 0"></div>
+        </td>
+        <td>
+            <div id="container-cve-corp" style="max-width: 510px; height: 250px; margin: 0"></div>            
+            <div id="container-cve-nl" style="max-width: 510px; height: 250px; margin: 0"></div>            
+            <div id="container-cve-qro" style="max-width: 510px; height: 250px; margin: 0"></div>            
+            <div id="container-cve-aero" style="max-width: 510px; height: 250px; margin: 0"></div>            
+        </td>
+    </tr>
+</table>
+<input type="hidden" value="<?= $this->year ?>" id="year" >
+<input type="hidden" value="<?= $this->rfc ?>" id="rfc" >
+<input type="hidden" value="<?= $this->name ?>" id="name" >

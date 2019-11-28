@@ -1,0 +1,34 @@
+<table class="table table-striped table-bordered comments-table">
+     <thead>
+        <tr>
+            <th style="width: 170px">Usuario</th>
+            <th>Comentario</th>
+            <th style="width: 130px">Fecha</th>
+        </tr>
+     </thead>
+     <tbody>
+        <?php if (isset($this->comments)) { ?>
+            <?php foreach($this->comments as $item) { ?>
+                <tr id="comment_<?= $item["id"] ?>">
+                    <td><?= $item["nombre"] ?></td>
+                    <td><?= $item["mensaje"] ?></td>
+                    <td><?= $item["creado"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="3">
+                    <em>No hay comentarios</em>
+                </td>
+            </tr>
+        <?php } ?>
+     </tbody>
+</table>
+<form id="demo-form" data-parsley-validate="" novalidate="">
+    <input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->id ?>" />
+    <label for="message">Comentario (20 caracteres min, 100 max) :</label>
+    <textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." data-parsley-validation-threshold="10"></textarea>
+
+    <br>
+    <span class="btn btn-primary btn-xs" id="add-comment">Agregar comentario</span>
+</form>

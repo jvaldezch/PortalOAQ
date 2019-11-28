@@ -1,0 +1,79 @@
+.traffic-tabs {
+  width: 100%;
+  display: inline-block;
+}
+.traffic-tab-links {
+  padding: 5px;
+  margin: 0;
+}
+.traffic-tab-links:after {
+  display: block;
+  clear: both;
+  content: '';
+}
+.traffic-tab-links li {
+  margin: 0px;
+  margin-right: 2px;
+  float: left;
+  list-style: none;
+}
+.traffic-tab-links a {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background-color: #d1dde5;
+  border-color: #ddd #ddd transparent;
+  border-image: none;
+  border-style: solid;
+  border-width: 1px;
+  color: #333;
+  cursor: default;
+  font-family: sans-serif;
+  font-size: 12px;
+  transition: all linear 0.15s;
+  padding: 8px 15px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.traffic-tab-links a:hover {
+  background: #e0e9ee;
+  color: #333;
+  text-decoration: none;
+}
+.traffic-tabs li.active a,
+.traffic-tabs li.active a:hover {
+  background: #3f4c6b;
+  color: #fff;
+}
+.traffic-tab-content {
+  padding: 0;
+  padding-top: 3px;
+  border-radius: 3px;
+  background: #fff;
+}
+.traffic-tab {
+  display: none;
+}
+.traffic-tab.active {
+  display: block;
+}
+.traffic-tab-table {
+  border-collapse: collapse;
+}
+.traffic-tab-table tr {
+  background: transparent;
+}
+.traffic-tab-table th,
+.traffic-tab-table td {
+  padding: 2px 3px;
+  font-size: 12px;
+  border: 1px #ddd solid;
+  text-align: center;
+}
+.traffic-tab-table th {
+  background-color: #3f4c6b;
+  color: #fff;
+  font-weight: normal;
+}
+/*# sourceMappingURL=tab.css.map */

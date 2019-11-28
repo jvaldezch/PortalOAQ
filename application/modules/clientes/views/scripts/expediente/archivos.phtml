@@ -1,0 +1,96 @@
+<table class="traffic-table traffic-table-left hover">    
+    <thead>
+        <tr>
+            <th class="traffic-table-subtitle" colspan="3" style="font-size: 16px !important">OPERACIÓN: <?= $this->aduana ?>-<?= $this->patente ?>-<?= $this->pedimento ?>, REFERENCIA AGENTE ADUANAL: <?= $this->referencia ?></th>            
+        </tr>
+        <tr>
+            <th class="traffic-table-subtitle" style="text-align: left">Archivo</th>
+            <th class="traffic-table-subtitle" style="text-align: left">Tipo</th>
+            <th class="traffic-table-subtitle">Creado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->files) && !empty($this->files)) { ?>
+            <?php foreach ($this->files as $k => $item) { ?>
+                <tr>
+                    <td>
+                        <?php if (file_exists($item["ubicacion"])) { ?>
+                            <a class="traffic-a" target="_blanl" href="/clientes/expediente/descargar-archivo?id=<?= $item["id"] ?>"><?= $item["nom_archivo"] ?></a>
+                        <?php } else { ?>
+                            <p><?= $item["nom_archivo"] ?></>
+                            <?php } ?>
+                    </td>
+                    <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                    <td style="width: 120px; text-align: center"><?= date('d/m/Y', strtotime($item["creado"])) ?>&nbsp;</td>                    
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="3" style="text-align: center">
+                    <em>No hay archivos para la referencia.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<table class="traffic-table traffic-table-left">    
+    <thead>
+        <tr>
+            <th class="traffic-table-subtitle" style="font-size: 16px !important">FOTOGRAFÍAS</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->gallery) && !empty($this->gallery)) { ?>
+            <tr>
+                <td>
+                    <?php foreach ($this->gallery as $item) { ?>
+                        <?php if (file_exists($item["carpeta"] . DIRECTORY_SEPARATOR . $item["miniatura"])) { ?>
+                            <div style="float: left; margin: 2px; border: 1px #999 solid; padding: 2px; background-color: #fff; min-width: 150px; min-height: 120px">
+                                <div>
+                                    <a title="Trafico Image <?= $item["id"] ?>" class="image-link traffic-thumb" target="_blank" href="/clientes/expediente/read-image?id=<?= $item["id"] ?>&time=<?= microtime() ?>" data-id="<?= $item["id"] ?>">
+                                        <?php if (isset($item['miniatura'])) { ?>
+                                            <img class="view-photo" src="/clientes/expediente/read-thumbnail?id=<?= $item["id"] ?>&time=<?= microtime() ?>" >
+                                        <?php } else { ?>
+                                            <img class="view-photo" src="/images/not_available.gif" width="150px" >
+                                        <?php } ?>
+                                    </a>
+                                </div>
+                                <div>
+                                    <div style="float: left; font-size: 11px">
+                                        <?= isset($item["nombre"]) ? $item["nombre"] : strtolower($item["imagen"]) ?>
+                                    </div>
+                                    <?php if (!isset($this->borrar)) { ?>
+                                        <div style="float: right">
+                                            <div class="traffic-icon traffic-icon-delete" style="cursor: pointer" onclick="borrarImagen(<?= $item["id"] ?>);"></div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        <?php } else { ?>
+                            <div style="float: left; margin: 2px; border: 1px #999 solid; padding: 2px; background-color: #fff; min-width: 150px; min-height: 120px">
+                                <div>
+                                    <a title="Image not found!" class="traffic-thumb">                            
+                                        <img class="traffic-img-notavailable">
+                                    </a>
+                                </div>
+                                <div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    <?php } ?>                
+                </td>
+            </tr>            
+        <?php } else { ?>
+            <tr>
+                <td style="text-align: center">
+                    <em>No tiene imágenes cargadas</em>                
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<a href="/clientes/expediente/descargar-archivos-trafico?code=<?= urlencode($this->code) ?>" class="traffic-btn-back traffic-btn-right">Descargar todo</a>

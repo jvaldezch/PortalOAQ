@@ -1,0 +1,266 @@
+<?php $item = $this->pedimento ?>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th colspan="13" class="header">Encabezado</th>
+    </tr>
+    <tr>
+        <th>Pedimento</th>
+        <th>Tipo de Operacion</th>
+        <th>Clave de Documento</th>
+        <th>Destino</th>
+        <th>Aduana de Entrada/Salida</th>
+        <th>Tipo de Cambio</th>
+        <th>Peso Bruto</th>
+        <th>Medio de Transporte Salida</th>
+        <th>Medio de Transporte Arribo</th>
+        <th>Medio de Transporte Entrada</th>
+        <th>Valor Dolares</th>
+        <th>Valor Aduanal</th>
+        <th>Valor Comercial</th>
+
+    </tr>
+    <tr>
+        <td><?= $item["pedimento"] ?></td>
+        <td><?= $item["encabezado"]["tipoOperacion"]["descripcion"] ?></td>
+        <td><?= $item["encabezado"]["claveDocumento"]["clave"] ?></td>
+        <td><?= $item["encabezado"]["destino"]["clave"] ?></td>
+        <td><?= $item["encabezado"]["aduanaEntradaSalida"]["clave"] ?></td>
+        <td><?= $item["encabezado"]["tipoCambio"] ?></td>
+        <td><?= $item["encabezado"]["pesoBruto"] ?></td>
+        <td><?= $item["encabezado"]["medioTrasnporteSalida"]["clave"] ?></td>
+        <td><?= $item["encabezado"]["medioTrasnporteArribo"]["clave"] ?></td>
+        <td><?= $item["encabezado"]["medioTrasnporteEntrada"]["clave"] ?></td>
+        <td><?= $item["encabezado"]["valorDolares"] ?></td>
+        <td><?= $item["encabezado"]["valorAduanalTotal"] ?></td>
+        <td><?= $item["encabezado"]["valorComercialTotal"] ?></td>                
+    </tr>            
+</table>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th colspan="19" class="impexp">Importador/Exportador</th>
+    </tr>
+    <tr>
+        <th>RFC</th>
+        <th>Razán Social</th>
+        <th>Calle</th>
+        <th>Número Exterior</th>
+        <th>Número Interior</th>
+        <th>Ciudad, Municipio</th>
+        <th>CP</th>
+        <th>Seguros</th>
+        <th>Fletes</th>
+        <th>Wmbalajes</th>
+        <th>Incrementables</th>
+        <th>Aduana Despacho</th>
+        <th>Fecha Pago Original</th>
+        <th>Fecha Pago Contribuciones</th>
+        <th>Fecha de Entrada</th>
+        <th>Efectivo</th>
+        <th>Otros</th>
+        <th>Total</th>
+        <th>País</th>            
+    </tr>
+    <tr>
+        <td><?= $item["importadorExportador"]["rfc"] ?></td>
+        <td><?= $item["importadorExportador"]["razonSocial"] ?></td>
+        <td><?= $item["importadorExportador"]["domicilio"]["calle"] ?></td>
+        <td><?= $item["importadorExportador"]["domicilio"]["numeroExterior"] ?></td>
+        <td><?= isset($item["importadorExportador"]["domicilio"]["numeroInterior"]) ? $item["importadorExportador"]["domicilio"]["numeroInterior"] : '&nbsp;' ?></td>
+        <td><?= $item["importadorExportador"]["domicilio"]["ciudadMunicipio"] ?></td>
+        <td><?= $item["importadorExportador"]["domicilio"]["codigoPostal"] ?></td>
+        <td><?= $item["importadorExportador"]["seguros"] ?></td>
+        <td><?= $item["importadorExportador"]["fletes"] ?></td>
+        <td><?= $item["importadorExportador"]["embalajes"] ?></td>
+        <td><?= $item["importadorExportador"]["incrementables"] ?></td>
+        <td><?= $item["importadorExportador"]["aaduanaDespacho"]["clave"] ?></td>
+        <td><?= $item["importadorExportador"]["fechas"][0]["fecha"] ?></td>
+        <td><?= $item["importadorExportador"]["fechas"][1]["fecha"] ?></td>
+        <td><?= $item["importadorExportador"]["fechas"][2]["fecha"] ?></td>
+        <td><?= $item["importadorExportador"]["efectivo"] ?></td>
+        <td><?= $item["importadorExportador"]["otros"] ?></td>
+        <td><?= $item["importadorExportador"]["total"] ?></td>
+        <td><?= $item["importadorExportador"]["pais"]["clave"] ?></td>                
+    </tr>
+</table>
+<?php if(isset($item["tasas"])) { ?>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th colspan="10" class="tasas">Tasas</th>
+    </tr>
+    <tr>
+        <th>Tipo de Tasa</th>
+        <th>Clave</th>
+        <th>Tasa Aplicable</th>
+        <th>Importe</th>
+        <th>Forma de Pago</th>
+    </tr>
+    <?php if(isset($item["tasas"]["contribucion"])) { ?>
+    <tr>
+        <td><?= $item["tasas"]["contribucion"]["descripcion"] ?></td>
+        <td><?= $item["tasas"]["tipoTasa"]["clave"] ?></td>
+        <td><?= $item["tasas"]["tasaAplicable"] ?></td>
+        <td><?= $item["tasas"]["importe"] ?></td>
+        <td><?= $item["tasas"]["formaPago"]["clave"] ?></td>
+    </tr>
+    <?php } elseif($item["tasas"][0]["contribucion"]) { ?>
+    <?php foreach($item["tasas"] as $tasa) { ?>
+    <tr>
+        <td><?= isset($tasa["contribucion"]["descripcion"]) ? $tasa["contribucion"]["descripcion"] : '&nbsp;' ?></td>
+        <td><?= isset($tasa["tipoTasa"]["clave"]) ? $tasa["tipoTasa"]["clave"] : '&nbsp;' ?></td>
+        <td><?= isset($tasa["tasaAplicable"]) ? '' : '&nbsp;' ?></td>
+        <td><?= isset($tasa["importe"]) ? '' : '&nbsp;' ?></td>
+        <td><?= isset($tasa["formaPago"]["clave"]) ? '' : '&nbsp;' ?></td>
+    </tr>
+    <?php } ?>
+    <?php } ?>
+</table>
+<?php } ?>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th colspan="11" class="proveedores">Proveedores/Compradores</th>
+    </tr>
+    <tr>
+        <th>Identificador</th>
+        <th>Proveedor/Comprador</th>
+        <th>Calle</th>
+        <th>Número Exterior</th>
+        <th>Número Interior</th>
+        <th>Ciudad, Municipio</th>
+        <th>CP</th>
+        <th>Moneda</th>
+        <th>Valor Moneda Extranjera</th>
+        <th>Valor Dolares</th>
+        <th>País</th>
+    </tr>
+    <?php if(isset($item["proveedoresCompradores"]["identificadorFiscal"])) { ?>
+    <tr>
+        <td><?= $item["proveedoresCompradores"]["identificadorFiscal"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["proveedorComprador"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["domicilio"]["calle"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["domicilio"]["numeroExterior"] ?></td>
+        <td><?= isset($item["proveedoresCompradores"]["domicilio"]["numeroInterior"]) ? $item["proveedoresCompradores"]["domicilio"]["numeroInterior"] : '' ?></td>
+        <td><?= $item["proveedoresCompradores"]["domicilio"]["ciudadMunicipio"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["domicilio"]["codigoPostal"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["moneda"]["clave"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["valorMonedaExtranjera"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["valorDolares"] ?></td>
+        <td><?= $item["proveedoresCompradores"]["pais"]["clave"] ?></td>
+    </tr>
+    <?php } elseif($item["proveedoresCompradores"][0]["identificadorFiscal"]) { ?>
+    <?php foreach($item["proveedoresCompradores"] as $prov) { ?>
+    <tr>
+        <td><?= $prov["identificadorFiscal"] ?></td>
+        <td><?= $prov["proveedorComprador"] ?></td>
+        <td><?= $prov["domicilio"]["calle"] ?></td>
+        <td><?= $prov["domicilio"]["numeroExterior"] ?></td>
+        <td><?= isset($prov["domicilio"]["numeroInterior"]) ? $prov["domicilio"]["numeroInterior"] : '' ?></td>
+        <td><?= $prov["domicilio"]["ciudadMunicipio"] ?></td>
+        <td><?= $prov["domicilio"]["codigoPostal"] ?></td>
+        <td><?= $prov["moneda"]["clave"] ?></td>
+        <td><?= $prov["valorMonedaExtranjera"] ?></td>
+        <td><?= $prov["valorDolares"] ?></td>
+        <td><?= $prov["pais"]["clave"] ?></td>
+    </tr>
+    <?php } ?>
+    <?php } ?>
+</table>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th colspan="11" class="facturas">Facturas</th>
+    </tr>
+    <tr>
+        <th>Fecha</th>
+        <th>COVE</th>        
+        <th>Moneda</th>
+        <th>Valor Dolares</th>
+        <th>Valor Moneda Extranjera</th>
+        <th>Identificador Proveedor/Comprador</th>
+        <th>Proveedor/Comprador</th>
+    </tr>
+    <?php if(isset($item["facturas"]["fecha"])) { ?>
+    <tr>
+        <td><?= $item["facturas"]["fecha"] ?></td>
+        <td><?= $item["facturas"]["numero"] ?></td>        
+        <td><?= $item["facturas"]["moneda"]["clave"] ?></td>
+        <td><?= $item["facturas"]["valorDolares"] ?></td>
+        <td><?= $item["facturas"]["valorMonedaExtranjera"] ?></td>
+        <td><?= $item["facturas"]["identificadorFiscalProveedorComprador"] ?></td>
+        <td><?= $item["facturas"]["proveedorComprador"] ?></td>
+    </tr>
+    <?php } elseif($item["facturas"][0]["fecha"]) { ?>
+    <?php foreach($item["facturas"] as $fact) { ?>
+    <tr>
+        <td><?= $fact["fecha"] ?></td>
+        <td><?= $fact["numero"] ?></td>
+        <td><?= $fact["moneda"]["clave"] ?></td>
+        <td><?= $fact["valorDolares"] ?></td>
+        <td><?= $fact["valorMonedaExtranjera"] ?></td>
+        <td><?= $fact["identificadorFiscalProveedorComprador"] ?></td>
+        <td><?= $fact["proveedorComprador"] ?></td>
+    </tr>
+    <?php } ?>
+    <?php } ?>
+</table>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th colspan="2" class="facturas">Identificadores</th>
+    </tr>
+    <tr>
+        <th>Identificador</th>
+        <th>Complemento1</th>
+    </tr>
+    <?php foreach($item["identificadores"]["identificadores"] as $iden) { ?>
+    <tr>
+        <td><?= $iden["claveIdentificador"]["clave"] ?></td>
+        <td><?= $iden["complemento1"] ?></td>
+    </tr>
+    <?php } ?>
+</table>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th colspan="8" class="descargos">Descargos</th>
+    </tr>
+    <tr>
+        <th>Patente Original</th>
+        <th>Pedimento Original</th>
+        <th>Aduana Original</th>
+        <th>Clave Documento Original</th>
+        <th>Fecha Pago Original</th>
+        <th>Fraccion Original</th>
+        <th>Unidad de Medida</th>
+        <th>Cantidad</th>
+    </tr>
+    <?php if(isset($item["descargos"]["patenteOriginal"])) { ?>
+    <tr>
+        <td><?= $item["descargos"]["patenteOriginal"] ?></td>
+        <td><?= $item["descargos"]["pedimentoOriginal"] ?></td>
+        <td><?= $item["descargos"]["aduanaOriginal"]["clave"] ?></td>
+        <td><?= $item["descargos"]["claveDocumentoOriginal"]["clave"] ?></td>
+        <td><?= $item["descargos"]["fechaPagoOriginal"] ?></td>
+        <td><?= $item["descargos"]["fraccionOriginal"] ?></td>
+        <td><?= $item["descargos"]["UnidadMedida"]["clave"] ?></td>
+        <td><?= $item["descargos"]["cantidad"] ?></td>
+    </tr>
+    <?php } elseif(isset($item["descargos"][0]["patenteOriginal"])) { ?>
+    <?php foreach($item["descargos"] as $desc) { ?>
+    <tr>
+        <td><?= $desc["patenteOriginal"] ?></td>
+        <td><?= $desc["pedimentoOriginal"] ?></td>
+        <td><?= $desc["aduanaOriginal"]["clave"] ?></td>
+        <td><?= $desc["claveDocumentoOriginal"]["clave"] ?></td>
+        <td><?= $desc["fechaPagoOriginal"] ?></td>
+        <td><?= $desc["fraccionOriginal"] ?></td>
+        <td><?= $desc["UnidadMedida"]["clave"] ?></td>
+        <td><?= $desc["cantidad"] ?></td>
+    </tr>
+    <?php } ?>
+    <?php } ?>
+</table>        
+<table class="table table-striped table-bordered table-hover small">
+    <tr>
+        <th class="descargos">Observaciones</th>
+    </tr>
+    <tr>
+        <td><?= $item["observaciones"] ?></td>
+    </tr>
+</table>

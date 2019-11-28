@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #pdfviewer {
+            width: 550px;
+            height: 550px;
+        }
+    </style>
+    <body>
+        <object data="data:application/pdf;base64,<?= $this->pdf ?>" type="application/pdf" id="pdfviewer"> 
+            <p>It appears you don't have a PDF plugin for this browser.
+            No biggie... you can <a href="myfile.pdf">click here to
+            download the PDF file.</a></p>
+        </object>
+    </body>
+</html>

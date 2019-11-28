@@ -1,0 +1,73 @@
+<form id="form" method="post" enctype="multipart/form-data">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2">CAMBIAR ARCHIVO</th>
+            </tr>        
+        </thead>
+        <tbody>
+            <tr>
+                <td>Id:</td>
+                <td>
+                    <input type="text" class="traffic-input-xs" id="id" name="id" value="<?= $this->id ?>" readonly="true">
+                    <input type="hidden" name="type" value="<?= $this->type ?>" readonly="true">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="file">Archivo:</label></td>
+                <td>
+                    <input type="file" name="file" id="file">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div class="traffic-clear-5"></div>
+<a class="traffic-btn traffic-btn-close" id="closeModal">Cerrar</a>
+<button id="submit" class="traffic-btn-add traffic-btn-right">Subir archivo</button>
+<div class="traffic-clear-5"></div>
+<script>
+    $("#form").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("label[for='" + element.attr("id") + "']")
+                    .append(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error-span",
+        rules: {
+            file: {
+                required: true,
+                extension: "cer|key"
+            }
+        },
+        messages: {
+            file: {
+                required: "[No ha seleccionado un archivo]",
+                extension: "[Extensión no válida]"
+            }
+        }
+    });
+    
+    $("#submit").click(function (e) {
+        e.preventDefault();
+        if ($("#form").valid()) {
+            $("#form").ajaxSubmit({
+                cache: false,
+                url: "/usuarios/ajax/actualizar-archivo",
+                type: "post",
+                dataType: "json",
+                success: function (res) {
+                    if (res.success === true) {
+                    }
+                }
+            });
+        }
+    });
+
+    $("#closeModal").click(function () {
+        $("#modalRegister").html('Please wait... <div class="traffic-icon traffic-loader"></div>');
+        $("#modalRegister").jqmHide();
+    });
+</script>

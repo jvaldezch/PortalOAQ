@@ -1,0 +1,112 @@
+<div>
+    <div class="traffic-col-50">
+        <form method="post" id="formUsuario">
+            <table id="user-data" class="traffic-table traffic-table-left">
+                <tr>
+                    <th style="width: 200px"><label for="nombre">Nombre:</label></th>
+                    <td>
+                        <?= $this->form->nombre ?>
+                        <a href="/principal/index/mis-documentos" class="traffic-btn-right traffic-btn-success">Doctos.</a>
+                        <a href="/principal/index/mis-actividades" class="traffic-btn-right traffic-btn-add">Actividades</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="email">Email:</label></th>
+                    <td><?= $this->form->email ?></td>
+                </tr>
+                <tr>
+                    <th><label for="usuario">Usuario:</label></th>
+                    <td><?= $this->form->usuario ?></td>
+                </tr>
+                <tr>
+                    <th><label for="empresa">Empresa:</label></th>
+                    <td><?= $this->form->empresa ?></td>
+                </tr>
+                <tr>
+                    <th><label for="departamento">Departamento:</label></th>
+                    <td><?= $this->form->departamento ?></td>
+                </tr>
+                <tr>
+                    <th><label for="telefono">Teléfono:</label></th>
+                    <td><?= $this->form->telefono ?></td>
+                </tr>
+                <tr>
+                    <th><label for="extension">Extensión:</label></th>
+                    <td><?= $this->form->extension ?></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <button id="update" class="traffic-btn-right traffic-btn-save">Guardar</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div>
+            <form method="post" id="formRequest">
+                <table id="user-data" class="traffic-table traffic-table-left">
+                    <tr>
+                        <th style="width: 200px">
+                            <label>Solicitud:</label>                            
+                        </th>
+                        <td>
+                            <?php if(isset($this->tipoSolicitudes)) { ?>
+                                <select name="idSolicitud" id="idSolicitud" class="traffic-select-large">
+                                    <option value="">---</option>
+                                    <?php foreach ($this->tipoSolicitudes as $item) { ?>
+                                        <option value="<?= $item["id"] ?>"><?= $item["tipoSolicitud"] ?></option>
+                                    <?php } ?>
+                                </select>
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <button type="submit" id="submit" class="traffic-btn">Crear</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <table id="solicitudes" class="traffic-table traffic-table-left">
+                <thead>
+                    <tr>
+                        <th colspan="4" class="traffic-table-subtitle">MIS SOLICITUDES</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 24px">&nbsp;</th>
+                        <th>Tipo solicitud</th>
+                        <th style="width: 120px">Creado</th>
+                        <th style="width: 130px">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="traffic-col-50">
+        <div class="traffic-clear-5"></div>
+        <table class="traffic-table traffic-table-left" id="directory">
+            <thead>
+                <tr>
+                    <th colspan="4">Directorio de personal</th>
+                </tr>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Ext.</th>
+                </tr>
+            </thead>            
+            <tbody>
+                <?php if (isset($this->directorio)) { ?>
+                    <?php foreach ($this->directorio as $item) { ?>
+                        <tr>
+                            <td><?= $item["nombre"] ?></td>
+                            <td><?= $item["email"] ?></td>
+                            <td><?= $item["telefono"] ?></td>
+                            <td><?= $item["extension"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<?php if((isset($this->archivosm) && !empty($this->archivosm)) || (isset($this->archivosv) && !empty($this->archivosv)) || (isset($this->archivosp) && !empty($this->archivosp))) { ?>
+<table class="traffic-table">
+    <tr>
+        <th colspan="3" class="invoice-title">ARCHIVOS VALIDACION</th>
+    </tr>
+    <tr>
+        <th>Nom. Archivo</th>
+        <th>Firma Validación</th>
+        <th>Firma Banco</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php if(isset($this->archivosm) && !empty($this->archivosm)) { foreach($this->archivosm as $item) { ?>
+    <tr>
+        <td><?= $item["archivoNombreM3"] ?></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>
+            <div class="traffic-icon traffic-icon-folder"></div>
+        </td>
+    </tr>
+    <?php } } ?>
+    <?php if(isset($this->archivosv) && !empty($this->archivosv)) { foreach($this->archivosv as $item) { ?>
+    <tr>
+        <td><?= $item["archivoNombre"] ?></td>
+        <td><?= $item["firma"] ?></td>
+        <td>&nbsp;</td>
+        <td>
+            <div class="traffic-icon traffic-icon-folder"></div>
+        </td>
+    </tr>
+    <?php } } ?>
+    <?php if(isset($this->archivosp) && !empty($this->archivosp)) { foreach($this->archivosp as $item) { ?>
+    <tr>
+        <td><?= $item["archivoNombre"] ?></td>
+        <td>&nbsp;</td>
+        <td><?= $item["firmaBanco"] ?></td>
+        <td>
+            <div class="traffic-icon traffic-icon-folder"></div>
+        </td>
+    </tr>
+    <?php } } ?>
+</table>
+<?php } else { ?>
+<table class="traffic-table">
+    <tr>
+        <th class="invoice-title">ARCHIVOS DE VALIDACIÓN</th>
+    </tr>           
+    <tr>
+        <td>
+            <em>No existen archivo de validación.</em>
+        </td>
+    </tr>
+</table>
+<?php } ?>

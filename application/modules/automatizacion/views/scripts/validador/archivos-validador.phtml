@@ -1,0 +1,37 @@
+<table id="table-validation" class="traffic-table traffic-table-left">    
+    <thead>
+        <tr>
+            <td colspan="4" style="text-align: left">
+                Actualizar ftp: 
+                <button style="background: #f6f6f6; background-position: 3px 3px; border-radius: 5px; background-repeat: no-repeat; height: 24px; width: 24px;border: 1px #999 solid;background-image: url('/images/icons/refresh.png');"  onclick="contenidoValidador('<?= $this->patente ?>','<?= $this->aduana ?>');" id="reload-ftp">&nbsp;</button>
+                <div id="loading" style="float: right; margin-right: 5px; display: none"><img src="/images/preloader.gif" ></div>                
+            </td>
+        </tr>
+        <tr>
+            <th>Archivo</th>
+            <th>Tamaño</th>
+            <th>Hora</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->files) && !empty($this->files)) { ?>
+            <?php foreach ($this->files as $item) { ?>
+                <tr>
+                    <td><?= str_replace('./', '', $item["name"]) ?></td>
+                    <td style="text-align: right; padding-right: 5px"><?= $item["size"] ?></td>
+                    <td><?= $item["date"] ?></td>
+                    <td>
+                        <a style="cursor: pointer" onclick="descargaUnArchivo(<?= $this->patente ?>,<?= $this->aduana ?>, '<?= str_replace('./', '', $item["name"]) ?>');">
+                            <img src="/images/icons/disk.png" >
+                        </a>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="4">No hay archivos.</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

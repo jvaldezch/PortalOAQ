@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Facturas</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="OAQ Web Portal">
+        <meta name="author" content="Jaime E. Valdez">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+    </head>
+    <style>
+        body {
+            font-family: sans-serif;
+            border: 0;
+            margin: 0;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        table tr {
+            background: transparent;
+        }
+        table th,
+        table td {
+            padding: 2px 3px;
+            font-size: 12px;
+            border: 1px #999 solid;
+            text-align: center;
+        }
+        table th {
+            background-color: #e1e1f9;
+            min-width: 80px;
+        }
+    </style>
+    <body>
+        <?php if (isset($this->data)) { ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Customs Entry Form</th>
+                        <th>Importation Date</th>
+                        <th>Customs</th>
+                        <th>Supplier</th>
+                        <th>Invoice #</th>
+                        <th>AWB</th>
+                        <th>P.O.</th>
+                        <th>P.N.</th>
+                        <th>Quantity</th>
+                        <th>Item Cost</th>
+                        <th>Weight kg</th>
+                        <th>Arrival</th>
+                        <th>Carrier</th>
+                        <th>Packages</th>
+                        <th>Crossing</th>
+                        <th>Vehicle</th>
+                        <th>Plates</th>
+                        <th>Incoterm</th>
+                        <!-- cargoquin -->                        
+                        <th>#Invoice</th>
+                        <th>Invoice Date</th>
+                        <th>Administrative Fees MXN (without IVA)</th>
+                        <th>Batch Assessment</th>
+                        <th>P.N. Assessment</th>
+                        <th>Extra Freight</th>
+                        <th>Batch Assessment</th>
+                        <th>P.N. Assessment</th>
+                        <th>Assessment Validation</th>
+                        <!-- cargoquin -->
+                        <!-- conceptos -->
+                        <?= $this->conceptosTitle("Revalidación", "en") ?>
+                        <?= $this->conceptosTitle("Previo", "en") ?>
+                        <?= $this->conceptosTitle("Manejo", "en") ?>
+                        <?= $this->conceptosTitle("Almacenaje", "en") ?>
+                        <?= $this->conceptosTitle("Custodia", "en") ?>
+                        <?= $this->conceptosTitle("Valores", "en") ?>
+                        <?= $this->conceptosTitle("Fleje", "en") ?>
+                        <!-- conceptos -->
+                        <?= $this->impuestosTitle("PREV") ?>
+                        <?= $this->impuestosTitle("DTA") ?>
+                        <?= $this->impuestosTitle("CNT") ?>
+                        <th>Total Custom Cost USD</th>
+                        <th>Total Invoice Cost MXN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                        $i = 1;
+                        foreach ($this->data as $ped) { 
+                        if($i & 1) {
+                            $style = "background-color: #fefefe;";
+                        } else {
+                            $style = "background-color: #f3f3f3;";                            
+                        }
+                        $i++;
+                        $np = 0;
+                        $cantidad = 0;
+                        foreach ($ped["facturas"] as $fact) {
+                            foreach ($fact["partes"] as $part) { ?>
+                                <tr style="<?= $style ?>">
+                                    <td><?= $ped["mes"] ?></td>
+                                    <td><?= $ped["operacion"] ?></td>
+                                    <td><?= $ped["fechaImportacion"] ?></td>
+                                    <td><?= $ped["aduana"] ?></td>
+                                    <td><?= $fact["proveedor"] ?></td>
+                                    <td><?= $fact["numFactura"] ?></td>
+                                    <td><?= isset($ped["guias"][0]["guia"]) ? $ped["guias"][0]["guia"] : '' ?></td>
+                                    <td>&nbsp;</td>
+                                    <td><?= isset($part["numParte"]) ? $part["numParte"] : '' ?></td>
+                                    <td><?= isset($part["cantidadFactura"]) ? $part["cantidadFactura"] : '' ?></td>
+                                    <td><?= number_format($part["valorComercial"], 6) ?>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td><?= $ped["fechaEntrada"] ?></td>
+                                    <td>DHL</td>
+                                    <td><?= $ped["bultos"] ?></td>
+                                    <td><?= $ped["fechaPago"] ?></td>
+                                    <td>&nbsp;</td>
+                                    <td><?= isset($ped["placas"]) ? $ped["placas"] : '' ?></td>
+                                    <td><?= isset($fact["incoterm"]) ? $fact["incoterm"] : '' ?></td>
+                                    <!-- cargoquin -->
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <!-- cargoquin -->
+                                    <!-- conceptos -->
+                                    <?= $this->conceptosProrrateo(isset($ped["conceptos"]["REVALIDACION"]) ? $ped["conceptos"]["REVALIDACION"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->conceptosProrrateo(isset($ped["conceptos"]["PREVIO"]) ? $ped["conceptos"]["PREVIO"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->conceptosProrrateo(isset($ped["conceptos"]["MANEJO"]) ? $ped["conceptos"]["MANEJO"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->conceptosProrrateo(isset($ped["conceptos"]["ALMACENAJE"]) ? $ped["conceptos"]["ALMACENAJE"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->conceptosProrrateo(isset($ped["conceptos"]["CUSTODIA"]) ? $ped["conceptos"]["CUSTODIA"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->conceptosProrrateo(isset($ped["conceptos"]["VALORES"]) ? $ped["conceptos"]["VALORES"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->conceptosProrrateo(isset($ped["conceptos"]["FLEJE"]) ? $ped["conceptos"]["FLEJE"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <!-- conceptos -->
+                                    <?= $this->impuestosProrrateo(isset($ped["impuestos"]["PREV"]) ? $ped["impuestos"]["PREV"]["importe"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->impuestosProrrateo(isset($ped["impuestos"]["DTA"]) ? $ped["impuestos"]["DTA"]["importe"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <?= $this->impuestosProrrateo(isset($ped["impuestos"]["CNT"]) ? $ped["impuestos"]["CNT"]["importe"] : null, $part["cantidadFactura"], $fact["cantidadFactura"]) ?>
+                                    <td><?= isset($ped["valorAduana"]) ? number_format($ped["valorAduana"], 2) : '' ?></td>
+                                    <td><?= isset($ped["valorAduanaMxn"]) ? number_format($ped["valorAduanaMxn"], 4) : '' ?></td>
+                                </tr>
+                            <?php 
+                            $np = $np + 1;
+                            $cantidad = $cantidad + $part["cantidadFactura"];
+                            } ?>
+                        <?php } ?>
+                                <tr style="<?= $style ?>">
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td><?= $np ?></td>
+                                    <td><?= $cantidad ?></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td><?= number_format($ped["prev"],2) ?></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td><?= number_format($ped["dta"],2) ?></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td><?= number_format($ped["cnt"],2) ?></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } ?>
+    </body>
+</html>

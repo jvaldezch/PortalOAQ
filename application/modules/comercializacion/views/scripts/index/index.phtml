@@ -1,0 +1,25 @@
+<fieldset>
+    <legend>Últimos 50 clientes registrados</legend>
+    <table class="table table-striped table-bordered table-hover small">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>RFC</th>
+                <th>Alta</th>
+                <th>Modificación</th>
+                <th>Última facturación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->clientes as $item) { ?>
+            <tr>
+                <td><?= $item["nombre"] ?></td>
+                <td><?= $this->verificar($item["rfc"]) ?></td>
+                <td><?= date('Y-m-d', strtotime($item["fechaalta"])) ?></td>
+                <td><?= ($item["fechamod"] != '') ? date('Y-m-d', strtotime($item["fechamod"])) : '&nbsp;' ?></td>
+                <td><?= ($item["ultfact"] != '') ? date('Y-m-d', strtotime($item["ultfact"])) : '&nbsp;' ?></td>
+            </tr>
+            <?php } ?>            
+        </tbody>
+    </table>
+</fieldset>

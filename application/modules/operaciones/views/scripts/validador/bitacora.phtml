@@ -1,0 +1,14 @@
+<table class="traffic-table traffic-table-left">
+    <?php if (isset($this->bitacora) && !empty($this->bitacora)) { ?>
+        <?php foreach ($this->bitacora as $item) { ?>
+            <tr>
+                <td><?= $item["mensaje"] ?></td>
+                <td style="width: 95px"><?= date("d/m/y H:i", strtotime($item["creado"])) ?></td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+    <?php } ?>
+</table>

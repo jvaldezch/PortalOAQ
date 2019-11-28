@@ -1,0 +1,85 @@
+<fieldset>
+    <h4>TRAFICO</h4>
+    <table style="width: 100%;">
+        <tr>
+            <th>PEDIMENTO:</th>
+            <th>REFERENCIA:</th>
+            <th>CVE. PED.:</th>
+            <th>REGIMEN:</th>
+            <th>TIPO OPERACIÓN:</th>
+            <th>CONSOLIDADO:</th>
+            <th>RECTIFICACIÓN:</th>
+        </tr>
+        <tr>
+            <td><?= $this->basico["patente"] . '-' . $this->basico["aduana"] . '-' . $this->basico["pedimento"] ?></td>
+            <td><?= $this->basico["referencia"] ?></td>
+            <td><?= $this->basico["cvePedimento"] ?></td>
+            <td><?= $this->basico["regimen"] ?></td>
+            <td><?= $this->basico["ie"] ?></td>
+            <td><?= ($this->basico["consolidado"] == '0') ? 'N' : 'S' ?></td>
+            <td><?= ($this->basico["rectificacion"] == '0') ? 'N' : 'S' ?></td>
+        </tr>
+    </table>
+    <h4>NUEVA SOLICITUD DE ANTICIPO</h4>
+    <form method="post" action="<?= $this->url ?>" id="header">
+        <table>
+            <tr>
+                <th colspan="2">CLIENTE:</th>
+                <th>RFC:</th>                
+            </tr>
+            <tr>
+                <td colspan="2"><input type="text" name="cliente" id="cliente" value="<?= $this->data["cliente"] ?>" class="cliente"></td>
+                <td><input type="text" name="rfcCliente" id="rfcCliente" value="<?= $this->data["rfcCliente"] ?>" class="rfcCliente"></td>      
+            </tr>
+            <tr>
+                <th>PESO:</th>
+                <th>MERCANCIA:</th>
+                <th>VALOR USD:</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="peso" id="peso" value="<?= $this->data["peso"] ?>" class="peso">&nbsp;kg</td>
+                <td><input type="text" name="mercancia" id="mercancia" value="<?= $this->data["mercancia"] ?>" class="mercancia"></td>
+                <td><input type="text" name="valorUsd" id="valorUsd" value="<?= $this->data["valorUsd"] ?>" class="valorUsd"></td>
+            </tr>
+            <tr>
+                <th>TIPO EMBARQUE:</th>
+                <th colspan="2">OPERACIÓN:</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="tipoEmbarque" id="tipoEmbarque" value="<?= $this->data["tipoEmbarque"] ?>" class="tipoEmbarque"></td>
+                <td colspan="2" name="tipoOp" id="tipoOp">
+                    <select>
+                        <option value="">-- Seleccionar --</option>
+                        <option value="TOCE.IMP">IMPORTACIÓN</option>
+                        <option value="TOCE.EXP">EXPORTACIÓN</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>FECHA ETA:</th>
+                <th colspan="2">LIBRE ALMACENAJE:</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="fechaEta" id="fechaEta" value="<?= $this->data["fechaEta"] ?>" class="fechaEta"><img src="/images/icons/calendar.png" onclick="show_cal('fechaEta');" style="margin-left: 5px;"></td>
+                <td colspan="2"><input type="text" name="fechaLibreAlmacenaje" id="fechaLibreAlmacenaje" value="<?= $this->data["fechaLibreAlmacenaje"] ?>" class="fechaLibreAlmacenaje"><img src="/images/icons/calendar.png" onclick="show_cal('fechaLibreAlmacenaje');" style="margin-left: 5px;"></td>
+            </tr>
+        </table>
+    </form>
+    <h4>CONCEPTOS</h4>
+    <form method="post" action="<?= $this->url ?>" id="concepts">
+        <table>
+            <tr>
+                <th>CONCEPTO:</th>
+                <th>IMPORTE:</th>                
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="concepto" id="concepto" class="concepto"></td>
+                <td><input type="text" name="importe" id="importe" class="importe"></td>
+                <td><button id="add-concept" class="btn btn-success btn-small" style="font-size:11px; padding: 1px 3px; margin-right: 2px;">Agregar concepto</button></td>
+            </tr>
+        </table>        
+    </form>
+    <iframe src="/trafico/data/load-concepts" id="concepts-frame" width="100%" style="width: 100%; border: 1px #ddd solid; height: 150px; padding: 0; margin: 0;"></iframe>
+</fieldset>
+<script type="text/javascript"></script>

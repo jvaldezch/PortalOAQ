@@ -1,0 +1,38 @@
+<div id="column1">
+    <form enctype="application/x-www-form-urlencoded" method="post" class="table-form" id="form">
+        <table>
+            <tbody>
+                <?= $this->form->idUsuario ?>
+                <?= $this->form->idAduana ?>
+                <?= $this->form->idCliente ?>
+                <?= $this->form->cvePedimento ?>
+                <?= $this->form->tipoOperacion ?>
+                <?= $this->form->pedimento ?>
+                <?= $this->form->referencia ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <?= $this->form->submit ?>
+                        <div>
+                            <input type="text" id="more" name="more" class="tiny center" value="1" />
+                            <button id="addMore" class="button-green button-plus">+</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<div id="column2">
+    <div class="newTrafficTitles">
+        <ul>
+            <li style="width: 100px">Referencia</li>
+            <li style="width: 100px">RFC</li>
+            <li style="width: 40px">Op.</li>
+            <li style="width: 40px">Rect.</li>
+            <li style="width: 40px">Cons.</li>
+            <li style="width: 40px">&nbsp;</li>
+        </ul>
+    </div>
+</div>
+<div class="clear"></div>

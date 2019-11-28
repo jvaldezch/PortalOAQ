@@ -1,0 +1,134 @@
+<form method="post" action="<?= $this->url ?>" id="letter">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="4" class="traffic-table-title">CARTA PORTE</th>
+        </tr>
+        <tr>
+            <?php if (isset($this->data["id"])) { ?>
+            <input type="hidden" name="folio" id="folio" value="<?= $this->data["id"] ?>" >
+        <?php } ?>
+        <th>FECHA:</th>
+        <td>
+            <input type="text" name="fecha" id="fecha" value="<?= isset($this->data["fecha"]) ? date('d/m/Y', strtotime($this->data["fecha"])) : '' ?>" class="traffic-input-small">
+            <div class="traffic-icon traffic-icon-calendar"onclick="show_cal('fecha');" style="margin-left: 5px;"></div>
+        </td>
+        <?php if (isset($this->data["id"])) { ?>
+            <td>&nbsp;</td>
+            <td>
+                <input name="facturado" id="facturado" type="checkbox" />&nbsp;¿Facturado?&nbsp;
+                <input type="text" name="factura" id="factura" value="<?= $this->data["factura"] ?>" class="traffic-input-small">
+            </td>
+        <?php } else { ?>
+            <td colspan="2">&nbsp;</td>
+        <?php } ?>
+        </tr>
+        <tr>
+            <th>RFC:</th>
+            <td colspan="3">
+                <input type="text" name="rfcCliente" id="rfcCliente" value="<?= $this->data["rfcCliente"] ?>" class="traffic-input-medium" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <th>CLIENTE:</th>
+            <td colspan="3">
+                <input type="text" name="cliente" id="cliente" value="<?= $this->data["cliente"] ?>" class="traffic-input-large" autocomplete="off">
+            </td>
+        </tr>
+        <tr>
+            <th>DOMICILIO:</th>
+            <td colspan="3">
+                <input type="text" name="domicilio" id="domicilio" value="<?= $this->data["domicilio"] ?>" class="traffic-input-large" >
+            </td>
+        </tr>
+    </table>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="4" class="traffic-table-subtitle">ORIGEN/DESTINO:</th>
+        </tr>
+        <tr>
+            <th>ORIGEN:</th>
+            <td>
+                <input type="text" name="origen" id="origen" value="<?= $this->data["origen"] ?>" class="traffic-input-large" >
+            </td>
+            <th>DESTINO:</th>
+            <td>
+                <input type="text" name="destino" id="destino" value="<?= $this->data["destino"] ?>" class="traffic-input-large" >
+            </td>
+        </tr>
+    </table>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="4" class="traffic-table-subtitle">MERCANCIA:</th>
+        </tr>
+        <tr>
+            <th>CANTIDAD:</th>
+            <th>UNIDAD:</th>
+            <th>PESO:</th>
+            <th>EL REMITENTE DICE QUE CONTIENE:</th>
+        </tr>
+        <tr>
+            <td>
+                <textarea name="cantidad" id="cantidad" class="traffic-textarea-small"><?= $this->data["cantidad"] ?></textarea>
+            </td>
+            <td>
+                <textarea name="unidad" id="unidad" class="traffic-textarea-small"><?= $this->data["unidad"] ?></textarea>
+            </td>
+            <td>
+                <textarea name="peso" id="peso" class="traffic-textarea-small"><?= $this->data["peso"] ?></textarea>
+            </td>
+            <td>
+                <textarea name="mercancia" id="mercancia" class="traffic-textarea-small"><?= $this->data["mercancia"] ?></textarea>
+            </td>
+        </tr>
+    </table>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="4" class="traffic-table-subtitle">TRANSPORTE/OPERADOR</th>
+        </tr>
+        <tr>
+            <th>REFERENCIA:</th>
+            <th>PEDIMENTO:</th>
+            <th>PLACAS:</th>
+            <th>OPERADOR:</th>
+        </tr>
+        <tr>
+            <td>
+                <textarea name="referencia" id="referencia" class="traffic-textarea-small"><?= $this->data["referencia"] ?></textarea>
+            </td>
+            <td>
+                <textarea name="pedimento" id="pedimento" class="traffic-textarea-small"><?= $this->data["pedimento"] ?></textarea>
+            </td>
+            <td>
+                <textarea name="placas" id="placas" class="traffic-textarea-small"><?= $this->data["placas"] ?></textarea>
+            </td>
+            <td>
+                <textarea name="operador" id="operador" class="traffic-textarea-small"><?= $this->data["operador"] ?></textarea>
+            </td>
+        </tr>
+    </table>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th class="traffic-table-subtitle">OBSERVACIONES:</th>
+        </tr>
+        <tr>
+            <td>
+                <textarea name="observaciones" id="observaciones" class="traffic-textarea-medium"><?= $this->data["observaciones"] ?></textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <a href="/administracion/index/cartas-porte" class="traffic-btn">
+        <i class="fas fa-angle-double-left"></i> Regresar</a>
+    <?php if ($this->action == 'carta-porte') { ?>
+        <input type="submit" id="submit" value="Generar" class="traffic-btn traffic-btn-right" />
+    <?php } else { ?>
+        <input type="submit" id="submit" value="Guardar cambios" class="traffic-btn traffic-btn-right" />
+    <?php } ?>                    
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+<?php if ($this->data['factura'] != null) { ?>
+            $("#letter :input").prop("disabled", true);
+<?php } ?>
+    });
+</script>

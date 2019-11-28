@@ -1,0 +1,40 @@
+<?php if (isset($this->sellos) && !empty($this->sellos)) { ?>
+    <?php foreach ($this->sellos as $item) { ?>
+        <tr>                                        
+            <td><?= $item["certificado_nom"] ?></td>
+            <td><?= $item["creado"] ?></td>
+            <td><?= mb_strtoupper($item["creadoPor"]) ?></td>
+            <td><?= $item["actualizado"] ?></td>
+            <td><?= mb_strtoupper($item["actualizadoPor"]) ?></td>
+            <td><?= ($item["sha"] == null) ? "No" : "Si" ?></td>
+            <td>
+                <?php if (isset($item["valido_desde"]) && isset($item["valido_hasta"])) { ?>
+                    <?php if (strtotime($item["valido_hasta"]) > time()) { ?>
+                        <?= date("d/m/Y", strtotime($item["valido_desde"])) . " - " . date("d/m/Y", strtotime($item["valido_hasta"])) ?>
+                    <?php } else { ?>
+                        <span style="color: red"><?= date("d/m/Y", strtotime($item["valido_desde"])) . " - " . date("d/m/Y", strtotime($item["valido_hasta"])) ?></span>
+                    <?php } ?>
+                <?php } else if ($item["tipo"] == "cliente") { ?>
+                    <div class="traffic-icon traffic-icon-reload reloadCertificate" data-id="<?= $item["id"] ?>"></div>
+                <?php } ?>
+            </td>
+            <td>
+                <input type="checkbox" name="active" data-id="<?= $item["id"] ?>" <?= ($item['activo'] == 1) ? 'checked="true"' : '' ?>><br>
+            </td>
+            <td>
+                <input type="radio" name="vucem" data-id="<?= $item["id"] ?>"><br>
+            </td>
+            <td>
+                <i class="fas fa-pencil-alt" onclick="editarSelloAgente(<?= $item["id"] ?>);" style="font-size: 1.4em; color: #2f3b58; cursor: pointer"></i>
+            </td>
+        </tr>
+    <?php } ?>
+<?php } else { ?>
+    <tr>
+        <td colspan="10" style="text-align: center">
+            <em>No hay sellos en el sistema para el agente aduanal.</em>
+        </td>
+    </tr>
+<?php
+
+}

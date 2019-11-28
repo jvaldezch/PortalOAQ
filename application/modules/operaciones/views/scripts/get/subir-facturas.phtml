@@ -1,0 +1,36 @@
+<form id="layout_upload" method="POST" enctype="multipart/form-data">
+    <label for="idCliente"><strong>CLIENTE:</strong></label>
+    <?php if (isset($this->clientes) && !empty($this->clientes)) { ?>
+        <select class="traffic-select-large" name="idCliente" id="idCliente">
+            <option value="">-- Seleccionar --</option>
+            <?php foreach ($this->clientes as $item) { ?>
+                <option value="<?= $item['id'] ?>"><?= $item['razonSocial'] ?></option>
+            <?php } ?>
+        </select>
+    <?php } ?>
+    <br>
+    <p style="font-size: 12px">Seleccione layout para subir a la base de datos.</p><br>
+    <input type="file" name="layout" id="layout">
+</form>
+<script type="text/javascript">
+    
+    $("#layout_upload").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            idCliente: "required",
+            layout: "required"
+        },
+        messages: {
+            idCliente: "Seleccionar cliente",
+            layout: "Seleccione un archivo para subir."
+        }
+    });
+    
+</script>

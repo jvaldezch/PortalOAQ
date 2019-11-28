@@ -1,0 +1,37 @@
+<?php if (isset($this->archivos) && !empty($this->archivos)) { ?>
+    <?php foreach ($this->archivos as $item) { ?>
+        <tr>
+            <td>
+                <?= (file_exists($item["ubicacion"])) ? '' : '<span><a title="El archivo no existe en el sistema, volver a subir." style="margin-left: 3px; color:red; cursor: pointer;"><strong>!</strong></a></span>' ?>
+            </td>
+            <td class="traffic-td-left">
+                <a class="traffic-a" href="/archivo/get/descargar-archivo?id=<?= $item["id"] ?>">
+                    <?= $item["nom_archivo"] ?>
+                </a>
+                <?php if (file_exists($item["ubicacion"]) && preg_match('/.pdf$/', $item["nom_archivo"])) { ?>
+                    <img src="/images/icons/eye-24-gray.png" class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer; float: right" />
+                <?php } ?>
+            </td>
+            <td class="traffic-td-left">
+                <div id="edit_<?= $item["id"] ?>">
+                    <p>
+                        <?= wordwrap($this->tipoArchivo($item["tipo_archivo"]), 50, "<br />\n") ?>
+                    </p>
+                </div>
+            </td>
+            <td style="width: 120px;"><?= date('d/m/Y H:i a', strtotime($item["creado"])) ?></td>
+            <td style="width: 150px;"><?= ucwords(strtolower($item["usuario"])) ?></td>
+        </tr>
+    <?php } ?>
+        <tr>
+            <td colspan="7">
+                <a href="/archivo/get/descargar-carpeta?id=<?= $this->idRepo ?>" id="downloadFiles" class="traffic-btn-success traffic-btn-right traffic-btn-small">Descargar archivos</a>
+            </td>                
+        </tr>
+<?php } else { ?>
+        <tr>
+            <td colspan="7">
+                <em>No hay archivos en el expediente.</em>
+            </td>
+        </tr>
+<?php } ?>

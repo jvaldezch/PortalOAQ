@@ -1,0 +1,29 @@
+<form id="<?= $this->form->getAttrib("id") ?>">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <td><label for="patente"><strong>Patente:</strong></label></td>
+            <td><?= $this->form->patente ?></td>
+        </tr>
+        <tr>
+            <td><label for="pedimento"><strong>Pedimento:</strong></label></td>
+            <td><?= $this->form->pedimento ?></td>        
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><button class="traffic-btn traffic-btn-create" buttons="danger info primary success warning inverse link" value="Buscar" type="submit" id="do-analysis" name="submit">Buscar</button></td>
+        </tr>
+    </table>
+</form>
+<div class="traffic-cols">
+    <div class="traffic-col-60">
+        <div id='m3'>&nbsp;</div>
+        <div id='prev'>&nbsp;</div>
+        <div id='pago'>&nbsp;</div>
+    </div>
+    <div class="traffic-col-40">
+        <div>
+            <textarea style="width: 100%; height: 350px; font-size: 12px; line-height: 13px; margin:0; overflow: scroll" id='filepreview'></textarea>
+        </div>
+        <div id='link'></div>        
+    </div>    
+</div>

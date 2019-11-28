@@ -1,0 +1,13 @@
+<p><b>Última actualización:</b> <?= date('d/m/Y',  strtotime($this->pedimento["fechaEstado"])) ?>, <?= date('h:i a',  strtotime($this->pedimento["fechaEstado"])) ?></p>
+<table class="table table-striped table-bordered table-hover small">
+    <tr>        
+        <th>Estado</th>
+        <th>Descripcion</th>
+    </tr>
+    <?php foreach($this->pedimento["estadosPedimento"] as $ped) { ?>
+    <tr>
+        <td><?= $ped["descripcionEstado"] ?></td>
+        <td><?= $ped["descripcionSubEstado"] ?></td>
+    </tr>
+    <?php } ?>
+</table>

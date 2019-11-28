@@ -1,0 +1,26 @@
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>Nombre de archivo</th>
+        <th>Tipo de archivo</th>
+        <th>VU</th>
+        <th>Creado</th>
+    </tr>
+    <?php foreach ($this->archivos as $item) { ?>
+        <tr>
+            <td>
+                <?= (file_exists($item["ubicacion"])) ? '' : '<span><a title="El archivo no existe en el sistema, volver a subir." style="margin-left: 3px; color:red; cursor: pointer;"><strong>!</strong></a></span>' ?>
+                <a onclick="descargarArchivo('/archivo/get/descargar-archivo?id=<?= $item["id"] ?>')" style="cursor: pointer">
+                    <?= $item["nom_archivo"] ?>
+                </a>
+                <?php if (file_exists($item["ubicacion"]) && preg_match('/.pdf$/', $item["nom_archivo"])) { ?>
+                    <img src="/images/icons/eye-24-gray.png" class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer; float: right" />
+                <?php } ?>
+            </td>
+            <td>
+                <?= wordwrap($this->tipoArchivo($item["tipo_archivo"]), 50, "<br />\n") ?>
+            </td>
+            <td><?= $item["edocument"] ?></td>
+            <td style="width: 120px;"><?= date('d/m/Y H:i a', strtotime($item["creado"])) ?></td>
+        </tr>            
+    <?php } ?>         
+</table>

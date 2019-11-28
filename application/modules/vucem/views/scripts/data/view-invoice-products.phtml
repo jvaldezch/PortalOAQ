@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <?= $this->headMeta(); ?>
+        <?= $this->headLink() ?>
+        <?= $this->headScript() ?>
+    </head>
+    <body style="height: 100%">
+        <?php if (isset($this->products)) { ?>
+            <table class="traffic-table">            
+                <tr>
+                    <th>Orden Captura</th>
+                    <th>Fracción</th>
+                    <th>Num. Parte</th>
+                    <th>Descripción</th>
+                    <th>P.Unit.</th>
+                    <th>Val. Comercial</th>
+                    <th>Moneda</th>
+                    <th>F. Equivalencia</th>
+                    <th>Val. Dolares (USD)</th>
+                    <th>Cantidad</th>
+                    <th>UMC</th>
+                    <th>OMA</th>
+                    <th>&nbsp;</th>
+                </tr>     
+                <?php 
+                $valcom = 0;
+                $valusd = 0;
+                foreach($this->products as $item) { ?>
+                <tr>
+                    <td><?= $item["ORDEN"] ?></td>
+                    <td><?= $item["CODIGO"] ?></td>
+                    <td><?= $item["PARTE"] ?></td>
+                    <td><?= $item["DESC_COVE"] ?></td>
+                    <td><?= number_format($item["PREUNI"], 4) ?></td>
+                    <td style="text-align: right;"><span style="float:left">$</span><span><?= number_format($item["VALCOM"],4,'.',',') ?></span></td>
+                    <td style="text-align: center;"><?= $item["MONVAL"] ?></td>
+                    <td style="text-align: center;"><?= number_format($item["VALCEQ"],4,'.',',') ?></td>
+                    <td style="text-align: right;"><span style="float:left">$</span><?= number_format($item["VALDLS"],4,'.',',') ?></td>
+                    <td style="text-align: right;"><?= number_format($item["CANTFAC"],4,'.',',') ?></td>
+                    <td><?= $item["UMC"] ?></td>
+                    <td><?= $item["UMC_OMA"] ?></td>
+                    <td>
+                        <div class="traffic-icon traffic-icon-edit" onclick="parent.editProduct('<?= $item["ID_FACT"] ?>','<?= $item["ID_PROD"] ?>');"></div>
+                        <div class="traffic-icon traffic-icon-delete" onclick="parent.deleteProduct('<?= $item["ID_FACT"] ?>','<?= $item["ID_PROD"] ?>');"></div>
+                    </td>
+                    <?php 
+                    $valcom += $item["VALCOM"];
+                    $valusd += $item["VALDLS"];
+                    ?>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td colspan="5">&nbsp;</td>
+                    <td class="total" style="text-align: right;"><span style="float:left">$</span><?= number_format($valcom,4,'.',',') ?></td>
+                    <td colspan="2">&nbsp;</td>
+                    <td class="total" style="text-align: right;"><span style="float:left">$</span><?= number_format($valusd,4,'.',',') ?></td>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+            </table>
+        <?php } else { ?>
+            <p>No existen productos.</p>
+        <?php } ?>
+    </body>
+</html>

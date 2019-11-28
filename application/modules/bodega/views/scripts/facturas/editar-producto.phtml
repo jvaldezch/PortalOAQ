@@ -1,0 +1,254 @@
+<form id="frmProduct">
+    <input type="hidden" name="idTrafico" id="idTrafico" value="<?= $this->idTrafico ?>" />
+    <input type="hidden" name="idCliente" id="idCliente" value="<?= $this->idCliente ?>" />
+    <input type="hidden" name="idFactura" id="idFactura" value="<?= $this->idFactura ?>" />
+    <?php if (isset($this->idProveedor)) { ?>
+        <input type="hidden" name="idProveedor" id="idProveedor" value="<?= $this->idProveedor ?>" />
+    <?php } ?>
+    <?php if (isset($this->idProducto)) { ?>
+        <input type="hidden" name="idProducto" id="idProducto" value="<?= $this->idProducto ?>" />
+    <?php } ?>
+    <table class="traffic-table">
+        <tbody>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">Orden Prod. (Ln):&nbsp;</label>
+                    <input style="float: left; width: 110px" type="text" name="orden" id="orden" value="<?= $this->ordenProducto ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">                        
+                        <label style="float: left; width: 120px; text-align: right">Fracción:<span style="color:red"> *</span>&nbsp;</label>
+                        <input style="float: left; width: 110px" type="text" name="fraccion" id="fraccion" value="<?= $this->fraccion ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 140px; text-align: right">Num Parte:<span style="color:red"> *</span>&nbsp;</label>
+                        <input style="float: left; width: 150px" type="text" name="numParte" id="numParte" value="<?= $this->numParte ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">Método val.:&nbsp;</label>
+                    <select name="metodoValoracion" id="metodoValoracion" style="float: left; width: 200px">
+                        <option value="">---</option>
+                        <option value="1">1 - Valor de transacción</option>
+                        <option value="2">2 - Valor de transacción de mercancías idénticas</option>
+                        <option value="3">3 - Valor de transacción de mercancías similares</option>
+                        <option value="4">4 - Método deductivo</option>
+                        <option value="5">5 - Método del valor reconstruido</option>
+                        <option value="6">6 - Método de última instancia</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">Descripción:<span style="color:red"> *</span>&nbsp;</label>
+                    <input style="float: left; width: 407px" type="text" name="descripcion" id="descripcion" value="<?= $this->descripcion ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">Descripción Inglés:&nbsp;</label>
+                    <input style="float: left; width: 407px" type="text" name="descripcionIngles" id="descripcionIngles" value="<?= $this->descripcionIngles ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">Precio Unit.:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 150px" type="text" name="precioUnitario" id="precioUnitario" value="<?= $this->precioUnitario ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">Cant. Fact.:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 150px" type="text" name="cantidadFactura" id="cantidadFactura" value="<?= $this->cantidadFactura ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">Val. Com.:&nbsp;<span style="color:red"> *</span></label>
+                        <input style="float: left; width: 150px" type="text" name="valorComercial" id="valorComercial" value="<?= $this->valorComercial ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">UMC:&nbsp;<span style="color:red"> *</span></label>
+                        <select name="umc" id="umc" style="float: left; width: 200px">
+                            <option value="">---</option>
+                            <?php if(isset($this->umcSelect)) {?>
+                                <?php foreach ($this->umcSelect as $item) {?>
+                                    <option value="<?= $item["id"] ?>" <?= (isset($this->umc) && ($this->umc == $item["clave"])) ? ' selected="true"' : '' ?>><?= $item["clave"] . " - " . $item["desc"] ?></option>                        
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">Cant. Tarif:&nbsp;</label>
+                        <input style="float: left; width: 150px" type="text" name="cantidadTarifa" id="cantidadTarifa" value="<?= $this->cantidadTarifa ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">UMT:&nbsp;</label>
+                        <select name="umt" id="umt" style="float: left; width: 200px">
+                            <option value="">---</option>
+                            <?php if(isset($this->umcSelect)) {?>
+                                <?php foreach ($this->umcSelect as $item) {?>
+                                    <option value="<?= $item["id"] ?>" <?= (isset($this->umc) && ($this->umc == $item["clave"])) ? ' selected="true"' : '' ?>><?= $item["clave"] . " - " . $item["desc"] ?></option>                        
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">Cant. OMA:&nbsp;<span style="color:red"> *</span></label>
+                        <input style="float: left; width: 150px" type="text" name="cantidadOma" id="cantidadOma" value="<?= $this->cantidadOma ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">OMA:&nbsp;<span style="color:red"> *</span></label>
+                        <select name="oma" id="oma" style="float: left; width: 200px">
+                            <option value="">---</option>
+                            <?php if(isset($this->omaSelect)) {?>
+                                <?php foreach ($this->omaSelect as $item) {?>
+                                    <option value="<?= $item["unidad_medida"] ?>" <?= (isset($this->oma) && ($this->oma == $item["unidad_medida"])) ? ' selected="true"' : '' ?>><?= $item["unidad_medida"] . " - " . $item["desc_es"] ?></option>                        
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">Marca:&nbsp;</label>
+                        <input style="float: left; width: 150px" type="text" name="marca" id="marca" value="<?= $this->marca ?>">                        
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">Modelo:&nbsp;</label>
+                        <input style="float: left; width: 150px" type="text" name="modelo" id="modelo" value="<?= $this->modelo ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">SubModelo:&nbsp;</label>
+                        <input style="float: left; width: 150px" type="text" name="subModelo" id="subModelo" value="<?= $this->subModelo ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">Num. Serie:&nbsp;</label>
+                        <input style="float: left; width: 150px" type="text" name="numSerie" id="numSerie" value="<?= $this->numSerie ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">IVA (%):&nbsp;</label>
+                        <input style="float: left; width: 70px" type="text" name="iva" id="iva" value="<?= $this->iva ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 200px; text-align: right">Adv:&nbsp;</label>
+                        <input style="float: left; width: 70px" type="text" name="advalorem" id="advalorem" value="<?= $this->advalorem ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">TLC:&nbsp;</label>
+                        <input style="float: left; margin-left: 3px" type="checkbox" name="tlc" id="tlc"<?= (isset($this->tlc) && $this->tlc == 'S') ? ' checked="true"' : '' ?> />                        
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">TLCUE:&nbsp;</label>
+                        <input style="float: left; margin-left: 3px" type="checkbox" name="tlcue" id="tlcue"<?= (isset($this->tlcue) && $this->tlcue == 'S') ? ' checked="true"' : '' ?>/>                        
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 120px; text-align: right">PROSEC:&nbsp;</label>
+                        <input style="float: left; margin-left: 3px" type="checkbox" name="prosec" id="prosec"<?= (isset($this->prosec) && $this->prosec == 'S') ? ' checked="true"' : '' ?> />                        
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">País Origen:&nbsp;</label>
+                    <select name="paisOrigen" id="paisOrigen" style="float: left; width: 250px">
+                        <option value="">---</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 120px; text-align: right">País Vendedor:&nbsp;</label>
+                    <select name="paisVendedor" id="paisVendedor" style="float: left; width: 250px">
+                        <option value="">---</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    <label style="float: left; width: 120px; text-align: right">Observaciones:&nbsp;</label>
+                    <textarea name="observaciones" id="observaciones" class="traffic-textarea-medium" style="margin-left: 5px"><?= $this->observaciones ?></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    <span style="color:red"> *</span> Campos obligatorios.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">
+    
+    $("#frmProduct").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "errorlabel",
+        rules: {
+            numParte: {required: true},
+            fraccion: {required: true},
+            descripcion: {required: true}
+        },
+        messages: {
+            numParte: "SE REQUIERE",
+            fraccion: "SE REQUIERE",
+            descripcion: "SE REQUIERE"
+        }
+    });
+    
+    $(document.body).on("change, focusout", "#precioUnitario, #cantidadFactura", function (evt) {
+        var precioUnitario = $("#precioUnitario").val();
+        var cantidadFactura = $("#cantidadFactura").val();
+        if (precioUnitario !== '' && cantidadFactura !== '') {
+            var valorComercial = parseFloat(precioUnitario) * parseFloat(cantidadFactura);
+            $("#valorComercial").val(valorComercial);
+        }
+    });
+    
+    $(document.body).on("input", "#marca, #modelo, #subModelo, #numSerie, #descripcion, #fraccion, #numParte, #observaciones", function (evt) {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+    $.when(paises('#paisOrigen'), paises('#paisVendedor')).done(function () {
+        $('#paisOrigen').val('<?= $this->paisOrigen ?>');
+        $('#paisVendedor').val('<?= $this->paisVendedor ?>');
+    });
+    
+</script>

@@ -1,0 +1,27 @@
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <tr>
+            <th style="width: 65px">Aduana</th>
+            <th>Directorio</th>
+            <th style="width: 24px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($this->data) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td style="text-align: center"><?= $item["patente"] . '-' . $item["aduana"] ?></td>
+                    <td><?= $item["directorio"] ?></td>
+                    <td>
+                        <!--<a style="cursor: pointer;" onclick="removerValidador(<?= $item["patente"] ?>, <?= $item["aduana"] ?>, <?= $this->idUsuario ?>);"><img src="/images/icons/small_delete.png" /></a>-->
+                        <i class="far fa-trash-alt" onclick="removerValidador(<?= $item["patente"] ?>, <?= $item["aduana"] ?>, <?= $this->idUsuario ?>);" style="font-size: 1.3em; color: #2f3b58; cursor: pointer"></i>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="3" style="text-align: center"><em>El usuario no tiene validadores asignados.</em></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

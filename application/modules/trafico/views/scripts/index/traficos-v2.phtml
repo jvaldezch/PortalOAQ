@@ -1,0 +1,114 @@
+<div id="mm" class="easyui-menu" style="width: 220px;">
+    <div name="actualizar">Actualizar desde SITAWIN</div>
+    <div name="solicitud">Solicitud de anticipo</div>
+    <div name="borrar">Eliminar</div>
+    <div class="menu-sep"></div>
+    <div>Salir</div>
+</div>
+<div style="float: left; margin-left: 2px"> 
+    <img style="float: left" src="/images/menus/traffic.png" />
+    <h5 style="float: left; margin-left: 5px" style="margin: 0;">TRÁFICOS</h5>
+</div>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <div class="semaphore-grey"></div><span>Sin sol. anticipo</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-black"></div><span>Pendiente de revisión</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>En tesorería</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-yellow"></div><span>Solicitar autorización</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Depositada</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-violet"></div><span>Aut. HSBC</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-palegreen"></div><span>Aut. Banamex</span>
+    </div>
+    <div class="semaphore-holder">
+        <img src="/images/icons/impo.png" /><span style="padding-left: 3px">Impo</span>
+    </div>
+    <div class="semaphore-holder">
+        <img src="/images/icons/expo.png" /><span style="padding-left: 3px">Expo</span>
+    </div>
+</div>
+<div id="dlg" class="easyui-dialog" style="width:600px"
+        closed="true" buttons="#dlg-buttons">
+    <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+        <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc">Nuevo trafico</div>
+        <div style="margin-bottom:10px">
+            <input name="pedimento" class="easyui-textbox" required="true" label="Pedimento:" style="width:170px">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="referencia" class="easyui-textbox" required="true" label="Referencia:" style="width:170px">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="rfcCliente" class="easyui-combobox" required="true" label="Cliente:" style="width:100%" data-options="
+                valueField:'rfc',
+                textField:'nombre',
+                method:'post',
+                url:'/trafico/crud/obtener-clientes'">
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Guardar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
+</div>
+<table id="dg" style="width:100%;height:630px"></table>
+<div class="traffic-clear-10"></div>
+<ul class="progress">
+    <li class="fechaEta">Fecha ETA</li>
+    <li class="fechaNotificacion">Fecha Notif.</li>
+    <li class="fechaEnvioDocumentos">Fecha Envío de Doctos.</li>
+    <li class="fechaEnvioProforma">Fecha Proforma</li>
+    <li class="fechaVistoBueno">Fecha de VoBo</li>
+    <li class="fechaRevalidacion">Fecha Revalidación</li>
+    <li class="fechaPrevio">Fecha Previo</li>
+    <li class="fechaPago">Fecha Pago</li>
+    <li class="fechaLiberacion">Fecha Lib.</li>
+    <li class="fechaFacturacion">Fecha Fact.</li>
+</ul>
+<div class="traffic-clear-10"></div>
+<a href="/trafico/index/crear-trafico" class="traffic-btn-create traffic-btn-right">Nuevo tráfico</a>
+<button class="traffic-btn-add traffic-btn-right" id="traficosLiberados">Trafico del día</button>
+<style type="text/css">
+    .popModal {
+        padding: 10px 15px;
+    }
+    .popModal .popModal_content.popModal_asMenu ul>li>a {
+        padding: 0 5px;
+    }
+    .notifyModal .notifyModal_content, .popModal .popModal_content {
+        font-size: 12px;
+    }
+    .popModal .popModal_content.popModal_asMenu ul>li {
+        line-height: 20px;
+    }
+    #contentPop ul,
+    #contentPop ul li {
+        float: none;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        display: block;
+        background: none;
+    }
+    #contentPop ul li:before {
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+    }
+    #contentPop ul li:after {
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+    }
+</style>
+<div id="menuContent" style="display: none"><div id="contentPop"></div></div>

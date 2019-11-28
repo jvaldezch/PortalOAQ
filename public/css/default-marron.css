@@ -1,0 +1,182 @@
+/* 
+    Document   : default
+    Created on : Apr 11, 2013, 6:46:15 PM
+    Author     : Jaime E. Valdez <jvaldezch at gmail.com>
+    Description:
+        Purpose of the stylesheet follows.
+*/
+* {
+    /*font-family: Arial;*/
+    font-family: 'Calibri', Arial, sans-serif;
+}
+root { 
+    display: block;
+}
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+body {
+    border-bottom: 15px #f1f1f1 solid;
+}
+p, img, h1, h2, h3, h4, ul, ul li {
+    margin: 0;
+    padding: 0;
+}
+#clear {
+    clear: both;
+}
+#wrap,
+#footer {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#wrap {
+    border-bottom: 1px #888 solid;
+    min-height: 140px;
+}
+
+
+#login p {
+    font-size: 12px;
+    margin: 10px 10px;
+}
+#login p a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #073d75;
+}
+#login p a:hover {
+    border-bottom: 1px #F00 dotted;
+}
+#login #loader {
+    float: left;
+    display: inline-block;
+    padding-top: 13px;
+}
+
+#login-front span#warning,
+#forgot-password span#warning {
+    color: red;
+    font-size: 12px;
+}
+#login-front label,
+#forgot-password label {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+#login-front input,
+#forgot-password input {
+    /*display: block;*/
+    margin: 10px;
+    font-family: 'AvenirBook';
+    font-size: 14px;
+}
+#login-front input[type=text],
+#login-front input[type=password],
+#forgot-password input[type=text],
+#forgot-password input[type=password] {
+    width: 250px;
+    padding: 7px;    
+}
+
+#login-front input[type=submit],
+#forgot-password input[type=submit] {
+    background: #073d75;
+    color: #fff;
+    padding: 5px 10px;
+    border: 2px #073d75 solid;
+    display: inline-block;
+    float: left;
+}
+
+#login-front input[type=submit]:hover,
+#forgot-password input[type=submit]:hover {
+    border: 2px #00b3ff solid;
+    cursor: pointer;
+}
+
+#front-img img,
+#front-img h2 {
+    float: left;
+}
+#front-img h2 {
+    font-family: 'AvenirRoman';
+    color: #fff;
+    display: inline-block;
+    width: 50px;
+    padding: 10px;
+}
+
+
+.column-50 {
+    width: 49%;
+    /*border: 1px #d5d5d5 solid;*/
+    float: left;
+    margin-right: 5px;
+    margin-left: 5px;
+    min-height: 150px;
+}
+
+ul#copyright,
+ul#help {
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+}
+ul#copyright li,
+ul#help li {
+    list-style: none;
+    display: inline-block;
+    margin: 0;
+    font-size: 14px;
+}
+ul#copyright li {
+    float: left;
+    margin-right: 30px;
+}
+ul#help li {
+    float: right;
+    margin-left: 30px;
+}
+
+#download-links {
+    margin-bottom: 10px;
+}
+
+#vucem {
+    float: right;
+    background: #00FF00;
+}
+#vucem p {
+    color: #fff;
+}
+/** MARRON **/
+#login p a {
+  color: #771B60;
+  font-weight: bold;
+  text-decoration: none;
+}
+a {
+  color: #771B60;
+  text-decoration: none;
+}
+#login-front input[type="submit"], #forgot-password input[type="submit"] {
+  background: none repeat scroll 0 0 #771B60;
+  border: 2px solid #561346;
+  color: #FFFFFF;
+  display: inline-block;
+  float: left;
+  padding: 5px 10px;
+}
+element.style {
+  background: none repeat scroll 0 0 #771B60;
+  border: 1px solid #BBBBBB;
+}
+.mainbox {
+    background: #771B60; border: 1px #bbb solid;
+    
+}

@@ -1,0 +1,98 @@
+<form id="form_letter">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    DATOS DE LA NUEVA CARTA
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="text-align: right">CLIENTE:</th>
+                <td>
+                    <?php if (isset($this->clientes) && !empty($this->clientes)) { ?>
+                        <select class="traffic-select-large" name="idCliente" id="idCliente">
+                            <option value="">-- Seleccionar --</option>
+                            <?php foreach ($this->clientes as $item) { ?>
+                                <option value="<?= $item['id'] ?>"><?= $item['razonSocial'] ?></option>
+                            <?php } ?>
+                        </select>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">TIPO OPERACIÓN:</th>
+                <td>
+                    <select class="traffic-select-small" name="tipoOperacion" id="tipoOperacion">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="1">Importación</option>
+                        <option value="2">Exportación</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">NUM. CARTA:</th>
+                <td>
+                    <input class="traffic-input-medium" type="text" name="numCarta" id="numCarta" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">SELLO:</th>
+                <td>
+                    <input class="traffic-input-medium" type="text" name="sello" id="sello" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">DIGIRIDA A:</th>
+                <td>
+                    <input class="traffic-input-large" type="text" name="dirigida" id="dirigida" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">FECHA:</th>
+                <td>
+                    <input class="traffic-input-date" type="text" name="fecha" id="fecha" /><i class="far fa-calendar-alt" style="padding-left: 5px; font-size: 1.2em"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">    
+    
+    $("#form_letter").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            idCliente: "required",
+            idnumCarta: "required"
+        },
+        messages: {
+            idCliente: "Campo necesario",
+            idnumCarta: "Campo necesario"
+        }
+    });
+    
+    $("#fecha").datepicker({
+        calendarWeeks: true,
+        autoclose: true,
+        language: "es",
+        format: "yyyy-mm-dd"
+    });
+
+    $(document).on("input", "#dirigida, #numCarta, #sello", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

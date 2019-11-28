@@ -1,0 +1,27 @@
+<p style="font-size: 12px">Seleccione un archivo para subir a la carpeta de servidor.</p><br>
+<form id="fileUpload" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="idDirectorio" id="idDirectorio" value="<?= $this->idDirectorio ?>">
+    <input type="hidden" name="patente" id="patente" value="<?= $this->patente ?>">
+    <input type="hidden" name="aduana" id="aduana" value="<?= $this->aduana ?>">
+    <input type="file" name="fileToUpload" id="fileToUpload">
+</form>
+<script type="text/javascript">
+    
+    $("#fileUpload").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            fileToUpload: "required"
+        },
+        messages: {
+            fileToUpload: "Seleccione un archivo para subir."
+        }
+    });
+    
+</script>

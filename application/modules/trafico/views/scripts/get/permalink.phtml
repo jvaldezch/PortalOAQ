@@ -1,0 +1,40 @@
+
+<p>El permalink sirve para enviarle este expediente a un cliente sin tener que enviar todos los archivos.</p><br>
+<input id="permalinkUri" value="<?= $this->uri ?>" class="traffic-input-large" style="width: 650px !important" />
+
+<?php if (isset($this->contacts)) { ?>
+    <table style="width: 100%">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th style="text-align: left; font-size: 11px">Email</th>
+                <th style="text-align: left; font-size: 11px">Nombre receptor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->contacts as $k => $contact) { ?>
+                <tr>
+                    <td style="text-align: center"><input type="checkbox" data-id="<?= $contact["id"] ?>" class="add-email" /></td>
+                    <td style="text-align: left; font-size: 11px"><?= $contact["email"] ?></td>
+                    <td style="text-align: left; font-size: 11px"><?= $contact["nombre"] ?></td>
+                </tr>
+            <?php } ?>
+            <tr>
+                <td colspan="3">
+                    Receptores adicionales (Email separados por punto y coma [;]):
+                    <br><input type="text" name="ccs" id="ccs" class="traffic-input-large"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <p style="font-size: 11px; margin: 5px 0; color: #ff3333">No hay contactos para este cliente.</p>
+<?php } ?>
+    
+<script type="text/javascript">
+    
+    $('#permalinkUri').focus(function() { 
+        $(this).select(); 
+    });
+    
+</script>

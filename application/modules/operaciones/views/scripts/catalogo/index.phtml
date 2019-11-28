@@ -1,0 +1,45 @@
+<table class="traffic-table">
+    <tr>
+        <td class="traffic-td-left">                            
+            <form method="get" action="/operaciones/catalogo/index" id="customer-search">
+                <input type="text" name="busqueda" id="busqueda" value="<?= isset($this->busqueda) ? $this->busqueda : "" ?>" autocomplete="off" 
+                       class="traffic-input-large"><button class="traffic-btn" style="float: none; display: inline-block"><i class="fas fa-search"></i> Buscar</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<div class="traffic-cols">
+    <div style="float: left; width: 100%">
+        <table class="traffic-table">
+            <tr>
+                <th style="width: 100px">RFC</th>
+                <th>Nombre</th>
+            </tr>
+        </table>
+        <div id="customer-list" style="height: 450px; overflow-y: auto; border-bottom: 1px #999 solid">
+            <table class="traffic-table hover">
+                <?php if (isset($this->paginator) && !empty($this->paginator)) { ?>
+                    <?php foreach ($this->paginator as $item) { ?>
+                        <tr>
+                            <td style="width: 100px"><?= $item["rfc"] ?></td>
+                            <td class="traffic-td-left">
+                                <a href="/operaciones/catalogo/consulta?id=<?= $item['id'] ?>"><?= $item["nombre"] ?></a>
+                            </td>
+                            <td style="width: 25px">
+                                <a href="/operaciones/catalogo/consulta?id=<?= $item['id'] ?>"><i class="fas fa-folder-open" style="font-size: 1.2em; color: #2f3b58; cursor: pointer"></i></a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="3">
+                            <em>No hubo resultados.</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
+        <?= (isset($this->paginator)) ? $this->paginationSize($this->paginator->getItemCountPerPage()) : "" ?><?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding") : null ?>    
+    </div>
+</div><!-- traffic-cols -->
+<div class="traffic-clear-10"></div>

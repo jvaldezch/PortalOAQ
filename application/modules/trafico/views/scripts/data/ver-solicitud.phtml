@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Solicitud de anticipo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <?= $this->headMeta(); ?>
+        <?= $this->headLink() ?>
+        <?= $this->headScript() ?>  
+    </head>
+    <script>
+        function close_window() {
+            close();
+        }
+    </script>
+    <body>
+        <?php if (isset($this->data)) { ?>
+            <div class="traffic-clear-5"></div>
+            <a class="traffic-btn" onclick="close_window();">
+                <i class="far fa-window-close"></i> Cerrar
+            </a>
+            <a target="_blank" href="/trafico/data/imprimir-solicitud?id=<?= $this->data["header"]["id"] ?>" style="float: right; margin-right: 5px" class="traffic-btn traffic-btn-right">
+                <i class="fas fa-print"></i>&nbsp;Imprimir
+            </a>
+            <div class="traffic-clear-5"></div>            
+            <table class="traffic-table">
+                <tr>
+                    <th>CLIENTE</th>
+                    <th>REFERENCIA</th>
+                    <th>PESO</th>
+                    <th colspan="2">MERCANCIA</th>
+                    <th>VALOR (USD)</th>
+                </tr>
+                <tr>
+                    <td><?= $this->data["header"]["nombreCliente"] ?></td>
+                    <td><?= $this->data["header"]["referencia"] ?></td>
+                    <td><?= number_format($this->data["detalle"]["peso"], 2, '.', ',') ?></td>
+                    <td colspan="2"><?= $this->data["detalle"]["mercancia"] ?></td>
+                    <td><?= $this->currency($this->data["detalle"]["valorMercancia"]) ?></td>
+                </tr>
+                <tr>
+                    <th>TIPO CARGA</th>
+                    <th>OPERACIÓN</th>
+                    <th>CVE PED</th>
+                    <th colspan="2">ETA</th>
+                    <th>LIBRE ALMACENAJE</th>
+                </tr>
+                <tr>
+                    <td><?= $this->data["detalle"]["tipoCarga"] ?></td>
+                    <td><?= $this->data["header"]["tipoOperacion"] ?></td>
+                    <td><?= $this->data["detalle"]["cvePed"] ?></td>
+                    <td colspan="2"><?= date('d/m/Y', strtotime($this->data["detalle"]["fechaEta"])) ?></td>
+                    <td><?= date('d/m/Y', strtotime($this->data["detalle"]["fechaAlmacenaje"])) ?></td>
+                </tr>
+                <tr>
+                    <th>FACTURA</th>
+                    <th colspan="2">SE FACTURA</th>
+                    <th>PECA</th>
+                    <th colspan="2">BL / GUIA / NUM.CONTENEDOR / PLACAS / CAJA</th>
+                </tr>
+                <tr>
+                    <td><?= $this->data["detalle"]["numFactura"] ?></td>        
+                    <td colspan="2"><?= $this->data["detalle"]["tipoFacturacion"] ?></td>        
+                    <td><?= ($this->data["detalle"]["peca"] == '1') ? 'SI' : 'NO' ?></td>        
+                    <td colspan="2"><?= $this->data["detalle"]["bl"] ?></td>        
+                </tr>
+                <tr>
+                    <th colspan="3">MERCANCIA</th>
+                    <th colspan="3">ALMACEN</th>
+                </tr>
+                <tr>
+                    <td colspan="3"><?= $this->data["detalle"]["mercancia"] ?></td>
+                    <td colspan="3"><?= $this->data["detalle"]["almacen"] ?></td>
+                </tr>
+            </table>
+            <table class="traffic-table">
+                <tr>
+                    <th colspan="4">COTIZACIÓN DE GASTOS PROVISIONAL SUJETA A CAMBIOS</th>
+                </tr>
+                <tr>
+                    <th>CONCEPTO</th>
+                    <th>IMPORTE</th>
+                    <th>CONCEPTO</th>
+                    <th>IMPORTE</th>
+                </tr>
+                <?php foreach ($this->data["conceptos"] as $item) { ?>
+                    <tr>
+                        <td style="text-align: left; padding: 0 5px;"><?= $item[0] ?></td>
+                        <td><?= ($item[1] != 0) ? $this->currency($item[1]) : "" ?></td>
+                        <td style="text-align: left; padding: 0 5px;"><?= $item[2] ?></td>
+                        <td><?= ($item[3] != 0) ? $this->currency($item[3]) : "" ?></td>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="text-align: right; padding: 0 5px; font-weight: bold">SUBTOTAL</td>
+                    <td><?= $this->currency($this->data["total"]) ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="text-align: right; padding: 0 5px; font-weight: bold">ANTICIPO</td>
+                    <td><?= $this->currency($this->data["anticipo"]) ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="text-align: right; padding: 0 5px; font-weight: bold">TOTAL</td>
+                    <td><?= $this->currency(($this->data["total"] - $this->data["anticipo"])) ?></td>
+                </tr>
+            </table>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="2">DATOS DE DEPÓSITO O TRANSFERENCIA</th>
+                </tr>
+                <tr>
+                    <th style="width: 30%">BANCO</th>
+                    <td><?= isset($this->banco["nombre"]) ? $this->banco["nombre"] : 'N/D' ?></td>
+                </tr>
+                <tr>
+                    <th>BENEFICIARIO</th>
+                    <td><?= isset($this->banco["razonSocial"]) ? $this->banco["razonSocial"] : '' ?></td>
+                </tr>
+                <tr>
+                    <th>CUENTA</th>
+                    <td><?= isset($this->banco["cuenta"]) ? $this->banco["cuenta"] : '' ?></td>
+                </tr>
+                <tr>
+                    <th>SUCURSAL</th>
+                    <td><?= isset($this->banco["sucursal"]) ? $this->banco["sucursal"] : '' ?></td>
+                </tr>
+                <tr>
+                    <th>CLABE</th>
+                    <td><?= isset($this->banco["clabe"]) ? $this->banco["clabe"] : '' ?></td>
+                </tr>
+            </table>                         
+        <?php } else { ?>
+            
+        <?php } ?>
+        <div class="traffic-clear-5"></div>
+    </body>
+</html>

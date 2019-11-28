@@ -1,0 +1,58 @@
+<form id="formReport">
+    <table class="traffic-table">
+        <tr>
+            <th colspan="2" class="traffic-table-title">REPORTE TRAFICO</th>                    
+        </tr>
+        <tr>
+            <th>
+                FILTROS PARA EL REPORTE
+            </th>
+            <td>
+                <div class="traffic-radio-block" style="padding-left: 10px; padding-bottom: 5px; float: left; display: table-cell">
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="0" id="reportFilter" name="reportFilter" checked="true">&nbsp;<p>Todos</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="1" id="reportFilter" name="reportFilter">&nbsp;<p>Clientes Ináctivos</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="3" id="reportFilter" name="reportFilter">&nbsp;<p>Solo clientes activos</p>
+                    </div>
+                </div>
+                <div class="traffic-radio-block" style="padding-left: 10px; padding-bottom: 5px; float: left; display: table-cell">
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="10" id="reportFilter" name="reportFilter">&nbsp;<p>Directo</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="99" id="reportFilter" name="reportFilter">&nbsp;<p>Prospectos</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="20" id="reportFilter" name="reportFilter">&nbsp;<p>Tercero</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="30" id="reportFilter" name="reportFilter">&nbsp;<p>Comisionista</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="40" id="reportFilter" name="reportFilter">&nbsp;<p>Corresponsal</p>
+                    </div>
+                </div>                
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="traffic-clear-5"></div>
+<button id="closeModal" class="traffic-btn-close">Cerrar</button>
+<a class="traffic-btn-save traffic-btn-right" href="/trafico/data/reporte-clientes" id="excel">Crear reporte</a>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document.body).on("click", "#excel", function (ev) {
+            ev.preventDefault();
+            var href = $(this).attr("href") + "?" + $("#formReport").serialize();
+            console.log(href);
+            window.location.href = href;
+        });
+
+    });
+</script>
+

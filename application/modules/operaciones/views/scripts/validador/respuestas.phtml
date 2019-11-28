@@ -1,0 +1,61 @@
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th colspan="4" class="traffic-table-title">ARCHIVOS RELACIONADOS</th>
+        </tr>
+        <tr>
+            <th style="width: 24px">&nbsp;</th>
+            <th>Archivo</th>
+            <th>Tamaño</th>
+            <th style="width: 70px">Estatus</th>
+        </tr>
+    </thead>
+    <tbody>        
+        <?php if (isset($this->archivo)) { ?>
+            <tr>
+                <td>
+                    <img src="/images/icons/disk.png" onclick="savetoDisk(<?= $this->id ?>);">
+                </td>
+                <td>
+                    <a style="cursor: pointer;" onclick="contenidoM3(<?= $this->id ?>);"><?= $this->archivo["archivo"] ?></a>
+                </td>
+                <td><?= $this->archivo["size"] ?> bytes</td>
+                <td>
+                    <?php if ($this->archivo["enviado"] == 0) { ?>
+                        <img id="imgm_<?= $this->id ?>" src="/images/icons/send.png" onclick="validarArchivo(<?= $this->archivo["id"] ?>);" style="cursor: pointer">
+                    <?php } elseif ($this->archivo["enviado"] == 1) { ?>
+                        <?php if ($this->archivo["validado"] == 1) { ?> 
+                            <img src="/images/icons/ok.png" >
+                            <div class="traffic-icon-space"></div>
+                            <img id="imgm_<?= $this->id ?>" src="/images/icons/update.png" onclick="reenviarArchivo(<?= $this->id ?>);" style="cursor: pointer">
+                            <img id="imgl_<?= $this->id ?>" src="/images/preloader.gif" style="display: none;" >
+                        <?php } else { ?>                
+                            <img id="imgm_<?= $this->id ?>" src="/images/icons/update.png" onclick="reenviarArchivo(<?= $this->id ?>);" style="cursor: pointer">
+                            <img id="imgl_<?= $this->id ?>" src="/images/preloader.gif" style="display: none;" >
+                        <?php } ?>
+                    <?php } ?>                
+                </td>
+            </tr>
+        <?php } ?>
+        <?php if (isset($this->respuestas) && !empty($this->respuestas)) { ?>
+            <?php foreach ($this->respuestas as $item) { ?>
+                <tr>
+                    <td><img src="/images/icons/disk.png" onclick="savetoDiskRes(<?= $item["id"] ?>);" ></td>
+                    <td>
+                        <a style="cursor: pointer;" onclick="contenidoRespuesta(<?= $item["id"] ?>);"><?= $item["archivo"] ?></a>
+                    </td>
+                    <td><?= $item["size"] ?> bytes</td>
+                    <?php if ($item["size"] == 0 || $item["error"] == 1) { ?>
+                        <td><img src="/images/icons/exclamation.png" ></td>
+                    <?php } else { ?>
+                        <td>&nbsp;</td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Facturas Terminal</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            font-size: 11px;
+        }
+        table {
+            border-collapse:collapse;
+        }
+        th, td {
+            border: 1px #ccc solid;
+            padding: 2px 5px;
+        }
+        th {
+            background: #d8d8d8;
+        }
+    </style>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Folio</th>
+                    <th>Fecha</th>
+                    <th>RFC</th>
+                    <th>Cliente</th>
+                    <th>Previo</th>
+                    <th>Manejo</th>
+                    <th>Manejo de valores</th>
+                    <th>Custodia</th>
+                    <th>Custodia</th>
+                    <th>Previos Extra</th>
+                    <th>Revalidacion</th>
+                    <th>Carga y Descarga</th>
+                    <th>Maniobra Fuera de la Aduana</th>
+                    <th>Refacturacion</th>
+                    <th>Tarimas</th>
+                    <th>Emplayado de Embarques</th>
+                    <th>Fleje</th>
+                    <th>Servicio Extraordinario</th>
+                    <th>Sub Total</th>
+                    <th>Descuento</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->facturas as $item) { ?>
+                <tr>
+                    <td><?= $item['folio'] ?></td>
+                    <td><?= date('Y-m-d', strtotime($item['fecha'])) ?></td>
+                    <td><?= $item['rfc_cliente'] ?></td>
+                    <td><?= $item['nom_cliente'] ?></td>
+                    <?= $this->conceptos($item["conceptos"],'Previo') ?>
+                    <?= $this->conceptos($item["conceptos"],'Manejo') ?>
+                    <?= $this->conceptos($item["conceptos"],'Manejo de Valores') ?>
+                    <?= $this->conceptos($item["conceptos"],'Almacenaje') ?>
+                    <?= $this->conceptos($item["conceptos"],'Custodia') ?>
+                    <?= $this->conceptos($item["conceptos"],'Previos Extra') ?>
+                    <?= $this->conceptos($item["conceptos"],'Revalidacion') ?>
+                    <?= $this->conceptos($item["conceptos"],'Carga y Descarga') ?>
+                    <?= $this->conceptos($item["conceptos"],'Maniobra Fuera de la Aduana') ?>
+                    <?= $this->conceptos($item["conceptos"],'Refacturacion') ?>
+                    <?= $this->conceptos($item["conceptos"],'Tarimas') ?>
+                    <?= $this->conceptos($item["conceptos"],'Emplayado de Embarques') ?>
+                    <?= $this->conceptos($item["conceptos"],'Fleje') ?>
+                    <?= $this->conceptos($item["conceptos"],'Servicio Extraordinario') ?>
+                    <td><?= $item['subtotal'] ?></td>
+                    <td><?= $item['descuento'] ?></td>
+                    <td><?= $item['total'] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </body>
+</html>

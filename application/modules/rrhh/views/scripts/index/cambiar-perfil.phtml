@@ -1,0 +1,42 @@
+<p><input type="file" id="file" accept="image/*" /></p>
+<!--SHOW THE IMAGES-->
+<p id="img"></p>
+<form id="formImages" action="/rrhh/post/cambiar-perfil" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="idEmpleado" value="<?= $this->idEmpleado ?>" />
+</form>
+<!--<br><button id="uploadImage">Cambiar</button>-->
+<script type="text/javascript">
+        
+    $(document.body).on("change", "#file",function () {
+        if (this.files.length > 0) {
+            $.each(this.files, function () {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function () {
+                        var canvas = document.createElement("canvas");
+                        var newWidth = 350;
+                        var newHeight = (img.height * (35000 / img.width)) / 100;
+                        img.width = newWidth;
+                        img.height = newHeight;
+                        var ctx = canvas.getContext("2d");
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        canvas.width = newWidth;
+                        canvas.height = newHeight;
+                        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                        $("#img").append(img);
+                        $("#formImages").append('<input type="hidden" name="photo" id="uploadedPhoto" value="' + canvas.toDataURL("image/png") + '" />');
+                        /* AUTO DOWNLOAD THE IMAGES, ONCES RESIZED.
+                        var a = document.createElement('a');
+                        a.href = canvas.toDataURL("image/png");
+                        a.download = 'sample.jpg';
+                        document.body.appendChild(a);
+                        a.click(); */
+                    };
+                };
+                reader.readAsDataURL(this);
+            });
+        }
+    });
+</script>

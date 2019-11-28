@@ -1,0 +1,36 @@
+<div class="traffic-clear-5"></div>
+<form enctype="multipart/form-data" method="POST" id="uploadForm">
+    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+    <input type="file" id="plantilla"name="plantilla" style="display:none">
+    <div class="input-append">
+        <input id="photoCover" class="traffic-input-large" name="filename" type="text">
+        <div class="traffic-clear-5"></div>
+        <a class="traffic-btn-add" onclick="$('input[id=plantilla]').click();">Seleccionar archivo...</a>
+    </div>
+</form>
+<script type="text/javascript">
+    
+    $(document.body).on('change', '#plantilla', function () {
+        $("#photoCover").val($(this).val());
+    });
+    
+    $('#uploadForm').validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest('form')
+                    .find('#' + element.attr('id'))
+                    .after(error);
+        },
+        ignore:'',
+        errorElement: 'span',
+        errorClass: 'traffic-error',
+        rules: {
+            'plantilla': {required: true}
+        },
+        messages: {
+            'plantilla': {required: "Se requiere seleccionar la plantilla."}
+        }
+    });
+    
+</script>
+<p style="font-size: 12px; margin: 10px 4px"><a href="/images/PLANTILLA_ANEXO_20180413.xlsx">Descargar plantilla</a> de ejemplo.</p>

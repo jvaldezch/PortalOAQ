@@ -1,0 +1,51 @@
+<div style="max-height: 400px; overflow-y: scroll; margin: 5px; border: 1px #999 solid">    
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th style="width: 70px">Aduana</th>
+                <th>Nombre</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->aduanas)) { ?>
+                <?php foreach ($this->aduanas as $item) { ?>
+                    <tr>
+                        <td style="text-align: center"><?= $item["patente"] . "-" . $item["aduana"] ?></td>
+                        <td><?= $item["nombre"] ?></td>
+                        <td>
+                            <?php if (isset($this->activas)) { ?>
+                                <?php if (isset($this->activas[$item["id"]])) { ?>
+                                    <input type="checkbox" class="activateCustom" data-cliente="<?= $this->idCliente ?>" data-aduana="<?= $item["id"] ?>" data-action="delete" checked="true" />
+                                <?php } else { ?>
+                                    <input type="checkbox" class="activateCustom" data-cliente="<?= $this->idCliente ?>" data-aduana="<?= $item["id"] ?>" data-action="add" />
+                                <?php } ?>
+                            <?php } else { ?>
+                                <input type="checkbox" class="activateCustom" data-cliente="<?= $this->idCliente ?>" data-aduana="<?= $item["id"] ?>" data-action="add" />
+                            <?php } ?>
+                        </td>
+                    </tr>
+                <?php } ?>        
+            <?php } ?>        
+        </tbody>
+    </table>
+    <div class="traffic-clear-5"></div>
+</div>
+<a id="closeCustoms" class="traffic-btn-close traffic-btn-right">Cerrar</a>
+<script type="text/javascript">
+    
+    $(document.body).on("click", ".activateCustom", function () {
+        $.post("/trafico/post/aduanas-cliente", {idCliente: $(this).data("cliente"), idAduana: $(this).data("aduana"), action: $(this).data("action")})
+            .done(function (res) {
+                if (res.success === true) {
+                    
+                }
+            });
+    });
+    
+    $(document.body).on("click", "#closeCustoms", function (ev) {
+        ev.preventDefault();
+        $("#addNewCustom").jqmHide();
+    });
+    
+</script>

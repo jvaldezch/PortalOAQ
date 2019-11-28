@@ -1,0 +1,36 @@
+<div style="overflow-y: scroll; max-height: 450px; border: 1px #c6d7e7 solid">    
+    <table class="traffic-table">
+        <tr>
+            <th style="width: 350px">Nombre Archivo</th>
+            <th style="width: 350px">Tipo de Archivo</th>
+            <th>Fecha de vencimiento</th>
+            <th>Creado</th>
+            <th style="width: 90px">&nbsp;</th>
+        </tr>
+        <?php foreach ($this->arr as $item) { ?>
+            <tr id="row_<?= $item["id"] ?>">
+                <td style="text-align: left">
+                    <a href="/archivo/get/descarga-archivo-cliente?id=<?= $item["id"] ?>"><?= $item["nombreArchivo"] ?></a>
+                    <?php if (file_exists($item["ubicacion"]) && preg_match('/.pdf/', $item["nombreArchivo"])) { ?>
+                        <img src="/images/icons/eye-24-gray.png" class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer; float: right" />
+                    <?php } ?>
+                </td>
+                <td style="text-align: left">
+                    <div id="fileDescription_<?= $item["id"] ?>">
+                        <?= $item["descripcionArchivo"] ?>
+                    </div>
+                </td>
+                <td style="text-align: center">
+                    <div class="dateContainer" style="width: 120px; margin: auto" id="fileExpiration_<?= $item["id"] ?>"><?= isset($item["fechaVencimiento"]) ? date("Y-m-d", strtotime($item["fechaVencimiento"])) : "" ?></div>
+                </td>
+                <td><?= date("Y-m-d", strtotime($item["creado"])) ?></td>
+                <td>
+                    <div id="icon_<?= $item["id"] ?>">
+                        <i class="fas fa-pencil-alt" onclick="editarArchivo(<?= $item["id"] ?>);" style="font-size: 1.4em; color: #2f3b58"></i>&nbsp;
+                        <i class="far fa-trash-alt" onclick="borrarArchivo(<?= $item["id"] ?>);" style="font-size: 1.4em; color: #2f3b58"></i>
+                    </div>
+                </td>
+            </tr>
+        <?php } ?>        
+    </table>
+</div>

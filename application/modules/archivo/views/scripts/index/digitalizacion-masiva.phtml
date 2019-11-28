@@ -1,0 +1,83 @@
+<div style="padding: 10px">
+    <form action="/archivo/ajax/bulk-upload" method="post" id="bulk">
+        <div class="form-group">
+            <label for="file[]">SELECCIONAR ARCHIVOS:</label>
+            <input type="file" id="files" name="files[]" multiple>
+            <p class="help-block"><strong>Restricciones:</strong><br>
+                Unicamente se pueden subir archivo en formato .PDF.<br>
+                El tamaño del archivo debe ser de menor de 6MB. <br>
+                Los archivos deben tener la forma "Q1406970_20151117135734.pdf", en donde al inicio debe contener la referencia.<br>
+                Solo es posible subir 20 archivos máximo.<br>
+                Para que los archivos pasen el repositorio deben cumplir con todos los campos.
+            </p>
+        </div>
+        <div class="form-group">
+            <label for="type">Tipos de archivos:</label>
+            <select name="type" id="type" class="traffic-select-medium">
+                <option value="">-- Tipo de archivo --</option>
+                <option value="17">Expediente completo</option>
+                <option value="1">Pedimento (DOF)</option>
+                <option value="33">Pedimento Simplificado</option>
+            </select>
+        </div>
+        <button class="traffic-btn-add traffic-btn-right" type="submit" id="submit">Cargar archivos</button>
+    </form>
+</div>
+<div style="clear: both; height: 10px"></div>
+<div style="max-height: 600px; overflow-y: scroll; padding: 5px">
+    <table class="traffic-table">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" id="checkall">
+                </th>
+                <th>Patente</th>
+                <th>Aduana</th>
+                <th>Pedimento</th>
+                <th>Referencia</th>
+                <th>RFC</th>
+                <th>Tipo Archivo</th>
+                <th>Archivo</th>
+                <th>
+                    <div onclick="reloadFiles();" class="traffic-icon traffic-icon-reload traffic-btn-right"></div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->data) && !empty($this->data)) { ?>
+                <?php foreach ($this->data as $item) { ?>
+                    <tr id="row_<?= $item["id"] ?>">
+                        <td>
+                            <?php if (isset($item["rfcCliente"]) && isset($item["pedimento"])) { ?>
+                                <div id="file_<?= $item["id"] ?>">
+                                    <input type="checkbox" value="<?= $item["id"] ?>" name="archivos" class="checkfiles">
+                                </div>
+                            <?php } ?>
+                        </td>
+                        <td><?= $item["patente"] ?></td>
+                        <td><?= $item["aduana"] ?></td>
+                        <td><?= $item["pedimento"] ?></td>
+                        <td><?= $item["referencia"] ?></td>
+                        <td><?= $item["rfcCliente"] ?></td>
+                        <td><?= $this->tipoArchivo($item["tipoArchivo"]) ?></td>
+                        <td><?= (file_exists($item["ubicacion"])) ? '' : '<span style="float:left"><a title="El archivo no existe en el sistema, volver a subir." style="margin-left: 3px; color:red; cursor: pointer;"><strong>!</strong></a></span>' ?><?= $item["archivo"] ?></td>
+                        <td>
+                            <?php if ($item["patente"] == 9999 && $item["aduana"] == 999) { ?>
+                                <div class="traffic-icon traffic-icon-edit" onclick="temporalFile(<?= $item["id"] ?>, 'edit');"></div>
+                            <?php } ?>
+                            <div class="traffic-icon traffic-icon-delete" onclick="temporalFile(<?= $item["id"] ?>, 'delete');"></div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="8">No hay archivos.</td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>    
+</div>
+<div style="padding: 5px">    
+    <button class="traffic-btn-import traffic-btn-right" id="sendselected">Enviar a repositorio</button>
+    <button class="traffic-btn-close traffic-btn-right" id="deleteselected">Borrar</button>
+</div>

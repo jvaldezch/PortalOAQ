@@ -1,0 +1,51 @@
+<style>
+    span.inlineError {
+        background-color: #f9f2f4;
+        border-radius: 4px;
+        color: #c7254e;
+        font-size: 90%;
+        padding: 2px 4px;
+        font-family: Consolas, sans-serif;
+    }
+</style>
+<div class="traffic-cols">
+    <form id="report">
+        <table class="traffic-table traffic-table-left">
+            <tr>
+                <td><label for="idAduana">Aduana:</label></td>
+                <td><?= $this->form->idAduana ?></td>
+                <td><label for="rfc">Cliente:</label></td>
+                <td><?= $this->form->idCliente ?></td>
+            </tr>
+            <tr>
+                <td><label for="fechaIni">Fecha Inicio:</label></td>
+                <td><?= $this->form->fechaIni ?></td>
+                <td><label for="fechaFin">Fecha Fin:</label></td>
+                <td><?= $this->form->fechaFin ?></td>
+            </tr>
+            <tr>
+                <td><label for="tipo">Tipo de reporte:</label></td>
+                <td>
+                    <input type="radio" name="tipo" value="encabezado" checked>&nbsp;Encabezado<br>
+<!--                    <input type="radio" name="tipo" value="prasad">&nbsp;PRASAD<br>-->
+                    <input type="radio" name="tipo" value="anexo">&nbsp;Extendido<br>
+                    <!--<input type="radio" name="tipo" value="proveedores">&nbsp;Proveedores<br>-->
+                    <!--<input type="radio" name="tipo" value="cargoquin">&nbsp;CargoQuin<br>-->
+                    <!--<input type="radio" name="tipo" value="cnh">&nbsp;CNH<br>-->
+                    <!--<input type="radio" name="tipo" value="tecnico">&nbsp;Layout Tecnico (NIHON)<br>-->
+                </td>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <button id="upload" class="traffic-btn traffic-btn-right">
+                        <i class="fas fa-upload"></i> Cargar plantilla
+                    </button>
+                    <button id="submit" class="traffic-btn traffic-btn-right">
+                        <i class="fas fa-table"></i> Generar reporte
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

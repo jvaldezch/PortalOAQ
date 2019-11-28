@@ -1,0 +1,203 @@
+<div class="traffic-cols">
+    <form method="get" id="form-search-request" action="/trafico/index/ultimas-solicitudes">
+        <table class="traffic-table">
+            <tr>
+                <th colspan="3" class="traffic-table-title">BUSCAR</th>                    
+            </tr>
+            <tr>
+                <th style="width: 280px">Buscar (Factura/BL/Guía/Contenedor...):</th>
+                <td class="traffic-td-left">
+                    <?= $this->form->buscar ?>
+                </td>
+                <td>
+                    <button type="submit" id="search-request" class="traffic-btn traffic-btn-right">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <button id="reporte" class="traffic-btn traffic-btn-right" href="/trafico/get/reporte-trafico-solicitudes">
+                        <i class="fas fa-table"></i> Reporte
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th style="width: 280px">Cliente:</th>
+                <td class="traffic-td-left" colspan="2">
+                    <?= $this->form->idCliente ?>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label for="aduana">Aduana:&nbsp;</label>
+                </th>
+                <td colspan="2" style="text-align: left">
+                    <?php if (isset($this->filters) && !empty($this->filters)) { ?>
+                        <select id="aduanas" name="aduanas" class="traffic-select-medium">
+                            <option value="">---</option>
+                            <?php foreach ($this->filters as $item) { ?>
+                                <option value="<?= $item["id"] ?>" <?= (isset($this->idAduana) && $this->idAduana == $item["id"]) ? "selected=\"selected\"" : "" ?>><?= $item["patente"] . '-' . $item["aduana"] . ', ' . $item["nombre"] ?></option>
+                            <?php } ?>
+                        </select>
+                    <?php } else { ?>
+                        &nbsp;
+                    <?php } ?>                    
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <div class="semaphore-black"></div><span>Pendiente de revisión</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>En tesorería</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-yellow"></div><span>Solicitar autorización</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Depositada</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-violet"></div><span>Autorizada HSBC</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-palegreen"></div><span>Autorizada Banamex</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i><span style="padding-left: 3px">Importación</span>        
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-up" style="color: #2e963a"></i><span style="padding-left: 3px">Exportación</span>        
+    </div>
+</div>
+<div class="checkbox-group">
+    <div class="checkbox">
+        <input id="depositado" name="depositado" type="checkbox">
+        <label class="checkbox-label">No depositado</label>
+    </div>
+    <div class="checkbox">
+        <input id="complementos" name="complementos" type="checkbox">
+        <label class="checkbox-label">Complementos</label>
+    </div>
+    <div class="checkbox">
+        <input id="pendiente" name="pendiente" type="checkbox">
+        <label class="checkbox-label">Pendientes de revisión</label>
+    </div>
+    <div class="checkbox">
+        <input id="warning" name="warning" type="checkbox">
+        <label class="checkbox-label">ETA vencido</label>
+    </div>
+</div>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <td colspan="13">
+                <?php if (!isset($this->error)) { ?>
+                    <div class="traffic-clear-5"></div>
+                    <a href="/trafico/index/crear-nueva-solicitud" class="traffic-btn traffic-btn-right">
+                        <i class="far fa-keyboard"></i> SOLICITUDES POR CAPTURAR
+                    </a>
+                <?php } ?>
+                <?php if (isset($this->corresponsal)) { ?>
+                    <div class="traffic-clear-5"></div>
+                    <a href="/trafico/index/solicitudes-corresponsal" class="traffic-btn traffic-btn-right">
+                        <i class="far fa-keyboard"></i> SOLICITUDES POR CAPTURAR
+                    </a>
+                <?php } ?>
+                <a class="traffic-btn descargar">
+                    <i class="fas fa-download"></i> Descargar
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <input type="checkbox" class="todas-solicitudes" />
+            </th>
+            <th>T/O</th>
+            <th>&nbsp;</th>
+            <th>Fecha ETA</th>
+            <th>Fecha Elab.</th>
+            <th>Referencia</th>
+            <th>Pedimento</th>
+            <th>Comp.</th>
+            <th>Esquema</th>
+            <th>Cliente</th>
+            <th>BL</th>
+            <th>Total</th>
+            <th style="width: 95px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator)) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <tr>
+                    <td>
+                        <?php if ($item["tramite"] !== null) { ?>
+                            <input type="checkbox" class="solicitud" />
+                        <?php } ?>
+                    </td>
+                    <td><?= ($item["tipoOperacion"] == 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>' : '<i class="fas fa-arrow-circle-up" style="color: #2e963a"></i>' ?></td>
+                    <td><?= $this->estatus($item["autorizada"], $item["tramite"], $item["deposito"], $item["autorizadaHsbc"], $item["autorizadaBanamex"]) ?></td>
+                    <td style="text-align: center"><?= $this->eta($item['fechaEta'], $item["deposito"]) ?></td>
+                    <td style="text-align: center"><?= $this->myHelpers->dateSpanish($item['creado']) ?></td>
+                    <td style="text-align: center">
+                        <a href="/trafico/index/ver-solicitud?id=<?= $item['id'] ?>"><?= $item["referencia"] ?></a>
+                    </td>
+                    <td style="text-align: center">
+                        <a href="/trafico/index/ver-solicitud?id=<?= $item['id'] ?>"><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></a>
+                    </td>
+                    <td style="text-align: center"><?= isset($item["complemento"]) ? "SI" : "" ?>&nbsp;</td>
+                    <td><?= $item["esquemaFondo"] ?></td>
+                    <td><?= $item["nombreCliente"] ?></td>
+                    <td><?= $item["bl"] ?></td>
+                    <td><?= $this->currency(($item["subtotal"] - $item["anticipo"]), 90) ?></td>
+                    <td>
+                        <div style="font-size:1.3em; color: #2f3b58; float: right; margin-right: 10px; float: right">
+                            <?php if ($item["autorizada"] === null) { ?>
+                                <a href="/trafico/index/editar-solicitud?id=<?= $item['id'] ?>&aduana=<?= $item['idAduana'] ?>">
+                                    <i class="fas fa-pencil-alt" style="color: #2f3b58; cursor: pointer"></i>
+                                </a>
+                            <?php } ?>
+                            <a href="/trafico/index/ver-solicitud?id=<?= $item['id'] ?>">
+                                <i class="fas fa-folder-open" style="color: #2f3b58; cursor: pointer"></i>
+                            </a>
+                            <?php if ($item["autorizada"] === null) { ?>
+                                <a onclick="deleteRequest(<?= $item["id"] ?>);" style="cursor: pointer">
+                                    <i class="far fa-trash-alt" style="color: #2f3b58; cursor: pointer"></i>
+                                </a>
+                            <?php } ?>
+                            <?php if ($item["tramite"] !== null) { ?>
+                                <a onclick="savePdf(<?= $item["id"] ?>);" style="cursor: pointer" title="Guardar en PDF.">
+                                    <i class="fas fa-print" style="color: #2f3b58; cursor: pointer"></i>
+                                </a>
+                            <?php } ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="13" style="text-align: center">
+                    <em>No hay registros en la base de datos o su usuario no tiene aduanas asignadas.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?= (isset($this->paginator)) ? $this->paginationSize($this->paginator->getItemCountPerPage()) : '' ?><?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding") : null ?>
+<?php if (!isset($this->error)) { ?>
+    <div class="traffic-clear-5"></div>
+    <a href="/trafico/index/crear-nueva-solicitud" class="traffic-btn traffic-btn-right">
+        <i class="far fa-keyboard"></i> SOLICITUDES POR CAPTURAR
+    </a>
+<?php } ?>
+<?php if (isset($this->corresponsal)) { ?>
+    <div class="traffic-clear-5"></div>
+    <a href="/trafico/index/solicitudes-corresponsal" class="traffic-btn traffic-btn-right">
+        <i class="far fa-keyboard"></i> SOLICITUDES POR CAPTURAR
+    </a>
+<?php } ?>
+<div class="traffic-clear"></div>
+<div class="jqmWindow" id="reporteModal">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>

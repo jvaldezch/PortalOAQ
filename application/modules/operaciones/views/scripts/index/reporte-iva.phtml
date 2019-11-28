@@ -1,0 +1,38 @@
+<form id="<?= $this->form->getAttrib('id') ?>" method="<?= $this->form->getMethod() ?>">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="5" class="traffic-table-title">REPORTE DE I.V.A.</th>
+        </tr>
+        <tr>
+            <th>Aduana:</th>
+            <th>Año:</th>
+            <th>Mes:</th>
+            <th>Cliente RFC:</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td><?= $this->form->aduana ?></td>
+            <td><?= $this->form->year ?></td>
+            <td><?= $this->form->mes ?></td>
+            <td><?= $this->form->rfc_cliente ?></td>
+            <td>
+                <button class="traffic-btn-add traffic-btn-right" id="submit">Generar reporte</button>
+            </td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>Nombre del cliente</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td><?= $this->form->nombre ?></td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</form>
+<iframe src="/operaciones/data/ver-reporte-iva" id="report-frame"></iframe>

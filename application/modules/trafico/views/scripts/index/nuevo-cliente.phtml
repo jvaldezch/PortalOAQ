@@ -1,0 +1,37 @@
+<form method="post" action="/trafico/ajax/nuevo-cliente" id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="text-align: right; width: 150px">Empresa:</th>
+            <td colspan="3">
+                <select id="idEmpresa" name="idEmpresa" class="traffic-select-large">
+                    <option value="">---</option>
+                    <?php if(isset($this->empresas)) { ?>
+                        <?php foreach ($this->empresas as $item) { ?>
+                            <option value="<?= $item["id"] ?>"><?= $item["razonSocial"] ?></option>
+                        <?php } ?>
+                    <?php } ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right; width: 150px">RFC:</th>
+            <td class="traffic-td-left"><?= $this->form->rfc ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right">Nombre:</th>
+            <td class="traffic-td-left"><?= $this->form->nombre ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right">RFC de sociedad:</th>
+            <td class="traffic-td-left"><?= $this->form->rfcSociedad ?></td>
+        </tr>
+        <tr>
+            <td colspan="6"><div id="errors"></div></td>
+        </tr>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <button class="traffic-btn traffic-btn-right" id="submit" tabindex="5">
+        <i class="far fa-save"></i> Agregar</button>
+    <a class="traffic-btn" onclick="window.history.back();" tabindex="99">
+        <i class="fas fa-angle-double-left"></i> Regresar</a>
+</form>

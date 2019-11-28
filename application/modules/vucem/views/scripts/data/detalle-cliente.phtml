@@ -1,0 +1,73 @@
+<div id="modalWindow">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3><?= $this->nombre ?></h3>
+    </div>
+    <div class="modal-body">
+        <?php if(isset($this->form)) { ?>        
+        <table class="table table-striped table-bordered small">
+            <tr>
+                <th>Tipo de Identificador</th>
+                <td><?= $this->form->CteIden ?></td>
+            </tr>
+            <tr>
+                <th>Cve. Cliente</th>
+                <td><?= $this->form->CveCli ?></td>
+            </tr>
+            <tr>
+                <th>RFC</th>
+                <td><?= $this->form->CteRfc ?></td>
+            </tr>
+            <tr>
+                <th>Razón Social</th>
+                <td><?= $this->form->CteNombre ?></td>
+            </tr>
+            <tr>
+                <th>Calle</th>
+                <td><?= $this->form->CteCalle ?></td>
+            </tr>
+            <tr>
+                <th>Num. Exterior</th>
+                <td><?= $this->form->CteNumExt ?></td>
+            </tr>
+            <tr>
+                <th>Num. Interior</th>
+                <td><?= $this->form->CteNumInt ?></td>
+            </tr>
+            <tr>
+                <th>Colonia</th>
+                <td><?= $this->form->CteColonia ?></td>
+            </tr>
+            <tr>
+                <th>C.P.</th>
+                <td><?= $this->form->CteCP ?></td>
+            </tr>
+            <tr>
+                <th>Localidad</th>
+                <td><?= $this->form->CteLocalidad ?></td>
+            </tr>
+            <tr>
+                <th>Municipio</th>
+                <td><?= $this->form->CteMun ?></td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td><?= $this->form->CteEdo ?></td>
+            </tr>
+            <tr>
+                <th>País</th>
+                <td><?= $this->form->CtePais ?></td>
+            </tr>
+        </table>
+        <?php } ?>
+    </div>
+    <div class="modal-footer">
+      <?php if($this->facturas) { ?>
+        <a id="selectallinvoices" class="btn btn-info" style="float: left"><i class="icon-white icon-check"></i>&nbsp;Seleccionar todas</a>
+        <a id="invoices" class="btn btn-primary">Seleccionar facturas</a>
+      <?php } ?>
+        <a href="/vucem/catalogo/editar-cliente?patente=<?= $this->patente ?>&aduana=<?= $this->aduana ?>&rfc=<?= $this->rfc ?>" class="btn btn-success" >Editar cliente</a>
+      <a id="closeModal" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
+    </div>
+</div>
+</script>

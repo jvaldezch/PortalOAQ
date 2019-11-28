@@ -1,0 +1,92 @@
+<input type="hidden" id="directorio" name="directorio" value="<?= $this->directorio ?>">
+<div class="traffic-clear-5"></div>
+<div class="traffic-radio-block" style="padding-bottom: 0">
+    <button class="button-delete">Eliminar</button>
+    <button class="button-newfolder">Nueva carpeta</button>
+    <button class="button-upload">Subir archivos</button>
+    <button class="button-home"></button>
+</div>
+<div class="traffic-clear-5"></div>
+<?php if(isset($this->navigator)) { ?>
+    <div class="traffic-radio-block" style="padding-bottom: 0; padding-left: 12px; font-size: 12px">
+        <span><a href="/rrhh/oea/index">&Omega;</a></span>
+        <?php if(is_array($this->navigator["directorio"])) { ?>
+            <?php foreach ($this->navigator["directorio"] as $k => $v) { ?>
+                &nbsp;&raquo;&nbsp;<span><a href="/rrhh/oea/index?directorio=<?= $v ?>"><?= $this->navigator["nombreCarpeta"][$k] ?></a></span>
+            <?php } ?>
+        <?php } else { ?>
+        &nbsp;&raquo;&nbsp;<span><a href="/rrhh/oea/index?directorio=<?= $this->navigator["directorio"] ?>"><?= $this->navigator["nombreCarpeta"] ?></a></span>
+        <?php } ?>
+    </div>
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<table class="traffic-table traffic-table-left hover" id="files">
+    <thead>
+        <tr>
+            <th style="width: 32px">
+                <input type="checkbox" id="selectAll" />
+            </th>
+            <th style="width: 24px">&nbsp;</th>
+            <th style="text-align: left">Nombre archivo/directorio</th>
+            <th style="text-align: left; width: 140px">Fecha de creación</th>
+            <th style="text-align: left; width: 160px">Fecha de modifcación</th>
+        </tr>
+    </thead>
+    <tbody>        
+<!--        <tr>
+            <td>&nbsp;</td>                        
+            <td colspan="4">
+                <a href="?directorio=<?= isset($this->parent) ? $this->parent["previo"] : "" ?>"><img src="/images/icons/folder_close.png"  style="padding-left: 3px"/></a>
+            </td>
+        </tr>  -->
+        <?php if (isset($this->carpetas)) { ?>
+            <?php foreach ($this->carpetas as $file) { ?>                
+                <tr>
+                    <td style="text-align: center">
+                        &nbsp;
+                    </td>
+                    <td>
+                        <a href="?directorio=<?= $file["siguiente"] ?>"><div class="traffic-icon traffic-icon-folder"></div></a>
+                    </td>
+                    <td>
+                        <a data-id="<?= $file["idCarpeta"] ?>" class="inline-edit-folder" href="?directorio=<?= $file["siguiente"] ?>"><?= $file["nombreCarpeta"] ?></a>
+                    </td>
+                    <td><?= date("d/m/Y H:i a", strtotime($file["creada"])) ?></td>
+                    <td><?= isset($file["modificada"]) ? date("d/m/Y H:i a", strtotime($file["modificada"])) : "" ?></td>
+                </tr>                
+            <?php } ?>
+        <?php } ?>
+        <?php if (isset($this->archivos)) { ?>
+            <?php foreach ($this->archivos as $file) { ?>                
+                <tr>
+                    <td style="text-align: center">
+                        <input type="checkbox" class="singleFile" data-id="<?= $file["id"] ?>" />
+                    </td>
+                    <td>
+                        <img src="/images/icons/pdf.png" />
+                    </td>
+                    <td>
+                        <a data-id="<?= $file["id"] ?>" class="inline-edit-file" href="/rrhh/oea/descargar-archivo?id=<?= $file["id"] ?>"><?= $file["nombreArchivo"] ?></a>
+                    </td>
+                    <td><?= date("d/m/Y H:i a", strtotime($file["creado"])) ?></td>
+                    <td><?= isset($file["modificado"]) ? date("d/m/Y H:i a", strtotime($file["modificado"])) : "" ?></td>
+                </tr>                
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>
+<script type="text/javascript">
+    
+    $('#files').dataTable({
+        "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
+        "sPaginationType": "bootstrap",
+        "oLanguage": {
+            "sLengthMenu": "_MENU_ registros por página"
+        },
+        "iDisplayLength": 15,
+        "bStateSave": true,
+        "aaSorting": [],
+        "bSort": false
+    });
+    
+</script>

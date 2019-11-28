@@ -1,0 +1,71 @@
+<form id="formReport">
+    <table class="traffic-table">
+        <tr>
+            <th colspan="2" class="traffic-table-title">REPORTE TRAFICO</th>                    
+        </tr>
+        <tr>
+            <th>
+                <label for="idAduana" style="display: inline">Aduana:&nbsp;</label>
+            </th>
+            <td style="text-align: left">
+                <?php if (isset($this->filters) && !empty($this->filters)) { ?>
+                    <select id="idAduana" name="idAduana" class="traffic-select-medium">
+                        <option value="">Todas</option>
+                        <?php foreach ($this->filters as $item) { ?>
+                            <option value="<?= $item["id"] ?>"><?= $item["patente"] . "-" . $item["aduana"] . ", " . $item["nombre"] ?></option>
+                        <?php } ?>
+                    </select>
+                <?php } else { ?>
+                    &nbsp;
+                <?php } ?>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="fechaInicio" style="display: inline">Fecha inicio:&nbsp;</label>
+            </th>
+            <td style="text-align: left">
+                <input type="text" name="fechaInicio" id="fechaInicio" class="traffic-date-input" style="text-align: center" value="<?= date("Y-m-" . "01") ?>" >
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="fechaFin" style="display: inline">Fecha fin:&nbsp;</label>
+            </th>
+            <td style="text-align: left">
+                <input type="text" name="fechaFin" id="fechaFin" class="traffic-date-input" style="text-align: center" value="<?= date("Y-m-d") ?>" >
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="pagados" style="display: inline">Pagados:&nbsp;</label>
+            </th>
+            <td style="text-align: left">
+                <input type="checkbox" name="pagados" value="1">
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="traffic-clear-5"></div>
+<button id="closeModal" class="traffic-btn-close">Cerrar</button>
+<a class="traffic-btn-save traffic-btn-right" href="/trafico/get/excel-reporte-trafico" id="excel">Crear reporte</a>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#fechaInicio, #fechaFin").datepicker({
+            calendarWeeks: true,
+            autoclose: true,
+            language: "es",
+            format: "yyyy-mm-dd"
+        });
+
+        $(document.body).on("click", "#excel", function (ev) {
+            ev.preventDefault();
+            var href = $(this).attr("href") + "?" + $("#formReport").serialize();
+            console.log(href);
+            window.location.href = href;
+        });
+
+    });
+</script>
+

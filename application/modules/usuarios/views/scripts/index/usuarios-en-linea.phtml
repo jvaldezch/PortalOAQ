@@ -1,0 +1,35 @@
+<div style="clear: both"></div>
+<?php if ($this->paginator) { ?>
+    <div style="overflow-y: auto; height: 450px">
+        <div class="traffic-clear-5"></div>
+        <table class="traffic-table hover" id="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Usuario</th>
+                    <th>Session ID</th>
+                    <th>IP</th>
+                    <th>Último acceso</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->paginator as $item) { ?>
+                    <tr id="row_<?= $item["id"] ?>">
+                        <td><?= $item["id"] ?></td>
+                        <td><?= $item["nombreUsuario"] ?></td>
+                        <td><?= $item["usuario"] ?></td>
+                        <td><?= $item["session"] ?></td>
+                        <td><?= $item["ip"] ?></td>  
+                        <td><?= isset($item["fecha"]) ? date("d/m/Y H:i a", strtotime($item["fecha"])) : "" ?></td>
+                        <td style="width: 120px">
+                            <button data-id="<?= $item["id"] ?>" class="traffic-btn closeSession">Cerrar sesión</button>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="traffic-clear-5"></div>
+<?php } ?>

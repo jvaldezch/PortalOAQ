@@ -1,0 +1,62 @@
+<div id="mm" class="easyui-menu" style="width: 220px;">
+    <div onclick="javascript:abrir()">Abrir</div>
+    <div onclick="javascript:consolidar()">Consolidar tráficos</div>
+    <div onclick="javascript:ordenCarga()">Generar orden de carga</div>
+    <div class="menu-sep"></div>
+    <div>Salir</div>
+</div>
+<div style="float: left; margin-left: 2px"> 
+    <img style="float: left" src="/images/menus/traffic.png" />
+    <h5 style="float: left; margin-left: 5px" style="margin: 0;">BODEGA</h5>
+</div>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <div class="semaphore-black"></div><span>En captura</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-yellow"></div><span>Proforma</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>Pagado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Liberado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-red"></div><span>En espera</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i><span style="padding-left: 3px">Importación</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-up" style="color: #2e963a"></i><span style="padding-left: 3px">Exportación</span>
+    </div>
+</div>
+<div id="dlg" class="easyui-dialog" style="width:600px"
+        closed="true" buttons="#dlg-buttons">
+    <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+        <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc">Nuevo trafico</div>
+        <div style="margin-bottom:10px">
+            <input name="pedimento" class="easyui-textbox" required="true" label="Pedimento:" style="width:170px">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="referencia" class="easyui-textbox" required="true" label="Referencia:" style="width:170px">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="rfcCliente" class="easyui-combobox" required="true" label="Cliente:" style="width:100%" data-options="
+                valueField:'rfc',
+                textField:'nombre',
+                method:'post',
+                url:'/trafico/crud/obtener-clientes'">
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Guardar</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
+</div>
+<table id="dg" style="width:100%;height:630px"></table>
+<div class="traffic-clear-10"></div>
+<a href="/bodega/index/crear-trafico" class="traffic-btn traffic-btn-right">
+    <i class="fas fa-file"></i> Nueva entrada
+</a>

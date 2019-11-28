@@ -1,0 +1,51 @@
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <th colspan="3" class="invoice-title">ARCHIVOS VALIDACION</th>
+    </tr>
+    <tr>
+        <th>Nom. Archivo</th>
+        <th>Firma</th>
+        <th><div class="traffic-icon traffic-icon-reload traffic-btn-right" onclick="loadRegister();"></div></td>
+    </tr>
+    <?php if (isset($this->archivosm) && !empty($this->archivosm)) {
+        foreach ($this->archivosm as $item) { ?>
+            <tr>
+                <td><?= $item["archivoNombre"] ?></td>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="traffic-icon traffic-icon-folder showRegister" data-id="<?= $item["idArchivoValidacion"] ?>" data-url="/trafico/data/ver-archivo-validacion?id=<?= $item["idArchivoValidacion"] ?>"></div>
+                </td>
+            </tr>
+        <?php }
+    } ?>
+<?php if (isset($this->archivosv) && !empty($this->archivosv)) {
+    foreach ($this->archivosv as $item) { ?>
+            <tr>
+                <td><?= $item["archivoNombre"] ?></td>
+                <td><?= $item["firma"] ?></td>
+                <td>
+                    <div class="traffic-icon traffic-icon-folder showRegister" data-id="<?= $item["idArchivoValidacion"] ?>" data-url="/trafico/data/ver-archivo-validacion?id=<?= $item["idArchivoValidacion"] ?>"></div>
+                </td>
+            </tr>
+    <?php }
+} ?>
+<?php if (isset($this->archivosp) && !empty($this->archivosp)) { ?>
+        <tr>
+            <td><?= $this->archivosp["archivoNombre"] ?></td>
+            <td><?= $this->archivosp["firmaBanco"] ?></td>
+            <td>
+                <div class="traffic-icon traffic-icon-folder showRegister" data-id="<?= $item["idArchivoValidacion"] ?>" data-url="/trafico/data/ver-archivo-validacion?id=<?= $this->archivosp["idArchivoValidacion"] ?>"></div>
+            </td>
+        </tr>
+<?php } ?>
+</table>
+<div class="jqmWindow" id="modalRegister" style="top: 10%">
+    Please wait... <div class="traffic-icon traffic-loader"></div>
+</div>
+<script>
+    $("#modalRegister").jqm({
+        ajax: '@data-url',
+        modal: true,
+        trigger: 'div.showRegister'
+    });
+</script>

@@ -1,0 +1,45 @@
+<div class="traffic-cols">
+    <form method="get" id="form">
+        <table class="traffic-table traffic-table-left">
+            <tr>
+                <th colspan="2" class="traffic-table-title">REPORTES</th>                    
+            </tr>
+            <tr>
+                <td style="width: 180px"><label for="layout">Tipo de reporte:</label></td>
+                <td>
+                    <div class="traffic-radio-block">
+                        <div class="traffic-radio-input">
+                            <input type="radio" name="layout" id="layout" value="1" checked="">&nbsp;<p>Expedientes</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="nombre">Nombre de la empresa:</label></td>
+                <td>
+                    <input type="text" class="traffic-input-large" autocomplete="off" placeholder="Nombre de la empresa" id="nombre" name="nombre">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="rfc">RFC:</label></td>
+                <td>
+                    <input type="text" class="traffic-input-medium" placeholder="RFC de consulta" id="rfc" name="rfc" readonly="true">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="fechaInicio">Fecha Inicio:</label></td>
+                <td>
+                    <input type="text" name="fechaInicio" id="fechaInicio" class="traffic-date-input" value="<?= date('Y-m-d') ?>" style="float: left; margin-right: 10px">
+                    <label for="fechaFin" style="float: left">Fecha Fin:</label>
+                    <input type="text" name="fechaFin" id="fechaFin" class="traffic-date-input" value="<?= date('Y-m-d') ?>"  style="float: left; margin-left: 10px">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button id="submit" class="traffic-btn-import traffic-btn-right">Generar reporte</button>
+                </td>                    
+            </tr>
+        </table>
+    </form>
+</div>
+<div class="traffic-clear-10"></div>

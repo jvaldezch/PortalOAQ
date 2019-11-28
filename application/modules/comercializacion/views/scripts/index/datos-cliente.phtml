@@ -1,0 +1,94 @@
+<form method="post" action="<?= $this->url ?>">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="2" class="traffic-table-title">DATOS DEL CLIENTE</th>
+        </tr>
+        <tr>
+            <th>RFC:</th>
+            <td><?= $this->form->rfc ?></td>
+        </tr>
+        <tr>
+            <th>Nombre:</th>
+            <td><?= $this->form->nombre ?></td>
+        </tr>
+        <tr>
+            <th>SICA ID:</th>
+            <td><?= $this->form->sicaid ?></td>
+        </tr>
+        <tr>
+            <th>Acceso Web:</th>
+            <td><?= $this->form->webaccess ?></td>
+        </tr>
+        <tr>
+            <th>Password Web:</th>
+            <td><?= $this->form->password ?></td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td>
+                <button value="Guardar cambios" type="submit" id="submit" name="submit" class="traffic-btn traffic-btn-add">Guardar cambios</button>&nbsp;
+                <button value="Agregar contactos" type="submit" id="add" name="add" class="traffic-btn traffic-btn-success">Agregar contactos</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<?php if (isset($this->cCartera) && count($this->cCartera) > 0) { ?>
+    <h4>Contactos de cartera</h4>
+    <table class="table table-striped table-bordered table-hover small">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->cCartera as $item) { ?>
+                <tr>
+                    <td><?= $item['nombre'] ?></td>
+                    <td><?= $item['email'] ?></td>
+                    <td style="width: 70px">
+                        <div class="btn-toolbar" style="margin: 0">
+                            <div class="btn-group" style="margin: 0">
+                                <a id="editContact" href="/comercializacion/index/editar-contacto?id=<?= $item['id'] ?>" class="btn btn-small" style="margin-bottom: 10px"><i class="icon-pencil"></i> Editar</a>
+                                <a href="/comercializacion/index/delete-contact?id=<?= $item['id'] ?>" class="btn btn-small btn-danger delContact" style="margin-bottom: 10px"><i class="icon-white icon-minus-sign"></i> Borrar</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>
+<?php if (isset($this->cTrafico) && count($this->cTrafico) > 0) { ?>
+    <h4>Contactos de trafico</h4>
+    <table class="table table-striped table-bordered table-hover small">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->cTrafico as $item) { ?>
+                <tr>
+                    <td><?= $item['nombre'] ?></td>
+                    <td><?= $item['email'] ?></td>
+                    <td style="width: 70px">
+                        <div class="btn-toolbar" style="margin: 0">
+                            <div class="btn-group" style="margin: 0">
+                                <a id="editContact" href="/comercializacion/index/editar-contacto?id=<?= $item['id'] ?>" class="btn btn-small" style="margin-bottom: 10px"><i class="icon-pencil"></i> Editar</a>
+                                <a href="/comercializacion/index/delete-contact?id=<?= $item['id'] ?>" class="btn btn-small btn-danger delContact" style="margin-bottom: 10px"><i class="icon-white icon-minus-sign"></i> Borrar</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>    
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<a class="traffic-btn traffic-btn-back" onclick="window.history.back();">&laquo;&nbsp;Regresar</a>
+<div class="traffic-clear-5"></div>

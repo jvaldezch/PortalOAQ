@@ -1,0 +1,66 @@
+<form id="edit-menu" class="traffic-form">    
+    <table class="traffic-table traffic-table-left">
+        <input type="hidden" value="<?= $this->menu["idAccion"] ?>" id="idAccion" name="idAccion">
+        <tr>
+            <th>ID</th>
+            <td><?= $this->menu["idAccion"] ?></td>
+        </tr>
+        <tr>
+            <th style="width: 150px">Modulo</th>
+            <td><?= $this->menu["nombreModulo"] ?></td>
+        </tr>
+        <tr>
+            <th>Controlador</th>
+            <td><?= $this->menu["controlador"] ?></td>
+        </tr>
+        <tr>
+            <th>Accion</th>
+            <td><?= $this->menu["accion"] ?></td>
+        </tr>
+        <tr>
+            <th>Nombre del menu</th>
+            <td>
+                <input type="text" value="<?= $this->menu["nombre"] ?>" name="nombre" id="nombre">
+            </td>
+        </tr>
+        <tr>
+            <th>Orden</th>
+            <td>
+                <input type="text" value="<?= $this->menu["orden"] ?>" name="orden" id="orden" style="width: 30px">
+            </td>
+        </tr>
+        <tr>            
+            <td>&nbsp;</td>
+            <td>
+                <button id='save' class="traffic-btn traffic-btn-save">Guardar</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<script>        
+    $("#edit-menu").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("label[for='" + element.attr("id") + "']")
+                    .append(error);
+        },
+        errorElement: "span",
+        rules: {
+            nombre: "required",
+            orden: "required"
+        },
+        messages: {
+            nombre: " [Selccionar rol]",
+            orden: " [Selccionar rol]"
+        }
+    });
+    
+    $("#save").click(function (e) {
+        e.preventDefault();
+        if ($("#edit-menu").valid()) {
+            save($("#idAccion").val(), $("#nombre").val(), $("#orden").val());
+        }
+    });
+    
+</script>

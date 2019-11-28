@@ -1,0 +1,21 @@
+<div style="height: 400px">
+    <table class="traffic-table traffic-table-left hover">
+        <thead>
+            <tr>
+                <th>Clave</th>
+                <th>Descripción</th>
+                <th>Regimen Imp.</th>
+                <th>Regimen Exp.</th>
+            </tr>
+        </thead>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr>
+                <td><?= $item["clave"] ?></td>
+                <td><?= $item["descripcion"] ?></td>
+                <td><?= $item["regimenImportacion"] ?></td>
+                <td><?= $item["regimenExportacion"] ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding", "paginacion.phtml", array("function" => $this->funcion, "busqueda" => $this->busqueda)) : null ?>

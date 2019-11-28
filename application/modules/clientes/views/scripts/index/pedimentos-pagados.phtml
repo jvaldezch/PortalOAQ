@@ -1,0 +1,79 @@
+<fieldset>
+    <legend>Reporte de pedimentos pagados</legend>
+    <?= $this->form ?>
+    <?php if($this->paginator) { ?>
+        <?php if(isset($this->paginator)) { ?>
+        <div style="height: 10px"></div>
+        <ul id="download-links">
+            <li>Descargar este reporte en: <img src="/images/icons/ms-excel.png" />&nbsp;<a href="/clientes/index/excel-pedimentos-pagados">Excel</a></li>
+        </ul>
+        <?php echo $this->paginationControl($this->paginator,'Sliding', 'pagination.phtml'); ?>        
+        <div style="height: 10px"></div>
+        <?php } ?>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Referencia</th>
+                    <th>Pedimento</th>
+                    <th>Fecha Pago</th>
+                    <th>Cve. Doc</th>
+                    <th>I/E</th>
+                    <th>Firma Validación</th>
+                    <th>Acuse Banco</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->paginator as $pedimento) { ?>
+                <tr>
+                    <td><?= $pedimento['patente'] ?></td>
+                    <td><?= $pedimento['aduana'] ?></td>
+                    <td><?= $pedimento['referencia'] ?></td>
+                    <td><?= $pedimento['pedimento'] ?></td>
+                    <td><?= date('d/m/Y', strtotime($pedimento['fecha_pago'])) ?></td>
+                    <td><?= $pedimento['cve_doc'] ?></td>
+                    <td><?php
+                        if($pedimento['ie'] == 1) {
+                            echo 'IMP';
+                        } else if ($pedimento['ie'] == 2) {
+                            echo 'EXP';
+                        }
+                    ?></td>
+                    <td><?= $pedimento['firma_validacion'] ?></td>
+                    <td><?= $pedimento['firma_banco'] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php if(isset($this->paginator)) { ?>
+        <?php echo $this->paginationControl($this->paginator,'Sliding', 'pagination.phtml'); ?>
+        <div style="height: 10px"></div>
+        <?php } ?>
+    <?php } else { ?>
+        <h4><?= $this->error ?></h4>
+    <?php } ?>
+</fieldset>
+<?php if(isset($this->searched)) { ?>
+<div class="alert alert-error">
+    <p><b>INFO:</b>&nbsp;La búsqueda no ha dado resultados.</p>
+</div>
+<?php } ?>
+<script>
+    // http://www.eyecon.ro/bootstrap-datepicker/
+  $("input[name='fechaIni']").datepicker({
+        format: 'yyyy-mm-dd'
+  }).on('changeDate', function() {
+        if( $("#bootstrap-rfc").val().length > 9 ) {
+            $("#bootstrap-submit").removeAttr("disabled");
+        }
+  });
+  
+  $("input[name='fechaFin']").datepicker({
+      format: 'yyyy-mm-dd'
+  }).on('changeDate', function() {
+        if( $("#bootstrap-rfc").val().length > 9 ) {
+            $("#bootstrap-submit").removeAttr("disabled");
+        }
+  });
+</script>

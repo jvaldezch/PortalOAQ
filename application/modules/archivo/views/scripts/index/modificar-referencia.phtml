@@ -1,0 +1,68 @@
+<form id="form">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="4" class="traffic-table-title">MODIFICAR REFERENCIA</th>
+            </tr>
+            <tr>
+                <th colspan="2" class="traffic-table-subtitle">ANTERIOR</th>
+                <th colspan="2" class="traffic-table-subtitle">NUEVO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="width: 150px; text-align: right">Patente</th>
+                <td style="width: 200px">
+                    <input type="text" name="opatente" readonly="true" value="<?= $this->data["patente"] ?>" class="traffic-input-small">
+                </td>
+                <th style="width: 150px; text-align: right"><label for="npatente">Patente:</label></th>
+                <td>
+                    <input type="text" name="npatente" id="patente" tabindex="1" class="traffic-input-small">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">Aduana:</th>
+                <td>
+                    <input type="text" name="oaduana" readonly="true" value="<?= $this->data["aduana"] ?>" class="traffic-input-small">
+                </td>
+                <th style="text-align: right"><label for="naduana">Aduana:</label></th>
+                <td>
+                    <input type="text" name="naduana" id="naduana" tabindex="2" class="traffic-input-small">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">Pedimento:</th>
+                <td>
+                    <input type="text" name="opedimento" readonly="true" value="<?= $this->data["pedimento"] ?>" class="traffic-input-small">
+                </td>
+                <th style="text-align: right"><label for="npedimento">Pedimento:</label></th>
+                <td>
+                    <input type="text" name="npedimento" id="npedimento" tabindex="3" class="traffic-input-small">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">Referencia:</th>
+                <td>
+                    <input type="text" name="oreferencia" readonly="true" value="<?= $this->data["referencia"] ?>" class="traffic-input-small">
+                </td>
+                <th style="text-align: right"><label for="nreferencia">Referencia:</label></th>
+                <td>
+                    <input type="text" name="nreferencia" id="nreferencia" tabindex="4" class="traffic-input-small">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">RFC Cliente</th>
+                <td>
+                    <input type="text" name="orfc" readonly="true" value="<?= $this->data["rfcCliente"] ?>" class="traffic-input-medium">
+                </td>
+                <th style="text-align: right"><label for="nrfc">RFC Cliente:</label></th>
+                <td>
+                    <input type="text" name="nrfc" id="nrfc" tabindex="5" class="traffic-input-medium">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <button id="submit" class="traffic-btn-success traffic-btn-right" tabindex="50">Actualizar</button>
+    <a href="javascript:window.history.back();" class="traffic-btn-back" tabindex="99">&Lt;&nbsp;Regresar</a>
+</form>

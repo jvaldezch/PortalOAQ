@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OAQ Web Portal">
+  <meta name="author" content="Jaime E. Valdez">
+  <title><?= $this->title ?></title>
+  <link rel="icon" type="image/png" href="/images/debian.png" />
+  <?= $this->headMeta(); ?>
+  <?= $this->headLink() ?>
+  <?= $this->headScript() ?>
+</head>
+<body>
+    <style>
+        body {
+            border-bottom: 0;
+            background: #fff;
+        }
+    </style>
+    <div id="wrap" style="padding-top: 60px;">
+        <?= $this->layout()->content ?>
+    </div><!-- wrap -->  
+    <div id="footer">
+        <div class="column-50">
+            <ul id="copyright">
+                <li>&copy; <?= date('Y') ?> Organización Aduanal de Querétaro, S.C.</li>
+                <li><a href="/index/terminos">Términos</a></li>
+                <li><a href="/index/privacidad">Privacidad</a></li>
+                <li><a href="https://187.188.159.44/sgcweb2012/" target="_blank"><img src="/favicon.ico" style="margin-bottom: 1px" />&nbsp;SGC 2012</a></li>
+            </ul>
+        </div>
+        <div class="column-50">
+            <ul id="help">
+                <li>Ayuda</li>
+                <li><a href="/index/contacto">Contacto</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

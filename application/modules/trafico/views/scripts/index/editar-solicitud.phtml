@@ -1,0 +1,169 @@
+<?php if (isset($this->data) && !empty($this->data)) { ?>
+    <form method="post" action="/trafico/data/new-request-enh" id="form-extras">
+        <?= $this->inputHidden("hidden", "idAduana", $this->aduana) ?>
+        <?= $this->inputHidden("hidden", "idSolicitud", $this->id) ?>
+        <?= $this->inputHidden("hidden", "idCliente", $this->data["idCliente"]) ?>
+        <?= $this->inputHidden("hidden", "idCliente", $this->data["idCliente"]) ?>
+        <?= $this->inputHidden("hidden", "aduana", $this->data["aduana"]) ?>
+        <table class="traffic-table">
+            <tr>
+                <th colspan="10" class="invoice-title" id="pageTitle">NUEVA SOLICITUD DE ANTICIPO</th>    
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>PEDIMENTO:</th>
+                <th>REFERENCIA:</th>
+                <th>TIPO OP.:</th>
+                <th>CLIENTE:</th>
+                <th>COMPLEMENTO:</th>
+                <th>CVE PED:</th>            
+                <th>FACTURACIÓN:</th>
+                <th>PLANTA:</th>
+                <th>FECHA ELAB.:</th>
+            </tr>            
+            <tr>
+                <td style="width: 30px">
+                    <a href="/trafico/index/editar-solicitud-anticipo?id=<?= $this->id ?>" title="Editar tráfico." style="float: right">
+                        <i class="fas fa-pencil-alt" style="font-size: 1.3em; color: #2f3b58"></i>
+                    </a>
+                </td>
+                <td><?= $this->data["aduana"] . "-" . $this->data["patente"] . "-" . $this->data["pedimento"] ?></td>
+                <td><?= $this->data["referencia"] ?></td>
+                <td><?= ($this->data["tipoOperacion"] == "TOCE.IMP") ? "IMPO" : "EXPO" ?></td>
+                <td><?= $this->data["nombreCliente"] ?></td>
+                <td><?= isset($this->data["complemento"]) ? "S" : "N" ?></td>
+                <td><?= $this->selectCvePedimento($this->aduana, "cvePed", (isset($this->detalle)) ? $this->detalle["cvePed"] : null) ?></td>
+                <td><?= $this->selectTipoFact($this->data["idCliente"], $this->aduana, "tipoFacturacion") ?></td>
+                <td>
+                    <?= $this->selectPlanta($this->data["idCliente"], $this->data["idPlanta"]) ?>
+                </td>
+                <td><?= date("d/m/Y H:i a", strtotime($this->data["creado"])) ?></td>
+            </tr>
+        </table>
+        <table class="traffic-table">
+            <tr>
+                <th>FECHA ETA:</th>
+                <th>FECHA LIBRE ALMACENAJE:</th>
+                <th>TIPO DE CARGA:</th>
+                <th>PESO (kg):</th>
+                <th>BL/GUIA/NUM.CONTENEDOR/PLACAS/CAJA:</th>
+            </tr>
+            <tr>
+                <td><?= $this->inputDate("text", "fechaEta", (isset($this->detalle)) ? $this->detalle["fechaEta"] : null, "fecha") ?></td>
+                <td><?= $this->inputDate("text", "fechaAlmacenaje", (isset($this->detalle)) ? $this->detalle["fechaAlmacenaje"] : null, "fecha") ?></td>
+                <td><?= $this->selectTipoCarga($this->aduana, "tipoCarga", (isset($this->detalle)) ? $this->detalle["tipoCarga"] : null) ?></td>
+                <td><?= $this->inputText("peso", (isset($this->detalle)) ? $this->detalle["peso"] : null, "width: 85px") ?></td>
+                <!--<td><?= $this->inputText("bl", null, "width: 140px") ?></td>-->
+                <td><?= $this->textarea("bl", (isset($this->detalle)) ? $this->detalle["bl"] : null, "width: 400px") ?></td>
+            </tr>
+            <tr>
+                <th colspan="2">FACTURA:</th>
+                <th>VALOR MERCANCIA (USD):</th>
+                <th>PECA:</th>
+                <th colspan="2">MERCANCIA:</th>
+            </tr>
+            <tr>
+                <!--<td><?= $this->inputText("numFactura", (isset($this->detalle)) ? $this->detalle["numFactura"] : null, "width: 140px") ?></td>-->
+                <td colspan="2"><?= $this->textarea("numFactura", (isset($this->detalle)) ? $this->detalle["numFactura"] : null, "width: 300px") ?></td>
+                <td><?= $this->inputText("valorMercancia", (isset($this->detalle)) ? $this->detalle["valorMercancia"] : null, "width: 140px") ?></td>
+                <td><?= $this->checkboxPeca("peca", (isset($this->detalle)) ? $this->detalle["peca"] : (isset($this->datosCliente["peca"])) ? $this->datosCliente["peca"] : null) ?></td>
+                <td colspan="2"><?= $this->textarea("mercancia", (isset($this->detalle)) ? $this->detalle["mercancia"] : null, "width: 400px") ?></td>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+                <th>ALMACEN:</th>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+                <td>
+                    <?= $this->form->almacen ?>
+                </td>
+            </tr>
+        </table>            
+        <div id="example" style="overflow: auto; background-color: #fff">
+            <div class="row-fluid">
+                <?php if (isset($this->warningConceptos)) { ?>
+                <p class="alert" style="margin: 5px; padding: 5px; border: 1px #cccc00 solid; font-size: 11px; color: #555">                
+                    <strong>NOTA:</strong>&nbsp;Esta aduana no cuenta con conceptos personalizados, se muestran genericos.<br>                
+                </p>
+                <?php } ?>
+                <?php if (isset($this->concepts)) { ?>
+                    <table style="margin-bottom: 15px" class="traffic-table traffic-table-left">
+                        <tr>
+                            <th>Concepto</th>
+                            <th style="text-align: right">Importe</th>
+                            <th>Concepto</th>
+                            <th style="text-align: right">Importe</th>
+                        </tr>
+                        <?php foreach (array_chunk($this->concepts, 2) as $k => $value) { ?>
+                            <tr>
+                                <td style="padding-left: 5px"><?= $value[0]["concepto"] ?></td>
+                                <td style="text-align: right"><?= $this->inputConcepto($value[0]["idConcepto"], $k + 101, $value[0]["importe"]) ?></td>
+                                <td style="padding-left: 5px"><?= isset($value[1]) ? $value[1]["concepto"] : "" ?></td>
+                                <td style="text-align: right"><?= isset($value[1]) ? $this->inputConcepto($value[1]["idConcepto"], $k + 102, $value[1]["importe"]) : "" ?></td>
+                            </tr>
+                        <?php } ?>
+                        <?php if (isset($this->subtotal)) { ?>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                                <td style="padding-left: 5px; font-weight: bold">SUBTOTAL</td>
+                                <td style="text-align: right"><input type="text" tabindex="201" class="input-concepto" value="<?= $this->subtotal ?>" id="subtotal" name="subtotal" readonly="readonly"></td>
+                            </tr>
+                        <?php } ?>
+                        <?php if (isset($this->anticipo)) { ?>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                                <td style="padding-left: 5px">ANTICIPO</td>
+                                <td style="text-align: right"><input type="text" tabindex="201" class="input-concepto" value="<?= $this->anticipo ?>" id="anticipo" name="anticipo"></td>
+                            </tr>
+                        <?php } ?>
+                        <?php if (isset($this->total)) { ?>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                                <td style="padding-left: 5px; font-weight: bold">TOTAL</td>
+                                <td style="text-align: right"><input type="text" tabindex="201" class="input-concepto" value="<?= $this->total ?>" id="total" name="total" readonly="readonly"></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                <?php } else { ?>
+                    <table style="margin-bottom: 15px" class="traffic-table">
+                        <tr>
+                            <td style="color: red; text-align: center"><em>No se encontraron conceptos para esta aduana.</em></td>
+                        </tr>
+                    </table>
+                <?php } ?>
+            </div>
+        </div>    
+        <button id="save-request" class="traffic-btn traffic-btn-right">
+            <i class="far fa-save"></i> Guardar
+        </button>
+        <?php if (isset($this->puedeEnviar)) { ?>
+            <a target="_blank" href="/trafico/data/imprimir-solicitud?id=<?= $this->id ?>" class="traffic-btn traffic-btn-right">
+                <i class="fas fa-print"></i> Imprimir
+            </a>
+            <button id="send-request" class="traffic-btn traffic-btn-right" data-id="<?= $this->id ?>">
+                <i class="fas fa-envelope"></i> Enviar
+            </button>
+        <?php } ?>
+    </form>
+    <?php if(!isset($this->corresponsal)) { ?>
+    <a href="/trafico/index/crear-nueva-solicitud" class="traffic-btn">
+        <i class="fas fa-angle-double-left"></i> Regresar
+    </a>
+    <?php } else { ?>
+    <a href="/trafico/index/solicitudes-corresponsal" class="traffic-btn">
+        <i class="fas fa-angle-double-left"></i> Regresar
+    </a>
+    <?php } ?>
+<?php } else { ?>
+    <table class="traffic-table">
+        <tr>
+            <th class="invoice-title">LA SOLICITUD NO EXISTE O HA SIDO ENVIADA.</th>    
+        </tr>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <a onclick="window.history.back();" class="traffic-btn">
+        <i class="fas fa-angle-double-left"></i> Regresar
+    </a>
+<?php } ?>
+<div class="traffic-clear-20"></div>

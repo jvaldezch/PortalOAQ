@@ -1,0 +1,30 @@
+<div class="traffic-clear-5"></div>
+<div class="traffic-edocument">
+    <table>
+        <tr>
+            <th>Num. Operación</th>
+        </tr>
+        <tr>
+            <td><?= isset($this->operacion) ? $this->operacion : 'No se completo.' ?></td>
+        </tr>
+        <tr>
+            <th colspan="2">Errores encontrados</th>
+        </tr>    
+        <tr>
+            <td colspan="2">
+                <?php
+                if (is_array($this->errores)) {
+                    foreach ($this->errores as $err) {
+                        echo $err . '<br />';
+                    }
+                } else {
+                    echo $this->errores . '<br />';
+                }
+                ?>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="traffic-clear-5"></div>
+<a href="<?= $this->url(array('action' => 'e-documents')) ?>" class="traffic-btn-back">&Lt;&nbsp;Regresar</a>
+<div class="traffic-clear-5"></div>

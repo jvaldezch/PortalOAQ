@@ -1,0 +1,43 @@
+<form id="form_part">
+    <input type="hidden" name="id" id="id" value="<?= $this->arr["id"] ?>"/>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    DATOS DEL RETORNABLE
+                </th>
+            </tr>
+        </thead>
+    </table>
+</form>
+<script type="text/javascript">    
+    
+    $("#form_part").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            idCliente: "required",
+            idnumCarta: "required"
+        },
+        messages: {
+            idCliente: "Campo necesario",
+            idnumCarta: "Campo necesario"
+        }
+    });
+
+    $(document).on("input", "#dirigida, #numCarta, #sello", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

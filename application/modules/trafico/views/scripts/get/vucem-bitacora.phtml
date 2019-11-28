@@ -1,0 +1,90 @@
+<?php if (isset($this->results) && !empty($this->results)) { ?>
+    <?php foreach ($this->results as $item) { ?>
+        <tr>
+            <td><input type="checkbox" class="checkvucem" id="vucem_<?= $item["id"] ?>"></td>
+            <td>
+                <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
+                    <i class="fas fa-code" onclick="vucemPreview(<?= $item["id"] ?>);" style="cursor: pointer" title="Mostrar XML"></i>
+                </div>                
+            </td>
+            <td>
+                <?php if (isset($item["idArchivo"]) && isset($item["nombreArchivo"])) { ?>
+                    <a style="float: left; font-size:1.2em; color: #2f3b58; cursor: pointer; padding: 3px" 
+                       target="_blank" 
+                       href="/trafico/get/imprimir-edocument?id=<?= $item["id"] ?>&idTrafico=<?= $this->idTrafico ?>"
+                       title="Imprimir Edocument">
+                        <i class="far fa-file-pdf"></i>
+                    </a>
+                <?php } else if (isset($item["edocument"])) { ?>
+                    <a style="float: left; font-size:1.2em; color: #2f3b58; cursor: pointer; padding: 3px" 
+                       target="_blank" 
+                       href="/trafico/get/imprimir-cove-detalle?idFactura=<?= $item["idFactura"] ?>&cove=<?= $item["edocument"] ?>"
+                       title="Imprimir Detalle COVE">
+                        <i class="far fa-file-pdf"></i>
+                    </a>
+                <?php } ?>
+            </td>
+            <td><?= $item["numeroOperacion"] ?></td>
+            <?php if (isset($item["idArchivo"]) && isset($item["nombreArchivo"])) { ?>
+                <td style="text-align: left">
+                    <?= $item["nombreArchivo"] ?>
+                    <?= (isset($item["ubicacion"]) && file_exists($item["ubicacion"])) ? $this->fileSize($item['ubicacion']) : ' <i class="fas fa-exclamation" style="color: #2f3b58" title="El archivo ha sido borrado o se ha transmitido de manera correcta.Si ya cuenta con número de EDocument hacre caso omiso de está advertencia."></i>' ?><br>
+                    <strong>Tipo: </strong><?= $item["tipoDocumento"] ?><br>
+                </td>
+            <?php } else { ?>
+                <td style="text-align: left">
+                    <strong>Factura: </strong>
+                    <?php if (isset($item["archivoXml"]) && $item["archivoXml"] !== null) { ?>
+                        <a style="cursor: pointer" class="preview" data-id="<?= $item["idFactura"] ?>" data-num="<?= $item["numFactura"] ?>"><?= $item["numFactura"] ?></a>
+                    <?php } else { ?>
+                        <?= $item["numFactura"] ?>
+                    <?php } ?>
+                </td>
+            <?php } ?>
+            <td><?= isset($item["edocument"]) ? isset($item["adenda"]) ? $item["adenda"] : $item["edocument"] : '' ?></td>
+            <td><?= isset($item["enviado"]) ? ($item["error"] == 1) ? "Sí" : "" : "" ?></td>
+            <td><?= isset($item["enviado"]) ? date("Y-m-d H:i:s", strtotime($item["enviado"])) : "" ?></td>
+            <td><?= isset($item["respuesta"]) ? date("Y-m-d H:i:s", strtotime($item["respuesta"])) : "" ?></td>
+            <td style="text-align: left">
+                <div class="logData" data-id="<?= $item["id"] ?>">
+                    <?php if(isset($item["log"]) && !empty($item["log"])) { ?>
+                        <?php foreach ($item["log"] as $value) { ?>
+                            <div style="float: left; clear: both">
+                                <?php if ($value['error'] !== null && $value['error'] != 0) { ?>
+                                    <div style="float: left">
+                                        <i class="fas fa-exclamation-circle" style="color:red"></i>
+                                        <?= $value["mensajeError"] ?>
+                                    </div>
+                                <?php } else { ?>
+                                    <div style="float: left">
+                                        <?= $value["mensaje"] ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        <?php } ?>
+                    <?php } ?>
+                </div>
+            </td>
+            <td style="width: 75px; text-align: left">
+                <div style="font-size:1.2em; color: #2f3b58; float: left; margin-right: 5px; margin-top: 2px; margin-bottom: 2px">
+                    <?php if(!isset($item["edocument"])) { ?>
+                        <?php if(!isset($item["numeroOperacion"])) { ?>
+                            <i class="fas fa-upload" onclick="enviarAVucem(<?= $item["id"] ?>);" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
+                        <?php } ?>
+                        <i class="fab fa-uniregistry consultarVucem" data-id="<?= $item["id"] ?>" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
+                        <script>consultaDetalleLog(<?= $item["id"] ?>);</script>
+                        <i class="fas fa-trash-alt" onclick="borrarVucem(<?= $item["id"] ?>);" style="cursor: pointer" title="Borrar operación"></i>
+                    <?php } else { ?>
+                        <i class="far fa-save" style="font-size:1.2em; color: #2f3b58; cursor: pointer" onclick="guardarEnDisco(<?= $item["id"] ?>);"></i>
+                    <?php } ?>
+                </div>
+            </td>
+        </tr>
+    <?php } ?>                
+<?php } else { ?>
+    <tr>
+        <td colspan="10">
+            <em>No hay solicitudes recientes.</em>
+        </td>
+    </tr>
+<?php } ?>

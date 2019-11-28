@@ -1,0 +1,104 @@
+<form method="post" action="<?= $this->url ?>" id="form">
+    <input type="hidden" id="idTrafico" name="idTrafico" />
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="4" class="invoice-title">CREAR NUEVO TRAFICO</th>
+        </tr>
+        <tr>
+            <th style="width: 150px; text-align: right"><label for="aduana">ADUANA:<span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <div style="float: right">
+                    <span style="color: red">*</span>&nbsp;<span style="font-size: 10px">Campos requeridos.</span>
+                </div>
+                <div id="divcustoms"><?= $this->form->aduana ?></div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="cliente">CLIENTE:<span style="color: red">*</span></label></th>
+            <td style="width: 360px">
+                <div id="divcustomers"><?= $this->form->cliente ?></div>
+            </td>
+            <td style="width: 100px">
+                <label style="display: table-cell; float: left; font-weight: bold">RFC SOCIEDAD: </label>                
+            </td>
+            <td>
+                <input type="text" id="rfcSociedad" value="" disabled="disabled" style="width: 150px"/>
+            </td>
+        </tr>            
+        <tr>
+            <th style="text-align: right"><label for="planta">PLANTA:</label></th>
+            <td colspan="3">
+                <div id="divplanta"><?= $this->form->planta ?></div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="operacion">TIPO OPERACIÓN: <span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <div id="divops"><?= $this->form->operacion ?></div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="cvePedimento">CVE PED: <span style="color: red">*</span></label></th>
+            <td colspan="3"><?= $this->form->cvePedimento ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="pedimento">PEDIMENTO: <span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <?= $this->form->pedimento ?><button id="consecutive" class="traffic-btn traffic-btn-small">Consecutivo</button>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="referencia">REFERENCIA: <span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <?= $this->form->referencia ?>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="referencia">GUÍA: <span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <?= $this->form->blGuia ?>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="consolidado">CONS:</label></th>
+            <td colspan="3"><?= $this->form->consolidado ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="rectificacion">RECT:</label></th>
+            <td colspan="3">
+                <?= $this->form->rectificacion ?>
+                <label for="pedimentoRectificar">Pedimento a rectificar:</label><input type="text" name="pedimentoRectificar" id="pedimentoRectificar" value="" class="traffic-input-small" readonly="true">
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="remesa">REMESA:</label></th>
+            <td colspan="3">
+                <?= $this->form->remesa ?>
+                <label for="referenciaOrigen">Ref. origen:</label><input type="text" name="referenciaOrigen" id="referenciaOrigen" value="" class="traffic-input-small" readonly="true">
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="contenedorCaja">CONT. / CAJA:</label></th>
+            <td colspan="3">
+                <?= $this->form->contenedorCaja ?>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="tipoCambio">TIPO CAMBIO:</label></th>
+            <td colspan="3"><?= $this->form->tipoCambio ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="fechaEta">FECHA ETA: <span style="color: red">*</span></label></th>
+            <td colspan="3"><?= $this->form->fechaEta ?></td>
+        </tr>
+    </table>
+</form>
+<div class="traffic-clear-5"></div>
+<button id="submit" class="traffic-btn traffic-btn-right" tabindex="20">
+    <i class="far fa-file-alt"></i> Crear
+</button>
+<!--<a href="javascript:void(0)" onclick="javascript:window.history.back();" class="traffic-btn traffic-btn-back" tabindex="99">&Lt; Regresar</a>-->
+<a href="javascript:void(0)" onclick="javascript:window.history.back();" class="traffic-btn" tabindex="99">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<div class="traffic-clear"></div>

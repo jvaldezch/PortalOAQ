@@ -1,0 +1,129 @@
+<div id="modalWindow">
+    <input type="hidden" id="pedimento" value="<?= $this->pedimento ?>" />
+    <input type="hidden" id="tipoOperacion" value="<?= $this->tipoOperacion ?>" />
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3 style="font-size: 14px; font-family: sans-serif; margin: 0; padding: 0; line-height: 18px">FACTURAS DEL PEDIMENTO</h3>
+    </div>
+    <div class="modal-body" style="padding: 0px;">
+        <?php if($this->facturas && !$this->warning) { ?>
+        <table class="traffic-table traffic-table-left">
+            <thead>
+                <tr>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Tipo</th>
+                    <th>Regimen</th>
+                    <th>Clave</th>
+                    <th>Consolidado</th>
+                    <th>Rectificación</th>
+                    <th>FIRMA</th>
+                    <th>FIRMA B.</th>
+                    <th>NUM. OP.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: center"><?= $this->aduana . "-" . $this->patente . "-" . $this->pedimento ?></td>
+                    <td style="text-align: center"><?= $this->referencia ?></td>
+                    <td style="text-align: center"><?= $this->tipoOperacion ?></td>
+                    <td style="text-align: center"><?= $this->regimen ?></td>
+                    <td style="text-align: center"><?= $this->cvePedimento ?></td>
+                    <td style="text-align: center"><?= isset($this->consolidado) ? 'S' : 'N' ?></td>
+                    <td style="text-align: center"><?= $this->rectificacion ?></td>    
+                    <td style="text-align: center"><?= $this->firmaValidacion ?></td>    
+                    <td style="text-align: center"><?= $this->firmaBanco ?></td>    
+                    <td style="text-align: center"><?= $this->operacion ?></td>    
+                </tr>
+            </tbody>
+        </table>
+        <table class="traffic-table traffic-table-left">
+            <thead>
+                <tr>
+                    <th colspan="8" class="traffic-table-subtitle">FACTURAS DEL PEDIMENTO</th>
+                </tr>
+                <tr>
+                    <th rowspan="2" style="border-bottom: 0; width: 20px">&nbsp;</th>
+                    <th rowspan="2" style="border-bottom: 0; vertical-align: middle">Factura</th>
+                    <th rowspan="2" style="border-bottom: 0; vertical-align: middle; width: 45px">Orden</th>
+                    <th rowspan="2" style="border-bottom: 0; width: 80px; vertical-align: middle">Cove</th>
+                    <th colspan="2" style="border-bottom: 0">Cliente</th>
+                    <th colspan="2" style="border-bottom: 0">Proveedor</th>
+                </tr>
+                <tr>
+                    <th style="border-bottom: 0">RFC/Tax Id</th>
+                    <th style="border-bottom: 0">Nombre</th>
+                    <th style="border-bottom: 0">RFC/Tax Id</th>
+                    <th style="border-bottom: 0">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->facturas as $item) { ?>
+                <tr>
+                    <td style="text-align: center">
+                        <input type="checkbox" name="facts" value="<?= urlencode($item["NumFactura"]) ?>" />
+                    </td>
+                    <td><?= $item["NumFactura"] ?></td>
+                    <td style="text-align: center"><?= $item["OrdenFact"] ?></td>
+                    <td><?= $item["Cove"] ?></td>
+                    <td style="text-align: center"><?= $item["CteRfc"] ?></td>
+                    <td><?= $item["CteNombre"] ?></td>
+                    <td style="text-align: center"><?= $item["ProTaxID"] ?></td>
+                    <td><?= $item["ProNombre"] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <?php } elseif($this->warning) { ?>
+        <table class="traffic-table">            
+            <th class="traffic-table-subtitle"><?= $this->warning ?></th>
+        </table>
+        <?php } ?>
+    </div>
+    <div class="modal-footer">
+      <?php if($this->facturas) { ?>
+        <a id="selectallinvoices" class="traffic-btn traffic-btn-success"><i class="icon-white icon-check"></i>&nbsp;Seleccionar todas</a>
+        <a id="invoices" class="traffic-btn traffic-btn-primary traffic-btn-right">Seleccionar facturas</a>
+      <?php } ?>
+      <a id="closeModal" class="traffic-btn traffic-btn-close traffic-btn-right" data-dismiss="modal">Cerrar</a>
+    </div>
+</div>
+<script type="text/javascript">
+    
+    function seleccionarFacturas(facturas)  {
+        var pedimento = $("#pedimento").val();
+        var tipoOperacion = $("#tipoOperacion").val();
+        $.ajax({
+            url: "/vucem/get/seleccionar-facturas?sistema=sitawin&pedimento=" + pedimento + "&facturas=" + facturas + "&tipoOperacion=" + tipoOperacion,
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (res) {
+                if (res.success === true) {
+                    $('#closeModal').trigger('click');
+                    window.location.reload();
+                }
+            }
+        });
+    }
+    
+    $("a#invoices").click(function(event) {        
+        event.preventDefault();        
+        var ids = [];
+        var boxes = $('input[name=facts]:checked');
+        if((boxes).size() > 0) {
+            $(boxes).each(function(){
+                ids.push($(this).val());
+            });
+            var facturas = ids.toString();
+            facturas = facturas.replace(/,/g, '|');
+            seleccionarFacturas(facturas);
+        }        
+    });
+    
+    $("a#selectallinvoices").click(function(event) {
+        $('input[name=facts]').each(function() {
+            $(this).attr('checked',!$(this).attr('checked'));
+        });
+    });
+</script>

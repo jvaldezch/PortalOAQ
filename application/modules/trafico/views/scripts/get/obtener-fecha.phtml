@@ -1,0 +1,23 @@
+<div id="cc" style="width: 100%"></div>
+<input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->idTrafico ?>" />
+<input type="hidden" id="tipoFecha" name="tipoFecha" value="<?= $this->tipoFecha ?>" />
+<div class="traffic-clear-5"></div>
+<span style="font-size: 12px">Fecha seleccionada:</span>&nbsp;<input type="text" class="traffic-input-date" id="selectedDate" name="selectedDate" value="<?= date('Y-m-d') ?>" />
+<script type="text/javascript"> 
+    
+    Number.prototype.pad = function (size) {
+        var s = String(this);
+        while (s.length < (size || 2)) {
+            s = "0" + s;
+        }
+        return s;
+    };
+
+    $("#cc").calendar({
+        onSelect: function (date) {
+            selectedDate = date.getFullYear() + "-" + (date.getMonth() + 1).pad() + "-" + date.getDate().pad();
+            $("#selectedDate").val(selectedDate);
+        }
+    });
+    
+</script>

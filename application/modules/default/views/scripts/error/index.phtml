@@ -1,0 +1,20 @@
+<div>
+    <div style="margin-left: 5px; margin: 5px">
+        <h1 style="color: #777">ERROR</h1>
+        <h2><?php echo $this->message ?></h2>
+        <?php if (isset($this->exception)): ?>
+
+        <h3>Información de la excepción:</h3>
+        <p>
+            <b>Mensaje:</b> <?php echo $this->exception->getMessage() ?>
+        </p>
+        <h3>Seguimiento:</h3>
+        <pre><?php echo $this->exception->getTraceAsString() ?>
+        </pre>
+
+        <h3>Parámetros solicitados:</h3>
+        <pre><?php echo $this->escape(var_export($this->request->getParams(), true)) ?></pre>
+        <pre><?php echo $this->escape($this->request->getParams()) ?></pre>
+        <?php endif ?>
+    </div>
+</div>

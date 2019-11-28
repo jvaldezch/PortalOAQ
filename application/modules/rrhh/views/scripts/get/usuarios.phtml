@@ -1,0 +1,50 @@
+<table class="traffic-table traffic-table-left" id="usuarios">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->results)) { ?>
+            <?php foreach ($this->results as $item) { ?>
+                <tr>
+                    <td style="text-align: center"><?= $item["id"] ?></td>
+                    <td style="text-align: center">
+                        <a onclick="javascript:seleccionarUsuario(<?= $item["id"] ?>);" style="cursor: pointer"><?= $item["usuario"] ?></a>
+                    </td>
+                    <td><?= $item["email"] ?></td>
+                    <td><?= $item["nombre"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="4" style="text-align: center">
+                    <em>No hay usuarios en el sistema.</em>
+                </td>              
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<script type="text/javascript">
+    
+    function seleccionarUsuario(idUsuario) {
+        $("#idUsuario").val(idUsuario);
+        jsonData["generales"]["idUsuario"] = idUsuario;
+    }
+    
+    $('#usuarios').dataTable({
+        "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
+        "sPaginationType": "bootstrap",
+        "oLanguage": {
+            "sLengthMenu": "_MENU_ registros por página"
+        },
+        "iDisplayLength": 10,
+        "bStateSave": true,
+        "aaSorting": [],
+        "bSort": false
+    });
+    
+</script>

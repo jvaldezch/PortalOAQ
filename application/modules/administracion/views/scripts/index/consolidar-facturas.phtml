@@ -1,0 +1,91 @@
+<fieldset>
+    <legend>Consolidar facturas (SICA)</legend>
+    <div id="facturas">&nbsp;</div>
+    
+    <form action="<?= $this->baseUrl() ?>/administracion/inicio/nueva-factura-xml" method="post" id="file-form">
+        <table>
+            <tr>
+                <td>Archivos XML</td>
+                <td><input type="file" id="xml-select" name="xmlfiles[]" multiple/></td>   
+                <td><div id='uploadStatus'>&nbsp;</div></td>
+                <td><button id="process">Procesar archivos</button></td>
+            </tr>
+        </table>
+    </form>
+</fieldset>
+<script>
+
+    function updateInvoices() {
+        $.ajax({
+            url: '<?= $this->baseUrl() ?>/administracion/data/read-invoices-directory',
+            type: 'post',
+            dataType: 'html',
+//            beforeSend: function() {
+//            },
+            success: function(response) {
+                $("#facturas").html(response);
+            }
+        });
+    }
+    
+    $("#process").click(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: '<?= $this->baseUrl() ?>/administracion/data/process-invoices',
+            type: 'post',
+            dataType: 'html',
+//            beforeSend: function() {
+//            },
+            success: function(response) {
+//                $("#facturas").html(response);
+                alert(response);
+            }
+        });
+    });
+
+    var cerFileSelect = document.getElementById('xml-select');
+    $("#xml-select").change(function() {
+        var val = $(this).val();
+        if (val.substring(val.lastIndexOf('.') + 1).toLowerCase() === 'xml' || val.substring(val.lastIndexOf('.') + 1).toLowerCase() === 'pdf') {
+            xmlFileSubmit();
+        } else {
+            $(this).val('');
+        }
+    });
+
+    $("#pdf-select").prop("disabled", true);
+
+    function xmlFileSubmit() {
+        var files = cerFileSelect.files;
+        var formData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (!file.type.match('image.*')) {
+                continue;
+            }
+        }
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            formData.append('xmlfiles[]', file, file.name);
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '<?= $this->baseUrl() ?>/administracion/data/xml-file-upload', true);
+        xhr.send(formData);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState < 4)
+                $("#uploadStatus").html('<img src="<?= $this->baseUrl() ?>/images/loader.gif" />');
+            else if (xhr.readyState === 4) {
+                if (xhr.status === 200 && xhr.status < 300) {
+                    var response = xhr.responseText;
+                }
+                $("#uploadStatus").html('&nbsp;');
+                updateInvoices();
+                $("#xml-select").val('');
+                return;
+            }
+        };
+    }
+    $(function() {
+        updateInvoices();
+    });
+</script>

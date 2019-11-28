@@ -1,0 +1,43 @@
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <th colspan="3" style="text-align: center; text-transform: uppercase; font-size: 14px">Motivos de la cancelación</th>
+    </tr>
+    <tr>
+        <td>Descripción:</td>
+        <td colspan="2">
+            <textarea name="description" id="description" style="width: 390px; height: 70px"></textarea>
+        </td>
+    </tr>
+</table>
+<div class="traffic-clear-10"></div>
+<a id="saveModal" class="traffic-btn-success traffic-btn-right">Guardar</a>
+<a id="closeModal" class="traffic-btn-close">Cerrar</a>
+<script>
+    $(document.body).on("click", "#closeModal", function (ev) {
+        ev.preventDefault();
+        $("#modal").html('Please wait... <img src="/images/loader.gif" alt="loading" />');
+        $("#modal").jqmHide();
+    });    
+    $(document.body).on("click", "#saveModal", function (ev) {
+        ev.preventDefault();
+        $.ajax({
+            url: "/administracion/ajax/cancelar-solicitud",
+            type: "post",
+            data: {idSolicitud: $("#idSolicitud").val(), mensaje: $("#description").val()},
+            dataType: "json",
+            success: function (res) {
+                if (res.success === true) {
+                    window.location.replace("/trafico/index/ver-solicitud?id=" + $("#idSolicitud").val());
+                }
+            }
+        });
+    });
+    $(document.body).on("input", "#description", function () {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+</script>

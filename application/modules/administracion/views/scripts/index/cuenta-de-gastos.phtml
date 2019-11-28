@@ -1,0 +1,189 @@
+<form action="/archivo/index/cuentas-de-gasto" method="post" enctype="application/x-www-form-urlencoded" id="form">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2" class="traffic-table-title">REPORTE DE CUENTA DE GASTOS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="text-align: right; width: 150px"><label for="rfc">RFC:</label></th>
+                <td><?= $this->form->rfc ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="nombre">Nombre:</label></th>
+                <td><?= $this->form->nombre ?></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="fechaIni">Fecha Inicio:</label></th>
+                <td></div><?= $this->form->fechaIni ?> <i class="far fa-calendar-alt" style="font-size: 1.2em"></i></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="fechaFin">Fecha Fin:</label></th>
+                <td></div><?= $this->form->fechaFin ?> <i class="far fa-calendar-alt" style="font-size: 1.2em"></i></td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><label for="desglose">Desglose:</label></th>
+                <td><?= $this->form->desglose ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <button id="submit" class="traffic-btn traffic-btn-right">
+        <i class="fas fa-table"></i> Generar reporte</button>
+    <a onclick="window.history.back();" class="traffic-btn">
+        <i class="fas fa-angle-double-left"></i> Regresar</a>
+</form>
+<?php if (isset($this->ctas) && !empty($this->ctas)) { ?>        
+    <ul id="download-links">
+        <li>Descargar este reporte en: <img src="/images/icons/ms-excel.png" />&nbsp;<a href="/administracion/index/excel-cuenta-de-gastos">Excel</a>&nbsp;<img src="/images/icons/pdf-icon.png" />&nbsp;<a href="#">PDF</a></li>
+    </ul>
+<?php } ?>
+<?php if (isset($this->ctas) && !empty($this->ctas)) { ?>
+    <?php if (isset($this->ctas)) { ?>
+        <?php echo $this->paginationControl($this->ctas); ?>
+        <div style="height: 20px"></div>
+    <?php } ?>
+    <table class="table table-striped table-bordered table-hover small">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Folio</th>
+                <th>Referencia</th>
+                <th>Aduana</th>
+                <th>Patente</th>            
+                <th>Pedimento</th>
+                <th>I/E</th>
+                <th>Cve. Doc</th>
+                <th>Fecha Pedimento</th>
+                <th>Factura Pedimento</th>
+                <th>Bultos/Piezas</th>
+                <th>Valor Aduana</th>
+                <?php if ($this->desglose == 0) { ?>
+                    <th>Maniobras</th>
+                    <th>Almacenajes</th>
+                    <th>Demoras</th>
+                    <th>Flete aereo</th>
+                    <th>Flete marítimo</th>
+                    <th>Fletes y acarreos</th>            
+                <?php } else { ?>
+                    <th>Maniobras Subtotal</th>
+                    <th>Maniobras IVA</th>
+                    <th>Maniobras Total</th>
+                    <th>Almacenajes Subtotal</th>
+                    <th>Almacenajes IVA</th>
+                    <th>Almacenajes Total</th>
+                    <th>Demoras Subtotal</th>
+                    <th>Demoras IVA</th>
+                    <th>Demoras Total</th>
+                    <th>Flete aereo Subtotal</th>
+                    <th>Flete aereo IVA</th>
+                    <th>Flete aereo Total</th>
+                    <th>Flete Marítimo Subtotal</th>
+                    <th>Flete Marítimo IVA</th>
+                    <th>Flete Marítimo Total</th>
+                    <th>Flete Acarreos Subtotal</th>
+                    <th>Flete Acarreos IVA</th>
+                    <th>Flete Acarreos Total</th>
+                <?php } ?>
+                <th>Gastos complementarios</th>
+                <th>Alijadores</th>
+                <th>Impuestos aduanales</th>
+                <th>Revalidación</th>
+                <th>Rectificaciones</th>
+                <th>Honorarios</th>
+                <th>IVA</th>
+                <th>Sub Total</th>            
+                <th>Anticipo</th>            
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($this->ctas) { ?>
+                <?php foreach ($this->ctas as $factura) { ?>
+                    <tr>
+                        <td><?= $factura['fecha_factura'] ?></td>
+                        <td><?= $factura['factura'] ?></td>
+                        <td><?= $factura['referencia'] ?></td>            
+                        <td><?= $factura['aduana'] ?></td>
+                        <td><?= $factura['patente'] ?></td>            
+                        <td><?= $factura['pedimento'] ?></td>
+                        <td><?= $factura['ie'] ?></td>
+                        <td><?= $factura['regimen'] ?></td>
+                        <td><?= $factura['fecha_pedimento'] ?></td>
+                        <td><?= $factura['ref_factura'] ?></td>
+                        <td><?= $factura['bultos'] ?></td>
+                        <td style="text-align: right">$ <?= number_format($factura['valor_aduana'], 2, '.', ',') ?></td>
+                        <?php
+                        if ($array = preg_grep("/^(\d+)?\.\d+$/", $array)) {
+                            
+                        } else {
+                            echo '&nbsp;';
+                        }
+                        ?>
+                        <?php if ($this->desglose == 0) { ?>
+                            <td style="text-align: right"><?php
+                                if (isset($factura["conceptos"]["gastos_maniobras"])) {
+                                    echo '$ ' . number_format($factura["conceptos"]["gastos_maniobras"]["total"], 2, '.', ',');
+                                } elseif (isset($factura["conceptos"]["gastos_complementarios_maniobras"])) {
+                                    echo '$ ' . number_format($factura["conceptos"]["gastos_complementarios_maniobras"]["total"], 2, '.', ',');
+                                } elseif (isset($factura["conceptos"]["gastos_maniobras"]) && isset($factura["conceptos"]["gastos_complementarios_maniobras"])) {
+                                    echo '$ ' . number_format($factura["conceptos"]["gastos_maniobras"]["total"] + $factura["conceptos"]["gastos_complementarios_maniobras"]["total"], 2, '.', ',');
+                                } else {
+                                    echo '&nbsp;';
+                                }
+                                ?></td>
+                            <td style="text-align: right"><?= $this->SingleField($factura, 'almacenaje') ?></td>
+                            <td style="text-align: right"><?= $this->SingleField($factura, 'demoras') ?></td>
+                            <td style="text-align: right"><?= $this->SingleField($factura, 'fleteaereo') ?></td>
+                            <td style="text-align: right"><?= $this->SingleField($factura, 'fletemaritimo') ?></td>
+                            <td style="text-align: right"><?= $this->SingleField($factura, 'fletesacarreos') ?></td> 
+                        <?php } else { ?>
+                            <?= $this->breakdownField($factura, 'maniobras') ?>
+                            <?= $this->breakdownField($factura, 'almacenaje') ?>
+                            <?= $this->breakdownField($factura, 'demoras') ?>
+                            <?= $this->breakdownField($factura, 'fleteaereo') ?>
+                            <?= $this->breakdownField($factura, 'fletemaritimo') ?>
+                            <?= $this->breakdownField($factura, 'fletesacarreos') ?>
+                        <?php } ?>
+                        <td style="text-align: right"><?= $this->SingleField($factura, 'gastos_complementarios') ?></td>
+                        <td style="text-align: right"><?= $this->SingleField($factura, 'gastos_alijadores') ?></td>            
+                        <td style="text-align: right"><?php
+                            if (isset($factura["conceptos"]["impuestos_aduanales"])) {
+                                echo '$ ' . number_format($factura["conceptos"]["impuestos_aduanales"]["total"], 2, '.', ',');
+                            } else {
+                                echo '&nbsp;';
+                            }
+                            ?></td>
+                        <td style="text-align: right"><?= $this->SingleField($factura, 'revalidacion') ?></td>
+                        <td style="text-align: right"><?= $this->SingleField($factura, 'rectificaciones') ?></td>
+                        <td style="text-align: right">$ <?= number_format($factura['honorarios'], 2, '.', ',') ?></td>
+                        <td style="text-align: right">$ <?= number_format($factura['iva'], 2, '.', ',') ?></td>
+                        <td style="text-align: right">$ <?= number_format($factura['subtotal'], 2, '.', ',') ?></td>            
+                        <td style="text-align: right">$ <?= number_format($factura['anticipo'], 2, '.', ',') ?></td>            
+                        <td style="text-align: right">$ <?= number_format($factura['total'], 2, '.', ',') ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        </tbody>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <a onclick="window.history.back();" class="traffic-btn-back">&Lt;&nbsp;Regresar</a>
+    <?php if (isset($this->ctas)) { ?>
+        <?php echo $this->paginationControl($this->ctas); ?>
+        <div style="height: 50px"></div>
+    <?php } ?>
+<?php } ?>
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Clientes SICA</h3>
+    </div>
+    <div class="modal-body">
+        <p>One fine body...</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    </div>
+</div>

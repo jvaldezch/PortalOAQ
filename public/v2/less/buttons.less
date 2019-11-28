@@ -1,0 +1,86 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30-dic-2016, 11:22:26
+    Author     : Jaime
+*/
+
+@import "variables";
+
+button.disabled,
+button:disabled {
+    background: @inputDisBackground;
+    border: @inputDisBorder;
+    color: @inputDisColor;
+}
+
+.buttons(@inputBackground, @color: #222222, @inputFontSize, @inputFont, @inputBorderRadius) {
+    margin: 0;
+    padding: 0;
+    text-decoration:none;
+    float: left;
+    display: inline;
+    display: table-cell;
+    display: inline-table;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    background: @inputBackground;
+    font-size: @inputFontSize;
+    font-family: @inputFont;
+    height: 32px;
+    vertical-align: middle;
+    border-radius: @inputBorderRadius;
+    border: 1px @inputBackground - #111111 solid;
+    padding: 0px 10px;
+    margin: 5px 2px;
+    color: @color;
+    &:hover {
+        background: @inputBackground - #111111;
+        border: 1px @inputBackground - #151515 solid;
+    }
+}
+
+button,
+a.button,
+form button,
+input[type=button],
+form input[type=submit] {
+    .buttons(@inputBackground, #222222, @inputFontSize, @inputFont, @inputBorderRadius);
+}
+a.button {
+    line-height: 30px;
+    height: 30px;
+    text-decoration:none;
+    color: #222222;
+}
+
+.button-blue {
+    .buttons(#3498db, #ffffff, @inputFontSize, @inputFont, @inputBorderRadius);
+}
+.button-red {
+    .buttons(#e74c3c, #ffffff, @inputFontSize, @inputFont, @inputBorderRadius);
+}
+.button-orange {
+    .buttons(#f1c40f, #ffffff, @inputFontSize, @inputFont, @inputBorderRadius);
+}
+.button-green {
+    .buttons(#2ecc71, #ffffff, @inputFontSize, @inputFont, @inputBorderRadius);
+}
+.button-plus,
+.button-minus {
+    font-size: 20px;
+}
+
+button.small {
+    .buttons(@inputBackground, #222222, @inputFontSize, @inputFont, @inputBorderRadius);
+    height: 18px;
+    padding: 0px 3px;
+    margin: 1px 2px;
+    font-weight: bold;
+    margin: 2px;
+    line-height: 11px;
+}

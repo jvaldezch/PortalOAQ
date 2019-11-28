@@ -1,0 +1,27 @@
+<fieldset>
+    <legend>Archivo de E-Document</legend>
+    <?PHP if(isset($this->errors)) { ?>
+    <div class="alert alert-error">
+        <?PHP foreach ($this->errors as $error) { ?>
+        <p><?= $error ?></p>
+        <?PHP } ?>
+    </div>
+    <?PHP } ?>
+    <form enctype="multipart/form-data" action="/vucem/index/archivo-e-document" method="POST">
+        <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+        <input id="lefile" type="file" name="file" style="display:none">
+            <div class="input-append">
+            <input id="photoCover" class="input-large" name="filename" type="text">
+            <a class="btn btn-success" onclick="$('input[id=lefile]').click();">Seleccionar archivo...</a>
+        </div>
+        <div style="clear: both"></div>
+        <input type="submit" class="btn btn-primary" value="Enviar a VU" />
+    </form>
+    <div style="clear: both"></div>
+<!--    <a href="/vucem/index/nueva-solicitud-e-document" class="btn btn-primary" style="margin: 5px 0">Enviar a VU</a>-->
+</fieldset>
+<script type="text/javascript">
+    $('input[id=lefile]').change(function() {
+        $('#photoCover').val($(this).val());
+    });
+</script>

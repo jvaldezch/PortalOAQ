@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <?= $this->headLink() ?>
+        <?= $this->headScript() ?>
+    </head>
+    <style></style>
+    <body>
+        <?php if($this->data) { ?>
+        <table>
+            <tr>
+                <th>Patente</th>
+                <th>Aduana</th>
+                <th>Pedimento</th>
+                <th>Referencia</th>
+                <th>RFC</th>
+                <th>I/E</th>
+                <th>Cve. P.</th>
+                <th>T.C.</th>
+                <th>Regimen</th>
+                <th>&nbsp;</th>
+            </tr>
+        <?php foreach($this->data as $item) { ?>
+            <tr>
+                <td><?= $item["patente"] ?></td>
+                <td><?= $item["aduana"] ?></td>
+                <td><?= $item["pedimento"] ?></td>
+                <td><?= $item["referencia"] ?></td>
+                <td><?= $item["rfcCliente"] ?></td>
+                <td><?= $item["tipoOperacion"] ?></td>
+                <td><?= $item["cvePed"] ?></td>
+                <td><?= $item["tipoCambio"] ?></td>
+                <td><?= $item["regimen"] ?></td>
+                <td>&nbsp;</td>
+            </tr>
+        <?php } ?>
+        </table>
+        <?php } else { ?>
+        <table>
+            <tr>
+                <td><em>No tiene referencias recientes.</em></td>
+            </tr>
+        </table>
+        <?php } ?>
+    </body>
+    <script type="text/javascript">
+        $(function () {
+            
+        });
+    </script>
+</html>

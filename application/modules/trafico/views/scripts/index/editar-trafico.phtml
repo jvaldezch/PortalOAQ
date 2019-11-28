@@ -1,0 +1,464 @@
+<style>
+    html {
+        overflow-y: scroll;
+    }
+    .l-btn-text {
+        line-height: 22px;
+    }
+</style>
+<?php if (!isset($this->deleted)) { ?>
+    <div style="float: right; margin-top: 3px; margin-right: 50px">        
+        <div style="float: right; margin-top: 3px">
+            <?php if ($this->basico["pagado"] === null) { ?>
+                <button id="traffic-request" class="traffic-btn" style="display: none">
+                    <i class="fas fa-money-check-alt"></i> Sol. Anticipo
+                </button>
+<!--                <div style="float: right; margin-top: 3px">                
+                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mms'" style="background-color: #c7d0d3; margin: 0 5px 0 5px">
+                        <i class="fas fa-sync" style="font-size:1.2em; color: #2f3b58; font-weight: bold"></i> ACTUALIZAR (2)</a>
+                    <div id="mms" style="width:150px; display: none">
+                        <div id="mn-slam" data-id="<?= $this->idTrafico ?>">SLAM</div>
+                        <div id="mn-casa" data-id="<?= $this->idTrafico ?>">CASA</div>
+                    </div>
+                </div>-->
+                <a id="traffic-view-request" class="traffic-btn" style="display: none">Sol. Anticipo</a>
+                <button id="update-traffic" class="traffic-btn">
+                    <i class="fas fa-redo"></i> Actualizar
+                </button>
+                <button id="justificar" data-id="<?= $this->idTrafico ?>" class="traffic-btn">
+                    <i class="fas fa-comment"></i> Justificar
+                </button>
+                <button id="envioDocumentos" data-id="<?= $this->idTrafico ?>" class="traffic-btn">
+                    <i class="fab fa-dochub"></i> Envió de Doctos.
+                </button>
+            <?php } ?>
+            <button id="semaforo" class="traffic-btn">
+                <i class="fas fa-tasks"></i> Semáforo
+            </button>
+            <?php if(isset($this->basico["fechaInstruccionEspecial"])) { ?>
+                <button id="desjustificar" data-id="<?= $this->idTrafico ?>" class="traffic-btn">
+                    <i class="fas fa-comment"></i> No justificar
+                </button>
+            <?php } ?>
+        </div>
+        <div style="float: right; margin-top: 3px">                
+            <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm'" style="background-color: #c7d0d3">
+                <i class="fas fa-print" style="font-size:1.2em; color: #2f3b58; font-weight: bold"></i> IMPRIMIR</a>
+            <div id="mm" style="width:150px; display: none">
+                <div><a id="salida" target="_blank" href="/trafico/get/imprimir-formato-salida?id=<?= $this->idTrafico ?>">Formato de salida</a></div>
+                <div><a id="ordenRemision" data-id="<?= $this->idTrafico ?>">Orden de remisión</a></div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
+    <li>
+        <a href="#information" data-toggle="tab">Información</a>
+    </li>
+    <li>
+        <a href="#files" data-toggle="tab"><div id="estatusChecklist" style="float:left; margin-right: 5px"></div>Archivos</a>
+    </li>
+    <li>
+        <a href="#vucem" data-toggle="tab">VUCEM</a>
+    </li>
+    <li>
+        <a href="#soia" data-toggle="tab">SOIA</a>
+    </li>
+</ul>
+<?php if (!isset($this->deleted)) { ?>
+    <div class="tab-content">
+        
+        <div class="tab-pane" id="soia">
+            <div class="traffic-cols">
+                <table class="traffic-table" id="soia_results">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Semaforo</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div><!-- soia -->
+        
+        <div class="tab-pane" id="information">
+            <?= $this->partial("extra/information.phtml", array("basico" => $this->basico, "fechas" => $this->fechas, 
+                "tiposFechas" => $this->tiposFechas, "sello" => $this->sello, "idTrafico" => $this->idTrafico, 
+                "edit" => $this->edit, "tipoCargas" => $this->tipoCargas, "plantas" => $this->plantas)); ?>
+        </div>
+        <!-- ARCHIVOS -->
+        <div class="tab-pane" id="files" style="overflow-x: hidden">
+            <form id="form-files" method="post" action="/trafico/ajax/subir-archivos">
+                <input type="hidden" name="MAX_FILE_SIZE" value="25000000" />
+                <?= $this->inputHidden("hidden", "pedimento", $this->basico["pedimento"]) ?>
+                <?= $this->inputHidden("hidden", "referencia", $this->basico["referencia"]) ?>
+                <?= $this->inputHidden("hidden", "patente", $this->basico["patente"]) ?>
+                <?= $this->inputHidden("hidden", "aduana", $this->basico["aduana"]) ?>
+                <?= $this->inputHidden("hidden", "rfcCliente", $this->basico["rfcCliente"]) ?>
+                <table class="traffic-table traffic-table-left">
+                    <tr>
+                        <th colspan="5" class="traffic-table-title">ARCHIVOS DE EXPEDIENTE</th>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <div class="semaphoreBox">
+                                <div class="semaphore-holder">
+                                    <div class="semaphore-green"></div><span>Expediente completo</span>
+                                </div>
+                                <div class="semaphore-holder">
+                                    <div class="semaphore-orange"></div><span>Revisado operación</span>
+                                </div>
+                                <div class="semaphore-holder">
+                                    <div class="semaphore-blue"></div><span>Revisado administración</span>
+                                </div>
+                            </div>  
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <div class="checkbox-group" style="padding-top: 5px; padding-right: 10px; float: right">      
+                                <div class="checkbox">
+                                    <input id="mvhcCliente" data-id="<?= $this->idTrafico ?>" name="mvhcCliente" style="margin-right:5px" type="checkbox">
+                                    <label class="checkbox-label" style="line-height: 16px; padding-left:5px">MV/HC N/A</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="mvhcFirmado" data-id="<?= $this->idTrafico ?>" name="mvhcFirmado" style="margin-right:5px" type="checkbox">
+                                    <label class="checkbox-label" style="line-height: 16px; padding-left:5px">MV/HC Firmada</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="mvhcEnviada" data-id="<?= $this->idTrafico ?>" name="mvhcEnviada" style="margin-right:5px" type="checkbox">
+                                    <label class="checkbox-label" style="line-height: 16px; padding-left:5px">MV/HC Enviada</label>
+                                </div>
+                                <div class="text" style="float:right; margin-left: 10px; font-size: 11px">
+                                    Num. guía:&nbsp;<input type="text" name="mvhcGuia" id="mvhcGuia" class="traffic-input-medium" style="height: 14px"/>&nbsp;
+                                    <i id="saveMvhcNumGuia" data-id="<?= $this->idTrafico ?>" class="fas fa-save" style="font-size: 1.2em; cursor: pointer"></i>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 220px">Seleccionar archivo</th>
+                        <td>
+                            <input type="file" name="file[]" id="file" class="required" multiple />
+                        </td>
+<!--                        <td>
+                            <button id="custom-upload" class="traffic-btn" style="min-width: 5px" title="Carga expedientes">
+                                <i class="fas fa-upload"></i>
+                            </button>
+                        </td>-->
+                        <td>
+                            <button type="submit" id="btn-upload-files" class="traffic-btn traffic-btn-right">
+                                <i class="fas fa-upload"></i> Subir archivo(s)
+                            </button>
+                            
+                            <button id="btn-download" class="traffic-btn traffic-btn-right" data-id="<?= $this->basico["id"] ?>" style="min-width: 5px" title="Descargar expediente">
+                                <i class="fas fa-cloud-download-alt"></i>
+                            </button>
+                            
+                            <button id="btn-permalink" class="traffic-btn traffic-btn-right" data-id="<?= $this->basico["id"] ?>" style="min-width: 5px" title="Liga de expediente">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            
+                            <button class="traffic-btn traffic-btn-right" id="help" href="/trafico/get/ayuda-documentos" style="width: 30px; min-width: 25px" data-hasqtip="0">
+                                <i class="fas fa-question"></i>
+                            </button>
+                            
+                            <button id="checklist" class="traffic-btn traffic-btn-right" style="min-width: 5px" title="Checklist de expediente">
+                                <i class="fas fa-clipboard-list"></i>
+                            </button>
+                            
+                            <?php if(isset($this->basico["idRepositorio"])) { ?>
+                                <a href="/archivo/index/expediente?id=<?= $this->basico["idRepositorio"]?>" target="_blank" 
+                                   id="archive" class="traffic-btn traffic-btn-right" style="min-width: 5px" title="Expediente digital">
+                                    <i class="fas fa-archive"></i>
+                                </a>
+                            <?php } else {?>
+                                <a href="javascript:void(0)" target="_blank" 
+                                   id="archive" class="traffic-btn traffic-btn-right" style="min-width: 5px; display: none" title="Expediente digital">
+                                    <i class="fas fa-archive"></i>
+                                </a>
+                            <?php } ?>
+                            
+                            <?php if(isset($this->basico["fechaLiberacion"])) { ?>
+                                <button id="xml-pedimento" class="traffic-btn traffic-btn-right" title="Obtener XML de pedimento" style="min-width: 5px">
+                                    <i class="far fa-file-code"></i> XML
+                                </button>
+                            <?php } ?>
+                            
+                            <a href="javascript:void(0)" class="traffic-btn traffic-btn-right" style="min-width: 5px; cursor: pointer">
+                                <i class="far fa-envelope" id="sendEmail" data-id="<?= $this->basico["id"] ?>"></i>                                
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <div class="progress progress-striped active">
+                    <div class="bar bar-success"></div >
+                    <div class="percent">0%</div >
+                </div>
+            </form>
+            <div id="traffic-files" style="display: none; min-height: 100px"></div>
+            <div class="traffic-clear-5"></div>
+            <div class="traffic-clear"></div>
+            <form id="formPhotos" method="post">
+                <?= $this->inputHidden("hidden", "idTrafico", $this->basico["id"]) ?>
+                <table class="traffic-table traffic-table-left">
+                    <tr>
+                        <th style="width: 220px">Seleccionar imagen (JPG)</th>
+                        <td>
+                            <input type="file" name="images[]" id="images" class="required" multiple accept="image/*" capture="camera" />
+                        </td>
+                        <td>
+                            <a href="/trafico/get/descargar-expediente?id=<?= $this->basico["id"] ?>" class="traffic-btn traffic-btn-right">
+                                <i class="fas fa-cloud-download-alt"></i> Descargar todo
+                            </a>
+                            <button id="uploadImage" class="traffic-btn traffic-btn-right">
+                                <i class="fas fa-camera"></i> Subir foto
+                            </button>
+                            <?php if (!isset($this->disableUpload) && !isset($this->noFtp)) { ?>
+                                <a id="enviarFtp" data-id="<?= $this->basico["id"] ?>" class="traffic-btn traffic-btn-right" style="width: 50px; padding-left: 0; padding-right: 0; min-width: 50px">FTP</a>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                </table>
+                <div class="progress progress-striped active">
+                    <div class="barImage bar-success"></div >
+                    <div class="percentImage">0%</div >
+                </div>
+            </form>
+            <div id="traffic-photos" style="display: none; min-height: 100px"></div>
+            <div class="traffic-clear-5"></div>
+            <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
+                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+            </a>
+            <div class="traffic-clear"></div>
+        </div><!-- files -->
+        <div class="tab-pane" id="register">
+            <div id="traffic-register" style="display: none"></div>
+            <div class="traffic-clear-5"></div>
+            <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
+                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+            </a>
+            <div class="traffic-clear"></div>
+        </div>
+        <div class="tab-pane" id="vucem">
+            <div class="traffic-cols">
+                <table class="traffic-table">           
+                    <thead>
+                        <tr>
+                            <th colspan="5" class="traffic-table-title">OPERACIONES EN VENTANILLA ÚNICA</th>
+                        </tr>
+                        <tr>
+                            <th colspan="5">
+                                SELLOS DISPONIBLES
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width: 30px">
+                                <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                                    <i onclick="getVucemSignatures();" class="fas fa-sync-alt" style="cursor: pointer"></i>
+                                </div>
+                            </th>
+                            <th style="width: 50px">Patente</th>
+                            <th style="width: 90px">RFC</th>
+                            <th style="width: 350px">Razon Social</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vucemSignatures"></tbody>
+                </table>
+                <table class="traffic-table">           
+                    <thead>
+                        <tr>
+                            <th colspan="11">
+                                <div style="font-size:1.2em; color: #2f3b58; float: left; margin-left: 10px">
+                                    <i onclick="getVucemLog();" class="fas fa-sync-alt" style="cursor: pointer"></i>
+                                </div>
+                                SOLICITUDES PENDIENTES
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width: 30px"><input type="checkbox" id="check-all"></th>
+                            <th colspan="2" style="width: 26px">&nbsp;</th>
+                            <th style="width: 110px">Num. Ope.</th>
+                            <th>Detalle</th>
+                            <th>Edoc</th>
+                            <th style="width: 70px">Error</th>
+                            <th style="width: 125px">Enviado</th>
+                            <th style="width: 125px">Respuesta</th>
+                            <th>Log</th>
+                            <th style="width: 60px">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vucemLog"></tbody>
+                </table>
+            </div>
+            <div class="traffic-clear-5"></div>
+            <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
+                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+            </a>
+        </div><!-- vucem -->
+    </div>
+    <div class="jqmWindow" id="checklistModal">
+        Please wait... <img src="/images/loader.gif" alt="loading" />
+    </div>
+    <?php if ($this->basico["pagado"] !== null) { ?>
+        <script type="text/javascript">
+            $("#fechaNotificacion, #fechaArribo , #fechaEntrada, #fechaRecepcionDocs, #fechaPago, #fechaDeposito, #fechaPrevio, #fechaRevalidado, #horaRecepcionDocs").attr("disabled", "disabled");
+            $("#form-invoice :input").attr("disabled", "disabled");
+            $("#form-tracking :input").attr("disabled", "disabled");
+        </script>
+    <?php } ?>
+<?php } else { ?>
+    <h4 style="background-color: red; color: white; border: 1px #cc0000 solid">La referencia ya no se encuentra activa en nuestro sistema.</h4>
+    <div class="traffic-clear-5"></div>
+    <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
+        <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+    </a>
+<?php } ?>
+<style>
+    .slider {
+        background-color: #fefefe;
+        border-left: 1px #bac5d2 solid;
+        color: #333;
+        padding: 10px;
+    }
+    .slider h3, table {
+        margin: 0;
+    }
+    .slider table {
+        margin-top: 10px;
+    }
+    .slider p, table th, table td {
+        font-size: 11px;
+    }
+    .slider .handle {
+        background-color: #fefefe;
+        left: -40px;
+        padding: 10px;
+        position: absolute;
+        top: 0px;
+        width: 20px;
+        cursor: pointer;
+        margin-top: 62px;
+        border-left: 1px #bac5d2 solid;
+        border-top: 1px #bac5d2 solid;
+        border-bottom: 1px #bac5d2 solid;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        box-shadow: -2px 2px 1px rgba(0,0,0,0.2);
+    }
+    .slider table th, .slider table td {
+        border: 1px #fdfdfd solid;
+    }
+    .slider table td {
+        text-align: left;
+        font-weight: normal;
+        background-color: #fefefe;
+    }
+</style>
+<?php
+$dates = array(
+    array("name" => "fechaEta", "label" => "ETA"),
+    array("name" => "fechaNotificacion", "label" => "Notificación"),
+    array("name" => "fechaEnvioDocumentos", "label" => "Envío de documentos"),
+    array("name" => "fechaEir", "label" => "Sharepoint"),
+//    array("name" => "fechaEntrada", "label" => "Entrada"),
+//    array("name" => "fechaPresentacion", "label" => "Sharepoint"),
+    array("name" => "fechaEnvioProforma", "label" => "Envío proforma"),
+    array("name" => "fechaVistoBueno", "label" => "Visto bueno"),
+    array("name" => "fechaRevalidacion", "label" => "Revalidación"),
+    array("name" => "fechaPrevio", "label" => "Previo"),
+    array("name" => "fechaPago", "label" => "Pago"),
+    array("name" => "fechaLiberacion", "label" => "Liberación"),
+    array("name" => "fechaEtaAlmacen", "label" => "ETA almacen"),
+    array("name" => "fechaFacturacion", "label" => "Facturación", "readonly" => true),
+);
+?>
+<div id="slider" class="slider">
+    <div class="handle">
+        <!--<div class="traffic-icon traffic-icon-calendar"></div>-->
+        <div style="font-size:1.4em; color: #2f3b58;">
+            <i class="far fa-calendar-alt"></i>
+        </div>
+    </div>
+    <h3>Fechas <?= $this->basico["referencia"] ?></h3>
+    <p>Presione <span style="background-color: #555; color: #fff; padding: 3px; border-radius: 2px">ESC</span> para cerrar.</p>
+    <form id="datesForm" method="post">
+        <?= $this->inputHidden("hidden", "idTrafico", $this->idTrafico) ?>
+        <?= $this->inputHidden("hidden", "pedimento", $this->basico["pedimento"]) ?>
+        <table>
+            <tbody>
+                <?php foreach($dates as $item) { ?>
+                    <tr>
+                        <td><?= $item["label"] ?></td>
+                        <td style="width: 95px">
+                            <input type="text" class="traffic-input-date" name="<?= $item["name"] ?>" id="<?= $item["name"] ?>" <?= isset($item["readonly"]) ? 'readonly="true"' : '' ?> />
+                        </td>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <td colspan="2">
+                        <button id="saveDates" class="traffic-btn-right traffic-btn" style="margin-right: 10px; margin-top: 10px">
+                            <i class="far fa-save"></i> Guardar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    
+    function stringPadLeft(value) {
+        console.log(value);
+        var str = "" + value;
+        var pad = "00";
+        return pad.substring(0, pad.length - str.length) + str;
+    }
+    
+    function getFormattedDate(value) {
+        return value;
+    }
+    
+    slider = $("#slider").slideReveal({push: false, position: "right", speed: 600, trigger: $(".handle"), overlay: true, width: '380px',
+        show: function(slider, trigger){
+            $.ajax({url: "/trafico/crud/obtener-fechas", cache: false, type: "GET", dataType: "json", data: {idTrafico: $("#idTrafico").val()}
+            }).done(function (res) {
+                if (res.success === true) {
+                    $.each(res.dates, function (index, value) {
+                        if (value !== null) {
+                            $("#datesForm #" + index).val(getFormattedDate(value));
+                        }
+                    });
+                }
+            });
+        }
+    });
+    
+    $("#datesForm input[class=traffic-input-date]").datepicker({
+        calendarWeeks: true,
+        autoclose: true,
+        language: 'es',
+        format: 'yyyy-mm-dd',
+        endDate: '+15d'
+    });
+    
+    $(document.body).on("click", "#saveDates", function(ev) {
+        ev.preventDefault();
+        $("#datesForm").ajaxSubmit({url: "/trafico/crud/guardar-fechas", timeout: 3000, dataType: "json", type: "POST",
+            success: function (res) {
+                if (res.success === true) {
+                    $.toast({text: "<strong>Guardado</strong>", bgColor: "green", stack : 3, position : "bottom-right"});
+                    loadComments();
+                } else {
+                    $.alert({title: "¡Advertencia!", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "400px", useBootstrap: false, content: res.message});
+                }
+            }
+        });
+    });
+    
+</script>

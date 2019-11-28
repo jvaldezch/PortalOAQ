@@ -1,0 +1,203 @@
+/* 
+    Document   : default
+    Created on : Apr 11, 2013, 6:46:15 PM
+    Author     : Jaime E. Valdez <jvaldezch at gmail.com>
+    Description:
+        Purpose of the stylesheet follows.
+*/
+* {
+    /*font-family: Arial;*/
+    font-family: 'Calibri', Arial, sans-serif;
+}
+root { 
+    display: block;
+}
+body,
+html {
+    margin: 0;
+    padding: 0;
+    background: #f6f6f6;
+}
+body {
+    border-bottom: 15px #f1f1f1 solid;
+}
+p, img, h1, h2, h3, h4, ul, ul li {
+    margin: 0;
+    padding: 0;
+}
+#clear {
+    clear: both;
+}
+#wrap,
+#footer {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#wrap {
+    border-bottom: 1px #888 solid;
+    min-height: 140px;    
+}
+#content {
+    background: #fff;
+    border-bottom: 2px #888 solid;
+}
+
+
+#top {
+    background: #073d75;
+    min-height: 30px;
+}
+#top-menu {
+    color: #fff;
+    position: relative;
+}
+#top-menu li {
+    float: left;
+    list-style: none;
+    display: inline;
+}
+#top-menu li.right {
+    float: right;
+}
+#top-menu li a {
+    padding: 7px 10px;
+    text-decoration: none;
+    color: #fff;
+    display: block;
+    border-left: 1px #2b81af solid;
+}
+#top-menu li a.current {
+    background: #800;
+}
+#top-menu li.last {
+    border-right: 1px #2b81af solid;
+}
+#top-menu li a:hover {
+    background: #669CB7;
+    cursor: pointer;
+}
+#magic-line { position: absolute; bottom: -34px; left: 0; width: 100px; height: 3px; background: #1883BA; border-left: 1px #2b81af solid }
+
+#work-menu {
+    height: 25px;    
+    background: #1883BA;
+    border-bottom: 1px #999 solid;
+    margin: 0;
+    padding: 0;
+}
+#work-menu ul {
+    margin-left: 188px;
+}
+#work-menu ul li {
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#work-menu ul li a {
+    font-family: Arial, sans-serif;
+    color: #fff;
+    font-size: 11px;
+    border-left: 1px #999 solid;
+    display: block;
+    padding: 2px 8px;
+    font-weight: bold;
+}
+#work-menu ul li a:hover {
+    text-decoration: none;
+    background: #880000;
+}
+
+
+
+#status {
+    background: #fff;
+    border-bottom: 1px #999 solid;
+    min-height: 23px;
+}
+#date {
+    float: right;
+    display: block;
+    padding: 3px 5px;
+    font-size: 12px;
+}
+
+
+#content {
+    width: 100%;
+    min-height: 350px;
+    border: 1px #eee solid;
+    padding: 0;
+}
+
+#left-menu,
+#main {
+    float: left;
+}
+#main {
+    padding-left: 10px;
+}
+#left-menu {
+    width: 187px;
+    min-height: 450px;
+    /*border-right: 1px #ccc solid;*/
+}
+#main {
+    /*border: 1px #600 solid;*/
+    min-height: 150px;
+    /*width: 850px;*/
+}
+#main .col {
+    margin: 5px;
+    border-radius: 5px;
+    background: #f7f7f7;
+    border: 1px #bbb solid;
+    min-height: 150px;
+    width: 220px;
+    padding: 10px;
+    float: left;
+}
+
+.options {
+    margin: 5px 0;
+}
+.options li {
+    list-style: none;
+}
+
+#download-links {
+    margin-bottom: 10px;
+}
+#download-links li {
+    list-style: none;
+}
+
+table.small td,
+table.small th {
+    padding: 2px 3px;
+}
+
+#vucemActivity {
+    float: right;
+    background: #00FF00;
+    margin-right: 3px;
+    margin-top: 2px;
+}
+#vucemActivity p {
+    color: #fff;
+    font-size: 10px;
+    padding: 0 8px;
+}
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#footer-copy {
+    color: #d1d1d1;
+    margin-left: 3px;
+    font-size: 11px;
+    background: none;
+    background-color: #fff;
+}

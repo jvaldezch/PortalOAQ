@@ -1,0 +1,32 @@
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th>Queue</th>
+            <th style="width: 40px">Ready</th>
+            <th style="width: 40px">Unacked</th>
+            <th style="width: 40px">Total</th>
+            <th style="width: 40px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->queues)) { ?>
+            <?php foreach ($this->queues as $item) { ?>
+                <tr>
+                    <td><?= $item["name"] ?></td>
+                    <td style="text-align: center"><?= $item["messages_ready"] ?></td>
+                    <td style="text-align: center"><?= $item["messages_unacknowledged"] ?></td>
+                    <td style="text-align: center"><?= $item["messages"] ?></td>
+                    <td>
+                        <a class="purge" data-queue="<?= $item["name"] ?>" style="cursor: pointer">Purgar</a>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="5" style="text-align: center">
+                    <em>No hay Queues en el sistema.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

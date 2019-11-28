@@ -1,0 +1,68 @@
+<form action="/archivo/index/proveedores" method="GET" id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 150px"><label for="rfc">Proveedor:</label></th>
+            <td><?= $this->form->rfc ?></td>
+        </tr>
+        <tr>
+            <th><label for="folio">Folio:</label></th>
+            <td><?= $this->form->folio ?></td>
+        </tr>
+        <tr>
+            <th><label for="rfcCliente">RFC Cliente (Receptor):</label></th>
+            <td><?= $this->form->rfcCliente ?></td>
+        </tr>
+        <tr>
+            <th><label for="fechaIni">Fecha inicio:</label></th>
+            <td><?= $this->form->fechaIni ?></td>
+        </tr>
+        <tr>
+            <th><label for="fechaFin">Fecha fin:</label></th>
+            <td><?= $this->form->fechaFin ?></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>
+                <button id="submit" class="traffic-btn-save">Buscar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <p>Descargar este reporte en: &nbsp;<img src="/images/icons/zip-icon.png" />&nbsp;<a href="#" data-toggle="modal" id="downloadzip">Descargar ZIP</a>&nbsp;<input type="checkbox" id="includepdf">&nbsp;Incluir PDF</p>
+            </td>
+        </tr>
+    </table>
+</form>
+<?php if ($this->paginator) { ?>
+    <div class="traffic-clear-10"></div>
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="selectall"></th>
+                <th>Folio</th>
+                <th>Fecha</th>
+                <th>Emisor</th>
+                <th>Cliente</th>
+                <th>Archivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->paginator as $item) { ?>            
+                <tr>
+                    <td><input type="checkbox" name="cuentas" class="cuentas" value="<?= $item['id'] ?>" ></td>
+                    <td><?= $item['folio'] ?></td>
+                    <td><?= date('d/m/Y', strtotime($item['fecha'])) ?></td>
+                    <td><?= $item['emisor_nombre'] ?></td>
+                    <td><?= $item['receptor_nombre'] ?></td>
+                    <td>
+                        <p><a href="/archivo/index/descargar-archivo?id=<?= urlencode($this->encrypt($item['id'])) ?>" title="ID: <?= $item['id'] ?>"><?= $item['nom_archivo'] ?></a></p>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <div class="traffic-clear-10"></div>
+    <?= $this->paginationControl($this->paginator) ?>
+    <div class="traffic-clear-10"></div>
+<?php } ?>

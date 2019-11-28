@@ -1,0 +1,21 @@
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tipo de documento</th>
+            <th>Referencia</th>
+        </tr>        
+    </thead>
+    <tbody>
+        <?php if (isset($this->documentos) && !empty($this->documentos)) { ?>
+            <?php foreach ($this->documentos as $item) { ?>
+                <tr>
+                    <td><?= $item["id"] ?></td>
+                    <td><?= $item["nombre"] ?></td>
+                    <td><?= $item["rgex"] ?></td>
+                </tr>
+            <?php } ?>        
+        <?php } ?>        
+    </tbody>
+</table>
+<button id="closeModal" class="traffic-btn-close">Cerrar</button>

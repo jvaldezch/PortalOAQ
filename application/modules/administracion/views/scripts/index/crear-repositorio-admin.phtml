@@ -1,0 +1,68 @@
+<div class="traffic-cols">
+    <form method="post" enctype="application/x-www-form-urlencoded" action="/administracion/data/validar-poliza" id="policy">
+        <table class="traffic-table">
+            <tr>
+                <td style="text-align: right"><label for="tipoPoliza">Tipo de poliza:</label></td>
+                <td colspan="3" style="text-align: left"><?= $this->form->tipoPoliza ?></td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><label for="tipoArchivo">Tipo de archivo:</label></td>
+                <td colspan="3" style="text-align: left">
+                    <div id="fileType"><?= $this->form->tipoArchivo ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><label for="poliza">Poliza:</label></td>
+                <td style="text-align: left"><?= $this->form->poliza ?></td>
+                <td style="text-align: right"><label for="fecha">Fecha:</label></td>
+                <td style="text-align: left">
+                    <div id="fileType"><?= $this->form->fecha ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><label for="folio">Folio:</label></td>
+                <td style="text-align: left">
+                    <div id="fileType"><?= $this->form->folio ?></div>
+                </td>
+                <td style="text-align: right"><label for="importe">Importe:</label></td>
+                <td style="text-align: left">
+                    <div id="fileType"><?= $this->form->importe ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><label for="factura">Factura:</label></td>
+                <td style="text-align: left">
+                    <div id="fileType"><?= $this->form->factura ?></div>
+                </td>
+                <td style="text-align: right"><label for="observaciones">Observaciones:</label></td>
+                <td style="text-align: left">
+                    <div id="fileType"><?= $this->form->observaciones ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><label for="cliente">Beneficiario:</label></td>
+                <td style="text-align: left">
+                    <div id="fileType"><?= $this->form->cliente ?></div>
+                </td>
+                <td style="text-align: right"><label for="transferencia">Transferencia:</label></td>
+                <td style="text-align: left">
+                    <div id="fileType"><?= $this->form->transferencia ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><label for="archivo">Archivo:</label></td>
+                <td colspan="3" style="text-align: left">
+                    <input type="file" id="archivo" name="archivo">
+                </td>                
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <button class="traffic-btn traffic-btn-add traffic-btn-right" id="submit" disabled="disabled">CREAR CARPETA</button>
+                </td>
+            </tr>
+        </table>   
+    </form>
+</div>
+<div class="traffic-clear-10"></div>
+<a href="<?= $this->url(array('action' => 'repositorio')) ?>" class="traffic-btn traffic-btn-back">« Regresar</a>
+<div class="traffic-clear"></div>

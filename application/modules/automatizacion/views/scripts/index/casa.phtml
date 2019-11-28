@@ -1,0 +1,93 @@
+<?php 
+//require_once 'Casa/Casa.php';
+//$casa = new Casa("C:\Tmp\espejo");
+//$pedimento = $casa->pedimentoXml();
+?>
+<!doctype html>
+<head>  
+  <meta charset="utf-8">  
+  <title>CASA</title>  
+  <meta name="description" content="Welcome to my basic template.">
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<style>
+    table td,
+    table th,
+    table tr {
+        font-size: 11px;
+        margin: 2px;
+        padding: 2px;
+    }
+    table td,
+    table th {
+        border: 1px #d2d2d2 solid;
+    }
+</style>
+<body>  
+    <div id="wrapper">  
+        <header>  
+            <h1>CASA</h1>
+        </header>  
+        <div id="core" class="clearfix">
+            <table class="table-hover">
+                <thead>
+                    <tr>
+                        <th>Referencia</th>
+                        <th>Patente</th>
+                        <th>Aduana</th>
+                        <th>Pedimento</th>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Cambio</th>
+                        <th>Clave</th>
+                        <th>Nom.Cli.</th>
+                        <th>RFC</th>
+                        <th>Num.Fact.</th>
+                        <th>Mon.Fact.</th>
+                        <th>Val.Dll</th>
+                        <th>Val.Extr.</th>
+                        <th>Incoterm</th>
+                        <th>Nom.Prov.</th>
+                        <th>Num.Parte</th>
+                        <th>Fracción</th>                        
+                        <th>Pais Orig.</th>
+                        <th>Pais Vend.</th>
+                        <th>COVE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($this->pedimentos as $item) { ?>
+                        <tr>
+                            <td><?= $item['NUM_REFE'] ?></td>
+                            <td><?= $item['PAT_AGEN'] ?></td>
+                            <td><?= $item['ADU_ENTR'] ?></td>
+                            <td><?= $item['NUM_PEDI'] ?></td>
+                            <td><?= str_replace('T00:00:00000', '', $item['FEC_ENTR']) ?></td>
+                            <td><?= $item['IMP_EXPO'] ?></td>
+                            <td><?= $item['TIP_CAMB'] ?></td>
+                            <td><?= $item['CVE_PEDI'] ?></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>            
+        </div>
+        <footer>  
+            <p style="font-size: 11px">Derechos reservados Jaime E. Valdez.</p>  
+        </footer>  
+    </div>  
+</body>  
+</html>

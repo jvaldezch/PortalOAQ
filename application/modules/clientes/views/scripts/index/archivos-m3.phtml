@@ -1,0 +1,80 @@
+<form action="/clientes/index/archivos-m3" method="get" enctype="application/x-www-form-urlencoded" id="form">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2" class="traffic-table-title">ARCHIVOS M3</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="width: 150px"><label for="fechaIni">Fecha Inicio:</label></th>
+                <td>
+                    <div style="font-size:1.4em; color: #2f3b58; float: left; margin-right: 5px">
+                        <i class="far fa-calendar-alt"></i>
+                    </div> <?= $this->form->fechaIni ?>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="fechaFin">Fecha Fin:</label></th>
+                <td>
+                    <div style="font-size:1.4em; color: #2f3b58; float: left; margin-right: 5px">
+                        <i class="far fa-calendar-alt"></i>
+                    </div> <?= $this->form->fechaFin ?>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <!--<button id="submit" class="traffic-btn-primary traffic-btn-right">Actualizar</button>-->
+                    <button id="submit" class="traffic-btn traffic-btn-right">
+                        <i class="fas fa-redo"></i> Actualizar
+                    </button>
+                    <?php if (isset($this->paginator)) { ?>
+                        <a href="/clientes/get/descarga-m3?fechaIni=<?= $this->fechaIni ?>&fechaFin=<?= $this->fechaFin ?>" class="traffic-btn-success traffic-btn-right">Descargar ZIP</a>
+                    <?php } ?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th style="width: 70px">Patente</th>
+            <th style="width: 90px">Aduana</th>
+            <th style="width: 80px">Pedimento</th>
+            <th>M3</th>
+            <th>VAL</th>
+            <th>PAG</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator)) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <tr>
+                    <td style="text-align: center"><?= $item["patente"] ?></td>
+                    <td style="text-align: center"><?= $item["aduana"] ?></td>
+                    <td style="text-align: center"><?= $item["pedimento"] ?></td>
+                    <td style="text-align: center"><?= $item["m3"]["archivoNombre"] ?></td>
+                    <td style="text-align: center"><?= $item["firma"]["archivoNombre"] ?></td>
+                    <td style="text-align: center"><?= $item["pago"]["archivoNombre"] ?></td>
+                    <td style="text-align: center"><?= $item["creado"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="7">
+                    <em>No hay archivos.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<div class="traffic-clear-5"></div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator) : null ?>
+<div class="traffic-clear-10"></div>
+<a onclick="window.history.back();" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<div class="traffic-clear-20"></div>

@@ -1,0 +1,36 @@
+<form method="<?= $this->form->getMethod() ?>" enctype="application/x-www-form-urlencoded" id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 150px; text-align: right"><label for="type">TIPO:</label></th>
+            <td><?= $this->form->type ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="rfc">RFC:</label></th>
+            <td><?= $this->form->rfc ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="url">URL:</label></th>
+            <td><?= $this->form->url ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="user">Usuario:</label></th>
+            <td><?= $this->form->user ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="password">CONTRASEÑA:</label></th>
+            <td><?= $this->form->password ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="port">PUERTO:</label></th>
+            <td><?= $this->form->port ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="remoteFolder">CARPETA:</label></th>
+            <td><?= $this->form->remoteFolder ?></td>
+        </tr>
+    </table>
+    <div class="traffic-clear-5"></div>
+    <button class="traffic-btn-add traffic-btn-right" type="submit" id="submit" tabindex="30">Agregar</button>
+    <a href="/archivo/index/ftp" class="traffic-btn traffic-btn-back" tabindex="99">&Lt; Regresar</a>
+    <div class="traffic-clear"></div>
+</form>

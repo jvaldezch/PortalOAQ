@@ -1,0 +1,181 @@
+<div class="semaphoreBox" style="float: left">
+    <div class="semaphore-holder">
+        <div class="semaphore-black"></div><span>No enviado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>Cove enviado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Cove completado</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-red"></div><span>Cove con error</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i><span style="padding-left: 3px">Importación</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="fas fa-arrow-circle-up" style="color: #2e963a"></i><span style="padding-left: 3px">Exportación</span>
+    </div>
+    <div class="semaphore-holder">
+        <img src="/images/icons/vucem.png" /><span style="padding-left: 3px">Consulta manual</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-file"></i><span style="padding-left: 3px">Consultar COVE</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-hdd"></i><span style="padding-left: 3px">Guardar en expediente</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-flag"></i><span style="padding-left: 3px">Adenda</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-pencil"></i><span style="padding-left: 3px">Editar factura</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-retweet"></i><span style="padding-left: 3px">Reenviar factura</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-repeat"></i><span style="padding-left: 3px">Intentar nuevamente</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-qrcode"></i><span style="padding-left: 3px">Enviar a pedimento</span>
+    </div>
+    <div class="semaphore-holder">
+        <i class="icon icon-trash"></i><span style="padding-left: 3px">Eliminar</span>
+    </div>
+    <div class="traffic-clear-5"></div>
+    <div style="padding-left: 5px"><strong>Importante:</strong>&nbsp;Las horas y fechas aquí mostradas pueden diferir de la de su equipo (PC). Sin embargo <strong>no</strong> afectan el proceso de entrega y recepción en VUCEM.</div>
+</div>
+<div class="traffic-clear-10"></div>
+<a class="traffic-btn" onclick="downloadAllCoves('files');">
+    <i class="fas fa-download"></i> Descargar
+</a>&nbsp;
+<a class="traffic-btn" onclick="selectAllCoves('files');">
+    <i class="fas fa-check-square"></i> Seleccionar todo
+</a>&nbsp;
+<a class="traffic-btn" onclick="unselectAllCoves('files');">
+    <i class="far fa-square"></i> Quitar seleccion
+</a>
+
+<div class="traffic-clear-10"></div>
+<table cellpadding="0" cellspacing="0" border="0" class="traffic-table hover" id="example">
+    <thead>
+        <tr>
+            <th>T/O</th>
+            <th style="width: 30px">&nbsp;</th>
+            <th>Acción</th>
+            <th>RFC</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th style="text-align: left">Factura</th>     
+            <th>COVE</th>
+            <th>Enviado</th>
+            <th>Actualizado</th>
+            <th>Usuario</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->result)) { ?>
+            <?php foreach ($this->result as $item) { ?>
+                <tr id="row_<?= $item["id"] ?>">
+                    <td style="width: 20px"><?= ($item["tipo"] == 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>' : '<i class="fas fa-arrow-circle-up" style="color: #2e963a"></i>' ?></td>
+                    <td>
+                        <?php if ($item["expediente"] == 1 && $item["estatus"] > 1) { ?>
+                            <input type="checkbox" name="files" value="<?= $item["cove"] ?>" >
+                        <?php } else { ?>
+                            <?php if ($item["estatus"] == 1) { ?>
+                                <!--<div class="traffic-icon traffic-icon-vucem vucem" data-id="<?= $item["id"] ?>"></div>-->
+                                <i class="fab fa-uniregistry vucem" data-id="<?= $item["id"] ?>" style="color: #0099ff; margin-right: 5px; font-size: 1.3em"></i>
+                            <?php } ?>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <div id="estatus_<?= $item["id"] ?>">
+                            <?php if ($item["estatus"] == 0) { ?>
+                                <div class="semaphore-red"></div>
+                                <a style="cursor: pointer; float:left; padding-left: 2px" title="Consultar el COVE enviado." href="/vucem/index/consultar-cove-enviado?id=<?= $item["id"] ?>"><i class="icon icon-file"></i></a>
+                                <a class="reenviar" style="cursor: pointer; float:left; padding-left: 2px" title="Reenviar factura" data-id="<?= $item["id"] ?>" data-factura="<?= $item["factura"] ?>"><i class="icon-retweet"></i></a>
+                                <a style="cursor: pointer; float:left; padding-left: 2px" title="Borrar COVE" class="deleteCove" data-id="<?= $item["id"] ?>"><i class="icon icon-trash"></i></a>
+                            <?php } else if ($item["estatus"] == 1) { ?>
+                                <div class="semaphore-blue"></div>
+                                <a style="cursor: pointer; float:left; padding-left: 2px" title="Borrar COVE" class="deleteCove" data-id="<?= $item["id"] ?>"><i class="icon icon-trash"></i></a>
+                            <?php } else if ($item["estatus"] == 2) { ?>
+                                <div class="semaphore-green"></div>
+                                <a style="cursor: pointer; float:left; padding-left: 2px" title="Consultar el COVE enviado." href="/vucem/index/consultar-cove-enviado?id=<?= $item["id"] ?>"><i class="icon icon-file"></i></a>
+                                <?php if ($item["expediente"] == 0) { ?>
+                                    <a  style="cursor: pointer; float:left; padding-left: 2px" data-id="<?= $item["id"] ?>" title="Mandar a expediente" class="enviarAExpediente"><i class="icon-hdd"></i></a>
+                                <?php } ?>
+                                <a class="adenda" style="cursor: pointer; float:left; padding-left: 2px" title="Crear adenda" data-id="<?= $item["id"] ?>" data-factura="<?= $item["factura"] ?>" data-cove="<?= $item["cove"] ?>"><i class="icon-flag"></i></a>
+                                <a class="reenviar" style="cursor: pointer; float:left; padding-left: 2px" title="Reenviar factura" data-id="<?= $item["id"] ?>" data-factura="<?= $item["factura"] ?>"><i class="icon-retweet"></i></a>
+                                <?php if ($item["patente"] == 3589 && $item["enPedimento"] !== 1) { ?>
+                                    <a style="cursor: pointer; float:left; padding-left: 2px" title="Enviar a pedimento" class="enviarAPedimento" data-id="<?= $item["id"] ?>"><i class="icon-qrcode"></i></a>
+                                <?php } ?>
+                            <?php } else if ($item["estatus"] == 3) { ?>
+                                <div class="semaphore-black"></div>
+                                <a style="cursor: pointer; float:left; padding-left: 2px" title="Consultar el COVE enviado." href="/vucem/index/consultar-cove-enviado?id=<?= $item["id"] ?>"><i class="icon icon-file"></i></a>
+                                <a style="cursor: pointer; float:left; padding-left: 2px" title="Borrar COVE" class="deleteCove" data-id="<?= $item["id"] ?>"><i class="icon icon-trash"></i></a>
+                            <?php } ?>
+                        </div>
+                    </td>
+                    <td><?= $item["rfc"] ?></td>
+                    <td><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></td>
+                    <td><?= $item["referencia"] ?></td>
+                    <td style="text-align: left"><?= $item["factura"] ?></td>
+                    <td><?= isset($item["cove"]) ? '<a href="/vucem/index/consultar-cove-enviado?id=' . $item["id"] . '">' . $item["cove"] . '</a>' : '' ?></td>
+                    <td><?= (isset($item["enviado"])) ? date("d/m/y H:i", strtotime($item["enviado"])) : "" ?></td>
+                    <td><?= (isset($item["actualizado"])) ? date("d/m/y H:i", strtotime($item["actualizado"])) : "" ?></td>
+                    <td><?= strtolower($item["usuario"]) ?></td>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>
+<a href="<?= $this->url(array('action' => 'nuevo-cove-solicitante')) ?>" class="traffic-btn">
+    <i class="fas fa-file"></i> Nuevo COVE
+</a>
+<a href="<?= $this->url(array('action' => 'nuevo-cove-facturas')) ?>" class="traffic-btn">
+    <i class="fas fa-file-alt"></i> COVE pendientes
+</a>
+<a href="#" id="refresh" class="traffic-btn traffic-btn-right">
+    <i class="fas fa-sync-alt"></i> Actualizar
+</a>
+<a href="#" id="refresh-hdd" class="traffic-btn traffic-btn-right" style="min-width: 40px">
+    <i class="fas fa-hdd"></i>
+</a>
+<div class="traffic-clear-5"></div>
+<form action="<?= $this->url() ?>" method="get">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="5">BURCAR COVES ANTERIORES</th>
+        </tr>
+        <tr>
+            <td style="width: 220px">
+                <label style="font-weight: bold">COVE:</label>
+                <input type="text" name="cove" class="traffic-input-medium" value="<?= $this->cove ?>" />
+            </td>
+            <td style="width: 220px">
+                <label style="font-weight: bold">REFERENCIA:</label>
+                <input type="text" name="referencia" class="traffic-input-medium" value="<?= $this->referencia ?>" />
+            </td>
+            <td style="width: 220px">
+                <label style="font-weight: bold">PEDIMENTO:</label>
+                <input type="text" name="pedimento" class="traffic-input-medium" value="<?= $this->pedimento ?>" />
+            </td>
+            <td style="width: 220px">
+                <label style="font-weight: bold">FACTURA:</label>
+                <input type="text" name="factura" class="traffic-input-medium" value="<?= $this->factura ?>" />
+            </td>
+            <td>
+                <!--<input type="submit" value="Buscar" class="traffic-btn-search traffic-btn-right" />-->
+                <button type="submit" class="traffic-btn traffic-btn-right">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+                <a class="traffic-btn traffic-btn-right" href="/vucem/index/index">
+                    <i class="fas fa-broom"></i> Limpiar
+                </a>
+            </td>
+        </tr>
+    </table>
+    <div class="traffic-clear-5"></div>
+</form>

@@ -1,0 +1,21 @@
+<p>¿Está seguro de que desea enviar el archivo vía FTP? Este proceso puede durar unos minutos en lo que el receptor sincroniza los datos.</p>
+<?php if (isset($this->results) && !empty($this->results)) { ?>
+    <div style="max-height: 250px; overflow-y: auto">
+        <table class="traffic-table traffic-table-left" style="margin-top: 7px">
+            <thead>
+                <tr>
+                    <th style="font-size: 9px !important; text-align: left">Estatus</th>
+                    <th style="font-size: 9px !important">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->results as $item) { ?>
+                <tr>
+                    <td style="font-size: 9px !important"><?= $item["mensaje"] ?></td>
+                    <td style="width: 100px; font-size: 9px !important; text-align: center"><?= $item["creado"] ?></td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>

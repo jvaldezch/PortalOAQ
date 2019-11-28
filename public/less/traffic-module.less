@@ -1,0 +1,791 @@
+/* 
+    Document   : default
+    Created on : Apr 11, 2013, 6:46:15 PM
+    Author     : Jaime E. Valdez <jvaldezch at gmail.com>
+*/
+
+@font: Helvetica, Arial, sans-serif;
+
+@fontsize: 12px;
+@bcolor: #888888;
+
+/** {
+    font-family: @font !important;
+}*/
+
+body,
+html {
+    font-family: @font !important;
+    background-color: #fdfdfd;
+    margin: 0;
+    padding: 0;
+}
+root { 
+    display: block;
+}
+
+#content {
+    border: 0;
+    background-color: #fdffff;
+}
+
+#top {
+    margin: 0;
+    padding: 0;
+    height: 35px;
+}
+
+#footer-copy {
+    background: #fff none repeat scroll 0 0;
+    color: #d1d1d1;
+    font-size: 11px;
+    margin-left: 3px;
+}
+
+.well {
+    background-color: #fbfbfe;
+}
+ul.nav-list > li > a {
+    color: 333;
+}
+ul.nav-list > li > a:hover {
+    color: 333;
+    background-color: #fbfed9;    
+}
+
+h1.traffic-h1,
+h2.traffic-h2,
+h3.traffic-h3,
+h4.traffic-h4,
+p.traffic-p,
+a.traffic-a {
+    color: #303d5b;
+    background: none;
+    border: 0;
+    text-align: left;
+    font-family: @font;
+    font-size: @fontsize;
+}
+p, a, span, hr, label, form, input {
+    margin: 0;
+    padding: 0;
+}
+h4,
+h4.traffic-section {
+    margin: 0;
+    padding: 5px;
+}
+
+label, input, button, select, textarea {
+    font-family: @font;
+    font-size: @fontsize;
+    font-weight: normal;
+    line-height: 20px;
+}
+
+.help-block {
+    display: block;
+    margin-bottom: 10px;
+    font-family: @font;
+    font-size: @fontsize;
+}
+
+.help-block, .help-inline {
+    color: #595959;
+}
+
+p.traffic-p {
+    color: #293552;
+    font-size: @fontsize;
+}
+a.traffic-a {
+    color: #3f4c6b;
+    text-decoration: none;
+    border-bottom: 1px #3f4c6b + #555555 dotted;
+    cursor: pointer;
+    &:hover {
+        color: #3f4c6b;
+        background-color: #3f4c6b + #aaaaaa;
+    }
+}
+.traffic-icon-space {
+    display: inline-block;
+    width: 8px;
+}
+h4.traffic-h4 {
+    background-color: none;
+    padding: 5px 2px;
+    text-transform: uppercase;
+}
+
+h4, th.dataTitle {
+    background-color: #0398ca;
+    border-top: none;
+    border-bottom: 1px solid #03bcdd;
+    color: #fff;
+    text-align: center;
+}
+span.errorlabel {
+    background-color: red;
+    color: white;
+    padding: 2px 3px;
+    margin-left: 2px;
+    border-radius: 3px;
+    font-size: 8px;
+    font-family: @font;
+}
+
+@import "navbar.css";
+
+
+// BOOTSTRAP FIXES
+
+.nav-list > li > a {
+    font-size: @fontsize;
+    padding: 3px 15px;
+}
+
+div[id^="icon_"] {
+    cursor: pointer;
+}
+div[id^="edit_"] p {
+    color: #293552;
+    font-size: @fontsize;
+    font-family: @font;
+}
+
+.traffic-form {
+    padding: 5px;
+}
+#traffic-trackings,
+#traffic-trackings p,
+#traffic-invoices,
+#traffic-invoices p {
+    font-family: @font !important;
+}
+.traffic-eta-red,
+.traffic-eta-yellow,
+.traffic-table,
+.traffic-table th,
+.traffic-table td,
+.traffic-table p,
+.traffic-table p > a {
+    font-family: @font !important;
+    font-size: @fontsize !important;
+}
+
+@import "table.css";
+
+.traffic-eta-red,
+.traffic-eta-yellow,
+.traffic-eta-green {
+    border-radius: 2px;
+    font-weight: bold;
+    font-family: @font;
+    color: #000; 
+    padding: 2px 5px; 
+    margin: 0;
+}
+.traffic-eta-red {
+    background-color: #dd5544;
+}
+.traffic-eta-yellow {
+    background-color: yellow;
+}
+.traffic-eta-green {
+    background-color: yellowgreen;
+}
+
+.traffic-currency > * {
+    font-size: @fontsize;
+    font-family: @font;
+}
+
+.traffic-section {
+    font-size: @fontsize;
+}
+
+.traffic-error-span {
+    font-family: @font;
+    color: red;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 0 5px;
+    float: none;
+    background-color: #f0f3cb;    
+}
+
+span.traffic-error {
+    display: block;
+    background: #f53333;
+    -webkit-border-radius: 1;
+    -moz-border-radius: 1;
+    border-radius: 1px;
+    text-shadow: 1px 1px 0px #442222;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 11px;
+    padding: 3px 2px 3px 2px;
+    text-decoration: none;
+}
+
+/** IFRAME */
+/*.div-frame {
+    width: 100%; 
+    border-bottom: 1px #bdcfe3 solid;
+}*/
+
+.traffic-iframe {
+    width: 100%;
+    border: 1px #ddd solid;
+    height: 350px;
+    padding: 0;
+    margin: 0;
+}
+iframe {
+    display: block; 
+}
+/*#anexo-frame,*/
+#tracking-frame,
+#invoices-frame {
+    position: relative;
+    width: 100vw;
+    border: 0; 
+    padding: 0; 
+    margin: 0;
+    margin-right: 1px;
+}
+/*#anexo-frame,*/
+#tracking-frame,
+#invoices-frame {
+    height: 180px;    
+}
+#tracking-frame {
+    height: 120px;    
+}
+
+/** BUTTONS */
+
+@import "buttons.css";
+
+.traffic-error {
+    color: red;
+    background-color: #ffeedd;
+    border-radius: 2px;
+    margin: 2px;
+}
+
+/** FORM INPUTS **/
+.input-fill {
+    background-color: #e3fdcf !important;
+}
+
+/** PAGINATION **/
+
+@import "pagination.css";
+
+span.pipe {
+    color: white;
+}
+/*body {
+    background-color: #f3f3f3;
+}*/
+
+@import "invoice.css";
+
+a.traffic-thumb > img {
+    background-color: #fff;
+    padding: 5px;
+    display: block;
+    border: 1px #8c9bbe solid;
+    margin: auto;
+    border-radius: 2px;
+}
+
+@import "form.css";
+
+@import "columns.css";
+
+.traffic-visual-help > * {
+    float: left;
+    font-size: 11px;
+    font-family: @font;
+}
+
+@import "navtab.css";
+
+@import "datepicker.css";
+
+@import "icons.css";
+
+.input-concepto {
+    text-align: right;
+}
+
+@bordercolor : #999;
+
+@import "edocument.css";
+
+legend {
+    font-family: @font;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    line-height: 25px;
+    color: #232d46;
+}
+#bootstrap-submit {
+    margin-left: 5px;
+}
+.form-horizontal .control-group {
+    margin-bottom: 8px;
+}
+
+legend + .control-group {
+    margin-top: 5px;
+}
+
+div.dataTables_length label,
+div.dataTables_filter label,
+div.dataTables_paginate,
+div.dataTables_info {
+    font-family: @font;
+    font-size: @fontsize;    
+}
+div.dataTables_length, 
+div.dataTables_info {
+    padding-top: 5px;
+    padding-left: 5px;
+}
+div.dataTables_filter,
+div.dataTables_paginate {
+    padding-right: 5px;    
+}
+div.dataTables_paginate {
+    padding-top: 8px;
+}
+div.dataTables_paginate ul > li > a,
+div.dataTables_paginate ul > li > span {
+    line-height: 14px;
+    padding: 4px 10px;
+}
+
+
+@import "tab.css";
+
+@import "iframe.css";
+
+
+.modal-footer,
+.modal-header {
+    border-radius: 2px;
+}
+.modal-header h3 {
+    line-height: 30px;
+    font-family: @font;
+    margin: 0;
+}
+.input-append, .input-prepend {
+    display: inline-block;
+    font-size: 0;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.input-append .add-on, .input-prepend .add-on {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: normal;
+    height: 20px;
+    line-height: 20px;
+    min-width: 16px;
+    padding: 2px 4px;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+    width: auto;
+}
+.progress {
+    margin-bottom: 0;
+}
+
+.content-row {
+    padding-left:3px;
+    font-size: 12px;
+}
+
+.content-row:hover {
+    cursor: pointer;
+    background: #ffffcc;
+    font-size: 12px;
+}
+
+.content-row .content-column a {
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.linedtextarea textarea {
+    font-family: Courier, 'New Courier', monospace, sans-serif !important; 
+    width: 100%;
+    padding: 5px; 
+    font-size: 12px;
+}
+
+.linedwrap .lines .codelines {
+    padding-top: 3px;
+}
+.linedwrap .lines .codelines  .lineno {
+    margin: 0;
+    line-height: 10px;
+    font-size: 10px;
+}
+
+.dropdown-menu > li.active,
+.dropdown-menu > li > a.active,
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover {
+    clear: both;
+    background: #cbd6e3 !important;
+    background-color: #cbd6e3 !important;
+    color: #333 !important;
+    display: block;
+    font-weight: normal;
+    line-height: 16px;
+    text-shadow: none !important;
+    white-space: nowrap;
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background: none;
+    background: #cbd6e3;
+    background-color: #cbd6e3;
+    color: #fff;
+    outline: 0 none;
+    text-decoration: none;
+}
+
+.semaphoreBox {
+    font-size: 11px;
+    margin-right: 10px;
+    float: right;
+    vertical-align:middle;
+    display: table-cell;
+    position: relative;
+}
+.semaphoreBox span {
+    line-height: 11px !important;
+    margin: 0;
+    padding: 0;
+}
+.semaphore (@color: #00cc66) {
+    padding: 0;
+    margin: 0;
+    display: block;
+    float: left;
+    /*display: inline-table;*/
+    background-color: @color;
+    color: @color;
+    border-radius: 2px;
+    width: 8px;
+    height: 14px;
+    margin-right: 3px;
+    margin-top: 4px;
+}
+.semaphore-holder {
+    float: left;
+    display: block;
+    margin-left: 3px;
+}
+.semaphore-grey {
+    .semaphore(#BBBBBB);
+}
+.semaphore-black {
+    .semaphore(#000000);
+}
+.semaphore-yellow {
+    .semaphore(#FFDE54);
+}
+.semaphore-red {
+    .semaphore(#ff2200);
+}
+.semaphore-blue {
+    .semaphore(#0099ff);
+}
+.semaphore-green {
+    .semaphore(#00cc66);
+}
+.semaphore-orange {
+    .semaphore(#F59211);
+}
+.semaphore-violet {
+    .semaphore(#775ba3);
+}
+.semaphore-palegreen {
+    .semaphore(#91c5a9);
+}
+.semaphore-pink {
+    .semaphore(#bc42f4);
+}
+.mensajero, .mensajeroEnTrafico, #allMessages {
+    cursor: pointer;
+    float: right;
+    padding-top: 3px;
+    margin-right: 4px;
+}
+
+.dataDireccion  {
+    padding: 5px 20px;
+}
+.dataDireccion  p {
+    font-size: 10px !important;
+}
+.dataDireccion  p span {
+    padding-left: 5px;
+    font-weight: bold;
+}
+.traffic-radio-block {
+    padding-left: 10px; 
+    padding-bottom: 5px; 
+    float: left; 
+    display: table-cell;
+}
+.button-save {
+    -webkit-appearance: button;
+    background-color: buttonface;
+    border-style: outset;
+    border-color: buttonface;
+    border: 1px #999 solid;
+    border-radius: 2px;
+    background: #fcfcfc;
+    background: url('/images/icons/disk.png'), linear-gradient(#fcfcfc, #e0e0e0);
+    background-repeat: no-repeat;
+    padding-left: 24px;
+    background-position: 3px 3px;
+}
+/** https://www.iconfinder.com/iconsets/fatcow **/
+.button-add,
+.button-newfolder,
+.button-upload,
+.button-home,
+.button-help,
+.button-settings,
+.button-search,
+.button-edit,
+.button-group,
+.button-save,
+.button-group-add,
+.button-user,
+.button-user-add,
+.button-delete,
+.button-edit,
+.button-emails,
+.button-cut {
+    display:block;
+    float: right;
+    height: 24px;
+    -webkit-appearance: button;
+    background-color: buttonface;
+    border-style: outset;
+    border-color: buttonface;
+    border: 1px #999 solid;
+    border-radius: 2px;
+    background: #fcfcfc;
+    background: url('/images/icons/small_edit.png'), linear-gradient(#fcfcfc, #e0e0e0);
+    background-repeat: no-repeat;
+    padding-left: 16px;
+    background-position: 3px 3px;
+    margin-left: 2px;
+}
+.button-save {
+    background: url('/images/icons/disk.png'), linear-gradient(#fcfcfc, #e0e0e0);
+    width: 10px;
+    background-repeat: no-repeat;
+    padding-left: 16px;
+    background-position: 3px 3px;
+}
+.button-add {
+    background: url('/images/icons/small_plus.png'), linear-gradient(#fcfcfc, #e0e0e0);
+    width: 10px;
+    background-repeat: no-repeat;
+    padding-left: 16px;
+    background-position: 3px 3px;
+}
+.button-newfolder {
+    background: url('/images/icons/folders_explorer.png'), linear-gradient(#fcfcfc, #e0e0e0);
+    background-repeat: no-repeat;
+    padding-left: 22px;
+    background-position: 3px 3px;
+}
+.button-delete {
+    background: url('/images/icons/small_delete.png'), linear-gradient(#fcfcfc, #e0e0e0);
+    background-repeat: no-repeat;
+    padding-left: 22px;
+    background-position: 3px 3px;
+}
+.button-upload {
+    background: url('/images/icons/small_plus.png'), linear-gradient(#fcfcfc, #e0e0e0);
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    background-position: 3px 3px;
+}
+.button-home {
+    background: url('/images/icons/house.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-group {
+    background: url('/images/icons/group.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-group-add {
+    background: url('/images/icons/group_add.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-user-add {
+    background: url('/images/icons/user_add.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-user {
+    background: url('/images/icons/user.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-search {
+    background: url('/images/icons/search.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-help {
+    background: url('/images/icons/help.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-settings {
+    background: url('/images/icons/settings.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-edit {
+    background: url('/images/icons/edit.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-cut {
+    background: url('/images/icons/cut.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-emails {
+    background: url('/images/icons/email.png'), linear-gradient(#fcfcfc, #e0e0e0);
+}
+.button-home,
+.button-group,
+.button-group-add,
+.button-user-add,
+.button-user,
+.button-search,
+.button-help,
+.button-settings,
+.button-cut,
+.button-emails,
+.button-edit {
+    background-repeat: no-repeat;
+    padding-left: 18px;
+    background-position: 3px 3px;
+}
+
+.progress {
+    padding: 0;
+    list-style-type: none;
+    font-family: arial;
+    font-size: 11px;
+    clear: both;
+    line-height: 11px;
+    margin: 0 -1px;
+    text-align: center;
+}
+.progress li {
+    float: left;
+    padding: 5px 5px 5px 12px;
+    background: #444;
+    color: #fff;
+    position: relative;
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
+    /*min-width: 65px;*/
+    margin: 0 1px;
+    line-height: 6px;
+}
+.progress li:before {
+    content: '';
+    border-left: 8px solid #fff;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+}
+.progress li:after {
+    content: '';
+    border-left: 8px solid #444;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    z-index: 20;
+}
+
+.progressLi (@color: #bfe500, @colort: #fff) {
+    background: @color;
+    border-top: 1px solid @color;
+    border-bottom: 1px solid @color;
+    color: @colort;
+    &:after {
+        border-left-color: @color;
+    }
+}
+
+.progress li.active {
+    .progressLi(#666666, #000000);
+}
+.progress li.inactive {
+    .progressLi(#999999, #000000);
+}
+.progress li.last {
+    .progressLi(#bbbbbb, #000000);
+    width: 10px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    width: 10px;
+    &:after {
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+    }
+    &:hover {
+        cursor: pointer;
+        background: #ccc;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+    }
+}
+.progress li.fechaEta {
+    .progressLi(#449f4a, #ffffff);
+}
+.progress li.fechaNotificacion {
+    .progressLi(#42994c, #ffffff);
+}
+.progress li.fechaEnvioDocumentos {
+    .progressLi(#419350, #ffffff);
+}
+.progress li.fechaEnvioProforma {
+    .progressLi(#3e8b55, #ffffff);
+}
+.progress li.fechaVistoBueno {
+    .progressLi(#3b805c, #ffffff);
+}
+.progress li.fechaRevalidacion {
+    .progressLi(#35686b, #ffffff);
+}
+.progress li.fechaPrevio {
+    .progressLi(#325d73, #ffffff);
+}
+.progress li.fechaPago {
+    .progressLi(#2d4f79, #ffffff);
+}
+.progress li.fechaLiberacion {
+    .progressLi(#2b4680, #ffffff);
+}
+.progress li.fechaFacturacion {
+    .progressLi(#294084, #ffffff);
+}

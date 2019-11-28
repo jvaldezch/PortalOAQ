@@ -1,0 +1,79 @@
+<form method="post" id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 120px">
+                <label for="aduana">ADUANA:<span style="color: red">*</span></label>
+            </th>
+            <td style="width: 360px">
+                <div id="divcustoms"><?= $this->form->aduana ?></div>
+            </td>
+            <th style="width: 120px">
+                <label for="operacion">TIPO OPERACIÓN:<span style="color: red">*</span></label>
+            </th>
+            <td style="width: 130px">
+                <div id="divops"><?= $this->form->operacion ?></div>
+            </td>
+            <th style="width: 130px">
+                <label for="tipoCambio">TIPO CAMBIO:</label>
+            </th>
+            <td>
+                <?= $this->form->tipoCambio ?>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="cliente">CLIENTE:<span style="color: red">*</span></label>
+            </th>
+            <td>
+                <div id="divcustomers"><?= $this->form->cliente ?></div>
+            </td>
+            <th>
+                <label for="cvePedimento">CVE PED:<span style="color: red">*</span></label>
+            </th>
+            <td>
+                <?= $this->form->cvePedimento ?>
+            </td>
+            <th>
+                <label for="fechaEta">Fecha ETA:</label>
+            </th>
+            <td>
+                <?= $this->form->fechaEta ?>
+            </td>
+        </tr>
+    </table>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 120px">
+                <label for="pedimento">PEDIMENTO:<span style="color: red">*</span></label>
+            </th>
+            <td style="width: 120px">
+                <?= $this->form->pedimento ?>
+            </td>
+            <th style="width: 110px">
+                <label for="referencia">REFERENCIA:<span style="color: red">*</span></label>
+            </th>
+            <td style="width: 116px">
+                <?= $this->form->referencia ?>
+            </td>
+            <th style="width: 120px">
+                <label for="cantidad">CANTIDAD:<span style="color: red">*</span></label>
+            </th>
+            <td>
+                <?= $this->form->cantidad ?>
+            </td>
+            <td>
+                <button id="submit" class="traffic-btn traffic-btn-right">
+                    <i class="far fa-plus-square"></i> Agregar
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+<div id="traficos"></div>
+<div class="traffic-clear-5"></div>
+<a href="javascript:void(0)" onclick="javascript:window.history.back();" class="traffic-btn" tabindex="99"> 
+    <i class="fas fa-angle-double-left"></i> Regresar
+</a>
+<button href="javascript:void(0)" class="traffic-btn-right traffic-btn createTraffics" tabindex="99">
+    <i class="far fa-file-alt"></i> Crear tráficos
+</button>

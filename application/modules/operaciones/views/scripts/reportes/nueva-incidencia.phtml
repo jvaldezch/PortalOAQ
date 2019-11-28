@@ -1,0 +1,131 @@
+<form id="form_incidence">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    DATOS DE LA INCIDENCIA
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="text-align: right">ADUANA:</th>
+                <td>
+                    <?php if (isset($this->aduanas) && !empty($this->aduanas)) { ?>
+                        <select class="traffic-select-large" name="idAduana" id="idAduana">
+                            <option value="">-- Seleccionar --</option>
+                            <?php foreach ($this->aduanas as $k => $v) { ?>
+                                <option value="<?= $k ?>"><?= $v ?></option>
+                            <?php } ?>
+                        </select>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">CLIENTE:</th>
+                <td>
+                    <?php if (isset($this->clientes) && !empty($this->clientes)) { ?>
+                        <select class="traffic-select-large" name="idCliente" id="idCliente">
+                            <option value="">-- Seleccionar --</option>
+                            <?php foreach ($this->clientes as $item) { ?>
+                                <option value="<?= $item['id'] ?>"><?= $item['razonSocial'] ?></option>
+                            <?php } ?>
+                        </select>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">PEDIMENTO:</th>
+                <td>
+                    <input class="traffic-input-medium" type="text" name="pedimento" id="pedimento" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">REFERENCIA:</th>
+                <td>
+                    <input class="traffic-input-medium" type="text" name="referencia" id="referencia" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">ACTA:</th>
+                <td>
+                    <input class="traffic-input-medium" type="text" name="acta" id="acta" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">MULTA:</th>
+                <td>
+                    <input class="traffic-input-medium" type="text" name="multa" id="multa" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">PAGADA:</th>
+                <td>
+                    <input type="checkbox" name="pagada" id="pagada" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">RESPONSABLE:</th>
+                <td>
+                    <input class="traffic-input-large" type="text" name="responsable" id="responsable" />
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">OBSERVACIONES:</th>
+                <td>
+                    <textarea class="traffic-textarea-medium" name="observaciones" id="observaciones"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">COMENTARIOS:</th>
+                <td>
+                    <textarea class="traffic-textarea-medium" name="comentarios" id="comentarios" ></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: right">FECHA:</th>
+                <td>
+                    <input class="traffic-input-date" type="text" name="fecha" id="fecha" /><i class="far fa-calendar-alt" style="padding-left: 5px; font-size: 1.2em"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">    
+    
+    $("#form_incidence").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            idAduana: "required",
+            idCliente: "required"
+        },
+        messages: {
+            idAduana: "Campo necesario",
+            idCliente: "Campo necesario"
+        }
+    });
+    
+    $("#fecha").datepicker({
+        calendarWeeks: true,
+        autoclose: true,
+        language: "es",
+        format: "yyyy-mm-dd"
+    });
+
+    $(document).on("input", "#responsable, #comentarios, #observaciones, #referencia", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>

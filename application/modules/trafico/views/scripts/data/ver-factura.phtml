@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="cache-control" content="max-age=0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <?= $this->headMeta(); ?>
+        <?= $this->headLink() ?>
+        <?= $this->headScript() ?>  
+    </head>
+    <script>
+        function close_window() {
+            close();
+        }
+    </script>
+    <body>
+        <table class="traffic-table">
+            <?php if (isset($this->invoice) && isset($this->invoice["encabezado"])) { ?>
+                <tr>
+                    <th colspan="8" class="invoice-title">ENCABEZADO</th>
+                </tr>
+                <tr>
+                    <th>Patente</th>
+                    <th>Aduana</th>
+                    <th>Pedimento</th>
+                    <th>Referencia</th>
+                    <th>Tipo Operación</th>
+                    <th colspan="3">Num. Factura</th>
+                </tr>
+                <tr>
+                    <td><?= isset($this->invoice["encabezado"]["patente"]) ? $this->invoice["encabezado"]["patente"] : '' ?></td>
+                    <td><?= isset($this->invoice["encabezado"]["aduana"]) ? $this->invoice["encabezado"]["aduana"] : '' ?></td>
+                    <td><?= isset($this->invoice["encabezado"]["pedimento"]) ? $this->invoice["encabezado"]["pedimento"] : '' ?></td>
+                    <td><?= isset($this->invoice["encabezado"]["referencia"]) ? $this->invoice["encabezado"]["referencia"] : '' ?></td>
+                    <td><?= isset($this->invoice["encabezado"]["ie"]) ? $this->invoice["encabezado"]["ie"] : '' ?></td>
+                    <td colspan="3"><?= isset($this->invoice["encabezado"]["numFactura"]) ? $this->invoice["encabezado"]["numFactura"] : '' ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+        <table class="traffic-table">
+            <?php if (isset($this->invoice) && isset($this->invoice["detalles"])) { ?>
+                <tr>
+                    <th colspan="9" class="invoice-title">DETALLES</th>
+                </tr>
+                <tr>
+                    <th colspan="2">COVE</th>
+                    <th>Fecha Factura</th>
+                    <th>Incoterm</th>
+                    <th>Pais Factura</th>
+                    <th>Valor USD</th>
+                    <th>Valor Mon. Ext.</th>
+                    <th>Factor Mon. Ext.</th>
+                    <th>Divisa</th>
+                </tr>
+                <tr>
+                    <td colspan="2"><?= isset($this->invoice["detalles"]["cove"]) ? $this->invoice["detalles"]["cove"] : '' ?></td>
+                    <td><?= isset($this->invoice["detalles"]["fechaFactura"]) ? date('d/m/Y', strtotime($this->invoice["detalles"]["fechaFactura"])) : '' ?></td>
+                    <td><?= isset($this->invoice["detalles"]["incoterm"]) ? $this->invoice["detalles"]["incoterm"] : '' ?></td>
+                    <td><?= isset($this->invoice["detalles"]["paisFactura"]) ? $this->invoice["detalles"]["paisFactura"] : '' ?></td>
+                    <td><?= isset($this->invoice["detalles"]["numFactura"]) ? $this->moneda($this->invoice["detalles"]["valorFacturaUsd"]) : '' ?></td>
+                    <td><?= isset($this->invoice["detalles"]["valorFacturaMonExt"]) ? $this->moneda($this->invoice["detalles"]["valorFacturaMonExt"]) : '' ?></td>
+                    <td><?= isset($this->invoice["detalles"]["factorMonExt"]) ? number_format($this->invoice["detalles"]["factorMonExt"], 6) : '' ?></td>
+                    <td><?= isset($this->invoice["detalles"]["divisa"]) ? $this->invoice["detalles"]["divisa"] : '' ?></td>
+                </tr>
+                <tr>
+                    <th>Subdivisión</th>
+                    <th>Certificado de Origen</th>
+                    <th>Num. Exportador</th>
+                    <th colspan="6">Observaciones</th>
+                </tr>
+                <tr>
+                    <td><?= $this->siNo($this->invoice["detalles"]["subdivision"]) ?></td>
+                    <td><?= $this->siNo($this->invoice["detalles"]["certificadoOrigen"]) ?></td>
+                    <td><?= $this->valor($this->invoice["detalles"]["numExportador"]) ?></td>
+                    <td colspan="6"><?= $this->valor($this->invoice["detalles"]["observaciones"]) ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+        <table class="traffic-table traffic-table-left">
+            <?php if (isset($this->invoice) && isset($this->invoice["cliente"])) { ?>
+                <tr>
+                    <?php if ($this->invoice["encabezado"]["ie"] == 'TOCE.IMP') { ?>
+                        <th colspan="8" class="invoice-title">IMPORTADOR Y PROVEEDOR</th>
+                    <?php } else { ?>
+                        <th colspan="8" class="invoice-title">EXPORTADOR Y DESTINATARIO</th>
+                    <?php } ?>
+                </tr>
+                <tr>
+                    <?php if ($this->invoice["encabezado"]["ie"] == "TOCE.IMP") { ?>
+                        <th colspan="4">IMPORTADOR</th>
+                        <th colspan="4">PROVEEDOR</th>
+                    <?php } ?>
+                </tr>
+                <?php if ($this->invoice["encabezado"]["ie"] == "TOCE.IMP") { ?>
+                    <?= $this->domicilio($this->invoice["cliente"], $this->invoice["proveedor"]) ?>                
+                <?php } else { ?>
+                    <?= $this->domicilio($this->invoice["proveedor"], $this->invoice["cliente"]) ?>                
+                <?php } ?>
+            <?php } ?>
+        </table>
+        <table class="traffic-table">
+            <?php if (isset($this->invoice) && isset($this->invoice["productos"])) { ?>
+                <tr>
+                    <th colspan="10" class="invoice-title">PRODUCTOS</th>
+                </tr>
+                <tr>
+                    <th>Orden</th>
+                    <th>Fraccion</th>
+                    <th>Descripción</th>
+                    <th>P.U.</th>
+                    <th>Val. Com.</th>
+                    <th>Cantidad Factura</th>
+                    <th>UMC</th>
+                    <th>OMA</th>
+                    <th>País Origen</th>
+                    <th>País Vendedor</th>
+                </tr>
+                <?php foreach ($this->invoice["productos"] as $item) { ?>
+                    <tr>
+                        <td><?= $this->valor($item["orden"]) ?></td>
+                        <td><?= $this->valor($item["fraccion"]) ?></td>
+                        <td style="text-align: left"><?= $this->valor($item["descripcion"]) ?></td>
+                        <td style="text-align: right"><?= number_format($item["precioUnitario"], 4, ".", ",") ?></td>
+                        <td style="text-align: right"><?= number_format($item["valorComercial"], 4, ".", ",") ?></td>
+                        <td style="text-align: right"><?= number_format($item["cantidadFactura"], 3, ".", ",") ?></td>
+                        <td><?= $this->valor($item["umc"]) ?></td>
+                        <td><?= $this->valor($item["oma"]) ?></td>
+                        <td><?= $this->valor($item["paisOrigen"]) ?></td>
+                        <td><?= $this->valor($item["paisVendedor"]) ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        </table>
+        <hr class="traffic-hr-small">
+        <a class="traffic-btn-close" onclick="close_window();">Cerrar</a>
+    </body>
+</html>

@@ -1,0 +1,271 @@
+<style>
+    .rTable {
+        display: table;
+        width: 100%;
+    }
+    .rTableRow {
+        display: table-row;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #ddd;
+    }
+    .rTableCell, .rTableHead {
+        display: table-cell;
+        padding: 2px 2px;
+        border: 1px solid #eee;
+    }
+    .rTableHeading {
+        display: table-header-group;
+        background-color: #ddd;
+        font-weight: bold;
+    }
+    .rTableFoot {
+        display: table-footer-group;
+        font-weight: bold;
+        background-color: #ddd;
+    }
+    .rTableBody {
+        display: table-row-group;
+    }
+</style>
+<table class="traffic-table traffic-table-left">
+    <?= $this->form->id ?>
+    <thead>
+        <tr>
+            <th style="text-align: right; width: 180px">
+                <label for="idCliente">CLIENTE:</label>
+            </th>            
+            <td>
+                <?= $this->form->idCliente ?>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right; width: 180px">
+                <label for="tipoVigencia">VIGENCIA:</label>
+            </th>            
+            <td>
+                <?= $this->form->tipoVigencia ?>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right; width: 180px" rowspan="2">
+                <label for="aereas">AÉRAS:</label>
+            </th>
+            <td>
+                <?= $this->form->aereas ?>                
+                <button class="traffic-btn-add traffic-btn-right add" data-type="aereas">Agregar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="aereas-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 40%"><strong>TARIFA FLAT (MERCANCIA EN GENERAL)</strong></div>
+                            <div class="rTableHead"><strong>IMPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>EXPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>MODO DE CALCULO</strong></div>
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right" rowspan="2">
+                <label for="terrestres">TERRESTRE:</label>
+            </th>
+            <td>
+                <?= $this->form->terrestres ?>
+                <button class="traffic-btn-add traffic-btn-right add" data-type="terrestres">Agregar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="terrestres-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 40%"><strong>TARIFA FLAT (MERCANCIA EN GENERAL)</strong></div>
+                            <div class="rTableHead"><strong>IMPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>EXPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>MODO DE CALCULO</strong></div>
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>                
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right" rowspan="2">
+                <label for="maritimas">MARÍTIMA:</label>
+            </th>
+            <td>
+                <?= $this->form->maritimas ?>
+                <button class="traffic-btn-add traffic-btn-right add" data-type="maritimas">Agregar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="maritimas-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 40%"><strong>TARIFA FLAT (MERCANCIA EN GENERAL)</strong></div>
+                            <div class="rTableHead"><strong>IMPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>EXPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>MODO DE CALCULO</strong></div>
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>                
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right" rowspan="2">
+                <label for="especiales">OPERACIONES ESPECIALES:</label>
+            </th>
+            <td>
+                <?= $this->form->especiales ?>
+                <button class="traffic-btn-add traffic-btn-right add" data-type="especiales">Agregar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="especiales-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 40%"><strong>TARIFA FLAT (MERCANCIA EN GENERAL)</strong></div>
+                            <div class="rTableHead"><strong>IMPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>EXPORTACIÓN</strong></div>
+                            <div class="rTableHead"><strong>MODO DE CALCULO</strong></div>
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>                
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right" rowspan="2">
+                <label for="conceptos">LADO AMERICANO:</label>
+            </th>
+            <td>
+                <?= $this->form->conceptos ?>
+                <button class="traffic-btn-add traffic-btn-right addConcept" data-type="conceptos">Agregar</button>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="conceptos-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 40%"><strong>CONCEPTO</strong></div>
+                            <div class="rTableHead">&nbsp;</div>
+                            <div class="rTableHead"><strong>MODO DE CALCULO</strong></div>
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>                
+            </td>
+        </tr>
+        <tr>
+            <th rowspan="2">
+                <label for="consolidado">COSTO BODEGA PARA CONSOLIDADO:</label>
+            </th>
+            <td>
+                <strong>PESO:</strong>&nbsp;<input type="text" id="weight" class="traffic-input-medium" />
+                $&nbsp;<input type="text" id="price" class="traffic-input-small" />
+                <button class="traffic-btn-add traffic-btn-right" id="addWeight" data-type="consolidado">Agregar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="consolidado-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 40%"><strong>PESO</strong></div>
+                            <div class="rTableHead"><strong>COSTO</strong></div>
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right" rowspan="2">
+                <label for="otros">OTROS CONCEPTOS:</label>
+            </th>
+            <td>
+                <?= $this->form->otros ?>
+                <button class="traffic-btn-add traffic-btn-right addAnotherConcept" data-type="otros">Agregar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="otros-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 40%"><strong>CONCEPTO</strong></div>
+                            <div class="rTableHead">&nbsp;</div>
+                            <div class="rTableHead"><strong>MODO DE CALCULO</strong></div>
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                        </div>
+                    </div>
+                </div>                
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right">
+                <label for="notas">NOTAS GENERALES:</label>
+            </th>
+            <td>
+                <div id="notas-tarifas">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width: 32px">&nbsp;</div>
+                            <div class="rTableHead"><strong>NOTA</strong></div>
+                        </div>
+                        <?php if (isset($this->notas) && !empty($this->notas)) { ?>
+                            <?php foreach ($this->notas as $item) { ?>
+                                <div class="rTableRow">
+                                    <div class="rTableCell">
+                                        <input type="checkbox" value="<?= $item["id"] ?>" class="notes" data-type="notas" />
+                                    </div>
+                                    <div class="rTableCell"><?= $item["nota"] ?></div>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>                    
+                    </div>
+                </div>   
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right">
+                <label for="firmante">FIRMANTES:</label>
+            </th>
+            <td>
+                <div style="float: left; margin-right: 5px">   
+                    <label for="emisor"><strong>EMISOR:</strong></label>
+                    <textarea id="emisor" name="emisor" data-type="firmante" class="traffic-textarea-medium emisor" style="width: 400px !important"></textarea>
+                </div>
+                <div style="float: left">   
+                    <label for="receptor"><strong>RECEPTOR:</strong></label>
+                    <textarea id="receptor" name="receptor" data-type="firmante" class="traffic-textarea-medium receptor" style="width: 400px !important"></textarea>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div id="container"></div>
+                <button class="traffic-btn-back" onclick="goBack();">&Lt; Regresar</button>
+                <button class="traffic-btn-save traffic-btn-right" id="save">Guardar</button>
+                <?php if (isset($this->idTarifa)) { ?>
+                    <a href="/trafico/get/imprimir-tarifa?id=<?= $this->idTarifa ?>" target="_blank" title="Imprimir tráfico." class="traffic-btn-print traffic-btn-right">Imprimir</a>                
+                <?php } ?>                
+                <button class="traffic-btn-close traffic-btn-right" id="new">Limpiar</button>                
+                <a download="tarifa.json" class="traffic-btn-primary traffic-btn-right" id="download">JSON</a>                
+            </td>
+        </tr>
+    </thead>
+</table>

@@ -1,0 +1,317 @@
+<ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
+    <li><a href="#generales" data-toggle="tab">Información</a></li>
+    <li><a href="#documentacion" data-toggle="tab">Documentos</a></li>
+    <li><a href="#retardos" data-toggle="tab">Retardos y faltas</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane" id="generales">
+        
+        <style>
+            .columna {
+                float: left;
+                width: 33.33%;
+            }
+
+            /* Clear floats after the columns */
+            .linea:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            
+            .centro, .derecha {
+                width: 35%;
+            }
+
+            .izquierda {
+                width: 25%;
+            }
+            
+            .traffic-table th, .traffic-table td, .traffic-table th label {
+                font-size: 11px !important;
+                line-height: 12px !important;
+            }
+            input[type="text"], select {
+                font-size: 11px !important;
+                line-height: 11px !important;
+                height: 14px;
+            }
+            .traffic-select-small,
+            .traffic-select-medium,
+            .traffic-select-large {
+                font-size: 11px !important;
+                line-height: 11px !important;
+                height: 14px;          
+                padding: 1px 2px !important;
+            }
+            .traffic-select-small {
+                width: 90px !important;
+            }
+            .traffic-select-medium {
+                width: 160px !important;
+            }
+            .traffic-select-large {
+                width: 280px !important;
+            }
+        </style>
+        <div class="traffic-clear-5"></div>
+        <div class="linea">
+            <div class="columna izquierda">
+                <div>
+                    <div style="padding: 2px; border-radius: 2px; border: 1px #bac5d2 solid; background-color: #eee; margin: auto; display: block; width: 250px">
+                        <?php if(isset($this->foto)) { ?>
+                            <img src="data:<?= base64_encode($this->foto["mimeType"]) ?>;base64,<?= base64_encode($this->foto["image"]) ?>" id="pictureProfile" />
+                        <?php } else { ?>
+                            <img src="/images/profile.jpg" id="pictureProfile" />
+                        <?php } ?>
+                    </div>
+                    <div style="margin: auto; display: block; width: 250px; text-align: center">
+                        <a style="font-size: 11px; margin:auto; display: block; width: 100px; cursor: pointer" id="changePicture">
+                            <i class="fas fa-pencil-alt"></i> Cambiar perfil
+                        </a>                        
+                    </div>                         
+
+                </div>
+            </div>
+            <div class="columna centro">
+                
+                <form id="information">
+                    <input type="hidden" id="idEmpleado" name="idEmpleado" value="<?= $this->idEmpleado ?>">
+                    <table class="traffic-table traffic-table-left">
+                        <thead>
+                            <tr>
+                                <th colspan="2">DATOS GENERALES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th style="text-align: right"><label>Activo:</label></th>
+                                <td><input id="activeEmployee" name="activeEmployee" type="checkbox" <?= (isset($this->estatus) && $this->estatus === 1) ? ' checked="true"' : '' ?>></td>
+                            </tr>
+                        <?php
+                        $array = array (
+                            "idEmpresa" => array("label" => "Empresa:", "class" => "traffic-select-large", "type" => "select", "options" => $this->empresas),
+                            "numeroEmpleado" => array("label" => "Número de empleado:", "class" => "traffic-input-small", "type" => "text"),
+                            "nombre" => "Nombre(s):",
+                            "apellido" => "Apellido(s):",
+                            "emailEmpresa" => "Email Empresa:",
+                            "emailPersonal" => "Email Personal:",
+                            "telefono" => "Teléfono:",
+                            "rfc" => "CURP:",
+                            "curp" => "RFC:",
+                            "nss" => "NSS:",
+                        );
+                        foreach ($array as $k => $v) {?>
+                            <tr>
+                                <th style="text-align: right; width: 80px">
+                                    <?php if(is_array($v)) { ?>
+                                        <label for="<?= $k ?>"><?= $v["label"] ?></label>
+                                    <?php } else { ?>
+                                        <label for="<?= $k ?>"><?= $v ?></label>
+                                    <?php } ?>
+                                </th>
+                                <td>
+                                    <?php if(is_array($v)) { ?>
+                                        <?php if($v["type"] == "text") { ?>
+                                        <input type="<?= $v["type"] ?>" id="<?= $k ?>" name="<?= $k ?>" class="<?= $v["class"] ?>"/>
+                                        <?php } elseif($v["type"] == "select") { ?>
+                                            <select id="<?= $k ?>" name="<?= $k ?>" class="<?= $v["class"] ?>">
+                                                <option value="">---</option>
+                                                <?php foreach ($v["options"] as $key => $value) { ?>
+                                                    <option value="<?= $key ?>"><?= $value ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <input type="text" id="<?= $k ?>" name="<?= $k ?>" class="traffic-input-medium"/>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </form>
+                
+                <form id="address">
+                    <input type="hidden" id="idEmpleado" name="idEmpleado" value="<?= $this->idEmpleado ?>">
+                    <table class="traffic-table traffic-table-left">
+                        <thead>
+                            <tr>
+                                <th colspan="2">DIRECCIÓN</th>
+                            </tr>
+                        </thead>
+                        <?php 
+                        $array = array (
+                            "calle" => "Calle",
+                            "numExt" => "Num. Ext.",
+                            "numInt" => "Num. Int.",
+                            "colonia" => "Colonia:",
+                            "ciudad" => "Ciudad:",
+                            "municipio" => "Municipio:",
+                            "entidad" => "Entidad:",
+                            "estado" => "Estado:",
+                            "pais" => "País:",
+                            "codigoPostal" => "C.P.",
+                        );
+                        foreach ($array as $k => $v) {?>
+                            <tr>
+                                <th style="text-align: right; width: 80px">
+                                    <label for="<?= $k ?>"><?= $v ?></label>
+                                </th>
+                                <td>
+                                    <input type="text" id="<?= $k ?>" name="<?= $k ?>" class="traffic-input-medium"/>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </form>
+                
+            </div>
+            <div class="columna derecha">
+                
+                <form id="other">
+                    <input type="hidden" id="idEmpleado" name="idEmpleado" value="<?= $this->idEmpleado ?>">
+                    <table class="traffic-table traffic-table-left">
+                        <tr>
+                            <th style="text-align: right">Departamento:</th>
+                            <td>
+                                <div id="deptos">
+                                    <select id="idDepto" name="idDepto" class="traffic-select-large" disabled="true">
+                                        <option value="">---</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right">Puesto:</th>
+                            <td>
+                                <div id="puestos">
+                                    <select id="idPuesto" name="idPuesto" class="traffic-select-large" disabled="true">
+                                        <option value="">---</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Usuario del sistema:</th>
+                            <td>
+                                <input type="text" id="idUsuario" name="idUsuario" class="traffic-input-tiny" readonly="true" style="width: 40px"/>
+                                &nbsp;
+                                <button id="searchUser" style="border: 1px #333 solid; border-radius: 3px">Buscar usuario</button>
+                            </td>
+                        </tr>
+                        <?php
+                        $array = array (
+                            "edad" => array("label" => "Edad:", "class" => "traffic-input-small", "type" => "text"),
+                            "fechaNacimiento" => array("label" => "Fecha Nacimiento:", "class" => "traffic-input-date", "type" => "text"),
+                            "creditoInfonavit" => "Crédito Infonavit:",
+                            "fechaIngreso" => array("label" => "Fecha Ingreso:", "class" => "traffic-input-date", "type" => "text"),
+                            "fechaBaja" => array("label" => "Fecha Baja:", "class" => "traffic-input-date", "type" => "text"),
+                            "banco" => array("label" => "Banco:", "class" => "traffic-select-medium", "type" => "select", "options" => $this->bancos),
+                            "numeroCuenta" => "Número de cuenta:",
+                            "clabe" => "CLABE:",
+                            "estadoCivil" => array("label" => "Estado civil:", "class" => "traffic-select-medium", "type" => "select", "options" => $this->estadoCivil),
+                            "escolaridad" => array("label" => "Escolaridad:", "class" => "traffic-select-large", "type" => "select", "options" => $this->escolaridad),
+                            "grupoSanguineo" => array("label" => "Grupo sanguineo:", "class" => "traffic-select-small", "type" => "select", "options" => $this->grupoSanguineo),
+                        );
+                        foreach ($array as $k => $v) {?>
+                            <tr>
+                                <th style="text-align: right; width: 150px">
+                                    <?php if(is_array($v)) { ?>
+                                        <label for="<?= $k ?>"><?= $v["label"] ?></label>
+                                    <?php } else { ?>
+                                        <label for="<?= $k ?>"><?= $v ?></label>
+                                    <?php } ?>
+                                </th>
+                                <td>
+                                    <?php if(is_array($v)) { ?>
+                                        <?php if($v["type"] == "text") { ?>
+                                        <input type="<?= $v["type"] ?>" id="<?= $k ?>" name="<?= $k ?>" class="<?= $v["class"] ?>"/>
+                                        <?php } elseif($v["type"] == "select") { ?>
+                                            <select id="<?= $k ?>" name="<?= $k ?>" class="<?= $v["class"] ?>">
+                                                <option value="">---</option>
+                                                <?php foreach ($v["options"] as $key => $value) { ?>
+                                                    <option value="<?= $key ?>"><?= $value ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <input type="text" id="<?= $k ?>" name="<?= $k ?>" class="traffic-input-medium"/>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <button id="save" class="traffic-btn traffic-btn-right">
+            <i class="far fa-save"></i> Guardar
+        </button>
+        
+    </div><!-- generales -->
+    
+    <div class="tab-pane" id="documentacion">        
+        <form id="formFiles" method="post" action="/rrhh/post/subir-archivo-empleado" enctype="multipart/form-data">
+            <input type="hidden" id="idEmpleado" name="idEmpleado" value="<?= $this->idEmpleado ?>">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="5" class="traffic-table-title">ARCHIVOS DE EXPEDIENTE EMPLEADO</th>
+                </tr>
+                <tr>
+                    <th style="width: 150px; text-align: right">Seleccionar archivo</th>
+                    <td>
+                        <input type="file" name="files[]" id="files" class="required" multiple />
+                    </td>
+                    <td>
+                        <!--<input type="submit" value="Subir archivo" id="uploadFiles" class="traffic-btn-add traffic-btn-right" />-->
+                        <button type="submit" class="traffic-btn traffic-btn-right" id="uploadFiles">
+                            <i class="fas fa-upload"></i> Subir archivo
+                        </button>
+                        <div class="checkbox-group" style="float:right; margin-right: 10px">
+                            <div class="checkbox">
+                                <input id="doctos" name="doctos" type="checkbox" <?= (isset($this->doctos) && $this->doctos == 1) ? 'checked="true"' : '' ?>>
+                                <label class="checkbox-label">&nbsp;Documentación completa</label>
+                            </div>
+                            <div class="checkbox">
+                                <input id="capacit" name="capacit" type="checkbox" <?= (isset($this->capacit) && $this->capacit == 1) ? 'checked="true"' : '' ?>>
+                                <label class="checkbox-label">&nbsp;Capacitación</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="progress progress-striped active">
+                <div class="bar bar-success"></div >
+                <div class="percent">0%</div >
+            </div>
+        </form>
+        <div id="employeeFiles"></div>
+    </div><!-- documentacion -->
+    
+    <div class="tab-pane" id="retardos">
+        <div style="float: left; height: 450px">
+            <div id="calendar" style="padding: 10px; max-width: 600px; height: 450px"></div>
+        </div>
+        <div style="float: left; margin-top: 70px; height: 450px">  
+            <div class="tools" style="float: left">
+                <div>
+                    <div class="traffic-icon traffic-icon-calendar" style="float:left"></div>
+                    <input type="text" id="retardo" class="traffic-input-date" style="float: left;" value="<?= date("Y-m-d") ?>" />
+                    <button class="traffic-btn-add" id="agregarRetardo" style="background-color: #c79100 !important">retardo</button>                   
+                </div>
+                <div class="traffic-clear-5"></div>
+                <div>
+                    <div class="traffic-icon traffic-icon-calendar" style="float:left"></div>
+                    <input type="text" id="falta" class="traffic-input-date" style="float: left" value="<?= date("Y-m-d") ?>" />
+                    <button class="traffic-btn-create" id="agregarFalta" style="background-color: #c70039 !important">falta</button>
+                </div>
+            </div>
+        </div>
+    </div><!-- retardos -->
+    
+</div>
+<div class="traffic-clear-5"></div>
+<a href="/rrhh/index/index" class="traffic-btn" tabindex="99">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>

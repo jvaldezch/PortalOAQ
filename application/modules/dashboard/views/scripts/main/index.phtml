@@ -1,0 +1,126 @@
+<style>
+    .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+        font-size: 12px;
+        padding: 4px 2px;
+        line-height: 1;
+    }
+    table.tableInfo th,
+    table.tableInfo td {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    table.tableInfo td p {
+        margin: 0;
+    }
+</style>
+<div class="row" style="margin-top: 70px">
+    <div class="col-md-10 col-sm-10 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content" id="datatable">
+                <div id="pause" style="cursor: pointer; float:right; margin-left: 10px">
+                    <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                </div>                    
+                <div style="float:left">
+                    <span class="label label-default">Proforma</span>
+                    <span class="label label-danger">En espera</span>
+                    <span class="label label-primary">Pagado</span>
+                    <span class="label label-success">Liberado</span>
+                </div>                
+                <div style="float:right" id="status"></div>
+                <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="headings">
+                            <th style="width: 15px"></th>
+                            <th style="width: 50px">Aduana</th>
+                            <th style="width: 80px">Pedimento</th>
+                            <th>Referencia Agente Aduanal</th>
+                            <th>Regimen</th>
+                            <th style="width: 100px">Notificacion</th>
+                            <th style="width: 100px">ETA Aduana</th>
+                            <th style="width: 100px">Proforma</th>
+                            <th style="width: 100px">Documentos</th>
+                            <th style="width: 100px">Revalidacion</th>
+                            <th style="width: 100px">Previo</th>
+                            <th style="width: 100px">Pago</th>
+                            <th style="width: 100px">Liberación</th>
+                            <th style="width: 100px">ETA Almacen</th>
+                            <th style="width: 100px">Facturación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody" style="overflow-y: auto"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-2 col-xs-12">
+        <div class="row">
+            <div class="x_panel tile overflow_hidden" id="operations">
+                <div class="x_title" style="margin-bottom: 2px">
+                    <h2>Total de operaciones</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row" style="padding-bottom: 2px; padding-top: 2px">
+                        <iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px;"></iframe>
+                        <canvas class="canvasDoughnutOperaciones" height="100" width="180" style="margin: 5px 5px 5px 0px; width: 120px; height: 100px;"></canvas>
+                    </div>                    
+                    <table style="width: 100%" class="tableInfo">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Aduana</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="porAduana"></tbody>
+                    </table>
+                    <div class="row" style="padding-bottom: 20px; padding-top: 10px">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="tile_stats_count">
+                              <span class="count_top"><i class="fa fa-line-chart"></i> Por liberar</span>
+                              <div style="font-size: 40px;line-height: 42px; font-weight: 600" class="count count-month"></div>
+                              <div id="porLiberar"></div>                              
+                            </div>                            
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="tile_stats_count">
+                              <span class="count_top"><i class="fa fa-line-chart"></i> Total mes</span>
+                              <div style="font-size: 40px;line-height: 42px; font-weight: 600" class="count count-current-month"></div>
+                              <div id="diff"></div>                              
+                            </div>                            
+                        </div>
+                    </div><!-- row -->
+                    <div class="row" style="padding-bottom: 20px">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="tile_stats_count">
+                              <span class="count_top"><i class="fa fa-line-chart"></i> Total anterior</span>
+                              <div style="font-size: 40px;line-height: 42px;; font-weight: 600" class="count count-previous-month"></div>
+                            </div>                            
+                        </div>                        
+                    </div><!-- row -->
+                </div>
+            </div>
+        </div><!-- row -->
+    </div>
+</div>
+<!-- Small modal -->
+<input type="hidden" name="rfcCliente" id="rfcCliente" value="<?= $this->rfcCliente ?>" />
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel2"></h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- /modals -->

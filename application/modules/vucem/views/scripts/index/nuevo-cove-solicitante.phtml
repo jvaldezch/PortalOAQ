@@ -1,0 +1,31 @@
+<form method="post" action="/vucem/index/nuevo-cove-solicitante" enctype="application/x-www-form-urlencoded" id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 150px; text-align: right"><label for="firmante">Firmante:</label></th>
+            <td><?= $this->form->firmante ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="Patente">Patente:</label></th>
+            <td><?= $this->form->Patente ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="Aduana">Aduana:</label></th>
+            <td><?= $this->form->Aduana ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="tipoOperacion">Tipo de Operación:</label></th>
+            <td><?= $this->form->tipoOperacion ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="tipoFigura">Tipo de Figura:</label></th>
+            <td><?= $this->form->tipoFigura ?></td>
+        </tr>
+    </table>
+    <div class="traffic-clear-10"></div>
+    <a href="javascript:window.history.back();" class="traffic-btn" tabindex="99">
+        <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+    </a>
+    <button type="submit" class="traffic-btn traffic-btn-right" id="submit">
+        Siguiente&nbsp;<i class="fas fa-angle-double-right"></i>
+    </button>
+</form>

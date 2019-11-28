@@ -1,0 +1,42 @@
+<table class="traffic-table traffic-table-left hover" id="archiveList">
+    <thead>
+        <tr>
+            <th style="width: 60px">Patente</th>
+            <th style="width: 60px">Aduana</th>
+            <th>&nbsp;</th>
+            <th style="width: 32px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($this->data) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td style="text-align: center"><?= ($item["patente"] == '0') ? 'Todas' : $item["patente"] ?></td>
+                    <td style="text-align: center"><?= ($item["aduana"] == '0') ? 'Todas' : $item["aduana"] ?></td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <!--<a style="cursor: pointer;" onclick="parent.borrarRepositorio('<?= $item["id"] ?>');"><img src="/images/icons/small_delete.png" /></a>-->
+                        <i class="far fa-trash-alt" onclick="parent.borrarRepositorio('<?= $item["id"] ?>');" style="font-size: 1.3em; color: #2f3b58; cursor: pointer"></i>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="4" style="text-align: center"><em>El usuario no tiene aduanas asignadas.</em></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php if ($this->data) { ?>
+    <script type="text/javascript">    
+        $("#archiveList").dataTable({
+            "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
+            "sPaginationType": "bootstrap",
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ registros por página"
+            },
+            "iDisplayLength": 10,
+            "aaSorting": [[10, "desc"]]
+        });    
+    </script>
+<?php } ?>

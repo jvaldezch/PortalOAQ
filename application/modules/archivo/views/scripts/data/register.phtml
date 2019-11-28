@@ -1,0 +1,36 @@
+<?php if (isset($this->archivom) && !empty($this->archivom)) { ?>           
+    <tr>
+        <td>&nbsp;</td>
+        <td>
+            <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->archivom["idArchivoValidacion"] ?>"><?= $this->archivom["archivoNombre"] ?></a>
+        </td>
+        <td>Archivo M3</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>   
+<?php } ?>
+<?php if (isset($this->archivov) && !empty($this->archivov)) { ?>
+    <tr>
+        <td>&nbsp;</td>
+        <td>
+            <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->archivov["idArchivoValidacion"] ?>"><?= $this->archivov["archivoNombre"] ?></a>
+        </td>
+        <td>Archivos validación</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+<?php } ?>
+<?php if (isset($this->archivop) && !empty($this->archivop)) { ?>
+    <tr>
+        <td>&nbsp;</td>
+        <td>
+            <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->archivop["idArchivoValidacion"] ?>"><?= $this->archivop["archivoNombre"] ?></a>
+        </td>
+        <td>Archivo de banco</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+<?php } ?>

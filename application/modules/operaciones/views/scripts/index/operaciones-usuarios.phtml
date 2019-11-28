@@ -1,0 +1,92 @@
+<style>
+    #datatable th.title {
+        width: 75px;
+    }
+    #datatable td {
+        padding: 2px 5px;
+        font-family:  'Consolas', sans-serif;
+    }
+    #datatable td strong {
+        font-family:  'Consolas', sans-serif;
+    }
+    #datatable td.data {
+        text-align: right;
+    }
+</style>
+<?= $this->form ?>
+<div id="container-line" style="max-width: 810px; height: 400px; float:left;"></div>
+<div id="container-pie" style="max-width: 310px; height: 400px; float:left;"></div>
+<div style="clear: both;"></div>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<table id="datatable">
+    <thead>
+        <tr>
+            <th></th>
+            <th class="title">Enero</th>
+            <th class="title">Febrero</th>
+            <th class="title">Marzo</th>
+            <th class="title">Abril</th>
+            <th class="title">Mayo</th>
+            <th class="title">Junio</th>
+            <th class="title">Julio</th>
+            <th class="title">Agosto</th>
+            <th class="title">Septiembre</th>
+            <th class="title">Octubre</th>
+            <th class="title">Noviembre</th>
+            <th class="title">Diciembre</th>
+            <th class="title">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        $sum = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+        foreach($this->data as $item) { ?>
+        <tr>
+            <td><?= $item["Usuario"] ?></td>
+            <td class="data"><?= ($item["Ene"] != 0) ? $item["Ene"] : '' ?></td>
+            <td class="data"><?= ($item["Feb"] != 0) ? $item["Feb"] : '' ?></td>
+            <td class="data"><?= ($item["Mar"] != 0) ? $item["Mar"] : '' ?></td>
+            <td class="data"><?= ($item["Abr"] != 0) ? $item["Abr"] : '' ?></td>
+            <td class="data"><?= ($item["May"] != 0) ? $item["May"] : '' ?></td>
+            <td class="data"><?= ($item["Jun"] != 0) ? $item["Jun"] : '' ?></td>
+            <td class="data"><?= ($item["Jul"] != 0) ? $item["Jul"] : '' ?></td>
+            <td class="data"><?= ($item["Ago"] != 0) ? $item["Ago"] : '' ?></td>
+            <td class="data"><?= ($item["Sep"] != 0) ? $item["Sep"] : '' ?></td>
+            <td class="data"><?= ($item["Oct"] != 0) ? $item["Oct"] : '' ?></td>
+            <td class="data"><?= ($item["Nov"] != 0) ? $item["Nov"] : '' ?></td>
+            <td class="data"><?= ($item["Dic"] != 0) ? $item["Dic"] : '' ?></td>
+            <td class="data"><?= ($item["TotalPagados"] != 0) ? $item["TotalPagados"] : '' ?></td>
+        </tr>
+        <?php 
+        $sum[0] += $item["Ene"];
+        $sum[1] += $item["Feb"];
+        $sum[2] += $item["Mar"];
+        $sum[3] += $item["Abr"];
+        $sum[4] += $item["May"];
+        $sum[5] += $item["Jun"];
+        $sum[6] += $item["Jul"];
+        $sum[7] += $item["Ago"];
+        $sum[8] += $item["Sep"];
+        $sum[9] += $item["Oct"];
+        $sum[10] += $item["Nov"];
+        $sum[11] += $item["Dic"];
+        $sum[12] += $item["TotalPagados"];
+        } ?>
+        <tr>
+            <td><strong>TOTALES</strong></td>
+            <td class="data"><strong><?= ($sum[0] != 0) ? $sum[0] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[1] != 0) ? $sum[1] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[2] != 0) ? $sum[2] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[3] != 0) ? $sum[3] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[4] != 0) ? $sum[4] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[5] != 0) ? $sum[5] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[6] != 0) ? $sum[6] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[7] != 0) ? $sum[7] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[8] != 0) ? $sum[8] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[9] != 0) ? $sum[9] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[10] != 0) ? $sum[10] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[11] != 0) ? $sum[11] : '' ?></strong></td>
+            <td class="data"><strong><?= ($sum[12] != 0) ? $sum[12] : '' ?></strong></td>
+        </tr>
+    </tbody>
+</table>

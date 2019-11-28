@@ -1,0 +1,58 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30-dic-2016, 11:25:59
+    Author     : Jaime
+*/
+
+@import "variables";
+
+.traffic-pagination-size,
+.traffic-pagination,
+.traffic-pagination ul {
+    float: left;
+    display: block; 
+    margin: 0;
+}
+
+.traffic-pagination-size,
+.traffic-pagination {
+    margin-top: 5px;    
+}
+
+.traffic-pagination ul {
+    padding: 0;
+}
+
+.traffic-pagination ul li {
+    list-style: none;
+    font-size: 11px;
+    float: left;    
+    margin-left: 2px;
+    &.active a:hover {
+        color: #222;
+        background: @hoverBackground;
+    }
+    &.disabled {
+        background: @inputDisBackground;
+    }
+    &.disabled a {
+        color: @inputDisColor;
+        border: @inputDisBorder;
+    }
+}
+
+.traffic-pagination ul li a {
+    color: #444;
+    text-decoration: none;
+    border: 1px @inputBorderColor solid;
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: @inputBorderRadius;
+}

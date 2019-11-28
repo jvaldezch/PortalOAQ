@@ -1,0 +1,121 @@
+<form method="get" action="<?= $this->url ?>?referencia=<?= $this->referencia ?>">
+    <table class="traffic-table">
+        <tr>
+            <th colspan="5" class="traffic-table-title">EXPEDIENTE DIGITAL</th>
+        </tr>
+        <tr>
+            <th>Patente</th>
+            <th>Aduana</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td style="width: 70px">
+                <?= $this->form->patente ?>
+            </td>
+            <td style="width: 70px">
+                <?= $this->form->aduana ?>
+            </td>
+            <td style="width: 120px">
+                <?= $this->form->pedimento ?>
+            </td>
+            <td style="width: 120px">
+                <?= $this->form->referencia ?>
+            </td>
+            <td>
+                <a href="/archivo/index/referencias" class="traffic-btn-back traffic-btn-right">Limpiar</a>&nbsp;
+                <a href="/archivo/index/nueva-referencia" class="traffic-btn-save traffic-btn-right">Crear referencia</a>&nbsp;
+                <button class="traffic-btn-primary traffic-btn-right" value="Buscar" type="submit" id="submit" name="submit">Buscar</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <div class="semaphore-green"></div><span>Expediente completo</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-orange"></div><span>Revisado operación</span>
+    </div>
+    <div class="semaphore-holder">
+        <div class="semaphore-blue"></div><span>Revisado administración</span>
+    </div>
+</div>
+<div class="checkbox-group">      
+    <div class="checkbox">
+        <input id="revisados" name="revisados" type="checkbox">
+        <label class="checkbox-label">Revisados</label>
+    </div>
+    <div class="checkbox">
+        <input id="revisadosOp" name="revisadosOp" type="checkbox">
+        <label class="checkbox-label">Revisados operación</label>
+    </div>
+    <div class="checkbox">
+        <input id="revisadosAdm" name="revisadosAdm" type="checkbox">
+        <label class="checkbox-label">Revisados administración</label>
+    </div>
+    <div class="checkbox">
+        <input id="completos" name="completos" type="checkbox">
+        <label class="checkbox-label">Expedientes completos</label>
+    </div>
+</div>
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <tr>
+            <th style="width: 35px; text-align: center">&nbsp;</th>
+            <th style="width: 60px; text-align: left">&nbsp;</th>
+            <th style="width: 60px;">Patente</th>
+            <th style="width: 60px;">Aduana</th>
+            <th style="width: 60px;">Pedimento</th>
+            <th style="width: 120px;">Referencia</th>
+            <th style="width: 110px;">RFC Cliente</th>
+            <th style="text-align: left">Última modificación</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator)) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <?php if (isset($item["referencia"])) { ?>
+                    <tr class="hover">
+                        <td style="text-align: center">
+                            <?php if(isset($item["completo"]) && $item["completo"] == 1) { ?>
+                                <div class="semaphore-green"></div>
+                            <?php } else { ?>
+                                <?php if(isset($item["revisionOperaciones"]) && $item["revisionOperaciones"] !== null) { ?>
+                                    <div class="semaphore-orange"></div>
+                                <?php } ?>
+                                <?php if(isset($item["revisionAdministracion"]) && $item["revisionAdministracion"] !== null) { ?>
+                                    <div class="semaphore-blue"></div>
+                                <?php } ?>
+                            <?php } ?>
+                        </td>
+                        <td style="text-align: center">
+                            <?= $this->folder($item["patente"], $item["aduana"], $item["referencia"], $this->rol) ?>
+                        </td>
+                        <td><?= $item["patente"] ?></td>
+                        <td><?= $item["aduana"] ?></td>
+                        <td><?= $item["pedimento"] ?></td>
+                        <td><?= strtoupper($item['referencia']) ?></td>
+                        <td><?= $item['rfc_cliente'] ?></td>
+                        <td style="text-align: left"><?= $this->user($item["patente"], $item["aduana"], $item["referencia"]) ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        <?php } elseif(isset($this->error)) { ?>
+            <tr>
+                <td colspan="8" style="text-align: center">
+                    <em><?= $this->error ?></em>
+                </td>
+            </tr>
+        <?php } else { ?>
+            <tr>
+                <td colspan="8" style="text-align: center">
+                    <em>No hay resultados para búsqueda</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator) : null ?>
+<div class="traffic-clear-10"></div>

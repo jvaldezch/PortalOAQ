@@ -1,0 +1,30 @@
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <tr>
+            <th>Prefijo</th>
+            <th>Id Doc.</th>
+            <th>Nombre</th>
+            <th style="width: 180px">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($this->data) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td><?= $item["prefijo"] ?></td>
+                    <td><?= $item["idDocumento"] ?></td>
+                    <td><?= $item["nombre"] ?></td>
+                    <td>
+                        <button class="traffic-btn traffic-btn-success traffic-btn-small">Editar</button>
+                        <button class="traffic-btn traffic-btn-close traffic-btn-small">Borrar</button>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td>No existen prefijos.</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+

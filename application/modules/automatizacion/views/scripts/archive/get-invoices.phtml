@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <table style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">Id Trafico</th>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">Folio</th>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">Patente</th>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">Aduana</th>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">Referencia</th>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">Pedimento</th>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">RFC Cliente</th>
+                    <th style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px; background-color: #f3f3f3">Nombre Receptor CDFi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->invoices)) { ?>
+                    <?php foreach ($this->invoices as $item) { ?>
+                        <tr>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["idTrafico"] ?></td>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["folio"] ?></td>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["patente"] ?></td>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["aduana"] ?></td>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["pedimento"] ?></td>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["referencia"] ?></td>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["rfcCliente"] ?></td>
+                            <td style="font-family: sans-serif; font-size: 11px; border: 1px #d3d3d3 solid; padding: 5px"><?= $item["nombreReceptor"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="8">
+                            <em>No hubo facturas</em>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </body>
+</html>

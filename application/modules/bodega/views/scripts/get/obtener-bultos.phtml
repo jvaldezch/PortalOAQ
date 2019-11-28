@@ -1,0 +1,34 @@
+<?php if (isset($this->data) && !empty($this->data)) { ?>    
+    <?php foreach ($this->data as $item) { ?>
+        <tr>
+            <td>
+                <input type="checkbox" value="<?= $item['id'] ?>" class="package" />
+            </td>
+            <td><?= $item['numBulto'] ?></td>
+            <td style="text-align: left"><?= $item['uuid'] ?></td>
+            <td><?= ($item['dano'] == 0) ? 'No' : 'Si'  ?></td>
+            <td><?= isset($item['descarga']) ? 'Si' : 'No' ?></td>
+            <td><?= isset($item['revision']) ? 'Si' : 'No' ?></td>
+            <td><?= isset($item['carga']) ? 'Si' : 'No' ?></td>
+            <td><?= ($item['escaneado'] !== null) ? 'Si' : 'No' ?></td>
+            <td style="width: 80px">
+                <div style="font-size: 1.2em">                    
+                    <i class="fas fa-pencil-alt editar-bulto" data-id="<?= $item['id'] ?>" style="cursor: pointer"></i>
+                    <i class="fas fa-print imprimir-etiqueta" data-id="<?= $item['id'] ?>" style="cursor: pointer; margin-left: 7px"></i>
+                    <i class="far fa-trash-alt borrar-bulto" data-id="<?= $item['id'] ?>" style="cursor: pointer; margin-left: 7px"></i>
+                </div>
+            </td>
+        </tr>
+    <?php } ?>
+        <tr>
+            <td colspan="9">
+                <button class="traffic-btn traffic-btn-small traffic-btn-right" data-id="<?= $this->id ?>" id="subdiv">Subdividir</button>
+            </td>
+        </tr>
+<?php } else { ?>
+        <tr>
+            <td colspan="9" style="text-align: center">
+                <em>No hay bultos generados.</em>
+            </td>
+        </tr>
+<?php } ?>

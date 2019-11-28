@@ -1,0 +1,120 @@
+<?php if (isset($this->files)) { ?>
+    <table class="traffic-table traffic-table-left hover">            
+        <tr>
+            <th class="traffic-table-subtitle">&nbsp;</th>
+            <th class="traffic-table-subtitle">Archivo</th>
+            <th class="traffic-table-subtitle">Tipo</th>
+            <th class="traffic-table-subtitle">Usuario</th>
+            <th class="traffic-table-subtitle">Creado</th>
+            <?php if (!isset($this->disableUpload)) { ?>
+                <th class="traffic-table-subtitle">&nbsp;</th>
+            <?php } ?>
+        </tr>     
+        <?php foreach ($this->files as $k => $item) { ?>
+            <tr class="hover" data-id="<?= $item["id"] ?>">
+                <td><?= (file_exists($item["ubicacion"])) ? '' : '<div style="color: red"><i class="fas fa-exclamation" title="El archivo no existe"></i></div>' ?></td>
+                <td>
+                    <?php if (file_exists($item["ubicacion"])) { ?>
+                        <?php if (preg_match('/.pdf$/', basename($item["ubicacion"]))) { ?>
+                            <a class="traffic-a" href="/archivo/get/descargar-archivo?id=<?= $item["id"] ?>"><?= basename($item["ubicacion"]) ?></a>
+                            <img src="/images/icons/eye-24-gray.png" class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer; float: right" />
+                        <?php } else { ?>
+                            <a class="traffic-a" href="/archivo/get/descargar-archivo?id=<?= $item["id"] ?>"><?= basename($item["ubicacion"]) ?></a>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <p><?= basename($item["ubicacion"]) ?></>
+                    <?php } ?>
+                </td>
+                <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                <td style="width: 150px;"><?= ucwords(strtolower($item["usuario"])) ?>&nbsp;</td>
+                <td style="width: 120px; text-align: center"><?= date('d/m/Y', strtotime($item["creado"])) ?>&nbsp;</td>
+                <?php if (!isset($this->disableUpload)) { ?>
+                    <td style="width: 100px;">
+                        <div id="icon_<?= $item["id"] ?>" style="font-size:1.3em; color: #2f3b58; float: right; margin-right: 5px; margin-bottom: 3px">
+                            <!--<div style="font-size:1.3em; color: #2f3b58; float: right; margin-right: 5px; margin-bottom: 3px">-->
+                                <i class="fas fa-pencil-alt editarArchivo" data-id="<?= $item["id"] ?>"></i>&nbsp;
+                                <?php if(isset($this->canDelete)) { ?>
+                                    <i class="fas fa-trash-alt borrarArchivo" data-id="<?= $item["id"] ?>"></i>
+                                <?php } ?>                                
+                            <!--</div>-->
+                        </div>
+                    </td>
+                <?php } ?>
+            </tr>
+        <?php } ?>
+        
+        <?php if (isset($this->complementos) && !empty($this->complementos)) { ?>
+            <?php foreach ($this->complementos as $k => $item) { ?>
+                <tr class="hover" data-id="<?= $item["id"] ?>">
+                    <td>C <?= (file_exists($item["ubicacion"])) ? '' : '<div style="color: red"><i class="fas fa-exclamation" title="El archivo no existe"></i></div>' ?></td>
+                    <td>
+                        <?php if (file_exists($item["ubicacion"])) { ?>
+                            <?php if (preg_match('/.pdf$/', basename($item["ubicacion"]))) { ?>
+                                <a class="traffic-a" href="/archivo/get/descargar-archivo?id=<?= $item["id"] ?>"><?= basename($item["ubicacion"]) ?></a>
+                                <img src="/images/icons/eye-24-gray.png" class="openFile" data-id="<?= $item["id"] ?>" style="cursor: pointer; float: right" />
+                            <?php } else { ?>
+                                <a class="traffic-a" href="/archivo/get/descargar-archivo?id=<?= $item["id"] ?>"><?= basename($item["ubicacion"]) ?></a>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <p><?= basename($item["ubicacion"]) ?></>
+                        <?php } ?>
+                    </td>
+                    <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                    <td style="width: 150px;"><?= ucwords(strtolower($item["usuario"])) ?>&nbsp;</td>
+                    <td style="width: 120px; text-align: center"><?= date('d/m/Y', strtotime($item["creado"])) ?>&nbsp;</td>
+                    <?php if (!isset($this->disableUpload)) { ?>
+                        <td style="width: 100px;">
+                            <div id="icon_<?= $item["id"] ?>" style="font-size:1.3em; color: #2f3b58; float: right; margin-right: 5px; margin-bottom: 3px">
+                                <!--<div style="font-size:1.3em; color: #2f3b58; float: right; margin-right: 5px; margin-bottom: 3px">-->
+                                    <i class="fas fa-pencil-alt editarArchivo" data-id="<?= $item["id"] ?>"></i>&nbsp;
+                                    <?php if(isset($this->canDelete)) { ?>
+                                        <i class="fas fa-trash-alt borrarArchivo" data-id="<?= $item["id"] ?>"></i>
+                                    <?php } ?>                                
+                                <!--</div>-->
+                            </div>
+                        </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+            
+        <?php if (isset($this->validacion) && !empty($this->validacion)) { ?>
+            <?php if (isset($this->validacion["validacion"]) && !empty($this->validacion["validacion"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->validacion["validacion"]["idArchivoValidacion"] ?>"><?= $this->validacion["validacion"]["archivoNombre"] ?></a>
+                    </td>
+                    <td style="text-align: left">Archivo M3</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
+            <?php if (isset($this->validacion["firma"]) && !empty($this->validacion["firma"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->validacion["firma"]["idArchivoValidacion"] ?>"><?= $this->validacion["firma"]["archivoNombre"] ?></a>
+                    </td>
+                    <td style="text-align: left">Archivo de firma de validación</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
+            <?php if (isset($this->validacion["pago"]) && !empty($this->validacion["pago"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->validacion["pago"]["idArchivoValidacion"] ?>"><?= $this->validacion["pago"]["archivoNombre"] ?></a>
+                    </td>
+                    <td style="text-align: left">Archivo de pago</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
+        <?php } ?> 
+    </table>
+<?php }

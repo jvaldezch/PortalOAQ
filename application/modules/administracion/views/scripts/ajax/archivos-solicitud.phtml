@@ -1,0 +1,26 @@
+<table class="traffic-table traffic-table-left">
+    <?php if (isset($this->data) && !empty($this->data)) { ?>
+        <?php foreach ($this->data as $item) { ?>
+            <tr>
+                <td style="width: 300px">&nbsp;</td>
+                <td>
+                    <a class="traffic-a request" href="/administracion/data/descargar-archivo-cliente?id=<?= $item["id"] ?>" data-id="<?= $item["id"] ?>">
+                        <?= $item["nombreArchivo"] ?>
+                    </a>
+                </td>
+                <td style="text-align: right">
+                    <span style="color: #777; font-size: 9px"><em>Subido <?= date("d/m/Y", strtotime($item["creado"])) ?>:</em></span> <?= strtoupper($item["usuario"]) ?>
+                </td>
+                <td style="width: 80px">
+                    <div style="width: 75px">
+                        <!--<a href="/administracion/ajax/borrar-archivo?id=<?= $item["id"] ?>">-->
+                            <i class="far fa-trash-alt deleteFile" data-id="<?= $item["id"] ?>" 
+                               data-request="delete" 
+                               style="font-size:1.3em; color: #2f3b58; float: right; margin-right: 5px; cursor: pointer"></i>
+                        <!--</a>-->
+                    </div>
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } ?>
+</table>

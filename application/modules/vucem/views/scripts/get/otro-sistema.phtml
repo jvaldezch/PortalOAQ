@@ -1,0 +1,245 @@
+<style>
+    .invoice-data {
+        /*border: 1px #555 solid;*/
+    }
+    .invoice-data h3 {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        line-height: 20px;
+    }
+    .invoice-data-field label,
+    .invoice-data-field input {
+        float: left;
+    }
+    .invoice-data-field label {
+        margin-left: 5px;
+        display: block;
+        min-width: 80px;
+    }
+    .invoice-data-field input {
+        width: 80px;
+        margin-left: 5px;
+        margin-right: 5px;
+        text-align: center;
+    }
+    .divTable{
+        display: table;
+        width: 100%;
+    }
+    .divTableRow {
+        display: table-row;
+    }
+    .divTableHeading {
+        background-color: #EEE;
+        display: table-header-group;
+    }
+    .divTableCell, .divTableHead {
+        border: 1px solid #bbbbbb;
+        display: table-cell;
+        padding: 2px 5px;
+    }
+    .divTableHeading {
+        background-color: #EEE;
+        display: table-header-group;
+        font-weight: bold;
+    }
+    .divTableFoot {
+        background-color: #EEE;
+        display: table-footer-group;
+        font-weight: bold;
+    }
+    .divTableBody {
+        display: table-row-group;
+    }
+</style>
+<table class="traffic-table">
+    <tbody>
+        <tr>
+            <td style="width: 100px"><strong>Sistema</strong></td>
+            <td rowspan="6">
+                <div class="invoice-data">
+                    <div class="invoice-data-field">
+                        <label for="hdrReferencia">Referencia: </label>
+                        <input type="text" id="hdrReferencia" name="hdrReferencia" class="hdrReferencia" readonly="true">
+                    </div>
+                    <div class="invoice-data-field">
+                        <label for="hdrRegimen">Regimen: </label>
+                        <input type="text" id="hdrRegimen" name="hdrRegimen" class="hdrRegimen" readonly="true" style="width: 35px">
+                    </div>
+                    <div class="invoice-data-field">
+                        <label for="hdrClavePedimento">Cve. Ped: </label>
+                        <input type="text" id="hdrClavePedimento" name="hdrClavePedimento" class="hdrClavePedimento" readonly="true" style="width: 35px">
+                    </div>
+                    <div class="invoice-data-field">
+                        <label for="hdrFirma">Firma: </label>
+                        <input type="text" id="hdrFirma" name="hdrFirma" class="hdrFirma" readonly="true" style="width: 80px">
+                    </div>
+                    <div class="traffic-clear-5"></div>
+                </div>
+                <div class="invoice-data">
+                    <div class="invoice-data-field">
+                        <label for="hrdCliente">Cliente: </label>
+                        <input type="text" id="hrdCliente" name="hrdCliente" class="hrdCliente" readonly="true" style="width: 350px">
+                    </div>
+                    <div class="invoice-data-field">
+                        <label for="hdrFirmaBanco">Firma Banco: </label>
+                        <input type="text" id="hdrFirmaBanco" name="hdrFirmaBanco" class="hdrFirmaBanco" readonly="true" style="width: 80px">
+                    </div>
+                    <div class="traffic-clear-5"></div>
+                </div>
+                <div class="invoice-data" style="overflow-y: auto; max-height: 220px; overflow-x: hidden; padding: 5px">
+                    <h3>Facturas del pedimento</h3>
+                    <div class="divTable">
+                        <div class="divTableHeading">
+                            <div class="divTableRow">
+                                <div class="divTableCell" style="width: 20px">
+                                    <input type="checkbox" id="selectAllInvoices" />
+                                </div>
+                                <div class="divTableCell">Num. Factura</div>
+                                <div class="divTableCell" style="width: 120px">COVE</div>
+                            </div>
+                        </div>
+                        <div class="divTableBody">
+                            <!--<div class="divTableRow">
+                                <div class="divTableCell">&nbsp;</div>
+                                <div class="divTableCell">&nbsp;</div>
+                                <div class="divTableCell">&nbsp;</div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-left: 5px; min-height: 50px">
+                <div class="sistemas" style="padding-left: 5px; min-height: 70px">
+                    <input type="radio" id="casa" name="system" value="casa" style="margin-right: 5px; float:left">
+                    <label for="casa" style="margin-left: 10px; float:left">CASA</label>
+                    <br>
+                    <input type="radio" id="aduanet" name="system" value="aduanet" style="margin-right: 5px; float:left">
+                    <label for="aduanet" style="margin-left: 10px; float:left">Aduanet</label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Aduana:</strong></td>
+        </tr>
+        <tr>
+            <td style="padding-left: 5px">
+                <div class="aduanas" style="padding-left: 5px; min-height: 70px"></div>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Pedimento:</strong></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="buscar" id="buscar" style="width: 80px; text-align: center; margin-bottom: 5px" readonly="true" />
+                <button class="traffic-btn traffic-btn-small" id="search" style="width: 100%">Buscar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+
+    function cleanFields() {
+        $('.hdrReferencia').val('');
+        $('.hdrRegimen').val('');
+        $('.hdrClavePedimento').val('');
+        $('.hrdCliente').val('');
+        $('.hdrFirma').val('');
+        $('.hdrFirmaBanco').val('');
+        $('.divTableBody').html('');
+    }
+
+    var sistema;
+    var aduana;
+
+    $(document.body).on('click', 'input[name="system"]:checked', function (ev) {
+        sistema = $(this).val();
+        cleanFields();
+        if (sistema === "casa") {
+            $('.aduanas').html('');
+            $('.aduanas').html('<input type="radio" id="aduana" name="aduana" value="640" style="margin-right: 5px; float:left"><label for="queretaro" style="margin-left: 10px; float:left">3589-640</label>');
+        }
+        if (sistema === "aduanet") {
+            $('.aduanas').html('');
+            $('.aduanas').html('<input type="radio" id="aduana" name="aduana" value="240" style="margin-right: 5px; float:left"><label for="queretaro" style="margin-left: 10px; float:left">3589-240</label>');
+        }
+    });
+
+    $(document.body).on('click', 'input[name="aduana"]:checked', function (ev) {
+        aduana = $(this).val();
+        cleanFields();
+        if (aduana && sistema) {
+            $('#buscar').removeAttr('readonly');
+            if (Cookies.get('BuscarPedimento') !== undefined) {
+                $('#buscar').val(Cookies.get('BuscarPedimento'));
+            }
+        }
+    });
+
+    $('#search').click(function (ev) {
+        ev.preventDefault();
+        var len = $('#buscar').val().length;
+        if (len === 7) {
+            Cookies.set('BuscarPedimento', $('#buscar').val(), {expires: 20 * 365, path: ''});
+            $.ajax({url: "/vucem/post/buscar-pedimento", cache: false, dataType: "json", type: "POST",
+                data: {sistema: sistema, aduana: aduana, pedimento: $('#buscar').val()},
+                success: function (res) {
+                    if (res.success === true) {
+                        var row = res.row;
+                        $('.hdrReferencia').val(row.referencia);
+                        $('.hdrRegimen').val(row.regimen);
+                        $('.hdrClavePedimento').val(row.clavePedimento);
+                        $('.hrdCliente').val(row.nomCliente);
+                        $('.hdrFirma').val(row.firmaValidacion);
+                        $('.hdrFirmaBanco').val(row.firmaBanco);
+                        if (row.facturas) {
+                            $('.divTableBody').html('');
+                            var invoices = row.facturas;
+                            $.each(invoices, function (k, v) {
+                                var tblRow = '<div class="divTableRow">';
+                                if ($('.hdrFirmaBanco').val() !== "") {
+                                    tblRow += '<div class="divTableCell"></div>';
+                                } else {
+                                    tblRow += '<div class="divTableCell"><input type="checkbox" name="invoice" value="' + v.numFactura + '"/></div>';
+                                }
+                                tblRow += '<div class="divTableCell">' + v.numFactura + '</div>';
+                                if (v.cove) {
+                                    tblRow += '<div class="divTableCell">' + v.cove + '</div>';
+                                } else {
+                                    tblRow += '<div class="divTableCell"></div>';
+                                }
+                                tblRow += '</div>';
+                                $('.divTableBody').append(tblRow);
+                            });
+                        }
+                    } else {
+                        alert(res.message);
+                    }
+                }
+            });
+        }
+    });
+
+    $(document.body).on('keydown', '#buscar', function (e) {
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+            return;
+        }
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+    
+    $('#selectAllInvoices').click(function(event) {
+        $('input[name=invoice]').each(function() {
+            $(this).attr('checked',!$(this).attr('checked'));
+        });
+    });
+
+</script>

@@ -1,0 +1,47 @@
+<div style="display: block; max-height: 400px; overflow-y: auto;">
+    <?php if (isset($this->gallery)) { ?>
+        <?php foreach ($this->gallery as $item) { ?>
+            <?php if (file_exists($item["carpeta"] . DIRECTORY_SEPARATOR . $item["miniatura"])) { ?>
+                <div style="float: left; margin: 2px; border: 1px #999 solid; padding: 2px; background-color: #fff; min-width: 150px; min-height: 120px">
+                    <div>
+                        <a title="Trafico Image <?= $item["id"] ?>" class="image-link" href="/dashboard/get/view-image?id=<?= $item["id"] ?>&time=<?= microtime() ?>" data-id="<?= $item["id"] ?>">
+                            <img class="view-photo" src="/dashboard/get/view-thumbnail?id=<?= $item["id"] ?>&time=<?= microtime() ?>" >
+                        </a>
+                    </div>
+                    <div>
+                        <div style="float: left; font-size: 11px">
+                            <?= isset($item["nombre"]) ? $item["nombre"] : strtolower($item["imagen"]) ?>
+                        </div>
+                    </div>
+                </div>
+            <?php } else { ?>
+                <div style="float: left; margin: 2px; border: 1px #999 solid; padding: 2px; background-color: #fff; min-width: 150px; min-height: 120px">
+                    <div>
+                        <a title="Image not found!" class="traffic-thumb">                            
+                            <img src="/images/not_available.gif" style="width: 150px">
+                        </a>
+                    </div>
+                    <div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            <?php } ?>
+        <?php } ?>
+    <?php } else { ?>
+        <p>
+            <em>No tiene imágenes cargadas</em>
+        </p>
+    <?php } ?>
+<div>
+<div style="clear: both"></div>
+<script>
+
+    $(document.body).on("click", ".image-link", function (ev) {
+        ev.preventDefault();
+        var w = window.open("/dashboard/get/view-image?id=" + $(this).data("id"), 'Imagen ' + $(this).data("id"), 'toolbar=0,location=0,menubar=0,height=750,width=950,scrollbars=yes');
+        w.focus();
+        return false;
+    });
+    
+</script>

@@ -1,0 +1,1 @@
+sudo mount -t cifs -o user=admin,password=oaq*7896541! //192.168.0.10/db /mnt/nas/dbs

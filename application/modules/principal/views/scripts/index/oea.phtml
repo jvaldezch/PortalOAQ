@@ -1,0 +1,75 @@
+<img src="/images/operador-economico-autorizado.jpg" style="float:right; width: 90px; margin-right: 10px" />
+<h3 style="padding-left: 10px; margin: 0">Operador Económico Autorizado</h3>
+<input type="hidden" id="directorio" name="directorio" value="<?= $this->directorio ?>">
+<div class="traffic-clear-5"></div>
+<div class="traffic-radio-block" style="padding-bottom: 0">
+    <button class="button-home" style="padding-left: 22px">Raíz documentos</button>
+</div>
+<div class="traffic-clear-5"></div>
+<?php if(isset($this->navigator)) { ?>
+    <div class="traffic-radio-block" style="padding-bottom: 0; padding-left: 12px; font-size: 10px">
+        <span><a href="/principal/index/oea">&Omega;</a></span>
+        <?php if(is_array($this->navigator["directorio"])) { ?>
+            <?php foreach ($this->navigator["directorio"] as $k => $v) { ?>
+                &nbsp;&raquo;&nbsp;<span><a href="/principal/index/oea?directorio=<?= $v ?>"><?= $this->navigator["nombreCarpeta"][$k] ?></a></span>
+            <?php } ?>
+        <?php } else { ?>
+        &nbsp;&raquo;&nbsp;<span><a href="/principal/index/oea?directorio=<?= $this->navigator["directorio"] ?>"><?= $this->navigator["nombreCarpeta"] ?></a></span>
+        <?php } ?>
+    </div>
+<?php } ?>
+<div class="traffic-clear-5"></div>
+<table class="traffic-table traffic-table-left hover" id="files">
+    <thead>
+        <tr>
+            <th style="width: 24px">&nbsp;</th>
+            <th style="text-align: left">Nombre archivo/directorio</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>                       
+            <td colspan="4">
+                <a href="?directorio=<?= isset($this->parent) ? $this->parent["previo"] : "" ?>"><img src="/images/icons/folder_close.png"  style="padding-left: 3px"/></a>
+            </td>
+        </tr>        
+        <?php if (isset($this->carpetas)) { ?>
+            <?php foreach ($this->carpetas as $file) { ?>                
+                <tr>
+                    <td>
+                        <a href="?directorio=<?= $file["siguiente"] ?>"><div class="traffic-icon traffic-icon-folder"></div></a>
+                    </td>
+                    <td>
+                        <a data-id="<?= $file["idCarpeta"] ?>" class="inline-edit-folder" href="?directorio=<?= $file["siguiente"] ?>"><?= $file["nombreCarpeta"] ?></a>
+                    </td>
+                </tr>                
+            <?php } ?>
+        <?php } ?>
+        <?php if (isset($this->archivos)) { ?>
+            <?php foreach ($this->archivos as $file) { ?>                
+                <tr>
+                    <td>
+                        <img src="/images/icons/pdf.png" />
+                    </td>
+                    <td>
+                        <a data-id="<?= $file["id"] ?>" class="inline-edit-file" href="/principal/get/descargar-archivo?id=<?= $file["id"] ?>"><?= $file["nombreArchivo"] ?></a>
+                    </td>
+                </tr>                
+            <?php } ?>
+        <?php } ?>
+        <?php if (isset($this->videos)) { ?>
+            <?php foreach ($this->videos as $k => $v) { ?>                
+                <tr>
+                    <td>
+                        <video width="320" height="240" controls>
+                            <source src="<?= $k ?>" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>                        
+                    </td>
+                    <td>
+                        <?= $v ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>

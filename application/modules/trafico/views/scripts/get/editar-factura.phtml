@@ -1,0 +1,188 @@
+<link href="/favicon.png" rel="icon shortcut" >
+<link href="/js/common/bootstrap/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/less/traffic-module.css?1497542492" media="screen" rel="stylesheet" type="text/css" >
+<link href="/easyui/themes/default/easyui.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/css/jqModal.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/css/jquery.qtip.min.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/v2/js/common/confirm/jquery-confirm.min.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/js/common/modal/magnific-popup.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/js/common/highlight/styles/monokai.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/js/common/bootstrap/datepicker/css/datepicker.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/js/common/contentxmenu/jquery.contextMenu.min.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="/css/jquery.timepicker.css" media="screen" rel="stylesheet" type="text/css" >        <script type="text/javascript" src="/js/common/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/js/common/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/common/jquery.form.min.js"></script>
+<script type="text/javascript" src="/js/common/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/js/common/js.cookie.js"></script>
+<script type="text/javascript" src="/js/common/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/js/common/principal.js?1497542492"></script>
+<script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/easyui/jquery.edatagrid.js"></script>
+<script type="text/javascript" src="/easyui/datagrid-filter.js"></script>
+<script type="text/javascript" src="/easyui/locale/easyui-lang-es.js"></script>
+<script type="text/javascript" src="/js/common/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="/v2/js/common/confirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="/js/common/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/js/common/modal/jquery.magnific-popup.min.js"></script>
+<script type="text/javascript" src="/js/common/jqModal.js"></script>
+<script type="text/javascript" src="/js/common/jquery.qtip.min.js"></script>
+<script type="text/javascript" src="/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js"></script>
+<script type="text/javascript" src="/js/common/contentxmenu/jquery.contextMenu.min.js"></script>
+<table id="header"></table>
+<table id="invoiceData"></table>
+<div>    
+    <table id="pgCustomer" style="width: 50%; float: left"></table>
+    <table id="pgProvider" style="width: 50%; float: left"></table>
+</div>
+<table id="products"></table>
+<input type="hidden" id="idFactura" value="<?= $this->idFactura ?>">
+<script type="text/javascript">
+    
+    $.fn.datebox.defaults.formatter = function (date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        var d = date.getDate();
+        return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+    };
+    $.fn.datebox.defaults.parser = function (s) {
+        if (!s)
+            return new Date();
+        var ss = s.split('-');
+        var y = parseInt(ss[0], 10);
+        var m = parseInt(ss[1], 10);
+        var d = parseInt(ss[2], 10);
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+            return new Date(y, m - 1, d);
+        } else {
+            return new Date();
+        }
+    };
+
+//    if (localStorage.getItem("factura") !== null) {
+//        var string = localStorage.getItem("factura");
+//        var data = jQuery.parseJSON(string);
+//    }
+//    
+//    var header;
+//    var details;
+//    var products;
+//
+//    if (data) {
+//        if (data["encabezado"]) {
+//            header = data["encabezado"];
+//        }
+//        if (data["detalles"]) {
+//            details = data["detalles"];
+//        }
+//        if (data["productos"]) {
+//            products = data["productos"];
+//        }
+//        
+//    }
+    
+    var tblHeader = $('#header').edatagrid();
+    
+    var tblData = $('#invoiceData').edatagrid();
+    
+    var tblProducts = $('#products').edatagrid();
+    
+    function getRowIndex(target){
+        var tr = $(target).closest('tr.datagrid-row');
+        return parseInt(tr.attr('datagrid-row-index'));
+    }
+
+    function editheader(target){
+        $('#header').datagrid('beginEdit', getRowIndex(target));
+    }
+    
+    tblHeader.edatagrid({
+        singleSelect: true,
+        striped: true,
+        rownumbers: false,
+        fitColumns: true,
+        url: '/trafico/facturas/factura?idFactura=' + $("#idFactura").val() + "&tipo=header",
+        method: 'get',
+        remoteFilter: false,
+        idField:'idFactura',
+        columns: [[
+                {field: 'operacion'title: 'Operación'},
+                {field: 'referencia' title: 'Referencia'},
+                {field: 'tipoOperacion', title: 'Tipo Operación'},
+                {field: 'numFactura', width: 300, title: 'Num. Factura'},
+                {field: 'fechaFactura', title: 'Fecha Factura', editor: {type: 'datebox'}, options: { required: true,validType:'date' } },
+                {field: 'paisFactura', title: 'País Factura'},
+                {field: 'divisa', title: 'Moneda'},
+                {field: 'action',title:'Action',width:80,align:'center',
+                formatter:function(value,row,index){
+                    if (row.editing){
+                        var s = '<a href="javascript:void(0)" onclick="saverow(this)"><div class="traffic-icon traffic-icon-save"></div></a> ';
+                        var c = '<a href="javascript:void(0)" onclick="cancelrow(this)"><div class="traffic-icon traffic-icon-cancel"></div></a>';
+                        return s+c;
+                    } else {
+                        return '<a href="javascript:void(0)" onclick="editheader(this)"><div class="traffic-icon traffic-icon-edit"></div></a> ';
+                    }
+                }}
+            ]]
+    });
+    
+    tblData.edatagrid({
+        singleSelect: true,
+        striped: true,
+        rownumbers: false,
+        url: '/trafico/facturas/factura?idFactura=' + $("#idFactura").val() + "&tipo=details",
+        method: 'get',
+        remoteFilter: false,
+        idField:'idFactura',
+        columns: [[
+                {field: 'incoterm', title: 'INCOTERM'},
+                {field: 'valorFacturaUsd', title: 'Valor USD'},
+                {field: 'valorFacturaMonExt', title: 'Valor Moneda Extranjera'},
+                {field: 'factorMonExt', title: 'Factor Moneda Extranjera'},
+                {field: 'subdivision', title: 'Subdivisión'},
+                {field: 'certificadoOrigen', title: 'Cert. de Origen'},
+                {field: 'numExportador', title: 'Num. Exportador'},
+                {field: 'observaciones', title: 'Observaciones'}
+            ]]
+    });
+    
+    tblProducts.edatagrid({
+        singleSelect: true,
+        striped: true,
+        rownumbers: false,
+        url: '/trafico/facturas/factura?idFactura=' + $("#idFactura").val() + "&tipo=products",
+        method: 'get',
+        remoteFilter: false,
+        idField:'idFactura',
+        toolbar:[{
+            text:'Guardar', 
+            iconCls:'icon-save',
+            handler: function(){
+                $('#products').edatagrid('saveRow');               
+            }
+        }, {
+            text:'Cancelar', 
+            iconCls:'icon-undo',
+            handler: function(){
+                $('#products').edatagrid('cancelRow');               
+            }
+        }, {
+            text:'Actualizar', 
+            iconCls:'icon-reload',
+            handler: function(){
+                $('#products').edatagrid('reload');               
+            }
+        }],
+        columns: [[
+                {field: 'orden', title: 'Orden'},
+                {field: 'fraccion', title: 'Fracción'},
+                {field: 'descripcion', title: 'Descripción'},
+                {field: 'precioUnitario', title: 'Precio Unitario'},
+                {field: 'valorComercial', title: 'Valor Comercial'},
+                {field: 'cantidadFactura', title: 'Cant. Factura'},
+                {field: 'umc', title: 'UMC'},
+                {field: 'oma', title: 'OMA'}
+            ]]
+    });
+    
+</script>

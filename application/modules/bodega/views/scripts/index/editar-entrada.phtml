@@ -1,0 +1,570 @@
+<style>
+    html {
+        overflow-y: scroll;
+    }
+    .l-btn-text {
+        line-height: 22px;
+    }
+    .slider {
+        background-color: #fefefe;
+        border-left: 1px #bac5d2 solid;
+        color: #333;
+        padding: 10px;
+    }
+    .slider h3, table {
+        margin: 0;
+    }
+    .slider table {
+        margin-top: 10px;
+    }
+    .slider p, table th, table td {
+        font-size: 11px;
+    }
+    .slider .handle {
+        background-color: #fefefe;
+        left: -40px;
+        padding: 10px;
+        position: absolute;
+        top: 0px;
+        width: 20px;
+        cursor: pointer;
+        margin-top: 62px;
+        border-left: 1px #bac5d2 solid;
+        border-top: 1px #bac5d2 solid;
+        border-bottom: 1px #bac5d2 solid;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        box-shadow: -2px 2px 1px rgba(0,0,0,0.2);
+    }
+    .slider table th, .slider table td {
+        border: 1px #fdfdfd solid;
+    }
+    .slider table td {
+        text-align: left;
+        font-weight: normal;
+        background-color: #fefefe;
+    }
+    .jconfirm {
+        z-index: 999 !important;
+    }
+</style>
+<div style="float: right; margin-top: 3px; margin-right: 50px">        
+    <div style="float: right; margin-top: 3px">
+        <a href="/bodega/get/imprimir-etiquetas?id=<?= $this->basico["id"] ?>" target="_blank" class="traffic-btn">
+            <i class="fas fa-qrcode"></i> Imprimir etiquetas
+        </a>
+        <a href="/bodega/get/formato-entrada?id=<?= $this->basico["id"] ?>" target="_blank" class="traffic-btn">
+            <i class="fas fa-file-signature"></i> Formato de entrada
+        </a>
+        <button id="enviar-notificacion" class="traffic-btn">
+            <i class="fas fa-envelope"></i> Notificar
+        </button>
+    </div>
+</div>
+<div class="traffic-clear-5"></div>
+<ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
+    <li>
+        <a href="#information" data-toggle="tab">Información</a>
+    </li>
+    <li>
+        <a href="#files" data-toggle="tab"><div id="estatusChecklist" style="float:left; margin-right: 5px"></div>Archivos</a>
+    </li>
+    <li>
+        <a href="#vucem" data-toggle="tab">VUCEM</a>
+    </li>
+</ul>
+<?php if (!isset($this->deleted)) { ?>
+    <div class="tab-content">
+        <div class="tab-pane" id="information">
+            <!-- #information -->
+            <style>
+                .traffic-table,
+                .traffic-table td,
+                .traffic-table th {
+                    line-height: 14px;
+                    padding: 2px 2px !important;
+                }
+                label {
+                    line-height: 14px;        
+                }
+            </style>
+            <?= $this->inputHidden("hidden","idCliente", $this->basico["idCliente"]) ?>
+            <div style="width: 100%">
+                <div style="float: left; width: 50%">
+                    <form id="form-information">
+                        <?= $this->inputHidden("hidden","idTrafico", $this->idTrafico) ?>
+                        <table class="traffic-table traffic-table-left">
+                            <tr>
+                                <th colspan="6" class="invoice-title"><?= $this->basico["nombreAduana"] ?></th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right">Referencia</th>
+                                <td colspan="5">
+                                    <div style="float: left; padding: 2px">                                        
+                                        <?= $this->basico["referencia"] ?>
+                                    </div>
+                                    <?php if ($this->basico["pagado"] == null) { ?>
+                                        <div style="font-size:1.3em; color: #2f3b58; float: left; margin-right: 5px; padding: 2px; padding-left: 10px">
+                                            <a href="/bodega/index/modificar-entrada?id=<?= $this->basico["id"] ?>" title="Editar tráfico." style="color: #2f3b58">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                            &nbsp;
+                                            <i id="update-traffic" class="far fa-save" data-id="<?= $this->basico["id"] ?>" style="cursor: pointer"></i>
+                                            &nbsp;
+                                            <i id="delete-traffic" class="fas fa-trash-alt" data-id="<?= $this->basico["id"] ?>" style="cursor: pointer"></i>
+                                        </div>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right">RFC Cliente</th>
+                                <td><?= $this->basico["rfc"] ?></td>
+                                <th style="text-align: right">Nombre</th>                
+                                <td colspan="3"><?= $this->basico["nombreCliente"] ?></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">Candado</th>
+                                <td>
+                                    <input class="traffic-input-small" id="candados" name="candados" value="" />
+                                </td>
+                                <th style="text-align: right; vertical-align: middle">Placas</th>
+                                <td>
+                                    <input class="traffic-input-small" id="contenedorCaja" name="contenedorCaja" value="<?= $this->basico["contenedorCaja"] ?>" />
+                                </td>
+                                <th style="text-align: right; vertical-align: middle">Usuario</th>
+                                <td style="vertical-align: middle"><?= strtoupper($this->basico["nombre"]) ?></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">BL / Guía</th>
+                                <td>
+                                    <input class="traffic-input-small" id="blGuia" name="blGuia" value="<?= $this->basico["blGuia"] ?>" />
+                                </td>
+                                <th style="text-align: right; vertical-align: middle">Bultos</th>
+                                <td>
+                                    <input class="traffic-input-small" id="bultos" name="bultos" value="<?= $this->basico["bultos"] ?>" />
+                                </td>
+                                <th style="text-align: right; vertical-align: middle">I/E:</th>
+                                <td>
+                                    <select name="ie" id="ie" class="traffic-select-small">
+                                        <option value="">---</option>
+                                        <option value="TOCE.IMP" <?= ($this->basico['ie'] !== null && $this->basico['ie'] == 'TOCE.IMP') ? 'selected="true"' : '' ?>>Importación</option>
+                                        <option value="TOCE.EXP" <?= ($this->basico['ie'] !== null && $this->basico['ie'] == 'TOCE.EXP') ? 'selected="true"' : '' ?>>Exportación</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">Línea Transporte</th>
+                                <td colspan="5">
+                                    <input class="traffic-input-large" id="lineaTransporte" name="lineaTransporte" value="<?= $this->basico["lineaTransporte"] ?>" />
+                                </td>                            
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">Proveedor</th>
+                                <td colspan="5">
+                                    <input class="traffic-input-large" id="proveedores" name="proveedores" value="<?= $this->basico["proveedores"] ?>" readonly="true"/>
+                                </td>                            
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">Ubicación</th>
+                                <td colspan="5">
+                                    <input class="traffic-input-small" id="ubicacion" name="ubicacion" value="<?= $this->basico["ubicacion"] ?>" />
+                                </td>                            
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">Bodega</th>
+                                <td colspan="3">
+                                    <?= $this->form->idBodega ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">Peso Kg</th>
+                                <td>
+                                    <input class="traffic-input-small" id="pesoKg" name="pesoKg" value="<?= $this->basico["pesoKg"] ?>" />
+                                </td>
+                                <th style="text-align: right; vertical-align: middle">Peso Lbs</th>
+                                <td colspan="3">
+                                    <input class="traffic-input-small" id="pesoLbs" name="pesoLbs" value="<?= $this->basico["pesoLbs"] ?>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: right; vertical-align: middle">Caja Entrada</th>
+                                <td>
+                                    <input class="traffic-input-small" id="contenedorCajaEntrada" name="contenedorCajaEntrada" value="<?= $this->basico["contenedorCajaEntrada"] ?>" />
+                                </td>
+                                <th style="text-align: right; vertical-align: middle">Caja Salida</th>
+                                <td colspan="3">
+                                    <input class="traffic-input-small" id="contenedorCajaSalida" name="contenedorCajaSalida" value="<?= $this->basico["contenedorCajaSalida"] ?>" />
+                                </td>
+                            </tr>
+                        </table><!-- informacion -->
+                    </form>
+                    <form id="form-invoice">
+                        <?= $this->inputHidden("hidden","factura") ?>
+                        <?= $this->inputHidden("hidden","idTrafico", $this->idTrafico) ?>
+                        <table class="traffic-table traffic-table-left" style="height: 100px">
+                            <tr>
+                                <th colspan="5" class="invoice-title">
+                                    FACTURAS
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left"><label for="numFactura">Num. Factura:</label></th>
+                                <th>                        
+                                    <div style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
+                                        <i class="fas fa-code" id="cargarXml" style="cursor: pointer" title="Subir CDFi (XML)"></i>
+                                        &nbsp;
+                                        <i class="fas fa-file-excel" id="loadTemplate" style="cursor: pointer" title="Cargar plantilla"></i>
+                                    </div>                        
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="numFactura" name="numFactura" style="width: 130px">
+                                </td>
+                                <td>
+                                    <button type="submit" id="addInvoice" class="traffic-btn traffic-btn-right">
+                                        <i class="fas fa-plus-square"></i> Agregar
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <table class="traffic-table hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAllInvoices" />
+                                </th>
+                                <th style="text-align: left">Num. Factura
+                                    <i class="fab fa-uniregistry" id="sendToVucem" style="color: #0099ff; float: right; margin-right: 5px; font-size: 1.3em"></i>
+                                </th>
+                                <th>COVE</th>
+                                <th>Valor Mon. Ext.</th>
+                                <th style="width: 40px">Mon.</th>
+                                <th style="width: 50px" style="text-align: center">
+                                    <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                                        <i onclick="loadInvoices();" id="loadInvoices" class="fas fa-sync-alt" style="cursor: pointer"></i>
+                                    </div>
+                                </th>
+                            </tr>                    
+                        </thead>
+                        <tbody id="traffic-invoices">
+                            <tr>
+                                <td colspan="6">
+                                    <span style="font-family: sans-serif; font-size: 12px">Cargando... <div class="traffic-icon traffic-loader"></div></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="traffic-table hover">
+                        <thead>
+                            <tr>
+                                <th colspan="9" class="invoice-title">BULTOS
+                                    <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                                        <i onclick="loadPackages();" id="loadPackages" class="fas fa-sync-alt" style="cursor: pointer; padding: 2px; color: #fff"></i>
+                                        <i onclick="addPackage();" id="addPackage" class="fas fa-plus" style="cursor: pointer; padding: 2px; color: #fff"></i>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAllPackages"/>
+                                </th>
+                                <th>
+                                    No.
+                                </th>
+                                <th style="text-align: left">
+                                    UUID
+                                </th>
+                                <th>Daño</th>
+                                <th><span id="descargado">D</span></th>
+                                <th><span id="revision">R</span></th>
+                                <th><span id="cargado">C</span></th>
+                                <th><span id="escaneado">E</span></th>
+                                <th></th>
+                            </tr>                    
+                        </thead>
+                        <tbody id="traffic-packages">
+                            <tr>
+                                <td colspan="9">
+                                    <span style="font-family: sans-serif; font-size: 12px">Cargando... <div class="traffic-icon traffic-loader"></div></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="float: left; width: 50%">
+                    <div id="traffic-comments">
+                        <div class="consolidados"></div>
+                        <table class="traffic-table traffic-table-left">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" class="traffic-table-title">BITACORA</th>
+                                </tr>
+                                <tr>
+                                    <th style="text-align: left;">Evento</th>
+                                    <th style="text-align: left;">Usuario</th>
+                                    <th style="text-align: center; width: 110px">Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trafficLog">
+                                <tr>
+                                    <td colspan="3">
+                                        <span style="font-family: sans-serif; font-size: 12px">Cargando... <div class="traffic-icon traffic-loader"></div></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>            
+                        <table class="traffic-table traffic-table-left">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" class="traffic-table-title">COMENTARIOS</th>
+                                </tr>                
+                                <tr>
+                                    <th style="width: 150px">Usuario</th>
+                                    <th>Comentario/mensaje</th>
+                                    <th style="width: 125px">Fecha
+                                        <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                                            <i onclick="loadComments();" class="fas fa-sync-alt" style="cursor: pointer"></i>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="trafficComments">
+                                <tr>
+                                    <td colspan="3">
+                                        <span style="font-family: sans-serif; font-size: 12px">Cargando... <div class="traffic-icon traffic-loader"></div></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="traffic-table traffic-table-left">
+                            <tbody>                    
+                                <tr>
+                                    <td colspan="2">
+                                        <form id="commentsForm" method="post" enctype="multipart/form-data">                    
+                                            <input type="hidden" name="idTrafico" id="idTrafico" value="<?= $this->idTrafico ?>" >
+                                            <input type="file" name="filess" id="filess" visibility="hidden" style="display: none"/>
+                                            <textarea id="comment" name="comment" class="traffic-textarea-medium"></textarea>
+                                            <div id="attachedFiles"></div>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <button id="addComment" class="traffic-btn traffic-btn-right">
+                                            <i class="far fa-comment-alt"></i> Comentario
+                                        </button>
+                                        <div style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
+                                            <i class="fas fa-paperclip" id="attach" data-id="<?= $this->idTrafico ?>" style="cursor: pointer"></i>
+                                            &nbsp;
+                                            <i class="far fa-envelope mensajeroEnTrafico" data-id="<?= $this->idTrafico ?>" style="cursor: pointer"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div><!-- 50% -->
+            </div>
+            <div class="traffic-clear-5"></div>
+            <a href="/bodega/index/index" class="traffic-btn" tabindex="99">
+                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+            </a>
+            <div class="traffic-clear"></div>
+            <!-- #information -->
+        </div>
+        <!-- ARCHIVOS -->
+        <div class="tab-pane" id="files" style="overflow-x: hidden">
+            <form id="form-files" method="post" action="/bodega/post/subir-archivos" enctype="multipart/form-data">
+                <?= $this->inputHidden("hidden", "idTrafico", $this->basico["id"]) ?>
+                <?= $this->inputHidden("hidden", "idBodega", $this->basico["idBodega"]) ?>
+                <?= $this->inputHidden("hidden", "referencia", $this->basico["referencia"]) ?>
+                <?= $this->inputHidden("hidden", "rfcCliente", $this->basico["rfcCliente"]) ?>
+                <table class="traffic-table traffic-table-left">
+                    <tr>
+                        <th colspan="5" class="traffic-table-title">ARCHIVOS DE EXPEDIENTE</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 220px">Seleccionar archivo</th>
+                        <td>
+                            <input type="file" name="file[]" id="file" class="required" multiple />
+                        </td>
+                        <td>
+                            <button type="submit" id="btn-upload-files" class="traffic-btn traffic-btn-right">
+                                <i class="fas fa-upload"></i> Subir archivo(s)
+                            </button>
+                            
+                            <button class="traffic-btn traffic-btn-right" id="help" href="/trafico/get/ayuda-documentos" style="width: 30px; min-width: 25px" data-hasqtip="3" aria-describedby="qtip-3">
+                                <i class="fas fa-question"></i>
+                            </button>
+                            
+                            <button id="btn-download" class="traffic-btn traffic-btn-right" data-id="<?= $this->basico["id"] ?>" style="min-width: 5px" title="Descargar expediente">
+                                <i class="fas fa-cloud-download-alt"></i>
+                            </button>
+                            
+                            <button id="checklist" class="traffic-btn traffic-btn-right" style="min-width: 5px" title="Checklist de expediente">
+                                <i class="fas fa-clipboard-list"></i>
+                            </button>                            
+                            
+                            <?php if(isset($this->basico["fechaLiberacion"])) { ?>
+                                <button id="xml-pedimento" class="traffic-btn traffic-btn-right" title="Obtener XML de pedimento" style="min-width: 5px">
+                                    <i class="far fa-file-code"></i> XML
+                                </button>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                </table>
+                <div class="progress progress-striped active">
+                    <div class="bar bar-success"></div >
+                    <div class="percent">0%</div >
+                </div>
+            </form>
+            <div id="traffic-files" style="display: none; min-height: 100px"></div>
+            <div class="traffic-clear-5"></div>
+            <div class="traffic-clear"></div>
+            <form id="formPhotos" method="post" enctype="multipart/form-data">
+                <?= $this->inputHidden("hidden", "idTrafico", $this->basico["id"]) ?>
+                <?= $this->inputHidden("hidden", "idBodega", $this->basico["idBodega"]) ?>
+                <?= $this->inputHidden("hidden", "referencia", $this->basico["referencia"]) ?>
+                <?= $this->inputHidden("hidden", "rfcCliente", $this->basico["rfcCliente"]) ?>
+                <table class="traffic-table traffic-table-left">
+                    <tr>
+                        <th style="width: 220px">Seleccionar imagen (JPG)</th>
+                        <td>
+                            <input type="file" name="images[]" id="images" class="required" multiple accept="image/*" capture="camera" />
+                        </td>
+                        <td>
+                            <button id="uploadImage" class="traffic-btn traffic-btn-right">
+                                <i class="fas fa-camera"></i> Subir foto
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="progress progress-striped active">
+                    <div class="barImage bar-success"></div >
+                    <div class="percentImage">0%</div >
+                </div>
+            </form>
+            <div id="traffic-photos" style="display: none; min-height: 100px"></div>
+            <div class="traffic-clear-5"></div>
+            <a href="/bodega/index/index" class="traffic-btn" tabindex="99">
+                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+            </a>
+            <div class="traffic-clear"></div>
+        </div>
+        <div class="tab-pane" id="register">
+            <div id="traffic-register" style="display: none"></div>
+            <div class="traffic-clear-5"></div>
+            <a href="/bodega/index/index" class="traffic-btn" tabindex="99">
+                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+            </a>
+            <div class="traffic-clear"></div>
+        </div>
+        <div class="tab-pane" id="vucem">
+            <div class="traffic-cols">
+                <table class="traffic-table">           
+                    <thead>
+                        <tr>
+                            <th colspan="5" class="traffic-table-title">OPERACIONES EN VENTANILLA ÚNICA</th>
+                        </tr>
+                        <tr>
+                            <th colspan="5">
+                                SELLOS DISPONIBLES
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width: 30px">
+                                <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px">
+                                    <i onclick="getVucemSignatures();" class="fas fa-sync-alt" style="cursor: pointer"></i>
+                                </div>
+                            </th>
+                            <th style="width: 50px">Patente</th>
+                            <th style="width: 90px">RFC</th>
+                            <th style="width: 350px">Razon Social</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vucemSignatures"></tbody>
+                </table>
+                <table class="traffic-table">           
+                    <thead>
+                        <tr>
+                            <th colspan="10">
+                                <div style="font-size:1.2em; color: #2f3b58; float: left; margin-left: 10px">
+                                    <i onclick="getVucemLog();" class="fas fa-sync-alt" style="cursor: pointer"></i>
+                                </div>
+                                SOLICITUDES PENDIENTES
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width: 30px"><input type="checkbox" id="check-all"></th>
+                            <th style="width: 26px">&nbsp;</th>
+                            <th style="width: 110px">Num. Ope.</th>
+                            <th>Detalle</th>
+                            <th>Edoc</th>
+                            <th style="width: 70px">Error</th>
+                            <th style="width: 125px">Enviado</th>
+                            <th style="width: 125px">Respuesta</th>
+                            <th>Log</th>
+                            <th style="width: 60px">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vucemLog"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <?php if ($this->basico["pagado"] !== null) { ?>
+        <script type="text/javascript">
+            $("#fechaNotificacion, #fechaArribo , #fechaEntrada, #fechaRecepcionDocs, #fechaPago, #fechaDeposito, #fechaPrevio, #fechaRevalidado, #horaRecepcionDocs").attr("disabled", "disabled");
+            $("#form-invoice :input").attr("disabled", "disabled");
+            $("#form-tracking :input").attr("disabled", "disabled");
+        </script>
+    <?php } ?>
+<?php } else { ?>
+    <h4 style="background-color: red; color: white; border: 1px #cc0000 solid">La referencia ya no se encuentra activa en nuestro sistema.</h4>
+    <div class="traffic-clear-5"></div>
+    <a href="/bodega/index/index" class="traffic-btn" tabindex="99">
+        <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+    </a>
+<?php } ?>
+<?php
+$dates = array(
+    array("name" => "fechaEta", "label" => "ETA", "readonly" => true),
+    array("name" => "fechaDescarga", "label" => "Descarga"),
+    array("name" => "fechaRevision", "label" => "Revisión"),
+    array("name" => "fechaCarga", "label" => "Carga"),
+    array("name" => "fechaSalida", "label" => "Salida"),
+);
+?>
+<div id="slider" class="slider">
+    <div class="handle">
+        <div style="font-size:1.4em; color: #2f3b58">
+            <i class="far fa-calendar-alt"></i>
+        </div>
+    </div>
+    <h3>Fechas <?= $this->basico["referencia"] ?></h3>
+    <p>Presione <span style="background-color: #555; color: #fff; padding: 3px; border-radius: 2px">ESC</span> para cerrar.</p>
+    <form id="datesForm" method="post">
+        <?= $this->inputHidden("hidden", "idTrafico", $this->idTrafico) ?>
+        <table>
+            <tbody>
+                <?php foreach($dates as $item) { ?>
+                    <tr>
+                        <td><?= $item["label"] ?></td>
+                        <td style="width: 115px">
+                            <input type="text" class="traffic-input-date" name="<?= $item["name"] ?>" style="width: 120px !important" id="<?= $item["name"] ?>" <?= isset($item["readonly"]) ? 'readonly="true"' : '' ?> />
+                        </td>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <td colspan="2">
+                        <button id="guardar-fechas" class="traffic-btn-right traffic-btn" style="margin-right: 10px; margin-top: 10px">
+                            <i class="far fa-save"></i> Guardar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

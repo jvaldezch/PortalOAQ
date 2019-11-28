@@ -1,0 +1,190 @@
+<?php
+
+function valores($v, $item) {
+    $value = '';
+    if (isset($item[$v])) {
+        $value = $item[$v];
+    } elseif (isset($item[strtoupper($v)])) {
+        $value = $item[strtoupper($v)];
+    }
+    return '<td>' . $value . '</td>';
+}
+?>
+
+<?php if ($this->tipo == 'anexo') { ?>
+    <table>
+        <thead>
+            <tr>
+                <th>Referencia</th>
+                <th>TipoOperacion</th>
+                <th>Patente</th>
+                <th>Aduana</th>
+                <th>Pedimento</th>
+                <th>Trafico</th>
+                <th>TransporteEntrada</th>
+                <th>TransporteArribo</th>
+                <th>TransporteSalida</th>
+                <th>FechaEntrada</th>
+                <th>FechaPago</th>
+                <th>FirmaValidacion</th>
+                <th>FirmaBanco</th>
+                <th>TipoCambio</th>
+                <th>CvePed</th>
+                <th>Regimen</th>
+                <th>ValorDolares</th>
+                <th>ValorAduana</th>
+                <th>Fletes</th>
+                <th>Seguros</th>
+                <th>Embalajes</th>
+                <th>OtrosIncrementales</th>
+                <th>DTA</th>
+                <th>IVA</th>
+                <th>IGI</th>
+                <th>PREV</th>
+                <th>CNT</th>
+                <th>Efectivo</th>
+                <th>Otros</th>
+                <th>Total</th>
+                <th>PesoBruto</th>
+                <th>Bultos</th>
+                <th>Guias</th>
+                <th>Planta</th>
+                <th>NumFactura</th>
+                <th>Cove</th>
+                <th>FechaFactura</th>
+                <th>Incoterm</th>
+                <th>ValorFacturaUsd</th>
+                <th>ValorFacturaMonExt</th>
+                <th>NomProveedor</th>
+                <th>TaxId</th>
+                <th>PaisFactura</th>
+                <th>Divisa</th>
+                <th>FactorMonExt</th>
+                <th>NumParte</th>
+                <th>Descripcion</th>
+                <th>Fraccion</th>
+                <th>Orden Fracción</th>
+                <th>PrecioUnitario</th>
+                <th>UMC</th>
+                <th>CantUMC</th>
+                <th>UMT</th>
+                <th>CantUMT</th>
+                <th>PaisOrigen</th>
+                <th>TLC</th>
+                <th>TLCAN</th>
+                <th>TLCUE</th>
+                <th>PROSEC</th>
+                <th>IVA (%)</th>
+                <th>TasaAdvalorem</th>
+                <th>PaisVendedor</th>
+                <th>PatenteOrig</th>
+                <th>AduanaOrig</th>
+                <th>PedimentoOrig</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->data) && !empty($this->data)) { ?>
+                <?php foreach ($this->data as $item) { ?>
+                    <tr>
+                        <td><?= $item["operacion"] ?></td>
+                        <td><?= $item["tipoOperacion"] ?></td>
+                        <td><?= $item["patente"] ?></td>
+                        <td><?= $item["aduana"] ?></td>
+                        <td><?= $item["pedimento"] ?></td>
+                        <td><?= $item["trafico"] ?></td>
+                        <td><?= $item["transporteEntrada"] ?></td>
+                        <td><?= $item["transporteArribo"] ?></td>
+                        <td><?= $item["transporteSalida"] ?></td>
+                        <td><?= date('d/m/Y', strtotime($item["fechaEntrada"])) ?></td>
+                        <td><?= date('d/m/Y', strtotime($item["fechaPago"])) ?></td>
+                        <td><?= $item["firmaValidacion"] ?></td>
+                        <td><?= $item["firmaBanco"] ?></td>
+                        <td><?= $item["tipoCambio"] ?></td>
+                        <td><?= $item["cvePed"] ?></td>
+                        <td><?= $item["regimen"] ?></td>
+                        <td style="text-align: right"><?= number_format($item["valorDolares"], 2, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["valorAduana"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["fletes"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["seguros"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["embalajes"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["otrosIncrementales"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["dta"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["iva"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["igi"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["prev"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["cnt"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["efectivo"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["otrosEfectivo"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["totalEfectivo"], 0, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["pesoBruto"], 4, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["bultos"], 0, '.', '') ?></td>
+                        <td><?= $item["guias"] ?></td>
+                        <td><?= $item["planta"] ?></td>
+                        <td><?= $item["numFactura"] ?></td>
+                        <td><?= $item["cove"] ?></td>
+                        <td><?= date('d/m/Y', strtotime($item["fechaFactura"])) ?></td>
+                        <td><?= $item["incoterm"] ?></td>
+                        <td style="text-align: right"><?= number_format($item["valorFacturaUsd"], 2, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["valorFacturaMonExt"], 2, '.', '') ?></td>
+                        <td><?= $item["nomProveedor"] ?></td>
+                        <td><?= $item["taxId"] ?></td>
+                        <td><?= $item["paisFactura"] ?></td>
+                        <td><?= $item["divisa"] ?></td>
+                        <td style="text-align: right"><?= number_format($item["factorMonExt"], 6, '.', '') ?></td>
+                        <td><?= $item["numParte"] ?></td>
+                        <td><?= $item["descripcion"] ?></td>
+                        <td><?= $item["fraccion"] ?></td>
+                        <td><?= $item["ordenFraccion"] ?></td>
+                        <td style="text-align: right"><?= number_format($item["precioUnitario"], 3, '.', '') ?></td>
+                        <td><?= $item["umc"] ?></td>
+                        <td style="text-align: right"><?= number_format($item["cantUmc"], 3, '.', '') ?></td>
+                        <td><?= $item["umt"] ?></td>
+                        <td style="text-align: right"><?= number_format($item["cantUmt"], 3, '.', '') ?></td>
+                        <td><?= $item["paisOrigen"] ?></td>
+                        <td><?= $item["tlc"] ?></td>
+                        <td><?= $item["tlcan"] ?></td>
+                        <td><?= $item["tlcue"] ?></td>
+                        <td><?= $item["prosec"] ?></td>
+                        <td style="text-align: right"><?= number_format($item["ivaParte"], 2, '.', '') ?></td>
+                        <td style="text-align: right"><?= number_format($item["tasaAdvalorem"], 2, '.', '') ?></td>
+                        <td><?= $item["paisVendedor"] ?></td>
+                        <td><?= $item["patenteOrig"] ?></td>
+                        <td><?= $item["aduanaOrig"] ?></td>
+                        <td><?= $item["pedimentoOrig"] ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="64">No existen resultados para los parámetros proporcioandos.</td>                    
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <table>
+        <thead>
+            <tr>
+                <?php if (isset($this->titulos["titulos"])) { ?>
+                    <?php foreach ($this->titulos["titulos"] as $k => $v) { ?>
+                        <th><?= $k ?></th>
+                    <?php } ?>
+                <?php } ?>            
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (isset($this->data) && !empty($this->data)) { ?>
+                <?php foreach ($this->data as $item) { ?>
+                    <tr>
+                        <?php foreach ($this->titulos["titulos"] as $k => $v) { ?>
+                            <?= valores($v, $item) ?>
+                        <?php } ?>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="<?= count($this->titulos["titulos"]) ?>">No existen resultados para los parámetros proporcioandos.</td>                    
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>

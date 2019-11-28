@@ -1,0 +1,59 @@
+<style>
+    .row {
+        font-size: 14px;
+    }
+</style>
+<input type="hidden" id="id" name="id" value="<?= $this->row['id'] ?>" />
+<div class="row">
+    <div class="col"><strong>ADUANA:</strong> <?= $this->row['aduana'] . '-' . $this->row['patente'] ?></div>
+    <div class="col"><strong>REFERENCIA:</strong> <?= $this->row['referencia'] ?></div>
+    <div class="w-100"></div>
+    <div class="col"><strong>PEDIMENTO:</strong> <?= $this->row['pedimento'] ?></div>
+    <div class="col"><strong>RFC:</strong> <?= $this->row['rfcCliente'] ?></div>
+    <div class="w-100"></div>
+    <div class="col"><strong>CLIENTE:</strong> <?= $this->row['nombreCliente'] ?></div>
+    <div class="w-100"></div>
+    <div class="col"><strong>CLAVE:</strong> <?= $this->row['cvePedimento'] ?></div>
+    <div class="col"><strong>IMP/EXP:</strong> <?= ($this->row["ie"] == 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>' : '<i class="fas fa-arrow-circle-up" style="color: #2f3b58"></i>' ?></div>
+    <div class="w-100"></div>
+    <div class="col"><strong>USUARIO:</strong> <?= mb_strtoupper($this->row['nombre']) ?><br><br></div>
+    <div class="w-100"></div>
+    <div class="col">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+            <a href="/mobile/traficos/trafico?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Básico</a>
+            <a href="/mobile/traficos/archivos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Archivos</a>
+            <a href="/mobile/traficos/fotos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Fotos</a>
+            <a href="/mobile/traficos/comentarios?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Comentarios</a>
+            <a href="/mobile/traficos/bitacora?id=<?= $this->row['id'] ?>" class="btn btn-primary active">Bitacora</a>
+        </div>
+        <br><br>
+    </div>
+    <div class="w-100"></div>
+    <div class="col">
+        <table class="table table-sm table-striped facturas">
+            <thead>
+                <tr>
+                    <th>COMENTARIO</th>
+                    <th>FECHA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($this->comments['bitacora'])) { ?>
+                    <?php foreach ($this->comments['bitacora'] as $item) { ?>
+                        <tr>
+                            <td><?= $item['bitacora'] ?></td>
+                            <td><?= date("d/m/Y", strtotime($item['creado'])) ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="2"><em>No hay bitacora</em></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="w-100"></div>
+</div>
+
+<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary"><i class="fas fa-angle-left"></i> Regresar</a>

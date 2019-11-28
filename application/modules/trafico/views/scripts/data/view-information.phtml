@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <?= $this->headMeta(); ?>
+        <?= $this->headLink() ?>
+        <?= $this->headScript() ?>  
+    </head>
+    <body>
+        <?php if (isset($this->data)) { ?>
+            <table class="data">
+                <tr>
+                    <th>Num. Factura</th>
+                    <th>COVE</th>
+                    <th>Fecha Fact.</th>
+                    <th>TaxID</th>
+                    <th>Proveedor</th>
+                    <th>Pais Fact.</th>
+                    <th>Incoterm</th>
+                    <th>Divisa</th>
+                    <th>Val. Fact. USD</th>
+                    <th>Val. Fact.</th>
+                    <th>Factor Mon. Ext.</th>
+                    <th>Num. Parte</th>
+                    <th>Desc. Merc.</th>
+                    <th>Fracción</th>
+                    <th>Ord. Fracción</th>
+                    <th>Val. Mon. Ext. (Merc.)</th>
+                    <th>Val. Aduana (Merc.)</th>
+                    <th>Cant. UMC</th>
+                    <th>UMC</th>
+                    <th>Cant. UMT</th>
+                    <th>UMT</th>
+                    <th>Pais Origen</th>
+                    <th>Pais Vendedor</th>
+                    <th>ADV</th>
+                    <th>IVA</th>
+                    <th>IEPS</th>
+                    <th>ISAN</th>
+                    <th>TLC</th>
+                    <th>TLCAN</th>
+                    <th>TLCUE</th>
+                    <th>PROSEC</th>
+                    <th>Pat. Original</th>
+                    <th>Adu. Original</th>
+                    <th>Ped. Original</th>
+                </tr>
+                <?php foreach($this->data as $item) { ?>
+                <tr>
+                    <td><?= $item["numFactura"] ?></td>
+                    <td><?= $item["cove"] ?></td>
+                    <td><?= date('d/m/Y',  strtotime($item["fechaFactura"])) ?></td>
+                    <td><?= $item["taxId"] ?></td>
+                    <td><?= $item["nomProveedor"] ?></td>
+                    <td><?= $item["paisFactura"] ?></td>
+                    <td><?= $item["incoterm"] ?></td>
+                    <td><?= $item["divisa"] ?></td>
+                    <td><?= number_format($item["valorFacturaUsd"], 4, '.',',') ?></td>
+                    <td><?= number_format($item["valorFacturaMonExt"], 4, '.',',') ?></td>
+                    <td><?= number_format($item["factorMonExt"], 6, '.',',') ?></td>
+                    <td><?= $item["numParte"] ?></td>
+                    <td><?= $item["descripcion"] ?></td>
+                    <td><?= $item["fraccion"] ?></td>
+                    <td><?= $item["ordenFraccion"] ?></td>
+                    <td><?= number_format($item["valorMonExt"], 6, '.',',') ?></td>
+                    <td><?= number_format($item["valorAduanaMXN"], 6, '.',',') ?></td>
+                    <td><?= number_format($item["cantUMC"], 4, '.',',') ?></td>
+                    <td><?= $item["umc"] ?></td>
+                    <td><?= number_format($item["cantUMT"], 4, '.',',') ?></td>
+                    <td><?= $item["umt"] ?></td>
+                    <td><?= $item["paisOrigen"] ?></td>
+                    <td><?= $item["paisVendedor"] ?></td>
+                    <td><?= number_format($item["tasaAdvalorem"], 2, '.',',') ?></td>
+                    <td><?= number_format($item["iva"], 2, '.',',') ?></td>
+                    <td><?= number_format($item["ieps"], 2, '.',',') ?></td>
+                    <td><?= number_format($item["isan"], 2, '.',',') ?></td>
+                    <td><?= $item["tlc"] ?></td>
+                    <td><?= $item["tlcan"] ?></td>
+                    <td><?= $item["tlcue"] ?></td>
+                    <td><?= $item["prosec"] ?></td>
+                    <td><?= $item["patenteOrig"] ?></td>
+                    <td><?= $item["aduanaOrig"] ?></td>
+                    <td><?= $item["pedimentoOrig"] ?></td>
+                </tr>
+                <?php } ?>        
+            </table>
+        <?php } else { ?>
+            <p>No existe información para anexo 24.</p>
+        <?php } ?>
+    </body>
+</html>

@@ -1,0 +1,178 @@
+<div class="traffic-clear-5"></div>
+<a href="/administracion/index/solicitudes-anticipo" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i> Regresar</a>
+<a target="_blank" href="/trafico/data/imprimir-solicitud?id=<?= $this->data["header"]["id"] ?>" class="traffic-btn traffic-btn-right">
+    <i class="fas fa-print"></i> Imprimir</a>
+<a onclick="verSolicitud(<?= $this->data["header"]["id"] ?>)" class="traffic-btn traffic-btn-right">
+    <i class="fas fa-eye"></i> Ver solicitud</a>
+<div class="traffic-clear-5"></div>
+<input type="hidden" name="rol" id="rol" value="<?= $this->rol ?>" >
+<?php if (isset($this->edit) && $this->edit === true) { ?>
+    <table class="traffic-table">
+        <tr>
+            <th>PEDIMENTO</th>
+            <th>REFERENCIA</th>
+            <th>OPERACIÓN</th>
+            <th>CLIENTE</th>
+            <th>COMPLEMENTO</th>
+        </tr>
+        <tr>
+            <td><?= $this->data["header"]["aduana"] . "-" . $this->data["header"]["patente"] . "-" . $this->data["header"]["pedimento"] ?></td>
+            <td><?= $this->data["header"]["referencia"] ?></td>
+            <td><?= $this->data["header"]["tipoOperacion"] ?></td>
+            <td><?= $this->data["header"]["nombreCliente"] ?></td>
+            <td><?= isset($this->data["header"]["complemento"]) ? "S" : "N" ?></td>
+        </tr>        
+    </table>
+    <?php if(isset($this->form)) { ?>
+        <form id="process">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th style="width: 300px"><label for="esquema">Esquema de fondos</label></th>
+                    <td>
+                        <?= $this->form->idSolicitud ?>
+                        <?= $this->form->esquema ?>
+                    </td>
+                    <td style="width: 150px">
+                        <?php if(!isset($this->disabled)) { ?>
+                        <button class="traffic-btn traffic-btn-right" id="save-approved" <?= isset($this->disabled) ? 'disabled="disabled"' : '' ?>>
+                            <i class="far fa-save"></i> Guardar</button>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 300px"><label for="proceso">Proceso actual</label></th>
+                    <td>
+                        <?= $this->form->proceso ?>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </form>
+        <form id="form-files" method="post">
+            <?= $this->form->idSolicitud ?>
+            <?= $this->form->aduana ?>
+            <?= $this->form->patente ?>
+            <?= $this->form->pedimento ?>
+            <?= $this->form->referencia ?>
+            <table class="traffic-table">
+                <tr>
+                    <th colspan="3" class="traffic-table-title">ADJUNTAR ARCHIVO</th>
+                </tr>
+                <tr>
+                    <th style="width: 300px"><label for="file[]">Seleccionar ficha de deposito o comprobante (PDF/JPG)</label></th>
+                    <td><input type="file" name="file[]" id="file" class="required" multiple /></td>
+                    <td>
+                        <!--<input type="submit" id="upload" value="Subir archivo" class="traffic-btn-save traffic-btn-right" />-->
+                        <button type="submit" id="upload" class="traffic-btn traffic-btn-right">
+                            <i class="fas fa-upload"></i> Subir archivo</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id="files"></div>
+    <?php } ?>
+<?php } else { ?>
+<div class="traffic-clear-5"></div>
+<form id="<?= $this->form->getAttrib("id") ?>" method="<?= $this->form->getMethod() ?>" action="<?= $this->form->getAction() ?>">
+    <?= $this->form->idSolicitud ?>
+    <table class="traffic-table">
+        <tr>
+            <td>
+                <button class="traffic-btn traffic-btn-save traffic-btn-right" id="add-complement">Complemento</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<?php } ?>
+<br>
+<div style="width: 100%">
+    <div style="float: left; width: 50%">
+        <table class="traffic-table">
+            <tr>
+                <th colspan="3">
+                    BITACORA
+                </th>
+            </tr>
+            <tr>
+                <th style="text-align: left;">Evento</th>
+                <th style="text-align: left;">Fecha</th>
+                <th style="text-align: left;">Usuario</th>
+            </tr>
+            <?php if (isset($this->bitacora) && !empty($this->bitacora)) { ?>
+                <?php foreach ($this->bitacora as $item) { ?>
+                    <tr>
+                        <td style="text-align: left;"><?= $item["bitacora"] ?></td>
+                        <td style="text-align: left;"><?= date('d/m/Y h:i a', strtotime($item["creado"])) ?></td>
+                        <td style="text-align: left;"><?= strtoupper($item["usuario"]) ?></td>
+                    </tr>
+                <?php } ?>        
+            <?php } else { ?>        
+                <tr>
+                    <td colspan="3" style="text-align: center;">
+                        <em>No hay información en la bitacora</em>
+                    </td>
+                </tr>
+            <?php } ?>        
+        </table>
+    </div>
+    <div style="float: left; width: 50%">
+        <table class="traffic-table">
+            <tr>
+                <th colspan="3">
+                    COMENTARIOS
+                </th>
+            </tr>
+            <tr>
+                <th style="text-align: left;">Comentario</th>
+                <th style="text-align: left;">Fecha</th>
+                <th style="text-align: left;">Usuario</th>
+            </tr>
+            <?php if (isset($this->comentarios) && !empty($this->comentarios)) { ?>
+                <?php foreach ($this->comentarios as $item) { ?>
+                    <tr>
+                        <td style="text-align: left;"><?= strtoupper($item["comentario"]) ?></td>
+                        <td style="text-align: left;"><?= date('d/m/Y h:i a', strtotime($item["creado"])) ?></td>
+                        <td style="text-align: left;"><?= strtoupper($item["nombre"]) ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>        
+                <tr>
+                    <td colspan="3" style="text-align: center;">
+                        <em>No hay información en la bitacora</em>
+                    </td>
+                </tr>
+            <?php } ?>
+            <tr>
+                <td style="text-align: left; vertical-align: top" colspan="3">
+                    <form id="form-comments" action="/trafico/ajax/add-comment" method="post">
+                        <input type="hidden" id="solicitud" name="solicitud" value="<?= $this->data["header"]["id"] ?>" >
+                        <input type="hidden" id="pedimento" name="pedimento" value="<?= $this->data["header"]["pedimento"] ?>" >
+                        <input type="hidden" id="referencia" name="referencia" value="<?= $this->data["header"]["referencia"] ?>" >
+                        <label for="comments">Comentarios:</label>                                    
+                        <textarea id="comments" name="comments" style="width: 300px; height: 80px"></textarea>
+                        <button id="add-comment" class="traffic-btn traffic-btn-right">
+                            <i class="fas fa-comment"></i> Agregar</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>    
+<div class="traffic-clear-5"></div>
+<a href="/administracion/index/solicitudes-anticipo" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i> Regresar</a>
+<div class="traffic-clear"></div>
+<div class="jqmWindow" id="confirm" style="top: 15%">    
+    <h4 class="traffic-h4">Cancelar solicitud de anticipo</h4>
+    <form id="form-cancel" class="traffic-form" action="/trafico/ajax/borrar-solicitud" method="post">
+        <?= $this->form->idSolicitud ?>
+        <label for="comentario">Comentario:</label>
+        <textarea id="comentario" name="comentario"></textarea>
+    </form>
+    <div class="traffic-clear-10"></div>
+    <a id="saveRequest" class="traffic-btn traffic-btn-right">
+        <i class="far fa-save"></i> Guardar</a>
+    <a id="closeModal" class="traffic-btn traffic-btn-right">
+        <i class="fas fa-times"></i> Cerrar</a>
+</div>

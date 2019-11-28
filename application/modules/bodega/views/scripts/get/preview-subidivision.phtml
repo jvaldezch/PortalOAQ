@@ -1,0 +1,32 @@
+<form id="subdivision">    
+    <input type="hidden" name="id" value="<?= $this->id ?>" />
+    <input type="hidden" name="ids" value="<?= $this->ids ?>" />
+    <table class="traffic-table traffic-table-left">
+        <tbody>
+            <tr>
+                <th style="width: 180px">NUEVA REFERENCIA:</th>
+                <td>
+                    <input type="text" name="" value="<?= $this->n_referencia ?>" />
+                </td>
+            </tr>
+            <tr>
+                <th>TOTAL DE BULTOS:</th>
+                <td>
+                    <?= $this->total ?>
+                </td>
+            </tr>
+            <tr>
+                <th>A SUBDIVIDIR:</th>
+                <td>
+                    <?= $this->cantidad ?>
+                </td>
+            </tr>
+            <tr>
+                <th>RESTANTES:</th>
+                <td>
+                    <?= $this->restantes ?>
+                </td>
+            </tr>
+        </tbody>    
+    </table>
+</form>

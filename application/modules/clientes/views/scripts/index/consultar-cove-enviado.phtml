@@ -1,0 +1,514 @@
+<br />
+<?php if ($this->data && $this->relfact == false) { ?>
+    <a href="javascript:window.history.back();" class="traffic-btn traffic-btn-back">&laquo;&nbsp;Regresar</a>
+    <a href="/clientes/data/ver-xml?id=<?= $this->id ?>" target="_blank" class="traffic-btn traffic-btn-right traffic-btn-primary">Ver XML</a>
+    <a href="/clientes/data/descarga-xml?id=<?= $this->id ?>" target="_blank" class="traffic-btn traffic-btn-right traffic-btn-save">Descargar XML</a>
+    <a href="/automatizacion/vucem/print-cove?id=<?= $this->id ?>&download=true" target="_blank" class="traffic-btn traffic-btn-close traffic-btn-right">Imprimir en PDF</a>
+    <div class="traffic-clear-5"></div>
+    <div class="traffic-edocument">
+        <table>
+            <tr>
+                <th colspan="3" style="background: none; font-size: 20px; text-align: center"><?= $this->valid($this->estatus, $this->cove) ?></th>
+            </tr>
+            <tr>
+                <th>Tipo de operación</th>
+                <th>Relación de facturas</th>
+                <th>No. de factura</th>                
+            </tr>
+            <tr>
+                <td><?= ($this->data["tipoOperacion"] == 'TOCE.EXP') ? 'Exportación' : 'Importación' ?></td>
+                <td><?= (isset($this->data["numeroRelacionFacturas"])) ? 'CON RELACIÓN DE FACTURAS' : 'SIN RELACIÓN DE FACTURAS' ?></td>
+                <td><?= $this->data["numeroFacturaOriginal"] ?></td>
+            </tr>
+            <tr>
+                <th>Tipo de figura</th>                
+                <th colspan="2">Fecha Exp.</th>                
+            </tr>            
+            <tr>
+                <td><?= ($this->data["tipoFigura"] == '1') ? 'Agente aduanal' : $this->data["tipoFigura"] ?></td>
+                <td colspan="2"><?= $this->data["fechaExpedicion"] ?></td>
+            </tr>
+            <tr>
+                <th colspan="3">Observaciones</th>
+            </tr>
+            <tr>
+                <td colspan="3"><?= isset($this->data["observaciones"]) ? (mb_check_encoding($this->data["observaciones"], 'UTF-8')) ? utf8_decode($this->data["observaciones"]) : $this->data["observaciones"] : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <h4>RFC con permisos de consulta</h4>
+        <table>
+            <tr>
+                <th>RFC de consulta</th>
+            </tr>
+            <?php if (is_array($this->data["rfcConsulta"])) { ?>
+                <?php foreach ($this->data["rfcConsulta"] as $rfcConsulta) { ?>
+                    <tr>
+                        <td><?= $rfcConsulta ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td><?= (isset($this->data["rfcConsulta"])) ? $this->data["rfcConsulta"] : '&nbsp;' ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+        <h4>Número de patente aduanal</h4>
+        <table>
+            <tr>
+                <th>Número autorización aduanal</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["patenteAduanal"])) ? $this->data["patenteAduanal"] : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <h4>Datos de la factura</h4>
+        <table>
+            <tr>
+                <th>Subdivisión</th>
+                <th>Certificado de origen</th>
+                <th>No. de exportador autorizado</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["factura"]["subdivision"]) && $this->data["factura"]["subdivision"] != '0') ? 'Con Subdivisión' : 'Sin subdivisión' ?></td>
+                <td><?= (isset($this->data["factura"]["certificadoOrigen"]) && $this->data["factura"]["certificadoOrigen"] != '0') ? "Si funge como certificado de origen" : 'NO funge como certificado de origen' ?></td>
+                <td><?= (isset($this->data["factura"]["numeroExportadorAutorizado"]) && $this->data["factura"]["numeroExportadorAutorizado"] != '') ? $this->data["factura"]["numeroExportadorAutorizado"] : '' ?></td>
+            </tr>
+        </table>
+        <h4>Datos generales del emisor</h4>
+        <table>
+            <tr>
+                <th>Tipo de identificador</th>
+                <th colspan="3">Tax ID/Sin Tax ID/RFC/CURP</th>
+            </tr>
+            <tr>
+                <td><?= isset($this->data["emisor"]["tipoIdentificador"]) ? $this->identificadorDesc($this->data["emisor"]["tipoIdentificador"]) : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["emisor"]["identificacion"]) && $this->data["emisor"]["identificacion"] != '0') ? $this->data["emisor"]["identificacion"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Nombre(s) o Razón Social</th>
+                <th>Apellido paterno</th>
+                <th colspan="2">Apellido materno</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["nombre"]) && $this->data["emisor"]["nombre"] != '') ? $this->data["emisor"]["nombre"] : '&nbsp;' ?></td>
+                <td>&nbsp;</td>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Calle</th>
+                <th>No. exterior</th>
+                <th>No. interior</th>
+                <th>Código postal</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["calle"]) && $this->data["emisor"]["domicilio"]["calle"] != '') ? $this->data["emisor"]["domicilio"]["calle"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["numeroExterior"]) && $this->data["emisor"]["domicilio"]["numeroExterior"] != '') ? $this->data["emisor"]["domicilio"]["numeroExterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["numeroInterior"]) && $this->data["emisor"]["domicilio"]["numeroInterior"] != '') ? $this->data["emisor"]["domicilio"]["numeroInterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["codigoPostal"]) && $this->data["emisor"]["domicilio"]["codigoPostal"] != '') ? $this->data["emisor"]["domicilio"]["codigoPostal"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Colonia</th>
+                <th colspan="3">Localidad</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["colonia"]) && $this->data["emisor"]["domicilio"]["colonia"] != '') ? $this->data["emisor"]["domicilio"]["colonia"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["emisor"]["domicilio"]["localidad"]) && $this->data["emisor"]["domicilio"]["localidad"] != '') ? $this->data["emisor"]["domicilio"]["localidad"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Municipio</th>
+                <th colspan="3">Entidad federativa</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["municipio"]) && $this->data["emisor"]["domicilio"]["municipio"] != '') ? $this->data["emisor"]["domicilio"]["municipio"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["emisor"]["domicilio"]["entidadFederativa"]) && $this->data["emisor"]["domicilio"]["entidadFederativa"] != '') ? $this->data["emisor"]["domicilio"]["entidadFederativa"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th colspan="4">País</th>
+            </tr>
+            <tr>
+                <td colspan="4"><?= (isset($this->data["emisor"]["domicilio"]["pais"]) && $this->data["emisor"]["domicilio"]["pais"] != '') ? $this->data["emisor"]["domicilio"]["pais"] : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <h4>Datos generales del destinatario</h4>
+        <table>
+            <tr>
+                <th>Tipo de identificador</th>
+                <th colspan="3">Tax ID/Sin Tax ID/RFC/CURP</th>                
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["tipoIdentificador"])) ? $this->identificadorDesc($this->data["destinatario"]["tipoIdentificador"]) : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["destinatario"]["identificacion"]) && $this->data["destinatario"]["identificacion"] != '') ? $this->data["destinatario"]["identificacion"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Nombre(s) o Razón Social</th>
+                <th>Apellido paterno</th>
+                <th colspan="2">Apellido materno</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["nombre"]) && $this->data["destinatario"]["nombre"] != '') ? $this->data["destinatario"]["nombre"] : '&nbsp;' ?></td>
+                <td>&nbsp;</td>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <th>Calle</th>
+                <th>No. exterior</th>
+                <th>No. interior</th>
+                <th>Código postal</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["calle"]) && $this->data["destinatario"]["domicilio"]["calle"] != '') ? $this->data["destinatario"]["domicilio"]["calle"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["numeroExterior"]) && $this->data["destinatario"]["domicilio"]["numeroExterior"] != '') ? $this->data["destinatario"]["domicilio"]["numeroExterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["numeroInterior"]) && $this->data["destinatario"]["domicilio"]["numeroInterior"] != '') ? $this->data["destinatario"]["domicilio"]["numeroInterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["codigoPostal"]) && $this->data["destinatario"]["domicilio"]["codigoPostal"] != '') ? $this->data["destinatario"]["domicilio"]["codigoPostal"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Colonia</th>
+                <th colspan="3">Localidad</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["colonia"]) && $this->data["destinatario"]["domicilio"]["colonia"] != '') ? $this->data["destinatario"]["domicilio"]["colonia"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["destinatario"]["domicilio"]["localidad"]) && $this->data["destinatario"]["domicilio"]["localidad"] != '') ? $this->data["destinatario"]["domicilio"]["localidad"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Municipio</th>
+                <th colspan="3">Entidad federativa</th>
+            </tr>
+            <tr>        
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["municipio"]) && $this->data["destinatario"]["domicilio"]["municipio"] != '') ? $this->data["destinatario"]["domicilio"]["municipio"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["destinatario"]["domicilio"]["entidadFederativa"]) && $this->data["destinatario"]["domicilio"]["entidadFederativa"] != '') ? $this->data["destinatario"]["domicilio"]["entidadFederativa"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th colspan="4">País</th>
+            </tr>
+            <tr>
+                <td colspan="4"><?= (isset($this->data["destinatario"]["domicilio"]["pais"]) && $this->data["destinatario"]["domicilio"]["pais"] != '') ? $this->data["destinatario"]["domicilio"]["pais"] : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <h4>Datos de la mercancía</h4>
+        <table>
+            <tr>
+                <th colspan="2">Descripción genérica de la mercancía</th>
+                <th>Tipo moneda</th>
+                <th>Valor unitario</th>
+                <th>Valor total</th>
+                <th>Valor total en dólares</th>
+                <th>Clave UMC</th>
+                <th>Cantidad UMC</th>
+            </tr>
+            <?php if (isset($this->data["mercancias"]["descripcionGenerica"])) { ?>
+                <tr>
+                    <td colspan="2"><?= (isset($this->data["mercancias"]["descripcionGenerica"]) && $this->data["mercancias"]["descripcionGenerica"] != '') ? $this->data["mercancias"]["descripcionGenerica"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["tipoMoneda"]) && $this->data["mercancias"]["tipoMoneda"] != '') ? $this->data["mercancias"]["tipoMoneda"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["valorUnitario"]) && $this->data["mercancias"]["valorUnitario"] != '') ? '$ ' . $this->number6($this->data["mercancias"]["valorUnitario"]) : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["valorTotal"]) && $this->data["mercancias"]["valorTotal"] != '') ? '$ ' . $this->number6($this->data["mercancias"]["valorTotal"]) : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["valorDolares"]) && $this->data["mercancias"]["valorDolares"] != '') ? '$ ' . $this->number4($this->data["mercancias"]["valorDolares"]) : '&nbsp;' ?></td>        
+                    <td><?= (isset($this->data["mercancias"]["claveUnidadMedida"]) && $this->data["mercancias"]["claveUnidadMedida"] != '') ? $this->data["mercancias"]["claveUnidadMedida"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["cantidad"]) && $this->data["mercancias"]["cantidad"] != '') ? $this->number($this->data["mercancias"]["cantidad"]) : '&nbsp;' ?></td>
+                </tr>
+            <?php } elseif (isset($this->data["mercancias"][0]["descripcionGenerica"])) { ?>
+                <?php foreach ($this->data["mercancias"] as $merc) { ?>
+                    <tr>
+                        <td colspan="2"><?= (isset($merc["descripcionGenerica"]) && $merc["descripcionGenerica"] != '') ? $merc["descripcionGenerica"] : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["tipoMoneda"]) && $merc["tipoMoneda"] != '') ? $merc["tipoMoneda"] : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["valorUnitario"]) && $merc["valorUnitario"] != '') ? '$ ' . $this->number6($merc["valorUnitario"]) : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["valorTotal"]) && $merc["valorTotal"] != '') ? '$ ' . $this->number6($merc["valorTotal"]) : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["valorDolares"]) && $merc["valorDolares"] != '') ? '$ ' . $this->number4($merc["valorDolares"]) : '&nbsp;' ?></td>        
+                        <td><?= (isset($merc["claveUnidadMedida"]) && $merc["claveUnidadMedida"] != '') ? $merc["claveUnidadMedida"] : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["cantidad"]) && $merc["cantidad"] != '') ? $this->number($merc["cantidad"]) : '&nbsp;' ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>    
+        </table>
+        <?php if (isset($this->data["mercancias"]["descripcionesEspecificas"])) { ?>
+            <h4>Descripción de la mercancía</h4>
+            <table>
+                <tr>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Submodelo</th>
+                    <th>No. Serie</th>
+                </tr>
+                <tr>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["marca"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["marca"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["modelo"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["modelo"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["subModelo"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["subModelo"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["numeroSerie"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["numeroSerie"] : '&nbsp;' ?></td>
+                </tr>
+            </table>
+        <?php } ?>
+        <h4>Datos del COVE (Firma electrónica)</h4>
+        <table>
+            <tr>
+                <th>Cadena original</th>
+            </tr>
+            <tr>
+                <td class="signature"><?= (isset($this->data["firmaElectronica"]["cadenaOriginal"]) && $this->data["firmaElectronica"]["cadenaOriginal"] != '') ? wordwrap($this->data["firmaElectronica"]["cadenaOriginal"], 100, "<br />", true) : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Firma</th>
+            </tr>
+            <tr>
+                <td class="signature"><?= (isset($this->data["firmaElectronica"]["firma"]) && $this->data["firmaElectronica"]["firma"] != '') ? wordwrap($this->data["firmaElectronica"]["firma"], 100, "<br />", true) : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <p class="legend">Esto es una representación gráfica de un COVE no es para su uso oficial o válidez ante la autoridad.</p>
+        <?php //} ?>
+    <?php } elseif ($this->data && $this->relfact == true) { /*     * ********************** RELACIÓN DE FACTURAS ******************* */ ?>
+        <a href="/vucem/index/index" class="btn btn-primary"><i class="icon-white icon-arrow-left"></i>&nbsp;Regresar</a>
+        <a href="/vucem/index/descarga-xml?id=<?= $this->id ?>" target="_blank" class="btn btn-success" style="float: right">Descargar XML</a>
+        <a href="/vucem/index/convert-cove-to-pdf?id=<?= $this->id ?>" target="_blank" class="btn btn-danger" style="float: right; margin-right: 10px">Imprimir en PDF</a>
+        <br /><br />
+        <h4>Datos del comprobante <?= $this->valid($this->estatus, $this->cove) ?></h4>
+        <table>
+            <tr>
+                <th>Tipo de operación</th>
+                <th>Relación de facturas</th>
+                <th>No. de Relación de Factura</th>                
+            </tr>
+            <tr>
+                <td><?= ($this->data["tipoOperacion"] == 'TOCE.EXP') ? 'Exportación' : 'Importación' ?></td>
+                <td><?= (isset($this->data["numeroRelacionFacturas"])) ? 'CON RELACIÓN DE FACTURAS' : 'SIN RELACIÓN DE FACTURAS' ?></td>
+                <td><?= $this->data["numeroRelacionFacturas"] ?></td>
+            </tr>
+            <tr>
+                <th>Tipo de figura</th>                
+                <th colspan="2">Fecha Exp.</th>                
+            </tr>            
+            <tr>
+                <td><?= ($this->data["tipoFigura"] == '1') ? 'Agente aduanal' : $this->data["tipoFigura"] ?></td>
+                <td colspan="2"><?= $this->data["fechaExpedicion"] ?></td>
+            </tr>
+            <tr>
+                <th colspan="3">Observaciones</th>
+            </tr>
+            <tr>
+                <td colspan="3"><?= (!isset($this->data["observaciones"])) ? '&nbsp;' : $this->data["observaciones"] ?></td>
+            </tr>
+        </table>
+        <h4>RFC con permisos de consulta</h4>
+        <table>
+            <tr>
+                <th>RFC de consulta</th>
+                <th>Nombre o Razón social</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["rfcConsulta"])) ? $this->data["rfcConsulta"] : '&nbsp;' ?></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+        <h4>Número de patente aduanal</h4>
+        <table>
+            <tr>
+                <th>Número autorización aduanal</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["patenteAduanal"])) ? $this->data["patenteAduanal"] : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <h4>Datos de la factura</h4>
+        <table>
+            <tr>
+                <th>Subdivisión</th>
+                <th>Certificado de origen</th>
+                <th>No. de exportador autorizado</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["factura"]["subdivision"]) && $this->data["factura"]["subdivision"] != '0') ? $this->data["factura"]["subdivision"] : 'Sin subdivisión' ?></td>
+                <td><?= (isset($this->data["factura"]["certificadoOrigen"]) && $this->data["factura"]["certificadoOrigen"] != '0') ? "SI funge como certificado de origen" : 'NO funge como certificado de origen' ?></td>
+                <td><?= (isset($this->data["factura"]["numeroExportadorAutorizado"]) && $this->data["factura"]["numeroExportadorAutorizado"] != '') ? $this->data["factura"]["numeroExportadorAutorizado"] : '' ?></td>
+            </tr>
+        </table>
+        <h4>Datos generales del emisor</h4>
+        <table>
+            <tr>
+                <th>Tipo de identificador</th>
+                <th colspan="2">Tax ID/Sin Tax ID/RFC/CURP</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["tipoIdentificador"]) && $this->data["emisor"]["tipoIdentificador"] != '0') ? $this->data["emisor"]["tipoIdentificador"] : '&nbsp;' ?></td>
+                <td colspan="2"><?= (isset($this->data["emisor"]["identificacion"]) && $this->data["emisor"]["identificacion"] != '0') ? $this->data["emisor"]["identificacion"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Nombre(s) o Razón Social</th>
+                <th>Apellido paterno</th>
+                <th>Apellido materno</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["nombre"]) && $this->data["emisor"]["nombre"] != '') ? $this->data["emisor"]["nombre"] : '&nbsp;' ?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+        <h4>Domicilio emisor</h4>
+        <table>
+            <tr>
+                <th>Calle</th>
+                <th>No. exterior</th>
+                <th>No. interior</th>
+                <th>Código postal</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["calle"]) && $this->data["emisor"]["domicilio"]["calle"] != '') ? $this->data["emisor"]["domicilio"]["calle"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["numeroExterior"]) && $this->data["emisor"]["domicilio"]["numeroExterior"] != '') ? $this->data["emisor"]["domicilio"]["numeroExterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["numeroInterior"]) && $this->data["emisor"]["domicilio"]["numeroInterior"] != '') ? $this->data["emisor"]["domicilio"]["numeroInterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["codigoPostal"]) && $this->data["emisor"]["domicilio"]["codigoPostal"] != '') ? $this->data["emisor"]["domicilio"]["codigoPostal"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Colonia</th>
+                <th colspan="3">Localidad</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["colonia"]) && $this->data["emisor"]["domicilio"]["colonia"] != '') ? $this->data["emisor"]["domicilio"]["colonia"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["emisor"]["domicilio"]["localidad"]) && $this->data["emisor"]["domicilio"]["localidad"] != '') ? $this->data["emisor"]["domicilio"]["localidad"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Entidad federativa</th>
+                <th colspan="3">Municipio</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["emisor"]["domicilio"]["entidadFederativa"]) && $this->data["emisor"]["domicilio"]["entidadFederativa"] != '') ? $this->data["emisor"]["domicilio"]["entidadFederativa"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["emisor"]["domicilio"]["municipio"]) && $this->data["emisor"]["domicilio"]["municipio"] != '') ? $this->data["emisor"]["domicilio"]["municipio"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th colspan="4">País</th>
+            </tr>
+            <tr>
+                <td colspan="4"><?= (isset($this->data["emisor"]["domicilio"]["pais"]) && $this->data["emisor"]["domicilio"]["pais"] != '') ? $this->data["emisor"]["domicilio"]["pais"] : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <h4>Datos generales del destinatario</h4>
+        <table>
+            <tr>
+                <th>Tipo de identificador</th>
+                <th colspan="2">Tax ID/Sin Tax ID/RFC/CURP</th>                
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["tipoIdentificador"]) && $this->data["destinatario"]["tipoIdentificador"] != '') ? $this->data["destinatario"]["tipoIdentificador"] : '&nbsp;' ?></td>
+                <td colspan="2"><?= (isset($this->data["destinatario"]["identificacion"]) && $this->data["destinatario"]["identificacion"] != '') ? $this->data["destinatario"]["identificacion"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Nombre(s) o Razón Social</th>
+                <th>Apellido paterno</th>
+                <th>Apellido materno</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["nombre"]) && $this->data["destinatario"]["nombre"] != '') ? $this->data["destinatario"]["nombre"] : '&nbsp;' ?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+        <h4>Domicilio del destinatario</h4>
+        <table>
+            <tr>
+                <th>Calle</th>
+                <th>No. exterior</th>
+                <th>No. interior</th>
+                <th>Código postal</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["calle"]) && $this->data["destinatario"]["domicilio"]["calle"] != '') ? $this->data["destinatario"]["domicilio"]["calle"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["numeroExterior"]) && $this->data["destinatario"]["domicilio"]["numeroExterior"] != '') ? $this->data["destinatario"]["domicilio"]["numeroExterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["numeroInterior"]) && $this->data["destinatario"]["domicilio"]["numeroInterior"] != '') ? $this->data["destinatario"]["domicilio"]["numeroInterior"] : '&nbsp;' ?></td>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["codigoPostal"]) && $this->data["destinatario"]["domicilio"]["codigoPostal"] != '') ? $this->data["destinatario"]["domicilio"]["codigoPostal"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Colonia</th>
+                <th colspan="3">Localidad</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["colonia"]) && $this->data["destinatario"]["domicilio"]["colonia"] != '') ? $this->data["destinatario"]["domicilio"]["colonia"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["destinatario"]["domicilio"]["localidad"]) && $this->data["destinatario"]["domicilio"]["localidad"] != '') ? $this->data["destinatario"]["domicilio"]["localidad"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Entidad federativa</th>
+                <th colspan="3">Municipio</th>
+            </tr>
+            <tr>
+                <td><?= (isset($this->data["destinatario"]["domicilio"]["entidadFederativa"]) && $this->data["destinatario"]["domicilio"]["entidadFederativa"] != '') ? $this->data["destinatario"]["domicilio"]["entidadFederativa"] : '&nbsp;' ?></td>
+                <td colspan="3"><?= (isset($this->data["destinatario"]["domicilio"]["municipio"]) && $this->data["destinatario"]["domicilio"]["municipio"] != '') ? $this->data["destinatario"]["domicilio"]["municipio"] : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th colspan="4">País</th>
+            </tr>
+            <tr>
+                <td colspan="4"><?= (isset($this->data["destinatario"]["domicilio"]["pais"]) && $this->data["destinatario"]["domicilio"]["pais"] != '') ? $this->data["destinatario"]["domicilio"]["pais"] : '&nbsp;' ?></td>
+            </tr>
+        </table>
+        <h4>Datos de la mercancía</h4>
+        <table>
+            <tr>
+                <th colspan="2">Descripción genérica de la mercancía</th>
+                <th>Tipo moneda</th>
+                <th>Valor unitario</th>
+                <th>Valor total</th>
+                <th>Valor total en dólares</th>
+                <th>Clave UMC</th>
+                <th>Cantidad UMC</th>
+            </tr>
+            <?php if (isset($this->data["mercancias"]["descripcionGenerica"])) { ?>
+                <tr>
+                    <td colspan="2"><?= (isset($this->data["mercancias"]["descripcionGenerica"]) && $this->data["mercancias"]["descripcionGenerica"] != '') ? $this->data["mercancias"]["descripcionGenerica"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["tipoMoneda"]) && $this->data["mercancias"]["tipoMoneda"] != '') ? $this->data["mercancias"]["tipoMoneda"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["valorUnitario"]) && $this->data["mercancias"]["valorUnitario"] != '') ? '$ ' . $this->number($this->data["mercancias"]["valorUnitario"]) : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["valorTotal"]) && $this->data["mercancias"]["valorTotal"] != '') ? '$ ' . $this->number($this->data["mercancias"]["valorTotal"]) : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["valorDolares"]) && $this->data["mercancias"]["valorDolares"] != '') ? '$ ' . $this->number($this->data["mercancias"]["valorDolares"]) : '&nbsp;' ?></td>        
+                    <td><?= (isset($this->data["mercancias"]["claveUnidadMedida"]) && $this->data["mercancias"]["claveUnidadMedida"] != '') ? $this->data["mercancias"]["claveUnidadMedida"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["cantidad"]) && $this->data["mercancias"]["cantidad"] != '') ? $this->number($this->data["mercancias"]["cantidad"]) : '&nbsp;' ?></td>
+                </tr>
+            <?php } elseif (isset($this->data["mercancias"][0]["descripcionGenerica"])) { ?>
+                <?php foreach ($this->data["mercancias"] as $merc) { ?>
+                    <tr>
+                        <td colspan="2"><?= (isset($merc["descripcionGenerica"]) && $merc["descripcionGenerica"] != '') ? $merc["descripcionGenerica"] : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["tipoMoneda"]) && $merc["tipoMoneda"] != '') ? $merc["tipoMoneda"] : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["valorUnitario"]) && $merc["valorUnitario"] != '') ? '$ ' . $this->number($merc["valorUnitario"]) : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["valorTotal"]) && $merc["valorTotal"] != '') ? '$ ' . $this->number($merc["valorTotal"]) : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["valorDolares"]) && $merc["valorDolares"] != '') ? '$ ' . $this->number($merc["valorDolares"]) : '&nbsp;' ?></td>        
+                        <td><?= (isset($merc["claveUnidadMedida"]) && $merc["claveUnidadMedida"] != '') ? $merc["claveUnidadMedida"] : '&nbsp;' ?></td>
+                        <td><?= (isset($merc["cantidad"]) && $merc["cantidad"] != '') ? $this->number($merc["cantidad"]) : '&nbsp;' ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        </table>
+        <?php if (isset($this->data["mercancias"]["descripcionesEspecificas"])) { ?>
+            <h4>Descripción de la mercancía</h4>
+            <table>
+                <tr>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Submodelo</th>
+                    <th>No. Serie</th>
+                </tr>
+                <tr>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["marca"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["marca"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["modelo"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["modelo"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["subModelo"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["subModelo"] : '&nbsp;' ?></td>
+                    <td><?= (isset($this->data["mercancias"]["descripcionesEspecificas"]["numeroSerie"])) ? $this->data["mercancias"]["descripcionesEspecificas"]["numeroSerie"] : '&nbsp;' ?></td>
+                </tr>
+            </table>
+        <?php } ?>
+        <h4>Datos del COVE (Firma electrónica)</h4>
+        <table>
+            <tr>
+                <th>Cadena original</th>
+            </tr>
+            <tr>
+                <td class="signature"><?= (isset($this->data["firmaElectronica"]["cadenaOriginal"]) && $this->data["firmaElectronica"]["cadenaOriginal"] != '') ? wordwrap($this->data["firmaElectronica"]["cadenaOriginal"], 100, "<br />", true) : '&nbsp;' ?></td>
+            </tr>
+            <tr>
+                <th>Firma</th>
+            </tr>
+            <tr>
+                <td class="signature"><?= (isset($this->data["firmaElectronica"]["firma"]) && $this->data["firmaElectronica"]["firma"] != '') ? wordwrap($this->data["firmaElectronica"]["firma"], 100, "<br />", true) : '&nbsp;' ?></td>
+            </tr>
+        </table>
+    <?php } else { ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>¡Error!</h4>
+            El número de solicitud no existe en nuestra base de datos.
+        </div>
+    <?php } ?>
+    <div class="traffic-clear-5"></div>
+    <a href="javascript:window.history.back();" class="traffic-btn traffic-btn-back">&laquo;&nbsp;Regresar</a>
+    <div class="traffic-clear-10"></div>
+</div>

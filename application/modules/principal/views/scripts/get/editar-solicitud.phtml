@@ -1,0 +1,184 @@
+<table>
+    <tr>
+        <td colspan="4">
+            <table id="equipo">
+                <thead>
+                    <tr>
+                        <th style="width: 60px">Escritorio</th>
+                        <th style="width: 50px">Laptop</th>
+                        <th>Uso o propósito</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <table id="software">
+                <thead>
+                    <tr>
+                        <th style="width: 112px">&nbsp;</th>
+                        <th>Software</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <table>
+                <tr>
+                    <td>Usuario:</td>
+                    <td>
+                        <input id="usuarioFinal" type="text" value="" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>De:</td>
+        <td>
+            <input class="de" name="nombre" type="text" value="" />
+        </td>
+        <td>Para:</td>
+        <td>
+            <input class="para" name="nombre" type="text" value="" />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input class="de" name="posicion" type="text" value="" />
+        </td>
+        <td></td>
+        <td>
+            <input class="para" name="posicion" type="text" value="" />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input class="de" name="departamento" type="text" value="" />
+        </td>
+        <td></td>
+        <td>
+            <input class="para" name="departamento" type="text" value="" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <table>
+                <tr>
+                    <td style="width: 112px">Observaciones:</td>
+                    <td>
+                        <textarea id="observaciones" style="width: 100%"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<script>
+    function jsUcfirst(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    var jsonData = {
+        'id': 1,
+        'de': {
+            'nombre': 'Jaime',
+            'posicion': 'Gerente',
+            'departamento': 'Tecnologías de Información'
+        },
+        'para': {
+            'nombre': 'Everardo',
+            'posicion': 'Gerente',
+            'departamento': 'Operaciones'
+        },
+        'usuarioFinal': {
+            'nombre': 'Vianey'
+        },
+        'equipo': {
+            'develop': {
+                'escritorio': false,
+                'laptop': false,
+                'objetivo': 'Desarrollo o procesamiento avanzado'
+            },
+            'sales': {
+                'escritorio': false,
+                'laptop': false,
+                'objetivo': 'Ejecutivo de ventas'
+            },
+            'traffic': {
+                'escritorio': false,
+                'laptop': false,
+                'objetivo': 'Ejecutivo de trafico'
+            }            
+        },
+        'software': {
+            'office': {
+                'install': false,
+                'paquete': 'Office'
+            }
+        },
+        'observaciones': 'Obs.'
+    };
+    
+    $.each(jsonData.de, function(index, value) {
+        $(".de[name='" + index.toString() + "']").val(jsonData.de[index.toString()]);
+        $(document.body).on("change", ".de[name='" + index.toString() + "']", function(){
+            jsonData.de[index.toString()] = $(this).val();
+        });
+    });
+    
+    $.each(jsonData.para, function(index, value) {
+        $(".para[name='" + index.toString() + "']").val(jsonData.para[index.toString()]);
+        $(document.body).on("change", ".para[name='" + index.toString() + "']", function(){
+            jsonData.para[index.toString()] = $(this).val();
+        });
+    });
+    
+    $('#usuarioFinal').val(jsonData.usuarioFinal.nombre);    
+    $('#observaciones').val(jsonData.observaciones);    
+    
+    $(document.body).on("change", "#usuarioFinal", function(){
+        jsonData.usuarioFinal.nombre = $(this).val();
+    });
+    
+    $(document.body).on("change", "#observaciones", function(){
+        jsonData.observaciones = $(this).val();
+    });
+    
+    var content = '';
+    $.each(jsonData.equipo, function(index, value) {
+        content += '<tr><td style="text-align: center"><input type="checkbox" /></td><td style="text-align: center"><input type="checkbox" /></td><td>' + value.objetivo + '</td></tr>';
+    });
+    $('#equipo tbody').append(content);
+    
+    var content = '';
+    $.each(jsonData.software, function(index, value) {
+        content += '<tr><td style="text-align: center"><input type="checkbox" name="' + index + '" /></td><td>' + value.paquete + '</td></tr>';
+    });
+    $('#software tbody').append(content);
+    
+    $.each(jsonData.equipo, function(index, value) {
+        
+    });
+    
+    $.each(jsonData.software, function(index, value) {
+        if (value.install === true) {
+            $("input[type='checkbox'][name='" + index + "']").prop('checked', true);
+        }
+        $(document.body).on("change", "input[type='checkbox'][name='" + index + "']", function(){
+            if($(this).is(":checked")) {
+                jsonData.software[index].install = true;
+            } else {
+                jsonData.software[index].install = false;
+            }
+        });
+    });
+    
+</script>

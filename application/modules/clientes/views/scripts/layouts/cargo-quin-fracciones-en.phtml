@@ -1,0 +1,57 @@
+<?php if (isset($this->data)) { ?>
+    <table class="traffic-tab-table">
+        <thead>
+            <tr>
+                <th># Tariff</th>
+                <th>P.N.</th>
+                <th>Quantity</th>
+                <th>Tariff Descrption</th>
+                <th>UM</th>
+                <th>Origin Country</th>
+                <th>Unit Price</th>
+                <th>Total Quantity</th>
+                <th>Invoice #</th>
+                <th>Reference</th>
+                <th>% IVA</th>
+                <th>IVA</th>
+                <th>% IGI</th>
+                <th>IGI</th>
+                <th>P.N. Assessment</th>
+                <th>IVA</th>
+                <th>P.N. Assessment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $i = 1;
+            foreach ($this->data as $ped) {
+                if ($i & 1) {
+                    $style = "background-color: #fefefe;";
+                } else {
+                    $style = "background-color: #f3f3f3;";
+                }
+                $i++;
+                ?>
+                <tr style="<?= $style ?>">
+                    <td><?= $ped["ordenFactura"] ?></td>
+                    <td><?= $ped["numParte"] ?></td>
+                    <td><?= $ped["cantidadFactura"] ?></td>
+                    <td><?= $ped["descripcion"] ?></td>
+                    <td><?= $ped["umc"] ?></td>
+                    <td><?= $ped["paisOrigen"] ?></td>
+                    <td><?= number_format($ped["precioUnitario"], 6) ?></td>
+                    <td><?= $ped["cantidadFactura"] ?></td>
+                    <td><?= $ped["numFactura"] ?></td>
+                    <td><?= $ped["referencia"] ?></td>
+                    <td><?= $ped["iva"] ?></td>
+                    <td><?= $ped["importeIva"] ?></td>
+                    <td><?= $ped["igi"] ?></td>
+                    <td><?= $ped["importeIgi"] ?></td>
+                    <td><?= (isset($ped["importeIgi"])) ? number_format(($ped["importeIgi"] / $ped["cantidadFactua"]), 2) : '0' ?></td>
+                    <td><?= $ped["importeIva"] ?></td>
+                    <td><?= (isset($ped["importeIgi"])) ? number_format(($ped["importeIva"] / $ped["cantidadFactua"]), 2) : '0' ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>

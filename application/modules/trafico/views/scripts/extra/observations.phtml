@@ -1,0 +1,26 @@
+<form id="form-additional" method="post" class="forms">
+    <?= $this->inputHidden('hidden','id',$this->basico["id"]) ?>
+    <?= $this->inputHidden('hidden','Patente',$this->basico["patente"]) ?>
+    <?= $this->inputHidden('hidden','Aduana',$this->basico["aduana"]) ?>
+    <?= $this->inputHidden('hidden','Pedimento',$this->basico["pedimento"]) ?>
+    <?= $this->inputHidden('hidden','Referencia',$this->basico["referencia"]) ?>
+    <table class="traffic-table">
+        <tr>
+            <th colspan="6" class="invoice-title">OTROS</th>
+        </tr>
+        <tr>
+            <th>Tipo de servicio</th>
+            <th>Observaciones</th>
+            <th>Comentarios</th>
+            <th>Transportista nacional</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td><?= $this->servicios($this->basico["idAduana"],"servicio", isset($this->otros["idServicio"]) ? $this->otros["idServicio"] : null) ?></td>
+            <td><?= $this->observaciones($this->basico["idAduana"],"observaciones", isset($this->otros["idObservacion"]) ? $this->otros["idObservacion"] : null) ?></td>
+            <td><textarea id="comentarios" name="comentarios"><?= isset($this->otros["comentarios"]) ? $this->otros["comentarios"] : '' ?></textarea></td>
+            <td><?= $this->transportistas($this->basico["idAduana"],2,"transportistanac", isset($this->otros["idTransportista"]) ? $this->otros["idTransportista"] : null) ?></td>
+            <td><button class="traffic-btn traffic-btn-save traffic-btn-right">Guardar</button></td>
+        </tr>
+    </table>
+</form>

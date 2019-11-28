@@ -1,0 +1,25 @@
+<?php if(isset($this->customers)) { ?>
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>RFC</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($this->customers as $cliente) { ?>
+        <tr>
+            <td><?= utf8_decode($cliente['cliente_nombre']) ?></td>
+            <td><a class="customer_rfc" style="cursor:pointer" id="<?= $cliente['cliente_rfc'] ?>"><?= $cliente['cliente_rfc'] ?></a></td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php } ?>
+<script>
+    $(".customer_rfc").click(function(){
+        $("#bootstrap-rfc").val( $(this).attr('id') );
+        $("#bootstrap-submit").removeAttr("disabled");
+        $('#myModal').modal('hide');
+    });
+</script>

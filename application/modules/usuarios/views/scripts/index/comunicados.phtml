@@ -1,0 +1,70 @@
+<div style="width: 100%">
+    <div style="float: left; width: 50%">
+        <form id="form" method="post">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th style="width: 80px; text-align: right">
+                        <label for="from">DE:</label>
+                    </th>
+                    <td>
+                        <select id="from" name="from" class="traffic-input-large">
+                            <option value="">---</option>
+                            <option value="1">arribosynotificaciones@oaq.com.mx</option>
+                            <option value="2">infraestructura@oaq.com.mx</option>
+                            <option value="3">pedimentos.pagados@oaq.com.mx</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 80px; text-align: right">
+                        <label for="subject">ASUNTO:</label>
+                    </th>
+                    <td>
+                        <input type="text" id="subject" name="subject" class="traffic-input-large" />
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 80px; text-align: right">
+                        <label for="body">CONTENIDO:</label>
+                    </th>
+                    <td>
+                        <textarea id="body" name="body" class="traffic-textarea-large"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" id="submit" class="traffic-btn-add traffic-btn-right">Enviar</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div style="float: left; width: 50%; height: 550px; overflow-y: auto" id="emails">
+        <table class="traffic-table traffic-table-left">
+            <thead>
+                <tr>
+                    <th style="width: 24px">
+                        <input type="checkbox" id="selectAll" />
+                    </th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>RFC Empresa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->usuarios)) { ?>
+                    <?php foreach ($this->usuarios as $item) { ?>
+                        <tr>
+                            <td style="text-align: center">
+                                <input type="checkbox" class="sendEmail" id="<?= $item["id"] ?>" />
+                            </td>
+                            <td><?= $item["nombre"] ?></td>
+                            <td><?= $item["email"] ?></td>
+                            <td><?= $item["rfc"] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>

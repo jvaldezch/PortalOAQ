@@ -1,0 +1,59 @@
+<div id="errors" class="alert alert-error" style="display: none;"></div>    
+<form id="form-headers" method="post">
+    <input type="hidden" id="loadExternal" name="loadExternal" value="<?= isset($this->loadExternal) && $this->loadExternal == true ? "true" : "" ?>" >
+    <table class="traffic-table">
+        <tr>
+            <th colspan="7" class="traffic-table-title">EXPEDIENTE DIGITAL</th>
+        </tr>
+        <tr>
+            <th>Patente</th>
+            <th>Aduana</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th>RFC Cliente</th>
+            <th colspan="2">&nbsp;</th>
+        </tr>
+        <tr>
+            <td><?= $this->form->patente ?></td>
+            <td><?= $this->form->aduana ?></td>
+            <td><?= $this->form->pedimento ?></td>
+            <td><?= $this->form->referencia ?></td>
+            <td><?= $this->form->rfc_cliente ?></td>
+            <td colspan="2">
+                <a id="checklist" class="traffic-btn-primary traffic-btn-right" href="" style="display: none">Checklist</a>
+                <!--<a class="traffic-btn-close traffic-btn-right" id="delete">Borrar</a>-->
+                <a class="traffic-btn-save traffic-btn-right" href="/archivo/index/nueva-referencia">Nueva referencia</a>
+                <button class="traffic-btn-success traffic-btn-right" id="update-reference">Actualizar</button>                
+            </td>
+        </tr>
+    </table>
+    <table class="traffic-table">
+        <tr>
+            <th colspan="3" class="traffic-table-title">ARCHIVO</th>
+        </tr>
+        <tr>
+            <th>Seleccionar archivo</th>
+            <td><input type="file" name="file[]" id="file" class="required" multiple /></td>
+            <td>
+                <input type="submit" id="submit" value="Subir archivo" class="traffic-btn-save traffic-btn-right" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="progress progress-striped active">
+    <div class="bar bar-success"></div >
+    <div class="percent">0%</div >
+</div>
+<div id="files"></div>
+<div class="traffic-clear-5"></div>
+<div>
+    <a href="/archivo/data/descarga-carpeta?patente=<?= $this->gets["patente"] ?>&aduana=<?= $this->gets["aduana"] ?>&referencia=<?= $this->gets["ref"] ?>" class="traffic-btn-back traffic-btn-right">Descargar todo</a>    
+</div>
+<div>
+    <a onclick="sendToFtp($('#rfc_cliente').val(),'<?= $this->gets["ref"] ?>');" class="traffic-btn-save traffic-btn-right" style="width: 50px; padding-left: 0; padding-right: 0; min-width: 50px">FTP</a>
+</div>
+<a onclick="window.history.back();" class="traffic-btn-back">&laquo;&nbsp;Regresar</a>
+<div class="traffic-clear-10"></div>
+<div class="jqmWindow" id="checklistModal">
+    Please wait... <img src="/images/loader.gif" alt="loading" />
+</div>

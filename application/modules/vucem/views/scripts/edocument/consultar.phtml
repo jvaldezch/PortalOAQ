@@ -1,0 +1,75 @@
+<div class="traffic-clear-5"></div>
+<a href="/vucem/edocument/index" class="traffic-btn traffic-btn-back">&Lt; Regresar</a>
+<?php if (isset($this->solicitud)) { ?>
+    <a href="/automatizacion/vucem/print-edocument-accuse?id=<?= $this->data["id"] ?>" target="_blank" class="traffic-btn-right traffic-btn-save">IMPRIMIR PDF</a>
+<?php } ?>
+<a href="/vucem/get/xml-edocument?id=<?= $this->data["id"] ?>" target="_blank" class="traffic-btn-right traffic-btn-create">XML EDOCUMENT</a>
+<div class="traffic-clear-5"></div>
+<div class="traffic-edocument" style="padding: 5px">
+    <?php if (isset($this->error)) { ?>
+        <table class="table-error">
+            <tr>
+                <th>ERRORES ENCONTRADOS</th>
+            </tr>
+            <?php if (is_array($this->error)) { ?>
+                <?php foreach ($this->error as $error) { ?>
+                    <tr>
+                        <td><?= $error ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } ?>            
+        </table>
+    <?php } ?>
+    <table>
+        <tr>
+            <td align="center" style="border-top: 1px #888888 solid; font-weight: bold">ACUSE DIGITALIZACIÓN DE DOCUMENTOS</td>
+        </tr>
+        <tr>
+            <td align="left" style="text-align: left"><p style="font-size: 13px"><strong>Referencia:</strong> <?= $this->data["referencia"] ?>, <strong>Pedimento:</strong> <?= $this->data["pedimento"] ?>, <strong>Solicitud:</strong> <?= isset($this->solicitud) ? $this->solicitud : '<span style="color: red">NO COMPLETADO</span>' ?></p></td>
+        </tr>
+        <tr>
+            <td align="right" style="text-align: left"><strong>Folio de la solicitud:</strong> <?= isset($this->data["numTramite"]) ? $this->data["numTramite"] : '' ?></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><strong>RFC:</strong> <?= $this->data["rfc"] ?><br />Siendo las <?= date('H:i', strtotime($this->data["enviado"])) ?> del <?= date('d/m/Y', strtotime($this->data["enviado"])) ?> se tiene por recibida y atendida la solicitud de registro de Documentos Digitalizados presentado a través de la ventanilla única (Web Service).</td>
+        </tr>
+    </table>
+    <table>
+        <tr>            
+            <th class="invoice-title" colspan="2">Los datos del documento son los siguientes:</th>
+        </tr>
+        <tr>
+            <th style="font-weight: bold">Operación</th>
+            <th>Registro de documentos digitalizados</th>
+        </tr>
+        <tr>
+            <td style="font-weight: bold">Número E-Document</td>
+            <td><?= isset($this->data["edoc"]) ? $this->data["edoc"] : '<span style="color: red">NO COMPLETADO</span>' ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold">Tipo de documento</td>
+            <td><?= $this->tipoEdoc($this->data["tipoDoc"]) ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold">Nombre del documento</td>
+            <td><?= $this->data["nomArchivo"] ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold">RFC de consulta</td>
+            <td><?= isset($this->data["rfcConsulta"]) ? $this->data["rfcConsulta"] : 'OAQ030623UL8' ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold">Cadena original</td>
+            <td><?= $this->data["cadena"] ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold">Sello digital del solicitante (del documento)</td>
+            <td><?= wordwrap($this->data["firma"], 90, "<br />\n", true) ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold">Leyenda</td>
+            <td>Tiene 90 días a partir de esta fecha para utilizar su documento digitalizado, si en ese tiempo no lo utiliza, será dado de baja del sistema de la Ventanilla Única.</td>
+        </tr>
+    </table>
+    <div class="traffic-clear-5"></div>        
+</div>

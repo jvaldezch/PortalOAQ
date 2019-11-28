@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3><?= $this->filename ?></h3>
+</div>
+<div class="modal-body">
+    <textarea style="width: 680px; height: 340px; font-size: 12px"><?= $this->content ?></textarea>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-primary" href="/operaciones/index/download-file?id=<?= $this->id ?>&filename=<?= $this->filename ?>">Guardar archivo</a>    
+    <a class="btn" data-dismiss="modal">Cerrar</a>
+</div>

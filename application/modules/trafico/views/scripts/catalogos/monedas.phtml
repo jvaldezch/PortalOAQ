@@ -1,0 +1,17 @@
+<div style="height: 400px">
+    <table class="traffic-table traffic-table-left hover">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Moneda</th>
+            </tr>
+        </thead>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr>
+                <td><?= $item["codigo"] ?></td>
+                <td><?= $item["moneda"] ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding", "paginacion.phtml", array("function" => $this->funcion, "busqueda" => $this->busqueda)) : null ?>

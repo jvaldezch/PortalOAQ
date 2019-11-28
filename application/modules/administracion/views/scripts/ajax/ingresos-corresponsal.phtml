@@ -1,0 +1,68 @@
+<div class="traffic-clear-5"></div>
+<a class="traffic-btn traffic-btn-print traffic-btn-right" href="/administracion/data/ingresos-corresponsales-imprimir" target="_blank">Imprimir</a>
+<div class="traffic-clear-5"></div>
+<table class="traffic-table traffic-table-left">
+    <thead>
+        <tr>
+            <th colspan="16" class="traffic-table-title"><?= $this->nombre ?></th>
+        </tr>
+        <tr>
+            <th>Tipo</th>
+            <th>Cuenta</th>
+            <th>Ene</th>
+            <th>Feb</th>
+            <th>Mar</th>
+            <th>Abr</th>
+            <th>May</th>
+            <th>Jun</th>
+            <th>Jul</th>
+            <th>Ago</th>
+            <th>Sep</th>
+            <th>Oct</th>
+            <th>Nov</th>
+            <th>Dic</th>
+            <th>Total</th>
+            <th>Promedio</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->ingresos) && !empty($this->ingresos)) { ?>
+            <tr>
+                <td style="text-align: left"><?= $this->ingresos["tipo"] ?></td>
+                <td style="text-align: left"><?= $this->ingresos["cuenta"] ?></td>
+                <?php if (isset($this->ingresos["valores"])) { ?>
+                    <?php foreach ($this->ingresos["valores"] as $item) { ?>
+                        <td style="text-align: right"><?= number_format($item, 2, '.', ',') ?></td>
+                    <?php } ?>
+                <?php } ?>
+            </tr>
+        <?php } ?>
+        <?php if (isset($this->egresos) && !empty($this->egresos)) { ?>
+            <tr>
+                <td style="text-align: left"><?= $this->egresos["tipo"] ?></td>
+                <td style="text-align: left"><?= $this->egresos["cuenta"] ?></td>
+                <?php if (isset($this->egresos["valores"])) { ?>
+                    <?php foreach ($this->egresos["valores"] as $item) { ?>
+                        <td style="text-align: right"><?= number_format($item, 2, '.', ',') ?></td>
+                    <?php } ?>
+                <?php } ?>
+            </tr>
+        <?php } ?>
+        <?php if (isset($this->ingresos) && !empty($this->ingresos) && isset($this->egresos) && !empty($this->egresos)) { ?>
+            <tr>
+                <td style="text-align: left">DIFERENCIA</td>
+                <td style="text-align: left">&nbsp;</td>
+                <?php foreach ($this->ingresos["valores"] as $k => $v) { ?>
+                    <td style="text-align: right"><?= number_format(($this->ingresos["valores"][$k] - $this->egresos["valores"][$k]), 2, '.', ',') ?></td>
+                <?php } ?>
+            </tr>
+            <tr>
+                <td style="text-align: left">PORCENTAJES</td>
+                <td style="text-align: left">&nbsp;</td>
+                <?php foreach ($this->ingresos["valores"] as $k => $v) { ?>
+                    <td style="text-align: right"><?= number_format(($this->ingresos["valores"][$k] - $this->egresos["valores"][$k]) / $this->ingresos["valores"][$k] * 100, 0) ?>&nbsp;%</td>
+                <?php } ?>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

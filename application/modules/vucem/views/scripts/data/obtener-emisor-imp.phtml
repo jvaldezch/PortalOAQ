@@ -1,0 +1,57 @@
+<div id="modalWindow">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Emisores Importación</h3>
+    </div>
+    <div class="modal-body">
+        <?php if($this->clientes) { ?>
+        <table class="table table-striped table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>RFC</th>
+                    <th>NOMBRE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->clientes as $item) { ?>
+                <tr>
+                    <td>&nbsp;<a href="/vucem/data/detalle-emisor-imp?cvepro=<?= $item["cvepro"] ?>&tipo=<?= $this->tipo ?>" class="detalle-emisor"><i class="icon-ok-sign"></i></a></td>
+                    <td><?= $item["rfc"] ?></td>
+                    <td><?= $item["razon_soc"] ?></td>
+                </tr>
+                <?php } ?>
+            </tbody>            
+        </table>
+        <?php } else { ?>
+        <h4>No tiene clientes asignados.</h4>
+        <?php } ?>
+    </div>
+    <div class="modal-footer">
+      <a id="closeModal" class="btn btn-danger" data-dismiss="modal">Cerrar</a>
+    </div>
+</div>
+<script>
+    $(".detalle-emisor").click(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('href'),
+            cache: false,
+            dataType: 'json'
+        }).done(function(data) {
+            $("#bootstrap-ProIden").val(data.identificador);
+            $("#bootstrap-CvePro").val(data.cvecte);
+            $("#bootstrap-ProTaxID").val(data.rfc);
+            $("#bootstrap-ProNombre").val(data.razon_soc);
+            $("#bootstrap-ProCalle").val(data.calle);
+            $("#bootstrap-ProColonia").val(data.colonia);
+            $("#bootstrap-ProCP").val(data.cp);
+            $("#bootstrap-ProNumExt").val(data.numext);
+            $("#bootstrap-ProNumInt").val(data.numint);
+            $("#bootstrap-ProMun").val(data.municipio);
+            $("#bootstrap-ProEdo").val(data.estado);
+            $("#bootstrap-ProPais").val(data.pais);
+            $('#closeModal').trigger('click');
+        });
+    });
+</script>

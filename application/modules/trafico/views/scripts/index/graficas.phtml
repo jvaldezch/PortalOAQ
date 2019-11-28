@@ -1,0 +1,252 @@
+<style>
+    table.graphs {
+        width: 350px; 
+        margin: auto;
+        border-spacing: 2px;
+        border-collapse: separate;
+    }
+    table.graphs th,
+    table.graphs td {
+        font-size: 12px;    
+    }
+    table.graphs th {
+        background-color: #f3f3f3;
+    }
+    table.graphs td {
+        padding-left: 10px;
+    }
+</style>
+<form action="/trafico/index/graficas" method="get">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th style="width: 130px; text-align: left">Año</th>
+                <th style="width: 130px; text-align: left">Mes</th>
+                <th style="width: 130px; text-align: left">Cliente</th>
+                <th style="width: 130px; text-align: left">Aduana</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select name="year" id="year" class="traffic-select-small">
+                        <?php foreach(range(date("Y"), 2016) as $item) { ?>
+                            <option value="<?= $item ?>"><?= $item ?></option>
+                        <?php } ?>
+                    </select>
+                </select>
+                </td>
+                <td>
+                    <select name="month" id="month" class="traffic-select-small">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="idCliente" id="idCliente" class="traffic-select-large">
+                        <option value="">-- Seleccionar --</option>
+                        <?php if (isset($this->clientes)) { ?>
+                            <?php foreach ($this->clientes as $item) { ?>
+                                <option value="<?= $item['id'] ?>" <?= (isset($this->idCliente) && (int) $this->idCliente == (int) $item['id']) ? ' selected="true"' : '' ?>><?= $item['nombre'] ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </td>
+                <td>
+                    <select name="idAduana" id="idAduana" class="traffic-select-medium">
+                        <option value="">-- Seleccionar --</option>
+                        <?php if (isset($this->aduanas)) { ?>
+                            <?php foreach ($this->aduanas as $item) { ?>
+                                <option value="<?= $item['id'] ?>" <?= (isset($this->idAduana) && (int) $this->idAduana == (int) $item['id']) ? ' selected="true"' : '' ?>><?= $item['patente'] . '-' . $item['aduana'] . ' '  . $item['nombre'] ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </td>
+                <td>
+                    <button type="submit" class="traffic-btn traffic-btn-right traffic-btn-success">Filtrar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div style="clear: both"></div>
+<div style="float: left; width: 100%">
+    <div style="float: left; width: 50%">
+        <div id="container" style="height: 350px"></div>   
+    </div>
+    <div style="float: left; width: 50%">
+        <div id="liberados" style="height: 350px"></div>
+        <table class="graphs" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Ene</th>
+                    <th>Feb</th>
+                    <th>Mar</th>
+                    <th>Abr</th>
+                    <th>May</th>
+                    <th>Jun</th>
+                    <th>Jul</th>
+                    <th>Ago</th>
+                    <th>Sep</th>
+                    <th>Oct</th>
+                    <th>Nov</th>
+                    <th>Dic</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pagados</td>
+                    <td><?= $this->pagados[0] ?></td>
+                    <td><?= $this->pagados[1] ?></td>
+                    <td><?= $this->pagados[2] ?></td>
+                    <td><?= $this->pagados[3] ?></td>
+                    <td><?= $this->pagados[4] ?></td>
+                    <td><?= $this->pagados[5] ?></td>
+                    <td><?= $this->pagados[6] ?></td>
+                    <td><?= $this->pagados[7] ?></td>
+                    <td><?= $this->pagados[8] ?></td>
+                    <td><?= $this->pagados[9] ?></td>
+                    <td><?= $this->pagados[10] ?></td>
+                    <td><?= $this->pagados[11] ?></td>
+                    <td><?= array_sum($this->pagados) ?></td>
+                </tr>
+                <tr>
+                    <td>Liberados</td>
+                    <td><?= $this->liberados[0] ?></td>
+                    <td><?= $this->liberados[1] ?></td>
+                    <td><?= $this->liberados[2] ?></td>
+                    <td><?= $this->liberados[3] ?></td>
+                    <td><?= $this->liberados[4] ?></td>
+                    <td><?= $this->liberados[5] ?></td>
+                    <td><?= $this->liberados[6] ?></td>
+                    <td><?= $this->liberados[7] ?></td>
+                    <td><?= $this->liberados[8] ?></td>
+                    <td><?= $this->liberados[9] ?></td>
+                    <td><?= $this->liberados[10] ?></td>
+                    <td><?= $this->liberados[11] ?></td>
+                    <td><?= array_sum($this->liberados) ?></td>
+                </tr>
+            </tbody>
+        </table>        
+    </div>
+</div>
+<div style="float: left; width: 100%">
+    <div style="float: left; width: 50%">
+        <div id="porAduana" style="height: 350px"></div>   
+    </div>
+    <div style="float: left; width: 50%">
+        <div id="porUsuarios" style="height: 350px"></div>
+    </div>
+</div>
+<div style="float: left; width: 100%">
+    <div style="float: left; width: 50%">
+        <div id="cumplimiento" style="height: 350px"></div>   
+    </div>
+    <div style="float: left; width: 50%">
+    </div>
+</div>
+
+<div style="clear: both"></div>
+<?php if (isset($this->arr)) { ?>
+    <script type="text/javascript">
+        var valores = jQuery.parseJSON('<?= $this->arr ?>');
+        $("#container").highcharts({
+            chart: { type: 'column' },
+            title: { text: 'Pedimentos Pagados <?= $this->year ?>' },
+            subtitle: {  },
+            xAxis: {
+                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                type: 'category'
+            },
+            yAxis: {title: { text: 'Total de pedimentos pagados' }},
+            legend: { enabled: false },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },
+            series: valores
+        });
+        
+        $("#liberados").highcharts({
+            chart: { type: 'column' },
+            title: { text: 'Pedimentos Pagados vs Liberados <?= $this->year ?>' },
+            subtitle: {  },
+            xAxis: {
+                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                type: 'category'
+            },
+            yAxis: { title: { text: 'Cantidad Pedimentos' }  },
+            legend: { enabled: true },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },
+            series: [{
+                name: 'Pagados',
+                data: <?= json_encode($this->pagados) ?>
+
+            }, {
+                name: 'Liberados',
+                data: <?= json_encode($this->liberados) ?>
+
+            }]
+        });
+        
+        $("#porAduana").highcharts({
+            chart: { type: 'column' },
+            title: { text: 'Pedimentos Liberados por Aduana <?= $this->month ?>, <?= $this->year ?>' },
+            subtitle: {  },
+            xAxis: {
+                categories: <?= json_encode($this->porAduanaEtiquetas) ?>,
+                type: 'category'
+            },
+            yAxis: {title: { text: 'Total de pedimentos pagados' }},
+            legend: { enabled: false },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },
+            series: [{ name: 'Operaciones', colorByPoint: true, data: <?= json_encode($this->porAduana) ?> }]
+        });
+    </script>
+<?php } ?>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="cache-control" content="max-age=0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <?= $this->headMeta(); ?>
+        <?= $this->headLink() ?>
+        <?= $this->headScript() ?>
+    </head>
+    <body style="height: 100%">
+        <?php if (isset($this->files)) { ?>
+            <table class="traffic-table traffic-table-left hover">            
+                <tr>
+                    <th class="traffic-table-subtitle">&nbsp;</th>
+                    <th class="traffic-table-subtitle">Archivo</th>
+                    <th class="traffic-table-subtitle">Tipo</th>
+                    <th class="traffic-table-subtitle">Usuario</th>
+                    <th class="traffic-table-subtitle">Creado</th>
+                    <th class="traffic-table-subtitle">&nbsp;</th>
+                </tr>     
+                <?php foreach ($this->files as $k => $item) { ?>
+                    <tr class="hover">
+                        <td><?= (file_exists($item["ubicacion"])) ? '' : '<span><a title="El archivo no existe en el sistema, volver a subir." style="margin-left: 3px; color:red; cursor: pointer;"><strong>!</strong></a></span>' ?></td>
+                        <td><a class="traffic-a" onclick="parent.descargarArchivo('/archivo/index/download-file?id=<?= $item["id"] ?>')"><?= $item["nom_archivo"] ?></a></td>
+                        <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                        <td style="width: 150px;"><?= ucwords(strtolower($item["usuario"])) ?>&nbsp;</td>
+                        <td style="width: 120px;"><?= date('d/m/Y',  strtotime($item["creado"])) ?>&nbsp;</td>
+                        <td style="width: 100px;">
+                            <div id="icon_<?= $item["id"] ?>">
+                                <a onclick="editarArchivo('<?= $item["id"] ?>');"><div class="traffic-icon traffic-icon-edit"></div></a>
+                                <a onclick="borrarArchivo('<?= $item["id"] ?>');"><div class="traffic-icon traffic-icon-delete"></div></a>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        <?php } ?>
+        <script type="text/javascript">
+            function editarArchivo(value) {
+                $.ajax({
+                    beforeSend: function () {
+                        $("#icon_" + value).html('<a style="cursor:pointer;" onclick="changeFile(' + value + ')"><div class="traffic-icon traffic-icon-save"></div></a>&nbsp;<a style="cursor:pointer;" onclick="cancelEdit(' + value + ')"><div class="traffic-icon traffic-icon-cancel"></div></a>');
+                    },
+                    url: "/archivo/ajax/file-types",
+                    context: document.body,
+                    data: {id: value},
+                    type: 'GET'
+                }).done(function (data) {
+                    $("#edit_" + value).html(data);
+                });
+            }
+            function cancelEdit(value) {
+                $.ajax({
+                    url: "<?= $this->baseUrl(); ?>/archivo/ajax/cancel-edit",
+                    context: document.body,
+                    data: {id: value, type: $("#select_" + value).val()},
+                    type: 'GET'
+                }).done(function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    if (obj.success === true) {
+                        $("#edit_" + value).html(obj.type);
+                        $("#icon_" + value).html(obj.icons);
+                    } else if (obj.success === false) {
+                        alert("Ocurrio un error al guardar cambios.");
+                    }
+                });
+            }
+            function changeFile(value) {
+                $.ajax({
+                    url: "<?= $this->baseUrl(); ?>/archivo/ajax/change-file-type",
+                    context: document.body,
+                    data: {id: value, type: $("#select_" + value).val()},
+                    type: 'GET'
+                }).done(function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    if (obj.success === true) {
+                        $("#edit_" + value).html(obj.type);
+                        $("#icon_" + value).html(obj.icons);
+                    } else if (obj.success === false) {
+                        alert("Ocurrio un error al guardar cambios.");
+                    }
+                });
+            }
+            function borrarArchivo(id) {
+                var answer = confirm("¿Desea borrar el archivo?")
+                if (answer){
+                    $.ajax({
+                        url: '<?= $this->baseUrl(); ?>/archivo/data/remove-file',
+                        data: { id: id },
+                        type: 'post',
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data) {
+                            if(data.success === true) {
+                                window.location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                        }
+                    });
+                }
+            }
+        </script>
+    </body>
+</html>

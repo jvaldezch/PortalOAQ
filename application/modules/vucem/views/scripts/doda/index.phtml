@@ -1,0 +1,30 @@
+<script type="text/javascript" src="https://aplicaciones.sat.gob.mx/PTSC/fwidget/restServices/m2.firmado.sat.general.js"></script>
+<div id="firmado-widget-container" style="width: 350px; padding-left: 10px"></div>
+<script type="text/javascript">
+    function btnEnviarFIELOnClick (){
+	try {
+            var cadenaOriginalEntrada ="cadenaoriginalnegocio";
+            var rfcSession ="rfc usuario loggeado";
+
+		//Método que genera el firmado 
+                generaFirmaIndividual([{cadenaOriginal:cadenaOriginalEntrada}],
+                {validarRFCSession:rfcSession},
+		function (error, resultado) {
+          	if (error && error!==0) {
+                  	console.log("Error", error);
+                  	// Mostrar error al usuario.
+				alert(catalogoErrores[error].msg_vista);
+                  } else {
+                          console.log("Success");
+                               
+				//Utilizar resultados
+                          console.log(resultado[0].firmaDigital);
+			 console.log(resultado[0].cadenaOriginalGenerada);
+                  }
+  	});
+	} catch (error) {
+            console.log("Error de widget");
+        }
+    }
+
+</script>

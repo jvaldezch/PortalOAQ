@@ -1,0 +1,293 @@
+
+<table class="table table-striped table-bordered" id="filesTable">
+    <thead>
+        <tr>
+            <th style="width: 26px; text-align: center">&nbsp;</th>
+            <th>Nombre de archivo</th>
+            <th style="width: 200px">Tipo de archivo</th>
+            <th style="width: 120px">Creado</th>            
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div class="form-group">
+    <div class="col-md-9 col-sm-9 col-xs-12">
+        <div class="">
+            <label>
+                <input class="js-switch" style="display: none;" data-switchery="true" type="checkbox"> Documentación completa
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="x_title">
+            <h2>Facturas</h2>
+            <div class="clearfix"></div>
+            <form id="uploadInvoices" class="dropzone">
+                <input type="hidden" name="id" value="<?= $this->id ?>" />
+            </form>
+        </div>    
+    </div>
+    <div class="col-lg-6">
+        <div class="x_title">
+            <h2>BL (Bill of lading)</h2>
+            <div class="clearfix"></div>
+        </div>
+        <form id="uploadBl" class="dropzone">
+            <input type="hidden" name="id" value="<?= $this->id ?>" />
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="x_title">
+            <h2>PL (Packing list)</h2>
+            <div class="clearfix"></div>
+        </div>
+        <form id="uploadPl" class="dropzone">
+            <input type="hidden" name="id" value="<?= $this->id ?>" />
+        </form>        
+    </div>
+    <div class="col-lg-6">
+        <div class="x_title">
+            <h2>3.1.7</h2>
+            <div class="clearfix"></div>
+        </div>
+        <form id="uploadCarta" class="dropzone">
+            <input type="hidden" name="id" value="<?= $this->id ?>" />
+        </form>        
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="x_title">
+            <h2>NOM</h2>
+            <div class="clearfix"></div>
+        </div>
+        <form id="uploadNom" class="dropzone">
+            <input type="hidden" name="id" value="<?= $this->id ?>" />
+        </form>                
+    </div>
+    <div class="col-lg-6">
+        <div class="x_title">
+            <h2>Certificado de Origen</h2>
+            <div class="clearfix"></div>
+        </div>
+        <form id="uploadCert" class="dropzone">
+            <input type="hidden" name="id" value="<?= $this->id ?>" />
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="x_title">
+            <h2>Otros documentos</h2>
+            <div class="clearfix"></div>
+        </div>
+        <form id="uploadOtros" class="dropzone">
+            <input type="hidden" name="id" value="<?= $this->id ?>" />
+        </form>                
+    </div>
+</div>
+
+
+<style>
+    .dropzone {
+        min-height: 60px;
+        border: 2px solid rgba(0,0,0,0.3);
+        background: white;
+        padding: 5px 5px;
+    }
+    .x_title {
+        padding: 1px 3px 0;
+        margin-bottom: 0;
+    }
+</style>
+<script type="text/javascript">
+    
+    window.viewUploadedFiles = function() {
+        $.get("/dashboard/get/view-uploaded-files", {id: <?= $this->id ?>})
+            .done(function (res) {
+                setTimeout(function () { }, 5000);
+                if (res.success === true) {
+                    var html = '';
+                    $.each(res.results, function (i, item) {
+                        html += '<tr>';
+                        html += '<td><i class="fa fa-trash" aria-hidden="true" style="cursor: pointer" onclick="javascript:void(0)"></i></td>';
+                        html += '<td><a href="/archivo/get/descargar-archivo?id=' + item.id + '" style="cursor: pointer">' + item.nom_archivo + '</a></td>';
+                        html += '<td>' + fileType(parseInt(item.tipo_archivo)) + '</td>';
+                        html += '<td>' + item.creado + '</td>';
+                        html += '</tr>';
+                    });
+                    $("#filesTable tbody").html(html);
+                } else {
+                    $("#filesTable tbody").html('<tr><td colspan="3"><em>No hay archivos.</em></td></tr>');
+                }
+            });          
+    };
+    
+    $("#uploadInvoices").dropzone({ 
+        url: "/dashboard/post/subir-archivos",
+        dictDefaultMessage: 'Coloque aquí las facturas',
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        maxFilesize: 15,
+        init: function(file, done) {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("tipo_documento", 34);
+            });
+            this.on("queuecomplete", function(file) {
+                this.removeAllFiles();
+                viewUploadedFiles();
+            });
+        }
+    });
+    
+    $("#uploadBl").dropzone({ 
+        url: "/dashboard/post/subir-archivos",
+        dictDefaultMessage: 'Coloque aquí BL (Bill of lading)',
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        maxFilesize: 15,
+        init: function(file, done) {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("tipo_documento", 60);
+            });
+            this.on("queuecomplete", function(file) {
+                this.removeAllFiles();
+                viewUploadedFiles();
+            });
+        }
+    });
+    
+    $("#uploadPl").dropzone({ 
+        url: "/dashboard/post/subir-archivos",
+        dictDefaultMessage: 'Coloque aquí PL (Packing list)',
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        maxFilesize: 15,
+        init: function(file, done) {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("tipo_documento", 38);
+            });
+            this.on("queuecomplete", function(file) {
+                this.removeAllFiles();
+                viewUploadedFiles();
+            });
+        }
+    });
+    
+    $("#uploadNom").dropzone({ 
+        url: "/dashboard/post/subir-archivos",
+        dictDefaultMessage: 'Coloque aquí NOM',
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        maxFilesize: 15,
+        init: function(file, done) {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("tipo_documento", 18);
+            });
+            this.on("queuecomplete", function(file) {
+                this.removeAllFiles();
+                viewUploadedFiles();
+            });
+        }
+    });
+    
+    $("#uploadCarta").dropzone({ 
+        url: "/dashboard/post/subir-archivos",
+        dictDefaultMessage: 'Coloque aquí carta 3.1.7',
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        maxFilesize: 15,
+        init: function(file, done) {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("tipo_documento", 55);
+            });
+            this.on("queuecomplete", function(file) {
+                this.removeAllFiles();
+                viewUploadedFiles();
+            });
+        }
+    });
+    
+    $("#uploadCert").dropzone({ 
+        url: "/dashboard/post/subir-archivos",
+        dictDefaultMessage: 'Coloque aquí certificado de origen',
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        maxFilesize: 15,
+        init: function(file, done) {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("tipo_documento", 55);
+            });
+            this.on("queuecomplete", function(file) {
+                this.removeAllFiles();
+                viewUploadedFiles();
+            });
+        }
+    });
+    
+    $("#uploadOtros").dropzone({ 
+        url: "/dashboard/post/subir-archivos",
+        dictDefaultMessage: 'Coloque aquí otros documentos',
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        maxFilesize: 15,
+        init: function(file, done) {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("tipo_documento", 55);
+            });
+            this.on("queuecomplete", function(file) {
+                this.removeAllFiles();
+                viewUploadedFiles();
+            });
+        }
+    });
+
+    $(document.body).on("click", "#btn-upload", function (ev) {
+        ev.preventDefault();
+        var uploadInvoices = Dropzone.forElement("#uploadInvoices");
+        uploadInvoices.processQueue();
+        
+        var uploadBl = Dropzone.forElement("#uploadBl");
+        uploadBl.processQueue();
+        
+        var uploadPl = Dropzone.forElement("#uploadPl");
+        uploadPl.processQueue();
+        
+        var uploadNom = Dropzone.forElement("#uploadNom");
+        uploadNom.processQueue();
+        
+        var uploadCarta = Dropzone.forElement("#uploadCarta");
+        uploadCarta.processQueue();
+        
+    });
+    
+    window.fileType = function(type) {
+        var obj = documents[type];
+        if (obj !== undefined) {
+            return obj.name;
+        }
+        return '';
+    };
+    
+    viewUploadedFiles();
+    
+    
+    if ($(".js-switch")[0]) {
+        var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+        elems.forEach(function (html) {
+            var switchery = new Switchery(html, {
+                color: '#26B99A'
+            });
+        });
+    }
+    
+</script>

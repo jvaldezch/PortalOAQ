@@ -1,0 +1,85 @@
+<style>
+    label.error {
+        color: red;
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+</style>
+<fieldset>
+    <legend>Archivos de poliza <b><?= $this->poliza ?></b></legend>    
+    <?= $this->form ?>
+    <div id="files">&nbsp;</div>
+    <script type="text/javascript">
+        var options = {
+            beforeSend: function () {
+                $("#upload-status").html('<img src="/images/loader.gif" />');
+            },
+            complete: function (xhr) {
+                $('#upload-status').html("&nbsp;");
+                var obj = jQuery.parseJSON(xhr.responseText);
+                if (obj.success === true) {
+                    window.location.href = "/administracion/index/ver-archivos-poliza?poliza=<?= $this->poliza ?>";
+                } else if (obj.success === false) {
+                    alert("Ocurrio un error al enviar archivo.");
+                }
+            }
+        };
+        $(document).ready(function() {
+            $("#submit").click(function(e){
+                e.preventDefault();
+                $("#files-to-upload").ajaxSubmit(options);                
+            });
+        });
+    </script>    
+    <table class="traffic-table">            
+        <tr>
+            <td><form action="/administracion/data/new-file-upload" method="post" enctype="multipart/form-data" id="files-to-upload">
+                    <input type="hidden" id="rfc-hidden" name="rfc-hidden" />
+                    <input id="lefile" type="file" name="file" style="display:none">
+                    <div class="input-append">
+                        <input id="fake" class="input-large" name="filename" type="text">
+                        <a class="btn btn-success" onclick="$('input[id=lefile]').click();">Seleccionar archivo...</a>
+                    </div>
+                    <div style="clear: both"></div>
+                    <a class="traffic-btn traffic-btn-back" href="/administracion/index/repositorio">« Regresar</a>
+                    <input type="submit" class="traffic-btn traffic-btn-save traffic-btn-right" id="submit" value="Subir archivo">
+                </form>
+            <td><div id="upload-status">&nbsp;</div></td>
+        </tr>            
+    </table>
+</fieldset>
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadFiles();
+    });
+    $('input[id=lefile]').change(function () {
+        $('#fake').val($(this).val());
+    });
+    $('body').on('click', '.openfile', function (e) {
+        e.preventDefault();
+        window.open($(this).attr('href'), '_blank', 'toolbar=0,location=0,menubar=0,height=550,width=800,scrollbars=yes');
+    });
+    function loadFiles() {
+        $.ajax({
+            url: "/administracion/data/poliza-cargar-archivos",
+            context: document.body
+        }).done(function (data) {
+            $("#files").html(data);
+        });
+    }
+    function sendSat(value) {
+        $.ajax({
+            url: "/administracion/data/verify-invoice",
+            context: document.body,
+            data: {id: value},
+            type: 'GET'
+        }).done(function (data) {
+            var obj = jQuery.parseJSON(data);
+            if (obj.success === true) {
+                window.location.href = "/administracion/index/ver-archivos-poliza?poliza=<?= $this->poliza ?>";
+            } else {
+                window.location.href = "/administracion/index/ver-archivos-poliza?poliza=<?= $this->poliza ?>";
+            }
+        });
+    }
+</script>

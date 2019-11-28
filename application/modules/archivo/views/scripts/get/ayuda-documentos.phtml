@@ -1,0 +1,22 @@
+<div style="overflow-y: auto; height: 400px">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>ID OAQ</th>
+                <th>Prefijo</th>
+            </tr>        
+        </thead>
+        <tbody>
+            <?php if (isset($this->documentos) && !empty($this->documentos)) { ?>
+                <?php foreach ($this->documentos as $item) { ?>
+                    <tr>
+                        <td><?= $item["descripcion"] ?></td>
+                        <td style="width: 70px; text-align: center"><?= $item["idDocumento"] ?></td>
+                        <td style="width: 120px"><?= $item["prefijo"] ?></td>
+                    </tr>
+                <?php } ?>        
+            <?php } ?>
+        </tbody>
+    </table>
+</div>

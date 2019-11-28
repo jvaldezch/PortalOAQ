@@ -1,0 +1,48 @@
+<table class="traffic-table traffic-table-left table-hover">
+    <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Tipo de contacto</th>
+        <th>Creación</th>
+        <th>Comentario</th>
+        <th>Deposito</th>
+        <th>Cancelación</th>
+        <th>Habilitado</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php if (isset($this->data) && !empty($this->data)) { ?>
+        <?php foreach ($this->data as $item) { ?>
+            <tr>
+            <tr>
+                <td><?= $item["nombre"] ?></td>
+                <td><?= $item["email"] ?></td>
+                <td><?= $item["tipo"] ?></td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="creacion" <?= ($item["creacion"] == 1) ? " checked=\"true\"" : "" ?>>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="comentario" <?= ($item["comentario"] == 1) ? " checked=\"true\"" : "" ?>>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="deposito" <?= ($item["deposito"] == 1) ? " checked=\"true\"" : "" ?>>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="cancelacion" <?= ($item["cancelacion"] == 1) ? " checked=\"true\"" : "" ?>>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="habilitado" <?= ($item["habilitado"] == 1) ? " checked=\"true\"" : "" ?>>
+                </td>
+                <td style="text-align: center">
+                    <i class="far fa-trash-alt" onclick="removerContacto(<?= $item["id"] ?>);" style="font-size:1.3em; color: #2f3b58"></i>
+                </td>
+            </tr>
+        </tr>
+    <?php } ?>
+<?php } else { ?>
+    <tr>
+        <td colspan="9" style="text-align: center">
+            <em>No tiene contactos asignados en esta aduana.</em>
+        </td>
+    </tr>
+<?php } ?>
+</table>

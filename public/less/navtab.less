@@ -1,0 +1,45 @@
+@font: sans-serif;
+@fontsize: 12px;
+@bcolor: #888888;
+
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color: #e0e9ee;
+    text-decoration: none;
+}
+
+.nav-tabs > li {
+    margin-bottom: -1px;
+}
+
+.nav-tabs > li, .nav-pills > li {
+    float: left;
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #3f4c6b;
+    border-color: #ddd #ddd transparent;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px;
+    color: #fff;
+    cursor: default;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.nav-tabs > li > a {
+    background-color: #d1dde5;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    color: #333;
+    font-family: @font;
+    font-size: @fontsize;
+    line-height: 20px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}

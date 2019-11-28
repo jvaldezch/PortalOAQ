@@ -1,0 +1,190 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30-dic-2016, 11:22:26
+    Author     : Jaime
+*/
+button.disabled,
+button:disabled {
+  background: #f0f0f0;
+  border: 1px #dddddd solid;
+  color: #aaa;
+}
+button,
+a.button,
+form button,
+input[type=button],
+form input[type=submit] {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  float: left;
+  display: inline;
+  display: table-cell;
+  display: inline-table;
+  display: inline-block;
+  cursor: pointer;
+  background: #ecf0f1;
+  font-size: 12px;
+  font-family: Montserrat;
+  height: 32px;
+  vertical-align: middle;
+  border-radius: 4px;
+  border: 1px #dbdfe0 solid;
+  padding: 0px 10px;
+  margin: 5px 2px;
+  color: #222222;
+}
+button:hover,
+a.button:hover,
+form button:hover,
+input[type=button]:hover,
+form input[type=submit]:hover {
+  background: #dbdfe0;
+  border: 1px #d7dbdc solid;
+}
+a.button {
+  line-height: 30px;
+  height: 30px;
+  text-decoration: none;
+  color: #222222;
+}
+.button-blue {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  float: left;
+  display: inline;
+  display: table-cell;
+  display: inline-table;
+  display: inline-block;
+  cursor: pointer;
+  background: #3498db;
+  font-size: 12px;
+  font-family: Montserrat;
+  height: 32px;
+  vertical-align: middle;
+  border-radius: 4px;
+  border: 1px #2387ca solid;
+  padding: 0px 10px;
+  margin: 5px 2px;
+  color: #ffffff;
+}
+.button-blue:hover {
+  background: #2387ca;
+  border: 1px #1f83c6 solid;
+}
+.button-red {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  float: left;
+  display: inline;
+  display: table-cell;
+  display: inline-table;
+  display: inline-block;
+  cursor: pointer;
+  background: #e74c3c;
+  font-size: 12px;
+  font-family: Montserrat;
+  height: 32px;
+  vertical-align: middle;
+  border-radius: 4px;
+  border: 1px #d63b2b solid;
+  padding: 0px 10px;
+  margin: 5px 2px;
+  color: #ffffff;
+}
+.button-red:hover {
+  background: #d63b2b;
+  border: 1px #d23727 solid;
+}
+.button-orange {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  float: left;
+  display: inline;
+  display: table-cell;
+  display: inline-table;
+  display: inline-block;
+  cursor: pointer;
+  background: #f1c40f;
+  font-size: 12px;
+  font-family: Montserrat;
+  height: 32px;
+  vertical-align: middle;
+  border-radius: 4px;
+  border: 1px #e0b300 solid;
+  padding: 0px 10px;
+  margin: 5px 2px;
+  color: #ffffff;
+}
+.button-orange:hover {
+  background: #e0b300;
+  border: 1px #dcaf00 solid;
+}
+.button-green {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  float: left;
+  display: inline;
+  display: table-cell;
+  display: inline-table;
+  display: inline-block;
+  cursor: pointer;
+  background: #2ecc71;
+  font-size: 12px;
+  font-family: Montserrat;
+  height: 32px;
+  vertical-align: middle;
+  border-radius: 4px;
+  border: 1px #1dbb60 solid;
+  padding: 0px 10px;
+  margin: 5px 2px;
+  color: #ffffff;
+}
+.button-green:hover {
+  background: #1dbb60;
+  border: 1px #19b75c solid;
+}
+.button-plus,
+.button-minus {
+  font-size: 20px;
+}
+button.small {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  float: left;
+  display: inline;
+  display: table-cell;
+  display: inline-table;
+  display: inline-block;
+  cursor: pointer;
+  background: #ecf0f1;
+  font-size: 12px;
+  font-family: Montserrat;
+  height: 32px;
+  vertical-align: middle;
+  border-radius: 4px;
+  border: 1px #dbdfe0 solid;
+  padding: 0px 10px;
+  margin: 5px 2px;
+  color: #222222;
+  height: 18px;
+  padding: 0px 3px;
+  margin: 1px 2px;
+  font-weight: bold;
+  margin: 2px;
+  line-height: 11px;
+}
+button.small:hover {
+  background: #dbdfe0;
+  border: 1px #d7dbdc solid;
+}
+/*# sourceMappingURL=buttons.css.map */

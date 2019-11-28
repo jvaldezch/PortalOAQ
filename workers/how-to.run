@@ -1,0 +1,43 @@
+su - www-data -c "php /var/www/portalprod/workers/trafico_worker.php"
+su - www-data -c "php /var/www/portalprod/workers/m3_worker.php"
+su - www-data -c "php /var/www/portalprod/workers/monitor_worker.php"
+su - www-data -c "php /var/www/portalprod/workers/ftp_worker.php"
+su - www-data -c "php /var/www/portalprod/workers/edocs_worker.php"
+
+//-----------------------------------------
+ANEXO 24
+
+Paso 1.
+https://192.168.0.11/automatizacion/ws/gearman-pedimentos?rfc=CTM990607US8&patente=3589&aduana=640&year=2016&month=1
+Paso 2.
+https://192.168.0.11/automatizacion/ws/gearman-detalle?rfc=STE071214BE7&patente=3589&aduana=640&year=2016
+Paso 3.
+https://192.168.0.11/automatizacion/ws/gearman-anexo?rfc=STE071214BE7&patente=3589&aduana=640&year=2016
+Paso 4.
+http://localhost/curl-anexo.php?rfc=SAU100330AL1&year=2017
+
+Paso 4., un shell
+su - www-data -c "php /var/www/portalprod/workers/trafico_worker.php"
+
+//-----------------------------------------
+COFIDI
+
+Paso 1.
+https://192.168.0.11/automatizacion/archive/get-invoices?fecha=2016-04-18&rfc=GCM9010126L2
+Ubicacion: /home/samba-share/expedientes/FacturacionElectronica
+
+Paso 2.
+https://192.168.0.11/automatizacion/email/enviar-cdfi-cofidi?fecha=2016-04-18&rfc=MME921204HZ4
+
+Paso 3. un shell
+su - www-data -c "php /var/www/portalprod/workers/emailc_worker.php"
+
+//----------------------------------------
+M3
+Paso 1.
+https://192.168.0.11/automatizacion/index/send-to-ftp?year=2016&mes=4&rfc=DME150923M6A
+Paso 2.
+su - www-data -c "php /var/www/portalprod/workers/ftp_worker.php"
+
+Tabla del sistema "ftp"
+

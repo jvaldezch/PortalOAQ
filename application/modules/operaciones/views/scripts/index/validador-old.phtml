@@ -1,0 +1,37 @@
+<h4>VALIDACIÓN</h4>
+<form id="form-validation" method="post" action="<?= $this->baseUrl() ?>/operaciones/data/obtener-archivos-validacion">
+    <table style="width: 100%;">
+        <tr>
+            <th>PATENTE:</th>
+            <th>ADUANA:</th>
+            <th>PEDIMENTO:</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td><?= $this->form->patente ?></td>
+            <td><div id="divcustoms"><?= $this->form->aduana ?></div></td>
+            <td><?= $this->form->pedimento ?></td>
+            <td>
+                <div class="control-group" style="float:right;">
+                    <button id="load-files" tabindex="5" class="btn btn-primary btn-small" style="font-size:11px; padding: 1px 3px; margin-right: 2px;">Actualizar</button>
+                </div>
+            </td>
+        </tr>
+    </table> 
+</form>
+<table>
+    <tr>
+        <th>Archivos</th>
+        <th>Actividad</th>
+    </tr>
+    <tr>
+        <td style="width: 550px;"><div id="files">&nbsp;</div></td>
+        <td><div id="activity" style="width: 380px; height: 200px; overflow: scroll; background-color: #fff;"></div></td>
+    </tr>
+    <tr>
+        <th colspan="2">Archivo: <div id="descarga" style="display: inline-block;">n/d</div></th>
+    </tr>
+    <tr>
+        <td colspan="2"><textarea id="file-content" style="width: 920px; height: 350px; padding: 5px; margin: 0;"></textarea></td>
+    </tr>
+</table>

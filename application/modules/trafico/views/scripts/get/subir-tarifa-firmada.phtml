@@ -1,0 +1,28 @@
+<form enctype="multipart/form-data" action="/trafico/post/cargar-tarifa-firmada" method="post" id="formTemplate">
+    <input type="hidden" name="idCliente" value="<?= $this->idCliente ?>" />
+    <input type="hidden" name="idTarifa" value="<?= $this->idTarifa ?>" />
+    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+    <input id="template" name="template" type="file" name="file">
+</form>
+<script type="text/javascript">
+    $("#formTemplate").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            template: {
+                required: true
+            }
+        },
+        messages: {
+            template: {
+                required: " [No se ha seleccionado archivo.]"
+            }
+        }
+    });
+</script>

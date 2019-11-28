@@ -1,0 +1,254 @@
+<table class="traffic-table traffic-table-left hover">
+    <tr>
+        <th colspan="4" class="traffic-table-title">EDITAR FIEL</th>
+    </tr>
+    <tr>
+        <td>ID:</td>
+        <td colspan="3">
+            <input type="text" name="id" id="id" value="<?= $this->idFiel ?>" disabled="disabled" readonly="true" class="traffic-input-xs">
+            &nbsp;Sello / FIEL válido desde: <strong><?= $this->validoDesde ?></strong> hasta: <strong><?= $this->validoHasta ?></strong>
+        </td>
+    </tr>
+    <tr>
+        <td>RFC:</td>
+        <td>
+            <input type="text" name="rfc" id="rfc" value="<?= $this->data["rfc"] ?>" class="traffic-input-small" readonly="true">
+        </td>
+        <td>Razón Social:</td>
+        <td>
+            <input type="text" name="nombre" id="nombre" value="<?= $this->data["razon"] ?>" readonly="true" class="traffic-input-large">
+        </td>
+    </tr>
+    <tr>
+        <td>Patente:</td>
+        <td>
+            <input type="text" name="patente" id="patente" value="<?= $this->data["patente"] ?>" readonly="true" class="traffic-input-small">
+        </td>
+        <td>Aduana:</td>
+        <td>
+            <input type="text" name="aduana" id="aduana" value="<?= $this->data["aduana"] ?>" readonly="true" class="traffic-input-small">
+        </td>
+    </tr>
+    <tr>
+        <td>Certificado:</td>
+        <td>
+            <input type="text" name="certificado" id="certificado" value="<?= $this->data["cer_nom"] ?>" readonly="true" class="traffic-input-medium">
+            <div style="display: block; margin-top: 5px">
+                <button class="traffic-btn traffic-btn-small changeFile" data-url="/usuarios/ajax/cambiar-archivo?type=cert&id=<?= $this->idFiel ?>" data-id="<?= $this->idFiel ?>">Cambiar</button>
+            </div>
+        </td>
+        <td>Key:</td>
+        <td>
+            <input type="text" name="certificado" id="certificado" value="<?= $this->data["key_nom"] ?>" readonly="true" class="traffic-input-medium">
+        </td>
+    </tr>
+    <tr>
+        <td>Encriptaci&oacute;n:</td>
+        <td colspan="3">
+            <div class="traffic-radio-block">
+                <div class="traffic-radio-input">
+                    <input type="radio" value="0" name="crypt"<?= ($this->data["sha"] == null) ? ' checked' : '' ?>>&nbsp;<p>Ninguno</p>
+                </div>
+                <div class="traffic-radio-input">
+                    <input type="radio" value="1" name="crypt"<?= ($this->data["sha"] == 'sha256') ? ' checked' : '' ?>>&nbsp;<p>2048 bits</p>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>Figura:</td>
+        <td colspan="3">
+            <select name="figura" id="figura" readonly="true" class="traffic-select-medium">
+                <option value="">-- Seleccionar --</option>
+                <option value="1"<?php
+                if (isset($this->data["figura"]) && $this->data["figura"] == 1) {
+                    echo 'selected';
+                }
+                ?>>Agente Aduanal</option>
+                <option value="2"<?php
+                if (isset($this->data["figura"]) && $this->data["figura"] == 2) {
+                    echo 'selected';
+                }
+                ?>>Apoderado Aduanal</option>
+                <option value="3"<?php
+                if (isset($this->data["figura"]) && $this->data["figura"] == 3) {
+                    echo 'selected';
+                }
+                ?>>Mandatario</option>
+                <option value="5"<?php
+                if (isset($this->data["figura"]) && $this->data["figura"] == 5) {
+                    echo 'selected';
+                }
+                ?>>Importador/Exportador</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Password Ventanilla:</td>
+        <td colspan="3">
+            <input type="password" name="pwdvu" id="pwd-vu" value="*******" readonly="true" class="traffic-input-small">
+        </td>
+    </tr>            
+    <tr>
+        <td>Password Servicios Web:</td>
+        <td colspan="3">
+            <textarea id="ws" class="traffic-textarea-large" style="float: left; width: 550px"><?= trim($this->data["ws_pswd"]) ?></textarea>
+            <button id="updateWs" class="traffic-btn">
+                <i class="far fa-save"></i> Actualizar WS
+            </button>               
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Consulta COVE (solicitud): 
+        </td>
+        <td colspan="3">
+            <input value="88250740" id="operacion" class="traffic-input-small" />  
+            <button id="operacionButton" data-url="/usuarios/ajax/view?fiel=<?= $this->idFiel ?>" class="traffic-btn traffic-btn-right try">
+                <i class="fas fa-cloud-upload-alt"></i> Consulta COVE
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Consulta EDOC (solicitud): 
+        </td>
+        <td colspan="3">
+            <input value="67723122" id="consultaEdoc" class="traffic-input-small" />  
+            <button id="consultaEdocButton" data-url="/usuarios/ajax/view?fiel=<?= $this->idFiel ?>&type=consultaedoc" class="traffic-btn traffic-btn-right try">
+                <i class="fas fa-cloud-upload-alt"></i> Consulta EDOC
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            COVE para pruebas (id): 
+        </td>
+        <td colspan="3">
+            <input value="42704" id="idCove" class="traffic-input-small" />
+            <button id="coveButton" data-url="/usuarios/ajax/view?fiel=<?= $this->idFiel ?>&type=cove" class="traffic-btn traffic-btn-right try">
+                COVE
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            EDOC para pruebas (id): 
+        </td>
+        <td colspan="3">
+            <input value="48248" id="idEdoc" class="traffic-input-small" />   
+            <button id="edocButton" data-url="/usuarios/ajax/view?fiel=<?= $this->idFiel ?>&type=edoc" class="traffic-btn traffic-btn-right try">
+                EDOC
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Email para pruebas: 
+        </td>
+        <td colspan="3">
+            <input value="soporte@oaq.com.mx" id="email" class="traffic-input-medium" />            
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Consulta Pedimento: 
+        </td>
+        <td colspan="3">
+            <input value="3589" id="patente" class="traffic-input-tiny" />   
+            <input value="640" id="aduana" class="traffic-input-tiny" />   
+            <input value="7006220" id="pedimento" class="traffic-input-small" />   
+            <button id="pedimentoButton" data-url="/usuarios/ajax/view?fiel=<?= $this->idFiel ?>" class="traffic-btn traffic-btn-right try">
+                Pedimento
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>Cadena original:</td>
+        <td colspan="3">
+            <input type="text" id="cadenaOriginal" value="|ACM080307L15|04381709LWZE3|" />
+        </td>
+    </tr>
+    <tr>
+        <td>Firma:</td>
+        <td colspan="3">
+            <textarea id="firmaDigital" class="traffic-textarea-large"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>EDOC (Consulta de Documentos <br>Digitalizados Certificados):</td>
+        <td colspan="3">
+            <input type="text" id="numEdocument" value="04361706CXZ36" />
+            <button id="btnEdocument" data-url="/usuarios/ajax/view?fiel=<?= $this->idFiel ?>" class="traffic-btn traffic-btn-right try">
+                <i class="fas fa-download"></i> Descarga EDOC
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <a href="/usuarios/index/fiel" class="traffic-btn" tabindex="99">
+                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+            </a>
+            <button id="delete" class="traffic-btn traffic-btn-right">
+                <i class="far fa-trash-alt"></i> Borrar sello
+            </button>
+            <a href="/usuarios/ajax/descargar-sello?id=<?= $this->idFiel ?>" class="traffic-btn traffic-btn-right">
+                <i class="fas fa-download"></i> Descargar
+            </a>
+        </td>
+    </tr>
+</table>
+<div class="traffic-clear-5"></div>
+<div class="jqmWindow" id="modalRegister" style="top: 10%; display: none" name="jqmodal">
+    Please wait... <div class="traffic-icon traffic-loader"></div>
+</div>
+<script>
+    
+    var cove = $("#coveButton").attr("data-url");
+    var edoc = $("#edocButton").attr("data-url");
+    var operacion = $("#operacionButton").attr("data-url");
+    var consultaEdoc = $("#consultaEdocButton").attr("data-url");
+    var pedimentoButton = $("#pedimentoButton").attr("data-url");
+    var btnEdocument = $("#btnEdocument").attr("data-url");
+    
+    $("#edocButton").attr("data-url", edoc + "&id=" + $("#idEdoc").val() + "&email=" + $("#email").val());
+    $("#coveButton").attr("data-url", cove + "&id=" + $("#idCove").val() + "&email=" + $("#email").val());
+    $("#operacionButton").attr("data-url", operacion + "&id=" + $("#operacion").val());
+    $("#consultaEdocButton").attr("data-url", operacion + "&id=" + $("#consultaEdoc").val() + "&type=consultaedoc");
+    $("#pedimentoButton").attr("data-url", pedimentoButton + "&patente=" + $("#patente").val() + "&aduana=" + $("#aduana").val() + "&pedimento=" + $("#pedimento").val() + "&type=consultaped");
+    $('#btnEdocument').attr("data-url", btnEdocument + "&id=" + $("#numEdocument").val() + "&type=descargaedoc");
+    
+    
+    $(document).on("change", "#idCove", function(){
+        $("#coveButton").attr("data-url", cove + "&id=" + $("#idCove").val() + "&email=" + $("#email").val());
+    });
+    
+    $(document).on("change", "#idEdoc", function(){
+        $("#coveButton").attr("data-url", cove + "&id=" + $("#idEdoc").val() + "&email=" + $("#email").val());
+    });
+    
+    $(document).on("change", "#operacion", function(){
+        $("#operacionButton").attr("data-url", cove + "&id=" + $("#operacion").val());
+    });
+    
+    $(document).on("change", "#consultaEdoc", function(){
+        $("#consultaEdocButton").attr("data-url", cove + "&id=" + $("#consultaEdoc").val() + "&type=consultaedoc");
+    });
+    
+    $(document).on('change', '#numEdocument', function(){
+        $('#btnEdocument').attr('data-url', cove + "&id=" + $("#numEdocument").val() + "&type=descargaedoc");
+    });
+    
+    $("#modalRegister").jqm({
+        ajax: "@data-url",
+        modal: true,
+        overlay: 80,
+        trigger: "button.try",
+        onShow: function (hash) {
+            windowHeight = jQuery(window).height();
+            linkOffset = jQuery("html").scrollTop();
+            hash.w.css("top", linkOffset + (windowHeight * .1)).show();
+        }
+    });
+    
+</script>

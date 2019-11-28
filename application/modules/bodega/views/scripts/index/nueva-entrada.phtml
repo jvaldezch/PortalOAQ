@@ -1,0 +1,113 @@
+
+<div class="traffic-clear-5"></div>
+
+<a href="/bodega/index/proveedores" class="traffic-btn traffic-btn-right">PROVEEDORES</a>
+<a href="/bodega/index/embarcador" class="traffic-btn traffic-btn-right">EMBARCADOR</a>
+<div class="traffic-clear-5"></div>
+<form method="post" id="form">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="2" class="invoice-title">ENTRADA DE BODEGA</th>
+        </tr>
+        <tr>
+            <td>
+                <div class="traffic-radio-block">Tipo de operación:</div>
+                <div class="traffic-radio-block">
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="1" name="tipoOperacion" class="tipoOperacion" checked="true">&nbsp;<p>Importación</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="2" name="tipoOperacion" class="tipoOperacion">&nbsp;<p>Exportación</p>
+                    </div>
+                </div>
+            </td>
+            <td>
+                Fecha ETA:
+                <input name="fechaEta" id="fechaEta" value="" class="traffic-input-date" tabindex="10" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Cliente:</label>
+                <?= $this->form->idCliente ?>
+                <div class="dataDireccion dataCliente" style="padding-left: 15px">
+                    <p class="numero">Id:<span></span></p>
+                    <p class="direccion">Dirección:<span></span></p>
+                    <p class="ciudad">Ciudad:<span></span></p>
+                    <p class="estado">Estado:<span></span></p>
+                    <p class="pais">País:<span></span></p>
+                </div>
+            </td>
+            <td>
+                <label>Proveedor:</label>                                
+                <div id="proveedor">
+                    <select name="idProveedor" id="idProveedor" class="traffic-select-large">
+                        <option value="">---</option>
+                    </select>
+                    <i class="fas fa-plus-circle" id="addProvider" style="font-size:1.2em; color: #2f3b58; cursor: pointer"></i>
+                    <i class="fas fa-pencil-alt" id="editProvider" style="font-size:1.2em; color: #2f3b58; cursor: pointer; display: none"></i>
+                </div>
+                <div class="dataDireccion dataProveedor" style="padding-left: 15px">
+                    <p class="numero">Id:<span></span></p>
+                    <p class="direccion">Dirección:<span></span></p>
+                    <p class="ciudad">Ciudad:<span></span></p>
+                    <p class="estado">Estado:<span></span></p>
+                    <p class="pais">País:<span></span></p>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Embarcador:</label>
+                <div id="embarcador">
+                    <select name="idEmbarcador" id="idEmbarcador" class="traffic-select-large">
+                        <option value="">---</option>
+                    </select>
+                    <i class="fas fa-plus-circle" id="addShipper" style="font-size:1.2em; color: #2f3b58; cursor: pointer"></i>
+                </div>
+                <div class="dataDireccion dataEmbarcador" style="padding-left: 15px">
+                    <p class="numero">Id:<span></span></p>
+                    <p class="direccion">Dirección:<span></span></p>
+                    <p class="ciudad">Ciudad:<span></span></p>
+                    <p class="estado">Estado:<span></span></p>
+                    <p class="pais">País:<span></span></p>
+                </div>
+                <div class="checkbox-group">      
+                    <div class="checkbox">
+                        <input id="noEmbarcador" name="noEmbarcador" type="checkbox">
+                        <label class="checkbox-label">&nbsp;Sin especificar</label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <label>Consignatario:</label>                
+                <div id="consignatario">
+                    <select name="idConsignatario" id="idConsignatario" class="traffic-select-large">
+                        <option value="">---</option>
+                    </select>
+                    <i class="fas fa-plus-circle" id="addConsignee" style="font-size:1.2em; color: #2f3b58; cursor: pointer"></i>
+                </div>
+                <div class="dataDireccion dataConsignatario" style="padding-left: 15px">
+                    <p class="numero">Id:<span></span></p>
+                    <p class="direccion">Dirección:<span></span></p>
+                    <p class="ciudad">Ciudad:<span></span></p>
+                    <p class="estado">Estado:<span></span></p>
+                    <p class="pais">País:<span></span></p>
+                </div>
+                <div class="checkbox-group">      
+                    <div class="checkbox">
+                        <input id="noConsignatario" name="noConsignatario" type="checkbox">
+                        <label class="checkbox-label">&nbsp;Sin especificar</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+<div class="traffic-clear-5"></div>
+
+<a href="/bodega/index/index" class="traffic-btn" tabindex="99">
+    <i class="fas fa-angle-double-left"></i> Regresar</a>
+
+<button class="traffic-btn traffic-btn-right" id="save">
+    <i class="far fa-save"></i> Guardar</button>

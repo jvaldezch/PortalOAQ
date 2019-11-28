@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="<?= $this->appConfig('edoc-css') ?>" media="screen" rel="stylesheet" type="text/css" >
+    </head>
+    <style>
+        @page { margin: 100px 50px; }        
+        #footer { position: fixed; left: 0px; bottom: -100px; right: 0px; height: 90px; background-color: white; }        
+    </style>
+    <body>
+        <img src="<?= $this->appConfig('edoc-logo') ?>" />
+        <h3>ACUSE DIGITALIZACIÓN DE DOCUMENTOS</h3>
+        <p style="font-size: 12px; text-align: center; color: #000"><strong>REFERENCIA:</strong> <?= $this->data["referencia"] ?>, <strong>PEDIMENTO:</strong> <?= $this->data["pedimento"] ?></p>
+        <p style="text-align: right"><strong>Folio de la solicitud:</strong> <?= $this->data["numTramite"] ?></p>
+        <p><strong>RFC:</strong> <?= $this->data["rfc"] ?><br />Siendo las <?= date('H:i',  strtotime($this->data["enviado"])) ?> del <?= date('d/m/Y',strtotime($this->data["enviado"])) ?> se tiene por recibida y atendida la solicitud de registro de Documentos Digitalizados presentado a través de la ventanilla única (Web Service).</p>
+        <p>Los datos del documento son los siguientes:</p>
+        <div style="height: 10px"></div>
+        <table class="table table-striped table-bordered table-hover small" style="width: 100%">        
+            <tr>
+                <th>Operación</th>
+                <th>Registro de documentos digitalizados</th>
+            </tr>
+            <tr>
+                <td>Número E-Document</td>
+                <td><?= $this->data["edoc"] ?></td>
+            </tr>
+            <tr>
+                <td>Tipo de documento</td>
+                <td><?= $this->tipoEdoc($this->data["tipoDoc"]) ?></td>
+            </tr>
+            <tr>
+                <td>Nombre del documento</td>
+                <td><?= $this->data["nomArchivo"] ?></td>
+            </tr>
+            <tr>
+                <td>RFC de consulta</td>
+                <td><?= isset($this->data["rfcConsulta"]) ? $this->data["rfcConsulta"] : 'OAQ030623UL8' ?></td>
+            </tr>
+            <tr>
+                <td>Cadena original</td>
+                <td><?= $this->data["hash"] ?></td>
+            </tr>
+            <tr>
+                <td>Sello digital del solicitante (del documento)</td>
+                <td><?= wordwrap($this->data["cadena"], 100, "<br />", true) ?></td>
+            </tr>
+            <tr>
+                <td>Leyenda</td>
+                <td>Tiene 90 días a partir de esta fecha para utilizar su documento digitalizado, si en ese tiempo no lo utiliza, será dado de baja del sistema de la Ventanilla Única.</td>
+            </tr>
+        </table>
+        <p class="legend">Este documento es una representación del acuse de Ventanilla Única para E-Document al cual solo le hace falta el sello de la Ventanilla Única.</p>
+        <div id="footer">
+            <p class="page">Generado por: <?= strtoupper($this->data["usuario"]) ?><br><?= 'Fecha de impresión: ' . date('Y-m-d H:i:s A'); ?></p>
+        </div>
+    </body>
+</html>

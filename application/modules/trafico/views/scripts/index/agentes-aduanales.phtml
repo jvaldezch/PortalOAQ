@@ -1,0 +1,32 @@
+<div class="traffic-clear-5"></div>
+<table class="traffic-table hover" id="table">       
+    <thead>
+        <tr>
+            <th style="width: 24px">&nbsp;</th>
+            <th style="width: 40px">Patente</th>
+            <th style="width: 150px">RFC</th>
+            <th style="text-align: left">Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) && !empty($this->data)) { ?>
+            <?php foreach ($this->data as $item) { ?>
+                <tr>
+                    <td>
+                        <a href="/trafico/index/editar-agente-aduanal?id=<?= $item["id"] ?>">
+                            <i class="fas fa-pencil-alt" style="font-size:1.4em; color: #2f3b58"></i>
+                        </a>
+                    </td>
+                    <td><?= $item["patente"] ?></td>
+                    <td><?= $item["rfc"] ?></td>
+                    <td style="text-align: left"><?= $item["nombre"] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>
+<div class="traffic-clear-10"></div>
+<a href="/trafico/index/agregar-agente-aduanal" class="traffic-btn traffic-btn-right">
+    <i class="far fa-file"></i> Nuevo agente
+</a>
+<div class="traffic-clear-10"></div>

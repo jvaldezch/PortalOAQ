@@ -1,0 +1,31 @@
+<table class="traffic-table hover">
+    <tr>
+        <th colspan="3" class="traffic-table-title">CONTACTOS</th>
+    </tr>
+    <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th style="width: 24px">&nbsp;</th>
+    </tr>
+    <?php if (isset($this->contactos) && !empty($this->contactos)) { ?>
+        <?php foreach ($this->contactos as $item) { ?>
+            <tr>
+                <td style="text-align: left"><?= $item["nombre"] ?></td>
+                <td style="text-align: left"><?= $item["email"] ?></td>
+                <td></td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>                        
+        <tr>
+            <td colspan="3"><em>El cliente no contactos.</em></td>
+        </tr>
+    <?php } ?>
+        <tr>
+            <th colspan="3">Comentarios adicionales:</th>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <textarea name="comments" id="comments" class="traffic-textarea-medium"></textarea>
+            </td>
+        </tr>
+</table>

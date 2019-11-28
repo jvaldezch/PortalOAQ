@@ -1,0 +1,53 @@
+<?php if (isset($this->sellos) && !empty($this->sellos)) { ?>
+    <?php foreach ($this->sellos as $item) { ?>
+        <tr>                                        
+            <td style="text-align: center"><?= isset($item["patente"]) ? $item["patente"] : "" ?></td>
+            <td><?= $item["razon"] ?></td>
+            <td><?= $item["rfc"] ?></td>
+            <td><?= $item["certificado_nom"] ?></td>
+            <td>
+                <?php if (isset($item["valido_desde"]) && isset($item["valido_hasta"])) { ?>
+                    <?php if (strtotime($item["valido_hasta"]) > time()) { ?>
+                        <?= date("d/m/Y", strtotime($item["valido_desde"])) . " - " . date("d/m/Y", strtotime($item["valido_hasta"])) ?>
+                    <?php } else { ?>
+                        <span style="color: red"><?= date("d/m/Y", strtotime($item["valido_desde"])) . " - " . date("d/m/Y", strtotime($item["valido_hasta"])) ?></span>
+                    <?php } ?>
+                <?php } else if ($item["tipo"] == "cliente") { ?>
+                    <div class="traffic-icon traffic-icon-reload reloadCertificate" data-id="<?= $item["id"] ?>"></div>
+                <?php } ?>
+            </td>
+            <td><?= $item["actualizado"] ?></td>
+            <td><?= ($item["sha"] == null) ? "No" : "Si" ?></td>
+            <td>
+                <input type="radio" name="vucem" data-id="<?= $item["id"] ?>" data-type="<?= $item["tipo"] ?>"><br>
+            </td>
+            <td>
+                <?php if (!isset($item["patente"])) { ?>
+                    <i class="fas fa-pencil-alt" onclick="actualizarSello(<?= $item["id"] ?>);" style="font-size: 1.4em; color: #2f3b58; cursor: pointer"></i>
+                <?php } ?>
+            </td>
+        </tr>
+    <?php } ?>
+        <tr>
+            <td colspan="9">
+                <a class="traffic-btn traffic-btn-right" id="uploadKey">
+                    <i class="fas fa-upload"></i> Subir sello
+                </a>
+            </td>
+        </tr>
+<?php } else { ?>
+    <tr>
+        <td colspan="9" style="text-align: center">
+            <em>No hay sellos.</em>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="9">
+            <a class="traffic-btn traffic-btn-right" id="uploadKey">
+                <i class="fas fa-upload"></i> Subir sello
+            </a>
+        </td>
+    </tr>
+<?php
+
+}

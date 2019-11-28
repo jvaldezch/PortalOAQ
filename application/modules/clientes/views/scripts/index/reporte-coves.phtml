@@ -1,0 +1,80 @@
+<form id="report">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2" class="traffic-table-title">REPORTE DE COVES</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <th style="width: 150px"><label for="rfc">RFC:</label></th>
+                <td>
+                    <input type="text" name="rfc" id="rfc" value="<?= $this->rfc ?>" placeholder="RFC del cliente" class="traffic-input-medium traffic-input-readonly" readonly="readonly">
+                </td>
+            </tr>
+            <tr>
+                <th style="width: 150px">Fecha inicio:</th>
+                <td>
+                    <div style="font-size:1.4em; color: #2f3b58; float: left; margin-right: 5px">
+                        <i class="far fa-calendar-alt"></i>
+                    </div> 
+                    <input name="fechaIni" id="fechaIni" class="traffic-input-date" value="<?= date("Y-m-") . "01" ?>" type="text">
+                </td>
+            </tr>
+            <tr>
+                <th>Fecha Fin:</th>
+                <td>
+                    <div style="font-size:1.4em; color: #2f3b58; float: left; margin-right: 5px">
+                        <i class="far fa-calendar-alt"></i>
+                    </div> 
+                    <input name="fechaIni" id="fechaFin" class="traffic-input-date" value="<?= date("Y-m-d") ?>" type="text">
+                </td>      
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <!--<button id="submit" class="traffic-btn traffic-btn-save traffic-btn-right">Generar reporte</button>-->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<div class="semaphoreBox">
+    <div class="semaphore-holder">
+        <i class="icon icon-file"></i>&nbsp;Consultar/ver el COVE
+    </div>
+</div>
+<div style="height: 10px; clear: both"></div>
+<table class="traffic-table traffic-table-left hover" id="example">
+    <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>Solicitud</th>
+            <th>RFC solicitante</th>
+            <th>Operación</th>
+            <th>Referencia</th>
+            <th>Factura</th>
+            <th>COVE</th>
+            <th>Generado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->result as $item) { ?>
+            <tr>
+                <td style="text-align: center; width: 30px"><?= $this->accion($item["estatus"], $item["id"], $item["cove"], urlencode($item["factura"])) ?></td>
+                <td style="text-align: center; width: 70px"><?= $item["solicitud"] ?></td>
+                <td style="text-align: center; width: 110px"><?= $item["rfc"] ?></td>
+                <td style="text-align: center; width: 140px"><?= $item["aduana"] . "-" . $item["patente"] . "-" . $item["pedimento"] ?></td>
+                <td style="text-align: center; width: 90px"><?= $item["referencia"] ?></td>
+                <td><?= $item["factura"] ?></td>
+                <td style="text-align: center; width: 90px"><?= $item["cove"] ?></td>
+                <td style="text-align: center; width: 90px"><?= date("d/m/Y", strtotime($item["actualizado"])) ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<div class="traffic-clear-10"></div>
+<a onclick="window.history.back();" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<div class="traffic-clear-20"></div>

@@ -1,0 +1,75 @@
+<form id="formUploadKey" method="post">
+    <input type="hidden" id="idCliente" name="idCliente" value="<?= $this->idCliente ?>" />
+    <table class="traffic-table traffic-table-left hover">
+        <tbody>
+            <tr>
+                <th>Tipo de figura:</th>
+                <td>
+                    <select name="figura" id="figura" class="traffic-select-medium" disabled="true">
+                        <option value="">-- Seleccionar --</option>
+                        <option value="1">Agente Aduanal</option>
+                        <option value="2">Apoderado Aduanal</option>
+                        <option value="3">Mandatario</option>
+                        <option value="5" selected="true">Importador/Exportador</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Password Ventanilla:</th>
+                <td>
+                    <input type="text" name="pwdvu" id="pwd-vu" class="traffic-input-medium">
+                </td>
+            </tr>
+            <tr>
+                <th>Password Servicios Web:</th>
+                <td>
+                    <input type="text" name="pwdws" id="pwd-ws" class="traffic-input-large" style="width: 520px !important">
+                </td>
+            </tr>
+            <tr>
+                <th>Tipo de sello:</th>
+                <td>
+                    <input type="radio" name="tipo" value="0"> Anterior<br>
+                    <input type="radio" name="tipo" value="1" checked="true"> Nuevo
+                </td>
+            </tr>
+            <tr>
+                <th>Archivo .KEY</th>
+                <td><input type="file" id="file-select" name="keyfile"/></td>
+            </tr>
+            <tr>
+                <th>Archivo .CER</th>
+                <td><input type="file" id="cer-select" name="cerfile"/></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script type="text/javascript">
+    var validator = $("#formUploadKey").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            figura: { required: true },
+            pwdvu: { required: true },
+            pwdws: { required: true },
+            keyfile: { required: true },
+            cerfile: { required: true }
+        },
+        messages: {
+            figura: { required: " [Seleccionar tipo de figura]" },
+            pwdvu: { required: " [Proporcionar contraseña de VUCEM]" },
+            pwdws: { required: " [Proporcionar contraseña de Servicios Web]" },
+            keyfile: { required: " [Seleccionar archivo .Key]" },
+            cerfile: { required: " [Seleccionar archivo .Cer]" }
+            
+        }
+    });
+    
+</script>

@@ -1,0 +1,74 @@
+<form action="<?= $this->url() ?>" method="get" enctype="application/x-www-form-urlencoded" id="form">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th colspan="2" class="traffic-table-title">REPORTE DE CUENTA DE GASTOS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 130px"><label for="fechaIni">Fecha Inicio:</label></td>
+                <td><?= $this->form->fechaIni ?> <i class="far fa-calendar-alt" style="font-size: 1.2em"></i></td>
+            </tr>
+            <tr>
+                <td><label for="opcion">Opcion:</label></td>
+                <td><?= $this->form->opcion ?></td>
+            </tr>
+            <?php if (isset($this->paginator) && !empty($this->paginator)) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</form>
+<?= isset($this->paginator) ? $this->paginationControl($this->paginator) . "<a class=\"traffic-btn traffic-btn-small traffic-btn-right\" href=\"/administracion/get/excel-envios-por-comprobar?" . $this->params . "\">Excel</a>" : "" ?>
+<div class="traffic-clear-5"></div>
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <tr>
+            <th>Corresponsal</th>
+            <th>Referencia</th>
+            <th>Cargo</th>
+            <th>Abono</th>
+            <th>Saldo</th>
+            <th>Fecha Envio</th>
+            <th>Fecha Elab.</th>
+            <th>Solicitudes</th>
+            <th>Fecha Liberación</th>
+            <th>Cliente</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->paginator) && !empty($this->paginator)) { ?>
+            <?php foreach ($this->paginator as $item) { ?>
+                <tr>
+                    <td><?= $item['Corresponsal'] ?></td>
+                    <td><?= $item['Referencia'] ?></td>
+                    <td style="text-align: right"><?= $item['Cargo'] ?></td>
+                    <td style="text-align: right"><?= $item['Abono'] ?></td>
+                    <td style="text-align: right"><?= $item['Saldo'] ?></td>
+                    <td style="text-align: right"><?= $item['FechaEnvio'] ?></td>
+                    <td style="text-align: right"><?= ($item['FechaEnviada'] !== null) ? date("Y-m-d", strtotime($item['FechaEnviada'])) : '' ?></td>
+                    <td style="text-align: right"><?= $this->SingleField($item, 'Solicitudes') ?></td>
+                    <td style="text-align: right"><?= ($item['FechaLiberacion'] !== null) ? date("Y-m-d", strtotime($item['FechaLiberacion'])) : '' ?></td>
+                    <td><?= $item['Cliente'] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="8">
+                    <em>No hubo resultados.</em>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<div class="traffic-clear-5"></div>
+<?= isset($this->paginator) ? $this->paginationControl($this->paginator) : "" ?>
+<div class="traffic-clear-5"></div>
+<button id="submit" class="traffic-btn traffic-btn-right">Generar reporte</button>
+<a onclick="window.history.back();" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar</a>
+

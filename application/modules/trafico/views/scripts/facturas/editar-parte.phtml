@@ -1,0 +1,178 @@
+<form id="frmProduct">
+    <input type="hidden" name="idProducto" id="idProducto" value="<?= $this->idProducto ?>" />
+    <table class="traffic-table">
+        <tbody>
+            <tr>
+                <td>
+                    <div style="float: left">                        
+                        <label style="float: left; width: 100px; text-align: right">Fracción:</label>
+                        <input style="float: left; width: 110px" type="text" name="fraccion" id="fraccion" value="<?= $this->fraccion ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 140px; text-align: right">Num Parte:</label>
+                        <input style="float: left; width: 150px" type="text" name="numParte" id="numParte" value="<?= $this->numParte ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 100px; text-align: right">Descripción:</label>
+                    <input style="float: left; width: 407px" type="text" name="descripcion" id="descripcion" value="<?= $this->descripcion ?>">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">UMC:</label>
+                        <select name="umc" id="umc" style="float: left; width: 190px">
+                            <option value="">---</option>
+                            <?php if(isset($this->umcSelect)) {?>
+                                <?php foreach ($this->umcSelect as $item) {?>
+                                    <option value="<?= $item["id"] ?>" <?= (isset($this->umc) && ($this->umc == $item["clave"])) ? ' selected="true"' : '' ?>><?= $item["clave"] . " - " . $item["desc"] ?></option>                        
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 70px; text-align: right">UMT:</label>
+                        <select name="umt" id="umt" style="float: left; width: 200px">
+                            <option value="">---</option>
+                            <?php if(isset($this->omaSelect)) {?>
+                                <?php foreach ($this->omaSelect as $item) {?>
+                                    <option value="<?= $item["unidad_medida"] ?>" <?= (isset($this->oma) && ($this->oma == $item["unidad_medida"])) ? ' selected="true"' : '' ?>><?= $item["unidad_medida"] . " - " . $item["desc_es"] ?></option>                        
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">OMA:</label>
+                        <select name="oma" id="oma" style="float: left; width: 190px">
+                            <option value="">---</option>
+                            <?php if(isset($this->omaSelect)) {?>
+                                <?php foreach ($this->omaSelect as $item) {?>
+                                    <option value="<?= $item["unidad_medida"] ?>" <?= (isset($this->oma) && ($this->oma == $item["unidad_medida"])) ? ' selected="true"' : '' ?>><?= $item["unidad_medida"] . " - " . $item["desc_es"] ?></option>                        
+                                <?php } ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">Marca:</label>
+                        <input style="float: left; width: 150px" type="text" name="marca" id="marca" value="<?= $this->marca ?>">                        
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">Modelo:</label>
+                        <input style="float: left; width: 150px" type="text" name="modelo" id="modelo" value="<?= $this->modelo ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">SubModelo:</label>
+                        <input style="float: left; width: 150px" type="text" name="subModelo" id="subModelo" value="<?= $this->subModelo ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">Num. Serie:</label>
+                        <input style="float: left; width: 150px" type="text" name="numSerie" id="numSerie" value="<?= $this->numSerie ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">IVA (%):</label>
+                        <input style="float: left; width: 70px" type="text" name="iva" id="iva" value="<?= $this->iva ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 180px; text-align: right">Adv:</label>
+                        <input style="float: left; width: 70px" type="text" name="advalorem" id="advalorem" value="<?= $this->advalorem ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">TLC:</label>
+                        <input style="float: left; margin-left: 3px" type="checkbox" name="tlc" id="tlc" />                        
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">TLCUE:</label>
+                        <input style="float: left; margin-left: 3px" type="checkbox" name="tlcue" id="tlcue" />                        
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 100px; text-align: right">PROSEC:</label>
+                        <input style="float: left; margin-left: 3px" type="checkbox" name="prosec" id="prosec" />                        
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 100px; text-align: right">País Origen:</label>
+                    <select name="paisOrigen" id="paisOrigen" style="float: left; width: 350px">
+                        <option value="">---</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 100px; text-align: right">País Vendedor:</label>
+                    <select name="paisVendedor" id="paisVendedor" style="float: left; width: 350px">
+                        <option value="">---</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    <label style="float: left; width: 100px; text-align: right">Observaciones:</label>
+                    <textarea name="observaciones" id="observaciones" class="traffic-textarea-medium" style="margin-left: 5px"><?= $this->observaciones ?></textarea>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">
+    
+    $("#frmProduct").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "errorlabel",
+        rules: {
+            numParte: {required: true},
+            fraccion: {required: true},
+            descripcion: {required: true}
+        },
+        messages: {
+            numParte: "SE REQUIERE",
+            fraccion: "SE REQUIERE",
+            descripcion: "SE REQUIERE"
+        }
+    });
+    
+    $(document.body).on("input", "#marca, #modelo, #subModelo, #numSerie, #descripcion, #fraccion, #numParte, #observaciones", function (evt) {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+    $.when(paises('#paisOrigen'), paises('#paisVendedor')).done(function () {
+        $('#paisOrigen').val('<?= $this->paisOrigen ?>');
+        $('#paisVendedor').val('<?= $this->paisVendedor ?>');
+    });
+    
+</script>

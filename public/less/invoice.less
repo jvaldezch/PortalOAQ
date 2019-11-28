@@ -1,0 +1,65 @@
+@font: sans-serif;
+@fontsize: 12px;
+@bcolor: #888888;
+
+.invoice-table {
+    background-color: #dce6e5;
+    border: 1px #c6d7e7 solid;
+    font-family: @font;
+}
+.invoice-table th,
+.invoice-table td {
+    padding: 2px 3px;
+    border: 1px #c7d0d3 solid;
+}
+.invoice-table th {
+    text-align: center;
+    border: 1px #486885 solid;
+    color: #e7f0f3;
+    background: #6083a3; /* Old browsers */
+    background: -moz-linear-gradient(top,  #6083a3 0%, #557795 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6083a3), color-stop(100%,#557795)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #6083a3 0%,#557795 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #6083a3 0%,#557795 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #6083a3 0%,#557795 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #6083a3 0%,#557795 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6083a3', endColorstr='#557795',GradientType=0 ); /* IE6-9 */
+}
+.invoice-table td {
+    text-align: center;
+    background: none;
+    color: #070249;
+}
+.invoice-table td.currency {
+    text-align: center;
+}
+.invoice-table th.invoice-title {
+    color: #f4f4f1;
+    padding: 5px 10px;
+    border-bottom: 1px #4a5777 solid;
+    border-top: 1px #3f4c6b solid;
+    border-left: 1px #4a5777 solid;
+    border-right: 1px #4a5777 solid;
+    text-align: center;
+    background: #3f4c6b; /* Old browsers */
+    background: -moz-linear-gradient(top,  #3f4c6b 0%, #3a4765 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3f4c6b), color-stop(100%,#3a4765)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #3f4c6b 0%,#3a4765 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #3f4c6b 0%,#3a4765 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #3f4c6b 0%,#3a4765 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #3f4c6b 0%,#3a4765 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3f4c6b', endColorstr='#3f4c6b',GradientType=0 ); /* IE6-9 */
+}
+
+.invoice-table tr {
+    background: none;
+}
+
+.invoice-table tr:nth-child(odd) {
+    background-color: #ebf0f3;
+}
+
+.invoice-table-left td,
+.invoice-table-left th {
+    text-align: left;
+}

@@ -1,0 +1,83 @@
+<style>
+    input[readonly]{
+        background-color: #eee;
+    }
+    .infodialog .ZebraDialog_Title { background:#073d75; border-bottom: 1px solid #222; }
+    .infodialog .ZebraDialog_Body { background-image: none; }
+    .selectboxit-container .selectboxit, .selectboxit-container .selectboxit-options {
+        width: 330px; /* Width of the dropdown button */
+        border-radius:0;
+        max-height:240px;
+        font-size: 11px;
+    }
+    .selectboxit-options .selectboxit-option .selectboxit-option-anchor {
+        white-space: normal;
+        min-height: 30px;
+        height: auto;
+        font-size: 11px;
+        line-height: 14px;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<form id="files" method="post" enctype="multipart/form-data">
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th colspan="5" class="traffic-table-subtitle">FIRMA DEL DOCUMENTO</th>
+        </tr>
+        <tr>
+            <td colspan="5" style="text-align: right; color: red;">* Campos requeridos.</td>
+        </tr>
+        <tr>
+            <td rowspan="3" style="width: 410px;"><?= $this->form->firmante ?></td>
+            <td style="width: 220px;"><?= $this->form->patente ?></td>
+            <td><?= $this->form->aduana ?></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><?= $this->form->referencia ?></td>
+            <td><?= $this->form->pedimento ?></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><?= $this->form->rfc ?></td>
+            <td colspan="2"><?= $this->form->nombre ?></td>
+        </tr>
+    </table>
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th class="traffic-table-subtitle">ARCHIVO</th>
+            <th class="traffic-table-subtitle">TIPO DE ARCHIVO</th>
+            <th class="traffic-table-subtitle">SUB TIPO</th>
+            <th class="traffic-table-subtitle">&nbsp;</th>
+        </tr>
+        <tr>
+            <td style="width: 250px">
+                <input type="file" name="file" id="file" />
+            </td>
+            <td style="width: 340px">
+                <?= $this->form->tipo ?>
+            </td>
+            <td style="width: 340px">
+                <select id="subTipo" name="subTipo" disabled="true">
+                    <option value="">---</option>
+                </select>
+            </td>
+            <td>
+                <button id="upload" tabindex="5" class="traffic-btn traffic-btn-right">
+                    <i class="fas fa-plus"></i>&nbsp;Agregar
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
+<iframe src="/vucem/data/loaded-documents" id="documents-frame" class="traffic-iframe"></iframe>
+<div class="traffic-clear-5"></div>
+<!--<a onclick="window.history.back();" class="traffic-btn traffic-btn-back">&Lt;&nbsp;Regresar</a>-->
+<a href="javascript:window.history.back();" class="traffic-btn" tabindex="99">
+    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+</a>
+<button id="enviar" tabindex="5" class="traffic-btn traffic-btn-right">
+    <i class="fas fa-upload"></i>&nbsp;Enviar VUCEM
+</button>
+<div class="traffic-clear-5"></div>

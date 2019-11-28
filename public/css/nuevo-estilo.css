@@ -1,0 +1,402 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 28, 2015, 9:37:41 AM
+    Author     : Jaime
+*/
+
+
+#main {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+table {
+    font-size: 12px;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;        
+    width: 100%;
+}
+table th, table td {
+    border: 1px #fff solid;
+    background-color: #eee;
+    vertical-align: top;
+}
+table th {
+    text-align: left;
+    color: #333;
+}
+table th.title {
+    background-color: #F2D38C;
+    text-align: center;
+}
+table.products {
+    border-collapse: collapse;
+}
+table.products th, table.products td {
+    border: 1px #fff solid;
+}
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    background-color: #fff;
+    font-size: 12px;
+    color: #000;
+    border: 1px solid #999;
+    box-shadow: none;
+    transition: none;
+    border-radius: 0;
+    padding: 1px 3px;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    margin-bottom: 0;
+}
+.blockUI h4 {
+    background-color: none;
+    background: none;
+    border: 0;
+    color: #333;
+}
+label, input, button, select, textarea {
+    font-size: 12px;
+    font-weight: normal;        
+    padding: 0;
+    margin: 0;
+}
+button {
+    font-size: 10px;
+    padding: 0 3px;
+}
+input[type="text"]:disabled {
+    background-color: #eee;
+}
+.inputpatente, .inputaduana, .inputop, .inputfechafact, .inputcteni, .inputctene, .inputprovni, .inputprovne, .inputprovcp, .inputctecp {
+    width: 80px;
+}
+.inputpedimento, .inputreferencia, .inputnumfactura, .inputnumexp {
+    width: 120px;
+}
+.inputcteid, .inputprovid {
+    width: 180px;
+}
+.inputctenom, .inputprovnom, .inputprovca, .inputcteca, .inputprovco, .inputprovlo, .inputcteco, .inputctelo {
+    width: 350px;
+}
+label.error {
+    color: red;
+    font-family: sans-serif;
+    font-size: 10px;
+}
+.selectcteiden, .selectproviden, .selectcert, .selectsubdiv {
+    border: 1px solid #999;
+    border-radius: 0;
+    height: 20px;
+    margin-bottom: 0;
+    padding: 0;
+    width: 150px;
+    color: #000;
+}
+.selectctepais, .inputprovpais {
+    border: 1px solid #999;
+    border-radius: 0;
+    height: 20px;
+    margin-bottom: 0;
+    padding: 0;
+    width: 250px;
+    color: #000;
+}
+.selectcert {
+    width: 210px;
+}
+.control-group {
+    margin-bottom: 0;
+}
+form {
+    margin: 0;
+}
+h4,
+th.dataTitle {
+    text-align: center;
+    background-color: #0398CA;
+    color: #fff;
+    border: 1px #03bcDD solid;
+}
+.tt-query,
+.tt-hint-prov,
+.tt-hint {
+    width: 150px;
+    height: 20px;
+    padding: 3px 5px;
+    font-size: 11px;
+    line-height: 140px;
+    border: 2px solid #ccc;
+    outline: none;
+}
+.tt-hint-prov {
+    width: 350px;
+}
+.tt-query {
+    /*box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);*/
+}
+.tt-hint {
+    color: #999
+}
+.tt-dropdown-menu {
+    width: 160px;
+    margin-top: 0;
+    background-color: #F4C758;
+    font-family: sans-serif;
+}
+.tt-suggestion {
+    padding: 3px 5px;
+    font-size: 12px;
+    line-height: 14px;
+    border: 1px solid #ccc;
+}
+.tt-suggestion.tt-is-under-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;        
+}
+.tt-suggestion p {
+    margin: 0;
+}
+input[readonly]{
+    background-color: #eee;
+}
+.infodialog .ZebraDialog_Title { background:#073d75; border-bottom: 1px solid #222; }
+.infodialog .ZebraDialog_Body { background-image: none; }
+.selectboxit-container .selectboxit, .selectboxit-container .selectboxit-options {
+    width: 400px; /* Width of the dropdown button */
+    border-radius:0;
+    max-height:240px;
+    font-size: 11px;
+}
+.selectboxit-options .selectboxit-option .selectboxit-option-anchor {
+    white-space: normal;
+    min-height: 30px;
+    height: auto;
+    font-size: 11px;
+    line-height: 14px;
+    margin: 0;
+    padding: 0;
+}
+input.fecha,
+input.patente {
+    width: 80px;
+}
+select.consolidado,
+select.selectconsolidado,
+select.selectrectificacion,
+input.aduana {
+    width: 60px;
+}
+input.pedimento {
+    width: 80px;
+}
+input.referencia {
+    width: 80px;
+}
+input.inputcveped,
+input.inputregimen,
+input.cvePed,
+input.regimen {
+    width: 50px;
+}
+input.rfc {
+    width: 150px;
+}
+input.origen,
+input.destino,
+input.domicilio {
+    width: 350px;
+}
+input.cliente {
+    width: 450px;
+}
+textarea.mercancia,
+textarea.observaciones,
+textarea.operador {
+    width:  350px;
+    height: 70px;
+}
+textarea.cantidad,
+textarea.unidad,
+textarea.placas,
+textarea.peso {
+    width:  250px;
+    height: 70px;
+}
+textarea.referencia,
+textarea.pedimento {
+    width:  200px;
+    height: 70px;
+}
+input.uppercase { text-transform: uppercase; }
+button.smallbuttonright {
+    font-size:11px; 
+    padding: 1px 3px; 
+    margin-right: 2px;
+    float: right;
+}
+.progress {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+#requests-frame,
+#concepts-frame,
+#report-frame {
+    width: 100%; 
+    border: 1px #ddd solid; 
+    height: 250px; 
+    padding: 0; 
+    margin: 0;
+}
+#report-frame {
+    height: 520px;
+}
+.btn-new-style-right {
+    font-size:11px; 
+    padding: 1px 3px; 
+    margin-right: 2px; 
+    float: right;
+}
+span.doctype {
+    color: #752E02;
+    font-size: 9px;
+    border: 1px #BB8459 solid;
+    background-color: #F4E2C3;
+    padding: 1px;
+    border-radius: 3px;
+    margin-left: 1px;
+}
+span.notdoctype {
+    color: red;
+    font-size: 9px;
+    border: 1px #DD9997 solid;
+    background-color: #FFDAD8;
+    padding: 1px;
+    border-radius: 3px;
+    margin-left: 1px;
+}
+.statusCove, span.norf, span.rf {
+    border-radius: 5px;
+}
+.odd {
+    background: #fafafc; 
+}
+.statusCove {
+    margin-top: 2px;
+    margin-left: 7px;
+    margin-bottom: 5px;
+    width: 12px;
+    height: 12px;
+    border: 1px #f3f3f3 solid;
+}
+.notsent {
+    background: #fff;        
+    border: 1px #999 solid;        
+}
+.sent {
+    background: #0398CA;
+}
+.cove {
+    background: #00ed00;
+}
+.error {
+    background: #DC143C;
+}
+table.info td .statusCove {
+    margin: 0;
+}
+span.norf, span.rf {
+    display: block;
+    width: 22px;
+    text-align: center;
+    font-size: 11px;
+    height: 15px;
+    line-height: 13px;
+}
+span.rf {
+    background: #ccffcc;
+    border: 1px #B5E0B5 solid;
+}
+span.norf {
+    background: #ccffff;
+    border: 1px #C6F2F2 solid;
+}
+label.error {
+    color: #fff;
+}
+.comments-textarea {
+    width: 450px;
+    height: 80px;
+}
+
+table.sysfiles td.td-operacion,
+table.sysfiles td.td-referencia,
+table.sysfiles td.td-usuario,
+table.sysfiles td.td-cove {
+    width: 100px;
+}
+
+table.sysfiles td.td-solicitud {
+    width: 60px;
+}
+
+.linedwrap {
+    border: 1px solid #c0c0c0;
+    padding: 3px;
+}
+
+.linedtextarea {
+    padding: 0px;
+    margin: 0px;
+}
+
+.linedtextarea textarea, .linedwrap .codelines .lineno {
+    font-size: 10pt;
+    font-family: monospace;
+    line-height: normal !important;
+}
+
+.linedtextarea textarea {
+    padding-right:0.3em;
+    padding-top:0.3em;
+    border: 0;
+}
+
+.linedwrap .lines {
+    margin-top: 0px;
+    width: 50px;
+    float: left;
+    overflow: hidden;
+    border-right: 1px solid #c0c0c0;
+    margin-right: 10px;
+}
+
+.linedwrap .codelines {
+    padding-top: 5px;
+}
+
+.linedwrap .codelines .lineno {
+    color:#AAAAAA;
+    padding-right: 0.5em;
+    padding-top: 0.0em;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.linedwrap .codelines .lineselect {
+    color: red;
+}
+
+.navbar-inner {
+    min-height: 20px;
+}
+.navbar .nav > li > a {
+    padding: 7px;
+}
+#top {
+    height: 35px;
+}

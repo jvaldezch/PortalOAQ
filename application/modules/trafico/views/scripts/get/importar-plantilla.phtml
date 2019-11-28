@@ -1,0 +1,31 @@
+<p style="font-size: 12px"><a href="/images/plantilla_facturas_sep2018.xlsx">Descargar plantilla</a> de ejemplo. <strong>Nota:</strong> esta plantilla únicamente funciona para facturas en portal. No es compatible con la plantilla de CASA.<br>
+    <span style="font-size: 10px">Última actualización: Sep-2018</span></p>
+<form enctype="multipart/form-data" method="post" id="formTemplate">
+    <input type="hidden" name="idTrafico" value="<?= $this->idTrafico ?>" />
+    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+    <input id="template" name="template" type="file" name="file">
+    <br>
+    <input type="checkbox" name="replace" id="replace" /> <span style="font-size: 11px"> No reemplazar facturas</span>
+</form>
+<script type="text/javascript">
+    $("#formTemplate").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            template: {
+                required: true
+            }
+        },
+        messages: {
+            template: {
+                required: " [No se ha seleccionado plantilla.]"
+            }
+        }
+    });
+</script>

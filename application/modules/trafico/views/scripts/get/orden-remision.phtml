@@ -1,0 +1,96 @@
+<form id="formOrder" method="post" action="/trafico/post/crear-orden-remision">
+    <input type="hidden" name="idTrafico" value="<?= $this->idTrafico ?>" />
+    <table class="traffic-table traffic-table-left">
+        <tbody>
+            <tr>
+                <th>DOCUMENTOS:</th>
+                <td>
+                    <div class="checkbox-group">
+                        <div class="checkbox">
+                            <input id="pedimentoSimplificado" name="pedimentoSimplificado" type="checkbox" <?= ($this->pedimentoSimplificado == 1) ? 'checked="true"' : '' ?>>
+                            <label class="checkbox-label" style="padding-left: 5px !important; padding-top: 2px !important; display: block">Ped. Simp.</label>
+                        </div>
+                        <div class="checkbox">
+                            <input id="manifiesto" name="manifiesto" type="checkbox"<?= ($this->manifiesto == 1) ? 'checked="true"' : '' ?>>
+                            <label class="checkbox-label" style="padding-left: 5px !important; padding-top: 2px !important; display: block">Manifiesto</label>
+                        </div>
+                        <div class="checkbox">
+                            <input id="inBond" name="inBond" type="checkbox"<?= ($this->inBond == 1) ? 'checked="true"' : '' ?>>
+                            <label class="checkbox-label" style="padding-left: 5px !important; padding-top: 2px !important; display: block">In-Bond</label>
+                        </div>
+                        <div class="checkbox">
+                            <input id="bl" name="bl" type="checkbox"<?= ($this->bl == 1) ? 'checked="true"' : '' ?>>
+                            <label class="checkbox-label" style="padding-left: 5px !important; padding-top: 2px !important; display: block">BL</label>
+                        </div>
+                        <div class="checkbox">
+                            <input id="relacionDocumentos" name="relacionDocumentos" type="checkbox"<?= ($this->relacionDocumentos == 1) ? 'checked="true"' : '' ?>>
+                            <label class="checkbox-label" style="padding-left: 5px !important; padding-top: 2px !important; display: block">Rel. Doctos.</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>CAJA:</th>
+                <td>
+                    <input type="text" name="caja" id="caja" value="<?= isset($this->caja) ? $this->caja : "" ?>" class="traffic-input-small" tabindex="1">
+                </td>
+            </tr>
+            <tr>
+                <th>TRANSFER/DIRECTO:</th>
+                <td>
+                    <input type="text" name="transfer" id="transfer" value="<?= isset($this->transfer) ? $this->transfer : "" ?>" class="traffic-input-large" tabindex="2">
+                </td>
+            </tr>
+            <tr>
+                <th>LÍNEA TRANSPORTISTA:</th>
+                <td>
+                    <input type="text" name="lineaTransportista" id="lineaTransportista" value="<?= isset($this->lineaTransportista) ? $this->lineaTransportista : "" ?>" class="traffic-input-large" tabindex="2">
+                </td>
+            </tr>
+            <tr>
+                <th>INSTRUCCIONES ESPECIALES:</th>
+                <td>
+                    <textarea id="instrucciones" name="instrucciones" class="traffic-textarea-medium"><?= isset($this->instrucciones) ? $this->instrucciones : "" ?></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>ELABORÓ:</th>
+                <td>
+                    <input type="text" name="elaboro" id="elaboro" value="<?= isset($this->elaboro) ? $this->elaboro : "" ?>" class="traffic-input-medium" tabindex="2">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">
+    
+    $("#formOrder").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorClass: "traffic-error-span",
+        rules: {
+            caja: { required: true },
+            transfer: { required: true },
+            instrucciones: { required: true }
+        },
+        messages: {
+            caja: "[Campo necesario]",
+            transfer: "[Campo necesario]",
+            instrucciones: "[Campo necesario]"
+        }
+    });
+    
+    $(document).on("input", "#transfer, #caja, #instrucciones, #elaboro, #lineaTransportista", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+    
+</script>
