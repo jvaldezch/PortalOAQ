@@ -458,7 +458,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 );
                 $v = array(
                     "page" => array(new Zend_Validate_Int(), "default" => 1),
-                    "rows" => array(new Zend_Validate_Int(), "default" => 10),
+                    "rows" => array(new Zend_Validate_Int(), "default" => 20),
                     "filterRules" => "NotEmpty",
                     "bodega" => "NotEmpty",
                 );
@@ -473,8 +473,9 @@ class Bodega_PostController extends Zend_Controller_Action {
                         }
                     }
                     $rows = $this->_todos($input->page, $input->rows, $b, $input->filterRules, $this->_cookies());
+                    $total = $this->_total($b, $input->filterRules, $this->_cookies());
                     $arr = array(
-                        "total" => $this->_total($b, $input->filterRules, $this->_cookies()),
+                        "total" => $total,
                         "rows" => empty($rows) ? array() : $rows,
                     );
                     $this->_helper->json($arr);
@@ -542,15 +543,13 @@ class Bodega_PostController extends Zend_Controller_Action {
         try {
             $sql = $this->_db->select()
                     ->from(array("t" => "traficos"), array("count(*) AS total"))
-                    ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                    ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
                     ->where("t.idBodega IN (?)", $warehouses)
                     ->where("t.pedimento IS NULL");
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchRow($sql);
             if ($stmt) {
-                return (int) $stmt["total"];
+                return (int) $stmt['total'];
             }
             return;
         } catch (Zend_Db_Exception $ex) {
