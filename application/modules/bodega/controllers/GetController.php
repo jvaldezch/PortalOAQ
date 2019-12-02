@@ -157,7 +157,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
 
                 $bodega = new OAQ_Bodega(array("idTrafico" => $input->id));
-                $arr = $bodega->obtenerDatos();
+//                $arr = $bodega->obtenerDatos();
 
                 if (!empty($input->bultos)) {
 
@@ -461,13 +461,13 @@ class Bodega_GetController extends Zend_Controller_Action {
     public function enviarATraficoAction() {
         try {
             $f = array(
-                "ids" => array("StringTrim", "StripTags"),
+                "id" => array("StringTrim", "StripTags"),
             );
             $v = array(
-                "ids" => array("NotEmpty"),
+                "id" => array("NotEmpty"),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            if ($input->isValid("ids")) {
+            if ($input->isValid("id")) {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
 
@@ -478,6 +478,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     $customs = $mppr->aduanasDeUsuario($this->_session->id);
                 }
                 $form = new Trafico_Form_CrearTraficoNew(array("aduanas" => $customs));
+                $view->id = $input->id;
                 $view->form = $form;
 
                 $this->_helper->json(array("success" => true, "html" => $view->render("enviar-a-trafico.phtml")));

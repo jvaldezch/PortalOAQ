@@ -5,14 +5,14 @@
  */
 
 function zeroPad(num, places) {
-    var zero = places - num.toString().length + 1;
+    let zero = places - num.toString().length + 1;
     return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
 window.abrir = function() {
-    var row = $('#dg').datagrid('getSelected');
+    let row = $('#dg').datagrid('getSelected');
     if (row) {
-        var win = window.open('/bodega/index/editar-entrada?id=' + row.id, '_blank');
+        let win = window.open('/bodega/index/editar-entrada?id=' + row.id, '_blank');
         win.focus();
     }
 };
@@ -48,19 +48,19 @@ window.formatImpo = function(val, row) {
 };
 
 $.fn.datebox.defaults.formatter = function (date) {
-    var y = date.getFullYear();
-    var m = date.getMonth() + 1;
-    var d = date.getDate();
+    let y = date.getFullYear();
+    let m = date.getMonth() + 1;
+    let d = date.getDate();
     return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
 };
 
 $.fn.datebox.defaults.parser = function (s) {
     if (!s)
         return new Date();
-    var ss = s.split('-');
-    var y = parseInt(ss[0], 10);
-    var m = parseInt(ss[1], 10);
-    var d = parseInt(ss[2], 10);
+    let ss = s.split('-');
+    let y = parseInt(ss[0], 10);
+    let m = parseInt(ss[1], 10);
+    let d = parseInt(ss[2], 10);
     if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
         return new Date(y, m - 1, d);
     } else {
@@ -70,8 +70,8 @@ $.fn.datebox.defaults.parser = function (s) {
 
 $.extend($.fn.combobox.defaults, {
     loader: function (param, success, error) {
-        var target = this;
-        var opts = $(target).combobox('options');
+        let target = this;
+        let opts = $(target).combobox('options');
         if (!opts.url)
             return false;
         $.ajax({type: opts.method, url: opts.url, data: param, dataType: 'json',
@@ -89,7 +89,7 @@ $.extend($.fn.combobox.defaults, {
 
 function initGeneral() {
 
-    var arr = "#allOperations,#pagadas,#liberadas,#impos,#expos,#fdates,#ninvoices";
+    let arr = "#allOperations,#pagadas,#liberadas,#impos,#expos,#fdates,#ninvoices";
 
     $(document.body).on("click", arr, function () {
         if ($(this).is(":checked")) {
@@ -100,7 +100,7 @@ function initGeneral() {
         $('#dg').edatagrid('reload');
     });
 
-    var customToolbar = '<td style="padding-left: 5px"><span><span class="l-btn-text">Todas:</span><input type="checkbox" id="allOperations" /></span></td>';
+    let customToolbar = '<td style="padding-left: 5px"><span><span class="l-btn-text">Todas:</span><input type="checkbox" id="allOperations" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Liberadas:</span><input type="checkbox" id="liberadas" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Sin facturar:</span><input type="checkbox" id="ninvoices" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Fechas:</span><input type="checkbox" id="fdates" /></span></td>';
@@ -110,15 +110,15 @@ function initGeneral() {
     $(".datagrid-toolbar").find("table > tbody > tr").append(customToolbar);
 
     $(document.body).on('click', '#traficosLiberados', function () {
-        var dateTime = new Date();
+        let dateTime = new Date();
         dateTime = moment(dateTime).format("YYYY-MM-DD");
         window.open("/trafico/crud/traficos-liberados?fecha=" + dateTime + "&tipo=50", "viewFile", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
     });
 
-    var array = arr.split(",");
+    let array = arr.split(",");
 
     $.each(array, function (index, value) {
-        var str = value.replace("#", "");
+        let str = value.replace("#", "");
         if (Cookies.get(str) !== undefined) {
             if (Cookies.get(str) === "true") {
                 $("#" + str).prop("checked", true);
@@ -132,8 +132,8 @@ function initGeneral() {
 
     $.each(['referencia', 'nombreCliente'], function (index, value) {
         $(document.body).on("input", ".datagrid-editable-input[name='" + value + "']", function () {
-            var input = $(this);
-            var start = input[0].selectionStart;
+            let input = $(this);
+            let start = input[0].selectionStart;
             $(this).val(function (_, val) {
                 return val.toUpperCase();
             });
@@ -153,20 +153,20 @@ window.consolidasTraficos = function(idMaster, ids) {
     });
 };
 
-var dg;
+let dg;
 
 window.consolidar = function () {    
-    var ids = [];
-    var rows = dg.datagrid('getSelections');
-    for (var i = 0; i < rows.length; i++) {
+    let ids = [];
+    let rows = dg.datagrid('getSelections');
+    for (let i = 0; i < rows.length; i++) {
         ids.push(rows[i].id);
     }
     if (ids.length > 1) {
         $.confirm({title: "Consolidar tráficos", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
             buttons: {
                 si: {btnClass: "btn-blue", action: function () {
-                        var idMaster = $('input[name=master]:checked').val();
-                        var ids = $("#ids").val();
+                        let idMaster = $('input[name=master]:checked').val();
+                        let ids = $("#ids").val();
                         $.when( consolidasTraficos(idMaster, ids) ).done(function( res ) {
                             if (res.success === true) {
                                 dg.edatagrid("reload");
@@ -180,7 +180,7 @@ window.consolidar = function () {
                 no: {action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({
                     url: "/bodega/get/consolidar-traficos",
                     method: "get",
@@ -198,9 +198,9 @@ window.consolidar = function () {
 };
 
 window.enviarATrafico = function () {    
-    var ids = [];
-    var rows = dg.datagrid('getSelections');
-    for (var i = 0; i < rows.length; i++) {
+    let ids = [];
+    let rows = dg.datagrid('getSelections');
+    for (let i = 0; i < rows.length; i++) {
         ids.push(rows[i].id);
     }
     if (ids.length === 1) {
@@ -209,6 +209,11 @@ window.enviarATrafico = function () {
                 si: {btnClass: "btn-blue", action: function () {
                         if ($("#sendTraffic").valid()) {
                             $("#sendTraffic").ajaxSubmit({url: "/bodega/post/enviar-a-trafico", cache: false, dataType: "json", timeout: 3000, type: "POST",
+                                success: function (res) {
+                                    if (res.success === true) {
+                                        window.location.href = "/trafico/index/editar-trafico?id=" + res.id;
+                                    }
+                                }
                             });
                             
                         }
@@ -217,11 +222,11 @@ window.enviarATrafico = function () {
                 no: {action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({
                     url: "/bodega/get/enviar-a-trafico",
                     method: "get",
-                    data: {ids: ids}
+                    data: {id: ids[0]}
                 }).done(function (res) {
                     self.setContent(res.html);
                 }).fail(function () {
@@ -235,9 +240,9 @@ window.enviarATrafico = function () {
 };
 
 window.ordenCarga = function() {
-    var ids = [];
-    var rows = dg.datagrid('getSelections');
-    for (var i = 0; i < rows.length; i++) {
+    let ids = [];
+    let rows = dg.datagrid('getSelections');
+    for (let i = 0; i < rows.length; i++) {
         ids.push(rows[i].id);
     }
     if (ids.length > 1) {
@@ -259,7 +264,7 @@ window.ordenCarga = function() {
                 no: {action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({
                     url: "/bodega/get/orden-carga",
                     method: "get",
@@ -463,13 +468,13 @@ $(document).ready(function () {
 
     initGeneral();
 
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
 
-    var dateini;
-    var dateend;
+    let dateini;
+    let dateend;
 
     if (Cookies.get("dateini") !== undefined) {
         dateini = Cookies.get("dateini");

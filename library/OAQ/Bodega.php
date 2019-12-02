@@ -1904,7 +1904,26 @@ class OAQ_Bodega {
         if ($emails->send()) {
             return true;
         }
-        
+        return null;
+    }
+
+    public function enviarATrafico($idAduana, $tipoOperacion, $cvePedimento, $pedimento) {
+        $custom = new Trafico_Model_TraficoAduanasMapper();
+        $adu = $custom->aduana($idAduana);
+
+        $arr = array(
+            "idAduana" => $idAduana,
+            "patente" => $adu['patente'],
+            "aduana" => $adu['aduana'],
+            "ie" => $tipoOperacion,
+            "cvePedimento" => $cvePedimento,
+            "pedimento" => $pedimento,
+            "actualizado" => date("Y-m-d H:i:s")
+        );
+        if (($this->actualizar($arr))) {
+            return true;
+        }
+        return null;
     }
 
 }

@@ -1,29 +1,33 @@
 <form id="sendTraffic">
-    <input type="hidden" id="idTrafico" name="idTrafico" />
+    <input type="hidden" id="idTrafico" name="idTrafico" value="<?= $this->id ?>" />
     <table class="traffic-table traffic-table-left">
         <tr>
             <th style="width: 150px; text-align: right"><label for="aduana">ADUANA:<span style="color: red">*</span></label></th>
-            <td colspan="3">
-                <div style="float: right">
-                    <span style="color: red">*</span>&nbsp;<span style="font-size: 10px">Campos requeridos.</span>
-                </div>
+            <td>
                 <div id="divcustoms"><?= $this->form->aduana ?></div>
             </td>
         </tr>
         <tr>
             <th style="text-align: right"><label for="operacion">TIPO OPERACIÓN: <span style="color: red">*</span></label></th>
-            <td colspan="3">
+            <td>
                 <div id="divops"><?= $this->form->operacion ?></div>
             </td>
         </tr>
         <tr>
             <th style="text-align: right"><label for="cvePedimento">CVE PED: <span style="color: red">*</span></label></th>
-            <td colspan="3"><?= $this->form->cvePedimento ?></td>
+            <td><?= $this->form->cvePedimento ?></td>
         </tr>
         <tr>
             <th style="text-align: right"><label for="pedimento">PEDIMENTO: <span style="color: red">*</span></label></th>
-            <td colspan="3">
+            <td>
                 <?= $this->form->pedimento ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="float: right">
+                    <span style="color: red">*</span>&nbsp;<span style="font-size: 10px">Campos requeridos.</span>
+                </div>
             </td>
         </tr>
     </table>

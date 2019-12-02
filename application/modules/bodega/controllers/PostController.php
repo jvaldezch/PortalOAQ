@@ -1788,30 +1788,30 @@ class Bodega_PostController extends Zend_Controller_Action {
             if ($r->isPost()) {
 
                 $f = array(
-                    "ids" => array("StringTrim", "StripTags"),
+                    "idTrafico" => array("StringTrim", "StripTags"),
+                    "aduana" => "Digits",
+                    "operacion" => "StringToUpper",
+                    "cvePedimento" => "StringToUpper",
+                    "pedimento" => "Digits"
                 );
                 $v = array(
-                    "ids" => array("NotEmpty"),
+                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                    "aduana"  => array("NotEmpty"),
+                    "operacion" => array("NotEmpty"),
+                    "cvePedimento" => array("NotEmpty"),
+                    "pedimento" => array("NotEmpty")
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
-                if ($input->isValid("ids")) {
-                    $view = new Zend_View();
-                    $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+                if ($input->isValid("idTrafico")) {
 
-                    $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
-                    if (in_array($this->_session->role, $this->_todosClientes)) {
-                        $customs = $mppr->aduanasDeUsuario();
-                    } else {
-                        $customs = $mppr->aduanasDeUsuario($this->_session->id);
+                    $bodega = new OAQ_Bodega(array("idTrafico" => $input->idTrafico));
+                    if (($bodega->enviarATrafico($input->aduana, $input->operacion, $input->cvePedimento, $input->pedimento))) {
+                        $this->_helper->json(array("success" => true, "id" => $input->idTrafico));
                     }
-                    $form = new Trafico_Form_CrearTraficoNew(array("aduanas" => $customs));
-                    $view->form = $form;
-
-                    $this->_helper->json(array("success" => true, "html" => $view->render("enviar-a-trafico.phtml")));
+                    $this->_helper->json(array("success" => false));
                 } else {
                     throw new Exception("Invalid input!");
                 }
-                
             } else {
                 throw new Exception("Invalid request type!");
             }

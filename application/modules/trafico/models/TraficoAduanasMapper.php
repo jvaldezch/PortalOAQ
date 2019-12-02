@@ -84,7 +84,7 @@ class Trafico_Model_TraficoAduanasMapper {
             if ($stmt) {
                 return $stmt->toArray();
             }
-            return;
+            return null;
         } catch (Zend_Db_Adapter_Exception $e) {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
