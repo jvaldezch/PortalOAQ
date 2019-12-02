@@ -197,6 +197,43 @@ window.consolidar = function () {
     }
 };
 
+window.enviarATrafico = function () {    
+    var ids = [];
+    var rows = dg.datagrid('getSelections');
+    for (var i = 0; i < rows.length; i++) {
+        ids.push(rows[i].id);
+    }
+    if (ids.length === 1) {
+        $.confirm({title: "Enviar a tráfico", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
+            buttons: {
+                si: {btnClass: "btn-blue", action: function () {
+                        if ($("#sendTraffic").valid()) {
+                            $("#sendTraffic").ajaxSubmit({url: "/bodega/post/enviar-a-trafico", cache: false, dataType: "json", timeout: 3000, type: "POST",
+                            });
+                            
+                        }
+                        return false;
+                }},
+                no: {action: function () {}}
+            },
+            content: function () {
+                var self = this;
+                return $.ajax({
+                    url: "/bodega/get/enviar-a-trafico",
+                    method: "get",
+                    data: {ids: ids}
+                }).done(function (res) {
+                    self.setContent(res.html);
+                }).fail(function () {
+                    self.setContent("Something went wrong.");
+                });
+            }
+        });        
+    } else {
+        $.alert({title: "Advertencia", type: "red", content: "Solo es posible enviar un tráfico.", boxWidth: "250px", useBootstrap: false});
+    }
+};
+
 window.ordenCarga = function() {
     var ids = [];
     var rows = dg.datagrid('getSelections');

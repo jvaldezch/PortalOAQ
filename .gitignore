@@ -3,3 +3,7 @@ application.ini
 
 # Zend Library
 application/library/Zend/*
+
+# PHP storm
+.idea/
+.idea/*

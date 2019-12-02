@@ -104,7 +104,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function obtenerBultosAction() {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
@@ -140,7 +140,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function previewSubidivisionAction() {
         try {
             $f = array(
@@ -155,27 +155,26 @@ class Bodega_GetController extends Zend_Controller_Action {
             if ($input->isValid("id")) {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-                
-                $bodega = new OAQ_Bodega(array("idTrafico" => $input->id));                
+
+                $bodega = new OAQ_Bodega(array("idTrafico" => $input->id));
                 $arr = $bodega->obtenerDatos();
-                
+
                 if (!empty($input->bultos)) {
-                
+
                     $model = new Bodega_Model_Bultos();
                     $bultos = $model->obtenerBultosByIds($input->bultos);
-                    
+
                     $total_bultos = $model->totalBultos($input->id);
-                    
+
                     $view->id = $input->id;
                     $view->ids = serialize($input->bultos);
                     $view->total = $total_bultos;
                     $view->cantidad = count($bultos);
                     $view->restantes = $total_bultos - count($bultos);
-                    
+
                     $n_referencia = $bodega->buscarSubdivision();
-                    
+
                     $view->n_referencia = $n_referencia;
-                    
                 }
 
                 $this->_helper->json(array("success" => true, "html" => $view->render("preview-subidivision.phtml")));
@@ -186,7 +185,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function editarBultoAction() {
         try {
             $f = array(
@@ -380,7 +379,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     $view = new Zend_View();
                     $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                     $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
-                    
+
                     $view->idTrafico = $input->id;
                     if ($input->isValid("borrar")) {
                         $view->borrar = 0;
@@ -431,7 +430,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function consolidarTraficosAction() {
         try {
             $f = array(
@@ -443,13 +442,13 @@ class Bodega_GetController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("ids")) {
                 $view = new Zend_View();
-                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");                
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                 $traficos = new OAQ_Trafico();
                 $arr = $traficos->seleccionConsolidarTraficos((array) $input->ids);
                 if (!empty($arr)) {
                     $view->data = $arr;
                     $view->ids = $input->ids;
-                }                
+                }
                 $this->_helper->json(array("success" => true, "html" => $view->render("consolidar-traficos.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -458,7 +457,38 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
+    public function enviarATraficoAction() {
+        try {
+            $f = array(
+                "ids" => array("StringTrim", "StripTags"),
+            );
+            $v = array(
+                "ids" => array("NotEmpty"),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("ids")) {
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+
+                $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
+                if (in_array($this->_session->role, $this->_todosClientes)) {
+                    $customs = $mppr->aduanasDeUsuario();
+                } else {
+                    $customs = $mppr->aduanasDeUsuario($this->_session->id);
+                }
+                $form = new Trafico_Form_CrearTraficoNew(array("aduanas" => $customs));
+                $view->form = $form;
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("enviar-a-trafico.phtml")));
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function ordenCargaAction() {
         try {
             $f = array(
@@ -470,15 +500,15 @@ class Bodega_GetController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("ids")) {
                 $view = new Zend_View();
-                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");                
-                
-                $traficos = new OAQ_Trafico();                
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+
+                $traficos = new OAQ_Trafico();
                 $arr = $traficos->seleccionConsolidarTraficos((array) $input->ids);
                 if (!empty($arr)) {
                     $view->data = $arr;
                 }
                 $view->ids = implode(",", $input->ids);
-                
+
                 $this->_helper->json(array("success" => true, "html" => $view->render("orden-carga.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -521,7 +551,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     $vucem->setPatente($trafico->getPatente());
                     $vucem->setAduana($trafico->getAduana());
                     $vucem->setPedimento($trafico->getPedimento());
-                    $vucem->setReferencia($trafico->getReferencia());                    
+                    $vucem->setReferencia($trafico->getReferencia());
                     $xml = $vucem->enviarCove($row["id"], $input->idTrafico, $input->idFactura, false);
                     if ($xml) {
                         $lib = new OAQ_VucemEnh();
@@ -560,7 +590,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $mppr = new Trafico_Model_VucemMapper();
                 $arr = $mppr->obtenerVucem($input->id);
                 $vucem = new OAQ_TraficoVucem();
-                
+
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                 if (isset($arr["idFactura"])) {
                     $vucem->setPatente($trafico->getPatente());
@@ -573,7 +603,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                             $this->_helper->json(array("success" => true));
                         }
                     }
-                } 
+                }
                 if (isset($arr["idArchivo"])) {
                     $vucem->setPatente($trafico->getPatente());
                     $vucem->setAduana($trafico->getAduana());
@@ -636,7 +666,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage() . " " . $ex->getTraceAsString()));
         }
     }
-    
+
     public function consultaDetalleLogAction() {
         try {
             $f = array(
@@ -650,9 +680,9 @@ class Bodega_GetController extends Zend_Controller_Action {
             if ($input->isValid("id")) {
                 $mppr = new Trafico_Model_TraficoVucemLog();
                 $arr = $mppr->obtenerUltimo($input->id);
-                if (!empty($arr)) {                    
+                if (!empty($arr)) {
                     $this->_helper->json(array("success" => true, "results" => $arr));
-                }                
+                }
             } else {
                 throw new Exception("Invalid input");
             }
@@ -696,7 +726,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function vucemFirmasAction() {
         try {
             $f = array(
@@ -731,12 +761,12 @@ class Bodega_GetController extends Zend_Controller_Action {
                     );
                 }
                 $this->_helper->json(array("success" => true, "results" => $arr));
-            }            
+            }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function vucemBitacoraAction() {
         try {
             $f = array(
@@ -756,7 +786,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     $view->results = $arr;
                 }
                 $this->_helper->json(array("success" => true, "html" => $view->render("vucem-bitacora.phtml")));
-            }            
+            }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
@@ -778,7 +808,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $mppr = new Trafico_Model_CliSello();
                 $id = $mppr->obtenerDefault($input->idCliente);
                 if (isset($id)) {
-                    $this->_helper->json(array("success" => true, "id" => $id));    
+                    $this->_helper->json(array("success" => true, "id" => $id));
                 }
                 $this->_helper->json(array("success" => false));
             } else {
@@ -825,7 +855,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
+
     public function importarPlantillaAction() {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
@@ -874,7 +904,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
+
     public function descargaCarpetaExpedienteAction() {
         try {
             $f = array(
@@ -888,7 +918,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $traffic = new OAQ_Trafico(array("idTrafico" => $input->id));
                 $id = $traffic->verificarIndexRepositorios();
                 if ($id) {
-                    $this->_helper->json(array("success" => true, "id" => $id));                    
+                    $this->_helper->json(array("success" => true, "id" => $id));
                 } else {
                     $this->_helper->json(array("success" => false));
                 }
@@ -899,21 +929,20 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function imprimirCodigoAction() {
         try {
-            
+
             $data = array();
             $print = new OAQ_Imprimir_CodigoBarras($data, "L", "pt", "LETTER");
             $print->set_filename("codigo_barras.pdf");
             $print->Create();
-            $print->Output("codigo_barras.pdf", "I");            
-            
+            $print->Output("codigo_barras.pdf", "I");
         } catch (Zend_Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function imprimirEtiquetasAction() {
         try {
             $f = array(
@@ -925,16 +954,16 @@ class Bodega_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id")) {
-                
+
                 $model = new Trafico_Model_TraficosMapper();
                 $row = $model->obtenerPorId($input->id);
                 $misc = new OAQ_Misc();
-                
+
                 $mppr = new Bodega_Model_Bultos();
                 $bmppr = new Bodega_Model_Bodegas();
-                
+
                 $bodega = $bmppr->obtenerDatos($row['idBodega']);
-                
+
                 $direccion = $bodega['calle'] . $bodega['numExt'];
                 if (isset($bodega['numInt'])) {
                     $direccion .= ", " . $bodega['numInt'];
@@ -963,7 +992,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 if (isset($bodega['url'])) {
                     $direccion .= " URL: " . $bodega['url'];
                 }
-                
+
                 $data = array(
                     "filename" => "ETIQUETAS_{$row['referencia']}",
                     "bultos" => array(),
@@ -974,7 +1003,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     "direccion" => $direccion,
                     "id_trafico" => $input->id,
                 );
-                
+
                 for ($i = 1; $i <= (int) $row['bultos']; $i++) {
                     if (!($r = $mppr->verificar($i, $row['id']))) {
                         $arr = array(
@@ -992,12 +1021,11 @@ class Bodega_GetController extends Zend_Controller_Action {
                         $data['bultos'][$i] = array("id_bulto" => $r['id'], "uuid" => $r['uuid']);
                     }
                 }
-                
+
                 $print = new OAQ_Imprimir_CodigoBarras($data, "L", "pt", "LETTER");
                 $print->set_filename($data['filename'] . ".pdf");
                 $print->Create();
                 $print->Output($data['filename'] . ".pdf");
-                
             } else {
                 
             }
@@ -1005,7 +1033,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function formatoEntradaAction() {
         try {
             $f = array(
@@ -1017,17 +1045,17 @@ class Bodega_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id")) {
-                
+
                 $model = new Trafico_Model_TraficosMapper();
                 $row = $model->obtenerPorId($input->id);
-                
+
                 $misc = new OAQ_Misc();
-                
+
                 $mppr = new Bodega_Model_Bultos();
                 $mpr = new Bodega_Model_Bodegas();
-                
+
                 $b = $mpr->obtener($row['idBodega']);
-                
+
                 $data = array(
                     "filename" => "ETIQUETAS_{$row['referencia']}",
                     "bultos" => array(),
@@ -1035,7 +1063,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     "referencia" => $row['referencia'],
                     "rfc_cliente" => $row['rfcCliente'],
                 );
-                
+
                 for ($i = 1; $i <= (int) $row['bultos']; $i++) {
                     if (!($r = $mppr->verificar($i, $row['id']))) {
                         $arr = array(
@@ -1052,12 +1080,11 @@ class Bodega_GetController extends Zend_Controller_Action {
                         $data['bultos'][$i] = array("id_bulto" => $r['id'], "uuid" => $r['uuid']);
                     }
                 }
-                
+
                 $print = new OAQ_Imprimir_CodigoBarras($data, "L", "pt", "LETTER");
                 $print->set_filename($data['filename'] . ".pdf");
                 $print->Create();
                 $print->Output($data['filename'] . ".pdf");
-                
             } else {
                 
             }
@@ -1065,7 +1092,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function editarProveedorAction() {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
@@ -1086,46 +1113,45 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $mppr = new Vucem_Model_VucemPaisesMapper();
                 $view->paisSelect = $mppr->getAllCountries();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-                
+
                 $view->idBodega = $input->idBodega;
                 $view->idCliente = $input->idCliente;
-                
+
                 if ($input->isValid("idProveedor")) {
                     $providers = new Trafico_Model_FactPro();
                     $row = $providers->obtener($input->idProveedor);
-                    
+
                     if (!empty($row)) {
-                        $view->nombre = $row["nombre"];                        
-                        $view->tipoIdentificador = $row["tipoIdentificador"];                        
-                        $view->identificador = $row["identificador"];                        
-                        $view->calle = $row["calle"];                        
-                        $view->numInt = $row["numInt"];                        
-                        $view->numExt = $row["numExt"];                        
-                        $view->colonia = $row["colonia"];                        
-                        $view->localidad = $row["localidad"];                        
-                        $view->municipio = $row["municipio"];                        
-                        $view->estado = $row["estado"];                        
-                        $view->codigoPostal = $row["codigoPostal"];                        
+                        $view->nombre = $row["nombre"];
+                        $view->tipoIdentificador = $row["tipoIdentificador"];
+                        $view->identificador = $row["identificador"];
+                        $view->calle = $row["calle"];
+                        $view->numInt = $row["numInt"];
+                        $view->numExt = $row["numExt"];
+                        $view->colonia = $row["colonia"];
+                        $view->localidad = $row["localidad"];
+                        $view->municipio = $row["municipio"];
+                        $view->estado = $row["estado"];
+                        $view->codigoPostal = $row["codigoPostal"];
                         $view->pais = $row["pais"];
                     }
-                    
                 }
-                /*$invoices = new Trafico_Model_TraficoFacturasMapper();                    
-                $arr = $invoices->informacionFactura($input->idFactura);
-                $view->idTrafico = $input->idTrafico;
-                $view->idCliente = $arr["idCliente"];
-                if ($input->isValid("idProv")) {
-                    $view->idProv = $input->idProv;
-                    $trafico = new OAQ_Trafico(array("idTrafico" => $arr["idTrafico"], "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
-                    if ($trafico->getTipoOperacion() == "TOCE.IMP") {
-                        $providers = new Trafico_Model_FactPro();
-                        $row = $providers->obtener($input->idProv);
-                    } else if ($trafico->getTipoOperacion() == "TOCE.EXP") {
-                        $providers = new Trafico_Model_FactDest();
-                        $row = $providers->obtener($input->idProv);
-                    }
-                    
-                }*/
+                /* $invoices = new Trafico_Model_TraficoFacturasMapper();                    
+                  $arr = $invoices->informacionFactura($input->idFactura);
+                  $view->idTrafico = $input->idTrafico;
+                  $view->idCliente = $arr["idCliente"];
+                  if ($input->isValid("idProv")) {
+                  $view->idProv = $input->idProv;
+                  $trafico = new OAQ_Trafico(array("idTrafico" => $arr["idTrafico"], "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+                  if ($trafico->getTipoOperacion() == "TOCE.IMP") {
+                  $providers = new Trafico_Model_FactPro();
+                  $row = $providers->obtener($input->idProv);
+                  } else if ($trafico->getTipoOperacion() == "TOCE.EXP") {
+                  $providers = new Trafico_Model_FactDest();
+                  $row = $providers->obtener($input->idProv);
+                  }
+
+                  } */
                 $this->_helper->json(array("success" => true, "html" => $view->render("editar-proveedor.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -1134,7 +1160,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function editarTransporteAction() {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
@@ -1153,7 +1179,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $mppr = new Vucem_Model_VucemPaisesMapper();
                 $view->paisSelect = $mppr->getAllCountries();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-                
+
                 $this->_helper->json(array("success" => true, "html" => $view->render("editar-transporte.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -1162,7 +1188,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function notificacionAction() {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
@@ -1177,14 +1203,14 @@ class Bodega_GetController extends Zend_Controller_Action {
             if ($input->isValid("idTrafico")) {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-                
+
                 $bodega = new OAQ_Bodega(array("idTrafico" => $input->idTrafico));
-            
+
                 $mppr = new Trafico_Model_ContactosCliMapper();
                 $contactos = $mppr->notificacion($bodega->getIdCliente());
-                
+
                 $view->contactos = $contactos;
-                
+
                 $this->_helper->json(array("success" => true, "html" => $view->render("notificacion.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -1193,7 +1219,7 @@ class Bodega_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     public function readImageAction() {
         try {
             $this->_helper->layout()->disableLayout();

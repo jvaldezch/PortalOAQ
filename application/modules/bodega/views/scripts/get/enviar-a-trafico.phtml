@@ -1,0 +1,66 @@
+<form id="sendTraffic">
+    <input type="hidden" id="idTrafico" name="idTrafico" />
+    <table class="traffic-table traffic-table-left">
+        <tr>
+            <th style="width: 150px; text-align: right"><label for="aduana">ADUANA:<span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <div style="float: right">
+                    <span style="color: red">*</span>&nbsp;<span style="font-size: 10px">Campos requeridos.</span>
+                </div>
+                <div id="divcustoms"><?= $this->form->aduana ?></div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="operacion">TIPO OPERACIÓN: <span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <div id="divops"><?= $this->form->operacion ?></div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="cvePedimento">CVE PED: <span style="color: red">*</span></label></th>
+            <td colspan="3"><?= $this->form->cvePedimento ?></td>
+        </tr>
+        <tr>
+            <th style="text-align: right"><label for="pedimento">PEDIMENTO: <span style="color: red">*</span></label></th>
+            <td colspan="3">
+                <?= $this->form->pedimento ?>
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+
+    $("#sendTraffic").validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                    .closest("form")
+                    .find("#" + element.attr("id"))
+                    .after(error);
+        },
+        errorElement: "span",
+        errorClass: "traffic-error",
+        rules: {
+            aduana: "required",
+            operacion: "required",
+            cvePedimento: "required",
+            fechaEta: "required",
+            pedimento: {
+                required: true,
+                minlength: 7,
+                maxlength: 7,
+                digits: true
+            }
+        },
+        messages: {
+            aduana: "Seleccionar aduana.",
+            operacion: "Seleccionar tipo de operación.",
+            cvePedimento: "Clave de pedimento necesaria",
+            pedimento: {
+                required: "Campo necesario",
+                minlength: "Pedimento debe ser de 7 digitos",
+                maxlength: "Pedimento dede ser de 7 digitos",
+                digits: "No debe contener letras"
+            }
+        }
+    });
+</script>

@@ -1,7 +1,5 @@
 <?php
 
-//require 'FirePHPCore/fb.php';
-
 class Bodega_PostController extends Zend_Controller_Action {
 
     protected $_session;
@@ -302,6 +300,12 @@ class Bodega_PostController extends Zend_Controller_Action {
                         "fechaLiberacion" => ($input->isValid("fechaLiberacion")) ? $input->fechaLiberacion : null,
                         "observaciones" => ($input->isValid("observaciones")) ? $input->observaciones : null,
                     );
+                    if ($input->isValid("fechaPago")) {
+                        $arr['estatus'] = 2;
+                    }
+                    if ($input->isValid("fechaLiberacion")) {
+                        $arr['estatus'] = 3;
+                    }
                     if (($entrada->actualizar($arr))) {
                         $this->_helper->json(array("success" => true));
                     }
@@ -459,15 +463,15 @@ class Bodega_PostController extends Zend_Controller_Action {
                     "bodega" => "NotEmpty",
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
-                if ($input->isValid("page") && $input->isValid("rows")) {                    
+                if ($input->isValid("page") && $input->isValid("rows")) {
                     $mppr = new Bodega_Model_BodegasUsuarios();
                     $bs = $mppr->obtenerBodegas($this->_session->id);
                     $b = array();
                     if (!empty($bs)) {
                         foreach ($bs as $item) {
-                            $b[] = $item['idBodega'];                            
+                            $b[] = $item['idBodega'];
                         }
-                    }                    
+                    }
                     $rows = $this->_todos($input->page, $input->rows, $b, $input->filterRules, $this->_cookies());
                     $arr = array(
                         "total" => $this->_total($b, $input->filterRules, $this->_cookies()),
@@ -583,6 +587,26 @@ class Bodega_PostController extends Zend_Controller_Action {
                         $sql->where("t.idUsuario IN (?)", $arr);
                     }
                 }
+            }
+            if ($filtrosCookies["pagadas"] == true) {
+                $sql->where("t.estatus = 2");
+                if ($filtrosCookies["fdates"] == true) {
+                    if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
+                        $sql->where("t.fechaPago >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
+                                ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                    }
+                }
+            }
+            if ($filtrosCookies["liberadas"] == true) {
+                $sql->where("t.estatus = 3");
+                if ($filtrosCookies["fdates"] == true) {
+                    if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
+                        $sql->where("t.fechaLiberacion >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
+                                ->where("t.fechaLiberacion <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                    }
+                }
+            } else {
+                $sql->where("t.estatus NOT IN (3, 4)");
             }
         }
 
@@ -1744,14 +1768,51 @@ class Bodega_PostController extends Zend_Controller_Action {
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("id") && $input->isValid("ids")) {
-                    
+
                     $this->_firephp->info($input->ids);
-                    
+
                     $this->_helper->json(array("success" => true));
-                    
                 } else {
                     throw new Exception("Invalid input!");
                 }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function enviarATraficoAction() {
+        try {
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+
+                $f = array(
+                    "ids" => array("StringTrim", "StripTags"),
+                );
+                $v = array(
+                    "ids" => array("NotEmpty"),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("ids")) {
+                    $view = new Zend_View();
+                    $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+
+                    $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
+                    if (in_array($this->_session->role, $this->_todosClientes)) {
+                        $customs = $mppr->aduanasDeUsuario();
+                    } else {
+                        $customs = $mppr->aduanasDeUsuario($this->_session->id);
+                    }
+                    $form = new Trafico_Form_CrearTraficoNew(array("aduanas" => $customs));
+                    $view->form = $form;
+
+                    $this->_helper->json(array("success" => true, "html" => $view->render("enviar-a-trafico.phtml")));
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+                
             } else {
                 throw new Exception("Invalid request type!");
             }
