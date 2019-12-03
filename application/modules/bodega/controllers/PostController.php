@@ -524,12 +524,12 @@ class Bodega_PostController extends Zend_Controller_Action {
                     ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
                     ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
                     ->joinLeft(array("b" => "trafico_bodegas"), "b.id = t.idBodega", array("siglas"))
-                    ->where("t.pedimento IS NULL")
                     ->where("t.idBodega IN (?)", $warehouses)
                     ->order(array("fechaEta DESC"))
                     ->limit($rows, ($page - 1) * $rows);
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchAll($sql);
+            $this->_firephp->fb($sql->assemble());
             if ($stmt) {
                 return $stmt;
             }
@@ -544,8 +544,7 @@ class Bodega_PostController extends Zend_Controller_Action {
             $sql = $this->_db->select()
                     ->from(array("t" => "traficos"), array("count(*) AS total"))
                     ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
-                    ->where("t.idBodega IN (?)", $warehouses)
-                    ->where("t.pedimento IS NULL");
+                    ->where("t.idBodega IN (?)", $warehouses);
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchRow($sql);
             if ($stmt) {
@@ -610,6 +609,11 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
 
         if (isset($filtrosCookies)) {
+            if ($filtrosCookies["intraffic"] == true) {
+                $sql->where("t.pedimento IS NOT NULL");
+            } else {
+                $sql->where("t.pedimento IS NULL");
+            }
             if ($filtrosCookies["ninvoices"] == true) {
                 $sql->where("t.fechaFacturacion IS NULL");
                 if ($filtrosCookies["fdates"] == true) {
@@ -666,6 +670,7 @@ class Bodega_PostController extends Zend_Controller_Action {
             "liberadas" => filter_var($request->getCookie("liberadas"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "fdates" => filter_var($request->getCookie("fdates"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "ninvoices" => filter_var($request->getCookie("ninvoices"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+            "intraffic" => filter_var($request->getCookie("intraffic"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "dateini" => filter_var($request->getCookie("dateini"), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^\d{4}\-\d{2}\-\d{2}$/"))),
             "dateend" => filter_var($request->getCookie("dateend"), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^\d{4}\-\d{2}\-\d{2}$/"))),
         );

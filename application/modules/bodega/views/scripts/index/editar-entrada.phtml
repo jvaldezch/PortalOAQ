@@ -103,9 +103,9 @@
                                     <div style="float: left; padding: 2px">                                        
                                         <?= $this->basico["referencia"] ?>
                                     </div>
-                                    <?php if ($this->basico["pagado"] == null) { ?>
+                                    <?php if ($this->basico["fechaLiberacion"] == null) { ?>
                                         <div style="font-size:1.3em; color: #2f3b58; float: left; margin-right: 5px; padding: 2px; padding-left: 10px">
-                                            <a href="/bodega/index/modificar-entrada?id=<?= $this->basico["id"] ?>" title="Editar tráfico." style="color: #2f3b58">
+                                            <a href="/bodega/index/modificar-entrada?id=<?= $this->basico["id"] ?>" title="Editar entrada." style="color: #2f3b58">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                             &nbsp;

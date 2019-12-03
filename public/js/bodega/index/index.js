@@ -89,7 +89,7 @@ $.extend($.fn.combobox.defaults, {
 
 function initGeneral() {
 
-    let arr = "#allOperations,#pagadas,#liberadas,#impos,#expos,#fdates,#ninvoices";
+    let arr = "#allOperations,#pagadas,#liberadas,#intraffic,#fdates,#ninvoices";
 
     $(document.body).on("click", arr, function () {
         if ($(this).is(":checked")) {
@@ -102,7 +102,7 @@ function initGeneral() {
 
     let customToolbar = '<td style="padding-left: 5px"><span><span class="l-btn-text">Todas:</span><input type="checkbox" id="allOperations" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Liberadas:</span><input type="checkbox" id="liberadas" /></span></td>';
-    customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Sin facturar:</span><input type="checkbox" id="ninvoices" /></span></td>';
+    customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">En tráfico:</span><input type="checkbox" id="intraffic" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Fechas:</span><input type="checkbox" id="fdates" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Desde</span><input id="dateini" style="width:100px; text-align: center"></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Hasta</span><input id="dateend" style="width:100px; text-align: center"></span></td>';
