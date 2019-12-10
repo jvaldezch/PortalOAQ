@@ -1913,4 +1913,19 @@ class OAQ_Trafico {
         return $arr;
     }
 
+    public function archivosDeExpediente($customer = null) {
+        try {
+
+            $mppr = new Archivo_Model_RepositorioMapper();
+
+            if ($customer) {
+                $files = $mppr->getFilesByReferenceCustomers($this->referencia, $this->patente, $this->aduana);
+                return $files;
+            }
+
+        } catch (Exception $ex) {
+
+        }
+    }
+
 }

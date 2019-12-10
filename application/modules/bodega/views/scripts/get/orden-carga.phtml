@@ -25,7 +25,8 @@
 <form id="loadOrder">
     <input type="hidden" name="ids" id="ids" value="<?= $this->ids ?>" />
     <p style="font-size: 12px">Número de orden de carga: </p>
-    <input type="text" class="traffic-input-medium" name="ordenCarga" id="ordenCarga" />
+    <input type="text" class="traffic-input-medium" name="ordenCarga" id="ordenCarga"
+           readonly="true" value="<?= $this->ordenCarga ?>" />
 </form>
 <script type="text/javascript">
     

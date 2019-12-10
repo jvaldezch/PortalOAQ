@@ -529,7 +529,6 @@ class Bodega_PostController extends Zend_Controller_Action {
                     ->limit($rows, ($page - 1) * $rows);
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchAll($sql);
-            $this->_firephp->fb($sql->assemble());
             if ($stmt) {
                 return $stmt;
             }

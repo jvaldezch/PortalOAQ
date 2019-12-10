@@ -5,6 +5,7 @@ class Bodega_GetController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
@@ -12,6 +13,7 @@ class Bodega_GetController extends Zend_Controller_Action {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -506,7 +508,15 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $traficos = new OAQ_Trafico();
                 $arr = $traficos->seleccionConsolidarTraficos((array) $input->ids);
                 if (!empty($arr)) {
+
                     $view->data = $arr;
+
+                    $ordenc = new Bodega_Model_OrdenCarga();
+                    if (!($orden_carga = $ordenc->verificar($input->ids[0]))) {
+                        $orden_carga = $ordenc->agregar($input->ids[0], $this->_session->id);
+                    }
+                    $view->ordenCarga = $orden_carga;
+
                 }
                 $view->ids = implode(",", $input->ids);
 
@@ -1281,7 +1291,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                         $html = new V2_Html();
                         $html->select("traffic-select-medium", "idPlanta");
                         $html->addSelectOption("", "---");
-                        $html->addSelectOption($item["id"], $item["descripcion"]);
+                        //$html->addSelectOption($item["id"], $item["descripcion"]);
                         $html->setDisabled();
                     }
                     $this->_helper->json(array("success" => true, "plantas" => isset($html) ? $html->getHtml() : null));

@@ -245,7 +245,7 @@ window.ordenCarga = function() {
     for (let i = 0; i < rows.length; i++) {
         ids.push(rows[i].id);
     }
-    if (ids.length > 1) {
+    if (ids.length >= 1) {
         $.confirm({title: "Asignar orden de carga", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
             buttons: {
                 si: {btnClass: "btn-blue", action: function () {

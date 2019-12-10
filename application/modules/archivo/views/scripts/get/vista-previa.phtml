@@ -1,0 +1,32 @@
+<table class="traffic-table traffic-table-left hover">
+    <thead>
+        <?php if (isset($this->results) && !empty($this->results)) { ?>
+            <tr>
+                <th colspan="3" style="font-size: 14px !important; padding: 5px 0 !important;" class="traffic-table-subtitle">Cantidad de archvios: <?= count($this->results) ?></th>
+            </tr>
+        <?php } ?>
+        <tr>
+            <th class="traffic-table-subtitle" style="text-align: left">Archivo</th>
+            <th class="traffic-table-subtitle" style="text-align: left">Tipo</th>
+            <th class="traffic-table-subtitle">Creado</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if (isset($this->results) && !empty($this->results)) { ?>
+        <?php foreach ($this->results as $item) { ?>
+            <tr>
+                <td>
+                    <?php if (file_exists($item["ubicacion"])) { ?>
+                        <a class="traffic-a" href="/clientes/expediente/descargar-archivo?id=<?= $item["id"] ?>"><?= $item["nom_archivo"] ?></a>
+                    <?php } else { ?>
+                        <p><?= $item["nom_archivo"] ?></>
+                    <?php } ?>
+                </td>
+                <td style="max-width: 350px;"><div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div></td>
+                <td style="width: 120px; text-align: center"><?= date('d/m/Y', strtotime($item["creado"])) ?>&nbsp;</td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+    <?php } ?>
+    </tbody>
+</table>

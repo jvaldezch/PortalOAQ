@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var vald = $("#formUpdateKey").validate({
+let vald = $("#formUpdateKey").validate({
     errorPlacement: function (error, element) {
         $(element)
                 .closest("form")
@@ -41,8 +41,8 @@ $(document).ready(function () {
 
     $(document.body).on('click', '#updateKeys', function(ev) {
         ev.preventDefault();        
-        var ids = [];
-        var boxes = $("input[class=archivo-sello]:checked");
+        let ids = [];
+        let boxes = $("input[class=archivo-sello]:checked");
         if ((boxes).size() === 0) {
             alert("No ha seleccionado ningun sello.");
         }
@@ -61,7 +61,7 @@ $(document).ready(function () {
     });
 
     $(document.body).on("click", ".select-sellos", function () {
-        var checkboxes = $("input[class=archivo-sello]");
+        let checkboxes = $("input[class=archivo-sello]");
         if ($(this).is(':checked')) {
             checkboxes.prop('checked', true);
         } else {

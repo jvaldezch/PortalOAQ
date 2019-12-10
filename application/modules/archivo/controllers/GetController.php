@@ -931,4 +931,33 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function vistaPreviaAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => array("Digits"),
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico")) {
+
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+                $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
+                $traffic = new OAQ_Trafico(array("idTrafico" => $input->idTrafico));
+                $view->results = $traffic->archivosDeExpediente(true);
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("vista-previa.phtml")));
+
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
 }

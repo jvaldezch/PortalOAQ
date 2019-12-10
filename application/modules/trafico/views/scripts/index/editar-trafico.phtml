@@ -13,14 +13,6 @@
                 <button id="traffic-request" class="traffic-btn" style="display: none">
                     <i class="fas fa-money-check-alt"></i> Sol. Anticipo
                 </button>
-<!--                <div style="float: right; margin-top: 3px">                
-                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mms'" style="background-color: #c7d0d3; margin: 0 5px 0 5px">
-                        <i class="fas fa-sync" style="font-size:1.2em; color: #2f3b58; font-weight: bold"></i> ACTUALIZAR (2)</a>
-                    <div id="mms" style="width:150px; display: none">
-                        <div id="mn-slam" data-id="<?= $this->idTrafico ?>">SLAM</div>
-                        <div id="mn-casa" data-id="<?= $this->idTrafico ?>">CASA</div>
-                    </div>
-                </div>-->
                 <a id="traffic-view-request" class="traffic-btn" style="display: none">Sol. Anticipo</a>
                 <button id="update-traffic" class="traffic-btn">
                     <i class="fas fa-redo"></i> Actualizar
@@ -166,9 +158,13 @@
                             <button class="traffic-btn traffic-btn-right" id="help" href="/trafico/get/ayuda-documentos" style="width: 30px; min-width: 25px" data-hasqtip="0">
                                 <i class="fas fa-question"></i>
                             </button>
-                            
+
                             <button id="checklist" class="traffic-btn traffic-btn-right" style="min-width: 5px" title="Checklist de expediente">
                                 <i class="fas fa-clipboard-list"></i>
+                            </button>
+
+                            <button id="view-as-customer" class="traffic-btn traffic-btn-right" style="min-width: 5px" title="Ver expediente como cliente">
+                                <i class="fas fa-user-alt"></i>
                             </button>
                             
                             <?php if(isset($this->basico["idRepositorio"])) { ?>

@@ -1,8 +1,8 @@
 
-var emailData = {};
+let emailData = {};
 emailData["emails"] = {};
     
-var base = "/trafico/index/editar-trafico";
+let base = "/trafico/index/editar-trafico";
 
 function importarFactura(idFactura) {
     $.ajax({url: '/trafico/facturas/importar-factura',
@@ -40,8 +40,8 @@ function crearAdenda(idFactura) {
     });
 }
 
-function borrarFactura(id) {
-    var id = id;
+function borrarFactura(id_factura) {
+    let id = id_factura;
     $.confirm({title: "Factura", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, type: "red",
         buttons: {
             si: {btnClass: "btn-red", action: function () {
@@ -67,7 +67,7 @@ function borrarFactura(id) {
 }
 
 function borrarImagen(idImage) {
-    var r = confirm("¿Está seguro que desea borrar la imagen?");
+    let r = confirm("¿Está seguro que desea borrar la imagen?");
     if (r === true) {
         $.ajax({url: "/trafico/post/borrar-imagen", dataType: "json", timeout: 3000, data: {id: idImage}, type: "POST",
             success: function (res) {
@@ -90,7 +90,7 @@ function borrarGuia(idGuia) {
 }
 
 function borrarArchivo(id) {
-    var answer = confirm("¿Desea borrar el archivo?");
+    let answer = confirm("¿Desea borrar el archivo?");
     if (answer) {
         $.ajax({url: "/trafico/post/borrar-archivo", dataType: "json", cache: false, data: {id: id}, type: "POST",
             success: function (data) {
@@ -101,7 +101,7 @@ function borrarArchivo(id) {
 }
 
 function verFactura(idFactura) {
-    var w = window.open("/trafico/data/ver-factura?id=" + idFactura, "varFactura", "toolbar=0,location=0,menubar=0,height=550,width=1024,scrollbars=yes");
+    let w = window.open("/trafico/data/ver-factura?id=" + idFactura, "varFactura", "toolbar=0,location=0,menubar=0,height=550,width=1024,scrollbars=yes");
     w.focus();
 }
 
@@ -132,7 +132,7 @@ function enviarEdocument(idArchivo) {
             cerrar: {action: function () {}}
         },
         content: function () {
-            var self = this;
+            let self = this;
             return $.ajax({
                 url: "/trafico/get/cargar-tipos-edocuments?idArchivo=" + idArchivo + "&idTrafico=" + $("#idTrafico").val(),
                 method: "get"
@@ -153,7 +153,7 @@ function enviarFacturaVucem(idFactura) {
 }
 
 function verCove(idFactura, cove) {
-    var w = window.open("/trafico/get/ver-edocument?idFactura=" + idFactura + "&idTrafico=" + $("#idTrafico").val() + "&cove=" + cove + "&type=cove", "verCove", "toolbar=0,location=0,menubar=0,height=550,width=850,scrollbars=yes");
+    let w = window.open("/trafico/get/ver-edocument?idFactura=" + idFactura + "&idTrafico=" + $("#idTrafico").val() + "&cove=" + cove + "&type=cove", "verCove", "toolbar=0,location=0,menubar=0,height=550,width=850,scrollbars=yes");
     w.focus();
 }
 
@@ -162,12 +162,12 @@ function htmlEntities(str) {
 }
 
 function vucemPreview(id) {
-    var w = window.open("/trafico/facturas/vucem-preview?id=" + id + "&idTrafico=" + $("#idTrafico").val(), "previewXml", "toolbar=0,location=0,menubar=0,height=550,width=850,scrollbars=yes");
+    let w = window.open("/trafico/facturas/vucem-preview?id=" + id + "&idTrafico=" + $("#idTrafico").val(), "previewXml", "toolbar=0,location=0,menubar=0,height=550,width=850,scrollbars=yes");
     w.focus();
 }
     
-function borrarVucem(id) {
-    var id = id;
+function borrarVucem(id_vucem) {
+    let id = id_vucem;
     $.confirm({title: "VUCEM", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, type: "red",
         buttons: {
             si: {btnClass: "btn-red", action: function () {
@@ -312,10 +312,10 @@ window.loadComments = function() {
             if (res.success === true) {
                 if (res.results['bitacora'] !== null) {
                     $("#trafficLog").html('');
-                    var rows = res.results['bitacora'];
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        var html = '<tr>';
+                    let rows = res.results['bitacora'];
+                    for (let i = 0; i < rows.length; i++) {
+                        let row = rows[i];
+                        let html = '<tr>';
                         html += '<td style="font-size: 10px !important; line-height: 11px">' + row.bitacora + '</td>';
                         html += '<td style="font-size: 10px !important; line-height: 11px">' + (row.usuario !== null ? row.usuario : '') + '</td>';
                         html += '<td style="text-align: center; font-size: 10px !important; line-height: 11px">' + row.creado + '</td>';
@@ -327,10 +327,10 @@ window.loadComments = function() {
                 }
                 if (res.results['comentarios'] !== null) {
                     $("#trafficComments").html('');
-                    var rows = res.results['comentarios'];
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        var html = '<tr>';
+                    let rows = res.results['comentarios'];
+                    for (let i = 0; i < rows.length; i++) {
+                        let row = rows[i];
+                        let html = '<tr>';
                         html += '<td>' + row.nombre + '</td>';
                         html += '<td>' + (row.mensaje !== null ? row.mensaje : '');
                         if (row.nombreArchivo) {
@@ -346,8 +346,8 @@ window.loadComments = function() {
                 }
                 if (res.results['archivos'] !== null) {
                     $("#attachedFiles").html('');
-                    var row = res.results['archivos'];
-                    for (var i = 0; i < row.length; i++) {
+                    let row = res.results['archivos'];
+                    for (let i = 0; i < row.length; i++) {
                         $("#attachedFiles").append('<img src="/images/icons/attachment.gif"><span style="font-size: 11px"><a href="/archivo/get/descargar-archivo-temporal?id=' + row.idArchivo + '">' + row.nombreArchivo + '</a></span><br>');
                     }
                 }
@@ -427,19 +427,19 @@ window.getVucemSignatures = function() {
         success: function (res) {
             if (res.success === true) {
                 if (res.results['agente']) {
-                    var row = res.results['agente'];
-                    for (var i = 0; i < row.length; i++) {
+                    let row = res.results['agente'];
+                    for (let i = 0; i < row.length; i++) {
                         $("#vucemSignatures").append('<tr><td><input type="radio" name="sello" data-type="agente" value="' + row[i].id + '" ></td><td>' + row[i].patente + '</td><td>' + row[i].rfc + '</td><td style="text-align: left">' + row[i].razon + '</td><td></td></tr>');                        
                     }
                 }
                 if (res.results['cliente']) {
-                    var row = res.results['cliente'];
-                    for (var i = 0; i < row.length; i++) {
+                    let row = res.results['cliente'];
+                    for (let i = 0; i < row.length; i++) {
                         $("#vucemSignatures").append('<tr><td><input type="radio" name="sello" data-type="cliente" value="' + row[i].id + '" ></td><td></td><td>' + row[i].rfc + '</td><td style="text-align: left">' + row[i].razon + '</td><td></td></tr>');
                     }
                 }
                 if (res.results['config']) {
-                    var row = res.results['config'];
+                    let row = res.results['config'];
                     if (row.idSelloAgente !== null) {
                         $('input[name=sello][value=' + row.idSelloAgente +']').prop('checked', true);
                     }
@@ -451,9 +451,9 @@ window.getVucemSignatures = function() {
                     $(':input[name="sello"]').prop('checked', true)
                         .attr('checked', true);
 
-                    var idSello = $('input[name="sello"]:checked').val();
-                    var tipo = $('input[name="sello"]:checked').data('type');
-                    var idTrafico = $("#idTrafico").val();
+                    let idSello = $('input[name="sello"]:checked').val();
+                    let tipo = $('input[name="sello"]:checked').data('type');
+                    let idTrafico = $("#idTrafico").val();
                     
                     establecerSello(idTrafico, idSello, tipo);
                 }
@@ -563,11 +563,11 @@ window.subirFactura = function(idFactura) {
             }
         },
         content: function () {
-            var self = this;
+            let self = this;
             return $.ajax({url: "/trafico/get/pdf-factura", dataType: "json", method: "GET",
                 data: {idTrafico: $("#idTrafico").val(), idFactura: idFactura}
             }).done(function (res) {
-                var html = "";
+                let html = "";
                 if (res.success === true) {
                     html = res.html;
                 } else {
@@ -584,32 +584,32 @@ window.subirFactura = function(idFactura) {
 window.loadSoia = function() {
     
     $('#soia_results tbody').empty();        
-    var tableRef = document.getElementById('soia_results').getElementsByTagName('tbody')[0];    
+    let tableRef = document.getElementById('soia_results').getElementsByTagName('tbody')[0];    
     
     $.ajax({url: "/trafico/get/obtener-soia", cache: false, dataType: "json", data: {id: $("#idTrafico").val()}, type: "GET",
         success: function (res) {
             if (res.success === true) {
                 
                 $.each(res.result, function(i, item) {
-                    var newRow   = tableRef.insertRow();
-                    var newCell1  = newRow.insertCell(0);
-                    var newText1  = document.createTextNode(item.fecha_pago);
+                    let newRow   = tableRef.insertRow();
+                    let newCell1  = newRow.insertCell(0);
+                    let newText1  = document.createTextNode(item.fecha_pago);
                     newCell1.appendChild(newText1);
-                    var newCell2  = newRow.insertCell(1);
-                    var newText2  = document.createTextNode(item.hora_pago);
+                    let newCell2  = newRow.insertCell(1);
+                    let newText2  = document.createTextNode(item.hora_pago);
                     newCell2.appendChild(newText2);
-                    var newCell3  = newRow.insertCell(2);
-                    var newText3  = document.createTextNode(item.semaforo);
+                    let newCell3  = newRow.insertCell(2);
+                    let newText3  = document.createTextNode(item.semaforo);
                     newCell3.appendChild(newText3);
-                    var newCell4  = newRow.insertCell(3);
-                    var newText4  = document.createTextNode(item.mensaje);
+                    let newCell4  = newRow.insertCell(3);
+                    let newText4  = document.createTextNode(item.mensaje);
                     newCell4.appendChild(newText4);
                 });
                 
             } else {
-                var newRow   = tableRef.insertRow();
-                var cell  = newRow.insertCell(0);
-                var text  = document.createTextNode("No hay datos se SOIA.");
+                let newRow   = tableRef.insertRow();
+                let cell  = newRow.insertCell(0);
+                let text  = document.createTextNode("No hay datos se SOIA.");
                 cell.appendChild(text);
                 cell.colSpan = 4;
             }
@@ -647,10 +647,10 @@ function abrirPrevio(idGuia) {
             cerrar: {btnClass: "btn-red", action: function () {}}
         },
         content: function () {
-            var self = this;
+            let self = this;
             return $.ajax({url: "/bitacora/get/detalle-guia?idGuia=" + idGuia, dataType: "json", method: "GET"
             }).done(function (res) {
-                var html = "";
+                let html = "";
                 if(res.success === true) { html = res.html; }
                 self.setContent(html);
             }).fail(function () {
@@ -737,14 +737,14 @@ window.buscarExpedienteIndex = function(idTrafico) {
     });    
 };
 
-var jc;
+let jc;
 
 $(document).ready(function () {
             
-    var valid = ["#information", "#comments", "#register", "#files", "#photos", "#vucem", "#soia"];
+    let valid = ["#information", "#comments", "#register", "#files", "#photos", "#vucem", "#soia"];
 
     $(document.body).on("click", "#traffic-tabs li a", function() {
-        var href = $(this).attr("href");
+        let href = $(this).attr("href");
         Cookies.set("active", href);
         currentActive(Cookies.get("active"));
     });
@@ -769,7 +769,7 @@ $(document).ready(function () {
     });
 
     $(document.body).on("click", "#save-traffic",function () {
-        var form1 = $("#form-additional");
+        let form1 = $("#form-additional");
         $.ajax({url: "/trafico/ajax/guardar-trafico", dataType: "json", timeout: 10000, type: "POST", data: {pedimento: form1.serialize()}
         });
     });
@@ -856,8 +856,8 @@ $(document).ready(function () {
     });
 
     $(document).on("input", "#numFactura, #proveedor, #number, #comment, #contenedorCaja, #nombreBuque, #placas, #ordenCompra, #candados", function() {
-        var input = $(this);
-        var start = input[0].selectionStart;
+        let input = $(this);
+        let start = input[0].selectionStart;
         $(this).val(function (_, val) {
             return val.toUpperCase();
         });
@@ -905,7 +905,7 @@ $(document).ready(function () {
 
     $(document.body).on("click", "#mn-slam",function (e) {
         e.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.confirm({title: "Confirmación", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, type: "blue",
             buttons: {
                 si: {
@@ -938,7 +938,7 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#mn-casa",function (e) {
         e.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.confirm({title: "Confirmación", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, type: "blue",
             buttons: {
                 si: {
@@ -1000,8 +1000,8 @@ $(document).ready(function () {
         });
     });
 
-    var bar = $(".barImage");
-    var percent = $(".percentImage");
+    let bar = $(".barImage");
+    let percent = $(".percentImage");
     
     $("#formPhotos").validate({
         errorPlacement: function (error, element) {
@@ -1023,7 +1023,7 @@ $(document).ready(function () {
     });
 
     $(document.body).on("click","#deleteTraffic",function (e) {
-        var r = confirm("¿Está seguro que desea eliminar el trafico?");
+        let r = confirm("¿Está seguro que desea eliminar el trafico?");
         if (r === true) {
             $.ajax({url: "/trafico/post/borrar-trafico", cache: false, type: "POST", dataType: "json", data: {id: $("#idTrafico").val()},
                 beforeSend: function() {                 
@@ -1041,7 +1041,7 @@ $(document).ready(function () {
     
     $(document.body).on("click",".image-link",function (ev) {
         ev.preventDefault();
-        var w = window.open("/trafico/data/read-image?id=" + $(this).data("id"), 'Trafico Image ' + $(this).data("id"), 'toolbar=0,location=0,menubar=0,height=750,width=950,scrollbars=yes');
+        let w = window.open("/trafico/data/read-image?id=" + $(this).data("id"), 'Trafico Image ' + $(this).data("id"), 'toolbar=0,location=0,menubar=0,height=750,width=950,scrollbars=yes');
         w.focus();
         return false;
     });
@@ -1051,12 +1051,12 @@ $(document).ready(function () {
         if ($("#formPhotos").valid()) {
             $("#formPhotos").ajaxSubmit({url: "/trafico/post/cargar-imagenes",
                 beforeSend: function () {
-                    var percentVal = "0%";
+                    let percentVal = "0%";
                     bar.width(percentVal);
                     percent.html(percentVal);
                 },
                 uploadProgress: function (event, position, total, percentComplete) {
-                    var percentVal = percentComplete + "%";
+                    let percentVal = percentComplete + "%";
                     bar.width(percentVal);
                     percent.html(percentVal);
                 },
@@ -1143,11 +1143,37 @@ $(document).ready(function () {
                 }
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/archivo/post/checklist", dataType: "json", method: "POST",
                     data: {idTrafico: $("#idTrafico").val()}
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
+                    if (res.success === true) {
+                        html = res.html;
+                    }
+                    self.setContent(html);
+                }).fail(function () {
+                    self.setContent("Something went wrong.");
+                });
+            }
+        });
+    });
+
+    $(document.body).on("click", "#view-as-customer", function (ev) {
+        ev.preventDefault();
+        $.confirm({title: "Vista de expediente (cliente)", escapeKey: "cerrar", boxWidth: "850px", useBootstrap: false,
+            buttons: {
+                cerrar: {
+                    btnClass: "btn-red",
+                    action: function () {}
+                }
+            },
+            content: function () {
+                let self = this;
+                return $.ajax({url: "/archivo/get/vista-previa", dataType: "json", method: "POST",
+                    data: {idTrafico: $("#idTrafico").val()}
+                }).done(function (res) {
+                    let html = "";
                     if (res.success === true) {
                         html = res.html;
                     }
@@ -1190,11 +1216,11 @@ $(document).ready(function () {
                 }
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/archivo/post/checklist", dataType: "json", method: "POST",
                     data: {idTrafico: $("#idTrafico").val()}
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
                     if (res.success === true) {
                         html = res.html;
                     }
@@ -1213,7 +1239,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", ".editInvoice", function (ev) {
-        var w = window.open("/trafico/facturas/editar-factura?idFactura=" + $(this).data("id"), 'editarFactura', 'toolbar=0,location=0,menubar=0,height=750,width=950,scrollbars=yes');
+        let w = window.open("/trafico/facturas/editar-factura?idFactura=" + $(this).data("id"), 'editarFactura', 'toolbar=0,location=0,menubar=0,height=750,width=950,scrollbars=yes');
         w.focus();
         return false;
     });
@@ -1224,8 +1250,8 @@ $(document).ready(function () {
                 seleccionar: {
                     btnClass: "btn-blue",
                     action: function () {
-                        var facturas = [];
-                        var boxes = $("input[class=invoice]:checked");
+                        let facturas = [];
+                        let boxes = $("input[class=invoice]:checked");
                         if ((boxes).size() > 0) {
                             $(boxes).each(function () {
                                 facturas.push($(this).data("factura"));
@@ -1245,10 +1271,10 @@ $(document).ready(function () {
                 }
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/trafico/get/facturas-pedimento?idTrafico=" + $("#idTrafico").val(), dataType: "json", method: "GET"
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
                     if(res.success === true) {
                         html = res.html;
                     }
@@ -1290,10 +1316,10 @@ $(document).ready(function () {
                 }
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/trafico/get/importar-plantilla?idTrafico=" + $("#idTrafico").val(), dataType: "json", method: "GET"
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
                     if(res.success === true) {
                         html = res.html;
                     }
@@ -1306,7 +1332,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", "#selectAllInvoices", function () {
-        var checkboxes = $("input[class=invoice]");
+        let checkboxes = $("input[class=invoice]");
         if ($(this).is(":checked")) {
             checkboxes.prop("checked", true);
         } else {
@@ -1319,7 +1345,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("change", "#commentsForm #filess", function () {
-        var filename = $('input[type=file]').val().replace(/C:\\fakepath\\/i, '');
+        let filename = $('input[type=file]').val().replace(/C:\\fakepath\\/i, '');
         $("#attachedFiles").append('<img src="/images/icons/attachment.gif"><span style="font-size: 11px">' + filename + '</span>');
     });
     
@@ -1369,10 +1395,10 @@ $(document).ready(function () {
                 }
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/trafico/get/semaforo?idTrafico=" + $("#idTrafico").val(), dataType: "json", method: "GET"
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
                     if(res.success === true) {
                         html = res.html;
                     }
@@ -1386,7 +1412,7 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#ordenRemision", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.confirm({ closeIcon: true, backgroundDismiss: true, title: 'Generar orden de remisión', type: 'dark', typeAnimated: true, escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false,
             buttons: {
                 guardar: {
@@ -1396,7 +1422,7 @@ $(document).ready(function () {
                             $("#formOrder").ajaxSubmit({type: "POST", dataType: "json",
                                 success: function (res) {
                                     if (res.success === true) {
-                                        var win = window.open("/trafico/get/imprimir-orden-de-remision?idTrafico=" + id + "&idRemision=" + res.id, '_blank');
+                                        let win = window.open("/trafico/get/imprimir-orden-de-remision?idTrafico=" + id + "&idRemision=" + res.id, '_blank');
                                         win.focus();
                                     } else {
                                         $.alert({title: "Error", type: "red", content: res.message, boxWidth: "250px", useBootstrap: false});
@@ -1413,10 +1439,10 @@ $(document).ready(function () {
                 }
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/trafico/get/orden-remision?idTrafico=" + id, dataType: "json", method: "get"
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
                     if(res.success === true) {
                         html = res.html;
                     }
@@ -1429,15 +1455,15 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", ".openFile", function (ev) {
-        ev.preventDefault();        
-        var id = $(this).data("id");
-        var w = window.open("/archivo/get/ver-archivo?id=" + id, "viewFile", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
+        ev.preventDefault();
+        let id = $(this).data("id");
+        let w = window.open("/archivo/get/ver-archivo?id=" + id, "viewFile", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
         w.focus();
     });
 
     $(document.body).on("click", "#xml-pedimento", function (ev) {
         ev.preventDefault();
-        var idTrafico = $("#idTrafico").val();
+        let idTrafico = $("#idTrafico").val();
         $.ajax({url: "/trafico/pedimentos/descarga", cache: false, dataType: "json", data: {idTrafico: idTrafico}, type: "GET",
             success: function (res) {
                 if (res.success === true) {
@@ -1451,7 +1477,7 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#justificar", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.ajax({url: "/trafico/post/trafico-justificar", cache: false, dataType: "json", data: {id: id}, type: "POST",
             success: function (res) {
                 if (res.success === true) {
@@ -1463,7 +1489,7 @@ $(document).ready(function () {
 
     $(document.body).on("click", "#desjustificar", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.ajax({url: "/trafico/post/trafico-desjustificar", cache: false, dataType: "json", data: {id: id}, type: "POST",
             success: function (res) {
                 if (res.success === true) {
@@ -1475,7 +1501,7 @@ $(document).ready(function () {
 
     $(document.body).on("click", "#envioDocumentos", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.ajax({url: "/trafico/post/trafico-documentos-completos", cache: false, dataType: "json", type: "POST",
             data: {id: id}, 
             success: function (res) {
@@ -1488,20 +1514,17 @@ $(document).ready(function () {
     
     $(document.body).on("click", ".preview", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
-        var num = $(this).data("num");
-        var w =window.open("/trafico/get/vucem-preview?idFactura=" + id, num, "toolbar=0,location=0,menubar=0,height=500,width=880,scrollbars=yes");
+        let id = $(this).data("id");
+        let num = $(this).data("num");
+        let w =window.open("/trafico/get/vucem-preview?idFactura=" + id, num, "toolbar=0,location=0,menubar=0,height=500,width=880,scrollbars=yes");
         w.focus();
     });
     
     $(document.body).on('change', 'input[name="sello"]', function (ev) {
-        
-        var idSello = $('input[name="sello"]:checked').val();
-        var tipo = $('input[name="sello"]:checked').data('type');
-        var idTrafico = $("#idTrafico").val();
-        
-        establecerSello(idTrafico, idSello, tipo);
-        
+        let idSello = $('input[name="sello"]:checked').val();
+        let tipo = $('input[name="sello"]:checked').data('type');
+        let idTrafico = $("#idTrafico").val();        
+        establecerSello(idTrafico, idSello, tipo);        
     });
     
     $("#loadInvoices").qtip({ // Grab some elements to apply the tooltip to
@@ -1517,8 +1540,8 @@ $(document).ready(function () {
     });
 
     $(document.body).on("click", "#sendToVucem", function () {
-        var facturas = [];
-        var checkboxes = $("input[class=invoice]:checked");
+        let facturas = [];
+        let checkboxes = $("input[class=invoice]:checked");
         if ((checkboxes).size() > 0) {
             $(checkboxes).each(function () {
                 facturas.push($(this).val());
@@ -1550,7 +1573,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", "#sendEmail", function (ev) {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.confirm({ title: "Enviar email", escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false, type: "blue",
             buttons: {
                 enviar: {btnClass: "btn-blue", action: function () {
@@ -1576,7 +1599,7 @@ $(document).ready(function () {
                 cerrar: {action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({
                     url: "/trafico/get/enviar-email?id=" + id,
                     method: "get"
@@ -1590,7 +1613,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", "#cargarXml", function (ev) {
-        var idTrafico = $("#idTrafico").val();
+        let idTrafico = $("#idTrafico").val();
         $.confirm({ title: "Cargar CDFi", escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false, type: "orange",
             buttons: {
                 cargar: {btnClass: "btn-orange", action: function () {
@@ -1606,7 +1629,7 @@ $(document).ready(function () {
                 cerrar: {action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({
                     url: "/trafico/get/cargar-xml?idTrafico=" + idTrafico,
                     method: "get"
@@ -1620,7 +1643,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", "#mvhcEnviada", function (ev) {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         if ($(this).is(':checked')) {
             mvhcEnviada(id, 1);
         } else {
@@ -1629,7 +1652,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", "#mvhcCliente", function (ev) {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         if ($(this).is(':checked')) {
             mvhcEstatus(id, 1);
         } else {
@@ -1638,7 +1661,7 @@ $(document).ready(function () {
     });
 
     $(document.body).on("click", "#mvhcFirmado", function (ev) {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         if ($(this).is(':checked')) {
             mvhcEstatus(id, 2);
         } else {
@@ -1648,7 +1671,7 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#btn-download", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.ajax({url: "/trafico/get/descarga-carpeta-expediente", dataType: "json", type: "GET",
             data: {id: id},
             success: function (res) {
@@ -1660,7 +1683,7 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", ".add-email", function (ev) {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         if($(this).is(':checked')) {
             emailData["emails"][id] = id;
         } else {
@@ -1670,7 +1693,7 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#btn-permalink", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.confirm({ title: "Permalink", escapeKey: "cerrar", boxWidth: "660px", useBootstrap: false, type: "green",
             buttons: {
                 enviar: {btnClass: "btn-green", action: function () {
@@ -1684,7 +1707,7 @@ $(document).ready(function () {
                 cerrar: {action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({ url: "/trafico/get/permalink-trafico?id=" + id, method: "GET"
                 }).done(function (res) {
                     self.setContent(res);
@@ -1697,22 +1720,22 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#template-casa", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         location.href = "/trafico/get/descarga-plantilla-casa?id=" + id;
     });
     
     $(document.body).on("click", "#template-slam", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         location.href = "/trafico/get/descarga-plantilla-slam?id=" + id;
     });
     
     
     $(document.body).on("click", "#saveMvhcNumGuia", function (ev) {
         ev.preventDefault();
-        
-        var id = $(this).data("id");
-        var mvhcGuia = $("#mvhcGuia").val();
+
+        let id = $(this).data("id");
+        let mvhcGuia = $("#mvhcGuia").val();
         
         $.ajax({url: "/trafico/post/mvhc-num-guia", cache: false, dataType: "json", data: {id: id, mvhcGuia: mvhcGuia}, type: "POST",
             success: function (res) {
@@ -1725,15 +1748,14 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#saveTraffic", function (ev) {
         ev.preventDefault();
-        
-        var idTrafico = $(this).data("id");
-        var contenedorCaja = $("#contenedorCaja").val();
-        var nombreBuque = $("#nombreBuque").val();
-        var placas = $("#placas").val();
-        var ordenCompra = $("#ordenCompra").val();
-        var placas = $("#placas").val();
-        var candados = $("#candados").val();
-        var tipoCarga = $("#tipoCarga").val();
+
+        let idTrafico = $(this).data("id");
+        let contenedorCaja = $("#contenedorCaja").val();
+        let nombreBuque = $("#nombreBuque").val();
+        let placas = $("#placas").val();
+        let ordenCompra = $("#ordenCompra").val();
+        let candados = $("#candados").val();
+        let tipoCarga = $("#tipoCarga").val();
         
         $.ajax({url: "/trafico/post/modificar-trafico", cache: false, dataType: "json", type: "POST",
             data: {idTrafico: idTrafico, contenedorCaja: contenedorCaja, nombreBuque: nombreBuque, placas: placas, ordenCompra: ordenCompra, candados: candados, tipoCarga: tipoCarga},
@@ -1749,13 +1771,13 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#soia", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.confirm({ title: "Estatus SOIA", escapeKey: "cerrar", boxWidth: "660px", useBootstrap: false, type: "green",
             buttons: {
                 cerrar: {btnClass: "btn-red",action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({ url: "/trafico/get/soia?id=" + id, method: "GET"
                 }).done(function (res) {
                     self.setContent(res);
@@ -1788,7 +1810,7 @@ $(document).ready(function () {
                 cerrar: {btnClass: "btn-red", action: function () {}}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/archivo/get/ayuda-documentos", method: "GET"
                 }).done(function (res) {
                     self.setContent(res);
@@ -1800,11 +1822,11 @@ $(document).ready(function () {
     });
     
     $(document.body).on("click", "#enviarFtp", function () {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         jc = $.confirm({title: "FTP",
             escapeKey: "cerrar", boxWidth: "650px", useBootstrap: false, type: "blue",
             onContentReady: function () {
-                var self = this;
+                let self = this;
                 //this.buttons.enviar.disable();
             },
             buttons: {
@@ -1812,33 +1834,33 @@ $(document).ready(function () {
                     btnClass: "btn-blue",
                     action: function () {
                         
-                        var self = this;
+                        let self = this;
                         this.buttons.enviar.disable();
                         
                         $("#ftp_working").show();
                         
-                        var ftp_result = document.getElementById("ftp_result");
+                        let ftp_result = document.getElementById("ftp_result");
                         
                         xhr = new XMLHttpRequest();
                         xhr.open("GET", "/automatizacion/ftp/envio-manual?id=" + id, true);
                         
                         xhr.onprogress = function(e) {
                             
-                            var ks = e.currentTarget.responseText.split("\n");
+                            let ks = e.currentTarget.responseText.split("\n");
                             if (ks.length === 1) {
-                                var item = $.parseJSON(ks[0]);
+                                let item = $.parseJSON(ks[0]);
                                 ftp_estatus(item);
                             }
                             if (ks.length > 1) {
-                                var item = $.parseJSON(ks[ks.length - 2]);
+                                let item = $.parseJSON(ks[ks.length - 2]);
                                 ftp_estatus(item);
                             }
                             
                         };
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4) {
-                                var ks = xhr.responseText.split("\n");
-                                var item = $.parseJSON(ks[ks.length - 2]);
+                                let ks = xhr.responseText.split("\n");
+                                let item = $.parseJSON(ks[ks.length - 2]);
                                 ftp_estatus(item);
                                 
                                 $("#ftp_working").hide();
@@ -1854,11 +1876,11 @@ $(document).ready(function () {
                 cerrar: function () {}
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/trafico/get/enviar-ftp", dataType: "json", method: "GET",
                     data: {id: id}
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
                     if (res.success === true) {
                         html = res.html;
                     }
@@ -1883,7 +1905,7 @@ $(document).ready(function () {
     }
     
     $(document.body).on("click", ".editInvoideData", function () {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         $.confirm({title: "Editar factura original", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
             buttons: {
                 guardar: {
@@ -1903,11 +1925,11 @@ $(document).ready(function () {
                 }
             },
             content: function () {
-                var self = this;
+                let self = this;
                 return $.ajax({url: "/trafico/get/editar-factura-original", dataType: "json", method: "GET",
                     data: {idTrafico: $("#idTrafico").val(), id: id}
                 }).done(function (res) {
-                    var html = "";
+                    let html = "";
                     if (res.success === true) {
                         html = res.html;
                     } else {
