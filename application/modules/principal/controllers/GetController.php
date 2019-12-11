@@ -171,6 +171,8 @@ class Principal_GetController extends Zend_Controller_Action {
                     } else {
                         throw new Exception("File not found [" . $filename . "]");
                     }
+                } else {
+                    throw new Exception("No data found");
                 }
             } else {
                 throw new Exception("Invalid input!");
