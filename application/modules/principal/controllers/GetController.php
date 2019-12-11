@@ -182,6 +182,52 @@ class Principal_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function descargarArchivoOeaAction() {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "id" => "Digits",
+            );
+            $v = array(
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($i->isValid("id")) {
+                $folder = realpath(APPLICATION_PATH . "/../public/oea/");
+                $mapper = new Rrhh_Model_OeaArchivos();
+                $arr = $mapper->obtener($i->id);
+                if (($d = $this->_buscarParent($arr["carpeta"]))) {
+                    $folder .= $d . DIRECTORY_SEPARATOR . $arr["carpeta"];
+                }
+                if (!isset($d) && $arr["carpeta"] !== "") {
+                    $folder .= DIRECTORY_SEPARATOR . $arr["carpeta"];
+                }
+                if (isset($arr)) {
+                    $filename = $folder . DIRECTORY_SEPARATOR . $arr["archivo"];
+                    if (file_exists($filename)) {
+                        header("Cache-Control: public");
+                        header("Content-Description: File Transfer");
+                        header("Content-Disposition: attachment; filename=\"" . $this->_convert($arr["nombreArchivo"]) . "\"");
+                        header("Content-length: " . filesize($filename));
+                        header("Content-Transfer-Encoding: binary");
+                        header("Content-Type: binary/octet-stream");
+                        readfile($filename);
+                    } else {
+                        throw new Exception("File not found [" . $filename . "]");
+                    }
+                } else {
+                    throw new Exception("No data found");
+                }
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
     protected function _convert($value) {
         return mb_convert_encoding(preg_replace(array("/\s+/"), "_", utf8_decode($value)), "UTF-8", "ISO-8859-1");
     }
