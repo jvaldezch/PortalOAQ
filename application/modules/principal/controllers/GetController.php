@@ -198,7 +198,7 @@ class Principal_GetController extends Zend_Controller_Action {
                 $folder = realpath(APPLICATION_PATH . "/../public/oea/");
                 $mapper = new Rrhh_Model_OeaArchivos();
                 $arr = $mapper->obtener($i->id);
-                if (($d = $this->_buscarParent($arr["carpeta"]))) {
+                if (($d = $this->_buscarParentOea($arr["carpeta"]))) {
                     $folder .= $d . DIRECTORY_SEPARATOR . $arr["carpeta"];
                 }
                 if (!isset($d) && $arr["carpeta"] !== "") {
@@ -230,6 +230,15 @@ class Principal_GetController extends Zend_Controller_Action {
 
     protected function _convert($value) {
         return mb_convert_encoding(preg_replace(array("/\s+/"), "_", utf8_decode($value)), "UTF-8", "ISO-8859-1");
+    }
+
+    protected function _buscarParentOea($directorio) {
+        $rel = new Rrhh_Model_OeaRelCarpetas();
+        $p = $rel->obtenerParent($directorio);
+        if ($p["previo"]) {
+            return $this->_buscarParent($p["previo"]) . DIRECTORY_SEPARATOR . $p["previo"];
+        }
+        return;
     }
 
     protected function _buscarParent($directorio) {
