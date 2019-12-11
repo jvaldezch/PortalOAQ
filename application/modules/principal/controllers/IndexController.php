@@ -13,7 +13,6 @@ class Principal_IndexController extends Zend_Controller_Action {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->view->headLink()
                 ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                //->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
                 ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
                 ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
