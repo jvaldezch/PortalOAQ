@@ -168,6 +168,8 @@ class Principal_GetController extends Zend_Controller_Action {
                         header("Content-Transfer-Encoding: binary");
                         header("Content-Type: binary/octet-stream");
                         readfile($filename);
+                    } else {
+                        throw new Exception("File not found [" . $filename . "]");
                     }
                 }
             } else {
