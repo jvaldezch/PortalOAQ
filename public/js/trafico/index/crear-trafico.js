@@ -125,8 +125,7 @@ $(document).ready(function () {
             pedimento: {
                 required: true,
                 minlength: 7,
-                maxlength: 7,
-                digits: true
+                maxlength: 7
             },
             blGuia: {
                 required: {
