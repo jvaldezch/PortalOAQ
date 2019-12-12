@@ -103,7 +103,8 @@ class Trafico_Form_CrearTraficoNew extends Twitter_Bootstrap_Form_Horizontal {
                 "tabindex" => "5",
                 "style" => "float: left",
                 "onKeyPress" => "return check(event,value)", 
-                "onInput" => "checkLength(7,this)"
+                "onInput" => "checkLength(7,this)",
+                "autocomplete" => "off"
             ),
             "decorators" => $decorators,
             "validators" => array('NotEmpty', new Zend_Validate_Int())

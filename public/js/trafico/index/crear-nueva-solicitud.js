@@ -59,7 +59,7 @@ $(document).ready(function () {
                 required: true,
                 minlength: 7,
                 maxlength: 7,
-                digits: true
+                regx: /^[0-9]{7}$/
             },
             referencia: "required"
         },

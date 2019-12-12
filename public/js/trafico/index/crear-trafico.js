@@ -125,7 +125,8 @@ $(document).ready(function () {
             pedimento: {
                 required: true,
                 minlength: 7,
-                maxlength: 7
+                maxlength: 7,
+                regx: /^[0-9]{7}$/
             },
             blGuia: {
                 required: {
@@ -149,7 +150,7 @@ $(document).ready(function () {
                 }},
                 minlength: 7,
                 maxlength: 7,
-                digits: true
+                regx: /^[0-9]{7}$/
             },
             referencia: {
                 required: true,

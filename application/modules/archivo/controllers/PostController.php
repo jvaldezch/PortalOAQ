@@ -874,7 +874,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                     "id" => "Digits",
                     "patente" => "Digits",
                     "aduana" => "Digits",
-                    "pedimento" => "Digits",
+                    "pedimento" => "StringToUpper",
                     "referencia" => "StringToUpper",
                     "rfc_cliente" => "StringToUpper",
                 );
@@ -882,7 +882,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                     "*" => "NotEmpty",
                     "aduana" => array("NotEmpty", new Zend_Validate_Int(), new Zend_Validate_StringLength(array("min" => 3, "max" => 3))),
                     "patente" => array("NotEmpty", new Zend_Validate_Int(), new Zend_Validate_StringLength(array("min" => 4, "max" => 4))),
-                    "pedimento" => array("NotEmpty", new Zend_Validate_Int(), new Zend_Validate_StringLength(array("min" => 7, "max" => 7))),
+                    "pedimento" => array("NotEmpty", new Zend_Validate_StringLength(array("min" => 7, "max" => 7))),
                     "referencia" => array("NotEmpty", new Zend_Validate_Regex("/^[-_a-zA-Z0-9.\/]+$/")),
                     "rfc_cliente" => array("NotEmpty", new Zend_Validate_Regex("/^[-_a-zA-Z0-9.]+$/")),
                 );

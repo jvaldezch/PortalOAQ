@@ -438,7 +438,7 @@ class Trafico_DataController extends Zend_Controller_Action {
                 "*" => array("StringTrim", "StripTags"),
                 "cliente" => "Digits",
                 "aduana" => "Digits",
-                "pedimento" => "Digits",
+                "pedimento" => "StringToUpper",
                 "planta" => "Digits",
                 "referencia" => "StringToUpper",
                 "operacion" => "StringToUpper",
@@ -446,7 +446,7 @@ class Trafico_DataController extends Zend_Controller_Action {
             $vld = array(
                 "aduana" => array("NotEmpty", new Zend_Validate_Int()),
                 "cliente" => array("NotEmpty", new Zend_Validate_Int()),
-                "pedimento" => array("NotEmpty", new Zend_Validate_Int()),
+                "pedimento" => array("NotEmpty"),
                 "planta" => array("NotEmpty", new Zend_Validate_Int()),
                 "operacion" => array("NotEmpty", new Zend_Validate_InArray(array("TOCE.EXP", "TOCE.IMP"))),
                 "referencia" => array("Notempty",new Zend_Validate_Regex("/^[-_a-zA-Z0-9.]+$/")),
