@@ -58,8 +58,7 @@ $(document).ready(function () {
             pedimento: {
                 required: true,
                 minlength: 7,
-                maxlength: 7,
-                regx: /^[0-9]{7}$/
+                maxlength: 7
             },
             referencia: "required"
         },
