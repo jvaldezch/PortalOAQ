@@ -1407,7 +1407,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                             "idUsuario" => $this->_session->id,
                             "idCliente" => $input->cliente,
                             "idPlanta" => ($input->isValid("planta")) ? $input->planta : null,
-                            "pedimento" => $input->pedimento,
+                            "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                             "referencia" => $input->referencia,
                             "blGuia" => preg_replace('/\s+/', '', $input->blGuia),
                             "pedimentoRectificar" => $input->pedimentoRectificar,

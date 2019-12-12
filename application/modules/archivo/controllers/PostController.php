@@ -888,7 +888,10 @@ class Archivo_PostController extends Zend_Controller_Action {
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("id") && $input->isValid("patente") && $input->isValid("aduana") && $input->isValid("pedimento") && $input->isValid("referencia") && $input->isValid("rfc_cliente")) {
-                    $referencias = new OAQ_Referencias(array("patente" => $input->patente, "aduana" => $input->aduana, "referencia" => $input->referencia, "usuario" => $this->_session->username, "rfcCliente" => $input->rfc_cliente, "pedimento" => $input->pedimento));
+
+                    $pedimento = str_pad($input->pedimento, 7, '0', STR_PAD_LEFT);
+
+                    $referencias = new OAQ_Referencias(array("patente" => $input->patente, "aduana" => $input->aduana, "referencia" => $input->referencia, "usuario" => $this->_session->username, "rfcCliente" => $input->rfc_cliente, "pedimento" => $pedimento));
                     if (($id = $referencias->nuevoRepositorioIndex())) {
                         $this->_helper->json(array("success" => true, "id" => $id));
                     }

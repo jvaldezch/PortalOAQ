@@ -453,9 +453,14 @@ class Trafico_DataController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($flt, $vld, $request->getPost());
             if ($input->isValid("cliente") && $input->isValid("pedimento") && $input->isValid("operacion") && $input->isValid("referencia")) {
+
+                $pedimento = str_pad($input->pedimento, 7, '0', STR_PAD_LEFT);
+
                 $model = new Trafico_Model_TraficoSolicitudesMapper();
-                if (!($found = $model->verificar($input->cliente, $input->aduana, $input->operacion, $input->pedimento, $input->referencia))) {
-                    $added = $model->agregar($input->cliente, $input->aduana, $input->operacion, $input->pedimento, $input->referencia, $this->_session->id, $input->planta);
+                if (!($found = $model->verificar($input->cliente, $input->aduana, $input->operacion, $pedimento, $input->referencia))) {
+
+                    $added = $model->agregar($input->cliente, $input->aduana, $input->operacion, $pedimento, $input->referencia, $this->_session->id, $input->planta);
+
                     if ($added == true) {
                         $this->_helper->json(array("success" => true));
                     }
