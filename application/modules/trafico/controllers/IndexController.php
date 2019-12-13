@@ -940,8 +940,10 @@ class Trafico_IndexController extends Zend_Controller_Action {
         if ($input->isValid("id")) {
             $model = new Trafico_Model_ClientesMapper();
             $this->view->id = $input->id;
+
             $data = $model->datosCliente($input->id);
             $this->view->data = $data;
+
             $adu = new Trafico_Model_TraficoCliAduanasMapper();
             $aduanas = $adu->clienteAduanas($input->id);
             $this->view->aduanas = $aduanas;

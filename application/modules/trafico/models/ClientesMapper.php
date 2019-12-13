@@ -311,6 +311,18 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
+    public function actualizar($idCliente, $arr) {
+        try {
+            $stmt = $this->_db_table->update($arr, ["id = ?" => $idCliente]);
+            if ($stmt) {
+                return true;
+            }
+            return null;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
     public function cambiarEstatus($activo, $rfc) {
         try {
             $data = array(

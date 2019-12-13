@@ -977,7 +977,39 @@ class Trafico_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function cambiarPecaClienteAction() {
+//    public function cambiarPecaClienteAction() {
+//        try {
+//            if (!$this->getRequest()->isXmlHttpRequest()) {
+//                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+//            }
+//            $request = $this->getRequest();
+//            if ($request->isPost()) {
+//                $filters = array(
+//                    "*" => array("StringTrim", "StripTags"),
+//                );
+//                $validators = array(
+//                    "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+//                    "value" => array("NotEmpty", new Zend_Validate_Int()),
+//                );
+//                $input = new Zend_Filter_Input($filters, $validators, $request->getPost());
+//                if ($input->isValid("idCliente") && $input->isValid("value")) {
+//                    $customers = new Trafico_Model_ClientesMapper();
+//                    if (($customers->pecaDefault($input->idCliente, $input->value)) == true) {
+//                        $this->_helper->json(["success" => true]);
+//                    }
+//                    $this->_helper->json(["success" => false]);
+//                } else {
+//                    throw new Exception("Invalid input!");
+//                }
+//            } else {
+//                throw new Exception("Invalid request type!");
+//            }
+//        } catch (Exception $ex) {
+//            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+//        }
+//    }
+
+    public function atributoClienteAction() {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -989,12 +1021,17 @@ class Trafico_PostController extends Zend_Controller_Action {
                 );
                 $validators = array(
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
-                    "value" => array("NotEmpty", new Zend_Validate_Int()),
+                    "atributo" => array("NotEmpty"),
+                    "value" => array("NotEmpty"),
                 );
                 $input = new Zend_Filter_Input($filters, $validators, $request->getPost());
-                if ($input->isValid("idCliente") && $input->isValid("value")) {
-                    $customers = new Trafico_Model_ClientesMapper();
-                    if (($customers->pecaDefault($input->idCliente, $input->value)) == true) {
+                if ($input->isValid("idCliente") && $input->isValid("atributo") && $input->isValid("value")) {
+                    $mppr = new Trafico_Model_ClientesMapper();
+                    $arr = array(
+                        $input->atributo => $input->value,
+                        "actualizado" => date("Y-m-d H:i:s")
+                    );
+                    if (($mppr->actualizar($input->idCliente, $arr))) {
                         $this->_helper->json(["success" => true]);
                     }
                     $this->_helper->json(["success" => false]);
@@ -1005,7 +1042,7 @@ class Trafico_PostController extends Zend_Controller_Action {
                 throw new Exception("Invalid request type!");
             }
         } catch (Exception $ex) {
-            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+            $this->_helper->json(["success" => false, "message" => $ex->getMessage()]);
         }
     }
 

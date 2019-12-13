@@ -1,3 +1,77 @@
+<style>
+    .onoffswitch-control {
+        display: block;
+        clear: both;
+    }
+    .onoffswitch-control p,
+    .onoffswitch-control .onoffswitch,
+    .onoffswitch-control .onoffswitch-input {
+        float: left;
+    }
+    .onoffswitch-control .onoffswitch-input {
+        width: 110px;
+        margin: 0 0 0 5px;
+    }
+    .onoffswitch-control p {
+        font-weight: bold;
+        min-width: 75px;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 2px;
+    }
+    .onoffswitch {
+        margin-top: 3px;
+        position: relative;
+        width: 48px;
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select: none;
+    }
+    .onoffswitch-checkbox {
+        display: none;
+    }
+    .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 1px solid #999999; border-radius: 13px;
+    }
+    .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 14px; padding: 0; line-height: 14px;
+        font-size: 11px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+        box-sizing: border-box;
+    }
+    .onoffswitch-inner:before {
+        content: "SI";
+        padding-left: 8px;
+        background-color: #5c7c9f; color: #FFFFFF;
+    }
+    .onoffswitch-inner:after {
+        content: "NO";
+        padding-right: 8px;
+        background-color: #EEEEEE; color: #999999;
+        text-align: right;
+    }
+    .onoffswitch-switch {
+        display: block;
+        width: 12px;
+        margin: 1px;
+        background: #FFFFFF;
+        position: absolute; top: 0; bottom: 0;
+        right: 32px;
+        border: 1px solid #999999;
+        border-radius: 13px;
+        transition: all 0.3s ease-in 0s;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0;
+    }
+</style>
 <ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
     <li><a href="#customer-information" data-toggle="tab">Información</a></li>
     <li><a href="#customer-documents" data-toggle="tab">Documentos</a></li>
@@ -26,14 +100,24 @@
                     <td style="padding: 0 !important">
                         <table class="traffic-table traffic-table-left">
                             <tr>
-                                <td style="width: 100px">Cliente activo</td>
-                                <td>
-                                    <div class="traffic-radio-block">
+                                <td colspan="2">
+                                    <!--<div class="traffic-radio-block">
                                         <div class="traffic-radio-input">
                                             <input type="radio" value="1" id="activate" name="activate">&nbsp;<p>Sí</p>
                                         </div>
                                         <div class="traffic-radio-input">
                                             <input type="radio" value="0" id="activate" name="activate">&nbsp;<p>No</p>
+                                        </div>
+                                    </div>-->
+                                    <div class="onoffswitch-control">
+                                        <p>Activo:</p>
+                                        <div class="onoffswitch">
+                                            <input type="checkbox" name="activate" id="activate"
+                                                   class="onoffswitch-checkbox" <?= ((int) $this->data["activate"] === 1) ? 'checked' : '' ?>>
+                                            <label class="onoffswitch-label" for="activate">
+                                                <span class="onoffswitch-inner"></span>
+                                                <span class="onoffswitch-switch"></span>
+                                            </label>
                                         </div>
                                     </div>
                                 </td>
@@ -56,14 +140,24 @@
                     <td style="width: 250px; padding: 0 !important">
                         <table class="traffic-table traffic-table-left">
                             <tr>
-                                <td style="width: 100px">WebService</td>
-                                <td>
-                                    <div class="traffic-radio-block">
+                                <td colspan="2">
+                                    <!--<div class="traffic-radio-block">
                                         <div class="traffic-radio-input">
                                             <input type="radio" value="1" id="activateWs" name="activateWs">&nbsp;<p>Sí</p>
                                         </div>
                                         <div class="traffic-radio-input">
                                             <input type="radio" value="0" id="activateWs" name="activateWs">&nbsp;<p>No</p>
+                                        </div>
+                                    </div>-->
+                                    <div class="onoffswitch-control">
+                                        <p>WS:</p>
+                                        <div class="onoffswitch">
+                                            <input type="checkbox" name="activateWs" id="activateWs"
+                                                   class="onoffswitch-checkbox" <?= ((int) $this->data["activateWs"] === 1) ? 'checked' : '' ?>>
+                                            <label class="onoffswitch-label" for="activateWs">
+                                                <span class="onoffswitch-inner"></span>
+                                                <span class="onoffswitch-switch"></span>
+                                            </label>
                                         </div>
                                     </div>
                                 </td>
@@ -192,32 +286,10 @@
         <div style="float: left; width: 50%">            
             <table class="traffic-table traffic-table-left">
                 <tr>
-                    <th class="traffic-table-title" style="width: 30%">PECA</th>
-                    <th class="traffic-table-title" style="width: 30%">TIPO DE CLIENTE</th>
-                    <th class="traffic-table-title">ESQUEMA FONDO</th>
+                    <th class="traffic-table-title" style="width: 170px">ESQUEMA FONDO</th>
+                    <th class="traffic-table-title"></th>
                 </tr>
                 <tr>
-                    <td>
-                        <div class="traffic-radio-block">
-                            <div class="traffic-radio-input">
-                                <input type="radio" name="pecaDefault" value="0" <?= ((int) $this->data["peca"] === 0) ? 'checked="true"' : '' ?>>&nbsp;<p>No</p>
-                            </div>
-                            <div class="traffic-radio-input">
-                                <input type="radio" name="pecaDefault" value="1" <?= ((int) $this->data["peca"] === 1) ? 'checked="true"' : '' ?>>&nbsp;<p>Si</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="traffic-radio-block">
-                            <?php if (isset($this->tipoCliente) && !empty($this->tipoCliente)) { ?>
-                                <?php foreach ($this->tipoCliente as $item) { ?>
-                                    <div class="traffic-radio-input">
-                                        <input type="radio" name="tipoCliente" value="<?= $item["id"] ?>" <?= ($this->data["tipoCliente"] == $item["id"]) ? "checked=\"true\"" : "" ?>>&nbsp;<p><?= $item["descripcion"] ?></p>
-                                    </div>
-                                <?php } ?>
-                            <?php } ?>
-                        </div>                            
-                    </td>
                     <td>
                         <div class="traffic-radio-block">
                             <?php if (isset($this->esquemaFondos) && !empty($this->esquemaFondos)) { ?>
@@ -230,7 +302,126 @@
                                     </div>
                                 <?php } ?>
                             <?php } ?>
-                        </div>                            
+                        </div>
+                    </td>
+                    <td>
+                        <!--<div class="traffic-radio-block">
+                            <div class="traffic-radio-input">
+                                <input type="radio" name="pecaDefault" value="0" <?= ((int) $this->data["peca"] === 0) ? 'checked="true"' : '' ?>>&nbsp;<p>No</p>
+                            </div>
+                            <div class="traffic-radio-input">
+                                <input type="radio" name="pecaDefault" value="1" <?= ((int) $this->data["peca"] === 1) ? 'checked="true"' : '' ?>>&nbsp;<p>Si</p>
+                            </div>
+                        </div>-->
+                        <div class="onoffswitch-control">
+                            <p>PECA:</p>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="peca" id="peca"
+                                       class="onoffswitch-checkbox" <?= ((int) $this->data["peca"] === 1) ? 'checked' : '' ?>>
+                                <label class="onoffswitch-label" for="peca">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input type="text" class="onoffswitch-input"
+                                   id="peca_num" name="peca_num" <?= ((int) $this->data["peca"] === 0) ? 'readonly=true' : '' ?> value="<?= $this->data["peca_num"] ?>">
+                        </div>
+                        <div class="onoffswitch-control">
+                            <p>INMEX:</p>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="inmex" id="inmex"
+                                       class="onoffswitch-checkbox" <?= ((int) $this->data["inmex"] === 1) ? 'checked' : '' ?>>
+                                <label class="onoffswitch-label" for="inmex">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input type="text" class="onoffswitch-input"
+                                   id="inmex_num" name="inmex_num" <?= ((int) $this->data["inmex"] === 0) ? 'readonly=true' : '' ?> value="<?= $this->data["inmex_num"] ?>">
+                        </div>
+                        <div class="onoffswitch-control">
+                            <p>CTPAT:</p>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="ctpat" id="ctpat"
+                                       class="onoffswitch-checkbox" <?= ((int) $this->data["ctpat"] === 1) ? 'checked' : '' ?>>
+                                <label class="onoffswitch-label" for="ctpat">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input type="text" class="onoffswitch-input"
+                                   id="ctpat_num" name="ctpat_num" <?= ((int) $this->data["ctpat"] === 0) ? 'readonly=true' : '' ?> value="<?= $this->data["ctpat_num"] ?>">
+                        </div>
+                        <div class="onoffswitch-control">
+                            <p>PROSEC:</p>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="prosec" id="prosec"
+                                       class="onoffswitch-checkbox" <?= ((int) $this->data["prosec"] === 1) ? 'checked' : '' ?>>
+                                <label class="onoffswitch-label" for="prosec">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input type="text" class="onoffswitch-input"
+                                   id="prosec_num" name="prosec_num" <?= ((int) $this->data["prosec"] === 0) ? 'readonly=true' : '' ?> value="<?= $this->data["prosec_num"] ?>">
+                        </div>
+                        <div class="onoffswitch-control">
+                            <p>CIVA:</p>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="civa" id="civa"
+                                       class="onoffswitch-checkbox" <?= ((int) $this->data["civa"] === 1) ? 'checked' : '' ?>>
+                                <label class="onoffswitch-label" for="civa">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input type="text" class="onoffswitch-input"
+                                   id="civa_num" name="civa_num" <?= ((int) $this->data["civa"] === 0) ? 'readonly=true' : '' ?> value="<?= $this->data["civa_num"] ?>">
+                        </div>
+                        <div class="onoffswitch-control">
+                            <p>IC:</p>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="ic" id="ic"
+                                       class="onoffswitch-checkbox" <?= ((int) $this->data["ic"] === 1) ? 'checked' : '' ?>>
+                                <label class="onoffswitch-label" for="ic">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input type="text" class="onoffswitch-input"
+                                   id="ic_num" name="ic_num" <?= ((int) $this->data["ic"] === 0) ? 'readonly=true' : '' ?> value="<?= $this->data["ic_num"] ?>">
+                        </div>
+                        <div class="onoffswitch-control">
+                            <p>OEA:</p>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="oea" id="oea"
+                                       class="onoffswitch-checkbox" <?= ((int) $this->data["oea"] === 1) ? 'checked' : '' ?>>
+                                <label class="onoffswitch-label" for="oea">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                            <input type="text" class="onoffswitch-input"
+                                   id="oea_num" name="oea_num" <?= ((int) $this->data["oea"] === 0) ? 'readonly=true' : '' ?> value="<?= $this->data["oea_num"] ?>">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th class="traffic-table-title" style="width: 30%">TIPO DE CLIENTE</th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="traffic-radio-block">
+                            <?php if (isset($this->tipoCliente) && !empty($this->tipoCliente)) { ?>
+                                <?php foreach ($this->tipoCliente as $item) { ?>
+                                    <div class="traffic-radio-input">
+                                        <input type="radio" name="tipoCliente" value="<?= $item["id"] ?>" <?= ($this->data["tipoCliente"] == $item["id"]) ? "checked=\"true\"" : "" ?>>&nbsp;<p><?= $item["descripcion"] ?></p>
+                                    </div>
+                                <?php } ?>
+                            <?php } ?>
+                        </div>
                     </td>
                 </tr>
             </table>

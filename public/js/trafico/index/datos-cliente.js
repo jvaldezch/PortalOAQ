@@ -276,11 +276,25 @@ $(document).ready(function () {
             console.log(res.success);
         });
     });
-    
-    $(document.body).on("click","input[name=pecaDefault]",function(){
-        $.post("/trafico/post/cambiar-peca-cliente", { idCliente: $("#idCliente").val(), value: $(this).val() }, function (res) {
-            console.log(res.success);            
-        });
+
+    $(document.body).on("change", "#peca, #inmex, #civa, #oea, #ic, #prosec, #ctpat",function() {
+        let obj = $(this);
+        let inp = $("#" + obj.attr('name') + "_num");
+        let v = 1;
+        if (obj.is(':checked')) {
+            inp.removeAttr('readonly');
+        } else {
+            v = 0;
+            inp.attr('readonly', 'true');
+        }
+        $.post("/trafico/post/atributo-cliente",
+            { idCliente: $("#idCliente").val(), atributo: obj.attr('name'), value: v });
+    });
+
+    $(document.body).on("change","#peca_num, #inmex_num, #civa_num, #oea_num, #ic_num, #prosec_num, #ctpat_num",function() {
+        let obj = $(this);
+        $.post("/trafico/post/atributo-cliente",
+            { idCliente: $("#idCliente").val(), atributo: obj.attr('name'), value: $(this).val() });
     });
 
     $(document.body).on("focus", ".dateContainer", function () {
@@ -296,13 +310,9 @@ $(document).ready(function () {
         data: {rfc: $("#rfcCliente").val()},
         success: function (res) {
             if (res.success === true) {
-                if(res.value === "1") {
-                    $('input[name=activateWs]').val([1]);
-                } else {
-                    $('input[name=activateWs]').val([0]);                    
+                if(parseInt(res.value) === 1) {
+                    $('input[name=activateWs]').attr("checked", "true");
                 }
-            } else {
-                $('input[name=activateWs]').val([0]);                
             }
         }
     });
@@ -311,13 +321,10 @@ $(document).ready(function () {
         data: {rfc: $("#rfcCliente").val()},
         success: function (res) {
             if (res.success === true) {
-                $('input[name=activate]').val([1]);                
-            } else {
-                $('input[name=activate]').val([0]);                
+                $('input[name=activate]').attr("checked", "true");
             }
         }
     });
-    
     
     $(document.body).on("change", "input[name=activate]:radio", function () {
         $.ajax({url: "/webservice/ajax/activar-cliente", dataType: "json", type: "POST",
@@ -558,9 +565,9 @@ $(document).ready(function () {
         });
     });
 
-    $(document.body).on("input", "#nombre, #razon_soc, #calle, #numint, #numext, #colonia, #localidad, #municipio, #ciudad, #estado, #pais", function () {
-        var input = $(this);
-        var start = input[0].selectionStart;
+    $(document.body).on("input", "#nombre, #razon_soc, #calle, #numint, #numext, #colonia, #localidad, #municipio, #ciudad, #estado, #pais, #peca_num, #inmex_num, #civa_num, #oea_num, #ic_num, #prosec_num, #ctpat_num", function () {
+        let input = $(this);
+        let start = input[0].selectionStart;
         $(this).val(function (_, val) {
             return val.toUpperCase();
         });
