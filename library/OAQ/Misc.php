@@ -2271,8 +2271,9 @@ class OAQ_Misc {
                     }
                     if (file_exists($this->_newDir)) {
                         return $this->_newDir;
+                    } else {
+                        throw new Exception("Base cannot be created!");
                     }
-                    return false;
                 } else {
                     throw new Exception("Base is not readable nor writable!");                    
                 }
