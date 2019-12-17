@@ -824,7 +824,8 @@ class Bodega_PostController extends Zend_Controller_Action {
             if (($path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia))) {
                 $upload->setDestination($path);
             }
-
+            $this->_firephp->info($this->_appconfig->getParam("expdest"));
+            $this->_firephp->info($b['siglas']);
             $this->_firephp->info($path);
 
             $files = $upload->getFileInfo();
