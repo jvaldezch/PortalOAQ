@@ -825,6 +825,8 @@ class Bodega_PostController extends Zend_Controller_Action {
                 $upload->setDestination($path);
             }
 
+            $this->_firephp->info($path);
+
             $files = $upload->getFileInfo();
             foreach ($files as $fieldname => $fileinfo) {
                 if (($upload->isUploaded($fieldname)) && ($upload->isValid($fieldname))) {
@@ -846,6 +848,8 @@ class Bodega_PostController extends Zend_Controller_Action {
                             "errors" => array("errors" => "El archivo ya existe."),
                         );
                     }
+
+                    $this->_firephp->info($path . DIRECTORY_SEPARATOR . $filename);
                 } else {
                     $error = $upload->getErrors();
                     $errors[] = array(
