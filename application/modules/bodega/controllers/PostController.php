@@ -821,11 +821,16 @@ class Bodega_PostController extends Zend_Controller_Action {
                     ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
                     ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false));
 
+
+            $this->_firephp->info($this->_appconfig->getParam("expdest"));
+            $this->_firephp->info($t["fechaEta"]);
+            $this->_firephp->info($b['siglas']);
+
             if (($path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia))) {
                 $upload->setDestination($path);
+            } else {
+                throw new Exception("Could not set base directory.");
             }
-            $this->_firephp->info($this->_appconfig->getParam("expdest"));
-            $this->_firephp->info($b['siglas']);
             $this->_firephp->info($path);
 
             $files = $upload->getFileInfo();
