@@ -411,6 +411,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                     $nomProv = $prov->obtener($input->idProveedor);
 
                     $trafico = new OAQ_Trafico(array("usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
                     $array = array(
                         "idBodega" => $input->idBodega,
                         "idUsuario" => $this->_session->id,
@@ -430,6 +431,10 @@ class Bodega_PostController extends Zend_Controller_Action {
                     );
 
                     if (($res = $trafico->nuevaEntradaBodega($array))) {
+                        if ($input->isValid("blGuia")) {
+                            $trafico->agregarGuia($res["id"], $this->_session->id, $input->blGuia);
+                        }
+                        die();
                         $this->_helper->json(array("success" => true, "id" => (int) $res["id"]));
                     }
                     $this->_helper->json(array("success" => false));

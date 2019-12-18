@@ -62,6 +62,15 @@ class Trafico_Model_TraficoGuiasMapper {
         }
     }
 
+    /**
+     * @param $idTrafico
+     * @param $tipo Tipo de guia
+     * @param $guia Numero de guia
+     * @param $idUsuario
+     * @param null $idTransportista
+     * @return bool
+     * @throws Exception
+     */
     public function agregarGuia($idTrafico, $tipo, $guia, $idUsuario, $idTransportista = null) {
         try {
             $data = array(

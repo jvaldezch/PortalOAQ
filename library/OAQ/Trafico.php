@@ -36,6 +36,7 @@ class OAQ_Trafico {
     protected $appconfig;
     protected $directorio;
     protected $misc;
+    protected $_firephp;
 
     function setIdTrafico($idTrafico) {
         $this->idTrafico = $idTrafico;
@@ -134,6 +135,9 @@ class OAQ_Trafico {
     }
 
     public function __construct(array $options = null) {
+
+        $this->_firephp = Zend_Registry::get("firephp");
+
         $this->appconfig = new Application_Model_ConfigMapper();
         $this->traficos = new Trafico_Model_TraficosMapper();
         $this->trafico = new Trafico_Model_Table_Traficos();
@@ -490,6 +494,18 @@ class OAQ_Trafico {
                 $g .= $item["guia"] . ", ";
             }
             $this->traficos->actualizarGuia($this->idTrafico, preg_replace("/,\s$/", "", $g));
+        }
+    }
+
+    public function agregarGuia($idTrafico, $idUsuario, $guias) {
+        $mppr = new Trafico_Model_TraficoGuiasMapper();
+        $arr_guias = explode(",", preg_replace('/\s+/', '', $guias));
+        if (is_array($arr_guias)) {
+            foreach ($arr_guias as $item) {
+                if (!($id = $mppr->verificarGuia($idTrafico, "H", $item))) {
+                    $mppr->agregarGuia($idTrafico, "H", $item, $idUsuario);
+                }
+            }
         }
     }
 
