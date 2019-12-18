@@ -1,0 +1,51 @@
+<form method="get">
+    <table class="traffic-table">
+        <thead>
+            <tr>
+                <th>Guía</th>
+                <td style="text-align: left">
+                    <input type="text" id="search" name="search" class="traffic-input-medium" value="<?= $this->search ?>">
+                    <br><br>
+                    <button class="traffic-btn">Buscar</button>
+                </td>
+            </tr>
+        </thead>
+    </table>
+</form>
+<table class="traffic-table hover">
+    <tr>
+        <th style="width: 24px">
+<!--            <input type="checkbox" id="selectAll" />-->
+        </th>
+        <th>Operación</th>
+        <th>Referencia</th>
+        <th>Guía</th>
+        <th>Usuario</th>
+        <th>Creado</th>
+    </tr>
+    <?php if ($this->paginator) { ?>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr>
+                <td></td>
+                <td>
+                    <a href="/trafico/index/editar-trafico?id=<?= $item["idTrafico"] ?>"><?= $item["aduana"] . '-' . $item["patente"] . '-' . $item["pedimento"] ?></a>
+                </td>
+                <td>
+                    <a href="/trafico/index/editar-trafico?id=<?= $item["idTrafico"] ?>"><?= $item["referencia"] ?></a>
+                </td>
+                <td><?= $item["guia"] ?></td>
+                <td><?= $item["usuario"] ?></td>
+                <td><?= $item["creado"] ?></td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="8">
+                <em>No hay guias.</em>
+            </td>
+        </tr>
+    <?php } ?>
+</table>
+<div class="traffic-clear-10"></div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding") : null ?>
+<div class="traffic-clear-20"></div>

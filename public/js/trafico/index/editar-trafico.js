@@ -639,6 +639,9 @@ function currentActive(current) {
             }
         });
     }
+    if(Cookies.get("active") === "#pedimento") {
+
+    }
 }
 
 function abrirPrevio(idGuia) {
@@ -741,7 +744,7 @@ let jc;
 
 $(document).ready(function () {
             
-    let valid = ["#information", "#comments", "#register", "#files", "#photos", "#vucem", "#soia"];
+    let valid = ["#information", "#files", "#vucem", "#soia, #pedimento"];
 
     $(document.body).on("click", "#traffic-tabs li a", function() {
         let href = $(this).attr("href");

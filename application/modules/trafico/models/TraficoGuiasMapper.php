@@ -143,4 +143,22 @@ class Trafico_Model_TraficoGuiasMapper {
         }
     }
 
+    public function buscar($search) {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("g" => "trafico_guias"), array("*"))
+                ->joinLeft(array("t" => "traficos"), "g.idTrafico = t.id", array("id", "patente", "aduana", "referencia", "pedimento"))
+                ->joinLeft(array("u" => "usuarios"), "g.idUsuario = u.id", array("usuario"))
+                ->where("REPLACE(g.guia, ' ', '') LIKE ?", "%" . $search . "%");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return null;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
 }

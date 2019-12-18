@@ -1051,19 +1051,19 @@ class Trafico_PostController extends Zend_Controller_Action {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
             }
-            $request = $this->getRequest();
-            if ($request->isPost()) {
-                $filters = array(
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
                     "*" => array("StringTrim", "StripTags"),
                     "idCliente" => "Digits",
                     "completo" => "Digits",
                 );
-                $validators = array(
+                $v = array(
                     "*" => "NotEmpty",
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                     "completo" => array("NotEmpty", new Zend_Validate_Int()),
                 );
-                $input = new Zend_Filter_Input($filters, $validators, $request->getPost());
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("idCliente")) {
                     $data = $request->getPost();
                     unset($data["idCliente"]);

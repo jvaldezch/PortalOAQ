@@ -58,7 +58,13 @@
                     <th style="text-align: right">RFC Cliente</th>
                     <td><?= $this->basico["rfc"] ?></td>
                     <th style="text-align: right">Nombre</th>                
-                    <td colspan="3"><?= $this->basico["nombreCliente"] ?></td>
+                    <td colspan="3">
+                        <?= $this->basico["nombreCliente"] ?>
+                        <i class="fas fa-address-card ttip">
+                            <p class="ttiptext"><?= 'PECA: ' . (($this->basico["peca"] == 1) ? 'SI' : 'NO') . ' - ' . $this->basico["peca_num"] ?>
+                                <br><?= 'INMEX: ' . (($this->basico["inmex"] == 1) ? 'SI' : 'NO') . ' - ' . $this->basico["inmex_num"] ?></p>
+                        </i>
+                    </td>
                 </tr>
                 <tr>
                     <th style="text-align: right">Tipo Op.</th>

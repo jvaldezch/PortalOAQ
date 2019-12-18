@@ -5,6 +5,92 @@
     .l-btn-text {
         line-height: 22px;
     }
+    /* Tooltip container */
+    .ttip {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Tooltip text */
+    .ttip .ttiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: #555;
+        color: #fff;
+        text-align: left;
+        padding: 5px 5px;
+        border-radius: 6px;
+
+        /* Position the tooltip text */
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+
+        /* Fade in tooltip */
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 12px;
+        font-weight: normal;
+    }
+
+    /* Tooltip arrow */
+    .ttip .ttiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .ttip:hover .ttiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+    .slider {
+         background-color: #fefefe;
+         border-left: 1px #bac5d2 solid;
+         color: #333;
+         padding: 10px;
+     }
+    .slider h3, table {
+        margin: 0;
+    }
+    .slider table {
+        margin-top: 10px;
+    }
+    .slider p, table th, table td {
+        font-size: 11px;
+    }
+    .slider .handle {
+        background-color: #fefefe;
+        left: -40px;
+        padding: 10px;
+        position: absolute;
+        top: 0px;
+        width: 20px;
+        cursor: pointer;
+        margin-top: 62px;
+        border-left: 1px #bac5d2 solid;
+        border-top: 1px #bac5d2 solid;
+        border-bottom: 1px #bac5d2 solid;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        box-shadow: -2px 2px 1px rgba(0,0,0,0.2);
+    }
+    .slider table th, .slider table td {
+        border: 1px #fdfdfd solid;
+    }
+    .slider table td {
+        text-align: left;
+        font-weight: normal;
+        background-color: #fefefe;
+    }
 </style>
 <?php if (!isset($this->deleted)) { ?>
     <div style="float: right; margin-top: 3px; margin-right: 50px">        
@@ -49,7 +135,9 @@
         <a href="#information" data-toggle="tab">Información</a>
     </li>
     <li>
-        <a href="#files" data-toggle="tab"><div id="estatusChecklist" style="float:left; margin-right: 5px"></div>Archivos</a>
+        <a href="#files" data-toggle="tab">
+            <div id="estatusChecklist" style="float:left; margin-right: 5px"></div>Archivos
+        </a>
     </li>
     <li>
         <a href="#vucem" data-toggle="tab">VUCEM</a>
@@ -57,10 +145,36 @@
     <li>
         <a href="#soia" data-toggle="tab">SOIA</a>
     </li>
+    <li>
+        <a href="#pedimento" data-toggle="tab">Pedimento</a>
+    </li>
 </ul>
 <?php if (!isset($this->deleted)) { ?>
     <div class="tab-content">
-        
+
+        <!-- pedimento -->
+        <div class="tab-pane" id="pedimento">
+
+            <div class="traffic-cols">
+
+                <table class="traffic-table">
+                    <thead>
+                    <tr>
+                        <th>Pedimento</th>
+                    </tr>
+                    </thead>
+                </table>
+
+                <br>
+                <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
+                    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+                </a>
+
+            </div>
+
+        </div><!-- pedimento -->
+
+        <!-- soia -->
         <div class="tab-pane" id="soia">
             <div class="traffic-cols">
                 <table class="traffic-table" id="soia_results">
@@ -76,13 +190,15 @@
                 </table>
             </div>
         </div><!-- soia -->
-        
+
+        <!-- information -->
         <div class="tab-pane" id="information">
             <?= $this->partial("extra/information.phtml", array("basico" => $this->basico, "fechas" => $this->fechas, 
                 "tiposFechas" => $this->tiposFechas, "sello" => $this->sello, "idTrafico" => $this->idTrafico, 
                 "edit" => $this->edit, "tipoCargas" => $this->tipoCargas, "plantas" => $this->plantas)); ?>
-        </div>
-        <!-- ARCHIVOS -->
+        </div><!-- information -->
+
+        <!-- files -->
         <div class="tab-pane" id="files" style="overflow-x: hidden">
             <form id="form-files" method="post" action="/trafico/ajax/subir-archivos">
                 <input type="hidden" name="MAX_FILE_SIZE" value="25000000" />
@@ -137,11 +253,6 @@
                         <td>
                             <input type="file" name="file[]" id="file" class="required" multiple />
                         </td>
-<!--                        <td>
-                            <button id="custom-upload" class="traffic-btn" style="min-width: 5px" title="Carga expedientes">
-                                <i class="fas fa-upload"></i>
-                            </button>
-                        </td>-->
                         <td>
                             <button type="submit" id="btn-upload-files" class="traffic-btn traffic-btn-right">
                                 <i class="fas fa-upload"></i> Subir archivo(s)
@@ -232,14 +343,8 @@
             </a>
             <div class="traffic-clear"></div>
         </div><!-- files -->
-        <div class="tab-pane" id="register">
-            <div id="traffic-register" style="display: none"></div>
-            <div class="traffic-clear-5"></div>
-            <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
-                <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
-            </a>
-            <div class="traffic-clear"></div>
-        </div>
+
+        <!-- vucem -->
         <div class="tab-pane" id="vucem">
             <div class="traffic-cols">
                 <table class="traffic-table">           
@@ -292,15 +397,21 @@
                     <tbody id="vucemLog"></tbody>
                 </table>
             </div>
+
             <div class="traffic-clear-5"></div>
+
             <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
                 <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
             </a>
+
         </div><!-- vucem -->
-    </div>
+
+    </div> <!-- tab-content -->
+
     <div class="jqmWindow" id="checklistModal">
         Please wait... <img src="/images/loader.gif" alt="loading" />
     </div>
+
     <?php if ($this->basico["pagado"] !== null) { ?>
         <script type="text/javascript">
             $("#fechaNotificacion, #fechaArribo , #fechaEntrada, #fechaRecepcionDocs, #fechaPago, #fechaDeposito, #fechaPrevio, #fechaRevalidado, #horaRecepcionDocs").attr("disabled", "disabled");
@@ -315,55 +426,12 @@
         <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
     </a>
 <?php } ?>
-<style>
-    .slider {
-        background-color: #fefefe;
-        border-left: 1px #bac5d2 solid;
-        color: #333;
-        padding: 10px;
-    }
-    .slider h3, table {
-        margin: 0;
-    }
-    .slider table {
-        margin-top: 10px;
-    }
-    .slider p, table th, table td {
-        font-size: 11px;
-    }
-    .slider .handle {
-        background-color: #fefefe;
-        left: -40px;
-        padding: 10px;
-        position: absolute;
-        top: 0px;
-        width: 20px;
-        cursor: pointer;
-        margin-top: 62px;
-        border-left: 1px #bac5d2 solid;
-        border-top: 1px #bac5d2 solid;
-        border-bottom: 1px #bac5d2 solid;
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        box-shadow: -2px 2px 1px rgba(0,0,0,0.2);
-    }
-    .slider table th, .slider table td {
-        border: 1px #fdfdfd solid;
-    }
-    .slider table td {
-        text-align: left;
-        font-weight: normal;
-        background-color: #fefefe;
-    }
-</style>
 <?php
 $dates = array(
     array("name" => "fechaEta", "label" => "ETA"),
     array("name" => "fechaNotificacion", "label" => "Notificación"),
     array("name" => "fechaEnvioDocumentos", "label" => "Envío de documentos"),
     array("name" => "fechaEir", "label" => "Sharepoint"),
-//    array("name" => "fechaEntrada", "label" => "Entrada"),
-//    array("name" => "fechaPresentacion", "label" => "Sharepoint"),
     array("name" => "fechaEnvioProforma", "label" => "Envío proforma"),
     array("name" => "fechaVistoBueno", "label" => "Visto bueno"),
     array("name" => "fechaRevalidacion", "label" => "Revalidación"),
@@ -411,8 +479,8 @@ $dates = array(
     
     function stringPadLeft(value) {
         console.log(value);
-        var str = "" + value;
-        var pad = "00";
+        let str = "" + value;
+        let pad = "00";
         return pad.substring(0, pad.length - str.length) + str;
     }
     

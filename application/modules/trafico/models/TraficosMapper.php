@@ -600,15 +600,13 @@ class Trafico_Model_TraficosMapper {
      */
     public function obtenerPorId($id) {
         try {
-            $cand = new Trafico_Model_Candados();
             $trans = new Trafico_Model_Trans();
             $sql = $this->_db_table->select()
                     ->setIntegrityCheck(false)
                     ->from(array("t" => "traficos"), array("*"))
-                    ->joinLeft(array("n" => "trafico_clientes"), "t.idCliente = n.id", array("nombre AS nombreCliente", "rfcSociedad", "rfc"))
+                    ->joinLeft(array("n" => "trafico_clientes"), "t.idCliente = n.id", array("nombre AS nombreCliente", "rfcSociedad", "rfc", "peca", "peca_num", "inmex", "inmex_num"))
                     ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
                     ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array("tipoAduana", "nombre AS nombreAduana"))
-                    //->joinLeft(array("p" => "trafico_clientes_plantas"), "a.id = t.idAduana", array("tipoAduana", "nombre AS nombreAduana"))
                     ->where("t.id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
@@ -616,7 +614,7 @@ class Trafico_Model_TraficosMapper {
                 $arr["transporte"] = $trans->obtener($id);
                 return $arr;
             }
-            return false;
+            return null;
         } catch (Zend_Db_Adapter_Exception $e) {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
