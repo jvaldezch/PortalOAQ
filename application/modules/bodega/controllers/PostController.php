@@ -434,7 +434,6 @@ class Bodega_PostController extends Zend_Controller_Action {
                         if ($input->isValid("blGuia")) {
                             $trafico->agregarGuia($res["id"], $this->_session->id, $input->blGuia);
                         }
-                        die();
                         $this->_helper->json(array("success" => true, "id" => (int) $res["id"]));
                     }
                     $this->_helper->json(array("success" => false));
