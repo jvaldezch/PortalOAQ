@@ -6,11 +6,11 @@
             </td>
             <td><?= $item['numBulto'] ?></td>
             <td style="text-align: left"><?= $item['uuid'] ?></td>
-            <td><?= ($item['dano'] == 0) ? 'No' : 'Si'  ?></td>
-            <td><?= isset($item['descarga']) ? 'Si' : 'No' ?></td>
-            <td><?= isset($item['revision']) ? 'Si' : 'No' ?></td>
-            <td><?= isset($item['carga']) ? 'Si' : 'No' ?></td>
-            <td><?= ($item['escaneado'] !== null) ? 'Si' : 'No' ?></td>
+            <td><?= ($item['dano'] == 0) ? '' : '<i class="fas fa-check"></i>'  ?></td>
+            <td><?= isset($item['descarga']) ? '<i class="fas fa-check"></i>' : '' ?></td>
+            <td><?= isset($item['revision']) ? '<i class="fas fa-check"></i>' : '' ?></td>
+            <td><?= isset($item['carga']) ? '<i class="fas fa-check"></i>' : '' ?></td>
+            <td><?= ($item['escaneado'] !== null) ? '<i class="fas fa-check"></i>' : '' ?></td>
             <td style="width: 80px">
                 <div style="font-size: 1.2em">                    
                     <i class="fas fa-pencil-alt editar-bulto" data-id="<?= $item['id'] ?>" style="cursor: pointer"></i>
