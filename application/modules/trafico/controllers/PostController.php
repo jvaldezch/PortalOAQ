@@ -621,7 +621,7 @@ class Trafico_PostController extends Zend_Controller_Action {
                     $upload = new Zend_File_Transfer_Adapter_Http();
                     $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
                             ->addValidator("Size", false, array("min" => "1kB", "max" => "6MB"))
-                            ->addValidator("Extension", false, array("extension" => "jpg", "case" => false));
+                            ->addValidator("Extension", false, array("extension" => "jpg,jpeg", "case" => false));
                     $upload->setDestination($dir);
                     $files = $upload->getFileInfo();
                     foreach ($files as $fieldname => $fileinfo) {
