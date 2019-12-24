@@ -394,6 +394,10 @@ class OAQ_TerminalLogistics {
             $arr["sis"] = "table";
             return $arr;
         }
+        if (($arr = $mppr->buscarNumGuia($guia))) {
+            $arr["sis"] = "table";
+            return $arr;
+        }
         $traficos = new OAQ_Trafico();
         if (($arr = $traficos->buscarGuia($guia))) {
             $arr["sis"] = "rest";

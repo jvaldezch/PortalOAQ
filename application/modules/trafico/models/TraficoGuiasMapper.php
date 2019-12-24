@@ -140,6 +140,21 @@ class Trafico_Model_TraficoGuiasMapper {
         }
     }
 
+    public function buscarNumGuia($guia) {
+        try {
+            $sql = $this->_db_table->select()
+                ->from(array("t" => "traficos"), array("patente", "aduana", "pedimento", "referencia", "rfcCliente"))
+                ->where("REPLACE(t.blGuia, ' ', '') LIKE ?", "%" . $guia . "%");
+            $stmt = $this->_db_table->fetchRow($sql);
+            if (count($stmt)) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
     public function delete($idFactura) {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $idFactura));
