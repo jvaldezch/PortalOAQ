@@ -12,6 +12,7 @@ class OAQ_TerminalLogistics {
     protected $_rows = array();
     protected $_total = 0;
     protected $_usuario;
+    protected $_firephp;
 
     function set_filename($_filename) {
         $this->_filename = $_filename;
@@ -40,6 +41,7 @@ class OAQ_TerminalLogistics {
     function __construct() {
         $this->_db = Zend_Registry::get("oaqintranet");
         $this->_sat = new OAQ_SATValidar();
+        $this->_firephp = Zend_Registry::get("firephp");
     }
     
     public function createDir($base_dir, $email_date) {        
@@ -390,6 +392,7 @@ class OAQ_TerminalLogistics {
 
     protected function _buscarPedimento($guia) {
         $guia = preg_replace('/-|\s+/', ' ', $guia);
+        $this->_firephp->info($guia);
         $mppr = new Trafico_Model_TraficoGuiasMapper();
         if (($arr = $mppr->buscarGuia($guia))) {
             $arr["sis"] = "table";
