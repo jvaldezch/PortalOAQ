@@ -143,6 +143,7 @@ class Trafico_Model_TraficoGuiasMapper {
     public function buscarNumGuia($guia) {
         try {
             $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
                 ->from(array("t" => "traficos"), array("patente", "aduana", "pedimento", "referencia", "rfcCliente"))
                 ->where("REPLACE(t.blGuia, ' ', '') LIKE ?", "%" . $guia . "%");
             $stmt = $this->_db_table->fetchRow($sql);
