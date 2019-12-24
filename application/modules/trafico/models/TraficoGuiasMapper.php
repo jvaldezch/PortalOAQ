@@ -128,9 +128,8 @@ class Trafico_Model_TraficoGuiasMapper {
                     ->setIntegrityCheck(false)
                     ->from(array("g" => "trafico_guias"), array(""))
                     ->joinInner(array("t" => "traficos"), "t.id = g.idTrafico", array("patente", "aduana", "pedimento", "referencia", "rfcCliente"))
-                    ->where("REPLACE(g.guia, ' ', '') LIKE ?", "%" . $guia . "%");
+                    ->where("REPLACE(REPLACE(g.guia, ' ', ''), '-', '') LIKE ?", "%" . $guia . "%");
             $stmt = $this->_db_table->fetchRow($sql);
-            //echo $sql->assemble();
             if (count($stmt)) {
                 return $stmt->toArray();
             }
@@ -145,10 +144,10 @@ class Trafico_Model_TraficoGuiasMapper {
             $sql = $this->_db_table->select()
                 ->setIntegrityCheck(false)
                 ->from(array("t" => "traficos"), array("patente", "aduana", "pedimento", "referencia", "rfcCliente"))
-                ->where("REPLACE(t.blGuia, ' ', '') LIKE ?", "%" . $guia . "%")
-                ->orWhere("REPLACE(t.contenedorCaja, ' ', '') LIKE ?", "%" . $guia . "%")
-                ->orWhere("REPLACE(t.contenedorCajaEntrada, ' ', '') LIKE ?", "%" . $guia . "%")
-                ->orWhere("REPLACE(t.contenedorCajaSalida, ' ', '') LIKE ?", "%" . $guia . "%");
+                ->where("REPLACE(REPLACE(t.blGuia, ' ', ''), '-', '') LIKE ?", "%" . $guia . "%")
+                ->orWhere("REPLACE(REPLACE(t.contenedorCaja, ' ', ''), '-', '') LIKE ?", "%" . $guia . "%")
+                ->orWhere("REPLACE(REPLACE(t.contenedorCajaEntrada, ' ', ''), '-', '') LIKE ?", "%" . $guia . "%")
+                ->orWhere("REPLACE(REPLACE(t.contenedorCajaSalida, ' ', ''), '-', '') LIKE ?", "%" . $guia . "%");
             $stmt = $this->_db_table->fetchRow($sql);
             if (count($stmt)) {
                 return $stmt->toArray();

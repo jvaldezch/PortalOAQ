@@ -392,7 +392,6 @@ class OAQ_TerminalLogistics {
 
     protected function _buscarPedimento($guia) {
         $guia = preg_replace('/-|\s+/', '', $guia);
-        $this->_firephp->info($guia);
         $mppr = new Trafico_Model_TraficoGuiasMapper();
         if (($arr = $mppr->buscarGuia($guia))) {
             $arr["sis"] = "table";
