@@ -50,6 +50,9 @@ class Operaciones_ValidadorController extends Zend_Controller_Action {
                     $model = new Application_Model_DirectoriosValidacion();
                     $archVal = new OAQ_ArchivosValidacion();
                     $folder = $model->obtener($i->patente, $i->aduana);
+                    if (file_exists($folder)) {
+                        mkdir($folder, 0777, true);
+                    }
                     if (isset($folder)) {
                         $view = new Zend_View();
                         $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/validador/");

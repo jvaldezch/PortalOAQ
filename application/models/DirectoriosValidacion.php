@@ -38,7 +38,7 @@ class Application_Model_DirectoriosValidacion {
                     ->where("activo = 1");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
-                return $stmt["directorio"];
+                return $stmt["directorio"] . DIRECTORY_SEPARATOR . date("YYYY");
             }
             return;
         } catch (Zend_Db_Adapter_Exception $e) {
@@ -51,7 +51,8 @@ class Application_Model_DirectoriosValidacion {
             $sql = $this->_db_table->select()
                     ->setIntegrityCheck(false)
                     ->from(array("d" => "validador_directorio"), array("directorio", "patente", "aduana"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "a.patente = d.patente AND a.aduana = d.aduana", array("nombre", "id"));
+                    ->joinLeft(array("a" => "trafico_aduanas"), "a.patente = d.patente AND a.aduana = d.aduana", array("nombre", "id"))
+                    ->where("d.activo = 1");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
