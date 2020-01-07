@@ -50,10 +50,8 @@ class Operaciones_ValidadorController extends Zend_Controller_Action {
                     $model = new Application_Model_DirectoriosValidacion();
                     $archVal = new OAQ_ArchivosValidacion();
                     $folder = $model->obtener($i->patente, $i->aduana);
-                    if (file_exists($folder)) {
+                    if (!file_exists($folder)) {
                         mkdir($folder, 0777, true);
-                    } else {
-                        throw new Exception("Folder deosn't exists " . $folder);
                     }
                     if (isset($folder)) {
                         $view = new Zend_View();
