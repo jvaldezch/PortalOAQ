@@ -741,6 +741,7 @@ class Automatizacion_IndexController extends Zend_Controller_Action {
                     $archivos->set_aduana($dir["aduana"]);
                     $archivos->set_patente($dir["patente"]);
                     $archivos->obtenerTodos();
+
                     $files = $archivos->get_data();
                     if ($input->isValid("debug")) {
                         $view->data = $files;

@@ -38,7 +38,7 @@ class Application_Model_DirectoriosValidacion {
                     ->where("activo = 1");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
-                return $stmt["directorio"] . DIRECTORY_SEPARATOR . date("Y");
+                return $stmt["directorio"];
             }
             return;
         } catch (Zend_Db_Adapter_Exception $e) {
