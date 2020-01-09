@@ -47,17 +47,6 @@ class WebService_PedimentoController extends Zend_Controller_Action {
                     $xmlRoot = $domtree->appendChild($root);
                     $xmlRoot->appendChild($domtree->createElement("error", "No database!"));
                 }
-//                $arr = $db->wsDetallePedimento($i->pedimento, $i->aduana);
-//                foreach (array(640, 646, 240, 645) as $k => $v) {
-//                    $db = $this->_sistemaPedimentos($i->patente, $v);
-//                    if (!isset($db)) {
-//                        continue;
-//                    }
-//                    $pedimento = $db->wsDetallePedimento($i->pedimento, $i->aduana);
-//                    if (isset($pedimento) && $pedimento !== false) {
-//                        break;
-//                    }
-//                }
                 $reg = $map->pedimento($i->patente, $i->pedimento, $i->aduana);
                 if(isset($reg)) {
                     $arch = $val->findFile($reg["archivoNombre"], $i->aduana);

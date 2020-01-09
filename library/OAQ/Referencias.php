@@ -119,7 +119,7 @@ class OAQ_Referencias {
     protected function _consecutivoPedimento($patente, $aduana) {
         $mppr = new Bitacora_Model_BitacoraPedimentos();
         $pedimento = $mppr->ultimoPedimento($patente, $aduana);
-        if ((int) $pedimento == 0) {
+        if ($pedimento == 0) {
             if ((int) date("Y") == 2017) {
                 return 7000000;
             }
@@ -129,8 +129,11 @@ class OAQ_Referencias {
             if ((int) date("Y") == 2019) {
                 return 9000000;
             }
+            if ((int) date("Y") == 2020) {
+                return 0200000;
+            }
         }
-        return (int) $pedimento + 1;
+        return str_pad($pedimento + 1, 7, '0', STR_PAD_LEFT);
     }
 
     public function consecutivo() {
