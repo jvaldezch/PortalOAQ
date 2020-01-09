@@ -309,7 +309,8 @@ class OAQ_TerminalLogistics {
 
     protected function _buscarEnRepositorio($patente, $aduana, $pedimento, $referencia) {
         $mppr = new Archivo_Model_RepositorioIndex();
-        if (($id = $mppr->buscar($patente, $aduana, $referencia, $pedimento))) {
+        //if (($id = $mppr->buscar($patente, $aduana, $referencia, $pedimento))) {
+        if (($id = $mppr->buscar($patente, $aduana, $referencia))) {
             return $id;
         }
         return;
@@ -376,7 +377,7 @@ class OAQ_TerminalLogistics {
                             "rfcCliente" => $array["rfcCliente"],
                         );
                         $this->_actualizar(pathinfo($filename, PATHINFO_FILENAME), $trafico);
-                        return array("success" => true, "idGuia" => (int) $id, "guia" => $arr["guia"], "results" => array("pedimento" => (int) $array["pedimento"], "referencia" => $array["referencia"], "sistema" => $array["sis"]));
+                        return array("success" => true, "idGuia" => (int) $id, "guia" => $arr["guia"], "results" => array("pedimento" => $array["pedimento"], "referencia" => $array["referencia"], "sistema" => $array["sis"]));
                     } else {
                         return array("success" => true, "idGuia" => (int) $id, "guia" => $arr["guia"], "results" => "No pedimento o referencia");
                     }
