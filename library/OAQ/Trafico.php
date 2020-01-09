@@ -156,7 +156,7 @@ class OAQ_Trafico {
             }
             $this->patente = (int) $this->trafico->getPatente();
             $this->aduana = (int) $this->trafico->getAduana();
-            $this->pedimento = (int) $this->trafico->getPedimento();
+            $this->pedimento = $this->trafico->getPedimento();
             $this->referencia = $this->trafico->getReferencia();
             $this->idAduana = $this->trafico->getIdAduana();
             $this->idCliente = $this->trafico->getIdCliente();
