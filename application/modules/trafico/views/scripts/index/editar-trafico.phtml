@@ -146,33 +146,11 @@
         <a href="#soia" data-toggle="tab">SOIA</a>
     </li>
     <li>
-        <a href="#pedimento" data-toggle="tab">Pedimento</a>
+        <a href="#pedimento-capt" data-toggle="tab">Pedimento</a>
     </li>
 </ul>
 <?php if (!isset($this->deleted)) { ?>
     <div class="tab-content">
-
-        <!-- pedimento -->
-        <div class="tab-pane" id="pedimento">
-
-            <div class="traffic-cols">
-
-                <table class="traffic-table">
-                    <thead>
-                    <tr>
-                        <th>Pedimento</th>
-                    </tr>
-                    </thead>
-                </table>
-
-                <br>
-                <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
-                    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
-                </a>
-
-            </div>
-
-        </div><!-- pedimento -->
 
         <!-- soia -->
         <div class="tab-pane" id="soia">
@@ -197,6 +175,30 @@
                 "tiposFechas" => $this->tiposFechas, "sello" => $this->sello, "idTrafico" => $this->idTrafico, 
                 "edit" => $this->edit, "tipoCargas" => $this->tipoCargas, "plantas" => $this->plantas)); ?>
         </div><!-- information -->
+
+        <!-- pedimento -->
+        <div class="tab-pane" id="pedimento-capt">
+
+            <div class="traffic-cols">
+
+                <table class="traffic-table table-pedimento">
+                    <thead>
+                    <tr>
+                        <th>Pedimento</th>
+                    </tr>
+                    </thead>
+                </table>
+
+                <div id="captura-pedimento"></div>
+
+                <br>
+                <a href="/trafico/index/traficos" class="traffic-btn" tabindex="99">
+                    <i class="fas fa-angle-double-left"></i>&nbsp;Regresar
+                </a>
+
+            </div>
+
+        </div><!-- pedimento -->
 
         <!-- files -->
         <div class="tab-pane" id="files" style="overflow-x: hidden">

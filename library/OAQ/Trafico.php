@@ -1862,6 +1862,14 @@ class OAQ_Trafico {
         return;
     }
 
+    public function obtenerCliente() {
+        $arr = $this->clientes->datosCliente($this->idCliente);
+        if (!empty($arr)) {
+            return $arr;
+        }
+        return;
+    }
+
     public function seleccionConsolidarTraficos(array $arr) {
         if (is_array($arr)) {
             $array = [];

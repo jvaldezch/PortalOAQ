@@ -1,0 +1,428 @@
+<style>
+    .table-pedimento {
+        border-top: 1px #777 solid;
+        text-align: left;
+    }
+    .table-pedimento th {
+        vertical-align: middle;
+        background-color: #d4d4d4;
+    }
+    .table-pedimento td {
+        vertical-align: middle;
+        background-color: #fff;
+    }
+    .table-pedimento td > .traffic-input-small,
+    .table-pedimento td > .traffic-input-medium,
+    .table-pedimento td > .traffic-input-large {
+        font-size: 11px;
+        border: 1px #0088cc solid !important;
+        border-radius: 0;
+        height: 15px;
+    }
+    .table-pedimento td > .traffic-select-small,
+    .table-pedimento td > .traffic-select-medium {
+        font-size: 11px;
+        border: 1px #0088cc solid !important;
+        border-radius: 0;
+        height: 15px;
+    }
+    .table-pedimento td > .traffic-textarea-medium {
+        font-size: 11px;
+        border: 1px #0088cc solid !important;
+        border-radius: 0;
+    }
+</style>
+<table class="traffic-table table-pedimento">
+    <tbody>
+        <tr>
+            <th width="90">Pedimento</th>
+            <td width="170"><?= $this->aduana . '-' . $this->patente . '-' . $this->pedimento ?></td>
+            <th width="120">T. Ope.</th>
+            <td width="160"><?= $this->tipoOperacion ?></td>
+            <th width="170">Cve. pedimento</th>
+            <td width="180">
+                <select id="cvePedimento" name="cvePedimento" class="traffic-select-small">
+                    <option value="">---</option>
+                    <?php foreach ($this->cves AS $item) { ?>
+                        <option value="<?= $item['clave'] ?>" <?= ($this->cvePedimento !== $item['clave']) ? '' : 'selected=true' ?>><?= $item['clave'] ?></option>
+                    <?php } ?>
+                </select>
+            </td>
+            <th width="120">Regimen</th>
+            <td>
+                <?php if ($this->tipoOperacion == 'TOCE.IMP') { ?>
+                    <select id="regimen" name="regimen" class="traffic-select-small" disabled="true">
+                        <option value="">---</option>
+                        <?php foreach ($this->cves AS $item) { ?>
+                            <option value="<?= $item['regimenImportacion'] ?>" <?= ($this->cvePedimento !== $item['clave']) ? '' : 'selected=true' ?>><?= $item['regimenImportacion'] ?></option>
+                        <?php } ?>
+                    </select>
+                <?php } else { ?>
+                    <select id="regimen" name="regimen" class="traffic-select-small" disabled="true">
+                        <option value="">---</option>
+                        <?php foreach ($this->cves AS $item) { ?>
+                            <option value="<?= $item['regimenExportacion'] ?>" <?= ($this->cvePedimento !== $item['clave']) ? '' : 'selected=true' ?>><?= $item['regimenExportacion'] ?></option>
+                        <?php } ?>
+                    </select>
+                <?php } ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th width="90">DEST./ORIGEN</th>
+        <td width="170">
+            <select id="destino" name="destino" class="traffic-select-small">
+                <option value="">---</option>
+                <?php foreach ($this->destinos AS $item) { ?>
+                    <option value="<?= $item['clave'] ?>" <?= ($this->destino !== $item['clave']) ? '' : 'selected=true' ?>>
+                        <?= $item['clave'] . ' - ' . '<em>' . $item['descripcion'] . '</em>' ?></option>
+                <?php } ?>
+            </select>
+        </td>
+        <th width="120">TIPO CAMBIO</th>
+        <td width="160">
+            <input type="text" id="tipoCambio" name="tipoCambio" class="traffic-input-small" />
+        </td>
+        <th width="170">PESO BRUTO</th>
+        <td width="180">
+            <input type="text" id="pesoBruto" name="pesoBruto" class="traffic-input-small" />
+        </td>
+        <th width="120">ADUANA E/S</th>
+        <td>
+            <select id="aduanaDespacho" name="aduanaDespacho" class="traffic-select-medium">
+                <option value="">---</option>
+                <?php foreach ($this->a_despacho AS $item) { ?>
+                    <option value="<?= $item['aduana'] . $item['seccion'] ?>" <?= ($this->aduanaDespacho !== $item['aduana'] . $item['seccion']) ? '' : 'selected=true' ?>>
+                        <?= $item['aduana'] . $item['seccion'] . ' - ' . '<em>' . $item['descripcion'] . '</em>' ?></option>
+                <?php } ?>
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th colspan="3">MEDIOS DE TRANSPORTE</th>
+        <th colspan="2"></th>
+    </tr>
+    <tr>
+        <th>Trans. Entrada/salida</th>
+        <th>Trans. Arribo</th>
+        <th>Trans. Salida</th>
+        <th>Valor dolares</th>
+        <td>
+            <input type="text" id="valorDolares" name="valorDolares" class="traffic-input-small" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <select id="transEntrada" name="transEntrada" class="traffic-select-small">
+                <option value="">---</option>
+                <?php foreach ($this->medios AS $item) { ?>
+                    <option value="<?= $item['clave'] ?>" <?= ($this->transArribo !== $item['clave']) ? '' : 'selected=true' ?>>
+                        <?= $item['clave'] . ' - ' . '<em>' . $item['descripcion'] . '</em>' ?></option>
+                <?php } ?>
+            </select>
+        </td>
+        <td>
+            <select id="transArribo" name="transArribo" class="traffic-select-small">
+                <option value="">---</option>
+                <?php foreach ($this->medios AS $item) { ?>
+                    <option value="<?= $item['clave'] ?>" <?= ($this->transArribo !== $item['clave']) ? '' : 'selected=true' ?>>
+                        <?= $item['clave'] . ' - ' . '<em>' . $item['descripcion'] . '</em>' ?></option>
+                <?php } ?>
+            </select>
+        </td>
+        <td>
+            <select id="transSalida" name="transSalida" class="traffic-select-small">
+                <option value="">---</option>
+                <?php foreach ($this->medios AS $item) { ?>
+                    <option value="<?= $item['clave'] ?>" <?= ($this->transArribo !== $item['clave']) ? '' : 'selected=true' ?>>
+                        <?= $item['clave'] . ' - ' . '<em>' . $item['descripcion'] . '</em>' ?></option>
+                <?php } ?>
+            </select>
+        </td>
+        <th>Valor aduana</th>
+        <td>
+            <input type="text" id="valorAduana" name="valorAduana" class="traffic-input-small" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3"></td>
+        <th>Valor comercial</th>
+        <td>
+            <input type="text" id="valorComercial" name="valorComercial" class="traffic-input-small" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th colspan="2">DATOS DEL IMPORTADOR / EXPORTADOR</th>
+        <th></th>
+    </tr>
+    <tr>
+        <th>RFC</th>
+        <td>
+            <input type="text" id="rfcCliente" name="rfcCliente" value="<?= $this->rfcCliente ?>" class="traffic-input-small" readonly="true" />
+        </td>
+        <th>
+            NOMBRE, DENOMINACIÓN O RAZÓN SOCIAL
+        </th>
+    </tr>
+    <tr>
+        <th>CURP</th>
+        <td></td>
+        <td>
+            <input type="text" id="nomCliente" name="nomCliente" value="<?= $this->nomCliente ?>" class="traffic-input-large" readonly="true" />
+        </td>
+    </tr>
+    <tr>
+        <th>DOMICILIO</th>
+        <td></td>
+        <td style="text-align: center">
+            <textarea class="traffic-textarea-medium" readonly="true" style="width: 350px !important;"></textarea>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th>VAL. SEGUROS</th>
+        <th>SEGUROS</th>
+        <th>FLETES</th>
+        <th>EMBALAJES</th>
+        <th>OTROS INCREMENTABLES</th>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" id="valorSeguros" name="valorSeguros" class="traffic-input-small" />
+        </td>
+        <td>
+            <input type="text" id="seguros" name="seguros" class="traffic-input-small" />
+        </td>
+        <td>
+            <input type="text" id="fletes" name="fletes" class="traffic-input-small" />
+        </td>
+        <td>
+            <input type="text" id="embalajes" name="embalajes" class="traffic-input-small" />
+        </td>
+        <td>
+            <input type="text" id="otrosIncrementables" name="otrosIncrementables" class="traffic-input-small" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th width="250">MARCAS, NUMEROS Y TOTAL DE BULTOS</th>
+        <td style="text-align: left">
+            <input type="text" id="bultos" name="bultos" class="traffic-input-large" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th colspan="2" rowspan="2">Fechas</th>
+        <th colspan="3">Tasas a nivel pedimento</th>
+    </tr>
+    <tr>
+        <th>Contrib.</th>
+        <th>Cve. T. Tasa</th>
+        <th>Tasa</th>
+    </tr>
+    <tr>
+        <td colspan="2"></td>
+        <td colspan="3"></td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th colspan="5">CUADRO DE LIQUIDACIÓN</th>
+    </tr>
+    <tr>
+        <th>Concepto</th>
+        <th>F.P.</th>
+        <th>Importe</th>
+        <th colspan="2">Totales</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>Efectivo</th>
+        <td>
+            <input type="text" id="efectivo" name="efectivo" class="traffic-input-small" />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>Otros</th>
+        <td>
+            <input type="text" id="otros" name="otros" class="traffic-input-small" />
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>Total</th>
+        <td>
+            <input type="text" id="totalLiquidacion" name="totalLiquidacion" class="traffic-input-small" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th colspan="4">DATOS DEL PROVEEDOR O COMPRADOR</th>
+    </tr>
+    <tr>
+        <th>Id fiscal</th>
+        <th>Nombre, denominación o razón social</th>
+        <th>Domicilio</th>
+        <th>Vincuación</th>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th width="150">TRANSPORTE</th>
+        <th width="150">INDENTIFICACIÓN</th>
+        <td>
+            <input type="text" id="idenTransporte" name="idenTransporte" class="traffic-input-small" />
+        </td>
+        <th>País</th>
+        <td>
+            <select id="paisTransporte" name="paisTransporte" class="traffic-select-small">
+                <option value="">---</option>
+                <?php foreach ($this->paises AS $item) { ?>
+                    <option value="<?= $item['clave_m3'] ?>" <?= ($this->paisTransporte !== $item['clave']) ? '' : 'selected=true' ?>>
+                        <?= $item['clave_m3'] . ' - ' . '<em>' . $item['nombre'] . '</em>' ?></option>
+                <?php } ?>
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <tbody>
+    <tr>
+        <th width="150">NÚMERO CANDADO</th>
+        <td>
+            <input type="text" id="candados" name="candados" class="traffic-input-medium" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <thead>
+    <tr>
+        <th colspan="4">IDENTIFICADORES</th>
+    </tr>
+    <tr>
+        <th>Clave / clomp. identificador</th>
+        <th>Complemento 1</th>
+        <th>Complemento 2</th>
+        <th>Complemento 3</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <thead>
+    <tr>
+        <th>OBSERVACIONES</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <textarea class="traffic-textarea-medium" readonly="true" style="width: 350px !important;"></textarea>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table table-pedimento">
+    <thead>
+    <tr>
+        <th colspan="16">PARTIDAS</th>
+    </tr>
+    <tr>
+        <th rowspan="3">SEC</th>
+        <th>FRACCION</th>
+        <th>SUBD.</th>
+        <th>VINC.</th>
+        <th>MET VAL</th>
+        <th>UMC</th>
+        <th>CANT. UMC</th>
+        <th>UMT</th>
+        <th>CANT. UMT</th>
+        <th>P. C/V</th>
+        <th>P. O/D</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <th colspan="10">DESCRIPCION</th>
+        <th>CON</th>
+        <th>TASA</th>
+        <th>TT</th>
+        <th>FP</th>
+        <th>IMPORTE</th>
+    </tr>
+    <tr>
+        <th colspan="3">VAL. ADU.</th>
+        <th colspan="3">IMP. PRECIO PAG.</th>
+        <th colspan="2">PRECIO UNT.</th>
+        <th colspan="2">VAL. AGREG.</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    </tr>
+    </tbody>
+</table>

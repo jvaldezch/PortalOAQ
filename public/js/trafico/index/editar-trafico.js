@@ -619,6 +619,7 @@ window.loadSoia = function() {
 };
 
 function currentActive(current) {
+
     if(Cookies.get("active") === "#information") {
         loadInvoices();
         loadTrackings();        
@@ -639,7 +640,15 @@ function currentActive(current) {
             }
         });
     }
-    if(Cookies.get("active") === "#pedimento") {
+    if(Cookies.get("active") === "#pedimento-capt") {
+        let id = $("#idTrafico").val();
+        $.ajax({url: "/trafico/pedimentos/captura-pedimento", cache: false, dataType: "json", data: {id: id}, type: "GET",
+            success: function (res) {
+                if (res.success === true) {
+                    $("#captura-pedimento").html(res.html);
+                }
+            }
+        });
 
     }
 }
@@ -744,7 +753,7 @@ let jc;
 
 $(document).ready(function () {
             
-    let valid = ["#information", "#files", "#vucem", "#soia, #pedimento"];
+    let valid = ["#information", "#files", "#vucem", "#soia", "#pedimento-capt", "#other"];
 
     $(document.body).on("click", "#traffic-tabs li a", function() {
         let href = $(this).attr("href");
