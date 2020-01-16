@@ -24,7 +24,8 @@
         font-size: 11px;
         border: 1px #0088cc solid !important;
         border-radius: 0;
-        height: 15px;
+        height: 20px !important;
+        padding: 0 !important;
     }
     .table-pedimento td > .traffic-textarea-medium {
         font-size: 11px;
@@ -32,6 +33,7 @@
         border-radius: 0;
     }
 </style>
+<input type="hidden" name="idPedimento" id="idPedimento" value="<?= $this->idPedimento ?>" />
 <table class="traffic-table table-pedimento">
     <tbody>
         <tr>
@@ -75,10 +77,10 @@
     <tr>
         <th width="90">DEST./ORIGEN</th>
         <td width="170">
-            <select id="destino" name="destino" class="traffic-select-small">
+            <select id="destinoOrigen" name="destinoOrigen" class="traffic-select-small">
                 <option value="">---</option>
                 <?php foreach ($this->destinos AS $item) { ?>
-                    <option value="<?= $item['clave'] ?>" <?= ($this->destino !== $item['clave']) ? '' : 'selected=true' ?>>
+                    <option value="<?= $item['clave'] ?>" <?= ($this->destinoOrigen !== $item['clave']) ? '' : 'selected=true' ?>>
                         <?= $item['clave'] . ' - ' . '<em>' . $item['descripcion'] . '</em>' ?></option>
                 <?php } ?>
             </select>
@@ -426,3 +428,4 @@
     </tr>
     </tbody>
 </table>
+<script src="/js/pedimentos/trafico-pedimento.js?<?= time() ?>"></script>

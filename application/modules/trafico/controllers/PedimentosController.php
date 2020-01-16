@@ -69,12 +69,16 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id")) {
 
+                $pedimento = new OAQ_TraficoPedimento(array("idTrafico" => $input->id));
+                $row = $pedimento->buscar($this->_session->username);
 
                 $cvemppr = new Trafico_Model_CvePedimentos();
 
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/pedimentos/");
                 $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
+                $view->idPedimento = $row['id'];
 
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
 
@@ -92,9 +96,6 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                 $view->cvePedimento = $row['cvePedimento'];
                 $view->rfcCliente = $row['rfcCliente'];
                 $view->nomCliente = $cust['nombre'];
-
-                $this->_firephp->info($row);
-                $this->_firephp->info($cust);
 
                 $medios = new Pedimento_Model_MedioTransporte();
                 $view->medios = $medios->obtenerTodos();

@@ -10,7 +10,8 @@
                 <?php if (isset($this->menu)) { ?>
                     <?php foreach ($this->menu as $item) { ?>
                         <li class="dropdown">
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown"><?= mb_strtoupper($item["moduloNombre"], "UTF-8") ?></a>
+                            <a href="" class="dropdown-toggle"
+                               data-toggle="dropdown"><?= mb_strtoupper($item["moduloNombre"], "UTF-8") ?></a>
                             <ul class="dropdown-menu">
                                 <?php foreach (json_decode($item["menus"]) as $m) { ?>
                                     <li><a href="<?= $m->link ?>"><?= $m->title ?></a></li>
@@ -18,23 +19,26 @@
                             </ul>
                         </li>
                     <?php } ?>
-                        <?php if (!in_array($this->rol, array("inhouse", "corresponsal", "cliente"))) { ?>
-                            <li>
-                                <a href="/principal/index/iso">SGC 2015</a>
-                            </li>
-                            <li>
-                                <a href="/principal/index/oea">OEA</a>
-                            </li>
-                        <?php } ?>
+                    <?php if (!in_array($this->rol, array("inhouse", "corresponsal", "cliente"))) { ?>
+                        <li>
+                            <a href="/principal/index/iso">SGC 2015</a>
+                        </li>
+                        <li>
+                            <a href="/principal/index/oea">OEA</a>
+                        </li>
+                        <li>
+                            <a href="/principal/index/oaq-te-escucha">OAQ Te escucha</a>
+                        </li>
+                    <?php } ?>
                 <?php } ?>
             <?php } ?>
         </ul><!-- nav -->
         <ul class="nav pull-right">
             <li class="btn-logout">
-                <a title="Salir del portal" href="<?= $this->appConfig("link-logout") ?>" >
+                <a title="Salir del portal" href="<?= $this->appConfig("link-logout") ?>">
                     <i class="fas fa-sign-out-alt" style="font-size: 1.2em; color: white"></i>
                 </a>
-            </li>          
+            </li>
         </ul>
     </div><!-- navbar-inner -->
 </div>
@@ -49,10 +53,10 @@
         </ul>
         <ul class="nav pull-right">
             <li class="btn-logout">
-                <a title="Salir del portal" href="<?= $this->appConfig("link-logout") ?>" >
+                <a title="Salir del portal" href="<?= $this->appConfig("link-logout") ?>">
                     <i class="fas fa-sign-out-alt" style="font-size: 1.2em; color: white"></i>
                 </a>
-            </li>          
+            </li>
         </ul>
     </div>
 </div>

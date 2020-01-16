@@ -1,0 +1,147 @@
+<style>
+    .format-listen {
+        margin: auto auto;
+        max-width: 650px;
+        text-align: justify;
+    }
+    .format-listen h3 {
+        text-align: center;
+    }
+    .format-listen p,
+    .format-listen form label,
+    .format-listen form p {
+        font-size: 14px !important;
+    }
+    .format-listen form span.format-listen-error {
+        color: red;
+        text-align: left !important;
+        clear: both;
+        display: block;
+    }
+    .format-listen form label,
+    .format-listen form button {
+        margin-top: 10px;
+    }
+    .format-listen form ul li label {
+        margin-top: 0;
+    }
+    .format-listen form p {
+        margin: 10px 0;
+    }
+    .format-listen form {
+        margin-top: 20px;
+    }
+    .format-listen form ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+    }
+    .format-listen form ul li {
+        display: block;
+        position: relative;
+        float: left;
+        width: 100%;
+        height: 30px;
+    }
+    .format-listen form ul li input[type=radio]{
+        position: absolute;
+    }
+    .format-listen form ul li label {
+        display: block;
+        margin-left: 20px;
+    }
+    .format-listen input[type="text"],
+    .format-listen textarea {
+        color: #0c5460;
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        border-bottom: 1px #444 solid;
+        background-color: #feffdb;
+    }
+</style>
+<div class="format-listen">
+    <h3>
+        FORMATO DE QUEJA O DENUNCIA
+    </h3>
+    <p>
+        Agradecemos tu visita a este canal, recuerda que está hecho para ti y fue diseñado con el propósito de prevenir
+        y/o corregir cualquier comportamiento que pueda generar algún riesgo psicosocial, violencia laboral, así como
+        promover un entorno organizacional favorable.
+        <br>
+        <br>
+        La información que los colaboradores comparten a OAQ es totalmente confidencial y privada, y será utilizada
+        únicamente con el fin de dar solución a la queja o denuncia presentada. Bajo ninguna circunstancia se generarán
+        represalias a aquellos colaboradores que de buena fe presenten una queja o denuncia relacionadas a prácticas
+        opuestas al entorno organizacional favorable o actos de violencia laboral.
+        <br>
+        <br>
+        Así mismo agradecemos que nos proporciones la siguiente información para actuar de manera inmediata:
+    </p>
+
+    <form id="format-listen">
+
+        <label for="name">Nombre del colaborador:</label>
+        <input type="text" name="name" id="name" autocomplete="off" required/>
+
+        <label for="area">Área:</label>
+        <input type="text" name="area" id="area" autocomplete="off" required/>
+
+        <label for="office">Oficina:</label>
+        <input type="text" name="office" id="office" autocomplete="off" required/>
+        <br>
+        <br>
+
+        <p>
+            <label for="matter">Selecciona el tema en particular por el cual nos contactas</label>
+        </p>
+
+        <ul>
+            <li>
+                <input type="radio" name="matter" value="ambience">
+                <label for="matter">Ambiente de trabajo</label>
+            </li>
+            <li>
+                <input type="radio" name="matter" value="load">
+                <label for="matter">Carga de trabajo</label>
+            </li>
+            <li>
+                <input type="radio" name="matter" value="extensive">
+                <label for="matter">Jornadas de trabajo extensas</label>
+            </li>
+            <li>
+                <input type="radio" name="matter" value="ledaership">
+                <label for="matter">Liderazgo</label>
+            </li>
+            <li>
+                <input type="radio" name="matter" value="violence">
+                <label for="matter">Violencia laboral (Acoso psicológico, hostigamiento, malos tratos)</label>
+            </li>
+            <li>
+                <input type="radio" name="matter" value="other">
+                <label for="matter">Otro</label>
+            </li>
+        </ul>
+
+        <br>
+
+        <input type="text" name="other-text" id="other-text" disabled="true" autocomplete="off"/>
+
+        <br>
+        <br>
+
+        <label for="about">Cuéntanos con mayor detalle la situación:</label>
+        <textarea name="about" id="about" rows="4" placeholder="Escribe aquí"></textarea>
+
+        <label for="tell-us">Platícanos que implicación tiene dicha situación en el desarrollo de tus actividades:</label>
+        <textarea name="tell-us" id="tell-us" rows="4" placeholder="Escribe aquí"></textarea>
+
+        <label for="how">¿Cómo consideras que podría mejorar esta situación?</label>
+        <textarea name="how" id="how" rows="4" placeholder="Escribe aquí"></textarea>
+
+        <button id="submit" class="btn" style="float: right">Enviar</button>
+
+    </form>
+
+</div>
