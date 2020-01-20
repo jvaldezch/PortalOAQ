@@ -16,7 +16,9 @@
         color: red;
         text-align: left !important;
         clear: both;
-        display: block;
+        display: inline-block;
+        float: right;
+        font-size: 11px;
     }
     .format-listen form label,
     .format-listen form button {
@@ -126,7 +128,7 @@
 
         <br>
 
-        <input type="text" name="other-text" id="other-text" disabled="true" autocomplete="off"/>
+        <input type="text" name="othertext" id="othertext" disabled="true" autocomplete="off"/>
 
         <br>
         <br>
@@ -135,10 +137,12 @@
         <textarea name="about" id="about" rows="4" placeholder="Escribe aquí"></textarea>
 
         <label for="tell-us">Platícanos que implicación tiene dicha situación en el desarrollo de tus actividades:</label>
-        <textarea name="tell-us" id="tell-us" rows="4" placeholder="Escribe aquí"></textarea>
+        <textarea name="tellus" id="tellus" rows="4" placeholder="Escribe aquí"></textarea>
 
         <label for="how">¿Cómo consideras que podría mejorar esta situación?</label>
         <textarea name="how" id="how" rows="4" placeholder="Escribe aquí"></textarea>
+
+        <br>
 
         <button id="submit" class="btn" style="float: right">Enviar</button>
 

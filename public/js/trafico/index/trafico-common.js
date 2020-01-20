@@ -15,11 +15,22 @@ function openTraffic() {
 function documentsComplete() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        $.ajax({url: "/trafico/post/trafico-documentos-completos", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
-            success: function(res) {
+        $.ajax({
+            url: "/trafico/post/trafico-documentos-completos",
+            cache: false,
+            dataType: "json",
+            data: {id: row.id},
+            type: "POST",
+            success: function (res) {
                 if (res.success === true) {
-                    $.alert({title: "Confirmación", type: "green", content: "Los datos han sido guardados de manera exitosa.", boxWidth: "350px", useBootstrap: false});
-                    $('#dg').datagrid('reload');                            
+                    $.alert({
+                        title: "Confirmación",
+                        type: "green",
+                        content: "Los datos han sido guardados de manera exitosa.",
+                        boxWidth: "350px",
+                        useBootstrap: false
+                    });
+                    $('#dg').datagrid('reload');
                 }
             }
         });
@@ -29,11 +40,18 @@ function documentsComplete() {
 function cancelOperation() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        $.ajax({url: "/trafico/post/cancelar-operacion", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
-            success: function(res) {
+        $.ajax({
+            url: "/trafico/post/cancelar-operacion", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
+            success: function (res) {
                 if (res.success === true) {
-                    $.alert({title: "Confirmación", type: "green", content: "Tráfico ha sido cancelado.", boxWidth: "350px", useBootstrap: false});
-                    $('#dg').datagrid('reload');                            
+                    $.alert({
+                        title: "Confirmación",
+                        type: "green",
+                        content: "Tráfico ha sido cancelado.",
+                        boxWidth: "350px",
+                        useBootstrap: false
+                    });
+                    $('#dg').datagrid('reload');
                 }
             }
         });
@@ -43,13 +61,18 @@ function cancelOperation() {
 function soia() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        $.confirm({ title: "Estatus SOIA", escapeKey: "cerrar", boxWidth: "660px", useBootstrap: false, type: "green",
+        $.confirm({
+            title: "Estatus SOIA", escapeKey: "cerrar", boxWidth: "660px", useBootstrap: false, type: "green",
             buttons: {
-                cerrar: {btnClass: "btn-red",action: function () {}}
+                cerrar: {
+                    btnClass: "btn-red", action: function () {
+                    }
+                }
             },
             content: function () {
                 var self = this;
-                return $.ajax({ url: "/trafico/get/soia?id=" + row.id, method: "GET"
+                return $.ajax({
+                    url: "/trafico/get/soia?id=" + row.id, method: "GET"
                 }).done(function (res) {
                     self.setContent(res);
                 }).fail(function () {
@@ -63,11 +86,18 @@ function soia() {
 function justification() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        $.ajax({url: "/trafico/post/trafico-justificar", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
-            success: function(res) {
+        $.ajax({
+            url: "/trafico/post/trafico-justificar", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
+            success: function (res) {
                 if (res.success === true) {
-                    $.alert({title: "Confirmación", type: "green", content: "Los datos han sido guardados de manera exitosa.", boxWidth: "350px", useBootstrap: false});
-                    $('#dg').datagrid('reload');                            
+                    $.alert({
+                        title: "Confirmación",
+                        type: "green",
+                        content: "Los datos han sido guardados de manera exitosa.",
+                        boxWidth: "350px",
+                        useBootstrap: false
+                    });
+                    $('#dg').datagrid('reload');
                 }
             }
         });
@@ -92,34 +122,35 @@ function formatEstatus(val, row) {
 
 function formatArchive(val, row) {
     if (parseInt(val) === 1) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';        
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
     } else if (parseInt(val) === 2) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #0099ff; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #0099ff; cursor: pointer; padding-top: 2px"></i>';
     } else if (parseInt(val) === 3) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #F59211; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #F59211; cursor: pointer; padding-top: 2px"></i>';
     } else if (parseInt(val) === 4) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: green; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: green; cursor: pointer; padding-top: 2px"></i>';
     } else {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
     }
 }
 
 function formatUpload(val, row) {
-    return '<i class="fas fa-cloud-upload-alt upload-files" data-id="' + row.id +'" style="font-size: 1.2em; color: #2f3b58; cursor: pointer; padding-top: 2px"></i>';
+    return '<i class="fas fa-cloud-upload-alt upload-files" data-id="' + row.id + '" style="font-size: 1.2em; color: #2f3b58; cursor: pointer; padding-top: 2px"></i>';
 }
 
 function formatMensajero(val, row) {
-    return '<i class="fas fa-envelope mensajero" data-id="' + row.id +'" style="font-size: 1.2em; color: #2f3b58; cursor: pointer"></i>';
+    return '<i class="fas fa-envelope mensajero" data-id="' + row.id + '" style="font-size: 1.2em; color: #2f3b58; cursor: pointer"></i>';
 }
 
 function formatCarrierNaviera(val, row) {
     if (row.carrierNaviera) {
         var naviera = '';
-        $.ajax({ url: "/trafico/crud/navieras?idNaviera=" + row.carrierNaviera, type: 'get', dataType: 'json', async: false,
-            success: function(res) {
+        $.ajax({
+            url: "/trafico/crud/navieras?idNaviera=" + row.carrierNaviera, type: 'get', dataType: 'json', async: false,
+            success: function (res) {
                 naviera = res.nombre;
-            } 
-         });
+            }
+        });
         return naviera;
     } else {
         return '';
@@ -132,7 +163,7 @@ function formatLink(val, row) {
 
 function formatImpo(val, row) {
     if (row.ie === "TOCE.IMP") {
-        return '<i class="fas fa-arrow-circle-down" style="font-size: 1.2em; color: #2f3b58; padding-top: 2px"></i>';        
+        return '<i class="fas fa-arrow-circle-down" style="font-size: 1.2em; color: #2f3b58; padding-top: 2px"></i>';
     } else {
         return '<i class="fas fa-arrow-circle-up" style="font-size: 1.2em; color: #2e963a; padding-top: 2px"></i>';
     }
@@ -144,7 +175,8 @@ function newUser() {
 }
 
 function saveUser() {
-    $('#fm').form('submit', {url: "/trafico/crud/trafico-nuevo",
+    $('#fm').form('submit', {
+        url: "/trafico/crud/trafico-nuevo",
         onSubmit: function () {
             return $(this).form('validate');
         },
@@ -168,10 +200,15 @@ function updateSitawin() {
     if (row) {
         if (row.patente == 3589 && (row.aduana == 240 || row.aduana == 640 || row.aduana == 800)) {
             $.messager.confirm('Confirmar', '¿Está seguro de que desea actualizar el trafico?', function (r) {
-                $.ajax({url: "/trafico/get/actualizar-desde-sistema", cache: false, dataType: "json", data: {id: row.id}, type: "GET",
-                    success: function(res) {
+                $.ajax({
+                    url: "/trafico/get/actualizar-desde-sistema",
+                    cache: false,
+                    dataType: "json",
+                    data: {id: row.id},
+                    type: "GET",
+                    success: function (res) {
                         if (res.success === true) {
-                            $('#dg').datagrid('reload');                            
+                            $('#dg').datagrid('reload');
                         }
                     }
                 });
@@ -207,7 +244,8 @@ $.extend($.fn.combobox.defaults, {
         var opts = $(target).combobox('options');
         if (!opts.url)
             return false;
-        $.ajax({type: opts.method, url: opts.url, data: param, dataType: 'json',
+        $.ajax({
+            type: opts.method, url: opts.url, data: param, dataType: 'json',
             success: function (data) {
                 if ($(target).parent().length) {
                     success(data);
@@ -221,7 +259,7 @@ $.extend($.fn.combobox.defaults, {
 });
 
 function initGeneral() {
-    
+
     var arr = "#allOperations,#pagadas,#liberadas,#impos,#expos,#fdates,#ninvoices";
 
     $(document.body).on("click", arr, function () {
@@ -232,7 +270,7 @@ function initGeneral() {
         }
         $('#dg').edatagrid('reload');
     });
-    
+
     var customToolbar = '<td style="padding-left: 5px"><span><span class="l-btn-text">Todas:</span><input type="checkbox" id="allOperations" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Pagadas:</span><input type="checkbox" id="pagadas" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Liberadas:</span><input type="checkbox" id="liberadas" /></span></td>';
@@ -242,21 +280,21 @@ function initGeneral() {
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Fechas:</span><input type="checkbox" id="fdates" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Desde</span><input id="dateini" style="width:100px; text-align: center"></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Hasta</span><input id="dateend" style="width:100px; text-align: center"></span></td>';
-    
+
     $(".datagrid-toolbar").find("table > tbody > tr").append(customToolbar);
-    
+
     $(document.body).on('click', '#traficosLiberados', function () {
         var dateTime = new Date();
         dateTime = moment(dateTime).format("YYYY-MM-DD");
         window.open("/trafico/crud/traficos-liberados?fecha=" + dateTime + "&tipo=50", "viewFile", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
     });
-    
+
     $(document.body).on('click', '#traficosAperturados', function () {
         var dateTime = new Date();
         dateTime = moment(dateTime).format("YYYY-MM-DD");
         window.open("/trafico/crud/traficos-aperturados?fecha=" + dateTime + "&tipo=50", "viewFile", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
     });
-    
+
     var array = arr.split(",");
 
     $.each(array, function (index, value) {
@@ -267,24 +305,11 @@ function initGeneral() {
             }
         }
     });
-    
-    /*$(".mensajero").each(function () {
-        var id = $(this).data("id");
-        $.ajax({url: "/trafico/get/mis-mensajes", cache: false, dataType: "json", data: {idTrafico: id}, type: "POST",
-            success: function (res) {
-                if (res.success === true) {
-                    if (res.cantidad > 0) {
-                        $(".mensajero[data-id=" + id + "]").attr("src", "/images/icons/message-new.png");
-                    }
-                }
-            }
-        });
-    });*/
-    
+
     $.each(['imex', 'msg', 'coves', 'edocuments', 'upl', 'ie', 'estatusExpediente', 'cvePedimento', 'fechaPago', 'estatus', 'fechaEtd', 'fechaLiberacion', 'fechaEntrada', 'fechaPresentacion', 'fechaFacturacion', 'fechaEta', 'fechaRevalidacion', 'fechaPrevio', 'fechaDespacho', 'fechaEtaAlmacen', 'fechaEnvioProforma', 'fechaEnvioDocumentos', 'fechaNotificacion', 'fechaDeposito', 'fechaCitaDespacho', 'fechaProformaTercero', 'fechaArriboTransfer', 'fechaSolicitudTransfer', 'fechaVistoBueno', 'facturas', 'cantidadFacturas', 'cantidadPartes', 'almacen', 'fechaVistoBuenoTercero', 'fechaComprobacion', 'tipoCarga', 'fechaEir', 'fechaInstruccionEspecial', 'idPlanta', 'diasDespacho', 'estatusRepositorio', 'observaciones', 'cumplimientoAdministrativo', 'cumplimientoOperativo', 'ccConsolidado', 'semaforo'], function (index, value) {
         $(".datagrid-editable-input[name='" + value + "']").hide();
     });
-    
+
     $.each(['referencia', 'nombreCliente'], function (index, value) {
         $(document.body).on("input", ".datagrid-editable-input[name='" + value + "']", function () {
             var input = $(this);
@@ -295,5 +320,5 @@ function initGeneral() {
             input[0].selectionStart = input[0].selectionEnd = start;
         });
     });
-    
+
 }

@@ -181,13 +181,13 @@ $(document).ready(function() {
                     editor: {type: "datetimebox"},
                     options: {required: false, validType: "datetime"}
                 },
-                {
-                    field: "fechaEnvioDocumentos",
-                    width: 105,
-                    title: "F. Envio Doctos.",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
-                },
+                // {
+                //     field: "fechaEnvioDocumentos",
+                //     width: 105,
+                //     title: "F. Envio Doctos.",
+                //     editor: {type: "datetimebox"},
+                //     options: {required: false, validType: "datetime"}
+                // },
                 {
                     field: "fechaPago",
                     width: 95,
@@ -238,16 +238,16 @@ $(document).ready(function() {
                         }
                     }
                 },
-                {
-                    field: "fechaInstruccionEspecial",
-                    width: 90,
-                    title: "Justificación",
-                    formatter(value, row) {
-                        if (row.fechaInstruccionEspecial !== null) {
-                            return "Si";
-                        }
-                    }
-                },
+                // {
+                //     field: "fechaInstruccionEspecial",
+                //     width: 90,
+                //     title: "Justificación",
+                //     formatter(value, row) {
+                //         if (row.fechaInstruccionEspecial !== null) {
+                //             return "Si";
+                //         }
+                //     }
+                // },
                 {
                     field: "diasDespacho",
                     width: 100,
@@ -258,37 +258,37 @@ $(document).ready(function() {
                         }
                     }
                 },
-                {
-                    field: "cumplimientoOperativo",
-                    width: 100,
-                    title: "Cump. Ope.",
-                    formatter: function (value, row) {
-                        if (parseInt(row.cumplimientoOperativo) === 1) {
-                            return 'Si';
-                        }
-                        if (parseInt(row.cumplimientoOperativo) === 0) {
-                            return 'No';
-                        }
-                    },
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            panelHeight: 'auto',
-                            valueField: 'value',
-                            textField: 'name',
-                            data: [
-                                {
-                                    value: '0',
-                                    name: 'No'
-                                },
-                                {
-                                    value: '1',
-                                    name: 'Si'
-                                }
-                            ]
-                        }
-                    }
-                },
+                // {
+                //     field: "cumplimientoOperativo",
+                //     width: 100,
+                //     title: "Cump. Ope.",
+                //     formatter: function (value, row) {
+                //         if (parseInt(row.cumplimientoOperativo) === 1) {
+                //             return 'Si';
+                //         }
+                //         if (parseInt(row.cumplimientoOperativo) === 0) {
+                //             return 'No';
+                //         }
+                //     },
+                //     editor: {
+                //         type: 'combobox',
+                //         options: {
+                //             panelHeight: 'auto',
+                //             valueField: 'value',
+                //             textField: 'name',
+                //             data: [
+                //                 {
+                //                     value: '0',
+                //                     name: 'No'
+                //                 },
+                //                 {
+                //                     value: '1',
+                //                     name: 'Si'
+                //                 }
+                //             ]
+                //         }
+                //     }
+                // },
                 {
                     field: "observaciones",
                     width: 250,
@@ -336,7 +336,7 @@ $(document).ready(function() {
     });
 
     $(document.body).on('click', '#inventario', function () {
-        var dateTime = new Date();
+        let dateTime = new Date();
         dateTime = moment(dateTime).format("YYYY-MM-DD");
         window.open("/trafico/crud/traficos-inventario?fechaIni=" + dateTime + "&fechaFin=" + dateTime + "&tipo=80&tipoAduana=0", "reporteInventario", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
     });

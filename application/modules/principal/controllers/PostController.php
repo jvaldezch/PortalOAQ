@@ -321,4 +321,105 @@ class Principal_PostController extends Zend_Controller_Action {
         }
     }
 
+    public function enviarFormatoQuejaAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "name" => "StringToUpper",
+                    "area" => "StringToUpper",
+                    "office" => "StringToUpper",
+                    "othertext" => "StringToUpper",
+                    "about" => "StringToUpper",
+                    "tellus" => "StringToUpper",
+                    "how" => "StringToUpper",
+                    "matter" => "StringToLower"
+                );
+                $v = array(
+                    "name" => "NotEmpty",
+                    "area" => "NotEmpty",
+                    "office" => "NotEmpty",
+                    "othertext" => "NotEmpty",
+                    "about" => "NotEmpty",
+                    "tellus" => "NotEmpty",
+                    "how" => "NotEmpty",
+                    "matter" => "NotEmpty",
+                );
+                $input = new Zend_Filter_Input($f, $v, $request->getPost());
+
+                $view = new Zend_View();
+                $view->setScriptPath(APPLICATION_PATH . "/../library/Templates/");
+
+                $emails = new OAQ_EmailsTraffic();
+                $emails->setSubject("OAQ te escucha " . $input->fecha);
+                if (APPLICATION_ENV == "production") {
+                    $emails->addTo("dlopez@oaq.com.mx", "David López Rosales");
+                    $emails->addTo("daniela.gomez@oaq.com.mx", "Daniela Gomez");
+                    $emails->addBcc("ti.jvaldez@oaq.com.mx", "Jaime E. Valdez");
+                } else if (APPLICATION_ENV == "staging" || APPLICATION_ENV == "development") {
+                    $emails->addTo("ti.jvaldez@oaq.com.mx", "Jaime E. Valdez");
+                }
+
+                $mppr = new Principal_Model_OaqTeEscucha();
+
+                $arr = array(
+                    "nombre" => $input->name,
+                    "area" => $input->area,
+                    "oficina" => $input->office,
+                    "tema" => $input->matter,
+                    "otro" => $input->othertext,
+                    "detalle" => $input->office,
+                    "implicacion" => $input->tellus,
+                    "como" => $input->how,
+                    "usuario" => $this->_session->username
+                );
+
+                $mppr->agregar($arr);
+
+                $view->name = $input->name;
+                $view->area = $input->area;
+                $view->office = $input->office;
+
+                $matter = '';
+                if ($input->matter == 'ambience') {
+                    $matter = 'Ambiente de trabajo';
+                }
+                if ($input->matter == 'load') {
+                    $matter = 'Carga de trabajo';
+                }
+                if ($input->matter == 'extensive') {
+                    $matter = 'Jornadas de trabajo extensas';
+                }
+                if ($input->matter == 'ledaership') {
+                    $matter = 'Liderazgo';
+                }
+                if ($input->matter == 'violence') {
+                    $matter = 'Violencia laboral (Acoso psicológico, hostigamiento, malos tratos)';
+                }
+                if ($input->matter == 'other') {
+                    $matter = $input->othertext;
+                }
+                $view->matter = $matter;
+                $view->about = $input->about;
+                $view->tellus = $input->tellus;
+                $view->how = $input->how;
+
+                $emails->contenidoPersonalizado($view->render("oaq-te-escucha.phtml"));
+                if ($emails->send()) {
+                    $this->_helper->json(array("success" => true));
+                }
+
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $e) {
+            $this->_helper->json(array("success" => false, "message" => $e->getMessage()));
+        }
+    }
+
 }

@@ -203,12 +203,16 @@ class Principal_IndexController extends Zend_Controller_Action {
     public function oaqTeEscuchaAction() {
         $this->view->title = $this->_appconfig->getParam("title") . " " . "te escucha";
         $this->view->headMeta()->appendName("description", "");
+        $this->view->headLink()
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
             ->appendFile("/js/common/jquery-1.9.1.min.js")
             ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
             ->appendFile("/js/common/jquery.form.min.js")
             ->appendFile("/js/common/jquery.validate.min.js")
             ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
             ->appendFile("/js/principal/index/oaq-te-escucha.js?" . time());
     }
     

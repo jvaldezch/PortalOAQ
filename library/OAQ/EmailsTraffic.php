@@ -92,7 +92,10 @@ class OAQ_EmailsTraffic {
 
     public function send() {
         try {
-            $this->mail->Send();
+            if ($this->mail->Send()) {
+                return true;
+            }
+            return null;
         } catch (Exception $ex) {
             $this->log->logEntry("Exception found", (string) $ex->getMessage(), "localhost", "RabbitMQ");
         }

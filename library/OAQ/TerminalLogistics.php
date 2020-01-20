@@ -632,7 +632,7 @@ class OAQ_TerminalLogistics {
     }
 
     public function crearZip($zipFilename, $files) {
-        $tmpDirectory = "D:\\Tmp\zips";
+        $tmpDirectory = "D:\\Tmp\\zips";
         if (APPLICATION_ENV === "production" || APPLICATION_ENV === "staging") {
             $tmpDirectory = "/tmp/zips";
         }

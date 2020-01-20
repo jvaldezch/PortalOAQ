@@ -15,11 +15,22 @@ function openTraffic() {
 function documentsComplete() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        $.ajax({url: "/trafico/post/trafico-documentos-completos", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
-            success: function(res) {
+        $.ajax({
+            url: "/trafico/post/trafico-documentos-completos",
+            cache: false,
+            dataType: "json",
+            data: {id: row.id},
+            type: "POST",
+            success: function (res) {
                 if (res.success === true) {
-                    $.alert({title: "Confirmación", type: "green", content: "Los datos han sido guardados de manera exitosa.", boxWidth: "350px", useBootstrap: false});
-                    $('#dg').datagrid('reload');                            
+                    $.alert({
+                        title: "Confirmación",
+                        type: "green",
+                        content: "Los datos han sido guardados de manera exitosa.",
+                        boxWidth: "350px",
+                        useBootstrap: false
+                    });
+                    $('#dg').datagrid('reload');
                 }
             }
         });
@@ -29,11 +40,18 @@ function documentsComplete() {
 function justification() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        $.ajax({url: "/trafico/post/trafico-justificar", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
-            success: function(res) {
+        $.ajax({
+            url: "/trafico/post/trafico-justificar", cache: false, dataType: "json", data: {id: row.id}, type: "POST",
+            success: function (res) {
                 if (res.success === true) {
-                    $.alert({title: "Confirmación", type: "green", content: "Los datos han sido guardados de manera exitosa.", boxWidth: "350px", useBootstrap: false});
-                    $('#dg').datagrid('reload');                            
+                    $.alert({
+                        title: "Confirmación",
+                        type: "green",
+                        content: "Los datos han sido guardados de manera exitosa.",
+                        boxWidth: "350px",
+                        useBootstrap: false
+                    });
+                    $('#dg').datagrid('reload');
                 }
             }
         });
@@ -55,7 +73,8 @@ function formatEstatus(val, row) {
 }
 
 function misMensajes(ids) {
-    $.ajax({url: '/trafico/get/alertas-de-mensajes=', dataType: 'json', type: 'GET',
+    $.ajax({
+        url: '/trafico/get/alertas-de-mensajes=', dataType: 'json', type: 'GET',
         data: {ids: ids},
         success: function (res) {
             if (res.success === true) {
@@ -68,17 +87,18 @@ function misMensajes(ids) {
 }
 
 function formatMensajero(val, row) {
-    return '<img src="/images/icons/message.png" class="mensajero" data-id="' + row.id +'">';
+    return '<img src="/images/icons/message.png" class="mensajero" data-id="' + row.id + '">';
 }
 
 function formatCarrierNaviera(val, row) {
     if (row.carrierNaviera) {
         var naviera = '';
-        $.ajax({ url: "/trafico/crud/navieras?idNaviera=" + row.carrierNaviera, type: 'get', dataType: 'json', async: false,
-            success: function(res) {
+        $.ajax({
+            url: "/trafico/crud/navieras?idNaviera=" + row.carrierNaviera, type: 'get', dataType: 'json', async: false,
+            success: function (res) {
                 naviera = res.nombre;
-            } 
-         });
+            }
+        });
         return naviera;
     } else {
         return '';
@@ -91,7 +111,7 @@ function formatLink(val, row) {
 
 function formatImpo(val, row) {
     if (row.ie === "TOCE.IMP") {
-        return '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>';        
+        return '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>';
     } else {
         return '<i class="fas fa-arrow-circle-up" style="color: #2e963a"></i>';
     }
@@ -134,9 +154,9 @@ function updateSitawin() {
                     type: "get",
                     dataType: "json",
                     data: {id: row.id},
-                    success: function(res) {
+                    success: function (res) {
                         if (res.success === true) {
-                            $('#dg').datagrid('reload');                            
+                            $('#dg').datagrid('reload');
                         }
                     }
                 });
@@ -147,15 +167,15 @@ function updateSitawin() {
 
 function formatArchive(val, row) {
     if (parseInt(val) === 1) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';        
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
     } else if (parseInt(val) === 2) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #0099ff; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #0099ff; cursor: pointer; padding-top: 2px"></i>';
     } else if (parseInt(val) === 3) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #F59211; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #F59211; cursor: pointer; padding-top: 2px"></i>';
     } else if (parseInt(val) === 4) {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: green; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: green; cursor: pointer; padding-top: 2px"></i>';
     } else {
-        return '<i class="fas fa-archive" data-id="' + row.id +'" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
     }
 }
 
@@ -219,7 +239,7 @@ $(document).ready(function () {
         idField: 'id',
         queryParams: {
             tipoAduana: tipoAduana
-	},
+        },
         url: '/trafico/crud/traficos',
         updateUrl: '/trafico/crud/trafico-actualizar',
         rowStyler: function (index, row) {
@@ -240,23 +260,23 @@ $(document).ready(function () {
             row.editing = false;
             $(this).datagrid('refreshRow', index);
         },
-        onCancelEdit:function(index,row){
+        onCancelEdit: function (index, row) {
             row.editing = false;
             $(this).datagrid('refreshRow', index);
         },
         onAdd: function (index, row) {
         },
-        onRowContextMenu: function(e, index, row) {    
+        onRowContextMenu: function (e, index, row) {
             e.preventDefault();
             $('#mm').menu('show', {
                 left: e.pageX,
                 top: e.pageY
             });
         },
-        onLoadSuccess:function(){
+        onLoadSuccess: function () {
             var ids = [];
             var data = $('#dg').datagrid('getRows');
-            $.each(data, function( index, value ){
+            $.each(data, function (index, value) {
                 ids.push(value.id);
             });
             if (ids.length > 0) {
@@ -264,92 +284,133 @@ $(document).ready(function () {
             }
         },
         remoteFilter: true,
-        toolbar:[{
-            text:'Guardar', 
-            iconCls:'icon-save',
-            handler: function(){
-                $('#dg').edatagrid('saveRow');               
+        toolbar: [{
+            text: 'Guardar',
+            iconCls: 'icon-save',
+            handler: function () {
+                $('#dg').edatagrid('saveRow');
             }
         }, {
-            text:'Cancelar', 
-            iconCls:'icon-undo',
-            handler: function(){
-                $('#dg').edatagrid('cancelRow');               
+            text: 'Cancelar',
+            iconCls: 'icon-undo',
+            handler: function () {
+                $('#dg').edatagrid('cancelRow');
             }
         }, {
-            text:'Actualizar', 
-            iconCls:'icon-reload',
-            handler: function(){
-                $('#dg').edatagrid('reload');               
+            text: 'Actualizar',
+            iconCls: 'icon-reload',
+            handler: function () {
+                $('#dg').edatagrid('reload');
             }
         }],
         frozenColumns: [[
-                {field: 'estatus', width: 20, title: '',
-                    formatter: formatEstatus
-                },
-                {field: 'imex', width: 30, checkbox: false, title: '', formatter: formatImpo },
-                {field: 'msg', width: 30, checkbox: false, title: '', formatter: formatMensajero },
-                {field: 'estatusExpediente', width: 30, title: "",
-                    formatter: formatArchive},
-                {field: 'patente', width: 50, title: 'Patente'},
-                {field: 'aduana', width: 50, title: 'Aduana'},
-                {field: 'pedimento', width: 80, title: 'Pedimento'},
-                {field: 'referencia', width: 100, title: 'Referencia', formatter: formatLink }
+            {
+                field: 'estatus', width: 20, title: '',
+                formatter: formatEstatus
+            },
+            {field: 'imex', width: 30, checkbox: false, title: '', formatter: formatImpo},
+            {field: 'msg', width: 30, checkbox: false, title: '', formatter: formatMensajero},
+            {
+                field: 'estatusExpediente', width: 30, title: "",
+                formatter: formatArchive
+            },
+            {field: 'patente', width: 50, title: 'Patente'},
+            {field: 'aduana', width: 50, title: 'Aduana'},
+            {field: 'pedimento', width: 80, title: 'Pedimento'},
+            {field: 'referencia', width: 100, title: 'Referencia', formatter: formatLink}
         ]],
         columns: [[
-                {field: 'cvePedimento', width: 40, title: 'Cve.'},
-                {field: 'nombreCliente', width: 300, title: 'Nombre Cliente'},
-                {field: 'fechaEta', width: 90, title: 'F. ETA', editor: {type: 'datetimebox'}, options: { required: false, validType: 'datetime'}},
-                {field: 'fechaEnvioDocumentos', width: 105, title: 'F. Envio Doctos.', editor: {type: 'datetimebox'}, options: { required: false, validType: 'datetime'}},
-                {field: 'fechaPago', width: 90, title: 'F. Pago', editor: {type: 'datetimebox'}, options: {required: false, validType: 'datetime'}},
-                {field: 'fechaLiberacion', width: 90, title: 'F. Liberación', editor: {type: 'datetimebox'}, options: { required: false, validType: 'datetime'}},
-                {field: 'fechaFacturacion', width: 90, title: 'F. Facturación', editor: {type: 'datetimebox'}, options: { required: false, validType: 'datetime'}},
-                {field: 'tipoCarga', width: 150, title: 'Tipo de Carga', editor: {
-                        type: 'combobox',
-                        options: {
-                            valueField: 'id',
-                            textField: 'tipoCarga',
-                            panelWidth: 150,
-                            panelHeight: 120
-                        }
-                    }, formatter(value, row){
-                        return row.carga;
-                    }},
-                {field: 'fechaInstruccionEspecial', width: 90, title: 'Justificación', 
-                    formatter(value, row){
-                        if (row.fechaInstruccionEspecial !== null) {
-                            return 'Si';
-                            
-                        }
-                    }},
-                {field: 'diasDespacho', width: 100, title: 'Días Despacho', 
-                    formatter(value, row){
-                        if (row.fechaLiberacion !== null) {
-                            return value;
-                            
-                        }
-                    }},
-                {field: 'observaciones', width: 250, title: 'Observaciones', editor: {type: 'text'}},
-                {field: 'semaforo', width: 100, title: 'Semaforo',
-                    formatter(value, row){
-                        if (row.semaforo == 1) {
-                            return 'Verde';
-                        } else if (row.semaforo == 2) {
-                            return 'Rojo';
-                        } else {
-                            return '';
-                        }
+            {field: 'cvePedimento', width: 40, title: 'Cve.'},
+            {field: 'nombreCliente', width: 300, title: 'Nombre Cliente'},
+            {
+                field: 'fechaEta',
+                width: 90,
+                title: 'F. ETA',
+                editor: {type: 'datetimebox'},
+                options: {required: false, validType: 'datetime'}
+            },
+            // {
+            //     field: 'fechaEnvioDocumentos',
+            //     width: 105,
+            //     title: 'F. Envio Doctos.',
+            //     editor: {type: 'datetimebox'},
+            //     options: {required: false, validType: 'datetime'}
+            // },
+            {
+                field: 'fechaPago',
+                width: 90,
+                title: 'F. Pago',
+                editor: {type: 'datetimebox'},
+                options: {required: false, validType: 'datetime'}
+            },
+            {
+                field: 'fechaLiberacion',
+                width: 90,
+                title: 'F. Liberación',
+                editor: {type: 'datetimebox'},
+                options: {required: false, validType: 'datetime'}
+            },
+            {
+                field: 'fechaFacturacion',
+                width: 90,
+                title: 'F. Facturación',
+                editor: {type: 'datetimebox'},
+                options: {required: false, validType: 'datetime'}
+            },
+            {
+                field: 'tipoCarga', width: 150, title: 'Tipo de Carga', editor: {
+                    type: 'combobox',
+                    options: {
+                        valueField: 'id',
+                        textField: 'tipoCarga',
+                        panelWidth: 150,
+                        panelHeight: 120
+                    }
+                }, formatter(value, row) {
+                    return row.carga;
+                }
+            },
+            // {
+            //     field: 'fechaInstruccionEspecial', width: 90, title: 'Justificación',
+            //     formatter(value, row) {
+            //         if (row.fechaInstruccionEspecial !== null) {
+            //             return 'Si';
+            //
+            //         }
+            //     }
+            // },
+            {
+                field: 'diasDespacho', width: 100, title: 'Días Despacho',
+                formatter(value, row) {
+                    if (row.fechaLiberacion !== null) {
+                        return value;
 
-                    }}
-            ]]
+                    }
+                }
+            },
+            {field: 'observaciones', width: 250, title: 'Observaciones', editor: {type: 'text'}},
+            {
+                field: 'semaforo', width: 100, title: 'Semaforo',
+                formatter(value, row) {
+                    if (row.semaforo == 1) {
+                        return 'Verde';
+                    } else if (row.semaforo == 2) {
+                        return 'Rojo';
+                    } else {
+                        return '';
+                    }
+
+                }
+            }
+        ]]
     });
-    
+
     $(document.body).on('click', '#traficosLiberados', function () {
         var dateTime = new Date();
         dateTime = moment(dateTime).format("YYYY-MM-DD");
         window.open("/trafico/crud/traficos-liberados?fecha=" + dateTime + "&tipo=54", "viewFile", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
     });
-    
+
     var customToolbar = '<td style="padding-left: 5px"><span><span class="l-btn-text">Todas:</span><input type="checkbox" id="allOperations" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Pagadas:</span><input type="checkbox" id="pagadas" /></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Liberadas:</span><input type="checkbox" id="liberadas" /></span></td>';
@@ -361,7 +422,7 @@ $(document).ready(function () {
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Hasta</span><input id="dateend" style="width:100px; text-align: center"></span></td>';
 
     $(".datagrid-toolbar").find("table > tbody > tr").append(customToolbar);
-    
+
     var arr = "#allOperations,#pagadas,#liberadas,#impos,#expos,#fdates,#ninvoices";
 
     $(document.body).on("click", arr, function () {
@@ -372,7 +433,7 @@ $(document).ready(function () {
         }
         $('#dg').edatagrid('reload');
     });
-    
+
     var array = arr.split(",");
 
     $.each(array, function (index, value) {
@@ -383,7 +444,7 @@ $(document).ready(function () {
             }
         }
     });
-    
+
     $(".mensajero").each(function () {
         var id = $(this).data("id");
         $.ajax({
@@ -403,11 +464,11 @@ $(document).ready(function () {
     });
 
     dg.edatagrid('enableFilter', []);
-    
+
     $.each(['imex', 'msg', 'ie', 'estatusExpediente', 'cvePedimento', 'fechaPago', 'fechaEtd', 'fechaLiberacion', 'fechaEntrada', 'fechaPresentacion', 'fechaFacturacion', 'fechaEta', 'fechaRevalidacion', 'fechaPrevio', 'fechaDespacho', 'fechaEtaAlmacen', 'fechaEnvioProforma', 'fechaEnvioDocumentos', 'fechaNotificacion', 'fechaDeposito', 'fechaCitaDespacho', 'fechaProformaTercero', 'fechaArriboTransfer', 'fechaSolicitudTransfer', 'fechaVistoBueno', 'facturas', 'cantidadFacturas', 'cantidadPartes', 'almacen', 'fechaVistoBuenoTercero', 'fechaComprobacion', 'tipoCarga', 'fechaEir', 'fechaInstruccionEspecial', 'idPlanta', 'diasDespacho', 'estatus', 'observaciones', 'semaforo'], function (index, value) {
         $(".datagrid-editable-input[name='" + value + "']").hide();
     });
-    
+
     $.each(['referencia', 'nombreCliente'], function (index, value) {
         $(document.body).on("input", ".datagrid-editable-input[name='" + value + "']", function () {
             var input = $(this);
@@ -418,7 +479,7 @@ $(document).ready(function () {
             input[0].selectionStart = input[0].selectionEnd = start;
         });
     });
-    
+
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
@@ -433,7 +494,7 @@ $(document).ready(function () {
         dateini = yyyy + "-" + zeroPad(mm, 2) + "-01";
         Cookies.set("dateini", dateini);
     }
-    
+
     if (Cookies.get("dateend") !== undefined) {
         dateend = Cookies.get("dateend");
     } else {
@@ -445,17 +506,17 @@ $(document).ready(function () {
         value: dateini,
         required: true,
         showSeconds: false,
-        onChange:  function(newValue) {
+        onChange: function (newValue) {
             Cookies.set('dateini', newValue);
             dg.edatagrid('reload');
         }
     });
-    
+
     $("#dateend").datebox({
         value: dateend,
         required: true,
         showSeconds: false,
-        onChange:  function(newValue) {
+        onChange: function (newValue) {
             Cookies.set('dateend', newValue);
             dg.edatagrid('reload');
         }
