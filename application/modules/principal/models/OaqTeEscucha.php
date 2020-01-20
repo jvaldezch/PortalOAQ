@@ -16,4 +16,13 @@ class Principal_Model_OaqTeEscucha {
         return null;
     }
 
+    public function obtenerTodos() {
+        $sql = $this->_db_table->select();
+        $stmt = $this->_db_table->fetchAll($sql);
+        if ($stmt) {
+            return $stmt->toArray();
+        }
+        return null;
+    }
+
 }

@@ -165,4 +165,60 @@ class Rrhh_IndexController extends Zend_Controller_Action {
         }
     }
 
+    public function buzonAction() {
+        $this->view->title = $this->_appconfig->getParam("title") . " Buzón de quejas y denuncias";
+        $this->view->headMeta()->appendName("description", "");
+        $this->view->headLink()
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+        $this->view->headScript()
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/rrhh/index/buzon.js?" . time());
+
+        $f = array(
+            "*" => array("StringTrim", "StripTags"),
+            "page" => "Digits",
+            "size" => "Digits",
+        );
+        $v = array(
+            "page" => array(new Zend_Validate_Int(), "default" => 1),
+            "size" => array(new Zend_Validate_Int(), "default" => 20),
+        );
+        $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+
+        $mppr = new Principal_Model_OaqTeEscucha();
+
+        $rows = $mppr->obtenerTodos();
+        if (isset($rows) && !empty($rows)) {
+            $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($rows));
+            $paginator->setItemCountPerPage(25);
+            $paginator->setCurrentPageNumber($i->page);
+            $this->view->paginator = $paginator;
+        }
+    }
+
+    public function verQuejaDenunciaAction() {
+        $this->view->title = $this->_appconfig->getParam("title") . " Queja o denuncia";
+        $this->view->headMeta()->appendName("description", "");
+        $this->view->headLink()
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+        $this->view->headScript()
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/rrhh/index/ver-queja-denuncia.js?" . time());
+
+        $f = array(
+            "*" => array("StringTrim", "StripTags"),
+            "id" => "Digits",
+        );
+        $v = array(
+            "id" => array(new Zend_Validate_Int(), "NotEmpty"),
+        );
+        $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+
+        $mppr = new Principal_Model_OaqTeEscucha();
+    }
+
 }

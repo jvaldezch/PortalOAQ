@@ -1,0 +1,62 @@
+<?php
+function temas($value, $other = null) {
+    $matter = '';
+    if ($value == 'ambience') {
+        $matter = 'Ambiente de trabajo';
+    }
+    if ($value == 'load') {
+        $matter = 'Carga de trabajo';
+    }
+    if ($value == 'extensive') {
+        $matter = 'Jornadas de trabajo extensas';
+    }
+    if ($value == 'ledaership') {
+        $matter = 'Liderazgo';
+    }
+    if ($value == 'violence') {
+        $matter = 'Violencia laboral (Acoso psicológico, hostigamiento, malos tratos)';
+    }
+    if ($value == 'other') {
+        $matter = $other;
+    }
+    return $matter;
+}
+?>
+<table class="traffic-table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Nombre</th>
+        <th>Área</th>
+        <th>Oficina</th>
+        <th>Tema</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if (!empty($this->paginator)) { ?>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr>
+                <td><?= $item['id'] ?></td>
+                <td><?= $item['nombre'] ?></td>
+                <td><?= $item['area'] ?></td>
+                <td><?= $item['oficina'] ?></td>
+                <td><?= temas($item['tema'], $item['otro']) ?></td>
+                <td>
+                    <a href="/rrhh/index/ver-queja-denuncia">
+                        <i class="far fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="6">
+                <em>No hay registros.</em>
+            </td>
+        </tr>
+    <?php } ?>
+    </tbody>
+</table>
+
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator) : null ?>
