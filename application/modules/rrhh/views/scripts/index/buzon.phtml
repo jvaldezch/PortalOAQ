@@ -30,6 +30,7 @@ function temas($value, $other = null) {
         <th>Área</th>
         <th>Oficina</th>
         <th>Tema</th>
+        <th>Creado</th>
         <th></th>
     </tr>
     </thead>
@@ -42,6 +43,7 @@ function temas($value, $other = null) {
                 <td><?= $item['area'] ?></td>
                 <td><?= $item['oficina'] ?></td>
                 <td><?= temas($item['tema'], $item['otro']) ?></td>
+                <td><?= $item['creado'] ?></td>
                 <td>
                     <a href="/rrhh/index/ver-queja-denuncia">
                         <i class="far fa-edit"></i>
@@ -51,7 +53,7 @@ function temas($value, $other = null) {
         <?php } ?>
     <?php } else { ?>
         <tr>
-            <td colspan="6">
+            <td colspan="7">
                 <em>No hay registros.</em>
             </td>
         </tr>

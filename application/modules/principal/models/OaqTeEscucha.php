@@ -17,7 +17,8 @@ class Principal_Model_OaqTeEscucha {
     }
 
     public function obtenerTodos() {
-        $sql = $this->_db_table->select();
+        $sql = $this->_db_table->select()
+            ->order("creado DESC");
         $stmt = $this->_db_table->fetchAll($sql);
         if ($stmt) {
             return $stmt->toArray();

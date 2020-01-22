@@ -50,7 +50,7 @@
                                 <div>
                                     <a title="Trafico Image <?= $item["id"] ?>" class="image-link traffic-thumb" target="_blank" href="/clientes/expediente/read-image?id=<?= $item["id"] ?>&time=<?= microtime() ?>" data-id="<?= $item["id"] ?>">
                                         <?php if (isset($item['miniatura'])) { ?>
-                                            <img class="view-photo" src="/clientes/expediente/read-thumbnail?id=<?= $item["id"] ?>&time=<?= microtime() ?>" >
+                                            <img class="view-photo" src="/clientes/expediente/read-thumbnail?id=<?= $item["id"] ?>&time=<?= microtime() ?>" width="150px" >
                                         <?php } else { ?>
                                             <img class="view-photo" src="/images/not_available.gif" width="150px" >
                                         <?php } ?>
@@ -60,11 +60,6 @@
                                     <div style="float: left; font-size: 11px">
                                         <?= isset($item["nombre"]) ? $item["nombre"] : strtolower($item["imagen"]) ?>
                                     </div>
-                                    <?php if (!isset($this->borrar)) { ?>
-                                        <div style="float: right">
-                                            <div class="traffic-icon traffic-icon-delete" style="cursor: pointer" onclick="borrarImagen(<?= $item["id"] ?>);"></div>
-                                        </div>
-                                    <?php } ?>
                                 </div>
                             </div>
                         <?php } else { ?>
