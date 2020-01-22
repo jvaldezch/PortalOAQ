@@ -26,7 +26,7 @@
                 <div>
                     <a title="Trafico Image <?= $item["id"] ?>" class="image-link traffic-thumb" href="/trafico/data/read-image?id=<?= $item["id"] ?>&time=<?= microtime() ?>" data-id="<?= $item["id"] ?>">
                         <?php if (isset($item['miniatura'])) { ?>
-                            <img class="view-photo" src="/trafico/data/read-thumbnail?id=<?= $item["id"] ?>&time=<?= microtime() ?>" >
+                            <img class="view-photo" src="/trafico/data/read-thumbnail?id=<?= $item["id"] ?>&time=<?= microtime() ?>" width="150px" >
                         <?php } else { ?>
                             <img class="view-photo" src="/images/not_available.gif" width="150px" >
                         <?php } ?>
