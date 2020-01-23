@@ -3433,4 +3433,125 @@ class Trafico_PostController extends Zend_Controller_Action {
         }
     }
 
+    public function agregarRfcConsultaEdocAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                    "rfc" => "StringToUpper"
+                );
+                $v = array(
+                    "id" => new Zend_Validate_Int(),
+                    "rfc" => new Zend_Validate_NotEmpty(),
+                );
+                $i = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($i->isValid("id") && $i->isValid("rfc")) {
+                    $mppr = new Trafico_Model_RfcConsultaMapper();
+                    if (!($mppr->verificarRfcEdocument($i->id, $i->rfc))) {
+                        $arr = array(
+                            "idCliente" => $i->id,
+                            "rfc" => $i->rfc,
+                            "tipo" => 'edoc'
+                        );
+                        if ($mppr->agregar($arr)) {
+                            $this->_helper->json(array("success" => true));
+                        } else {
+                            $this->_helper->json(array("success" => false, "message" => "No se pudo agregar"));
+                        }
+                    } else {
+                        $this->_helper->json(array("success" => false, "message" => "RFC ya existe"));
+                    }
+                } else {
+                    throw new Exception("Invalid input.");
+                }
+            } else {
+                throw new Exception("Invalid request type.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function agregarRfcConsultaCoveAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                    "rfc" => "StringToUpper"
+                );
+                $v = array(
+                    "id" => new Zend_Validate_Int(),
+                    "rfc" => new Zend_Validate_NotEmpty(),
+                );
+                $i = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($i->isValid("id") && $i->isValid("rfc")) {
+                    $mppr = new Trafico_Model_RfcConsultaMapper();
+                    if (!($mppr->verificarRfcEdocument($i->id, $i->rfc))) {
+                        $arr = array(
+                            "idCliente" => $i->id,
+                            "rfc" => $i->rfc,
+                            "tipo" => 'cove'
+                        );
+                        if ($mppr->agregar($arr)) {
+                            $this->_helper->json(array("success" => true));
+                        } else {
+                            $this->_helper->json(array("success" => false, "message" => "No se pudo agregar"));
+                        }
+                    } else {
+                        $this->_helper->json(array("success" => false, "message" => "RFC ya existe"));
+                    }
+                } else {
+                    throw new Exception("Invalid input.");
+                }
+            } else {
+                throw new Exception("Invalid request type.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function removerRfcConsultaAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                );
+                $v = array(
+                    "id" => new Zend_Validate_Int(),
+                );
+                $i = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($i->isValid("id")) {
+                    $mppr = new Trafico_Model_RfcConsultaMapper();
+                    if (!($mppr->borrar($i->id))) {
+                        $this->_helper->json(array("success" => true));
+                    } else {
+                        $this->_helper->json(array("success" => false, "message" => "No se pudo borrar"));
+                    }
+                } else {
+                    throw new Exception("Invalid input.");
+                }
+            } else {
+                throw new Exception("Invalid request type.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
 }

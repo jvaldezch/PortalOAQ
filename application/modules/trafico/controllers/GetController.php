@@ -1336,7 +1336,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                     if (APPLICATION_ENV == 'production') {
                         $directory = $this->appConfig->getParam("expdest");
                     } else {
-                        $directory = "D:\\wamp64\\tmp\\expedientes";
+                        $directory = "D:\\xampp\\tmp\\expedientes";
                     }
 
                     $sello = $vucem->_obtenerSello($input->id);
@@ -1352,7 +1352,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                         "archivo" => base64_encode(file_get_contents($directory . DIRECTORY_SEPARATOR . $arr["nombreArchivo"])),
                         "hash" => sha1_file($directory . DIRECTORY_SEPARATOR . $arr["nombreArchivo"]),
                         "correoElectronico" => "soporte@oaq.com.mx",
-                        "rfcConsulta" => "OAQ030623UL8"
+                        "rfcConsulta" => $rfcConsulta
                     );
                     $ed["usuario"] = array(
                         "username" => $sello["rfc"],

@@ -9,49 +9,80 @@ class Trafico_Model_RfcConsultaMapper {
     }
 
     public function obtener($idCliente) {
-        try {
-            $sql = $this->_db_table->select()
-                    ->where('idCliente = ?', $idCliente);
-            $stmt = $this->_db_table->fetchAll($sql);
-            if ($stmt) {
-                $data = array();
-                foreach ($stmt->toArray() as $item) {
-                    if ($item["tipo"] == 'cove') {
-                        $data["cove"][$item["id"]] = $item["rfc"];
-                    } elseif ($item["tipo"] == 'edoc') {
-                        $data["edoc"][$item["id"]] = $item["rfc"];
-                    }
+        $sql = $this->_db_table->select()
+                ->where('idCliente = ?', $idCliente);
+        $stmt = $this->_db_table->fetchAll($sql);
+        if ($stmt) {
+            $data = array();
+            foreach ($stmt->toArray() as $item) {
+                if ($item["tipo"] == 'cove') {
+                    $data["cove"][$item["id"]] = $item["rfc"];
+                } elseif ($item["tipo"] == 'edoc') {
+                    $data["edoc"][$item["id"]] = $item["rfc"];
                 }
-                return $data;
             }
-            return false;
-        } catch (Zend_Db_Adapter_Exception $e) {
-            throw new Exception("Zend DB Exception found on " . __METHOD__ . " >> " . $e->getMessage());
+            return $data;
         }
+        return false;
     }
 
     public function rfcCove($idCliente) {
-        try {
-            
-        } catch (Zend_Db_Adapter_Exception $e) {
-            throw new Exception("Zend DB Exception found on " . __METHOD__ . " >> " . $e->getMessage());
-        }
+
     }
 
     public function rfcEdocument($idCliente) {
-        try {
-            $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("rfc"))
-                    ->where("idCliente = ?", $idCliente)
-                    ->where("tipo = 'edoc'");
-            $stmt = $this->_db_table->fetchRow($sql);
-            if ($stmt) {
-                $data = $stmt->toArray();
-                return $data["rfc"];
-            }
-        } catch (Zend_Db_Adapter_Exception $e) {
-            throw new Exception("Zend DB Exception found on " . __METHOD__ . " >> " . $e->getMessage());
+        $sql = $this->_db_table->select()
+                ->from($this->_db_table, array("rfc"))
+                ->where("idCliente = ?", $idCliente)
+                ->where("tipo = 'edoc'");
+        $stmt = $this->_db_table->fetchRow($sql);
+        if ($stmt) {
+            $data = $stmt->toArray();
+            return $data["rfc"];
         }
+        return null;
+    }
+
+    public function verificarRfcEdocument($idCliente, $rfc) {
+        $sql = $this->_db_table->select()
+            ->from($this->_db_table, array("rfc"))
+            ->where("idCliente = ?", $idCliente)
+            ->where("rfc = ?", $rfc)
+            ->where("tipo = 'edoc'");
+        $stmt = $this->_db_table->fetchRow($sql);
+        if ($stmt) {
+            return true;
+        }
+        return null;
+    }
+
+    public function verificarRfcCove($idCliente, $rfc) {
+        $sql = $this->_db_table->select()
+            ->from($this->_db_table, array("rfc"))
+            ->where("idCliente = ?", $idCliente)
+            ->where("rfc = ?", $rfc)
+            ->where("tipo = 'cove'");
+        $stmt = $this->_db_table->fetchRow($sql);
+        if ($stmt) {
+            return true;
+        }
+        return null;
+    }
+
+    public function agregar($arr) {
+        $stmt = $this->_db_table->insert($arr);
+        if ($stmt) {
+            return true;
+        }
+        return null;
+    }
+
+    public function borrar($id) {
+        $stmt = $this->_db_table->delete(array("id = ?" => $id));
+        if ($stmt) {
+            return true;
+        }
+        return null;
     }
 
 }

@@ -912,10 +912,12 @@ class OAQ_TraficoVucem {
             if ($arr["idSelloCliente"] !== null) {
                 $ss = new Trafico_Model_SellosClientes();
                 $sello = $ss->obtenerPorId($arr["idSelloCliente"]);
+                $sello['tipo'] = 'cliente';
             }
             if ($arr["idSelloAgente"] !== null) {
                 $ss = new Trafico_Model_SellosAgentes();
                 $sello = $ss->obtenerPorId($arr["idSelloAgente"]);
+                $sello['tipo'] = 'agente';
             }
         }
         if (isset($sello)) {
@@ -926,17 +928,27 @@ class OAQ_TraficoVucem {
     
     public function _armarEdocument($idVucem, $idTrafico, $idArchivo, $tipoDocumento) {
         $sello = $this->_obtenerSello($idVucem);
+
         $uti = new Utilerias_Vucem(false, true);
         $mdl = new Trafico_Model_TraficosMapper();
         $mdd = new Archivo_Model_RepositorioMapper();
         $rfc = new Trafico_Model_RfcConsultaMapper();
         $trafico = $mdl->obtenerPorId($idTrafico);
         $archivo = $mdd->getFileById($idArchivo);
+
         if (empty($sello)) {
             throw new Exception("No se encontro sello para cliente con RFC {$trafico["rfc"]}.");
         }
         if (isset($trafico["id"]) && isset($archivo["id"])) {
             $rfcConsulta = $rfc->rfcEdocument($trafico["idCliente"]);
+
+            if (!$rfcConsulta) {
+                $rfcConsulta = 'OAQ030623UL8';
+                if ($sello["tipo"] == 'agente') {
+                    $rfcConsulta = $trafico['rfcCliente'];
+                }
+            }
+
             $nombreDocumento = substr($archivo["nom_archivo"], 0, -4);
             $data = array(
                 "tipoDoc" => $tipoDocumento,
@@ -947,7 +959,7 @@ class OAQ_TraficoVucem {
                 "hash" => sha1_file($archivo["ubicacion"]),
                 "email" => "soporte@oaq.com.mx",
                 "correoElectronico" => "soporte@oaq.com.mx",
-                "rfcConsulta" => isset($rfcConsulta["rfc"]) ? $rfcConsulta["rfc"] : "OAQ030623UL8",
+                "rfcConsulta" => $rfcConsulta,
                 "rfc" => $sello["rfc"],
                 "razonSocial" => $sello["razon"],
             );

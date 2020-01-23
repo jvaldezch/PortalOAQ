@@ -535,18 +535,18 @@
                 </tr>
                 <tr>
                     <td style="text-align: left">
-                        <input type="" >
+                        <input type="text" id="rfc_cove" name="rfc_cove" >
                     </td>
                     <td style="text-align: right">
-                        <button class="traffic-btn traffic-btn-small traffic-btn-right">
+                        <button class="traffic-btn traffic-btn-small traffic-btn-right add-rfc-cove" data-id="<?= $this->id ?>">
                             <i class="far fa-plus-square"></i> Agregar
                         </button>
                     </td>
                     <td style="text-align: left">
-                        <input type="" >
+                        <input type="text" id="rfc_edoc" name="rfc_edoc" >
                     </td>
                     <td style="text-align: right">
-                        <button class="traffic-btn traffic-btn-small traffic-btn-right">
+                        <button class="traffic-btn traffic-btn-small traffic-btn-right add-rfc-edoc" data-id="<?= $this->id ?>">
                             <i class="far fa-plus-square"></i> Agregar
                         </button>
                     </td>
@@ -558,7 +558,7 @@
                                 <?php foreach ($this->rfcConsulta["cove"] as $k => $v) { ?>
                                     <tr>
                                         <td><?= $v ?></td>
-                                        <td><div onclick="removerRfcConsultaCove(<?= $k ?>);" class="traffic-icon traffic-icon-delete"></div></td>
+                                        <td><div onclick="removerRfcConsulta(<?= $k ?>);" class="traffic-icon traffic-icon-delete"></div></td>
                                     </tr>
                                 <?php } ?>
                             <?php } else { ?>
@@ -574,7 +574,7 @@
                                 <?php foreach ($this->rfcConsulta["edoc"] as $k => $v) { ?>
                                     <tr>
                                         <td><?= $v ?></td>
-                                        <td><div onclick="removerRfcConsultaEdoc(<?= $k ?>);" class="traffic-icon traffic-icon-delete"></div></td>
+                                        <td><div onclick="removerRfcConsulta(<?= $k ?>);" class="traffic-icon traffic-icon-delete"></div></td>
                                     </tr>
                                 <?php } ?>
                             <?php } else { ?>
