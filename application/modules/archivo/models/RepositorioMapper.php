@@ -16,15 +16,19 @@ class Archivo_Model_RepositorioMapper {
      * @return type
      * @throws Exception
      */
-    public function getFilesByReferenceCustomers($reference, $patente = null, $aduana = null) {
+    public function getFilesByReferenceCustomers($reference, $patente = null, $aduana = null, $file_type = null) {
         try {
             $sql = $this->_db_table->select()
                     ->setIntegrityCheck(false)
                     ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "sub_tipo_archivo", "folio", "emisor_nombre", "receptor_nombre", "nom_archivo", "creado", "usuario", "ubicacion_pdf", "ubicacion"))
                     ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
                     ->where("a.referencia = ?", $reference)
-                    ->where("a.tipo_archivo NOT IN (29, 31, 58, 89, 2001, 9999)")
                     ->order("d.orden ASC");
+            if (!$file_type) {
+                $sql->where("a.tipo_archivo NOT IN (29, 31, 58, 89, 2001, 9999)");
+            } else {
+                $sql->where("a.tipo_archivo IN (?)", $file_type);
+            }
             if (isset($patente)) {
                 $sql->where("a.patente = ?", $patente);
             }

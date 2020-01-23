@@ -83,8 +83,12 @@ class Clientes_ExpedienteController extends Zend_Controller_Action {
                 $traffic = new OAQ_Trafico(array("idTrafico" => $arr['idTrafico']));
                 
                 $model = new Archivo_Model_RepositorioMapper();
-                $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana());
-                
+                if ($traffic->getRfcCliente() == 'STE071214BE7') {
+                    $file_type = array(2, 3, 40, 33, 23, 438);
+                    $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana(), $file_type);
+                } else {
+                    $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana());
+                }
                 $this->view->files = $files;
                 $this->view->patente = $traffic->getPatente();
                 $this->view->aduana = $traffic->getAduana();
