@@ -4,6 +4,7 @@ class Trafico_Model_Table_Traficos {
 
     protected $id;
     protected $idCliente;
+    protected $idBodega;
     protected $idAduana;
     protected $idRepositorio;
     protected $idUsuario;
@@ -66,6 +67,10 @@ class Trafico_Model_Table_Traficos {
 
     function getIdCliente() {
         return $this->idCliente;
+    }
+
+    function getIdBodega() {
+        return $this->idBodega;
     }
 
     function getIdAduana() {
@@ -222,6 +227,10 @@ class Trafico_Model_Table_Traficos {
 
     function setEstatus($estatus) {
         $this->estatus = $estatus;
+    }
+
+    function setIdBodega($idBodega) {
+        $this->idBodega = $idBodega;
     }
 
     function setFirmaValidacion($firmaValidacion) {

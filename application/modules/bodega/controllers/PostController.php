@@ -1812,6 +1812,45 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
+    public function cambiarTipoBultoAction() {
+        try {
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                    "tipoBulto" => "Digits",
+                );
+                $v = array(
+                    "id" => array("NotEmpty", new Zend_Validate_Int()),
+                    "ids" => array("NotEmpty"),
+                    "tipoBulto" => array("NotEmpty"),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("id") && $input->isValid("ids") && $input->isValid("tipoBulto")) {
+
+                    $ids = explode("," ,$input->ids);
+
+                    $mppr = new Bodega_Model_Bultos();
+
+                    if (!empty($ids)) {
+                        foreach ($ids as $id_bulto) {
+                            $mppr->actualizar($id_bulto, array("tipoBulto" => $input->tipoBulto));
+                        }
+                    }
+                    $this->_helper->json(array("success" => true));
+
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function enviarATraficoAction() {
         try {
             $r = $this->getRequest();

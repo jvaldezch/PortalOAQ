@@ -94,13 +94,16 @@ class Bodega_Model_Bultos {
     public function obtenerBultos($idTrafico) {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idTrafico = ?", $idTrafico)
-                    ->order("numBulto ASC");
+                    ->setIntegrityCheck(false)
+                    ->from(array("b" => "trafico_bultos"), array("*"))
+                    ->joinLeft(array("t" => "trafico_bulto_tipos"), "t.id = b.tipoBulto", array("descripcion AS nombreBulto"))
+                    ->where("b.idTrafico = ?", $idTrafico)
+                    ->order("b.numBulto ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
             }
-            return;
+            return null;
         } catch (Zend_Db_Adapter_Exception $e) {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }

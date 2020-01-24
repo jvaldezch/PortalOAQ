@@ -34,11 +34,12 @@ function editarProveedorModal(titulo, idTrafico, idFactura, idProv) {
                     if ($("#frmProvider").valid()) {
                         $("#frmProvider").ajaxSubmit({url: "/bodega/facturas/guardar-proveedor", dataType: "json", type: "POST",
                             success: function (res) {
-                                if (res.success === true) {
+                                /*if (res.success === true) {
                                     location.replace("/bodega/facturas/editar-factura?idFactura=" + idFactura);
-                                }
+                                }*/
                             }
                         });
+                        return false;
                     } else {
                         return false;
                     }

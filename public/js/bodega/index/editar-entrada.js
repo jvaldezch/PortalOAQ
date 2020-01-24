@@ -1425,5 +1425,60 @@ $(document).ready(function () {
             });
         }
     });
+
+    $(document.body).on("click", "#ctipobulto", function (ev) {
+        ev.preventDefault();
+
+        let id = $(this).data('id');
+
+        let checkboxes = $("input[class=package]:checked");
+
+        bultos = [];
+
+        if ((checkboxes).size() > 0) {
+
+            $(checkboxes).each(function () {
+                bultos.push($(this).val());
+            });
+
+            $.confirm({title: "Cambiar tipo de bulto", escapeKey: "cerrar", boxWidth: "500px", useBootstrap: false, type: "blue",
+                buttons: {
+                    cerrar: {action: function () {}},
+                    guardar: {
+                        btnClass: "btn-blue",
+                        action: function () {
+                            $("#formtipobulto").ajaxSubmit({url: "/bodega/post/cambiar-tipo-bulto", dataType: "json", type: "POST",
+                                success: function (res) {
+                                    if (res.success === true) {
+                                        loadPackages();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                },
+                content: function () {
+                    let self = this;
+                    return $.ajax({url: "/bodega/get/cambiar-tipo-bulto", method: "GET",
+                        data: {id: id, bultos: bultos}
+                    }).done(function (res) {
+                        self.setContent(res.html);
+                    }).fail(function () {
+                        self.setContent("Something went wrong.");
+                    });
+                }
+            });
+
+        } else {
+            $.alert({
+                title: "¡Oops!",
+                type: "orange",
+                content: "No ha seleccionado bultos.",
+                escapeKey: true,
+                boxWidth: "310px",
+                useBootstrap: false
+            });
+        }
+    });
     
 });

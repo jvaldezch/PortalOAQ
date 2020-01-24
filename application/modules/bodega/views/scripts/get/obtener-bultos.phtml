@@ -5,6 +5,7 @@
                 <input type="checkbox" value="<?= $item['id'] ?>" class="package" />
             </td>
             <td><?= $item['numBulto'] ?></td>
+            <td><?= $item['nombreBulto'] ?></td>
             <td style="text-align: left"><?= $item['uuid'] ?></td>
             <td><?= ($item['dano'] == 0) ? '' : '<i class="fas fa-check"></i>'  ?></td>
             <td><?= isset($item['descarga']) ? '<i class="fas fa-check"></i>' : '' ?></td>
@@ -21,13 +22,14 @@
         </tr>
     <?php } ?>
         <tr>
-            <td colspan="9">
+            <td colspan="10">
                 <button class="traffic-btn traffic-btn-small traffic-btn-right" data-id="<?= $this->id ?>" id="subdiv">Subdividir</button>
+                <button class="traffic-btn traffic-btn-small traffic-btn-right" data-id="<?= $this->id ?>" id="ctipobulto">Tipo de bulto</button>
             </td>
         </tr>
 <?php } else { ?>
         <tr>
-            <td colspan="9" style="text-align: center">
+            <td colspan="10" style="text-align: center">
                 <em>No hay bultos generados.</em>
             </td>
         </tr>

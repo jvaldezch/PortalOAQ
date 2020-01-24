@@ -54,6 +54,10 @@ class OAQ_Trafico {
         $this->idUsuario = $idUsuario;
     }
 
+    function setIdBodega($idBodega) {
+        $this->idBodega = $idBodega;
+    }
+
     function setPatente($patente) {
         $this->patente = $patente;
     }
@@ -88,6 +92,10 @@ class OAQ_Trafico {
 
     function getPedimento() {
         return $this->pedimento;
+    }
+
+    function getIdBodega() {
+        return $this->idBodega;
     }
 
     function getIdCliente() {
@@ -160,6 +168,7 @@ class OAQ_Trafico {
             $this->referencia = $this->trafico->getReferencia();
             $this->idAduana = $this->trafico->getIdAduana();
             $this->idCliente = $this->trafico->getIdCliente();
+            $this->idBodega = $this->trafico->getIdBodega();
             $this->idRepositorio = $this->trafico->getIdRepositorio();
             $this->rfcCliente = $this->trafico->getRfcCliente();
             $this->ie = $this->trafico->getIe();
@@ -175,7 +184,7 @@ class OAQ_Trafico {
     public function __set($name, $value) {
         $method = "set" . $name;
         if (("mapper" == $name) || !method_exists($this, $method)) {
-            throw new Exception("Invalid property " . __METHOD__);
+            throw new Exception("Invalid property " . __METHOD__ . " " . $name);
         }
         $this->$method($value);
     }

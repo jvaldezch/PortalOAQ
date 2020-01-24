@@ -1,0 +1,19 @@
+<form id="formtipobulto">
+    <input type="hidden" name="id" value="<?= $this->id ?>" />
+    <input type="hidden" name="ids" value="<?= $this->ids ?>" />
+    <table class="traffic-table traffic-table-left">
+        <tbody>
+            <tr>
+                <th style="width: 180px">TIPO DE BULTO:</th>
+                <td>
+                    <select id="tipoBulto" name="tipoBulto">
+                        <option value="">---</option>
+                        <?php foreach ($this->tipo_bultos as $item) { ?>
+                            <option value="<?= $item['id'] ?>" <?= ($item['id'] == $this->data["tipoBulto"]) ? 'selected="true"' : '' ?>><?= $item['descripcion'] ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+        </tbody>    
+    </table>
+</form>

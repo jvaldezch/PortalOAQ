@@ -434,10 +434,13 @@ class Bodega_FacturasController extends Zend_Controller_Action {
             if ($input->isValid("idFactura")) {
                 $invoices = new Trafico_Model_TraficoFacturasMapper();
                 $arr = $invoices->informacionFactura($input->idFactura);
+
                 $trafico = new OAQ_Trafico(array("idTrafico" => $arr["idTrafico"], "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
+                $row = $trafico->obtenerDatos();
                 
                 $mppr = new Bodega_Model_Proveedores();
-                $rows = $mppr->obtenerProveedores($arr["idCliente"]);
+                $rows = $mppr->obtenerProveedores($arr["idCliente"], $row['idBodega']);
                 
                 if (!empty($rows)) {
                     $this->_helper->json(array("success" => true, "result" => $rows));
@@ -542,56 +545,87 @@ class Bodega_FacturasController extends Zend_Controller_Action {
 
     public function guardarProveedorAction() {
         try {
-            if (!$this->getRequest()->isXmlHttpRequest()) {
-                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
-            }
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $f = array(
                     "idTrafico" => array("StringTrim", "StripTags", "Digits"),
                     "idCliente" => array("StringTrim", "StripTags", "Digits"),
                     "idProv" => array("StringTrim", "StripTags", "Digits"),
+                    "nombre" => "StringToUpper",
+                    "identificador" => "StringToUpper",
+                    "tipoIdentificador" => "Digits",
+                    "calle" => "StringToUpper",
+                    "numExt" => "StringToUpper",
+                    "numInt" => "StringToUpper",
+                    "colonia" => "StringToUpper",
+                    "localidad" => "StringToUpper",
+                    "municipio" => "StringToUpper",
+                    "estado" => "StringToUpper",
+                    "codigoPostal" => "StringToUpper",
+                    "pais" => "StringToUpper",
                 );
                 $v = array(
                     "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                     "idProv" => array("NotEmpty", new Zend_Validate_Int()),
+                    "nombre" => "NotEmpty",
+                    "identificador" => "NotEmpty",
+                    "tipoIdentificador" => "NotEmpty",
+                    "calle" => "NotEmpty",
+                    "numExt" => "NotEmpty",
+                    "numInt" => "NotEmpty",
+                    "colonia" => "NotEmpty",
+                    "localidad" => "NotEmpty",
+                    "municipio" => "NotEmpty",
+                    "estado" => "NotEmpty",
+                    "codigoPostal" => "NotEmpty",
+                    "pais" => "NotEmpty",
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idTrafico") && $input->isValid("idCliente")) {
-                    $post = $request->getPost();
-                    
-                    $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));                    
+
                     $mppr = new Bodega_Model_Proveedores();
-                            
+
+                    $mdl = new Trafico_Model_TraficosMapper();
+                    $row = $mdl->obtenerPorId($input->idTrafico);
+
                     $arr = array(
-                        "nombre" => $post["nombre"],
-                        "tipoIdentificador" => $post["tipoIdentificador"],
-                        "identificador" => $post["identificador"],
-                        "calle" => $post["calle"],
-                        "numExt" => $post["numExt"],
-                        "numInt" => $post["numInt"],
-                        "colonia" => $post["colonia"],
-                        "localidad" => $post["localidad"],
-                        "municipio" => $post["municipio"],
-                        "estado" => $post["estado"],
-                        "codigoPostal" => $post["codigoPostal"],
-                        "pais" => $post["pais"],
+                        "idBodega" => $row["idBodega"],
+                        "nombre" => $input->nombre,
+                        "identificador" => $input->identificador,
+                        "tipoIdentificador" => $input->tipoIdentificador,
+                        "calle" => $input->calle,
+                        "numExt" => $input->numExt,
+                        "numInt" => ($input->isValid("numInt")) ? $input->numInt : null,
+                        "colonia" => ($input->isValid("colonia")) ? $input->colonia : null,
+                        "localidad" => ($input->isValid("localidad")) ? $input->localidad : null,
+                        "municipio" => ($input->isValid("municipio")) ? $input->municipio : null,
+                        "estado" => ($input->isValid("estado")) ? $input->estado : null,
+                        "codigoPostal" => $input->codigoPostal,
+                        "pais" => $input->pais,
                     );
+
                     if ($input->isValid("idCliente") && $input->isValid("idProv")) {
                         $arr["modificado"] = date("Y-m-d H:i:s");
                         if (($mppr->actualizar($input->idProv, $arr))) {
-                            $this->_helper->json(array("success" => true));                            
+                            $this->_helper->json(array("success" => true, "message" => "Actualizado"));
+                        } else {
+                            throw new Exception("No se pudo actualizar");
                         }
-                    } 
-                    if ($input->isValid("idCliente") && !$input->isValid("idProv")) {
+                    } else if ($input->isValid("idCliente") && !$input->isValid("idProv")) {
                         $arr["creado"] = date("Y-m-d H:i:s");
                         $arr["idCliente"] = $input->idCliente;
                         if (($mppr->agregar($arr))) {
-                            $this->_helper->json(array("success" => true));
+                            $this->_helper->json(array("success" => true, "message" => "Agregado"));
+                        } else {
+                            throw new Exception("No se pudo agregar");
                         }
+                    } else {
+                        $this->_helper->json(array("success" => false));
                     }
-                    $this->_helper->json(array("success" => false));
+
+                } else {
+                    throw new Exception("Invalid input!");
                 }
             } else {
                 throw new Exception("Invalid request type!");
