@@ -1091,6 +1091,9 @@ class OAQ_Trafico {
 
     protected function _verificarDestinatario($arr) {
         $mppr = new Trafico_Model_FactDest();
+        if (!isset($arr["identificador"])) {
+            throw new Exception("Factura no tiene identificador del destinatario (TaxId)");
+        }
         if (!($id = $mppr->verificarDestinatario($this->idCliente, $arr["cvePro"], $arr["identificador"]))) {
             $row = array(
                 "idCliente" => $this->idCliente,
@@ -1113,6 +1116,9 @@ class OAQ_Trafico {
 
     protected function _verificarProveedor($arr) {
         $mppr = new Trafico_Model_FactPro();
+        if (!isset($arr["identificador"])) {
+            throw new Exception("Factura no tiene identificador del proveedor (TaxId)");
+        }
         if (!($id = $mppr->verificarProveedor($this->idCliente, $arr["cvePro"], $arr["identificador"]))) {
             $row = array(
                 "idCliente" => $this->idCliente,
