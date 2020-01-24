@@ -144,6 +144,12 @@ class Bodega_IndexController extends Zend_Controller_Action {
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
         if ($input->isValid("id")) {
+
+            if ($this->_session->role == "super") {
+                $this->view->edit = true;
+            } else {
+                $this->view->edit = false;
+            }
             
             $model = new Trafico_Model_TraficosMapper();
             if ($input->isValid("active")) {
