@@ -200,10 +200,16 @@ class Bodega_GetController extends Zend_Controller_Action {
             if ($input->isValid("id")) {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+
                 $model = new Bodega_Model_Bultos();
+
+                $mppr = new Bodega_Model_TipoBulto();
+
+
                 $row = $model->obtenerBulto($input->id);
                 if (isset($row)) {
                     $view->data = $row;
+                    $view->tipo_bultos = $mppr->obtenerTodos();
                     $this->_helper->json(array("success" => true, "html" => $view->render("editar-bulto.phtml")));
                 }
             } else {

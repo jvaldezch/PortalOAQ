@@ -1640,11 +1640,13 @@ class Bodega_PostController extends Zend_Controller_Action {
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
                     "idBulto" => "Digits",
+                    "tipoBulto" => "Digits",
                     "mercancia" => "StringToUpper",
                     "observacion" => "StringToUpper",
                 );
                 $v = array(
                     "idBulto" => array("NotEmpty", new Zend_Validate_Int()),
+                    "tipoBulto" => "NotEmpty",
                     "bulto_descarga" => "NotEmpty",
                     "bulto_carga" => "NotEmpty",
                     "bulto_revision" => "NotEmpty",
@@ -1659,6 +1661,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                     $model = new Bodega_Model_Bultos();
 
                     $arr = array(
+                        "tipoBulto" => $input->isValid("tipoBulto") ? $input->tipoBulto : null,
                         "descarga" => $input->isValid("bulto_descarga") ? date("Y-m-d H:i:s", strtotime($input->bulto_descarga)) : null,
                         "carga" => $input->isValid("bulto_carga") ? date("Y-m-d H:i:s", strtotime($input->bulto_carga)) : null,
                         "revision" => $input->isValid("bulto_revision") ? date("Y-m-d H:i:s", strtotime($input->bulto_revision)) : null,
