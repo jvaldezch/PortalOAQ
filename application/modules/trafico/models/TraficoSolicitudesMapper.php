@@ -348,21 +348,21 @@ class Trafico_Model_TraficoSolicitudesMapper {
             if (isset($idCliente) && $idCliente != '') {
                 $sql->where("s.idCliente = ?", $idCliente);
             }
-            if (isset($complementos) && $complementos == true && !$buscar) {
+            if (isset($complementos) && $complementos == true) {
                 $sql->where("s.complemento = 1");
             }
             if (isset($idAduana) && $idAduana !== false && $idAduana !== "") {
                 $sql->where("s.idAduana = ?", $idAduana);
             }
-            if (isset($pend) && $pend !== false && !$buscar) {
+            if (isset($pend) && $pend !== false) {
                 $sql->where("s.aprobada IS NULL");
             }
-            if (isset($dep) && $dep !== false && !$buscar) {
+            if (isset($dep) && $dep !== false) {
                 $sql->where("s.depositado IS NULL")
                         ->where("s.autorizadaHsbc IS NULL")
                         ->where("s.autorizadaBanamex IS NULL");
             }
-            if (isset($war) && $war !== false && !$buscar) {
+            if (isset($war) && $war !== false) {
                 $sql->where("(time_to_sec(timediff(d.fechaEta, s.enviada)) / 3600) <= 48");
             }
             $stmt = $this->_db_table->fetchAll($sql);
