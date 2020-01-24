@@ -546,6 +546,7 @@ class Bodega_PostController extends Zend_Controller_Action {
         try {
             $sql = $this->_db->select()
                     ->from(array("t" => "traficos"), array("count(*) AS total"))
+                ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
                     ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
                     ->where("t.idBodega IN (?)", $warehouses);
             $this->_filters($sql, $filterRules, $cookies);
@@ -580,6 +581,9 @@ class Bodega_PostController extends Zend_Controller_Action {
                 }
                 if ($item->field == "proveedores" && $item->value != "") {
                     $sql->where("t.proveedores LIKE ?", "%" . trim($item->value) . "%");
+                }
+                if ($item->field == "ordenCarga" && $item->value != "") {
+                    $sql->where("t.ordenCarga LIKE ?", "%" . trim($item->value) . "%");
                 }
                 if ($item->field == "nombre" && trim($item->value) != "") {
                     $mppr = new Usuarios_Model_UsuariosMapper();
