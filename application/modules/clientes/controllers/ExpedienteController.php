@@ -84,7 +84,7 @@ class Clientes_ExpedienteController extends Zend_Controller_Action {
                 
                 $model = new Archivo_Model_RepositorioMapper();
                 if ($traffic->getRfcCliente() == 'STE071214BE7') {
-                    $file_type = array(2, 3, 40, 33, 23, 438);
+                    $file_type = array(2, 3, 40, 33, 34, 23, 438);
                     $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana(), $file_type);
                 } else {
                     $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana());
