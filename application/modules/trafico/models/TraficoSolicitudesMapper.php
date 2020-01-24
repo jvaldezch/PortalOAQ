@@ -362,7 +362,7 @@ class Trafico_Model_TraficoSolicitudesMapper {
                         ->where("s.autorizadaHsbc IS NULL")
                         ->where("s.autorizadaBanamex IS NULL");
             }
-            if (isset($war) && $war !== false) {
+            if (isset($war) && $war !== false && !$buscar) {
                 $sql->where("(time_to_sec(timediff(d.fechaEta, s.enviada)) / 3600) <= 48");
             }
             $stmt = $this->_db_table->fetchAll($sql);
