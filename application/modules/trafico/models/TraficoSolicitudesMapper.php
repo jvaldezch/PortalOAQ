@@ -348,16 +348,16 @@ class Trafico_Model_TraficoSolicitudesMapper {
             if (isset($idCliente) && $idCliente != '') {
                 $sql->where("s.idCliente = ?", $idCliente);
             }
-            if (isset($complementos) && $complementos == true) {
+            if (isset($complementos) && $complementos == true && !$buscar) {
                 $sql->where("s.complemento = 1");
             }
             if (isset($idAduana) && $idAduana !== false && $idAduana !== "") {
                 $sql->where("s.idAduana = ?", $idAduana);
             }
-            if (isset($pend) && $pend !== false) {
+            if (isset($pend) && $pend !== false && !$buscar) {
                 $sql->where("s.aprobada IS NULL");
             }
-            if (isset($dep) && $dep !== false) {
+            if (isset($dep) && $dep !== false && !$buscar) {
                 $sql->where("s.depositado IS NULL")
                         ->where("s.autorizadaHsbc IS NULL")
                         ->where("s.autorizadaBanamex IS NULL");
