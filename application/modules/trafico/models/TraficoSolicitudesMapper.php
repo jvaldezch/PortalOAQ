@@ -340,7 +340,7 @@ class Trafico_Model_TraficoSolicitudesMapper {
                     ->order(array("d.fechaEta DESC", "s.creado DESC"))
                     ->limit(200);
             if (isset($buscar) && $buscar != "") {
-                $sql->where("(d.bl LIKE '%{$buscar}%' OR d.numFactura LIKE '%{$buscar}%' OR s.referencia LIKE '%{$buscar}%') AND s.generada = 1");
+                $sql->where("(d.bl LIKE '%{$buscar}%' OR d.numFactura LIKE '%{$buscar}%' OR s.referencia LIKE '%{$buscar}%' OR s.pedimento LIKE '%{$buscar}%') AND s.generada = 1");
             }
             if (isset($aduanas)) {
                 $sql->where("s.idAduana IN (?)", $aduanas);
