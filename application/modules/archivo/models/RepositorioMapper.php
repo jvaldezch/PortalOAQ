@@ -1739,6 +1739,14 @@ class Archivo_Model_RepositorioMapper {
         }
     }
 
+    public function actualizarIdTrafico($idTrafico, $arr) {
+        $stmt = $this->_db_table->update($arr, array("id_trafico = ?" => $idTrafico));
+        if ($stmt) {
+            return true;
+        }
+        return null;
+    }
+
     public function actualizarArchivos($patente, $aduana, $pedimento, $rfcCliente, $referencia, $anterior, $username) {
         try {
             $arr = array(

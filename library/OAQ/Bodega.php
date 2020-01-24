@@ -1924,7 +1924,7 @@ class OAQ_Bodega {
         return null;
     }
 
-    public function subdividir($bultos_ids, $n_referencia) {
+    public function subdividir($bultos_ids, $bultos_restantes, $n_referencia) {
         try {
             $old_traffic = $this->traficos->obtenerRegistroCompleto($this->idTrafico);
             if ($old_traffic) {
@@ -1958,6 +1958,8 @@ class OAQ_Bodega {
                     }
 
                 }
+
+                $this->traficos->actualizarDatosTrafico($this->idTrafico, array("bultos" => $bultos_restantes));
 
             }
             return true;

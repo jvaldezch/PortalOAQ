@@ -1778,10 +1778,12 @@ class Bodega_PostController extends Zend_Controller_Action {
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
                     "id" => "Digits",
+                    "bultos_restantes" => "Digits",
                     "n_referencia" => "StringToUpper"
                 );
                 $v = array(
                     "id" => array("NotEmpty", new Zend_Validate_Int()),
+                    "bultos_restantes" => array("NotEmpty", new Zend_Validate_Int()),
                     "ids" => array("NotEmpty"),
                     "n_referencia" => array("NotEmpty")
                 );
@@ -1791,7 +1793,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                     $ids = explode("," ,$input->ids);
 
                     $bodega = new OAQ_Bodega(array("idTrafico" => $input->id));
-                    if ($bodega->subdividir($ids, $input->n_referencia)) {
+                    if ($bodega->subdividir($ids, $input->bultos_restantes, $input->n_referencia)) {
                         $this->_helper->json(array("success" => true));
                     } else {
                         $this->_helper->json(array("success" => false));
@@ -1845,4 +1847,44 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
+    public function modificarEntradaAction()
+    {
+        try {
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
+                    "idTrafico" => new Zend_Filter_Digits(),
+                    "idBodega" => new Zend_Filter_Digits(),
+                    "idCliente" => new Zend_Filter_Digits(),
+                    "referencia" => new Zend_Filter_StringToUpper(),
+                );
+                $v = array(
+                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idBodega" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                    "referencia" => array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9.\/]+$/"), "presence" => "required"),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("idTrafico")) {
+
+                    $referencias = new OAQ_Referencias();
+                    if ($referencias->modificarEntrada($input->idTrafico, $input->idBodega, $input->idCliente, $input->referencia, $this->_session->username)) {
+                        $this->_helper->json(array("success" => true));
+                    } else {
+                        $this->_helper->json(array("success" => false));
+                    }
+
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
 }
+

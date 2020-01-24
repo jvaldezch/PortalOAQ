@@ -667,4 +667,42 @@ class OAQ_Referencias {
         }
     }
 
+    public function modificarEntrada($idTrafico, $idBodega, $idCliente, $referencia, $usuario) {
+
+        $mppr = new Bodega_Model_Entradas();
+
+        $arr = $mppr->obtenerPorId($idTrafico);
+
+        if (!empty($arr)) {
+            if ($referencia == $arr["referencia"] && $idCliente == $arr["idCliente"] && $idBodega == $arr["idBodega"]) {
+                throw new Exception("Los datos son los mismos.");
+            }
+
+            $clientes = new Trafico_Model_ClientesMapper();
+            $repo = new Archivo_Model_RepositorioMapper();
+
+            $busq = $mppr->buscarEntrada($idBodega, $referencia);
+
+            if (empty($busq)) {
+                $cli = $clientes->datosCliente($idCliente);
+                $arr_n = array(
+                    "idCliente" => $idCliente,
+                    "idBodega" => $idBodega,
+                    "referencia" => $referencia,
+                    "rfcCliente" => $cli["rfc"],
+                    "actualizado" => date("Y-m-d H:i:s"),
+                );
+                if ($mppr->actualizarEntrada($idTrafico, $arr_n)) {
+                    $repo->actualizarIdTrafico($idTrafico, array("referencia" => $referencia));
+                    return true;
+                }
+
+            } else {
+                throw new Exception("La referencia ya existe.");
+            }
+        } else {
+            throw new Exception("No se encontraron datos.");
+        }
+    }
+
 }

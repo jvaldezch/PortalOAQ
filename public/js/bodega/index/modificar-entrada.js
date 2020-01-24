@@ -51,8 +51,8 @@ $(document).ready(function () {
     });
 
     $(document.body).on("input", "#referencia", function (evt) {
-        var input = $(this);
-        var start = input[0].selectionStart;
+        let input = $(this);
+        let start = input[0].selectionStart;
         $(this).val(function (_, val) {
             return val.toUpperCase();
         });

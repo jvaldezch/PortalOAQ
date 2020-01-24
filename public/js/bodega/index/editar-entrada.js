@@ -1388,9 +1388,13 @@ $(document).ready(function () {
                     guardar: {
                         btnClass: "btn-blue",
                         action: function () {
+
+                            let restantes = $("#bultos_restantes").val();
+
                             $("#subdivision").ajaxSubmit({url: "/bodega/post/subdividir", dataType: "json", type: "POST",
                                 success: function (res) {
                                     if (res.success === true) {
+                                        $("#bultos").val(restantes);
                                         loadPackages();
                                     }
                                 }
@@ -1399,7 +1403,7 @@ $(document).ready(function () {
                     }
                 },
                 content: function () {
-                    var self = this;
+                    let self = this;
                     return $.ajax({url: "/bodega/get/preview-subidivision", method: "GET",
                         data: {id: id, bultos: bultos}
                     }).done(function (res) {

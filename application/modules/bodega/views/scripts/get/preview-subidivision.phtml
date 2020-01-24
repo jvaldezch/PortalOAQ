@@ -12,19 +12,19 @@
             <tr>
                 <th>TOTAL DE BULTOS:</th>
                 <td>
-                    <?= $this->total ?>
+                    <input type="text" name="total_bultos" id="total_bultos" value="<?= $this->total ?>" readonly="true" />
                 </td>
             </tr>
             <tr>
                 <th>A SUBDIVIDIR:</th>
                 <td>
-                    <?= $this->cantidad ?>
+                    <input type="text" name="a_subdividir" id="a_subdividir" value="<?= $this->cantidad ?>" readonly="true" />
                 </td>
             </tr>
             <tr>
                 <th>RESTANTES:</th>
                 <td>
-                    <?= $this->restantes ?>
+                    <input type="text" name="bultos_restantes" id="bultos_restantes" value="<?= $this->restantes ?>" readonly="true" />
                 </td>
             </tr>
         </tbody>    
