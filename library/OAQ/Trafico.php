@@ -1429,6 +1429,15 @@ class OAQ_Trafico {
         return;
     }
 
+    public function obtenerBitacoraBodega() {
+        $mppr = new Trafico_Model_BitacoraMapper();
+        $arr = $mppr->obtenerBitacoraBodega($this->referencia);
+        if (!empty($arr)) {
+            return $arr;
+        }
+        return;
+    }
+
     public function crearZip($idUsuario, $role) {
 
         $exp = new OAQ_Expediente_Descarga();

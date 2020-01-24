@@ -34,6 +34,7 @@ class OAQ_Bodega {
     protected $appconfig;
     protected $directorio;
     protected $misc;
+    protected $_firephp;
 
     function setIdTrafico($idTrafico) {
         $this->idTrafico = $idTrafico;
@@ -140,6 +141,8 @@ class OAQ_Bodega {
     }
             
     public function __construct(array $options = null) {
+        $this->_firephp = Zend_Registry::get("firephp");
+
         $this->appconfig = new Application_Model_ConfigMapper();
         $this->traficos = new Trafico_Model_TraficosMapper();
         $this->trafico = new Trafico_Model_Table_Traficos();
@@ -167,7 +170,6 @@ class OAQ_Bodega {
             } else {
                 $this->directorio = "D:\\xampp\\tmp\\expedientes";
             }
-            //$this->bitacora = new OAQ_Referencias(array("patente" => $this->trafico->getPatente(), "aduana" => $this->trafico->getAduana(), "pedimento" => $this->trafico->getPedimento(), "referencia" => $this->trafico->getReferencia(), "usuario" => $this->usuario));
         }
     }
 
@@ -1889,10 +1891,6 @@ class OAQ_Bodega {
     }
     
     public function enviarNotificacion() {
-        
-        //$mppr = new Trafico_Model_ContactosCliMapper();
-        //$contactos = $mppr->notificacion($this->idCliente);
-        
         $emails = new OAQ_EmailsBodega();        
         if (APPLICATION_ENV == "production") {
             
@@ -1924,6 +1922,47 @@ class OAQ_Bodega {
             return true;
         }
         return null;
+    }
+
+    public function subdividir($bultos_ids, $n_referencia) {
+        try {
+            $old_traffic = $this->traficos->obtenerRegistroCompleto($this->idTrafico);
+            if ($old_traffic) {
+
+                $new_traffic = $old_traffic;
+                unset($old_traffic);
+                unset($new_traffic['id']);
+
+                $new_traffic['referencia'] = $n_referencia;
+
+                $id_trafico = $this->traficos->agregar($new_traffic);
+
+                if ($id_trafico) {
+
+                    $mppr = new Bodega_Model_Bultos();
+                    $bultos = $mppr->obtenerBultosByIds($bultos_ids);
+
+                    if (!empty($bultos)) {
+                        foreach ($bultos as $item) {
+
+                            $old_bulto_id = $item['id'];
+
+                            unset($item['id']);
+                            $item['idTrafico'] = $id_trafico;
+
+                            if (($mppr->agregar($item))) {
+                                $mppr->borrar($old_bulto_id);
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+            return true;
+        } catch (Zend_Application_Exception $e) {
+        }
     }
 
 }

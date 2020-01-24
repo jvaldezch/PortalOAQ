@@ -1661,9 +1661,11 @@ class Bodega_PostController extends Zend_Controller_Action {
                         "mercancia" => $input->mercancia,
                         "observacion" => $input->observacion,
                         "dano" => $input->isValid("damage") ? 1 : null,
-                        "escaneado" => $input->isValid("escaneado") ? 1 : null,
+                        "escaneado" => $input->isValid("escaneado") ? date("Y-m-d H:i:s") : null,
                         "actualizado" => date("Y-m-d H:i:s")
                     );
+
+                    $this->_firephp->info($arr);
 
                     if (($model->actualizar($input->idBulto, $arr))) {
                         $this->_helper->json(array("success" => true));
@@ -1772,17 +1774,24 @@ class Bodega_PostController extends Zend_Controller_Action {
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
                     "id" => "Digits",
+                    "n_referencia" => "StringToUpper"
                 );
                 $v = array(
                     "id" => array("NotEmpty", new Zend_Validate_Int()),
-                    "ids" => array("NotEmpty")
+                    "ids" => array("NotEmpty"),
+                    "n_referencia" => array("NotEmpty")
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("id") && $input->isValid("ids")) {
 
-                    $this->_firephp->info($input->ids);
+                    $ids = explode("," ,$input->ids);
 
-                    $this->_helper->json(array("success" => true));
+                    $bodega = new OAQ_Bodega(array("idTrafico" => $input->id));
+                    if ($bodega->subdividir($ids, $input->n_referencia)) {
+                        $this->_helper->json(array("success" => true));
+                    } else {
+                        $this->_helper->json(array("success" => false));
+                    }
                 } else {
                     throw new Exception("Invalid input!");
                 }

@@ -271,6 +271,17 @@ class Trafico_Model_TraficosMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+    public function agregar($arr) {
+        try {
+            $stmt = $this->_db_table->insert($arr);
+            if ($stmt) {
+                return $stmt;
+            }
+            return null;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
 
     public function nuevoTrafico($arr) {
         try {
@@ -613,6 +624,21 @@ class Trafico_Model_TraficosMapper {
                 $arr = $stmt->toArray();
                 $arr["transporte"] = $trans->obtener($id);
                 return $arr;
+            }
+            return null;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function obtenerRegistroCompleto($id) {
+        try {
+            $sql = $this->_db_table->select()
+                ->from($this->_db_table, array("*"))
+                ->where("id = ?", $id);
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return $stmt->toArray();
             }
             return null;
         } catch (Zend_Db_Adapter_Exception $e) {

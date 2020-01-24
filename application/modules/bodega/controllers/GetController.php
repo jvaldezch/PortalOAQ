@@ -159,7 +159,6 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
 
                 $bodega = new OAQ_Bodega(array("idTrafico" => $input->id));
-//                $arr = $bodega->obtenerDatos();
 
                 if (!empty($input->bultos)) {
 
@@ -169,7 +168,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     $total_bultos = $model->totalBultos($input->id);
 
                     $view->id = $input->id;
-                    $view->ids = serialize($input->bultos);
+                    $view->ids = implode($input->bultos, ",");
                     $view->total = $total_bultos;
                     $view->cantidad = count($bultos);
                     $view->restantes = $total_bultos - count($bultos);
@@ -297,7 +296,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 if ($input->isValid("idTrafico")) {
                     $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                     $arr = array();
-                    $arr['bitacora'] = $trafico->obtenerBitacora();
+                    $arr['bitacora'] = $trafico->obtenerBitacoraBodega();
                     $arr['comentarios'] = $trafico->obtenerComentarios();
                     $arr['archivos'] = $trafico->obtenerArchivosComentarios();
                     $this->_helper->json(array("success" => true, "results" => $arr));

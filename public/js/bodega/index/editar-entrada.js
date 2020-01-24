@@ -334,25 +334,29 @@ window.loadComments = function() {
             if (res.success === true) {
                 if (res.results['bitacora'] !== null) {
                     $("#trafficLog").html('');
-                    var rows = res.results['bitacora'];
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        var html = '<tr>';
-                        html += '<td style="font-size: 10px !important; line-height: 11px">' + row.bitacora + '</td>';
-                        html += '<td style="font-size: 10px !important; line-height: 11px">' + (row.usuario !== null ? row.usuario : '') + '</td>';
-                        html += '<td style="text-align: center; font-size: 10px !important; line-height: 11px">' + row.creado + '</td>';
-                        html += '</tr>';
-                        $("#trafficLog").append(html);
+                    let rows = res.results['bitacora'];
+                    if (rows.length > 0) {
+                        for (let i = 0; i < rows.length; i++) {
+                            let row = rows[i];
+                            let html = '<tr>';
+                            html += '<td style="font-size: 10px !important; line-height: 11px">' + row.bitacora + '</td>';
+                            html += '<td style="font-size: 10px !important; line-height: 11px">' + (row.usuario !== null ? row.usuario : '') + '</td>';
+                            html += '<td style="text-align: center; font-size: 10px !important; line-height: 11px">' + row.creado + '</td>';
+                            html += '</tr>';
+                            $("#trafficLog").append(html);
+                        }
+                    } else {
+                        $("#trafficLog").append("<tr><td colspan='3' style='text-align: center'>No hay bitacora</td></tr>");
                     }
                 } else {
                     $("#trafficLog").html('<tr><td colspan="3" style="font-size: 10px !important; line-height: 11px">No hay comentarios</td></tr>');
                 }
                 if (res.results['comentarios'] !== null) {
                     $("#trafficComments").html('');
-                    var rows = res.results['comentarios'];
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i];
-                        var html = '<tr>';
+                    let rows = res.results['comentarios'];
+                    for (let i = 0; i < rows.length; i++) {
+                        let row = rows[i];
+                        let html = '<tr>';
                         html += '<td>' + row.nombre + '</td>';
                         html += '<td>' + (row.mensaje !== null ? row.mensaje : '');
                         if (row.nombreArchivo) {
@@ -364,16 +368,20 @@ window.loadComments = function() {
                         $("#trafficComments").append(html);
                     }
                 } else {
+
                     $("#trafficComments").html('<tr><td colspan="3" style="font-size: 10px !important; line-height: 11px">No hay comentarios</td></tr>');
                 }
                 if (res.results['archivos'] !== null) {
                     $("#attachedFiles").html('');
-                    var row = res.results['archivos'];
-                    for (var i = 0; i < row.length; i++) {
+                    let row = res.results['archivos'];
+                    for (let i = 0; i < row.length; i++) {
                         $("#attachedFiles").append('<img src="/images/icons/attachment.gif"><span style="font-size: 11px"><a href="/archivo/get/descargar-archivo-temporal?id=' + row.idArchivo + '">' + row.nombreArchivo + '</a></span><br>');
                     }
                 }
+
+
             } else {
+                console.log(res.results['comentarios']);
                 $("#trafficLog").html('<tr><td colspan="3" style="font-size: 10px !important; line-height: 11px">No hay comentarios</td></tr>');
             }
         }       
@@ -1364,7 +1372,10 @@ $(document).ready(function () {
         
         let id = $(this).data('id');
         
-        var checkboxes = $("input[class=package]:checked");
+        let checkboxes = $("input[class=package]:checked");
+
+        bultos = [];
+
         if ((checkboxes).size() > 0) {
             
             $(checkboxes).each(function () {
@@ -1384,7 +1395,6 @@ $(document).ready(function () {
                                     }
                                 }
                             });
-                            return false;
                         }
                     }
                 },

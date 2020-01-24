@@ -39,6 +39,21 @@ class Trafico_Model_BitacoraMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+
+    public function obtenerBitacoraBodega($referencia) {
+        try {
+            $sql = $this->_db_table->select()
+                ->where("referencia = ?", $referencia)
+                ->where("tipo IS NULL");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
     
     public function obtener($patente, $aduana, $pedimento, $referencia) {
         try {
