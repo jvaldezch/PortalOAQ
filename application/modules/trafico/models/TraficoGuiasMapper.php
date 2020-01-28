@@ -189,7 +189,8 @@ class Trafico_Model_TraficoGuiasMapper {
             ->setIntegrityCheck(false)
             ->from(array("g" => "trafico_guias"), array("*"))
             ->joinLeft(array("t" => "traficos"), "g.idTrafico = t.id", array("id", "patente", "aduana", "referencia", "pedimento"))
-            ->joinLeft(array("u" => "usuarios"), "g.idUsuario = u.id", array("usuario"));
+            ->joinLeft(array("u" => "usuarios"), "g.idUsuario = u.id", array("usuario"))
+            ->order("creado DESC");
         return $sql;
     }
 
