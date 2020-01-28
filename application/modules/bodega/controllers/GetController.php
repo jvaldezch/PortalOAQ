@@ -1339,4 +1339,63 @@ class Bodega_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function proveedoresAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "name" => "StringToUpper",
+                "idCliente" => "Digits",
+                "idFactura" => "Digits",
+                "idTrafico" => "Digits",
+            );
+            $v = array(
+                "name" => "NotEmpty",
+                "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                "idFactura" => array("NotEmpty", new Zend_Validate_Int()),
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($i->isValid("idTrafico") && $i->isValid("name")) {
+
+                $bodega = new OAQ_Bodega(array("idTrafico" => $i->idTrafico));
+
+                $mapper = new Bodega_Model_Proveedores();
+                $arr = $mapper->buscarProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
+                $this->_helper->json($arr);
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function obtenerProveedorAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "name" => "StringToUpper",
+                "idCliente" => "Digits",
+                "idFactura" => "Digits",
+                "idTrafico" => "Digits",
+            );
+            $v = array(
+                "name" => "NotEmpty",
+                "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                "idFactura" => array("NotEmpty", new Zend_Validate_Int()),
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($i->isValid("idTrafico") && $i->isValid("name")) {
+
+                $bodega = new OAQ_Bodega(array("idTrafico" => $i->idTrafico));
+
+                $mapper = new Bodega_Model_Proveedores();
+                $row = $mapper->obtenerProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
+
+                $this->_helper->json(array("success" => true, "results" => $row));
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
 }

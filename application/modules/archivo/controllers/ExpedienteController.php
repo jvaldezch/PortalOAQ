@@ -16,6 +16,7 @@ class Archivo_ExpedienteController extends Zend_Controller_Action {
         $this->view->headLink()
                 ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
                 ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
                 ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
                 ->appendFile("/js/common/jquery-1.9.1.min.js")

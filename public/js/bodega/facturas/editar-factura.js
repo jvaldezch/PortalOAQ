@@ -34,12 +34,11 @@ function editarProveedorModal(titulo, idTrafico, idFactura, idProv) {
                     if ($("#frmProvider").valid()) {
                         $("#frmProvider").ajaxSubmit({url: "/bodega/facturas/guardar-proveedor", dataType: "json", type: "POST",
                             success: function (res) {
-                                /*if (res.success === true) {
+                                if (res.success === true) {
                                     location.replace("/bodega/facturas/editar-factura?idFactura=" + idFactura);
-                                }*/
+                                }
                             }
                         });
-                        return false;
                     } else {
                         return false;
                     }
@@ -47,10 +46,10 @@ function editarProveedorModal(titulo, idTrafico, idFactura, idProv) {
             cerrar: {action: function () {}}
         },
         content: function () {
-            var self = this;
+            let self = this;
             return $.ajax({url: "/bodega/facturas/editar-proveedor?idTrafico=" + idTrafico + "&idFactura=" + idFactura + "&idProv=" + idProv, dataType: "json", method: "get"
             }).done(function (res) {
-                var html = "";
+                let html = "";
                 if (res.success === true) {
                     html = res.html;
                 }
@@ -84,10 +83,10 @@ function editarProductoModal(titulo, idTrafico, idCliente, idFactura, idProveedo
             cerrar: {action: function () {}}
         },
         content: function () {
-            var self = this;
+            let self = this;
             return $.ajax({url: "/bodega/facturas/editar-producto?idTrafico=" + idTrafico + "&idCliente=" + idCliente + "&idFactura=" + idFactura + "&idProveedor=" + idProveedor + "&idProducto=" + idProducto, dataType: "json", method: "get"
             }).done(function (res) {
-                var html = "";
+                let html = "";
                 if (res.success === true) {
                     html = res.html;
                 }
@@ -104,13 +103,13 @@ window.detalle = function () {
         data: {idFactura: $('#idFactura').val()},
         success: function (res) {
             if (res.success === true) {
-                var row = res.result;
-                var valorFacturaMonExt = number_format(row.valorFacturaMonExt, 2, '.', ',');
-                var valorFacturaUsd = number_format(row.valorFacturaUsd, 2, '.', ',');
-                var fletes = number_format(row.fletes, 2, '.', ',');
-                var seguros = number_format(row.seguros, 2, '.', ',');
-                var embalajes = number_format(row.embalajes, 2, '.', ',');
-                var otros = number_format(row.otros, 2, '.', ',');
+                let row = res.result;
+                let valorFacturaMonExt = number_format(row.valorFacturaMonExt, 2, '.', ',');
+                let valorFacturaUsd = number_format(row.valorFacturaUsd, 2, '.', ',');
+                let fletes = number_format(row.fletes, 2, '.', ',');
+                let seguros = number_format(row.seguros, 2, '.', ',');
+                let embalajes = number_format(row.embalajes, 2, '.', ',');
+                let otros = number_format(row.otros, 2, '.', ',');
                 $('#incoterm').val(row.incoterm);
                 $('#numExportador').val(row.numExportador);
                 $('#valorFacturaMonExt').val(valorFacturaMonExt);
@@ -140,8 +139,8 @@ window.proveedores = function () {
         success: function (res) {
             if (res.success === true) {
                 localStorage.setItem("proveedoresFactura", JSON.stringify(res.result));
-                for (var i = 0; i < res.result.length; i++) {
-                    var row = res.result[i];
+                for (let i = 0; i < res.result.length; i++) {
+                    let row = res.result[i];
                     $('#idProv').append($("<option />").val(row.id).text(row.nombre));
                 }
             }
@@ -155,7 +154,7 @@ window.proveedor = function () {
         success: function (res) {
             if (res.success === true) {
                 localStorage.setItem("proveedorFactura", JSON.stringify(res.result));
-                var row = res.result;
+                let row = res.result;
                 $('#idProv').val(row.id);
                 $('#tipoIdentificador').val(row.tipoIdentificador);
                 $('#identificador').val(row.identificador);
@@ -174,9 +173,9 @@ window.proveedor = function () {
 };
 
 window.fillIncoterms = function () {
-    var incoterms = JSON.parse(localStorage.getItem("incoterms"));
-    for (var i = 0; i < incoterms.length; i++) {
-        var row = incoterms[i];
+    let incoterms = JSON.parse(localStorage.getItem("incoterms"));
+    for (let i = 0; i < incoterms.length; i++) {
+        let row = incoterms[i];
         $('#incoterm').append($("<option />").val(row.clave).text(row.clave));
     }
 };
@@ -193,7 +192,7 @@ window.incoterms = function () {
             }
         }); 
     } else {
-        var incoterms = JSON.parse(localStorage.getItem("incoterms"));
+        let incoterms = JSON.parse(localStorage.getItem("incoterms"));
         if (incoterms.length === 0) {
             return $.ajax({url: '/bodega/facturas/incoterms',
                 success: function (res) {
@@ -210,9 +209,9 @@ window.incoterms = function () {
 };
 
 window.fillPaises = function (id) {
-    var paises = JSON.parse(localStorage.getItem("paises"));
-    for (var i = 0; i < paises.length; i++) {
-        var row = paises[i];
+    let paises = JSON.parse(localStorage.getItem("paises"));
+    for (let i = 0; i < paises.length; i++) {
+        let row = paises[i];
         $(id).append($("<option />").val(row.cve_pais).text(row.cve_pais + ' - ' + row.nombre));
     }
 };
@@ -229,8 +228,7 @@ window.paises = function (id) {
             }
         });
     } else {
-        var paises = JSON.parse(localStorage.getItem("paises"));
-        console.log(paises);
+        let paises = JSON.parse(localStorage.getItem("paises"));
         if (paises.length === 0) {
             return $.ajax({url: '/bodega/facturas/paises',
                 success: function (res) {
@@ -247,9 +245,9 @@ window.paises = function (id) {
 };
 
 window.fillMonedas = function () {
-    var monedas = JSON.parse(localStorage.getItem("monedas"));
-    for (var i = 0; i < monedas.length; i++) {
-        var row = monedas[i];
+    let monedas = JSON.parse(localStorage.getItem("monedas"));
+    for (let i = 0; i < monedas.length; i++) {
+        let row = monedas[i];
         $('#divisa').append($("<option />").val(row.codigo).text(row.codigo + ' - ' + row.moneda));
     }
 };
@@ -266,7 +264,7 @@ window.monedas = function () {
                 }
             });
     } else {
-        var divisas = JSON.parse(localStorage.getItem("monedas"));
+        let divisas = JSON.parse(localStorage.getItem("monedas"));
         if (divisas.length === 0) {
             return $.ajax({url: '/bodega/facturas/monedas',
                 success: function (res) {
@@ -345,9 +343,9 @@ window.productos = function () {
             if (res.success === true) {
                 localStorage.setItem("productosFactura", JSON.stringify(res.result));
                 $('.divTableBody').html('');
-                for (var i = 0; i < res.result.length; i++) {
-                    var row = res.result[i];
-                    var html = '<div class="divTableRow" id="' + row.id + '">';
+                for (let i = 0; i < res.result.length; i++) {
+                    let row = res.result[i];
+                    let html = '<div class="divTableRow" id="' + row.id + '">';
                     html += '<div class="divTableCell">' + ((row.fraccion !== null) ? row.fraccion : '') + '</div>';
                     html += '<div class="divTableCell">' + ((row.numParte !== null) ? row.numParte : '') + '</div>';
                     html += '<div class="divTableCell" style="text-align: left">' + row.descripcion;
@@ -430,7 +428,7 @@ $(document).ready(function () {
     
     $(document.body).on('change', '#idProv', function(ev) {
         ev.preventDefault();
-        var idProv = $(this).val();
+        let idProv = $(this).val();
         if (idProv !== '') {
             $.ajax({url: '/bodega/facturas/cambiar-proveedor', dataType: "json", timeout: 10000, type: "POST",
                 data: {idFactura: $('#idFactura').val(), idProv: idProv},
@@ -448,8 +446,8 @@ $(document).ready(function () {
     }
     
     $(document).on("input", "#observaciones, #identificador, #calle, #numExt, #numInt, #colonia, #localidad, #municipio, #estado", function() {
-        var input = $(this);
-        var start = input[0].selectionStart;
+        let input = $(this);
+        let start = input[0].selectionStart;
         $(this).val(function (_, val) {
             return val.toUpperCase();
         });
