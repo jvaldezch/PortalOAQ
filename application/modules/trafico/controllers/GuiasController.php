@@ -73,8 +73,10 @@ class Trafico_GuiasController extends Zend_Controller_Action {
             "search" => "NotEmpty",
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+
+        $mppr = new Trafico_Model_TraficoGuiasMapper();
+
         if ($input->isValid("search")) {
-            $mppr = new Trafico_Model_TraficoGuiasMapper();
 
             $search = preg_replace('/\s+/', '', $input->search);
 
@@ -89,6 +91,11 @@ class Trafico_GuiasController extends Zend_Controller_Action {
             }
 
             $this->view->search = $search;
+        } else {
+            $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($mppr->obtenerTodas()));
+            $paginator->setItemCountPerPage($input->size);
+            $paginator->setCurrentPageNumber($input->page);
+            $this->view->paginator = $paginator;
         }
     }
 
