@@ -1162,8 +1162,9 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $view->idCliente = $input->idCliente;
 
                 if ($input->isValid("idProveedor")) {
-                    $providers = new Trafico_Model_FactPro();
-                    $row = $providers->obtener($input->idProveedor);
+
+                    $mapper = new Bodega_Model_Proveedores();
+                    $row = $mapper->obtener($input->idProveedor);
 
                     if (!empty($row)) {
                         $view->nombre = $row["nombre"];
@@ -1180,22 +1181,6 @@ class Bodega_GetController extends Zend_Controller_Action {
                         $view->pais = $row["pais"];
                     }
                 }
-                /* $invoices = new Trafico_Model_TraficoFacturasMapper();                    
-                  $arr = $invoices->informacionFactura($input->idFactura);
-                  $view->idTrafico = $input->idTrafico;
-                  $view->idCliente = $arr["idCliente"];
-                  if ($input->isValid("idProv")) {
-                  $view->idProv = $input->idProv;
-                  $trafico = new OAQ_Trafico(array("idTrafico" => $arr["idTrafico"], "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
-                  if ($trafico->getTipoOperacion() == "TOCE.IMP") {
-                  $providers = new Trafico_Model_FactPro();
-                  $row = $providers->obtener($input->idProv);
-                  } else if ($trafico->getTipoOperacion() == "TOCE.EXP") {
-                  $providers = new Trafico_Model_FactDest();
-                  $row = $providers->obtener($input->idProv);
-                  }
-
-                  } */
                 $this->_helper->json(array("success" => true, "html" => $view->render("editar-proveedor.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -1289,7 +1274,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 throw new Exception("Invalid input");
             }
         } catch (Exception $ex) {
-            Zend_Debug::Dump($ex->getMessage());
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
 
@@ -1345,23 +1330,33 @@ class Bodega_GetController extends Zend_Controller_Action {
                 "*" => array("StringTrim", "StripTags"),
                 "name" => "StringToUpper",
                 "idCliente" => "Digits",
+                "idBodega" => "Digits",
                 "idFactura" => "Digits",
                 "idTrafico" => "Digits",
             );
             $v = array(
                 "name" => "NotEmpty",
                 "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                "idBodega" => array("NotEmpty", new Zend_Validate_Int()),
                 "idFactura" => array("NotEmpty", new Zend_Validate_Int()),
                 "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
             );
             $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            if ($i->isValid("idTrafico") && $i->isValid("name")) {
-
-                $bodega = new OAQ_Bodega(array("idTrafico" => $i->idTrafico));
-
-                $mapper = new Bodega_Model_Proveedores();
-                $arr = $mapper->buscarProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
-                $this->_helper->json($arr);
+            if ($i->isValid("name")) {
+                if ($i->isValid("idTrafico")) {
+                    $bodega = new OAQ_Bodega(array("idTrafico" => $i->idTrafico));
+                    $mapper = new Bodega_Model_Proveedores();
+                    $arr = $mapper->buscarProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
+                    $this->_helper->json($arr);
+                } else if ($i->isValid("idBodega")) {
+                    $mapper = new Bodega_Model_Proveedores();
+                    $arr = $mapper->buscarProveedor($i->idBodega, $i->idCliente, $i->name);
+                    $this->_helper->json($arr);
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid input!");
             }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
@@ -1384,13 +1379,17 @@ class Bodega_GetController extends Zend_Controller_Action {
                 "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
             );
             $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            if ($i->isValid("idTrafico") && $i->isValid("name")) {
-
-                $bodega = new OAQ_Bodega(array("idTrafico" => $i->idTrafico));
-
-                $mapper = new Bodega_Model_Proveedores();
-                $row = $mapper->obtenerProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
-
+            if ($i->isValid("name")) {
+                if ($i->isValid("idTrafico")) {
+                    $bodega = new OAQ_Bodega(array("idTrafico" => $i->idTrafico));
+                    $mapper = new Bodega_Model_Proveedores();
+                    $row = $mapper->obtenerProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
+                } else if ($i->isValid("idBodega")) {
+                    $mapper = new Bodega_Model_Proveedores();
+                    $row = $mapper->buscarProveedor($i->idBodega, $i->idCliente, $i->name);
+                } else {
+                    throw new Exception("Invalid input!");
+                }
                 $this->_helper->json(array("success" => true, "results" => $row));
             }
         } catch (Exception $ex) {

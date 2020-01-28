@@ -7,7 +7,7 @@ $.datetimepicker.setLocale('es');
 
 $.datetimepicker.setDateFormatter({
     parseDate: function (date, format) {
-        var d = moment(date, format);
+        let d = moment(date, format);
         return d.isValid() ? d.toDate() : false;
     },
     
@@ -44,7 +44,7 @@ function check(e, value) {
 }
 
 function checkLength(len, ele) {
-    var fieldLength = ele.value.length;
+    let fieldLength = ele.value.length;
     if (fieldLength <= len) {
         return true;
     } else {
@@ -55,10 +55,10 @@ function checkLength(len, ele) {
 }
 
 function ordenarPorNombre(jsonObject) {
-    var dataArray = [];
-    var id;
+    let dataArray = [];
+    let id;
     for (id in jsonObject) {
-        var nombre = jsonObject[id];
+        let nombre = jsonObject[id];
         dataArray.push({id: parseInt(id), nombre: nombre});
     }
     dataArray.sort(function (a, b) {
@@ -80,10 +80,42 @@ function editarTransporteModal(titulo, idBodega, idLineaTransporte) {
             cerrar: {action: function () {}}
         },
         content: function () {
-            var self = this;
+            let self = this;
             return $.ajax({url: "/bodega/get/editar-transporte?idBodega=" + idBodega + "&idLineaTransporte=" + idLineaTransporte, dataType: "json", method: "get"
             }).done(function (res) {
-                var html = "";
+                let html = "";
+                if (res.success === true) {
+                    html = res.html;
+                }
+                self.setContent(html);
+            }).fail(function () {
+                self.setContent("Something went wrong.");
+            });
+        }
+    });
+}
+
+function nuevoProveedorModal(titulo, idBodega, idCliente) {
+    $.confirm({title: titulo, escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false, type: "blue",
+        buttons: {
+            guardar: {btnClass: "btn-blue", action: function () {
+                    if ($("#frmProvider").valid()) {
+                        $("#frmProvider").ajaxSubmit({url: "/bodega/post/agregar-proveedor", dataType: "json", type: "POST",
+                            success: function (res) {
+                                obtenerProveedores(idCliente, idBodega);
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+                }},
+            cerrar: {action: function () {}}
+        },
+        content: function () {
+            let self = this;
+            return $.ajax({url: "/bodega/get/editar-proveedor?idBodega=" + idBodega + "&idCliente=" + idCliente, dataType: "json", method: "get"
+            }).done(function (res) {
+                let html = "";
                 if (res.success === true) {
                     html = res.html;
                 }
@@ -112,10 +144,10 @@ function editarProveedorModal(titulo, idBodega, idCliente, idProveedor) {
             cerrar: {action: function () {}}
         },
         content: function () {
-            var self = this;
+            let self = this;
             return $.ajax({url: "/bodega/get/editar-proveedor?idBodega=" + idBodega + "&idCliente=" + idCliente + "&idProveedor=" + idProveedor, dataType: "json", method: "get"
             }).done(function (res) {
-                var html = "";
+                let html = "";
                 if (res.success === true) {
                     html = res.html;
                 }
@@ -159,7 +191,7 @@ window.obtenerTransportes = function (idBodega) {
 };
 
 window.nuevoProveedor = function (idBodega, idCliente) {
-    editarProveedorModal("Nuevo proveedor", idBodega, idCliente);
+    nuevoProveedorModal("Nuevo proveedor", idBodega, idCliente);
 };
 
 window.editarProveedor = function (idBodega, idCliente, idProveedor) {
@@ -237,7 +269,7 @@ $(document).ready(function () {
                        window.location.href = "/bodega/index/editar-entrada?id=" + res.id;
                     } else {                        
                         $("#form").LoadingOverlay("hide");
-                        var msg = res.message;
+                        let msg = res.message;
                         if (!msg.search("pero ha sido marcado como borrado")) {
                             $.alert({title: "¡Advertencia!", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, content: msg});
                         }
@@ -249,19 +281,20 @@ $(document).ready(function () {
     
     $(document.body).on("click", ".edit-provider", function (ev) {
         ev.preventDefault();
-        var idCliente = $("#idCliente").val();
-        var idProveedor = $("#idProveedor").val();
+        let idBodega = $("#idBodega").val();
+        let idCliente = $("#idCliente").val();
+        let idProveedor = $("#idProveedor").val();
         if (idCliente && idProveedor) {
-            editarProveedor(idCliente, idProveedor);        
+            editarProveedor(idBodega, idCliente, idProveedor);
         } else {
-            $.alert({title: "Error", type: "red", content: "No ha seleccionado cliente.", boxWidth: "350px", useBootstrap: false});
+            $.alert({title: "Error", type: "red", content: "No ha seleccionado proveedor.", boxWidth: "350px", useBootstrap: false});
         }
     });
     
     $(document.body).on("click", ".new-provider", function (ev) {
         ev.preventDefault();
-        var idBodega = $("#idBodega").val();
-        var idCliente = $("#idCliente").val();
+        let idBodega = $("#idBodega").val();
+        let idCliente = $("#idCliente").val();
         if (idCliente) {
             nuevoProveedor(idBodega, idCliente);        
         } else {
@@ -271,7 +304,7 @@ $(document).ready(function () {
     
     $(document.body).on("click", ".new-transport", function (ev) {
         ev.preventDefault();
-        var idBodega = $("#idBodega").val();
+        let idBodega = $("#idBodega").val();
         if (idBodega) {
             nuevoTransporte(idBodega);
         } else {
@@ -281,8 +314,8 @@ $(document).ready(function () {
     
     $(document.body).on("click", ".edit-transport", function (ev) {
         ev.preventDefault();
-        var idBodega = $("#idBodega").val();
-        var idLineaTransporte = $("#idLineaTransporte").val();
+        let idBodega = $("#idBodega").val();
+        let idLineaTransporte = $("#idLineaTransporte").val();
         if (idBodega && idLineaTransporte) {
             editarTransporte(idBodega, idLineaTransporte);
         } else {
@@ -291,9 +324,9 @@ $(document).ready(function () {
     });
 
     /** UPPER CASE INPUT */
-    $(document.body).on("input", "#referencia, #proveedor, #contenedorCaja, #lineaTransporte, #blGuia, #proveedores, #contenedorCajaEntrada", function (evt) {
-        var input = $(this);
-        var start = input[0].selectionStart;
+    $(document.body).on("input", "#referencia, #proveedor, #contenedorCaja, #lineaTransporte, #blGuia, #proveedores, #contenedorCajaEntrada", function () {
+        let input = $(this);
+        let start = input[0].selectionStart;
         $(this).val(function (_, val) {
             return val.toUpperCase();
         });

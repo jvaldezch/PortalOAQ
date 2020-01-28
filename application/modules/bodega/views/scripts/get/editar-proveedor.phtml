@@ -11,15 +11,15 @@
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Nombre:&nbsp;<span style="color:red"> *</span></label>
-                    <input style="float: left; width: 390px" type="text" name="nombre" id="nombre" value="<?= $this->nombre ?>">
+                    <label style="float: left; width: 110px; text-align: right" for="nombre">Nombre:&nbsp;<span style="color:red"> *</span></label>
+                    <input style="float: left; width: 390px" type="text" class="typehead" name="nombre" id="nombre" value="<?= $this->nombre ?>" autocomplete="off">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Iden:&nbsp;<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 110px; text-align: right" for="identificador">Iden:&nbsp;<span style="color:red"> *</span></label>
                     <input style="float: left; width: 100px" type="text" name="identificador" id="identificador" value="<?= $this->identificador ?>">
-                    <label style="float: left; width: 65px; text-align: right">Tipo Iden.:<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 65px; text-align: right" for="tipoIdentificador">Tipo Iden.:<span style="color:red"> *</span></label>
                     <select name="tipoIdentificador" id="tipoIdentificador" style="float: left; width: 110px">
                         <option value="">---</option>
                         <option value="0"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 0) ? ' selected="true"' : '' ?>>Tax ID</option>
@@ -31,51 +31,51 @@
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Calle:&nbsp;<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 110px; text-align: right" for="calle">Calle:&nbsp;<span style="color:red"> *</span></label>
                     <input style="float: left; width: 250px" type="text" name="calle" id="calle" value="<?= $this->calle ?>">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Num. Ext.:&nbsp;<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 110px; text-align: right" for="numExt">Num. Ext.:&nbsp;<span style="color:red"> *</span></label>
                     <input style="float: left; width: 70px" type="text" name="numExt" id="numExt" value="<?= $this->numExt ?>">
-                    <label style="float: left; width: 60px; text-align: right">Num. Int.:&nbsp;</label>
+                    <label style="float: left; width: 60px; text-align: right" for="numInt">Num. Int.:&nbsp;</label>
                     <input style="float: left; width: 70px" type="text" name="numInt" id="numInt" value="<?= $this->numInt ?>">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Colonia:&nbsp;</label>
+                    <label style="float: left; width: 110px; text-align: right" for="colonia">Colonia:&nbsp;</label>
                     <input style="float: left; width: 250px" type="text" name="colonia" id="colonia" value="<?= $this->colonia ?>">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Loc. (Cd.):&nbsp;</label>
+                    <label style="float: left; width: 110px; text-align: right" for="localidad">Loc. (Cd.):&nbsp;</label>
                     <input style="float: left; width: 250px" type="text" name="localidad" id="localidad" value="<?= $this->localidad ?>">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Municipio:&nbsp;</label>
+                    <label style="float: left; width: 110px; text-align: right" for="municipio">Municipio:&nbsp;</label>
                     <input style="float: left; width: 250px" type="text" name="municipio" id="municipio" value="<?= $this->municipio ?>">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Estado:&nbsp;</label>
+                    <label style="float: left; width: 110px; text-align: right" for="estado">Estado:&nbsp;</label>
                     <input style="float: left; width: 250px" type="text" name="estado" id="estado" value="<?= $this->estado ?>">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">CP:&nbsp;<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 110px; text-align: right" for="codigoPostal">CP:&nbsp;<span style="color:red"> *</span></label>
                     <input style="float: left; width: 70px" type="text" name="codigoPostal" id="codigoPostal" value="<?= $this->codigoPostal ?>">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">País:&nbsp;<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 110px; text-align: right" for="pais">País:&nbsp;<span style="color:red"> *</span></label>
                     <select name="pais" id="pais" style="float: left; width: 250px">
                         <option value="">---</option>
                         <?php if(isset($this->paisSelect)) {?>
@@ -123,12 +123,61 @@
     });
     
     $(document.body).on("input", "#nombre, #calle, #numInt, #numExt, #colonia, #municipio, #estado, #codigoPostal, #localidad", function (evt) {
-        var input = $(this);
-        var start = input[0].selectionStart;
+        let input = $(this);
+        let start = input[0].selectionStart;
         $(this).val(function (_, val) {
             return val.toUpperCase();
         });
         input[0].selectionStart = input[0].selectionEnd = start;
+    });
+
+    window.decodeEntities = function(array) {
+        let arr = [];
+        array.forEach(function (item) {
+            let txt = $('<textarea />').html(item.name).text();
+            arr.push(txt);
+        });
+        return arr;
+    };
+
+    $(".typehead").typeahead({
+        minLength: 3,
+        source: function (query, process) {
+            return $.ajax({
+                url: "/bodega/get/proveedores",
+                type: "get",
+                data: {name: query, idFactura: $("#idFactura").val(), idTrafico: $("#idTrafico").val(), idCliente: $("#idCliente").val(), idBodega: $("#idBodega").val()},
+                dataType: "json",
+                success: function (res) {
+                    return process(decodeEntities(res));
+                }
+            });
+        },
+        updater:function (item) {
+            $.ajax({
+                url: "/bodega/get/obtener-proveedor",
+                type: "get",
+                data: {name: item, idFactura: $("#idFactura").val(), idTrafico: $("#idTrafico").val(), idCliente: $("#idCliente").val(), idBodega: $("#idBodega").val()},
+                dataType: "json",
+                success: function (res) {
+                    if (res.success === true) {
+                        let row = res.results;
+                        $('#frmProvider #nombre').val(row.nombre);
+                        $('#frmProvider #tipoIdentificador').val(row.tipoIdentificador);
+                        $('#frmProvider #identificador').val(row.identificador);
+                        $('#frmProvider #calle').val(row.calle);
+                        $('#frmProvider #numExt').val(row.numExt);
+                        $('#frmProvider #numInt').val(row.numInt);
+                        $('#frmProvider #colonia').val(row.colonia);
+                        $('#frmProvider #localidad').val(row.localidad);
+                        $('#frmProvider #municipio').val(row.municipio);
+                        $('#frmProvider #estado').val(row.estado);
+                        $('#frmProvider #codigoPostal').val(row.codigoPostal);
+                        $('#frmProvider #pais').val(row.pais);
+                    }
+                }
+            });
+        }
     });
     
 </script>
