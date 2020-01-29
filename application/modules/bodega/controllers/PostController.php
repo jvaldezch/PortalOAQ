@@ -70,6 +70,84 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
+    public function agregarProveedorAction() {
+        try {
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+                $f = array(
+                    "idBodega" => array("StringTrim", "StripTags", "Digits"),
+                    "idCliente" => array("StringTrim", "StripTags", "Digits"),
+                    "idProv" => array("StringTrim", "StripTags", "Digits"),
+                    "nombre" => "StringToUpper",
+                    "identificador" => "StringToUpper",
+                    "tipoIdentificador" => "Digits",
+                    "calle" => "StringToUpper",
+                    "numExt" => "StringToUpper",
+                    "numInt" => "StringToUpper",
+                    "colonia" => "StringToUpper",
+                    "localidad" => "StringToUpper",
+                    "municipio" => "StringToUpper",
+                    "estado" => "StringToUpper",
+                    "codigoPostal" => "StringToUpper",
+                    "pais" => "StringToUpper",
+                );
+                $v = array(
+                    "idBodega" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idProv" => array("NotEmpty", new Zend_Validate_Int()),
+                    "nombre" => "NotEmpty",
+                    "identificador" => "NotEmpty",
+                    "tipoIdentificador" => "NotEmpty",
+                    "calle" => "NotEmpty",
+                    "numExt" => "NotEmpty",
+                    "numInt" => "NotEmpty",
+                    "colonia" => "NotEmpty",
+                    "localidad" => "NotEmpty",
+                    "municipio" => "NotEmpty",
+                    "estado" => "NotEmpty",
+                    "codigoPostal" => "NotEmpty",
+                    "pais" => "NotEmpty",
+                );
+                $input = new Zend_Filter_Input($f, $v, $request->getPost());
+                if ($input->isValid("idBodega") && $input->isValid("idCliente")) {
+
+                    $mppr = new Bodega_Model_Proveedores();
+
+                    $arr = array(
+                        "idCliente" => $input->idCliente,
+                        "idBodega" => $input->idBodega,
+                        "nombre" => $input->nombre,
+                        "identificador" => $input->identificador,
+                        "tipoIdentificador" => $input->tipoIdentificador,
+                        "calle" => $input->calle,
+                        "numExt" => $input->numExt,
+                        "numInt" => ($input->isValid("numInt")) ? $input->numInt : null,
+                        "colonia" => ($input->isValid("colonia")) ? $input->colonia : null,
+                        "localidad" => ($input->isValid("localidad")) ? $input->localidad : null,
+                        "municipio" => ($input->isValid("municipio")) ? $input->municipio : null,
+                        "estado" => ($input->isValid("estado")) ? $input->estado : null,
+                        "codigoPostal" => $input->codigoPostal,
+                        "pais" => $input->pais,
+                        "creado" => date("Y-m-d H:i:s")
+                    );
+
+                    if (($mppr->agregar($arr))) {
+                        $this->_helper->json(array("success" => true, "message" => "Agregado"));
+                    } else {
+                        throw new Exception("No se pudo agregar");
+                    }
+
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function obtenerEmbarcadorAction() {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
