@@ -1369,7 +1369,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                 "*" => array("StringTrim", "StripTags"),
                 "name" => "StringToUpper",
                 "idCliente" => "Digits",
-                "idBodega" => array("NotEmpty", new Zend_Validate_Int()),
+                "idBodega" => "Digits",
                 "idFactura" => "Digits",
                 "idTrafico" => "Digits",
             );
