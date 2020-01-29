@@ -1386,7 +1386,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     $row = $mapper->obtenerProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
                 } else if ($i->isValid("idBodega")) {
                     $mapper = new Bodega_Model_Proveedores();
-                    $row = $mapper->buscarProveedor($i->idBodega, $i->idCliente, $i->name);
+                    $row = $mapper->buscarProveedor($i->idCliente, $i->name);
                 } else {
                     throw new Exception("Invalid input!");
                 }
