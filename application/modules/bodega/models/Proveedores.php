@@ -51,9 +51,8 @@ class Bodega_Model_Proveedores {
         return null;
     }
 
-    public function buscarProveedor($idBodega, $idCliente, $name) {
+    public function buscarProveedor($idCliente, $name) {
         $sql = $this->_db_table->select()
-            ->where("idBodega = ?", $idBodega)
             ->where("idCliente = ?", $idCliente)
             ->where("nombre LIKE ?", "%" . $name . "%")
             ->order("nombre ASC")

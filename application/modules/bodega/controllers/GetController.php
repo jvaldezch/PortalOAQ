@@ -1346,11 +1346,11 @@ class Bodega_GetController extends Zend_Controller_Action {
                 if ($i->isValid("idTrafico")) {
                     $bodega = new OAQ_Bodega(array("idTrafico" => $i->idTrafico));
                     $mapper = new Bodega_Model_Proveedores();
-                    $arr = $mapper->buscarProveedor($bodega->getIdBodega(), $i->idCliente, $i->name);
+                    $arr = $mapper->buscarProveedor($i->idCliente, $i->name);
                     $this->_helper->json($arr);
                 } else if ($i->isValid("idBodega")) {
                     $mapper = new Bodega_Model_Proveedores();
-                    $arr = $mapper->buscarProveedor($i->idBodega, $i->idCliente, $i->name);
+                    $arr = $mapper->buscarProveedor($i->idCliente, $i->name);
                     $this->_helper->json($arr);
                 } else {
                     throw new Exception("Invalid input!");
