@@ -71,9 +71,8 @@ class Bodega_Model_Proveedores {
         return null;
     }
 
-    public function obtenerProveedor($idBodega, $idCliente, $name) {
+    public function obtenerProveedor($idCliente, $name) {
         $sql = $this->_db_table->select()
-            ->where("idBodega = ?", $idBodega)
             ->where("idCliente = ?", $idCliente)
             ->where("nombre = ?", $name);
         $stmt = $this->_db_table->fetchRow($sql);
