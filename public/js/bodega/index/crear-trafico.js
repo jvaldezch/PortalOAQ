@@ -170,9 +170,9 @@ window.obtenerProveedores = function (idCliente, idBodega) {
                     $.each(res.results, function (k, v) {
                         $('#idProveedor').append('<option value="' + v["id"] + '">' + v["nombre"] + '</option>');
                     });
-                    $('#idProveedor').removeAttr('disabled');
                 }
             }
+            $('#idProveedor').removeAttr('disabled');
         }
     });
 };
