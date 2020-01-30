@@ -1866,31 +1866,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                             $dates = new Trafico_Model_TraficoFechasMapper();
                             $fechaEta = $dates->obtenerFecha($i->idTrafico, 10);
                             $details = new Trafico_Model_TraficoSolDetalleMapper();
-                            /*if ($traffic->getPatente() == 3589 && ($traffic->getAduana() == 240 || $traffic->getAduana() == 640)) {
-                                $db = $misc->sitawinTrafico($traffic->getPatente(), $traffic->getAduana());
-                                if (isset($db)) {
-                                    $b = $db->infoPedimentoBasicaReferencia($traffic->getReferencia());
-                                }
-                                if (isset($b) && !empty($b)) {
-                                    if (isset($b["pesoBruto"])) {
-                                        $data["pesoBruto"] = $b["pesoBruto"];
-                                    }
-                                    if (isset($b["guias"]) && !empty($b["guias"])) {
-                                        $data["guias"] = "";
-                                        foreach ($b["guias"] as $value) {
-                                            $data["guias"] .= preg_replace("/\s+/", "", $value["guia"]) . ", ";
-                                        }
-                                    }
-                                    if (isset($b["facturas"]) && !empty($b["facturas"])) {
-                                        $valorUsd = 0;
-                                        $data["facturas"] = "";
-                                        foreach ($b["facturas"] as $value) {
-                                            $data["facturas"] .= preg_replace("/\s+/", "", $value["numFactura"]) . ", ";
-                                            $valorUsd += $value["valorFacturaUsd"];
-                                        }
-                                    }
-                                }
-                            }*/
+
                             $detail = array(
                                 "idSolicitud" => $id,
                                 "idAduana" => $traffic->getIdAduana(),
@@ -1902,6 +1878,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                                 "fechaEta" => isset($fechaEta) ? $fechaEta : null,
                                 "creado" => date("Y-m-d H:i:s"),
                             );
+
                             $details->agregar($detail);
                             $this->_helper->json(array("success" => true, "id" => $id, "aduana" => $traffic->getIdAduana()));
                         } else {
@@ -2071,12 +2048,17 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                     $index = $trafico->verificarIndexRepositorios();
 
-                    $this->_firephp->info($archivos);
-
                     foreach ($archivos as $r) {
                         if (!isset($r['id_trafico'])) {
                             $repo->update($r['id'], array(
                                 "id_trafico" => $input->id,
+                                "patente" => $trafico->getPatente(),
+                                "aduana" => $trafico->getAduana(),
+                                "pedimento" => $trafico->getPedimento(),
+                            ));
+                        }
+                        if (!isset($r['patente']) || !isset($r['aduana']) || !isset($r['pedimento'])) {
+                            $repo->update($r['id'], array(
                                 "patente" => $trafico->getPatente(),
                                 "aduana" => $trafico->getAduana(),
                                 "pedimento" => $trafico->getPedimento(),
