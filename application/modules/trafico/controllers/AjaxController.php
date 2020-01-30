@@ -2067,11 +2067,22 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     $repo = new Archivo_Model_RepositorioMapper();
                     $archivos = $repo->obtenerArchivosReferencia($array["referencia"]);
                     $view->archivos = $archivos;
-
-                    $this->_firephp->info($archivos);
                     
                     $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                     $index = $trafico->verificarIndexRepositorios();
+
+                    $this->_firephp->info($archivos);
+
+                    foreach ($archivos as $r) {
+                        if (!isset($r['id_trafico'])) {
+                            $repo->update($r['id'], array(
+                                "id_trafico" => $input->id,
+                                "patente" => $trafico->getPatente(),
+                                "aduana" => $trafico->getAduana(),
+                                "pedimento" => $trafico->getPedimento(),
+                            ));
+                        }
+                    }
                     
                     if (in_array($this->_session->role, array("super", "gerente", "trafico_ejecutivo", "trafico"))) {
                         $view->canDelete = true;
