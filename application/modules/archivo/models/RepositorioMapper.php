@@ -1946,7 +1946,7 @@ class Archivo_Model_RepositorioMapper {
             $sql = $this->_db_table->select()
                     ->distinct()
                     ->setIntegrityCheck(false)
-                    ->from(array("r" => "repositorio"), array("id", "uuid", "nom_archivo", "ubicacion", "tipo_archivo", "creado", "usuario", "edocument"))
+                    ->from(array("r" => "repositorio"), array("id", "id_trafico", "patente", "aduana", "pedimento", "uuid", "nom_archivo", "ubicacion", "tipo_archivo", "creado", "usuario", "edocument"))
                     ->joinLeft(array("d" => "documentos"), "r.tipo_archivo = d.id", array(""))
                     ->where("r.tipo_archivo NOT IN (?)", array(9999))
                     ->order("d.orden ASC");
