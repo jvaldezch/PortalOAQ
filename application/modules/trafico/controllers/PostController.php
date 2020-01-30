@@ -3554,4 +3554,41 @@ class Trafico_PostController extends Zend_Controller_Action {
         }
     }
 
+    /*public function vucemEnviarMultipleAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "idTrafico" => array("Digits"),
+                );
+                $v = array(
+                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                    "ids" => array("NotEmpty"),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("idTrafico") && $input->isValid("ids")) {
+                    $sellos = new OAQ_Archivos_SellosVucem();
+                    if (is_array($input->ids)) {
+                        foreach ($input->ids as $value) {
+                            $sellos->actualizarSelloDesdeTrafico($input->idSello, $value);
+                        }
+                    } else {
+                        $sellos->actualizarSelloDesdeTrafico($input->idSello, $input->ids);
+                    }
+                    $this->_helper->json(array("success" => true));
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }*/
+
 }

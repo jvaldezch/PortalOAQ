@@ -1,7 +1,11 @@
 <?php if (isset($this->results) && !empty($this->results)) { ?>
     <?php foreach ($this->results as $item) { ?>
         <tr>
-            <td><input type="checkbox" class="checkvucem" id="vucem_<?= $item["id"] ?>"></td>
+            <td>
+                <?php if(!isset($item["edocument"])) { ?>
+                    <input type="checkbox" class="checkvucem" data-id="<?= $item["id"] ?>" id="vucem_<?= $item["id"] ?>">
+                <?php } ?>
+            </td>
             <td>
                 <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
                     <i class="fas fa-code" onclick="vucemPreview(<?= $item["id"] ?>);" style="cursor: pointer" title="Mostrar XML"></i>
@@ -68,14 +72,20 @@
             <td style="width: 75px; text-align: left">
                 <div style="font-size:1.2em; color: #2f3b58; float: left; margin-right: 5px; margin-top: 2px; margin-bottom: 2px">
                     <?php if(!isset($item["edocument"])) { ?>
+
                         <?php if(!isset($item["numeroOperacion"])) { ?>
-                            <i class="fas fa-upload" onclick="enviarAVucem(<?= $item["id"] ?>);" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
+                            <i class="fas fa-upload vucem-send" data-id="<?= $item["id"] ?>" onclick="enviarAVucem(<?= $item["id"] ?>);" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
                         <?php } ?>
-                        <i class="fab fa-uniregistry consultarVucem" data-id="<?= $item["id"] ?>" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
+                        <i class="fab fa-uniregistry vucem-request consultarVucem" data-id="<?= $item["id"] ?>" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
+
                         <script>consultaDetalleLog(<?= $item["id"] ?>);</script>
+
                         <i class="fas fa-trash-alt" onclick="borrarVucem(<?= $item["id"] ?>);" style="cursor: pointer" title="Borrar operación"></i>
+
                     <?php } else { ?>
-                        <i class="far fa-save" style="font-size:1.2em; color: #2f3b58; cursor: pointer" onclick="guardarEnDisco(<?= $item["id"] ?>);"></i>
+
+                        <i class="far fa-save vucem-save" data-id="<?= $item["id"] ?>" style="font-size:1.2em; color: #2f3b58; cursor: pointer" onclick="guardarEnDisco(<?= $item["id"] ?>);"></i>
+
                     <?php } ?>
                 </div>
             </td>
@@ -83,7 +93,7 @@
     <?php } ?>                
 <?php } else { ?>
     <tr>
-        <td colspan="10">
+        <td colspan="11">
             <em>No hay solicitudes recientes.</em>
         </td>
     </tr>

@@ -32,7 +32,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return true;
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -109,7 +109,7 @@ class Trafico_Model_VucemMapper {
                 }
                 return $arr;
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -130,7 +130,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return $stmt->toArray();
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -153,7 +153,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return $stmt->toArray();
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -173,7 +173,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return $stmt->toArray();
             }
-            return false;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -185,7 +185,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return true;
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -197,7 +197,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return true;
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -209,7 +209,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return $stmt;
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
@@ -221,7 +221,7 @@ class Trafico_Model_VucemMapper {
             if ($stmt) {
                 return $stmt;
             }
-            return;
+            return null;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }

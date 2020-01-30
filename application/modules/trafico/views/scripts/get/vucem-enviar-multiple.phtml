@@ -1,0 +1,27 @@
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Factura</th>
+            <th>Archivo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->rows as $item) { ?>
+            <?php if (!$item['edocument']) { ?>
+                <tr>
+                    <td>
+                        <!--                <i class="far fa-check-circle" style="color: #777"></i>-->
+                        <i class="far fa-check-circle" style="color: #82c91e"></i>
+                    </td>
+                    <td><?= $item['numFactura'] ?></td>
+                    <td><?= $item['nombreArchivo'] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+</script>

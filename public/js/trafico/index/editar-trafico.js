@@ -1954,5 +1954,67 @@ $(document).ready(function () {
             }
         });
     });
+
+    function mensajeAlerta(mensaje) {
+        $.alert({title: "Alerta", type: "red", typeAnimated: true, useBootstrap: false, boxWidth: "250px",
+            content: mensaje
+        });
+    }
+
+    $(document.body).on("click", ".send-multiple", function () {
+        let ids = [];
+        let boxes = $("input[class=checkvucem]:checked");
+        if ((boxes).size() === 0) {
+            mensajeAlerta('Usted no ha seleccionado nada.');
+        }
+        if ((boxes).size() > 0) {
+            $(boxes).each(function () {
+                ids.push($(this).data('id'));
+            });
+            $.confirm({title: "Enviar a VUCEM", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
+                buttons: {
+                    confirmar: {
+                        btnClass: "btn-blue",
+                        action: function () {
+                            ids.forEach(function(id) {
+
+                                if ($('.vucem-send[data-id=' + id + ']')) {
+                                    setTimeout(function () {
+                                        enviarAVucem(id)
+                                    }, 3000);
+                                }
+                                if ($('.vucem-request[data-id=' + id + ']')) {
+                                    setTimeout(function () {
+                                        consultarVucem(id)
+                                    }, 3000);
+                                }
+
+                            });
+                        }
+                    },
+                    cerrar: {
+                        action: function () {}
+                    }
+                },
+                content: function () {
+                    let self = this;
+                    return $.ajax({url: "/trafico/get/vucem-enviar-multiple", dataType: "json", method: "GET",
+                        data: {idTrafico: $("#idTrafico").val(), ids: ids}
+                    }).done(function (res) {
+                        let html = "";
+                        if (res.success === true) {
+                            html = res.html;
+                        } else {
+                            html = res.message;
+                        }
+                        self.setContent(html);
+                    }).fail(function () {
+                        self.setContent("Something went wrong.");
+                    });
+                }
+            });
+
+        }
+    });
     
 });

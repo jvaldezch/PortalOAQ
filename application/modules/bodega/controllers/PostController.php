@@ -292,13 +292,11 @@ class Bodega_PostController extends Zend_Controller_Action {
                     "ubicacion" => array("StringToUpper"),
                     "contenedorCajaEntrada" => array("StringToUpper"),
                     "contenedorCajaSalida" => array("StringToUpper"),
-                    "bultos" => array("Digits"),
                 );
                 $v = array(
                     "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
                     "ie" => "NotEmpty",
                     "blGuia" => "NotEmpty",
-                    "contenedorCaja" => "NotEmpty",
                     "lineaTransporte" => "NotEmpty",
                     "contenedorCaja" => "NotEmpty",
                     "proveedores" => "NotEmpty",

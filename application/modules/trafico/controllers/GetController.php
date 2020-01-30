@@ -3161,4 +3161,43 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function vucemEnviarMultipleAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => array("Digits"),
+                "ids" => array("Digits"),
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                "ids" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico") && $input->isValid("ids")) {
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+                $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
+                $arr = [];
+
+                $mppr = new Trafico_Model_VucemMapper();
+
+                if (is_array($input->ids)) {
+                    foreach ($input->ids as $id) {
+                        $row = $mppr->obtenerVucem($id);
+                        $arr[] = $row;
+                    }
+                }
+
+                $view->rows = $arr;
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("vucem-enviar-multiple.phtml")));
+            } else {
+                $this->_helper->json(array("success" => false, "message" => "Invalid input!"));
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
 }
