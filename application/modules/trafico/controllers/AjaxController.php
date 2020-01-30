@@ -10,6 +10,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
     protected $_logger;
     protected $_rolesEditarTrafico;
     protected $_todosClientes;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();  
@@ -19,6 +20,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_logger = Zend_Registry::get("logDb");
         $contextSwitch = $this->_helper->getHelper("contextSwitch");
+        $this->_firephp = Zend_Registry::get("firephp");
         $contextSwitch->addActionContext("recent-coves", "json")
                 ->addActionContext("borrar-solicitud-cove", "json")
                 ->initContext();
@@ -2065,6 +2067,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     $repo = new Archivo_Model_RepositorioMapper();
                     $archivos = $repo->obtenerArchivosReferencia($array["referencia"]);
                     $view->archivos = $archivos;
+
+                    $this->_firephp->info($archivos);
                     
                     $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                     $index = $trafico->verificarIndexRepositorios();
