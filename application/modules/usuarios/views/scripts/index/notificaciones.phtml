@@ -1,0 +1,108 @@
+<form method="get">
+    <table class="traffic-table hover">
+        <tbody>
+        <tr>
+            <th style="width: 90px">
+                <label for="buscar">BUSCAR:</label>
+            </th>
+            <td style="text-align: left">
+                <input type="text" name="buscar" id="buscar"
+                       value="<?= (isset($this->buscar)) ? $this->buscar : '' ?>"/>
+                <button type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<table class="traffic-table hover contacts">
+    <tr>
+        <th>Aduana</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Tipo de contacto</th>
+        <th>Creación</th>
+        <th>Gerencia</th>
+        <th>Admon.</th>
+        <th>Ope.</th>
+        <th>Dep.</th>
+        <th>Coment.</th>
+        <th>Coment. Sol.</th>
+        <th>Cancelación</th>
+        <th>Solicitud</th>
+        <th>Habilitado</th>
+        <th></th>
+    </tr>
+    <?php if ($this->paginator) { ?>
+        <?php foreach ($this->paginator as $item) { ?>
+            <tr id="contact_<?= $item['id'] ?>">
+                <td><?= $item['patente'] . '-' . $item['aduana'] ?></td>
+                <td><?= $item['nombre'] ?></td>
+                <td><?= $item['email'] ?></td>
+                <td><?= $item['tipo'] ?></td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="creacion" <?= ($item['creacion'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="gerencia" <?= ($item['gerencia'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox"
+                           class="administracion" <?= ($item['administracion'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="operacion" <?= ($item['operacion'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="deposito" <?= ($item['deposito'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox"
+                           class="comentario" <?= ($item['comentario'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox"
+                           class="comentarioSolicitud" <?= ($item['comentarioSolicitud'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox"
+                           class="cancelacion" <?= ($item['cancelacion'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox" class="solicitud" <?= ($item['solicitud'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td style="text-align: center">
+                    <input type="checkbox"
+                           class="habilitado" <?= ($item['habilitado'] == 1) ? ' checked="true"' : '' ?>
+                           data-id="<?= $item['id'] ?>"/>
+                </td>
+                <td>
+                    <i class="far fa-trash-alt delete"
+                       data-id="<?= $item['id'] ?>"
+                       style="font-size: 1.1rem; margin: 0 3px; cursor: pointer"></i>
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="15">
+                <em>No hay registros en la base de datos o su usuario no tiene aduanas asignadas.</em>
+            </td>
+        </tr>
+    <?php } ?>
+</table>
+<div class="traffic-clear-10"></div>
+<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator, "Sliding", null, array("buscar" => $this->buscar)) : null ?>
+<button class="traffic-btn traffic-btn-right" id="submit">
+    <i class="fas fa-plus"></i> Agregar
+</button>

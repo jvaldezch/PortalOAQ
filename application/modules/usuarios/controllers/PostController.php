@@ -5,6 +5,7 @@ class Usuarios_PostController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
@@ -16,6 +17,7 @@ class Usuarios_PostController extends Zend_Controller_Action {
         $ajaxContext->setAutoJsonSerialization(false)
                 ->addActionContext("encriptacion-sello", array("json"))
                 ->initContext();
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -824,6 +826,151 @@ class Usuarios_PostController extends Zend_Controller_Action {
                 }
             } else {
                 throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function actualizarContactosAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                    "type" => array("StringToLower"),
+                    "value" => array("Digits"),
+                );
+                $v = array(
+                    "id" => array("NotEmpty", new Zend_Validate_Int()),
+                    "type" => array("NotEmpty"),
+                    "value" => array(new Zend_Validate_InArray(array(1, 0))),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("id") && $input->isValid("type") && $input->isValid("value")) {
+                    $mppr = new Trafico_Model_ContactosMapper();
+                    $arr = array(
+                        "{$input->type}" => ($input->value == 1) ? 1 : 0
+                    );
+                    if (($mppr->actualizar($input->id, $arr))) {
+                        $this->_helper->json(array("success" => true));
+                    } else {
+                        throw new Exception("No se puede actualizar.");
+                    }
+                } else {
+                    throw new Exception("Datos de solicitud no son válidos.");
+                }
+            } else {
+                throw new Exception("Tipo de solicitud no es válida.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function borrarContactoAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                );
+                $v = array(
+                    "id" => array("NotEmpty", new Zend_Validate_Int()),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("id")) {
+                    $mppr = new Trafico_Model_ContactosMapper();
+                    if (($mppr->delete($input->id))) {
+                        $this->_helper->json(array("success" => true));
+                    } else {
+                        throw new Exception("No se puede borrar.");
+                    }
+                } else {
+                    throw new Exception("Datos de solicitud no son válidos.");
+                }
+            } else {
+                throw new Exception("Tipo de solicitud no es válida.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function nuevoContactoAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/post/");
+                $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
+                $mppr = new Trafico_Model_TraficoAduanasMapper();
+                $view->aduanas = $mppr->obtenerTodas();
+
+                $tmppr = new Trafico_Model_TipoContactoMapper();
+                $view->tipoContactos = $tmppr->obtenerTodos();
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("nuevo-contacto.phtml")));
+            } else {
+                throw new Exception("Tipo de solicitud no es válida.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function agregarContactoAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                );
+                $v = array(
+                    "nombre" => array("NotEmpty"),
+                    "email" => array("NotEmpty"),
+                    "idAduana" => array("NotEmpty"),
+                    "tipoContacto" => array("NotEmpty"),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("nombre") && $input->isValid("email")
+                    && $input->isValid("idAduana") && $input->isValid("tipoContacto")) {
+
+                    $mppr = new Trafico_Model_ContactosMapper();
+
+                    $arr = array(
+                        "nombre" => $input->nombre,
+                        "email" => $input->email,
+                        "idAduana" => $input->idAduana,
+                        "tipoContacto" => $input->tipoContacto,
+                        "creado" => date("Y-m-d H:is"),
+                        "creadoPor" => $this->_session->username
+                    );
+
+                    if (($mppr->agregar($arr))) {
+                        $this->_helper->json(array("success" => true));
+                    }
+
+                } else {
+                    throw new Exception("Datos de solicitud no son válidos.");
+                }
+            } else {
+                throw new Exception("Tipo de solicitud no es válida.");
             }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));

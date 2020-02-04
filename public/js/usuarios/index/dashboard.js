@@ -8,7 +8,7 @@ $(document).ready(function () {
 
     $(document.body).on('click', '.purge', function (ev) {
         ev.preventDefault();
-        var queue = $(this).data('queue');
+        let queue = $(this).data('queue');
         $.confirm({title: "Confirmar", content: '¿Está seguro de que desea eliminar el Queue, esto borrará todos los mensajes y todo el procesamiento de ese Queue será reiniciado?', type: 'red', escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false,
             buttons: {
                 si: {

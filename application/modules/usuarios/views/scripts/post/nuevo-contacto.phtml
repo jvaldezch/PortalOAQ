@@ -1,0 +1,84 @@
+<form id="formNewContact">
+    <table class="traffic-table traffic-table-left hover">
+        <tbody>
+        <tr>
+            <th>
+                <label for="nombre">Nombre</label>
+            </th>
+            <td>
+                <input class="traffic-input-medium" type="text" name="nombre" id="nombre">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="email">Email</label>
+            </th>
+            <td>
+                <input class="traffic-input-medium" type="text" name="email" id="email">
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="idAduana">Aduana</label>
+            </th>
+            <td>
+                <select class="traffic-select-medium" name="idAduana" id="idAduana">
+                    <option value="">-- Seleccionar --</option>
+                    <?php if (isset($this->aduanas)) { ?>
+                        <?php foreach ($this->aduanas as $item) { ?>
+                            <option value="<?= $item['id'] ?>"><?= $item['patente'] . '-' . $item['aduana'] . ' ' . $item['nombre'] ?></option>
+                        <?php } ?>
+                    <?php } ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="tipoContacto">Tipo de contacto</label>
+            </th>
+            <td>
+                <select class="traffic-select-medium" name="tipoContacto" id="tipoContacto">
+                    <option value="">-- Seleccionar --</option>
+                    <?php if (isset($this->tipoContactos)) { ?>
+                        <?php foreach ($this->tipoContactos as $item) { ?>
+                            <option value="<?= $item['id'] ?>"><?= $item['tipo'] ?></option>
+                        <?php } ?>
+                    <?php } ?>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">
+
+    $('#formNewContact').validate({
+        errorPlacement: function (error, element) {
+            $(element)
+                .closest('form')
+                .find('#' + element.attr('id'))
+                .after(error);
+        },
+        ignore:'',
+        errorElement: 'span',
+        errorClass: 'traffic-error',
+        rules: {
+            'nombre': {required: true},
+            'email': {required: true, email: true},
+            'idAduana': {required: true},
+            'tipoContacto': {required: true},
+        },
+        messages: {
+        }
+    });
+
+    $(document).on("input", "#nombre", function() {
+        let input = $(this);
+        let start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+
+</script>

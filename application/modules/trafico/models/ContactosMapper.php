@@ -34,6 +34,27 @@ class Trafico_Model_ContactosMapper {
     }
 
     /**
+     * @param null|string $buscar
+     * @return array|null
+     */
+    public function todos($buscar = null) {
+        $sql = $this->_db_table->select()
+            ->setIntegrityCheck(false)
+            ->from(array("c" => "trafico_contactos"), array("*"))
+            ->joinLeft(array("t" => "trafico_tipocontacto"), "t.id = c.tipoContacto", array("tipo"))
+            ->joinLeft(array("a" => "trafico_aduanas"), "a.id = c.idAduana", array("patente", "aduana"))
+            ->order("c.nombre ASC");
+        if ($buscar) {
+            $sql->where("c.nombre LIKE ?", '%' . $buscar . '%');
+        }
+        $stmt = $this->_db_table->fetchAll($sql);
+        if ($stmt) {
+            return $stmt->toArray();
+        }
+        return null;
+    }
+
+    /**
      * 
      * @param int $idAduana
      * @return boolean
@@ -365,6 +386,31 @@ class Trafico_Model_ContactosMapper {
         } catch (Zend_Db_Adapter_Exception $e) {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
+    }
+
+    /**
+     * @param int $id
+     * @param array $arr
+     * @return bool|null
+     */
+    public function actualizar($id, $arr) {
+        $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
+        if ($stmt) {
+            return true;
+        }
+        return null;
+    }
+
+    /**
+     * @param $arr
+     * @return bool|null
+     */
+    public function agregar($arr) {
+        $stmt = $this->_db_table->insert($arr);
+        if ($stmt) {
+            return true;
+        }
+        return null;
     }
 
 }

@@ -742,6 +742,48 @@ class Usuarios_IndexController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
+
+    public function notificacionesAction() {
+        $this->view->title = $this->_appconfig->getParam("title") . " " . " Notificaciones";
+        $this->view->headMeta()->appendName("description", "");
+        $this->view->headLink()
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+        $this->view->headScript()
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/usuarios/index/notificaciones.js?" . time());
+        try {
+            if ($this->_session->role != "super") {
+                throw new Zend_Controller_Action_Exception("Forbidden", 403);
+            }
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "page" => array("Digits"),
+                "size" => array("Digits"),
+                "buscar" => array("StringToUpper"),
+            );
+            $v = array(
+                "page" => array(new Zend_Validate_Int(), "default" => 1),
+                "size" => array(new Zend_Validate_Int(), "default" => 20),
+                "buscar" => "NotEmpty",
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+
+            $mppr = new Trafico_Model_ContactosMapper();
+            $arr = $mppr->todos($input->buscar);
+
+            if (isset($arr) && !empty($arr)) {
+                $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($arr));
+                $paginator->setItemCountPerPage($input->size);
+                $paginator->setCurrentPageNumber($input->page);
+                $this->view->paginator = $paginator;
+                $this->view->buscar = $input->buscar;
+            }
+
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
     
     public function aplicacionesAction() {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Aplicaciones";

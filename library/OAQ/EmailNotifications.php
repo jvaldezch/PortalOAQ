@@ -170,7 +170,7 @@ class OAQ_EmailNotifications {
             $misc->execCurl("enviar-email");
             return $id;
         }
-        return;
+        return null;
     }
 
 }

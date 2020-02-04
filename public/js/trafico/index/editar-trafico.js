@@ -62,7 +62,7 @@ function borrarFactura(id_factura) {
             }},
             no: {action: function () {}}
         },
-        content: "¿Está seguro que desea borrar esta esta factura?"
+        content: "¿Está seguro que desea borrar está factura?"
     });
 }
 
