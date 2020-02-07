@@ -3,13 +3,14 @@
  * 2015.may.14
  */
 
-var clavesPedimento;
-var clientes;
+let clavesPedimento;
+let clientes;
 
-var jsonData = {};
+let jsonData = {};
 
 function obtenerMisTraficos() {
-    $.ajax({url: '/trafico/get/trafico-tmp-todos', cache: false, dataType: 'json', type: 'GET',
+    $.ajax({
+        url: '/trafico/get/trafico-tmp-todos', cache: false, dataType: 'json', type: 'GET',
         success: function (res) {
             if (res.success === true) {
                 $('#traficos').html(res.html);
@@ -19,7 +20,8 @@ function obtenerMisTraficos() {
 }
 
 function mensajeAlerta(mensaje) {
-    $.alert({title: "Alerta", type: "red", typeAnimated: true, useBootstrap: false, boxWidth: "250px",
+    $.alert({
+        title: "Alerta", type: "red", typeAnimated: true, useBootstrap: false, boxWidth: "250px",
         content: mensaje
     });
 }
@@ -29,7 +31,7 @@ function inputText(value, name, width) {
 }
 
 function fecha(value) {
-    var date = new Date(value);
+    let date = new Date(value);
     return date.getFullYear() + "-" + (date.getMonth() + 1).pad() + "-" + date.getDate().pad();
 }
 
@@ -38,21 +40,21 @@ function inputDate(value, name, width) {
 }
 
 function selectClientes(value, name, width) {
-    var html = '<select name="' + name + '" style="width: ' + width + 'px; height: 23px">';
+    let html = '<select name="' + name + '" style="width: ' + width + 'px; height: 23px">';
     $.each(clientes, function (k, v) {
-        if (value == v.id) {
+        if (parseInt(value) === v.id) {
             html += '<option value="' + v.id + '" selected="true">' + v.nombre + '</option>';
         } else {
             html += '<option value="' + v.id + '">' + v.nombre + '</option>';
         }
     });
-    return html += '</select>';    
+    return html += '</select>';
 }
 
 function selectClavesPedimento(value, name, width) {
-    var html = '<select name="' + name + '" style="width: ' + width + 'px; height: 23px">';
+    let html = '<select name="' + name + '" style="width: ' + width + 'px; height: 23px">';
     $.each(clavesPedimento, function (k, v) {
-        if (value == v) {
+        if (parseInt(value) === v) {
             html += '<option value="' + v + '" selected="true">' + v + '</option>';
         } else {
             html += '<option value="' + v + '">' + v + '</option>';
@@ -62,7 +64,7 @@ function selectClavesPedimento(value, name, width) {
 }
 
 function icono(id, tipoOperacion) {
-    if (tipoOperacion == 'TOCE.IMP') {
+    if (tipoOperacion === 'TOCE.IMP') {
         return '<i data-id="' + id + '" class="fas fa-arrow-circle-down changeTipoOperacion" style="font-size:1.2em; color: #2f3b58; cursor: pointer"></i><input data-id="' + id + '" type="hidden" class="tipoOperacion" name="tipoOperacion" value="' + tipoOperacion + '" />';
     } else {
         return '<i data-id="' + id + '" class="fas fa-arrow-circle-up changeTipoOperacion" style="font-size:1.2em; color: #2e963a; cursor: pointer"></i><input data-id="' + id + '" type="hidden" class="tipoOperacion" name="tipoOperacion" value="' + tipoOperacion + '" />';
@@ -70,7 +72,8 @@ function icono(id, tipoOperacion) {
 }
 
 function obtenerClientes(idAduana) {
-    return $.ajax({url: "/trafico/get/obtener-clientes", dataType: "json", timeout: 3000, type: "GET",
+    return $.ajax({
+        url: "/trafico/get/obtener-clientes", dataType: "json", timeout: 3000, type: "GET",
         data: {idAduana: idAduana},
         success: function (res) {
             if (res.success === true) {
@@ -82,13 +85,14 @@ function obtenerClientes(idAduana) {
 }
 
 function cancelar(id) {
-    $.ajax({url: "/trafico/get/trafico-tmp-seleccionar", dataType: "json", timeout: 3000, type: "GET",
+    $.ajax({
+        url: "/trafico/get/trafico-tmp-seleccionar", dataType: "json", timeout: 3000, type: "GET",
         data: {id: id},
         success: function (res) {
             if (res.success === true) {
-                var html = '<td><input type="checkbox" class="sTraffic" data-id="' + id + '" /></td>';
-                html += '<td>' + ((res.row["ie"] === 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="font-size:1.2em; color: #2f3b58"></i>' : 
-                        '<i class="fas fa-arrow-circle-up" style="font-size:1.2em; color: #2e963a"></i>') + '</td>';
+                let html = '<td><input type="checkbox" class="sTraffic" data-id="' + id + '" /></td>';
+                html += '<td>' + ((res.row["ie"] === 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="font-size:1.2em; color: #2f3b58"></i>' :
+                    '<i class="fas fa-arrow-circle-up" style="font-size:1.2em; color: #2e963a"></i>') + '</td>';
                 html += '<td style="text-align: center">' + res.row["patente"] + '</td>';
                 html += '<td style="text-align: center">' + res.row["aduana"] + '</td>';
                 html += '<td style="text-align: center">' + res.row["pedimento"] + '</td>';
@@ -104,7 +108,7 @@ function cancelar(id) {
 }
 
 Number.prototype.pad = function (size) {
-    var s = String(this);
+    let s = String(this);
     while (s.length < (size || 2)) {
         s = "0" + s;
     }
@@ -112,12 +116,13 @@ Number.prototype.pad = function (size) {
 };
 
 function obtenerClientesSelect(idAduana) {
-    return $.ajax({url: '/trafico/get/obtener-clientes', dataType: 'json', timeout: 3000, type: 'GET',
+    return $.ajax({
+        url: '/trafico/get/obtener-clientes', dataType: 'json', timeout: 3000, type: 'GET',
         data: {idAduana: idAduana},
         success: function (res) {
             if (res.success === true) {
                 $('#cliente').empty()
-                        .append('<option value="">---</option>');
+                    .append('<option value="">---</option>');
                 $.each(res.rows, function (k, v) {
                     $('#cliente').append('<option value="' + v["id"] + '">' + v["nombre"] + '</option>');
                 });
@@ -132,19 +137,19 @@ function obtenerClientesSelect(idAduana) {
 }
 
 $(document).ready(function () {
-    
+
     if (localStorage.getItem("crearTraficoMultiple") !== null) {
-        var string = localStorage.getItem("crearTraficoMultiple");
+        let string = localStorage.getItem("crearTraficoMultiple");
         jsonData = jQuery.parseJSON(string);
         $.each(jsonData, function (k, v) {
             if (k === "cliente") {
                 if (jsonData["aduana"] && jsonData["cliente"]) {
-                    $.when(obtenerClientesSelect(jsonData["aduana"])).done(function(resp){
+                    $.when(obtenerClientesSelect(jsonData["aduana"])).done(function (resp) {
                         if (resp.success === true) {
                             $("#cliente").val(jsonData["cliente"]);
                         }
                     });
-                }                
+                }
             } else {
                 $("#" + k).val(v);
             }
@@ -153,7 +158,8 @@ $(document).ready(function () {
 
     obtenerMisTraficos();
 
-    $.ajax({url: "/trafico/get/obtener-claves-pedimento", dataType: "json", timeout: 3000, type: "GET",
+    $.ajax({
+        url: "/trafico/get/obtener-claves-pedimento", dataType: "json", timeout: 3000, type: "GET",
         success: function (res) {
             if (res.success === true) {
                 clavesPedimento = res.rows;
@@ -162,9 +168,9 @@ $(document).ready(function () {
     });
 
     $(document.body).on('click', '.changeTipoOperacion', function () {
-        var id = $(this).data('id');
-        var tipo = $('.tipoOperacion[data-id=' + id + ']').val();
-        if (tipo == 'TOCE.EXP') {
+        let id = $(this).data('id');
+        let tipo = $('.tipoOperacion[data-id=' + id + ']').val();
+        if (tipo === 'TOCE.EXP') {
             $('.tipoOperacion[data-id=' + id + ']').val('TOCE.IMP');
             $(this).removeClass('fa-arrow-circle-down').addClass('fa-arrow-circle-up').css('color', '#2f3b58');
         } else {
@@ -172,29 +178,31 @@ $(document).ready(function () {
             $(this).removeClass('fa-arrow-circle-up').addClass('fa-arrow-circle-down').css('color', '#2e963a');
         }
     });
-    
+
     $(document.body).on('change', '#aduana', function () {
         obtenerClientesSelect($(this).val());
     });
 
     $(document.body).on('click', '.createTraffics', function (ev) {
-        var ids = [];
-        var boxes = $('input[class=sTraffic]:checked');
+        ev.preventDefault();
+        let ids = [];
+        let boxes = $('input[class=sTraffic]:checked');
         if ((boxes).size() === 0) {
             mensajeAlerta('Usted no ha seleccionado nada.');
         }
         if ((boxes).size() > 0) {
             $('.createTraffics').attr("disabled", true)
-                    .addClass("disabled");
+                .addClass("disabled");
             $(boxes).each(function () {
                 ids.push($(this).data('id'));
             });
-            $.ajax({url: '/trafico/post/trafico-tmp-crear', cache: false, dataType: 'json', type: 'POST',
+            $.ajax({
+                url: '/trafico/post/trafico-tmp-crear', cache: false, dataType: 'json', type: 'POST',
                 data: {ids: ids},
                 success: function (res) {
                     if (res.success === true) {
                         $('.createTraffics').removeAttr("disabled")
-                                .removeClass("disabled");
+                            .removeClass("disabled");
                         obtenerMisTraficos();
                     }
                 }
@@ -203,7 +211,8 @@ $(document).ready(function () {
     });
 
     $(document.body).on('click', '.selectAll', function (ev) {
-        var checkboxes = $("input[class=sTraffic]");
+        ev.preventDefault();
+        let checkboxes = $("input[class=sTraffic]");
         if ($(this).is(':checked')) {
             checkboxes.prop('checked', true);
         } else {
@@ -212,33 +221,38 @@ $(document).ready(function () {
     });
 
     $(document.body).on('click', '.cancelSave', function (ev) {
-        var id = $(this).data('id');
+        ev.preventDefault();
+        let id = $(this).data('id');
         cancelar(id);
     });
 
     $(document.body).on('click', '.saveTraffic', function (ev) {
-        var id = $(this).data('id');
-        var fields = {};
+        ev.preventDefault();
+        let id = $(this).data('id');
+        let fields = {};
         fields['id'] = id;
-        $('.trafficRow_' + id + ' :input').each(function(e) {
+        $('.trafficRow_' + id + ' :input').each(function () {
             fields[this.name] = this.value;
         });
-        $.ajax({url: "/trafico/post/trafico-tmp-guardar", dataType: "json", timeout: 3000, type: "POST",
+        $.ajax({
+            url: "/trafico/post/trafico-tmp-guardar", dataType: "json", timeout: 3000, type: "POST",
             data: fields,
-            success: function (res) {
+            success: function () {
                 cancelar(id);
             }
         });
     });
-    
+
     $(document.body).on('click', '.editTraffic', function (ev) {
-        var id = $(this).data('id');
-        $.ajax({url: "/trafico/get/trafico-tmp-seleccionar", dataType: "json", timeout: 3000, type: "GET",
+        ev.preventDefault();
+        let id = $(this).data('id');
+        $.ajax({
+            url: "/trafico/get/trafico-tmp-seleccionar", dataType: "json", timeout: 3000, type: "GET",
             data: {id: id},
             success: function (res) {
                 if (res.success === true) {
-                    $.when(obtenerClientes(res.row["idAduana"])).done(function(resp){
-                        var html = '<td></td>';
+                    $.when(obtenerClientes(res.row["idAduana"])).done(function (res) {
+                        let html = '<td></td>';
                         html += '<td>' + icono(id, res.row['tipoOperacion']) + ' </td>';
                         html += inputText(res.row['patente'], 'editPatente', 50);
                         html += inputText(res.row['aduana'], 'editAduana', 40);
@@ -256,13 +270,21 @@ $(document).ready(function () {
     });
 
     $(document.body).on('click', '.deleteTraffic', function (ev) {
-        var id = $(this).data('id');
-        $.confirm({title: "Confirmar", type: "red", content: '¿Está seguro de que desea eliminar el tráfico?', escapeKey: "cerrar", boxWidth: "250px", useBootstrap: false,
+        ev.preventDefault();
+        let id = $(this).data('id');
+        $.confirm({
+            title: "Confirmar",
+            type: "red",
+            content: '¿Está seguro de que desea eliminar el tráfico?',
+            escapeKey: "cerrar",
+            boxWidth: "250px",
+            useBootstrap: false,
             buttons: {
                 si: {
                     btnClass: "btn-red",
                     action: function () {
-                        $.ajax({url: "/trafico/post/trafico-tmp-borrar", dataType: "json", timeout: 3000, type: "POST",
+                        $.ajax({
+                            url: "/trafico/post/trafico-tmp-borrar", dataType: "json", timeout: 3000, type: "POST",
                             data: {id: id},
                             success: function (res) {
                                 if (res.success === true) {
@@ -272,7 +294,8 @@ $(document).ready(function () {
                         });
                     }
                 },
-                no: function () {}
+                no: function () {
+                }
             }
         });
     });
@@ -280,7 +303,8 @@ $(document).ready(function () {
     $(document.body).on('click', '#submit', function (ev) {
         ev.preventDefault();
         if ($("#form").valid()) {
-            $("#form").ajaxSubmit({url: "/trafico/post/trafico-tmp-agregar", cache: false, dataType: "json", timeout: 3000, type: "POST",
+            $("#form").ajaxSubmit({
+                url: "/trafico/post/trafico-tmp-agregar", cache: false, dataType: "json", timeout: 3000, type: "POST",
                 success: function (res) {
                     if (res.success === true) {
                         obtenerMisTraficos();
@@ -289,8 +313,9 @@ $(document).ready(function () {
             });
         }
     });
-    
+
     $(document.body).on('focus', '.editFechaEta', function (ev) {
+        ev.preventDefault();
         $(this).datepicker({
             calendarWeeks: true,
             autoclose: true,
@@ -309,9 +334,9 @@ $(document).ready(function () {
     $("#form").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -327,30 +352,30 @@ $(document).ready(function () {
                 maxlength: 7,
                 digits: true
             },
-            blGuia: {
-                required: {
-                    depends: function (element) {
-                        if (parseInt($("#aduana").val()) === 2 && $("#aduana").val() !== '') {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                }
-            },
-            planta: {
-                required: {depends: function (elm) {
-                        return $(this).is(":not(:disabled)");
-                    }}
-            },
-            pedimentoRectificar: {
-                required: {depends: function (elm) {
-                        return $("#rectificacion:checked").length;
-                    }},
-                minlength: 7,
-                maxlength: 7,
-                digits: true
-            },
+            // blGuia: {
+            //     required: {
+            //         depends: function (elm) {
+            //             return parseInt($("#aduana").val()) === 2 && $("#aduana").val() !== '';
+            //         }
+            //     }
+            // },
+            // planta: {
+            //     required: {
+            //         depends: function (elm) {
+            //             return $(this).is(":not(:disabled)");
+            //         }
+            //     }
+            // },
+            // pedimentoRectificar: {
+            //     required: {
+            //         depends: function (elm) {
+            //             return $("#rectificacion:checked").length;
+            //         }
+            //     },
+            //     minlength: 7,
+            //     maxlength: 7,
+            //     digits: true
+            // },
             referencia: {
                 required: true,
                 minlength: 4
@@ -369,34 +394,36 @@ $(document).ready(function () {
                 maxlength: "Pedimento dede ser de 7 digitos",
                 digits: "No debe contener letras"
             },
-            blGuia: {
-                required: "Guía necesaria"
-            },
-            pedimentoRectificar: {
-                required: "Campo necesario",
-                minlength: "Pedimento debe ser de 7 digitos",
-                maxlength: "Pedimento dede ser de 7 digitos",
-                digits: "No debe contener letras"
-            },
+            // blGuia: {
+            //     required: "Guía necesaria"
+            // },
+            // pedimentoRectificar: {
+            //     required: "Campo necesario",
+            //     minlength: "Pedimento debe ser de 7 digitos",
+            //     maxlength: "Pedimento dede ser de 7 digitos",
+            //     digits: "No debe contener letras"
+            // },
             referencia: {
                 required: "Proporcionar referencia",
                 minlength: "Mínimo 4 caracteres alfanumérico"
             }
         }
     });
-    
-    $(document.body).on("input", "#referencia", function (evt) {
-        var input = $(this);
-        var start = input[0].selectionStart;
+
+    $(document.body).on("input", "#referencia", function (ev) {
+        ev.preventDefault();
+        let input = $(this);
+        let start = input[0].selectionStart;
         $(this).val(function (_, val) {
             return val.toUpperCase();
         });
         input[0].selectionStart = input[0].selectionEnd = start;
     });
 
-    $(document.body).on("change", "#referencia, #pedimento, #cliente, #cantidad, #cvePedimento, #fechaEta, #operacion, #aduana", function (evt) {
-        jsonData[$(this).attr("id")] = $(this).val();        
+    $(document.body).on("change", "#referencia, #pedimento, #cliente, #cantidad, #cvePedimento, #fechaEta, #operacion, #aduana", function (ev) {
+        ev.preventDefault();
+        jsonData[$(this).attr("id")] = $(this).val();
         localStorage.setItem("crearTraficoMultiple", JSON.stringify(jsonData));
     });
-    
+
 });

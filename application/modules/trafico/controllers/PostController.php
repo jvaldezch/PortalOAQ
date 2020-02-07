@@ -2148,7 +2148,7 @@ class Trafico_PostController extends Zend_Controller_Action {
                 $f = array(
                     "*" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
                     "aduana" => new Zend_Filter_Digits(),
-                    "pedimento" => new Zend_Filter_Digits(),
+//                    "pedimento" => new Zend_Filter_Digits(),
                     "referencia" => new Zend_Filter_StringToUpper(),
                     "pedimentoRectificar" => new Zend_Filter_Digits(),
                     "rectificacion" => new Zend_Filter_Digits(),
@@ -2161,8 +2161,8 @@ class Trafico_PostController extends Zend_Controller_Action {
                 $v = array(
                     "aduana" => array("NotEmpty", new Zend_Validate_Int()),
                     "cliente" => array("NotEmpty", new Zend_Validate_Int()),
-                    "pedimento" => array("NotEmpty", new Zend_Validate_Int()),
-                    "pedimentoRectificar" => array("NotEmpty", new Zend_Validate_Int()),
+                    "pedimento" => array("NotEmpty"),
+                    "pedimentoRectificar" => array("NotEmpty"),
                     "rectificacion" => array("NotEmpty", new Zend_Validate_Int()),
                     "consolidado" => array("NotEmpty", new Zend_Validate_Int()),
                     "cantidad" => array("NotEmpty", new Zend_Validate_Int()),
@@ -2197,11 +2197,14 @@ class Trafico_PostController extends Zend_Controller_Action {
                     } else {
                         if ($input->cantidad > 1) {
                             foreach (range(1, $input->cantidad) as $value) {
-                                $pedimento = ($input->pedimento + (int) $value);
-                                if (preg_match('/^Q17/', $input->referencia) || preg_match('/^Q18/', $input->referencia) || preg_match('/^Q19/', $input->referencia) || preg_match('/^Q20/', $input->referencia)) {
-                                    $referencia = 'Q1' . substr($pedimento, 0, 1) . substr($pedimento, -5);
-                                } else {
-                                    $referencia = $input->referencia;
+                                $pedimento = str_pad(($input->pedimento + (int) $value), 7, '0', STR_PAD_LEFT);
+//                                if (preg_match('/^Q17/', $input->referencia) || preg_match('/^Q18/', $input->referencia) || preg_match('/^Q19/', $input->referencia) || preg_match('/^Q20/', $input->referencia)) {
+//                                    $referencia = 'Q1' . substr($pedimento, 0, 1) . substr($pedimento, -5);
+//                                } else {
+//                                    $referencia = $input->referencia;
+//                                }
+                                if (preg_match('/^Q/', $input->referencia)) {
+                                    $referencia = substr($input->referencia, 0, 2) . substr($pedimento, -6);
                                 }
                                 $arr = array(
                                     "idAduana" => $input->aduana,
@@ -2216,7 +2219,8 @@ class Trafico_PostController extends Zend_Controller_Action {
                                     "usuario" => $this->_session->username,
                                     "creado" => date("Y-m-d H:i:s"),
                                 );
-                                $mppr->agregar($arr);
+//                                $mppr->agregar($arr);
+                                $this->_firephp->info($arr);
                             }
                         }
                     }
