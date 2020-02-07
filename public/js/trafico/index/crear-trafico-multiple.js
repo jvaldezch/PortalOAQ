@@ -352,30 +352,6 @@ $(document).ready(function () {
                 maxlength: 7,
                 digits: true
             },
-            // blGuia: {
-            //     required: {
-            //         depends: function (elm) {
-            //             return parseInt($("#aduana").val()) === 2 && $("#aduana").val() !== '';
-            //         }
-            //     }
-            // },
-            // planta: {
-            //     required: {
-            //         depends: function (elm) {
-            //             return $(this).is(":not(:disabled)");
-            //         }
-            //     }
-            // },
-            // pedimentoRectificar: {
-            //     required: {
-            //         depends: function (elm) {
-            //             return $("#rectificacion:checked").length;
-            //         }
-            //     },
-            //     minlength: 7,
-            //     maxlength: 7,
-            //     digits: true
-            // },
             referencia: {
                 required: true,
                 minlength: 4
@@ -394,15 +370,6 @@ $(document).ready(function () {
                 maxlength: "Pedimento dede ser de 7 digitos",
                 digits: "No debe contener letras"
             },
-            // blGuia: {
-            //     required: "Guía necesaria"
-            // },
-            // pedimentoRectificar: {
-            //     required: "Campo necesario",
-            //     minlength: "Pedimento debe ser de 7 digitos",
-            //     maxlength: "Pedimento dede ser de 7 digitos",
-            //     digits: "No debe contener letras"
-            // },
             referencia: {
                 required: "Proporcionar referencia",
                 minlength: "Mínimo 4 caracteres alfanumérico"

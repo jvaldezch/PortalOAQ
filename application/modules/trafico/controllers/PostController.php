@@ -2219,8 +2219,7 @@ class Trafico_PostController extends Zend_Controller_Action {
                                     "usuario" => $this->_session->username,
                                     "creado" => date("Y-m-d H:i:s"),
                                 );
-//                                $mppr->agregar($arr);
-                                $this->_firephp->info($arr);
+                                $mppr->agregar($arr);
                             }
                         }
                     }
