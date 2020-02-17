@@ -1610,13 +1610,17 @@ class Clientes_DataController extends Zend_Controller_Action {
                 if (isset($arr["pedimento"])) {
                     $arch_val = $val->archivosDePedimento($arr["patente"], $arr["aduana"], $arr["pedimento"]);
                     if (!empty($arch_val)) {
-                        Zend_Debug::dump($arch_val);
-                        foreach ($arch_val as $file) {
-
+                        $mppr_val = new Automatizacion_Model_ArchivosValidacionMapper();
+                        foreach ($arch_val as $a_val) {
+                            if ($a_val['idArchivoValidacion']) {
+                                $file_val = $mppr_val->fileContent($a_val['idArchivoValidacion']);
+                                if ($file_val) {
+                                    $zip->addFromString($a_val['archivoNombre'], base64_decode(base64_decode($file_val["contenido"])));
+                                }
+                            }
                         }
                     }
                 }
-                die();
 
                 if (($zip->close()) === TRUE) {
                     $closed = true;
