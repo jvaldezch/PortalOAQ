@@ -28,7 +28,7 @@
     <tr>
         <th class="traffic-table-subtitle" style="width: 32px;">&nbsp;</th>
         <th class="traffic-table-subtitle">Archivo</th>
-        <th class="traffic-table-subtitle">Tipo</th>
+        <th class="traffic-table-subtitle" colspan="2">Tipo</th>
         <th class="traffic-table-subtitle" style="width: 75px;" colspan="2">Creado</th>
     </tr>
     <?php if (isset($this->files)) { ?>
@@ -42,7 +42,7 @@
                         <p><?= $item["nom_archivo"] ?></>
                         <?php } ?>
                 </td>
-                <td style="max-width: 350px;">
+                <td style="max-width: 350px;" colspan="2">
                     <div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div>
                 </td>
                 <td colspan="2"><?= date('Y-m-d', strtotime($item["creado"])) ?>&nbsp;</td>
@@ -61,14 +61,13 @@
                         <p><?= $item["nom_archivo"] ?></>
                         <?php } ?>
                 </td>
-                <td style="max-width: 350px;">
+                <td style="max-width: 350px;" colspan="2">
                     <div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div>
                 </td>
-                <td><?= date('Y-m-d', strtotime($item["creado"])) ?>&nbsp;</td>
+                <td colspan="2"><?= date('Y-m-d', strtotime($item["creado"])) ?>&nbsp;</td>
             </tr>
         <?php } ?>
     <?php } ?>
-
 
     <?php if (isset($this->validacion) && !empty($this->validacion)) { ?>
         <?php if (isset($this->validacion["validacion"]) && !empty($this->validacion["validacion"])) { ?>
