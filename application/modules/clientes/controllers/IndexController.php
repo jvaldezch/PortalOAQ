@@ -137,7 +137,7 @@ class Clientes_IndexController extends Zend_Controller_Action {
             
             $val = new OAQ_ArchivosValidacion();
             if (isset($arr["pedimento"])) {
-                $view->validacion = $val->archivosDePedimento($arr["patente"], $arr["aduana"], $arr["pedimento"]);
+                $this->view->validacion = $val->archivosDePedimento($arr["patente"], $arr["aduana"], $arr["pedimento"]);
             }
 
             if (strtoupper(substr(PHP_OS, 0, 3)) === "WIN") {
