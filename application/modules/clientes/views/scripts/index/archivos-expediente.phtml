@@ -29,7 +29,7 @@
         <th class="traffic-table-subtitle" style="width: 32px;">&nbsp;</th>
         <th class="traffic-table-subtitle">Archivo</th>
         <th class="traffic-table-subtitle">Tipo</th>
-        <th class="traffic-table-subtitle" style="width: 75px;">Creado</th>
+        <th class="traffic-table-subtitle" style="width: 75px;" colspan="2">Creado</th>
     </tr>
     <?php if (isset($this->files)) { ?>
         <?php foreach ($this->files as $k => $item) { ?>
@@ -45,10 +45,11 @@
                 <td style="max-width: 350px;">
                     <div id="edit_<?= $item["id"] ?>"><?= isset($item["tipo_archivo"]) ? $this->tipoArchivo($item["tipo_archivo"]) : '&nbsp;' ?></div>
                 </td>
-                <td><?= date('Y-m-d', strtotime($item["creado"])) ?>&nbsp;</td>
+                <td colspan="2"><?= date('Y-m-d', strtotime($item["creado"])) ?>&nbsp;</td>
             </tr>
         <?php } ?>
     <?php } ?>
+
     <?php if (isset($this->complementos) && !empty($this->complementos)) { ?>
         <?php foreach ($this->complementos as $item) { ?>
             <tr class="hover" data-id="<?= $item["id"] ?>">
@@ -80,7 +81,6 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
             </tr>
         <?php } ?>
         <?php if (isset($this->validacion["firma"]) && !empty($this->validacion["firma"])) { ?>
@@ -90,7 +90,6 @@
                     <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->validacion["firma"]["idArchivoValidacion"] ?>"><?= $this->validacion["firma"]["archivoNombre"] ?></a>
                 </td>
                 <td style="text-align: left">Archivo de firma de validación</td>
-                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -106,11 +105,10 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
             </tr>
         <?php } ?>
     <?php } ?>
-    
+
 </table>
 <div class="traffic-clear-5"></div>
 <?php if (!isset($this->downloadZip)) { ?>
