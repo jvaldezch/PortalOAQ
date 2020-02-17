@@ -19,7 +19,7 @@ class Application_Model_ValidadorPedimentos {
                 "idArchivo" => $idArchivo,
                 "patente" => $patente,
                 "aduana" => $aduana,
-                "pedimento" => $pedimento,
+                "pedimento" => str_pad($pedimento, 7, '0', STR_PAD_LEFT),
                 "tipoMovimiento" => $tipoMovimiento,
                 "firmaDesistir" => $firmaDesistir,
                 "usuario" => $usuario,

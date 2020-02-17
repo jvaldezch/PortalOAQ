@@ -434,7 +434,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                     $row->setPatente($i->patente);
                     $row->setAduana($i->aduana);
                     $row->setReferencia($i->referencia);
-                    $row->setPedimento($i->pedimento);
+                    $row->setPedimento(str_pad($i->pedimento, 7, '0', STR_PAD_LEFT));
                     $row->setObservaciones($i->observaciones);
                     $table->find($row);
                     
@@ -449,7 +449,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                             $log->agregar(array(
                                 'patente' => $i->patente,
                                 'aduana' => $i->aduana,
-                                'pedimento' => $i->pedimento,
+                                'pedimento' => str_pad($i->pedimento, 7, '0', STR_PAD_LEFT),
                                 'referencia' => $i->referencia,
                                 'usuario' => $this->_session->username,
                                 'bitacora' => "EXPEDIENTE COMPLETO",
@@ -473,7 +473,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                             $log->agregar(array(
                                 'patente' => $i->patente,
                                 'aduana' => $i->aduana,
-                                'pedimento' => $i->pedimento,
+                                'pedimento' => str_pad($i->pedimento, 7, '0', STR_PAD_LEFT),
                                 'referencia' => $i->referencia,
                                 'usuario' => $this->_session->username,
                                 'bitacora' => "REVISADO POR OPERACIONES",
@@ -490,7 +490,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                             $log->agregar(array(
                                 'patente' => $i->patente,
                                 'aduana' => $i->aduana,
-                                'pedimento' => $i->pedimento,
+                                'pedimento' => str_pad($i->pedimento, 7, '0', STR_PAD_LEFT),
                                 'referencia' => $i->referencia,
                                 'usuario' => $this->_session->username,
                                 'bitacora' => "REVISADO POR ADMINISTRACIÓN",
@@ -591,7 +591,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                                         $upload->receive($fieldname);
                                         if (($misc->renombrarArchivo($path, $fileinfo["name"], $filename))) {
                                             if (file_exists($path . DIRECTORY_SEPARATOR . $filename)) {
-                                                $model->nuevoArchivo($tipoArchivo, null, $arr["patente"], $arr["aduana"], $arr["pedimento"], $misc->trimUpper($arr["referencia"]), $filename, $path . DIRECTORY_SEPARATOR . $filename, $this->_session->username, $arr["rfcCliente"]);
+                                                $model->nuevoArchivo($tipoArchivo, null, $arr["patente"], $arr["aduana"], str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT), $misc->trimUpper($arr["referencia"]), $filename, $path . DIRECTORY_SEPARATOR . $filename, $this->_session->username, $arr["rfcCliente"]);
                                             }
                                         }
                                     } else {
@@ -608,7 +608,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                                             "sub_tipo_archivo" => null,
                                             "patente" => $arr["patente"],
                                             "aduana" => $arr["aduana"],
-                                            "pedimento" => $arr["pedimento"],
+                                            "pedimento" => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                                             "referencia" => $misc->trimUpper($arr["referencia"]),
                                             "nom_archivo" => trim($fileinfo["name"]),
                                             "ubicacion" => $path . DIRECTORY_SEPARATOR . trim($fileinfo["name"]),
@@ -741,7 +741,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                             "patente" => $arr["patente"],
                             "rfc_cliente" => $arr["rfcCliente"],
                             "referencia" => $arr["referencia"],
-                            "pedimento" => $arr["pedimento"],
+                            "pedimento" => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                         ));
                         $formSource->patente->setAttrib("disabled", "true");
                         $formSource->rfc_cliente->setAttrib("disabled", "true");
@@ -751,7 +751,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                             "patente" => $arr["patente"],
                             "rfc_cliente" => $arr["rfcCliente"],
                             "referencia" => $arr["referencia"],
-                            "pedimento" => $arr["pedimento"],
+                            "pedimento" => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                         ));
                     }
                     $view->formSource = $formSource;
@@ -786,7 +786,6 @@ class Archivo_PostController extends Zend_Controller_Action {
                     "id" => "Digits",
                     "patente" => "Digits",
                     "aduana" => "Digits",
-                    "pedimento" => "Digits",
                     "referencia" => "StringToUpper",
                     "rfc_cliente" => "StringToUpper",
                 );
@@ -807,7 +806,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         $row = array(
                             "patente" => $input->patente,
                             "aduana" => $input->aduana,
-                            "pedimento" => $input->pedimento,
+                            "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                             "referencia" => $input->referencia,
                             "rfcCliente" => $input->rfc_cliente,
                             "modificado" => date("Y-m-d H:i:s"),
@@ -818,7 +817,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                                 $rrow = array(
                                     "patente" => $input->patente,
                                     "aduana" => $input->aduana,
-                                    "pedimento" => $input->pedimento,
+                                    "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                                     "referencia" => $input->referencia,
                                     "rfc_cliente" => $input->rfc_cliente,
                                     "modificado" => date("Y-m-d H:i:s"),
@@ -834,7 +833,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         }
                     } else {
                         $row = array(
-                            "pedimento" => $input->pedimento,
+                            "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                             "rfcCliente" => $input->rfc_cliente,
                             "modificado" => date("Y-m-d H:i:s"),
                             "modificadoPor" => $this->_session->username,
@@ -842,7 +841,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         if ($model->update($input->id, $row)) {
                             if (count($arr)) {
                                 $rrow = array(
-                                    "pedimento" => $input->pedimento,
+                                    "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                                     "rfc_cliente" => $input->rfc_cliente,
                                     "modificado" => date("Y-m-d H:i:s"),
                                     "modificadoPor" => $this->_session->username,
@@ -916,7 +915,6 @@ class Archivo_PostController extends Zend_Controller_Action {
                     "id" => "Digits",
                     "patente" => "Digits",
                     "aduana" => "Digits",
-                    "pedimento" => "Digits",
                     "referencia" => "StringToUpper",
                     "rfc_cliente" => "StringToUpper",
                 );
@@ -964,7 +962,6 @@ class Archivo_PostController extends Zend_Controller_Action {
                     "id" => "Digits",
                     "patente" => "Digits",
                     "aduana" => "Digits",
-                    "pedimento" => "Digits",
                     "referencia" => "StringToUpper",
                     "rfc_cliente" => "StringToUpper",
                 );
@@ -980,14 +977,14 @@ class Archivo_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("id") && $input->isValid("patente") && $input->isValid("aduana") && $input->isValid("pedimento") && $input->isValid("referencia") && $input->isValid("rfc_cliente")) {
                     $mapper = new Archivo_Model_RepositorioIndex();
-                    if (($id = $mapper->buscar($input->patente, $input->aduana, $input->referencia, $input->pedimento))) {
+                    if (($id = $mapper->buscar($input->patente, $input->aduana, $input->referencia, str_pad($input->pedimento, 7, '0', STR_PAD_LEFT)))) {
                         $old = $mapper->datos($input->id);
                         $new = $mapper->datos($id);
                         $arr = $mapper->archivosDeRepositorio($old["patente"], $old["aduana"], $old["referencia"]);
                         if (!empty($arr)) {
                             foreach ($arr as $item) {
                                 if ((int) $item["tipo_archivo"] !== 9999) {
-                                    $mapper->actualizarArchivo($item["id"], array("patente" => $new["patente"], "aduana" => $new["aduana"], "pedimento" => $new["pedimento"], "referencia" => $new["referencia"], "rfc_cliente" => $new["rfcCliente"], "modificado" => date("Y-m-d H:i:s"), "modificadoPor" => $this->_session->username));
+                                    $mapper->actualizarArchivo($item["id"], array("patente" => $new["patente"], "aduana" => $new["aduana"], "pedimento" => str_pad($new['pedimento'], 7, '0', STR_PAD_LEFT), "referencia" => $new["referencia"], "rfc_cliente" => $new["rfcCliente"], "modificado" => date("Y-m-d H:i:s"), "modificadoPor" => $this->_session->username));
                                 } else {
                                     $mapper->borrarEnRepositorio($item["id"]);
                                 }
@@ -1099,7 +1096,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         $log->agregar(array(
                             'patente' => $arr["patente"],
                             'aduana' => $arr["aduana"],
-                            'pedimento' => $arr["pedimento"],
+                            'pedimento' => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                             'referencia' => $arr["referencia"],
                             'usuario' => $this->_session->username,
                             'bitacora' => "MV/HC EN POSESIÓN DE CLIENTE",
@@ -1110,7 +1107,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         $log->agregar(array(
                             'patente' => $arr["patente"],
                             'aduana' => $arr["aduana"],
-                            'pedimento' => $arr["pedimento"],
+                            'pedimento' => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                             'referencia' => $arr["referencia"],
                             'usuario' => $this->_session->username,
                             'bitacora' => "MV/HC FIRMADA POR CLIENTE",
@@ -1156,7 +1153,7 @@ class Archivo_PostController extends Zend_Controller_Action {
 
                             $view->patente = $arr["patente"];
                             $view->aduana = $arr["aduana"];
-                            $view->pedimento = $arr["pedimento"];
+                            $view->pedimento = str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT);
                             $view->referencia = $arr["referencia"];
 
                             if (!empty($json["emails"]) && !empty($json["archivos"])) {

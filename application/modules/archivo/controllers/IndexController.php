@@ -187,7 +187,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $v = array(
             "aduana" => array(new Zend_Validate_Int()),
             "patente" => array(new Zend_Validate_Int()),
-            "pedimento" => array(new Zend_Validate_Int()),
+            "pedimento" => array("NotEmpty"),
             "page" => array(new Zend_Validate_Int(), "default" => 1),
             "size" => array(new Zend_Validate_Int(), "default" => 25),
             "referencia" => array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9.\/]+$/")),
@@ -198,13 +198,11 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $repo = new Archivo_Model_RepositorioIndex();
         $referencias = new OAQ_Referencias();
         $res = $referencias->restricciones($this->_session->id, $this->_session->role);
-        /*$search = null;
-        if ($i->isValid("rfcCliente") || $i->isValid("referencia") || $i->isValid("pedimento") || $i->isValid("patente") || $i->isValid("aduana")) {
-        }*/
+        
         $search = array(
             $i->isValid("patente") ? $i->patente : null, 
             $i->isValid("aduana") ? $i->aduana : null, 
-            $i->isValid("pedimento") ? $i->pedimento : null, 
+            $i->isValid("pedimento") ? str_pad($i->pedimento, 7, '0', STR_PAD_LEFT) : null, 
             $i->isValid("referencia") ? $i->referencia : null, 
             $i->isValid("rfcCliente") ? $i->rfcCliente : null, 
             $fecha_inicio, 
@@ -238,7 +236,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $form->populate(array(
             "patente" => $i->patente,
             "aduana" => $i->aduana,
-            "pedimento" => $i->pedimento,
+            "pedimento" => str_pad($i->pedimento, 7, '0', STR_PAD_LEFT),
             "referencia" => $i->referencia,
             "rfcCliente" => $i->rfcCliente,
         ));
@@ -262,13 +260,12 @@ class Archivo_IndexController extends Zend_Controller_Action {
             "size" => "Digits",
             "aduana" => "Digits",
             "patente" => "Digits",
-            "pedimento" => "Digits",
             "referencia" => "StringToUpper",
         );
         $v = array(
             "aduana" => array(new Zend_Validate_Int()),
             "patente" => array(new Zend_Validate_Int()),
-            "pedimento" => array(new Zend_Validate_Int()),
+            "pedimento" => array("NotEmpty"),
             "page" => array(new Zend_Validate_Int(), "default" => 1),
             "size" => array(new Zend_Validate_Int(), "default" => 25),
             "referencia" => array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9.]+$/")),
@@ -330,7 +327,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $form->populate(array(
             "patente" => $i->patente,
             "aduana" => $i->aduana,
-            "pedimento" => $i->pedimento,
+            "pedimento" => str_pad($i->pedimento, 7, '0', STR_PAD_LEFT),
             "referencia" => $i->referencia,
         ));
         $this->view->rol = $this->_session->role;
@@ -363,7 +360,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
             "patente" => $gets["patente"],
             "aduana" => $gets["aduana"],
             "referencia" => $gets["ref"],
-            "pedimento" => isset($info["pedimento"]) ? $info["pedimento"] : null,
+            "pedimento" => isset($info["pedimento"]) ? str_pad($info["pedimento"], 7, '0', STR_PAD_LEFT) : null,
             "rfcCliente" => isset($info["rfc_cliente"]) ? $info["rfc_cliente"] : null,
         );
     }

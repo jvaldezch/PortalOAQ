@@ -132,7 +132,7 @@ class Administracion_Model_RepositorioContaMapper {
                 "referencia" => $table->getReferencia(),
                 "patente" => $table->getPatente(),
                 "aduana" => $table->getAduana(),
-                "pedimento" => $table->getPedimento(),
+                "pedimento" => str_pad($table->getPedimento(), 7, '0', STR_PAD_LEFT),
                 "hash" => $table->getHash(),
                 "uuid" => $table->getUuid(),
                 "rfcEmisor" => $table->getRfcEmisor(),

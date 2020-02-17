@@ -238,7 +238,7 @@ class Administracion_GetController extends Zend_Controller_Action {
                         "patente" => $row["patente"],
                         "aduana" => $row["aduana"],
                         "referencia" => $row["referencia"],
-                        "pedimento" => $row["pedimento"],
+                        "pedimento" => str_pad($row["pedimento"], 7, '0', STR_PAD_LEFT),
                         "total" => $row["subtotal"] - $row["anticipo"],
                     );                    
                 }

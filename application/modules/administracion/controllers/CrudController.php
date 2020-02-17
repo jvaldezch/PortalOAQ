@@ -84,15 +84,6 @@ class Administracion_CrudController extends Zend_Controller_Action {
         if (isset($arr)) {
             $sql->where("Patente = ?", $arr["patente"])
                     ->where("AduanaID = ?", $arr["aduana"]);
-            /*if ($arr["tipoAduana"] == 1 || $arr["tipoAduana"] == 2) {
-                $sql->where("DATEDIFF(day, F.FechaPedimento, F.Fecha) > 3");
-            }
-            if ($arr["tipoAduana"] == 3) {
-                $sql->where("DATEDIFF(day, F.FechaPedimento, F.Fecha) > 15");
-            }
-            if ($arr["tipoAduana"] == 4) {
-                $sql->where("DATEDIFF(day, F.FechaPedimento, F.Fecha) > 3");
-            }*/
         }
     }
 

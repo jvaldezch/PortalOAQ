@@ -905,7 +905,7 @@ class Archivo_GetController extends Zend_Controller_Action {
                     "patente" => $arr['patente'],
                     "aduana" => $arr['aduana'],
                     "referencia" => $arr['referencia'],
-                    "pedimento" => $arr['pedimento'],
+                    "pedimento" => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                     "bitacora" => (isset($logs) && !empty($logs)) ? $logs : null,
                     "checklist" => $checkjson,
                     "revisionAdministracion" => $arr['revisionAdministracion'],
@@ -913,11 +913,7 @@ class Archivo_GetController extends Zend_Controller_Action {
                     "completo" => $arr['completo'],
                     "observaciones" => $checklist->observaciones,
                 );
-//                Zend_Debug::Dump($checklist);
-//                Zend_Debug::Dump($checkjson);
-//                Zend_Debug::Dump($arr);
-//                Zend_Debug::Dump($data);
-//                die();                
+
                 $print = new OAQ_Imprimir_Checklist($data, "P", "pt", "LETTER");
                 $print->checklist();
                 $print->set_filename("CHECKLIST_{$arr["referencia"]}.pdf");

@@ -892,7 +892,7 @@ class Administracion_IndexController extends Zend_Controller_Action {
                 "idSolicitud" => $id,
                 "aduana" => $data["header"]["aduana"],
                 "patente" => $data["header"]["patente"],
-                "pedimento" => $data["header"]["pedimento"],
+                "pedimento" => str_pad($data["header"]["pedimento"], 7, '0', STR_PAD_LEFT),
                 "referencia" => $data["header"]["referencia"],
                 "esquema" => isset($header["esquema"]) ? $header["esquema"] : $datosCliente["esquema"],
                 "proceso" => $solicitud->proceso($header["autorizada"], $header["autorizadaHsbc"], $header["autorizadaBanamex"]),

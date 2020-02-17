@@ -287,7 +287,7 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                         'solicitante' => $solicitante,
                         'patente' => $archivo["patente"],
                         'aduana' => $archivo["aduana"],
-                        'pedimento' => $pedimento,
+                        'pedimento' => str_pad($pedimento, 7, '0', STR_PAD_LEFT),
                         'referencia' => $archivo["referencia"],
                         'uuid' => $uuid,
                         'hash' => $hash,
@@ -330,14 +330,13 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                     "*" => array("StringTrim", "StripTags"),
                     "npatente" => "Digits",
                     "naduana" => "Digits",
-                    "npedimento" => "Digits",
                     "nreferencia" => "StringToUpper",
                     "nrfc" => "StringToUpper",
                 );
                 $vld = array(
                     "npatente" => array("NotEmpty", new Zend_Validate_Int(), array("stringLength", array("min" => 4, "max" => 4))),
                     "naduana" => array("NotEmpty", new Zend_Validate_Int(), array("stringLength", array("min" => 3, "max" => 3))),
-                    "npedimento" => array("NotEmpty", new Zend_Validate_Int(), array("stringLength", array("min" => 7, "max" => 7))),
+                    "npedimento" => array("NotEmpty", array("stringLength", array("min" => 7, "max" => 7))),
                     "nreferencia" => array("NotEmpty", new Zend_Validate_Regex("/^[-_a-zA-Z0-9.\/]+$/")),
                     "oreferencia" => array("NotEmpty", new Zend_Validate_Regex("/^[-_a-zA-Z0-9.\/]+$/")),
                     "nrfc" => array("NotEmpty", new Zend_Validate_Regex("/^[a-zA-Z0-9]+$/")),
@@ -345,7 +344,7 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($flt, $vld, $request->getPost());
                 if ($input->isValid("npatente") && $input->isValid("naduana") && $input->isValid("npedimento") && $input->isValid("nreferencia") && $input->isValid("nrfc") && $input->isValid("oreferencia")) {
                     $mapper = new Archivo_Model_RepositorioMapper();
-                    $updated = $mapper->actualizarArchivos($input->npatente, $input->naduana, $input->npedimento, $input->nrfc, $input->nreferencia, $input->oreferencia, $this->_session->username);
+                    $updated = $mapper->actualizarArchivos($input->npatente, $input->naduana, str_pad($input->npedimento, 7, '0', STR_PAD_LEFT), $input->nrfc, $input->nreferencia, $input->oreferencia, $this->_session->username);
                     if($updated) {
                         $this->_helper->json(array("success" => true, "href" => "/archivo/index/archivos-expediente?ref={$input->nreferencia}&patente={$input->npatente}&aduana={$input->naduana}"));
                     }
@@ -1119,7 +1118,7 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                     $row->setPatente($i->patente);
                     $row->setAduana($i->aduana);
                     $row->setReferencia($i->referencia);
-                    $row->setPedimento($i->pedimento);
+                    $row->setPedimento(str_pad($i->pedimento, 7, '0', STR_PAD_LEFT));
                     $row->setObservaciones($i->observaciones);
                     $table->find($row);
                     if ($i->isValid("completo")) {

@@ -56,7 +56,6 @@ class Archivo_DataController extends Zend_Controller_Action {
                     "*" => array("StringTrim", "StripTags"),
                     "patente" => "Digits",
                     "aduana" => "Digits",
-                    "pedimento" => "Digits",
                     "referencia" => "StringToUpper",
                     "rfc_cliente" => "StringToUpper",
                 );
@@ -98,7 +97,7 @@ class Archivo_DataController extends Zend_Controller_Action {
                         $upload->receive($fieldname);
                         if (($this->_renombrarArchivo($path, $fileinfo["name"], $filename))) {
                             if (file_exists($path . DIRECTORY_SEPARATOR . $filename)) {
-                                $model->nuevoArchivo($tipoArchivo, null, $input->patente, $input->aduana, $input->pedimento, $this->_trim($input->referencia), $filename, $path . DIRECTORY_SEPARATOR . $filename, $this->_session->username, $input->rfc_cliente);
+                                $model->nuevoArchivo($tipoArchivo, null, $input->patente, $input->aduana, str_pad($input->pedimento, 7, '0', STR_PAD_LEFT), $this->_trim($input->referencia), $filename, $path . DIRECTORY_SEPARATOR . $filename, $this->_session->username, $input->rfc_cliente);
                             }
                         }
                     } else {
@@ -316,7 +315,6 @@ class Archivo_DataController extends Zend_Controller_Action {
                     '*' => array('StringTrim', 'StripTags'),
                     'patente' => 'Digits',
                     'aduana' => 'Digits',
-                    'pedimento' => 'Digits',
                     'rfc' => 'StringToUpper',
                     'referencia' => 'StringToUpper',
                 );
@@ -330,7 +328,7 @@ class Archivo_DataController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid()) {
                     $tbl = new Archivo_Model_RepositorioMapper();
-                    $updated = $tbl->actualizarDatosReferencia($input->patente, $input->referencia, $input->rfc, $input->pedimento, $this->_session->username);
+                    $updated = $tbl->actualizarDatosReferencia($input->patente, $input->referencia, $input->rfc, str_pad($input->pedimento, 7, '0', STR_PAD_LEFT), $this->_session->username);
                     if ($updated === true) {
                         $this->_helper->json(array("success" => true, "message" => "Se actualizo"));
                     }
@@ -352,7 +350,6 @@ class Archivo_DataController extends Zend_Controller_Action {
                 "idTrafico" => "Digits",
                 "patente" => "Digits",
                 "aduana" => "Digits",
-                "pedimento" => "Digits",
                 "referencia" => "StringToUpper",
             );
             $v = array(
@@ -370,7 +367,7 @@ class Archivo_DataController extends Zend_Controller_Action {
                 $row->setPatente($i->patente);
                 $row->setAduana($i->aduana);
                 $row->setReferencia($i->referencia);
-                $row->setPedimento($i->pedimento);
+                $row->setPedimento(str_pad($i->pedimento, 7, '0', STR_PAD_LEFT));
                 $table->find($row);
                 $view = new Zend_View();
                 $model = new Trafico_Model_TraficoAduanasMapper();
@@ -397,7 +394,7 @@ class Archivo_DataController extends Zend_Controller_Action {
                 }
                 $view->aduana = $i->aduana;
                 $view->patente = $i->patente;
-                $view->pedimento = $i->pedimento;
+                $view->pedimento = str_pad($i->pedimento, 7, '0', STR_PAD_LEFT);
                 $view->referencia = $i->referencia;
                 $r = new Archivo_Model_ChecklistRoles();
                 if($r->rolChecklist($this->_session->role) == "admin") {
@@ -537,7 +534,7 @@ class Archivo_DataController extends Zend_Controller_Action {
                 $row->setReferencia($i->referencia);
                 $data = array(
                     "referencia" => $i->referencia,
-                    "pedimento" => $info["pedimento"],
+                    "pedimento" => str_pad($info["pedimento"], 7, '0', STR_PAD_LEFT),
                     "empresa" => "ORGANIZACIÓN ADUANAL DE QUERÉTARO S.C.",
                     "oficina" => "[{$i->patente}-{$i->aduana}] " . strtoupper($aduana["nombre"]),
                     "nombreCliente" => $cliente["nombre"],

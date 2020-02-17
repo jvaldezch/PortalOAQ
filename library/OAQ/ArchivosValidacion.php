@@ -253,7 +253,7 @@ class OAQ_ArchivosValidacion {
                     $tmp = array(
                         'patente' => (int) $reg500[2],
                         'aduana' => (int) $reg500[4],
-                        'pedimento' => (int) $reg500[3],
+                        'pedimento' => str_pad($reg500[3], 7, '0', STR_PAD_LEFT),
                         'tipoMovimiento' => (int) $reg500[1],
                         'pedimentoDesistir' => ($reg500[5] != '') ? $reg500[5] : null,
                         'cveDoc' => $cveDoc,
@@ -368,7 +368,7 @@ class OAQ_ArchivosValidacion {
                         'archivoNombre' => isset($ex801[1]) ? $ex801[1] : null,
                         'patente' => (int) $reg500[2],
                         'aduana' => (int) $reg500[4],
-                        'pedimento' => (int) $reg500[3],
+                        'pedimento' => str_pad($reg500[3], 7, '0', STR_PAD_LEFT),
                         'tipoMovimiento' => (int) $reg500[1],
                         'pedimentoDesistir' => ($reg500[5] != '') ? $reg500[5] : null,
                         'cveDoc' => $cveDoc,
@@ -411,7 +411,7 @@ class OAQ_ArchivosValidacion {
                                 $tmp = array(
                                     "aduana" => (int) substr($parts[0], 2, 2),
                                     "patente" => (int) substr($parts[0], 4, 4),
-                                    "pedimento" => (int) substr($parts[0], 8, 7),
+                                    "pedimento" => str_pad(substr($parts[0], 8, 7), 7, '0', STR_PAD_LEFT),
                                     "rfcImportador" => substr($parts[0], 15, 12),
                                     "caja" => (int) substr($parts[0], 13, 2),
                                     "numOperacion" => substr($parts[0], 30, 10),
@@ -425,7 +425,7 @@ class OAQ_ArchivosValidacion {
                                 $tmp = array(
                                     "aduana" => (int) substr($parts[0], 2, 2),
                                     "patente" => (int) substr($parts[0], 4, 4),
-                                    "pedimento" => (int) substr($parts[0], 8, 7),
+                                    "pedimento" => str_pad(substr($parts[0], 8, 7), 7, '0', STR_PAD_LEFT),
                                     "rfcImportador" => substr($parts[0], 15, 12),
                                     "caja" => (isset($parts[2])) ? substr($parts[1], 0, 2) : substr($parts[1], 0, 2),
                                     "numOperacion" => (isset($parts[2])) ? substr($parts[1], 2, 10) : substr($parts[1], 2, 10),
@@ -472,7 +472,7 @@ class OAQ_ArchivosValidacion {
                         $tmp = array(
                             "aduana" => (int) substr($line, 2, 2),
                             "patente" => (int) substr($line, 4, 4),
-                            "pedimento" => (int) substr($line, 8, 7),
+                            "pedimento" => str_pad(substr($line, 8, 7), 7, '0', STR_PAD_LEFT),
                             "firmaBanco" => substr($line, 15, 3),
                             "rfcImportador" => "ND",
                             "fecha" => date('Y-m-d'),
@@ -510,21 +510,21 @@ class OAQ_ArchivosValidacion {
                         if (preg_match('/^F/i', $line) && !preg_match('/BORRADO/i', trim($line))) {
                             $this->_data[] = array(
                                 'patente' => (int) $this->_patente,
-                                'pedimento' => (int) substr($line, 1, 7),
+                                'pedimento' => str_pad(substr($line, 1, 7), 7, '0', STR_PAD_LEFT),
                                 'firma' => substr($line, 8, 8)
                             );
                         }
                         if (preg_match('/^E/i', $line) && !preg_match('/BORRADO/i', trim($line))) {
                             $this->_data[] = array(
                                 'patente' => (int) $this->_patente,
-                                'pedimento' => (int) substr($line, 1, 7),
+                                'pedimento' => str_pad(substr($line, 1, 7), 7, '0', STR_PAD_LEFT),
                                 'firma' => substr($line, 8, strlen($line) - 7)
                             );
                         }
                         if (preg_match('/^F/i', $line) && preg_match('/BORRADO/i', trim($line))) {
                             $this->_data[] = array(
                                 'patente' => (int) $this->_patente,
-                                'pedimento' => (int) substr($line, 1, 7),
+                                'pedimento' => str_pad(substr($line, 1, 7), 7, '0', STR_PAD_LEFT),
                                 'firma' => "BORRADO"
                             );
                         }

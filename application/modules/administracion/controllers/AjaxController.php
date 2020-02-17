@@ -225,7 +225,6 @@ class Administracion_AjaxController extends Zend_Controller_Action {
                     "idSolicitud" => "Digits",
                     "patente" => "Digits",
                     "aduana" => "Digits",
-                    "pedimento" => "Digits",
                     "referencia" => "StringToUpper",
                 );
                 $v = array(
@@ -263,7 +262,7 @@ class Administracion_AjaxController extends Zend_Controller_Action {
                     if (!empty($header)) {
                         if (isset($header["rfcCliente"])) {
                             $referencias = new OAQ_Referencias();
-                            $referencias->crearRepositorio($input->patente, $input->aduana, $input->referencia, $this->_session->username, $header["rfcCliente"], $input->pedimento);
+                            $referencias->crearRepositorio($input->patente, $input->aduana, $input->referencia, $this->_session->username, $header["rfcCliente"], str_pad($input->pedimento, 7, '0', STR_PAD_LEFT));
                         }
                     }
                 }
@@ -282,7 +281,7 @@ class Administracion_AjaxController extends Zend_Controller_Action {
                                 "idSolicitud" => $input->idSolicitud,
                                 "aduana" => $input->aduana,
                                 "patente" => $input->patente,
-                                "pedimento" => $input->pedimento,
+                                "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                                 "referencia" => $input->referencia,
                                 "nombreArchivo" => $filename,
                                 "ubicacion" => $path,
@@ -359,45 +358,6 @@ class Administracion_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    /*public function informacionSolicitudesAction() {
-        try {
-            if (!$this->getRequest()->isXmlHttpRequest()) {
-                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
-            }
-            $r = $this->getRequest();
-            if ($r->isPost()) {
-                $f = array(
-                    "*" => array("StringTrim", "StripTags"),
-                );
-                $v = array(
-                    "ids" => array("NotEmpty"),
-                );
-                $i = new Zend_Filter_Input($f, $v, $r->getPost());
-                if ($i->isValid("ids")) {
-                    $m = new Trafico_Model_TraficoSolicitudesMapper();
-                    $array = array();
-                    foreach ($i->ids as $id) {
-                        $d = $m->obtener($id);
-                        $array[] = array(
-                            "patente" => $d["patente"],
-                            "aduana" => $d["aduana"],
-                            "referencia" => $d["referencia"],
-                            "pedimento" => $d["pedimento"],
-                            "total" => $d["subtotal"] - $d["anticipo"],
-                        );
-                    }
-                    $this->_helper->json(array("success" => true, "data" => $array));
-                } else {
-                    $this->_helper->json(array("success" => false, "message" => "Not valid!"));
-                }
-            } else {
-                throw new Exception("Invalid request type!");
-            }
-        } catch (Exception $ex) {
-            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
-        }
-    }*/
-
     public function multiplesDepositosAction() {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
@@ -447,7 +407,7 @@ class Administracion_AjaxController extends Zend_Controller_Action {
                                     "idCliente" => $s["idCliente"],
                                     "patente" => $s["patente"],
                                     "aduana" => $s["aduana"],
-                                    "pedimento" => $s["pedimento"],
+                                    "pedimento" => str_pad($s["pedimento"], 7, '0', STR_PAD_LEFT),
                                     "referencia" => $s["referencia"],
                                     "nombreArchivo" => $filename,
                                     "ubicacion" => $path,
