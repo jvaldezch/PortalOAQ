@@ -1616,6 +1616,7 @@ class Clientes_DataController extends Zend_Controller_Action {
                         }
                     }
                 }
+                die();
 
                 if (($zip->close()) === TRUE) {
                     $closed = true;
