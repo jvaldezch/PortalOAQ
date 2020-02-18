@@ -264,7 +264,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                         'rfc_cliente' => $rfcCliente,
                         'patente' => substr($aduana, 0, 4),
                         'aduana' => substr($aduana, 5, 3),
-                        'pedimento' => $pedimento,
+                        'pedimento' => str_pad($pedimento, 7, '0', STR_PAD_LEFT),
                         'referencia' => $referencia,
                         'nom_archivo' => basename($name),
                         'ubicacion' => $name,
@@ -295,7 +295,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                         }
                     }
                     if ($added == true) {
-                        $model->actualizarPedimento($item["referencia"], $item["pedimento"], $item["rfc_cliente"]);
+                        $model->actualizarPedimento($item["referencia"], str_pad($item["pedimento"], 7, '0', STR_PAD_LEFT), $item["rfc_cliente"]);
                     }
                 }
                 unset($data);
@@ -435,7 +435,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                                 'patente' => $explode[3],
                                 'aduana' => $explode[4],
                                 'referencia' => $referencia["trafico"],
-                                'pedimento' => $referencia["pedimento"],
+                                'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                                 'nom_archivo' => $misc->formatFilename(basename($nombre)),
                                 'ubicacion' => $nombre,
                                 'tipo_archivo' => 99,
@@ -491,7 +491,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                             'patente' => $explode[3],
                             'aduana' => $explode[4],
                             'referencia' => $ref[1],
-                            'pedimento' => $referencia["pedimento"],
+                            'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                             'nom_archivo' => basename($name),
                             'ubicacion' => $name,
                             'tipo_archivo' => $this->_casaFileType(basename($name), $ref[1]),
@@ -523,7 +523,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                         }
                     }
                     if ($added == true) {
-                        $model->actualizarPedimento($item["referencia"], $item["pedimento"], $item["rfc_cliente"]);
+                        $model->actualizarPedimento($item["referencia"], str_pad($item["pedimento"], 7, '0', STR_PAD_LEFT), $item["rfc_cliente"]);
                     }
                 }
                 unset($data);
@@ -734,7 +734,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                                             'patente' => $patente,
                                             'aduana' => $aduana,
                                             'referencia' => $arr["trafico"],
-                                            'pedimento' => $arr["pedimento"],
+                                            'pedimento' => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                                             'nom_archivo' => basename($file),
                                             'ubicacion' => $file,
                                             'tipo_archivo' => 1,
@@ -747,7 +747,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                                             'patente' => $patente,
                                             'aduana' => $aduana,
                                             'referencia' => $arr["trafico"],
-                                            'pedimento' => $arr["pedimento"],
+                                            'pedimento' => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                                             'nom_archivo' => basename($file),
                                             'ubicacion' => $file,
                                             'tipo_archivo' => 33,
@@ -866,7 +866,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                                         'patente' => $patente,
                                         'aduana' => $aduana,
                                         'referencia' => $arr["trafico"],
-                                        'pedimento' => $arr["pedimento"],
+                                        'pedimento' => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                                         'nom_archivo' => basename($filename),
                                         'new_nom_archivo' => $newname,
                                         'ubicacion' => $filename,
@@ -882,7 +882,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                                         'patente' => $patente,
                                         'aduana' => $aduana,
                                         'referencia' => $arr["trafico"],
-                                        'pedimento' => $arr["pedimento"],
+                                        'pedimento' => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                                         'nom_archivo' => basename($filename),
                                         'new_nom_archivo' => $snewname,
                                         'ubicacion' => pathinfo($filename, PATHINFO_DIRNAME) . '/simplificados' . DIRECTORY_SEPARATOR . basename($filename),
@@ -1035,7 +1035,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                                 'patente' => $patente,
                                 'aduana' => $aduana,
                                 'referencia' => $arr["trafico"],
-                                'pedimento' => $arr["pedimento"],
+                                'pedimento' => str_pad($arr["pedimento"], 7, '0', STR_PAD_LEFT),
                                 'nom_archivo' => basename($name),
                                 'ubicacion' => $name,
                                 'tipo_archivo' => 17,
@@ -1051,57 +1051,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                 break;
             }
         }
-        Zend_Debug::dump($data);
         return true;
-
-//        if (isset($data)) {
-//            echo "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"></head><style>body { font-size: 11px; margin: 0; padding: 0; } table { border-collapse: collapse; border-spacing: 0; } table th, table td { font-size: 11px; font-family: sans-serif; padding: 2px; border: 1px #777 solid; }</style>"
-//            . "<body><table>"
-//            . "<tr>"
-//            . "<th>Patente</th>"
-//            . "<th>Aduana</th>"
-//            . "<th>Pedimento</th>"
-//            . "<th>Referencia</th>"
-//            . "<th>RFC Cliente</th>"
-//            . "<th>Archivo</th>"
-//            . "<th>Tipo Archivo</th>"
-//            . "<th>Ubicacion</th>"
-//            . "</tr>";
-//            foreach ($data as $item) {
-//                $verificar = $model->verificarArchivo($item["patente"], $item["referencia"], $item["nom_archivo"]);
-//                if ($verificar == false) {
-//                    $path = $misc->crearDirectorio($item["patente"], $item["aduana"], $item["referencia"]);
-//                    if (!copy($item["ubicacion"], $path . DIRECTORY_SEPARATOR . $item["nom_archivo"])) {
-//                        die("Error al copiar ...\n");
-//                    }
-//                    $added = $model->nuevoArchivo($item["tipo_archivo"], $item["patente"], $item["aduana"], $item['pedimento'], $item["referencia"], $item["nom_archivo"], $path . DIRECTORY_SEPARATOR . $item["nom_archivo"], 'Auto', $item["rfc_cliente"]);
-//                    if ($added === true) {
-//                        echo "<tr>"
-//                        . "<td>" . $item["patente"] . "</td>"
-//                        . "<td>" . $item["aduana"] . "</td>"
-//                        . "<td>" . $item["pedimento"] . "</td>"
-//                        . "<td>" . $item["referencia"] . "</td>"
-//                        . "<td>" . $item["rfc_cliente"] . "</td>"
-//                        . "<td>" . $item["nom_archivo"] . "</td>"
-//                        . "<td>" . $docs->tipoDocumento($item["tipo_archivo"]) . "</td>"
-//                        . "<td>" . $item["ubicacion"] . "</td>"
-//                        . "</tr>";
-//                    }
-//                } else {
-//                    echo "<tr>"
-//                    . "<td colspan=\"4\">Archivo ya existe.</td>"
-//                    . "<td>" . $item["rfc_cliente"] . "</td>"
-//                    . "<td>" . $item["nom_archivo"] . "</td>"
-//                    . "<td>" . $docs->tipoDocumento($item["tipo_archivo"]) . "</td>"
-//                    . "<td>" . $item["ubicacion"] . "</td>"
-//                    . "</tr>";
-//                }
-////                if($added == true) {
-////                    unlink($item["ubicacion"]);
-////                }
-//            }
-//            echo "</table></body></html>";
-//        }
     }
 
     public function analizarFtpAction() {
@@ -1283,7 +1233,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                     'patente' => substr($aduana, 0, 4),
                     'aduana' => $explode[4],
                     'referencia' => $referencia["trafico"],
-                    'pedimento' => $referencia["pedimento"],
+                    'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                     'nom_archivo' => $misc->formatFilename(basename($nombre)),
                     'ubicacion' => $nombre,
                     'tipo_archivo' => 29,
@@ -1294,7 +1244,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                     'patente' => substr($aduana, 0, 4),
                     'aduana' => $explode[4],
                     'referencia' => $referencia["trafico"],
-                    'pedimento' => $referencia["pedimento"],
+                    'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                     'nom_archivo' => $misc->formatFilename(basename($nombre)),
                     'ubicacion' => $nombre,
                     'tipo_archivo' => 29,
@@ -1305,7 +1255,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                     'patente' => substr($aduana, 0, 4),
                     'aduana' => $explode[4],
                     'referencia' => $referencia["trafico"],
-                    'pedimento' => $referencia["pedimento"],
+                    'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                     'nom_archivo' => $misc->formatFilename(basename($nombre)),
                     'ubicacion' => $nombre,
                     'tipo_archivo' => 50,
@@ -1316,7 +1266,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                     'patente' => substr($aduana, 0, 4),
                     'aduana' => $explode[4],
                     'referencia' => $referencia["trafico"],
-                    'pedimento' => $referencia["pedimento"],
+                    'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                     'nom_archivo' => $misc->formatFilename(basename($nombre)),
                     'ubicacion' => $nombre,
                     'tipo_archivo' => 51,
@@ -1327,7 +1277,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                     'patente' => substr($aduana, 0, 4),
                     'aduana' => $explode[4],
                     'referencia' => $referencia["trafico"],
-                    'pedimento' => $referencia["pedimento"],
+                    'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                     'nom_archivo' => $misc->formatFilename(basename($nombre)),
                     'ubicacion' => $nombre,
                     'tipo_archivo' => 52,
@@ -1338,7 +1288,7 @@ class Automatizacion_ArchiveController extends Zend_Controller_Action {
                     'patente' => substr($aduana, 0, 4),
                     'aduana' => $explode[4],
                     'referencia' => $referencia["trafico"],
-                    'pedimento' => $referencia["pedimento"],
+                    'pedimento' => str_pad($referencia["pedimento"], 7, '0', STR_PAD_LEFT),
                     'nom_archivo' => $misc->formatFilename(basename($nombre)),
                     'ubicacion' => $nombre,
                     'tipo_archivo' => 99,
