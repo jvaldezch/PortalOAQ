@@ -236,7 +236,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $form->populate(array(
             "patente" => $i->patente,
             "aduana" => $i->aduana,
-            "pedimento" => str_pad($i->pedimento, 7, '0', STR_PAD_LEFT),
+            "pedimento" => $i->isValid("pedimento") ? str_pad($i->pedimento, 7, '0', STR_PAD_LEFT): null,
             "referencia" => $i->referencia,
             "rfcCliente" => $i->rfcCliente,
         ));
