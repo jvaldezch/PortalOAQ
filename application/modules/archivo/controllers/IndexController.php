@@ -180,7 +180,6 @@ class Archivo_IndexController extends Zend_Controller_Action {
             "size" => "Digits",
             "aduana" => "Digits",
             "patente" => "Digits",
-            "pedimento" => "Digits",
             "referencia" => "StringToUpper",
             "rfcCliente" => "StringToUpper",
         );
@@ -208,6 +207,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
             $fecha_inicio, 
             $fecha_fin
         );
+
         if ($this->_session->role !== "inhouse" && $this->_session->role !== "proveedor" && $this->_session->role !== "corresponsal") {
             if (!empty($res["idsAduana"])) {
                 $select = $repo->paginatorSelect($filtro, $search, $res["idsAduana"], $res["rfcs"]);
