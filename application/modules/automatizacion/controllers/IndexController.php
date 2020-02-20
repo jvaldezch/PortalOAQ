@@ -993,7 +993,7 @@ class Automatizacion_IndexController extends Zend_Controller_Action {
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
         $mapper = new Automatizacion_Model_ArchivosValidacionMapper();
         $archivos = new OAQ_ArchivosValidacion();
-        $arrayp = $mapper->notAnalized("pagado");
+        /*$arrayp = $mapper->notAnalized("pagado");
         $pagos = new Automatizacion_Model_ArchivosValidacionPagosMapper();
         if (isset($arrayp) && !empty($arrayp)) {
             foreach ($arrayp as $item) {
@@ -1019,7 +1019,7 @@ class Automatizacion_IndexController extends Zend_Controller_Action {
                     $mapper->setAnalized($item["id"]);
                 }
             }
-        }
+        }*/
         $array = $mapper->notAnalized("m3");
         $documents = new Automatizacion_Model_ArchivosValidacionPedimentosMapper();
         if (isset($array) && !empty($array)) {
