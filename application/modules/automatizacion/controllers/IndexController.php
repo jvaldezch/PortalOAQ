@@ -769,7 +769,7 @@ class Automatizacion_IndexController extends Zend_Controller_Action {
                     }
                     unset($files);
                 } // foreach $arr as $dir
-                $arrayp = $mapper->notAnalized("pagado");
+                /*$arrayp = $mapper->notAnalized("pagado");
                 $pagos = new Automatizacion_Model_ArchivosValidacionPagosMapper();
                 if (isset($arrayp) && !empty($arrayp)) {
                     foreach ($arrayp as $item) {
@@ -788,7 +788,7 @@ class Automatizacion_IndexController extends Zend_Controller_Action {
                             $mapper->setAnalized($item["id"]);
                         }
                     }
-                }
+                }*/
                 $arrayv = $mapper->notAnalized("validacion");
                 $signatures = new Automatizacion_Model_ArchivosValidacionFirmasMapper();
                 if (isset($arrayv) && !empty($arrayv)) {
@@ -876,7 +876,7 @@ class Automatizacion_IndexController extends Zend_Controller_Action {
                 }
             }
             unset($files);
-            $arrayp = $mapper->notAnalized("pagado");
+            /*$arrayp = $mapper->notAnalized("pagado");
             $pagos = new Automatizacion_Model_ArchivosValidacionPagosMapper();
             if (isset($arrayp) && !empty($arrayp)) {
                 foreach ($arrayp as $item) {
@@ -895,7 +895,7 @@ class Automatizacion_IndexController extends Zend_Controller_Action {
                         $mapper->setAnalized($item["id"]);
                     }
                 }
-            }
+            }*/
             $arrayv = $mapper->notAnalized("validacion");
             $signatures = new Automatizacion_Model_ArchivosValidacionFirmasMapper();
             if (isset($arrayv) && !empty($arrayv)) {
