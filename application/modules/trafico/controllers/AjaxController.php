@@ -840,7 +840,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             }
             $r = $this->getRequest();
             if ($r->isPost()) {
-                $addr = array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú.,& ]+$/"));
+                $addr = array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú.,&+ ]+$/"));
                 $f = array(
                     "*" => array("StringTrim", "StripTags", "StringToUpper"),
                     "id" => "Digits",
