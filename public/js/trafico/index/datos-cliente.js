@@ -395,7 +395,7 @@ $(document).ready(function () {
             },
             calle: {
                 required: true,
-                regex: /^[-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú., ]+$/
+                regex: /^[-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú.,+ ]+$/
             },
             numext: {required: true},
             estado: {required: true},
