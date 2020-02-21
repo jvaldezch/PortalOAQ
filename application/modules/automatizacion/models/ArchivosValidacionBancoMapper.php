@@ -12,7 +12,7 @@ class Automatizacion_Model_ArchivosValidacionBancoMapper {
         try {
             $sql = $this->_db_table->select()
                     ->setIntegrityCheck(false)
-                    ->from(array("p" => "archivos_validacion_pago"), array("patente", "aduana", "pedimento", "rfcImportador", "firmaBanco", "numOperacion", "idArchivoValidacion"))
+                    ->from(array("p" => "archivos_validacion_pago"), array("patente", "aduana", "pedimento", "rfcImportador", "lineaCaptura", "idArchivoValidacion"))
                     ->joinLeft(array("a" => "archivos_validacion"), "p.idArchivoValidacion = a.id", array("archivo", "archivoNombre", "contenido"))
                     ->where("p.patente = ?", $patente)
                     ->where("p.aduana LIKE ?", substr($aduana, 0, 2) . "%")
