@@ -109,6 +109,19 @@
                     <td>&nbsp;</td>
                 </tr>
             <?php } ?>
+            <?php if (isset($this->validacion["banco"]) && !empty($this->validacion["banco"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <a class="traffic-a" href="/archivo/data/descarga-archivo-validacion?id=<?= $this->validacion["banco"]["idArchivoValidacion"] ?>"><?= $this->validacion["banco"]["archivoNombre"] ?></a>
+                    </td>
+                    <td style="text-align: left">Archivo de pago (banco)</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
             <?php if (isset($this->validacion["pago"]) && !empty($this->validacion["pago"])) { ?>
                 <tr>
                     <td>&nbsp;</td>

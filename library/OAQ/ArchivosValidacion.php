@@ -622,6 +622,11 @@ class OAQ_ArchivosValidacion {
         if (isset($pago) && !empty($pago)) {
             $arr["pago"] = $pago;
         }
+        $pag = new Automatizacion_Model_ArchivosValidacionBancoMapper();
+        $pago = $pag->findFile($patente, $aduana, $pedimento);
+        if (isset($pago) && !empty($pago)) {
+            $arr["banco"] = $pago;
+        }
         return $arr;
     }
 
