@@ -8,7 +8,7 @@ class Dashboard_Model_Traficos {
         $this->_db_table = new Trafico_Model_DbTable_Traficos();
     }
 
-    public function obtenerTraficos($rfcCliente, $page, $size, $fecha = null) {
+    public function obtenerTraficos($page, $size, $fecha = null, $rfcCliente = null) {
         try {
             $sql = $this->_db_table->select()
                     ->setIntegrityCheck(false)
@@ -23,26 +23,25 @@ class Dashboard_Model_Traficos {
                         "ie",
                         "estatus",
                         "DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta",
-                        "DATE_FORMAT(fechaPago,'%Y-%m-%d') AS fechaPago",
+                        "DATE_FORMAT(fechaPago,'%Y-%m-%d %H:%i:%s') AS fechaPago",
                         "DATE_FORMAT(fechaLiberacion,'%Y-%m-%d') AS fechaLiberacion",
-                        "DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion",
                         "DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada",
                         "DATE_FORMAT(fechaPrevio,'%Y-%m-%d') AS fechaPrevio",
-                        "DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion",
                         "DATE_FORMAT(fechaDespacho,'%Y-%m-%d') AS fechaDespacho",
                         "DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen",
                         "DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d') AS fechaEnvioProforma",
                         "DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos",
-                        "DATE_FORMAT(fechaNotificacion,'%Y-%m-%d') AS fechaNotificacion",
-                        "DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito",
                     ))
                     ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array("nombre AS nombreAduana"))
+                    ->where("t.fechaEta >= ?", date('Y-m-d', strtotime('-95 days', strtotime($fecha))))
+                    ->where("t.idBodega IS NULL")
                     ->where("t.estatus <> 4")
-                    ->where("t.rfcCliente = ?", $rfcCliente)
-                    ->where("t.fechaEta > ?", date('Y-m-d', strtotime('-15 days', strtotime($fecha))))
                     ->order("t.idAduana ASC");
             if (isset($size)) {
                 $sql->limit($size, ((int) $size * ((int) $page - 1 )));
+            }
+            if ($rfcCliente) {
+                $sql->where("rfcCliente = ?", $rfcCliente);
             }
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
@@ -54,13 +53,16 @@ class Dashboard_Model_Traficos {
         }
     }
 
-    public function total($rfcCliente, $fecha = null) {
+    public function total($fecha = null, $rfcCliente = null) {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array(new Zend_Db_Expr("COUNT(*) AS total")))
-                    ->where("rfcCliente = ?", $rfcCliente)
-                    ->where("fechaEta > ?", date('Y-m-d', strtotime('-15 days', strtotime($fecha))))
+                    ->from($this->_db_table, array(new Zend_Db_Expr("COUNT(*) AS total")))                    
+                    ->where("fechaEta >= ?", date('Y-m-d', strtotime('-95 days', strtotime($fecha))))
+                    ->where("idBodega IS NULL")
                     ->where("estatus <> 4");
+            if ($rfcCliente) {
+                $sql->where("rfcCliente = ?", $rfcCliente);
+            }
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->total;

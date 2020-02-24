@@ -78,37 +78,23 @@ function newRow(item) {
     } else if (parseInt(item.estatus) === 6) {
         status = '<span class="label label-danger">&nbsp;</span>';
     }
-    return '<tr><td>' 
-            + status 
-            + '</td><td>' 
-            + item.nombreAduana 
-            + '</td><td>' 
-            + (item.patente + '-' + item.aduana + '-' + item.pedimento)
-            + '</td><td>' 
-            + item.referencia 
-            + '</td><td>' 
-            + ((item.regimen) ? item.regimen : '')
-            + '</td><td>' 
-            + ((item.fechaNotificacion) ? item.fechaNotificacion : '')
-            + '</td><td>' 
-            + ((item.fechaEta) ? item.fechaEta : '')
-            + '</td><td>' 
-            + ((item.fechaEnvioProforma) ? item.fechaEnvioProforma : '')
-            + '</td><td>' 
-            + ((item.fechaEnvioDocumentos) ? item.fechaEnvioDocumentos : '')
-            + '</td><td>' 
-            + ((item.fechaRevalidacion) ? item.fechaRevalidacion : '')
-            + '</td><td>' 
-            + ((item.fechaPrevio) ? item.fechaPrevio : '')
-            + '</td><td>' 
-            + ((item.fechaPago) ? item.fechaPago : '')
-            + '</td><td>' 
-            + ((item.fechaLiberacion) ? item.fechaLiberacion : '')
-            + '</td><td>' 
-            + ((item.fechaEtaAlmacen) ? item.fechaEtaAlmacen : '')
-            + '</td><td>' 
-            + ((item.fechaFacturacion) ? item.fechaFacturacion : '')
-            + '</td></tr>';
+    return '<tr>'
+        + '<td>' + status + '</td>'
+        + '<td></td>'
+        + '<td>' + item.nombreAduana + '</td>'
+        + '<td>' + (item.patente + '-' + item.aduana + '-' + item.pedimento) + '</td>'
+        + '<td>' + item.referencia + '</td>'
+        + '<td>' + item.regimen + '</td>'
+        + '<td>' + item.fechaEta + '</td>'
+        + '<td>' + ((item.fechaPrevio) ? '<i class="fa fa-check" style="color: rgb(51, 204, 51)"></i>': '') + '</td>'
+        + '<td>' + ((item.fechaEnvioDocumentos) ? '<i class="fa fa-check" style="color: rgb(51, 204, 51)"></i>': '') + '</td>'
+        + '<td>' + ((item.fechaEnvioProforma) ? '<i class="fa fa-check" style="color: rgb(51, 204, 51)"></i>': '') + '</td>'
+        + '<td>' + ((item.fechaPago) ? item.fechaPago : '') + '</td>'
+        + '<td></td>'
+        + '<td>' + ((item.fechaLiberacion) ? item.fechaLiberacion : '') + '</td>'
+        + '<td></td>'
+        + '<td></td>'
+        + '</tr>';
 }
 
 /**

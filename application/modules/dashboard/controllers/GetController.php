@@ -50,9 +50,11 @@ class Dashboard_GetController extends Zend_Controller_Action {
                 $cust = $custs->buscarIdentificador($input->code);
                 if (count($cust)) {
                     $mapper = new Dashboard_Model_Traficos();
-                    $arr = $mapper->obtenerTraficos($cust["rfc"], $input->page, $input->limit, date("Y-m-d"));
+                    //$arr = $mapper->obtenerTraficos($input->page, $input->limit, date("Y-m-d"), $cust["rfc"]);
+                    $arr = $mapper->obtenerTraficos($input->page, $input->limit, date("Y-m-d"));
                     if (count($arr)) {
-                        $this->_helper->json(array("success" => true, "total" => $mapper->total($cust["rfc"], date("Y-m-d")), "page" => $input->page, "data" => $arr));
+                        //$this->_helper->json(array("success" => true, "total" => $mapper->total(date("Y-m-d"), $cust["rfc"]), "page" => $input->page, "data" => $arr));
+                        $this->_helper->json(array("success" => true, "total" => $mapper->total(date("Y-m-d")), "page" => $input->page, "data" => $arr));
                     } else {
                         throw new Exception("No data found!");
                     }

@@ -76,12 +76,15 @@ window.documentsType = function () {
             });
 };
 
-window.uploadFile = function (id, type) {
-    $.get("/dashboard/get/upload-form", {id: id, type: type})
+window.uploadFiles = function (id) {
+    $.get("/dashboard/get/upload-form", {id: id, type: 'fechaPago'})
             .done(function (res) {
                 setTimeout(function () { }, 5000);
                 if (res.success === true) {
-                    if (type === 'fechaPrevio') {
+                    $('.modal-upload-title').html('<i class="fa fa-upload" aria-hidden="true"></i>&nbsp;Subir documentos: ' + res.referencia + " (" + res.pedimento + ")");
+                    $('.modal-upload-body').html(res.html);
+                    $('.modal-upload').modal('show');
+                    /*if (type === 'fechaPrevio') {
                         $('.modal-photos-title').html('&nbsp;Fotos previo: ' + res.referencia + " (" + res.pedimento + ")");
                         $('.modal-photos-body').html(res.html);
                         $('.modal-photos').modal('show');
@@ -89,8 +92,7 @@ window.uploadFile = function (id, type) {
                         $('.modal-upload-title').html('<i class="fa fa-upload" aria-hidden="true"></i>&nbsp;Subir documentos: ' + res.referencia + " (" + res.pedimento + ")");
                         $('.modal-upload-body').html(res.html);
                         $('.modal-upload').modal('show');
-                    }
-
+                    }*/
                 }
             });
 };
@@ -141,13 +143,13 @@ window.viewPhotos = function(id) {
             });
 };
 
-window.uploadIcon = function(id, type) {
-    return '<i class="fa fa-upload" aria-hidden="true" style="margin-left: 5px; cursor: pointer" onclick="uploadFile(' + id + ', \'' + type + '\');"></i>';
-};
+/*window.uploadIcon = function(id) {
+    return '<i class="fa fa-upload" aria-hidden="true" style="margin-left: 5px; cursor: pointer" onclick="uploadFile(' + id + ');"></i>';
+};*/
 
-window.viewIcon = function(id, type, fecha) {
+/*window.viewIcon = function(id, type, fecha) {
     return fecha + '&nbsp;<i class="fa fa-eye" aria-hidden="true" style="cursor: pointer" title="Ver documentos" onclick="uploadFile(' + id + ', \'' + type + '\');"></i>';
-};
+};*/
 
 window.descargarArchivo = function(href) {
     location.href = href;
@@ -167,41 +169,28 @@ function newRow(item) {
     } else if (parseInt(item.estatus) === 6) {
         status = '<span class="label label-danger">&nbsp;</span>';
     }
-    return '<tr><td>' 
-            + status 
-            + '</td><td>' 
-            + '<a href="javascript:void(0)" onclick="viewFiles(' + item.id + ')"><i class="fa fa-folder-open" aria-hidden="true"></i></a>' 
-            + '<a href="javascript:void(0)" onclick="viewComments(' + item.id + ')"><i class="fa fa-envelope" aria-hidden="true"></i></a>' 
-            + '</td><td>' 
-            + item.nombreAduana 
-            + '</td><td>' 
-            + (item.patente + '-' + item.aduana + '-' + item.pedimento)
-            + '</td><td>' 
-            + item.referencia 
-            + '</td><td>' 
-            + ((item.regimen) ? item.regimen : '')
-            + '</td><td>' 
-            + ((item.fechaNotificacion) ? item.fechaNotificacion : '')
-            + '</td><td>' 
-            + ((item.fechaEta) ? item.fechaEta : '')
-            + '</td><td>' 
-            + ((item.fechaEnvioProforma) ? item.fechaEnvioProforma : '')
-            + '</td><td>' 
-            + ((item.fechaEnvioDocumentos) ? viewIcon(item.id, 'fechaEnvioDocumentos', item.fechaEnvioDocumentos) : uploadIcon(item.id, 'fechaEnvioDocumentos'))
-            + '</td><td>' 
-            + ((item.fechaRevalidacion) ? viewIcon(item.id, 'fechaRevalidacion', item.fechaRevalidacion) : uploadIcon(item.id, 'fechaRevalidacion'))
-            + '</td><td>' 
-            //+ ((item.fechaPrevio) ? photosIcon(item.id, 'fechaPrevio', item.fechaPrevio) : '')
-            + ((item.fechaPrevio) ? item.fechaPrevio + '&nbsp;<i class="fa fa-eye" aria-hidden="true" style="cursor: pointer" title="Ver fotos" onclick="viewPhotos(' + item.id + ');"></i>' : '')
-            + '</td><td>' 
-            + ((item.fechaPago) ? item.fechaPago : '')
-            + '</td><td>' 
-            + ((item.fechaLiberacion) ? item.fechaLiberacion : '')
-            + '</td><td>' 
-            + ((item.fechaEtaAlmacen) ? item.fechaEtaAlmacen : '')
-            + '</td><td>' 
-            + ((item.fechaFacturacion) ? item.fechaFacturacion : '')
-            + '</td></tr>';
+    return '<tr>' 
+        + '<td>' + status + '</td>'
+        + '<td>' 
+        + '<a href="javascript:void(0)" onclick="viewFiles(' + item.id + ')"><i class="fa fa-folder-open" aria-hidden="true"></i></a>' 
+        + '<a href="javascript:void(0)" onclick="viewComments(' + item.id + ')"><i class="fa fa-envelope" aria-hidden="true"></i></a>' 
+        + '<a href="javascript:void(0)" onclick="uploadFiles(' + item.id + ')"><i class="fa fa-upload" aria-hidden="true"></i></a>' 
+        + '</td>'
+        + '<td>' + item.nombreAduana + '</td>'
+        + '<td>' + (item.patente + '-' + item.aduana + '-' + item.pedimento) + '</td>'
+        + '<td>' + item.referencia + '</td>'
+        + '<td>' + item.regimen + '</td>'
+        + '<td>' + item.fechaEta + '</td>'
+        + '<td>' + ((item.fechaPrevio) ? '<i class="fa fa-check" style="color: rgb(51, 204, 51)"></i>': '') + '</td>'
+        + '<td>' + ((item.fechaEnvioDocumentos) ? '<i class="fa fa-check" style="color: rgb(51, 204, 51)"></i>': '') + '</td>'
+        + '<td>' + ((item.fechaEnvioProforma) ? '<i class="fa fa-check" style="color: rgb(51, 204, 51)"></i>': '') + '</td>'
+        + '<td>' + ((item.fechaPago) ? item.fechaPago : '') + '</td>'
+        + '<td></td>'
+        + '<td>' + ((item.fechaLiberacion) ? item.fechaLiberacion : '') + '</td>'
+        + '<td></td>'
+        + '<td></td>'
+        + '</tr>';
+
 }
 
 /**
