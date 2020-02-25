@@ -6,11 +6,13 @@ class Dashboard_MainController extends Zend_Controller_Action {
     protected $_config;
     protected $_appconfig;
     protected $_redirector;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout->setLayout("dashboard/default");
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
+        $this->_firephp = Zend_Registry::get("firephp");
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headScript()->exchangeArray(array());
         $this->view->headLink()
@@ -97,9 +99,30 @@ class Dashboard_MainController extends Zend_Controller_Action {
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
                 ->appendFile("/js/dashboard/main/panel.js?" . time());
-        $this->view->login = true;
+        
+        $this->_session = new Zend_Session_Namespace("OAQDashboard");
+
         if (isset($this->_session->code)) {            
+            if (!isset($this->_session->rfcCliente)) {
+                $this->view->login = true;
+                $this->_helper->redirector->gotoUrl("/");
+            }
             $this->view->nomCliente = $this->_session->nomCliente;
+        } else {
+            $this->_helper->redirector->gotoUrl("/");
+        }
+    }
+        
+    public function logoutAction() {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $session = new Zend_Session_Namespace("OAQDashboard");
+        try {
+            $session->unsetAll();
+            Zend_Session::destroy(true);
+            $this->_helper->redirector->gotoUrl("/");
+        } catch (Zend_Exception $ex) {
+            throw new Exception($ex->getMessage());
         }
     }
 

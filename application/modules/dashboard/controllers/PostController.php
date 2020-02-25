@@ -5,11 +5,13 @@ class Dashboard_PostController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -116,7 +118,14 @@ class Dashboard_PostController extends Zend_Controller_Action {
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("ulogin") && $input->isValid("plogin") && $input->isValid("code")) {  
-                    if ($input->ulogin == 'ansell' && $input->plogin == 'ansell') {
+                    
+                    $auth_model = new OAQ_Auth();
+                    $auth = $auth_model->challengeCredentials($input->ulogin, $input->plogin);
+                    if ($auth["auth"] === true) {
+
+                        if ($auth['rol'] !== 'cliente') {
+                            throw new Exception("RFC invalid!");
+                        }
                         
                         $mapper = new Dashboard_Model_ClientesDbs();
                         $arr = $mapper->buscarIdentificador($input->code);
@@ -132,10 +141,38 @@ class Dashboard_PostController extends Zend_Controller_Action {
                         $this->_session->nomCliente = $arr["nombre"];
                         $this->_session->lock();
                         
-                        $this->_helper->json(array("success" => true));                            
+                        $this->_helper->json(array("success" => true));
+
+
+                    } else {
+                        if (isset($auth["username"])) {
+                            $this->_helper->json(array("success" => false, "username" => $auth["username"]));
+                        }
+                        if (isset($auth["password"])) {
+                            $this->_helper->json(array("success" => false, "password" => $auth["password"]));
+                        }
+                    }
+
+                    /*if ($input->ulogin == 'ansell' && $input->plogin == 'ansell') {
+                        
+                        $mapper = new Dashboard_Model_ClientesDbs();
+                        $arr = $mapper->buscarIdentificador($input->code);
+                        
+                        Zend_Session::regenerateId();
+                        $this->_session = new Zend_Session_Namespace("OAQDashboard");
+                        if ($this->_session->isLocked()) {
+                            $this->_session->unLock();
+                            $this->_session->setExpirationSeconds(3600);
+                        }
+                        $this->_session->code = $input->code;
+                        $this->_session->rfcCliente = $arr["rfc"];
+                        $this->_session->nomCliente = $arr["nombre"];
+                        $this->_session->lock();
+                        
+                        $this->_helper->json(array("success" => true));
                     } else {
                         throw new Exception("Usuario o contraseña no válidos.");
-                    }
+                    }*/
                 } else {
                     throw new Exception("Invalid input!");
                 }

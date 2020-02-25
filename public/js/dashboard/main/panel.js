@@ -306,6 +306,10 @@ function graficaOperaciones() {
     }
 }
 
+window.go_logout = function() {
+    window.location.href = '/dashboard/main/logout';
+};
+
 window.logout = function() {
     $('.modal-logout-title').html('<i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Confirmar');
     $('.modal-logout-body').html('¿Está seguro que desea salir de nuestro panel?');

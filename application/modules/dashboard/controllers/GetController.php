@@ -6,12 +6,14 @@ class Dashboard_GetController extends Zend_Controller_Action {
     protected $_config;
     protected $_appconfig;
     protected $_redirector;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
+        $this->_firephp = Zend_Registry::get("firephp");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_logger = Zend_Registry::get("logDb");
     }
@@ -88,6 +90,7 @@ class Dashboard_GetController extends Zend_Controller_Action {
             $mapper = new Dashboard_Model_Traficos();
             $year = (int) date("Y");
             $month = (int) date("m");
+
             if ($input->isValid("year")) {
                 $year = $input->year;
             }
@@ -115,12 +118,13 @@ class Dashboard_GetController extends Zend_Controller_Action {
                 );                
             } else if ($cust["rfc"] == "GCO980828GY0") {
                 $array = array(
-                    'QUERETARO, QRO' => $mapper->porAduana($$cust["rfc"], 3589, 640, date("Y-m-d")),
-                    'NUEVO LAREDO' => $mapper->porAduana($cust["rfc"], null, 240, date("Y-m-d")),
-                    'COLOMBIA, N.L.' => $mapper->porAduana($cust["rfc"], null, 800, date("Y-m-d")),
+                    'QUERETARO, QRO' => $mapper->porAduana($cust["rfc"], 3589, 640, date("Y-m-d")),
+                    'NUEVO LAREDO' => $mapper->porAduana($cust["rfc"], 3589, 240, date("Y-m-d")),
                     'CD. DE MEXICO' => $mapper->porAduana($cust["rfc"], 3574, 470, date("Y-m-d")),
                 );                                
             }
+            $this->_firephp->info($array);
+
             $totalMes = $mapper->totalMes($cust["rfc"], date("Y-m-d"));
             $totalPorLiberar = $mapper->totalPorLiberar($cust["rfc"], date("Y-m-d"));
             $totalAnterior = $mapper->totalMesAnterior($cust["rfc"], date("Y-m-d"));
