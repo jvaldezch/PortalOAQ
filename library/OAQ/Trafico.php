@@ -94,6 +94,10 @@ class OAQ_Trafico {
         return $this->pedimento;
     }
 
+    function getClavePedimento() {
+        return $this->clavePedimento;
+    }
+
     function getIdBodega() {
         return $this->idBodega;
     }
@@ -171,6 +175,7 @@ class OAQ_Trafico {
             $this->idBodega = $this->trafico->getIdBodega();
             $this->idRepositorio = $this->trafico->getIdRepositorio();
             $this->rfcCliente = $this->trafico->getRfcCliente();
+            $this->clavePedimento = $this->trafico->getCvePedimento();
             $this->ie = $this->trafico->getIe();
             if (APPLICATION_ENV == "production") {
                 $this->directorio = $this->appconfig->getParam("expdest");

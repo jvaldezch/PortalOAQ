@@ -50,6 +50,9 @@ class OAQ_Checklist {
             if (strtotime($fecha) > strtotime("2017-04-24")) {
                 $v = 2;
             }
+            if (strtotime($fecha) > strtotime("2020-02-26")) {
+                $v = 3;
+            }
         }
         if (isset($role)) {
             if (in_array($role, $this->admin)) {

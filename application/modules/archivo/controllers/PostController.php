@@ -341,11 +341,14 @@ class Archivo_PostController extends Zend_Controller_Action {
                         }
                     }
                     if ($input->isValid("idTrafico")) {
+                        $traffic = new OAQ_Trafico(array("idTrafico" => $input->idTrafico));
                         $view->idTrafico = $input->idTrafico;
+                        $view->cvePedimento = $traffic->getClavePedimento();
                     }
                     $view->admin = true;
                     $view->operacion = true;
-                    $view->administracion = true;
+                    $view->administracion = true;                    
+
                     $repo = new Archivo_Model_RepositorioMapper();
                     $tipos = $repo->obtenerTiposArchivosReferencia($arr["referencia"]);
                     if (isset($tipos)) {

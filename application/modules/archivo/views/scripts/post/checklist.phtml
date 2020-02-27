@@ -1,4 +1,5 @@
 <div style="overflow-y: scroll; max-height: 400px">
+    <div id="alert"></div>
     <form id="formChecklist" enctype="application/x-www-form-urlencoded">
         <?php if(isset($this->idRepo)) { ?>
             <input type="hidden" value="<?= $this->idRepo ?>" name="idRepo" />
@@ -10,6 +11,7 @@
         <input type="hidden" value="<?= $this->aduana ?>" name="aduana" />
         <input type="hidden" value="<?= $this->pedimento ?>" name="pedimento" />
         <input type="hidden" value="<?= $this->referencia ?>" name="referencia" />
+        <input type="hidden" value="<?= $this->cvePedimento ?>" name="clavePedimento" id="clavePedimento" />
         <table class="traffic-table traffic-table-left">
             <tr>
                 <td colspan="2"><strong>REFERENCIA:</strong>&nbsp;<?= $this->referencia ?></td>
@@ -129,6 +131,7 @@
 <?php 
 $arrg = array(
     array("name" => "pedimentos", "ids" => array(1, 23, 24, 32)),
+    array("name" => "doda", "ids" => array(63)),
     array("name" => "gastos", "ids" => array(2)),
     array("name" => "factura", "ids" => array(3, 34, 170)),
     array("name" => "cartai", "ids" => array(4)),
@@ -172,6 +175,14 @@ $arrg = array(
                     }
                 <?php } ?>
             });
+            let claves = ["A1","AF","H8","AJ","F4","G1","E1"];
+            let cvePedimento = $("#clavePedimento").val();
+            if (claves.includes(cvePedimento)) {
+                let ch = $("input:radio[name='manif']").filter("[value='1']");
+                if (!$("input:radio[name='manif']").filter("[value='1']").is(':checked')) {
+                    $("#alert").html('<p style="color: red; text-align: center; font-size: 11px; padding: 3px; border: 1px red solid">Clave de pedimento A1, AF, H8, AJ, F4, G1 y E1 deben contar con manifestación de valor y hoja de cálculo.</p>');
+                }
+            }
         }      
 <?php } ?>
     
