@@ -84,6 +84,7 @@ class Trafico_Model_FactProd {
                         "id",
                         "idFactura",
                         "orden",
+                        "ordenProducto",
                         "numParte",
                         "fraccion",
                         "subFraccion",
@@ -107,7 +108,8 @@ class Trafico_Model_FactProd {
                         "subModelo",
                         "numSerie"
                     ))
-                    ->where('idFactura = ?', $idFactura);
+                    ->where('idFactura = ?', $idFactura)
+                    ->order("ordenProducto ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();

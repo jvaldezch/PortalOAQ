@@ -349,6 +349,7 @@ window.productos = function () {
                 for (var i = 0; i < res.result.length; i++) {
                     var row = res.result[i];
                     var html = '<div class="divTableRow" id="' + row.id + '">';
+                    html += '<div class="divTableCell">' + ((row.ordenProducto !== null) ? row.ordenProducto : '') + '</div>';
                     html += '<div class="divTableCell">' + ((row.fraccion !== null) ? row.fraccion : '') + '</div>';
                     html += '<div class="divTableCell">' + ((row.numParte !== null) ? row.numParte : '') + '</div>';
                     html += '<div class="divTableCell" style="text-align: left">' + row.descripcion;
