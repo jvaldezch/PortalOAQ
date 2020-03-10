@@ -627,7 +627,10 @@ class Archivo_PostController extends Zend_Controller_Action {
                                         }
                                         if (preg_match('/^a[0-9]{7}.[0-9]{3}$/i', $fileinfo["name"])) {
                                             $insert["tipo_archivo"] = 1030;
-                                        }                                        
+                                        }
+                                        if (preg_match('/^e[0-9]{7}.([0-9]{3})$/i', basename($fileinfo["name"]))) {
+                                            $tipoArchivo = 1030;
+                                        }                                       
                                         if($model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $fileinfo["name"]) === false) {
                                             $model->agregar($insert);
                                         }

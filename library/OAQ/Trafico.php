@@ -875,19 +875,23 @@ class OAQ_Trafico {
     }
 
     protected function _facturasPedimento(Zend_Rest_Client $client) {
-        $response = $client->restPost("/{$this->sistema}/encabezado-facturas", array(
-            'patente' => $this->patente,
-            'aduana' => $this->aduana,
-            'pedimento' => $this->pedimento,
-            'referencia' => $this->referencia,
-        ));
-        if ($response->getBody()) {
-            $row = json_decode($response->getBody(), true);
-            if (!empty($row["response"])) {
-                return $row["response"];
+        try {
+            $response = $client->restPost("/{$this->sistema}/encabezado-facturas", array(
+                'patente' => $this->patente,
+                'aduana' => $this->aduana,
+                'pedimento' => $this->pedimento,
+                'referencia' => $this->referencia,
+            ));
+            if ($response->getBody()) {
+                $row = json_decode($response->getBody(), true);
+                if (!empty($row["response"])) {
+                    return $row["response"];
+                }
+            } else {
+                return false;
             }
-        } else {
-            return false;
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
 
@@ -1014,14 +1018,18 @@ class OAQ_Trafico {
     }
 
     protected function _actualizarEncabezadoPedimento($arr) {
-        $mppr = new Trafico_Model_TraficoPedimento();
-        if (!empty($arr)) {
-            if (!($id = $mppr->verificar($this->idTrafico, $this->pedimento))) {
-                $mppr->agregar($this->idTrafico, $this->patente, $this->aduana, $this->pedimento, $this->referencia, $arr);
-            } else {
-                $mppr->actualizar($id, $arr);
-            }
-            return;
+        try {
+            $mppr = new Trafico_Model_TraficoPedimento();
+            if (!empty($arr)) {
+                if (!($id = $mppr->verificar($this->idTrafico, $this->pedimento))) {
+                    $mppr->agregar($this->idTrafico, $this->patente, $this->aduana, $this->pedimento, $this->referencia, $arr);
+                } else {
+                    $mppr->actualizar($id, $arr);
+                }
+                return;
+            }        
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
 

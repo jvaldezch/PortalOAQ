@@ -2136,14 +2136,11 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             $up = array();
             $nup = array();
             foreach ($files as $fieldname => $fileinfo) { 
-                if (($upload->isUploaded($fieldname))) {
-                    
+                if (($upload->isUploaded($fieldname))) {                    
                     if (!preg_match('/\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpe?g|bmp|png|msg|([0-9]{3})|err)(?:[\?\#].*)?$/i', $fileinfo["name"])) {
                         continue;
                     }
-
-                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));
-                    
+                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));                    
                     if (preg_match('/^A[0-9]{7}.([0-9]{3})$/i', basename($fileinfo["name"]))) {
                         $tipoArchivo = 1030;
                     }
