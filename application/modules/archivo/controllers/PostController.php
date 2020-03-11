@@ -5,12 +5,14 @@ class Archivo_PostController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -581,13 +583,11 @@ class Archivo_PostController extends Zend_Controller_Action {
                         foreach ($files as $fieldname => $fileinfo) {
                             if (($upload->isUploaded($fieldname)) && ($upload->isValid($fieldname))) {
                                 if (preg_match('/\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpe?g|bmp|png|msg)(?:[\?\#].*)?$/i', $fileinfo["name"])) {
-                                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));                                  
-                                    
+                                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));                                    
                                     if ($tipoArchivo == 99) {
                                         unlink($fileinfo["name"]);
                                         continue;
-                                    }
-                                    
+                                    }                                    
                                     $filename = $misc->formatFilename($fileinfo["name"], false);
                                     $verificar = $model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $filename);
                                     if ($verificar == false) {
@@ -604,7 +604,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                                         );
                                     }
                                 } else {
-                                    if (preg_match('/^m[0-9]{7}.[0-9]{3}$/i', $fileinfo["name"]) || preg_match('/^m[0-9]{7}.err$/i', $fileinfo["name"]) || preg_match('/^a[0-9]{7}.[0-9]{3}$/i', $fileinfo["name"])) {
+                                    if (preg_match('/^m[0-9]{7}.[0-9]{3}$/i', $fileinfo["name"]) || preg_match('/^m[0-9]{7}.err$/i', $fileinfo["name"]) || preg_match('/^a[0-9]{7}.[0-9]{3}$/i', $fileinfo["name"]) ||  preg_match('/^e[0-9]{7}.[0-9]{3}$/i', $fileinfo["name"])) {
                                         $upload->receive($fieldname);
                                         $insert = array(
                                             "tipo_archivo" => 9999,
@@ -628,12 +628,23 @@ class Archivo_PostController extends Zend_Controller_Action {
                                         if (preg_match('/^a[0-9]{7}.[0-9]{3}$/i', $fileinfo["name"])) {
                                             $insert["tipo_archivo"] = 1030;
                                         }
-                                        if (preg_match('/^e[0-9]{7}.([0-9]{3})$/i', basename($fileinfo["name"]))) {
-                                            $tipoArchivo = 1030;
+                                        if (preg_match('/^e[0-9]{7}.([0-9]{3})$/i', $fileinfo["name"])) {
+                                            $insert["tipo_archivo"] = 1030;
                                         }                                       
-                                        if($model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $fileinfo["name"]) === false) {
+                                        if(!($model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $fileinfo["name"]))) {
+                                            $this->_firephp->info($insert);
                                             $model->agregar($insert);
+                                        } else {                                            
+                                            $errors[] = array(
+                                                "filename" => $fileinfo["name"],
+                                                "errors" =>  "File exists",
+                                            );
                                         }
+                                    } else {
+                                        $errors[] = array(
+                                            "filename" => $fileinfo["name"],
+                                            "errors" =>  "No rule matched",
+                                        );
                                     }
                                 }
                             } else {
@@ -644,11 +655,8 @@ class Archivo_PostController extends Zend_Controller_Action {
                                 );
                             }
                         }
-                        if (isset($errors)) {
-                            
-                        }
                         $index->modificacion($input->id, $this->_session->username);
-                        $this->_helper->json(array("success" => true));
+                        $this->_helper->json(array("success" => true, "errors" => $errors));
                     } else {
                         $this->_helper->json(array("success" => false));
                     }
