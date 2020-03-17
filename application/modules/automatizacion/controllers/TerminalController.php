@@ -165,7 +165,7 @@ class Automatizacion_TerminalController extends Zend_Controller_Action {
             $mppr = new Automatizacion_Model_EmailsLeidos();
             $terminal = new OAQ_TerminalLogistics();
             $emailProcessing = new OAQ_Emails();
-            $emailProcessing->set_validFrom(array('aviso@terlog.mx', 'aviso@tlog.mx', 'oaqsoporte@gmail.com'));
+            $emailProcessing->set_validFrom(array('aviso@terlog.mx', 'aviso@tlog.mx', $this->_appconfig->getParam("gmailEmail")));
             $emailProcessing->set_validSubject(array('Facturas Terminal Logistics'));
             
             if (APPLICATION_ENV == "production" || APPLICATION_ENV == "staging") {
@@ -288,7 +288,7 @@ class Automatizacion_TerminalController extends Zend_Controller_Action {
             
             $fecha = date("d F Y", strtotime($input->fecha));
             
-            $imap = new OAQ_Gmail('oaqsoporte@gmail.com', 'T3chn0l0gy');
+            $imap = new OAQ_Gmail($this->_appconfig->getParam("gmailEmail"), $this->_appconfig->getParam("gmailPass"));
             
             $emails_to_read = $imap->search('SINCE "' . $fecha . '"');
             
@@ -322,7 +322,7 @@ class Automatizacion_TerminalController extends Zend_Controller_Action {
                     if (!$mppr->verificar($uid, date('Y-m-d', $header->udate))) {
                         $mppr->agregar(array(
                             'idEmail' => $uid,
-                            'toEmail' => 'oaqsoporte@gmail.com',
+                            'toEmail' => $this->_appconfig->getParam("gmailEmail"),
                             'de' => $details["fromAddr"],
                             'fecha' => date('Y-m-d', $header->udate),
                             'hora' => date('H:i:s', $header->udate),
