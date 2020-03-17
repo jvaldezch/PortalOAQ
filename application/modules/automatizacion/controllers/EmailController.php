@@ -1223,9 +1223,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
         ini_set('display_errors', 1);
 
         if (isset($aduana) && $aduana == '3589-640') {
-            $imap = new OAQ_IMAP("mail.oaq.com.mx", "pedimentos.pagados@oaq.com.mx", "P3diment0s.pag23#", 'INBOX');
+            $imap = new OAQ_IMAP($this->appconfig->getParam('pedimentosServer'), $this->appconfig->getParam('pedimentosEmail'), $this->appconfig->getParam('pedimentosPass'), 'INBOX');
         } elseif (isset($aduana) && $aduana == '3574-160') {
-            $imap = new OAQ_IMAP("mail.oaq.com.mx", "arribosynotificaciones@oaq.com.mx", '4rrib0$yn0tifica#$', 'INBOX');
+            $imap = new OAQ_IMAP($this->appconfig->getParam('arribosServer'), $this->appconfig->getParam('arribosEmail'), $this->appconfig->getParam('arribosPass'), 'INBOX');
         } else {
             die("Debe especificar una aduana.");
         }
@@ -1440,9 +1440,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
         if (isset($aduana)) {
             if ($aduana == '3589-640') {
                 $imap = new Zend_Mail_Storage_Imap(array(
-                    'host' => "mail.oaq.com.mx",
-                    'user' => "pedimentos.pagados@oaq.com.mx",
-                    'password' => "P3diment0s.pag23#",
+                    'host' => $this->appconfig->getParam('pedimentosServer'),
+                    'user' => $this->appconfig->getParam('pedimentosEmail'),
+                    'password' => $this->appconfig->getParam('pedimentosPass'),
                 ));
             }
         } else {
@@ -1478,9 +1478,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
             if (isset($aduana)) {
                 if ($aduana == '3589-640') {
                     $imap = new Zend_Mail_Storage_Imap(array(
-                        'host' => "mail.oaq.com.mx",
-                        'user' => "pedimentos.pagados@oaq.com.mx",
-                        'password' => "P3diment0s.pag23#",
+                        'host' => $this->appconfig->getParam('pedimentosServer'),
+                        'user' => $this->appconfig->getParam('pedimentosEmail'),
+                        'password' => $this->appconfig->getParam('pedimentosPass'),
                     ));
                 }
             } else {
@@ -1547,9 +1547,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
         ini_set('display_errors', 1);
 
         if (isset($aduana) && $aduana == '3589-640') {
-            $imap = new OAQ_IMAP("mail.oaq.com.mx", "pedimentos.pagados@oaq.com.mx", "P3diment0s.pag23#", 'INBOX');
+            $imap = new OAQ_IMAP($this->appconfig->getParam('pedimentosServer'), $this->appconfig->getParam('pedimentosEmail'), $this->appconfig->getParam('pedimentosPass'), 'INBOX');
         } elseif (isset($aduana) && $aduana == '3574-160') {
-            $imap = new OAQ_IMAP("mail.oaq.com.mx", "arribosynotificaciones@oaq.com.mx", '4rrib0$yn0tifica#$', 'INBOX');
+            $imap = new OAQ_IMAP($this->appconfig->getParam('arribosServer'), $this->appconfig->getParam('arribosEmail'), $this->appconfig->getParam('arribosPass'), 'INBOX');
         } else {
             die("Debe especificar una aduana.");
         }
@@ -1744,18 +1744,17 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
                 "allow_self_signed" => true
             )
         );
-        $mail->Host = "mail.oaq.com.mx";
+        $mail->Host = $this->appconfig->getParam('arribosServer');
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = 'tls';
-        $mail->Username = 'arribosynotificaciones@oaq.com.mx';
-        $mail->Password = '4rrib0$yn0tifica#$';
+        $mail->Username = $this->appconfig->getParam('arribosEmail');
+        $mail->Password = $this->appconfig->getParam('arribosPass');
         $mail->Port = 26;
-        $mail->From = "arribosynotificaciones@oaq.com.mx";
+        $mail->From = $this->appconfig->getParam('arribosEmail');
         $mail->FromName = $fromName;
         $mail->addAddress($to["email"], ucwords($to["nombre"]));
         if (APPLICATION_ENV === "production") {
             $mail->addCC("everardo.martinez@oaq.com.mx", "Everardo Martinez");
-            $mail->addCC("renatta.colin@oaq.com.mx", "Renatta Colin");
         }
         $mail->addReplyTo("no-responder@oaq.com.mx");
         if (isset($ccs) && is_array($ccs)) {
@@ -1783,13 +1782,13 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
                 "allow_self_signed" => true
             )
         );
-        $mail->Host = "mail.oaq.com.mx";
+        $mail->Host = $this->appconfig->getParam('arribosServer');
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = 'tls';
-        $mail->Username = 'arribosynotificaciones@oaq.com.mx';
-        $mail->Password = '4rrib0$yn0tifica#$';
+        $mail->Username = $this->appconfig->getParam('arribosEmail');
+        $mail->Password = $this->appconfig->getParam('arribosPass');
         $mail->Port = 26;
-        $mail->From = "arribosynotificaciones@oaq.com.mx";
+        $mail->From = $this->appconfig->getParam('arribosEmail');
         $mail->FromName = $fromName;
         if (isset($ccs) && is_array($ccs)) {
             foreach ($ccs as $item) {

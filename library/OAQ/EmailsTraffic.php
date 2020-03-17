@@ -16,6 +16,7 @@ class OAQ_EmailsTraffic {
     protected $cc;
     protected $bcc;
     protected $log;
+    protected $appconfig;
 
     function setSubject($subject) {
         if(APPLICATION_ENV == "production") {
@@ -41,6 +42,7 @@ class OAQ_EmailsTraffic {
 
     function __construct() {
         try {
+            $this->appconfig = new Application_Model_ConfigMapper();
             $this->log = new Application_Model_LogMapper();
             $this->view = new Zend_View();
             $this->view->setScriptPath(__DIR__ . "/../Templates/");
@@ -57,12 +59,12 @@ class OAQ_EmailsTraffic {
             $this->mail->MailerDebug = true;
             $this->mail->isSMTP();
             $this->mail->SMTPSecure = 'tls';
-            $this->mail->Host = "mail.oaq.com.mx";
+            $this->mail->Host = $this->appconfig->getParam('arribosServer');
             $this->mail->SMTPAuth = true;
-            $this->mail->Username = "arribosynotificaciones@oaq.com.mx";
-            $this->mail->Password = '4rrib0$yn0tifica#$';
+            $this->mail->Username = $this->appconfig->getParam('arribosEmail');
+            $this->mail->Password = $this->appconfig->getParam('arribosPass');
             $this->mail->Port = 26;
-            $this->mail->From = "arribosynotificaciones@oaq.com.mx";
+            $this->mail->From = $this->appconfig->getParam('arribosEmail');
             $this->mail->FromName = "Notificaciones OAQ";
             $this->mail->isHTML(true);
         } catch (Exception $ex) {

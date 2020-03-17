@@ -114,26 +114,19 @@ $(document).ready(function() {
           field: "fechaEta",
           width: 90,
           title: "F. ETA",
-          editor: { type: "datetimebox" },
-          options: { required: false, validType: "datetime" }
-        },
-        {
-          field: "fechaEnvioDocumentos",
-          width: 105,
-          title: "F. Envio Doctos.",
-          editor: { type: "datetimebox" },
-          options: { required: false, validType: "datetime" }
+          editor: { type: "datebox" },
+          options: { required: false, validType: "date" }
         },
         {
           field: "fechaPago",
-          width: 95,
+          width: 130,
           title: "F. Pago",
           editor: { type: "datetimebox" },
           options: { required: false, validType: "datetime" }
         },
         {
           field: "fechaLiberacion",
-          width: 95,
+          width: 130,
           title: "F. Liberación",
           editor: { type: "datetimebox" },
           options: { required: false, validType: "datetime" }
@@ -142,8 +135,8 @@ $(document).ready(function() {
           field: "fechaFacturacion",
           width: 100,
           title: "F. Facturación",
-          editor: { type: "datetimebox" },
-          options: { required: false, validType: "datetime" }
+          editor: { type: "datebox" },
+          options: { required: false, validType: "date" }
         },
         {
           field: "blGuia",

@@ -108,7 +108,7 @@ class Automatizacion_TerminalController extends Zend_Controller_Action {
     
     public function arribosAction() {
         try {
-            $imap = new OAQ_IMAP('mail.oaq.com.mx', 'arribosynotificaciones@oaq.com.mx', '4rrib0$yn0tifica#$', 'INBOX');
+            $imap = new OAQ_IMAP($this->appconfig->getParam('arribosServer'), $this->appconfig->getParam('arribosEmail'), $this->appconfig->getParam('arribosPass'), 'INBOX');
             $numMessages = $imap->getNumMessages();
             $directory = $this->_appconfig->getParam("arribosDir") . DIRECTORY_SEPARATOR . date("Y") . DIRECTORY_SEPARATOR . date("m") . DIRECTORY_SEPARATOR . date("d");
             if (!file_exists($directory)) {
@@ -179,7 +179,7 @@ class Automatizacion_TerminalController extends Zend_Controller_Action {
             }
             $emailProcessing->set_dir($directory);
             
-            $imap = new OAQ_IMAP('mail.oaq.com.mx', 'facturacion.terminal@oaq.com.mx', '24eK8RI6ZyNN', 'INBOX');
+            $imap = new OAQ_IMAP($this->appconfig->getParam('terminalServer'), $this->appconfig->getParam('terminalEmail'), $this->appconfig->getParam('terminalPass'), 'INBOX');
             $numMessages = $imap->getNumMessages();
             $unreaded = 0;
             $notvalid = 0;

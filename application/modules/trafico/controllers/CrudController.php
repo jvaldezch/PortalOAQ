@@ -235,10 +235,10 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         new Zend_Db_Expr("DATE_FORMAT(fechaVistoBuenoTercero,'%Y-%m-%d %T') AS fechaVistoBuenoTercero"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d') AS fechaPago"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d') AS fechaLiberacion"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
@@ -447,9 +447,33 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $v["cumplimientoAdministrativo"] = array("NotEmpty");
                 $v["cumplimientoOperativo"] = array("NotEmpty");
                 $v["ccConsolidado"] = array("NotEmpty");
+                
+                $v["fechaEtd"] = array("NotEmpty");
+                $v["fechaEta"] = array("NotEmpty");
+                $v["fechaNotificacion"] = array("NotEmpty");
+                $v["fechaEnvioDocumentos"] = array("NotEmpty");
+                $v["fechaEntrada"] = array("NotEmpty");
+                $v["fechaPresentacion"] = array("NotEmpty");
+                $v["fechaDeposito"] = array("NotEmpty");
+                $v["fechaInstruccionEspecial"] = array("NotEmpty");
+                $v["fechaEnvioProforma"] = array("NotEmpty");
+                $v["fechaVistoBueno"] = array("NotEmpty");
+                $v["fechaProformaTercero"] = array("NotEmpty");
+                $v["fechaVistoBuenoTercero"] = array("NotEmpty");
+                $v["fechaRevalidacion"] = array("NotEmpty");
+                $v["fechaPrevio"] = array("NotEmpty");
+                $v["fechaPago"] = array("NotEmpty");
+                $v["fechaSolicitudTransfer"] = array("NotEmpty");
+                $v["fechaArriboTransfer"] = array("NotEmpty");
+                $v["fechaLiberacion"] = array("NotEmpty");
+                $v["fechaEtaAlmacen"] = array("NotEmpty");
+                $v["fechaFacturacion"] = array("NotEmpty");
+                $v["fechaComprobacion"] = array("NotEmpty");
+
                 $i = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($i->isValid("id")) {
                     $trafico = new OAQ_Trafico(array("idTrafico" => $i->id, "idUsuario" => $this->_session->id, "usuario" => $this->_session->username));
+                    $row = $trafico->obtenerDatos();
                     if ($i->isValid("fechaPago")) {
                         $i->estatus = 2;
                     }
@@ -459,21 +483,42 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     $arr = array(
                         "estatus" => ($i->isValid("estatus")) ? $i->estatus : null,
                         "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : null,
-                        "contenedorCaja" => ($i->isValid("contenedorCaja")) ? $i->contenedorCaja : null,
-                        "observaciones" => ($i->isValid("observaciones")) ? $i->observaciones : null,
-                        "ordenCompra" => ($i->isValid("ordenCompra")) ? $i->ordenCompra : null,
+                        "contenedorCaja" => ($i->isValid("contenedorCaja")) ? $i->contenedorCaja : $row['contenedorCaja'],
+                        "observaciones" => ($i->isValid("observaciones")) ? $i->observaciones : $row['observaciones'],
+                        "ordenCompra" => ($i->isValid("ordenCompra")) ? $i->ordenCompra : $row['ordenCompra'],
                         "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : null,
-                        "carrierNaviera" => ($i->isValid("carrierNaviera")) ? $i->carrierNaviera : null,
-                        "proveedores" => ($i->isValid("proveedores")) ? $i->proveedores : null,
-                        "facturas" => ($i->isValid("facturas")) ? $i->facturas : null,
-                        "cantidadFacturas" => ($i->isValid("cantidadFacturas")) ? $i->cantidadFacturas : null,
-                        "cantidadPartes" => ($i->isValid("cantidadPartes")) ? $i->cantidadPartes : null,
-                        "tipoCarga" => ($i->isValid("tipoCarga")) ? $i->tipoCarga : null,
-                        "almacen" => ($i->isValid("almacen")) ? $i->almacen : null,
-                        "idPlanta" => ($i->isValid("idPlanta")) ? $i->idPlanta : null,
-                        "cumplimientoAdministrativo" => ($i->isValid("cumplimientoAdministrativo")) ? $i->cumplimientoAdministrativo : null,
-                        "cumplimientoOperativo" => ($i->isValid("cumplimientoOperativo")) ? $i->cumplimientoOperativo : null,
-                        "ccConsolidado" => ($i->isValid("ccConsolidado")) ? $i->ccConsolidado : null,
+                        "carrierNaviera" => ($i->isValid("carrierNaviera")) ? $i->carrierNaviera : $row['carrierNaviera'],
+                        "proveedores" => ($i->isValid("proveedores")) ? $i->proveedores : $row['proveedores'],
+                        "facturas" => ($i->isValid("facturas")) ? $i->facturas : $row['facturas'],
+                        "cantidadFacturas" => ($i->isValid("cantidadFacturas")) ? $i->cantidadFacturas : $row['cantidadFacturas'],
+                        "cantidadPartes" => ($i->isValid("cantidadPartes")) ? $i->cantidadPartes : $row['cantidadPartes'],
+                        "tipoCarga" => ($i->isValid("tipoCarga")) ? $i->tipoCarga : $row['tipoCarga'],
+                        "almacen" => ($i->isValid("almacen")) ? $i->almacen : $row['almacen'],
+                        "idPlanta" => ($i->isValid("idPlanta")) ? $i->idPlanta : $row['idPlanta'],
+                        "cumplimientoAdministrativo" => ($i->isValid("cumplimientoAdministrativo")) ? $i->cumplimientoAdministrativo : $row['cumplimientoAdministrativo'],
+                        "cumplimientoOperativo" => ($i->isValid("cumplimientoOperativo")) ? $i->cumplimientoOperativo : $row['cumplimientoOperativo'],
+                        "ccConsolidado" => ($i->isValid("ccConsolidado")) ? $i->ccConsolidado : $row['ccConsolidado'],
+                        "fechaEtd" => ($i->isValid("fechaEtd")) ? $i->fechaEtd : $row['fechaEtd'],
+                        "fechaEta" => ($i->isValid("fechaEta")) ? $i->fechaEta : $row['fechaEta'],
+                        "fechaNotificacion" => ($i->isValid("fechaNotificacion")) ? $i->fechaNotificacion : $row['fechaNotificacion'],
+                        "fechaEnvioDocumentos" => ($i->isValid("fechaEnvioDocumentos")) ? $i->fechaEnvioDocumentos : $row['fechaEnvioDocumentos'],
+                        "fechaEntrada" => ($i->isValid("fechaEntrada")) ? $i->fechaEntrada : $row['fechaEntrada'],
+                        "fechaPresentacion" => ($i->isValid("fechaPresentacion")) ? $i->fechaPresentacion : $row['fechaPresentacion'],
+                        "fechaDeposito" => ($i->isValid("fechaDeposito")) ? $i->fechaDeposito : $row['fechaDeposito'],
+                        "fechaInstruccionEspecial" => ($i->isValid("fechaInstruccionEspecial")) ? $i->fechaInstruccionEspecial : $row['fechaInstruccionEspecial'],
+                        "fechaEnvioProforma" => ($i->isValid("fechaEnvioProforma")) ? $i->fechaEnvioProforma : $row['fechaEnvioProforma'],
+                        "fechaVistoBueno" => ($i->isValid("fechaVistoBueno")) ? $i->fechaVistoBueno : $row['fechaVistoBueno'],
+                        "fechaProformaTercero" => ($i->isValid("fechaProformaTercero")) ? $i->fechaProformaTercero : $row['fechaProformaTercero'],
+                        "fechaVistoBuenoTercero" => ($i->isValid("fechaVistoBuenoTercero")) ? $i->fechaVistoBuenoTercero : $row['fechaVistoBuenoTercero'],
+                        "fechaRevalidacion" => ($i->isValid("fechaRevalidacion")) ? $i->fechaRevalidacion : $row['fechaRevalidacion'],
+                        "fechaPrevio" => ($i->isValid("fechaPrevio")) ? $i->fechaPrevio : $row['fechaPrevio'],
+                        "fechaPago" => ($i->isValid("fechaPago")) ? $i->fechaPago : $row['fechaPago'],
+                        "fechaSolicitudTransfer" => ($i->isValid("fechaSolicitudTransfer")) ? $i->fechaSolicitudTransfer : $row['fechaSolicitudTransfer'],
+                        "fechaArriboTransfer" => ($i->isValid("fechaArriboTransfer")) ? $i->fechaArriboTransfer : $row['fechaArriboTransfer'],
+                        "fechaLiberacion" => ($i->isValid("fechaLiberacion")) ? $i->fechaLiberacion : $row['fechaLiberacion'],
+                        "fechaEtaAlmacen" => ($i->isValid("fechaEtaAlmacen")) ? $i->fechaEtaAlmacen : $row['fechaEtaAlmacen'],
+                        "fechaFacturacion" => ($i->isValid("fechaFacturacion")) ? $i->fechaFacturacion : $row['fechaFacturacion'],
+                        "fechaComprobacion" => ($i->isValid("fechaComprobacion")) ? $i->fechaComprobacion : $row['fechaComprobacion'],
                     );
                     foreach ($dates as $k => $v) {
                         if ($i->isValid($v["label"])) {

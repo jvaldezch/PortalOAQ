@@ -19,6 +19,10 @@ window.descargaReporte = function() {
     window.location.href = '/trafico/reportes/traficos?fechaInicio=' + dateini + '&fechaFin=' + dateend + '&filterRules=' + JSON.stringify(dg.datagrid('options').filterRules);
 };
 
+window.formatUpload = function(val, row) {
+    return '<i class="fas fa-cloud-upload-alt upload-files" data-id="' + row.id + '" style="font-size: 1.2em; color: #2f3b58; cursor: pointer; padding-top: 2px"></i>';
+};
+
 $(document).ready(function() {
     
     var today = new Date();
@@ -63,13 +67,6 @@ $(document).ready(function() {
 	},
         onClickRow: function (index, row) {},
         onBeginEdit: function (index, row) {
-            //            var tc = $('#dg').datagrid('getEditor', {
-            //                index: index,
-            //                field: 'tipoCarga'
-            //            });
-            //            if (tc !== undefined) {
-            //                $(tc.target).combobox('reload', '/trafico/crud/tipo-carga?patente=' + row.patente + '&aduana=' + row.aduana);
-            //            }
         },
         onBeforeEdit: function (index, row) {},
         onAfterEdit: function (index, row) {
@@ -178,26 +175,19 @@ $(document).ready(function() {
                     field: "fechaEta",
                     width: 90,
                     title: "F. ETA",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: {type: "datebox"},
+                    options: {required: false, validType: "date"}
                 },
-                // {
-                //     field: "fechaEnvioDocumentos",
-                //     width: 105,
-                //     title: "F. Envio Doctos.",
-                //     editor: {type: "datetimebox"},
-                //     options: {required: false, validType: "datetime"}
-                // },
                 {
                     field: "fechaPago",
-                    width: 95,
+                    width: 130,
                     title: "F. Pago",
                     editor: {type: "datetimebox"},
                     options: {required: false, validType: "datetime"}
                 },
                 {
                     field: "fechaLiberacion",
-                    width: 95,
+                    width: 130,
                     title: "F. Liberación",
                     editor: {type: "datetimebox"},
                     options: {required: false, validType: "datetime"}
@@ -206,8 +196,8 @@ $(document).ready(function() {
                     field: "fechaFacturacion",
                     width: 100,
                     title: "F. Facturación",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: {type: "datebox"},
+                    options: {required: false, validType: "date"}
                 },
                 {
                     field: "blGuia",
@@ -339,6 +329,12 @@ $(document).ready(function() {
         let dateTime = new Date();
         dateTime = moment(dateTime).format("YYYY-MM-DD");
         window.open("/trafico/crud/traficos-inventario?fechaIni=" + dateTime + "&fechaFin=" + dateTime + "&tipo=80&tipoAduana=0", "reporteInventario", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
+    });
+
+    $(document.body).on('click', '.upload-files', function () {
+        let id = $(this).data('id');
+        /*dateTime = moment(dateTime).format("YYYY-MM-DD");
+        window.open("/trafico/crud/traficos-inventario?fechaIni=" + dateTime + "&fechaFin=" + dateTime + "&tipo=80&tipoAduana=0", "reporteInventario", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");*/
     });
   
 });
