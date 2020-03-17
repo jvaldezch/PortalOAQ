@@ -221,7 +221,7 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                 $hash = sha1_file($archivo["ubicacion"]);
                 $rfc = $firmante->obtenerDetalleFirmante($solicitante);
                 $pkeyid = openssl_get_privatekey(base64_decode($rfc['spem']), $rfc['spem_pswd']);
-                $cadena = $vucem->cadenaEdocument($solicitante, 'vucem@oaq.mx', $archivo["tipo_archivo"], $noExtension, "OAQ030623UL8", $hash);
+                $cadena = $vucem->cadenaEdocument($solicitante, $this->_appconfig->getParam('vucem-email'), $archivo["tipo_archivo"], $noExtension, "OAQ030623UL8", $hash);
                 $signature = "";
                 if (isset($rfc["sha"]) && $rfc["sha"] == 'sha256') {
                     openssl_sign($cadena, $signature, $pkeyid, OPENSSL_ALGO_SHA256);
@@ -232,7 +232,7 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                 $uuid = $misc->getUuid($solicitante . $archivo["id"] . $archivo["patente"] . $archivo["aduana"] . $archivo["referencia"] . $hash . $noExtension);
                 $folder = '/tmp' . DIRECTORY_SEPARATOR . 'envio-edocs';
                 if (!file_exists($folder . DIRECTORY_SEPARATOR . $uuid . '.xml')) {
-                    $xml = $vucem->envioEdocument($solicitante, $rfc["ws_pswd"], 'vucem@oaq.mx', $archivo["tipo_archivo"], $noExtension, "OAQ030623UL8", $base64, $rfc['cer'], $cadena, $firma);
+                    $xml = $vucem->envioEdocument($solicitante, $rfc["ws_pswd"], $this->_appconfig->getParam('vucem-email'), $archivo["tipo_archivo"], $noExtension, "OAQ030623UL8", $base64, $rfc['cer'], $cadena, $firma);
                     // vucem
                     if (!file_exists($folder)) {
                         mkdir($folder, 0777, true);
@@ -298,7 +298,7 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                         'subTipoArchivo' => $archivo["sub_tipo_archivo"],
                         'nombreArchivo' => $noExtension . '.pdf',
                         'username' => $this->_session->username,
-                        'email' => 'vucem@oaq.mx',
+                        'email' => $this->_appconfig->getParam('vucem-email'),
                     );
                     $client->addTaskBackground("edocreq", serialize($array));
                     $client->runTasks();

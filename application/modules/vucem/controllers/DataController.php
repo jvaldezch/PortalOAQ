@@ -1254,7 +1254,7 @@ class Vucem_DataController extends Zend_Controller_Action {
                         'output' => $this->_svucem->edtmp,
                         'username' => $this->_session->username,
                         'uuid' => $misc->getUuid($data["firmante"] . $data["patente"] . $data["aduana"] . $data["referencia"] . $data["pedimento"] . microtime()),
-                        'email' => "vucem@oaq.com.mx",
+                        'email' => $this->_appconfig->getParam('vucem-email'),
                         'urlvucem' => $this->_config->app->vucem . "DigitalizarDocumentoService",
                     );
                     $client->addTaskBackground("edoc_enviaredocs", serialize($file));
@@ -1994,7 +1994,7 @@ class Vucem_DataController extends Zend_Controller_Action {
 
                         $pkeyid = openssl_get_privatekey(base64_decode($firmante['spem']), $firmante['spem_pswd']);
                         $signature = "";
-                        $cadena = $vucem->cadenaEdocument($file["firmante"], "vucem@oaq.com.mx", $file["tipoArchivo"], pathinfo($file["nomArchivo"], PATHINFO_FILENAME), $file["rfcConsulta"], $hash);
+                        $cadena = $vucem->cadenaEdocument($file["firmante"], $this->_appconfig->getParam('vucem-email'), $file["tipoArchivo"], pathinfo($file["nomArchivo"], PATHINFO_FILENAME), $file["rfcConsulta"], $hash);
 
                         if (isset($firmante["sha"]) && $firmante["sha"] == 'sha256') {
                             openssl_sign($cadena, $signature, $pkeyid, OPENSSL_ALGO_SHA256);
@@ -2003,7 +2003,7 @@ class Vucem_DataController extends Zend_Controller_Action {
                         }
                         $firma = base64_encode($signature);
 
-                        $xml = $vucem->envioEdocument($firmante["rfc"], $firmante["ws_pswd"], "vucem@oaq.com.mx", $file["tipoArchivo"], pathinfo($file["nomArchivo"], PATHINFO_FILENAME), $file["rfcConsulta"], $base64, $firmante["cer"], $cadena, $firma);
+                        $xml = $vucem->envioEdocument($firmante["rfc"], $firmante["ws_pswd"], $this->_appconfig->getParam('vucem-email'), $file["tipoArchivo"], pathinfo($file["nomArchivo"], PATHINFO_FILENAME), $file["rfcConsulta"], $base64, $firmante["cer"], $cadena, $firma);
 
                         $xmlFile = '/tmp/edoctmp' . DIRECTORY_SEPARATOR . $uuid . '.xml';
                         file_put_contents($xmlFile, $xml);
@@ -2428,7 +2428,7 @@ class Vucem_DataController extends Zend_Controller_Action {
                 $mapper = new Vucem_Model_VucemEdocMapper();
                 $data = $mapper->obtener($input->id);
                 $fiel = $sello->obtenerDetalleFirmante($data["rfc"], null, $data["patente"], $data["aduana"]);
-                $xml = $vucem->envioEdocument($data["rfc"], $fiel["ws_pswd"], "vucem@oaq.com.mx", $data["tipoDoc"], $data["nomArchivo"], $data["rfcConsulta"], "", $fiel["cer"], $data["firma"], $data["cadena"]);
+                $xml = $vucem->envioEdocument($data["rfc"], $fiel["ws_pswd"], $this->_appconfig->getParam('vucem-email'), $data["tipoDoc"], $data["nomArchivo"], $data["rfcConsulta"], "", $fiel["cer"], $data["firma"], $data["cadena"]);
                 if (isset($xml)) {
                     header("Content-Type:text/xml;charset=utf-8");
                     echo utf8_decode($this->_cleanXml($xml));

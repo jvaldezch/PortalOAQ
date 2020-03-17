@@ -374,7 +374,7 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
                     $efrom->set_dir($des);
                     $view = new Zend_View();
                     $view->setScriptPath(realpath(dirname(__FILE__)) . '/../views/scripts/data/');
-                    $imap = new OAQ_IMAP('mail.oaq.com.mx', 'facturacion.proveedores@oaq.com.mx', 'F4ctur4.provee3s', 'INBOX');
+                    $imap = new OAQ_IMAP($this->_appconfig->getParam('factprovServer'), $this->_appconfig->getParam('factprovEmail'), $this->_appconfig->getParam('factprovPass'), 'INBOX');
                     /* $folders = $imap->getFolders(); */
                     $numMessages = $imap->getNumMessages();
                     $emails = array();
@@ -1223,9 +1223,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
         ini_set('display_errors', 1);
 
         if (isset($aduana) && $aduana == '3589-640') {
-            $imap = new OAQ_IMAP($this->appconfig->getParam('pedimentosServer'), $this->appconfig->getParam('pedimentosEmail'), $this->appconfig->getParam('pedimentosPass'), 'INBOX');
+            $imap = new OAQ_IMAP($this->_appconfig->getParam('pedimentosServer'), $this->_appconfig->getParam('pedimentosEmail'), $this->_appconfig->getParam('pedimentosPass'), 'INBOX');
         } elseif (isset($aduana) && $aduana == '3574-160') {
-            $imap = new OAQ_IMAP($this->appconfig->getParam('arribosServer'), $this->appconfig->getParam('arribosEmail'), $this->appconfig->getParam('arribosPass'), 'INBOX');
+            $imap = new OAQ_IMAP($this->_appconfig->getParam('arribosServer'), $this->_appconfig->getParam('arribosEmail'), $this->_appconfig->getParam('arribosPass'), 'INBOX');
         } else {
             die("Debe especificar una aduana.");
         }
@@ -1440,9 +1440,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
         if (isset($aduana)) {
             if ($aduana == '3589-640') {
                 $imap = new Zend_Mail_Storage_Imap(array(
-                    'host' => $this->appconfig->getParam('pedimentosServer'),
-                    'user' => $this->appconfig->getParam('pedimentosEmail'),
-                    'password' => $this->appconfig->getParam('pedimentosPass'),
+                    'host' => $this->_appconfig->getParam('pedimentosServer'),
+                    'user' => $this->_appconfig->getParam('pedimentosEmail'),
+                    'password' => $this->_appconfig->getParam('pedimentosPass'),
                 ));
             }
         } else {
@@ -1478,9 +1478,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
             if (isset($aduana)) {
                 if ($aduana == '3589-640') {
                     $imap = new Zend_Mail_Storage_Imap(array(
-                        'host' => $this->appconfig->getParam('pedimentosServer'),
-                        'user' => $this->appconfig->getParam('pedimentosEmail'),
-                        'password' => $this->appconfig->getParam('pedimentosPass'),
+                        'host' => $this->_appconfig->getParam('pedimentosServer'),
+                        'user' => $this->_appconfig->getParam('pedimentosEmail'),
+                        'password' => $this->_appconfig->getParam('pedimentosPass'),
                     ));
                 }
             } else {
@@ -1547,9 +1547,9 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
         ini_set('display_errors', 1);
 
         if (isset($aduana) && $aduana == '3589-640') {
-            $imap = new OAQ_IMAP($this->appconfig->getParam('pedimentosServer'), $this->appconfig->getParam('pedimentosEmail'), $this->appconfig->getParam('pedimentosPass'), 'INBOX');
+            $imap = new OAQ_IMAP($this->_appconfig->getParam('pedimentosServer'), $this->_appconfig->getParam('pedimentosEmail'), $this->_appconfig->getParam('pedimentosPass'), 'INBOX');
         } elseif (isset($aduana) && $aduana == '3574-160') {
-            $imap = new OAQ_IMAP($this->appconfig->getParam('arribosServer'), $this->appconfig->getParam('arribosEmail'), $this->appconfig->getParam('arribosPass'), 'INBOX');
+            $imap = new OAQ_IMAP($this->_appconfig->getParam('arribosServer'), $this->_appconfig->getParam('arribosEmail'), $this->_appconfig->getParam('arribosPass'), 'INBOX');
         } else {
             die("Debe especificar una aduana.");
         }
@@ -1744,13 +1744,13 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
                 "allow_self_signed" => true
             )
         );
-        $mail->Host = $this->appconfig->getParam('arribosServer');
+        $mail->Host = $this->_appconfig->getParam('arribosServer');
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = 'tls';
-        $mail->Username = $this->appconfig->getParam('arribosEmail');
-        $mail->Password = $this->appconfig->getParam('arribosPass');
+        $mail->Username = $this->_appconfig->getParam('arribosEmail');
+        $mail->Password = $this->_appconfig->getParam('arribosPass');
         $mail->Port = 26;
-        $mail->From = $this->appconfig->getParam('arribosEmail');
+        $mail->From = $this->_appconfig->getParam('arribosEmail');
         $mail->FromName = $fromName;
         $mail->addAddress($to["email"], ucwords($to["nombre"]));
         if (APPLICATION_ENV === "production") {
@@ -1782,13 +1782,13 @@ class Automatizacion_EmailController extends Zend_Controller_Action {
                 "allow_self_signed" => true
             )
         );
-        $mail->Host = $this->appconfig->getParam('arribosServer');
+        $mail->Host = $this->_appconfig->getParam('arribosServer');
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = 'tls';
-        $mail->Username = $this->appconfig->getParam('arribosEmail');
-        $mail->Password = $this->appconfig->getParam('arribosPass');
+        $mail->Username = $this->_appconfig->getParam('arribosEmail');
+        $mail->Password = $this->_appconfig->getParam('arribosPass');
         $mail->Port = 26;
-        $mail->From = $this->appconfig->getParam('arribosEmail');
+        $mail->From = $this->_appconfig->getParam('arribosEmail');
         $mail->FromName = $fromName;
         if (isset($ccs) && is_array($ccs)) {
             foreach ($ccs as $item) {

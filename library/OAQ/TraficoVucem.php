@@ -449,7 +449,7 @@ class OAQ_TraficoVucem {
             $this->data["factura"]["certificadoOrigen"] = $this->factura["certificadoOrigen"];
             $this->data["factura"]["numExportador"] = $this->factura["numExportador"];
             $this->data["factura"]["observaciones"] = $this->factura["observaciones"];
-            $this->data["factura"]["correoElectronico"] = "vucem@oaq.com.mx";
+            $this->data["factura"]["correoElectronico"] = $this->appConfig->getParam('vucem-email');
             if (isset($this->sello)) {
                 $this->data["usuario"]["username"] = $this->sello["rfc"];
                 $this->data["usuario"]["password"] = $this->sello["ws_pswd"];

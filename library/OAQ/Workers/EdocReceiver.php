@@ -137,7 +137,7 @@ class OAQ_Workers_EdocReceiver {
             $xml = new OAQ_Xml(false, true);
             $this->data["archivo"] = array(
                 "idTipoDocumento" => $arr["tipoArchivo"],
-                "correoElectronico" => (APPLICATION_ENV == "production") ? "vucem@oaq.com.mx" : "soporte@oaq.com.mx",
+                "correoElectronico" => (APPLICATION_ENV == "production") ? $this->appConfig->getParam('vucem-email') : $this->appConfig->getParam('support-email'),
                 "archivo" => base64_encode(file_get_contents($arr["nomArchivo"])),
                 "nombreDocumento" => pathinfo($arr["nomArchivo"], PATHINFO_FILENAME),
                 "rfcConsulta" => $arr["rfcConsulta"],
@@ -253,7 +253,7 @@ class OAQ_Workers_EdocReceiver {
                 "nomArchivo" => basename($arr["nomArchivo"]),
                 "hash" => $arr["hash"],
                 "usuario" => $arr["usuario"],
-                "email" => (APPLICATION_ENV == "production") ? "vucem@oaq.com.mx" : "soporte@oaq.com.mx",
+                "email" => (APPLICATION_ENV == "production") ? $this->appConfig->getParam('vucem-email') : $this->appConfig->getParam('support-email'),
                 "estatus" => 1,
                 "edoc" => null,
                 "archivo" => "",
