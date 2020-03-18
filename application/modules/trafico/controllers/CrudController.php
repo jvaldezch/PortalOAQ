@@ -481,12 +481,11 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         $i->estatus = 3;
                     }
                     $arr = array(
-                        "estatus" => ($i->isValid("estatus")) ? $i->estatus : null,
-                        "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : null,
+                        "estatus" => ($i->isValid("estatus")) ? $i->estatus : $row['estatus'],
+                        "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : $row['blGuia'],
                         "contenedorCaja" => ($i->isValid("contenedorCaja")) ? $i->contenedorCaja : $row['contenedorCaja'],
                         "observaciones" => ($i->isValid("observaciones")) ? $i->observaciones : $row['observaciones'],
                         "ordenCompra" => ($i->isValid("ordenCompra")) ? $i->ordenCompra : $row['ordenCompra'],
-                        "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : null,
                         "carrierNaviera" => ($i->isValid("carrierNaviera")) ? $i->carrierNaviera : $row['carrierNaviera'],
                         "proveedores" => ($i->isValid("proveedores")) ? $i->proveedores : $row['proveedores'],
                         "facturas" => ($i->isValid("facturas")) ? $i->facturas : $row['facturas'],
