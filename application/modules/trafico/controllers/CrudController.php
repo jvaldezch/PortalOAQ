@@ -474,14 +474,19 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 if ($i->isValid("id")) {
                     $trafico = new OAQ_Trafico(array("idTrafico" => $i->id, "idUsuario" => $this->_session->id, "usuario" => $this->_session->username));
                     $row = $trafico->obtenerDatos();
+                    
+                    $estatus = 1;
+                    if ($row['estatus']) {
+                        $estatus = $row['estatus'];
+                    }
                     if ($i->isValid("fechaPago")) {
-                        $i->estatus = 2;
+                        $estatus = 2;
                     }
                     if ($i->isValid("fechaLiberacion")) {
-                        $i->estatus = 3;
+                        $estatus = 3;
                     }
                     $arr = array(
-                        "estatus" => ($i->isValid("estatus")) ? $i->estatus : $row['estatus'],
+                        "estatus" => $estatus,
                         "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : $row['blGuia'],
                         "contenedorCaja" => ($i->isValid("contenedorCaja")) ? $i->contenedorCaja : $row['contenedorCaja'],
                         "observaciones" => ($i->isValid("observaciones")) ? $i->observaciones : $row['observaciones'],
