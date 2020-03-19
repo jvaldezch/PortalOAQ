@@ -474,9 +474,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 if ($i->isValid("id")) {
                     $trafico = new OAQ_Trafico(array("idTrafico" => $i->id, "idUsuario" => $this->_session->id, "usuario" => $this->_session->username));
                     $row = $trafico->obtenerDatos();
-                    
+
                     $estatus = 1;
-                    if ($row['estatus']) {
+                    if ($row['estatus'] && $row['estatus'] !== null) {
                         $estatus = $row['estatus'];
                     }
                     if ($i->isValid("fechaPago")) {
