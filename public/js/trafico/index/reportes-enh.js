@@ -611,8 +611,7 @@ function submitForm() {
                                 } else {
                                     return '';
                                 }
-                            }}}
-                            }}
+                            }},
                     ]]
             });
         }
