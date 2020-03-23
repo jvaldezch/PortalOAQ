@@ -1217,7 +1217,7 @@ class OAQ_ExcelReportes {
                     $row["nombreCliente"],
                     $row["tipoAduana"],
                     $row["ie"],
-                    semaforo($row['semaforo']),
+                    $this->semaforo($row['semaforo']),
                     $row["observacionSemaforo"],
                     $row["fechaEta"],
                     $row["fechaPago"],
