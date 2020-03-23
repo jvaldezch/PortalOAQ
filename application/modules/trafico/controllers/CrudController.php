@@ -1762,34 +1762,20 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         "t.referencia",
                         "t.cvePedimento",
                         "t.ie",
-                        "t.fechaEta",
-                        "t.fechaPago",
-                        "t.fechaLiberacion",
-                        "DATE_FORMAT(t.fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion",
+                        "DATE_FORMAT(t.fechaEta,'%T') AS fechaEta",
+                        "DATE_FORMAT(t.fechaPago,'%T') AS fechaPago",
+                        "DATE_FORMAT(t.fechaLiberacion,'%T') AS fechaLiberacion",
+                        "DATE_FORMAT(t.fechaFacturacion,'%T') AS fechaFacturacion",
                         "t.semaforo",
-                        //"t.blGuia",
-                        //"t.contenedorCaja",
                         "t.observacionSemaforo",
                         "t.observaciones",
-                        //"t.cumplimientoAdministrativo",
-                        //"t.cumplimientoOperativo",
                         "t.ccConsolidado",
-                        "i.folio",
-                        "DATE_FORMAT(i.fechaFacturacion,'%Y-%m-%d') AS fechaFacturacionSica",
-                        "i.honorarios",
-                        new Zend_Db_Expr("DATE_FORMAT(t.fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos"),
-                        new Zend_Db_Expr("CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN 1 ELSE NULL END AS justificado"),
-                        //new Zend_Db_Expr("Cumplimiento(a.tipoAduana, c.clave, t.fechaLiberacion, t.fechaEntrada, t.fechaRevalidacion, t.fechaPrevio, t.fechaInstruccionEspecial) AS cumplimiento"),
                     ))
                     ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
                     ->joinInner(array("ta" => "trafico_tipoaduana"), "ta.id = a.tipoAduana", array("tipoAduana"))
-                    //->joinLeft(array("c" => "trafico_tipocarga"), "c.id = t.tipoCarga", array("c.tipoCarga"))
                     ->joinLeft(array("l" => "trafico_clientes"), "l.id = t.idCliente", array("nombre AS nombreCliente"))
-                    //->joinLeft(array("r" => "repositorio_index"), "r.patente = t.patente AND r.aduana = t.aduana AND r.pedimento = t.pedimento", array("revisionOperaciones"))
-                    //->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
-                    ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre AS nombreUsuario"))
                     ->joinLeft(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
-                    ->joinLeft(array("x" => "repositorio_index"), "x.idTrafico = t.id", array("revisionAdministracion", "revisionOperaciones", "completo", "mvhcCliente", "mvhcFirmada"))
+                    ->joinLeft(array("x" => "repositorio_index"), "x.idTrafico = t.id", array("revisionAdministracion", "revisionOperaciones", "completo"))
                     ->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
                     ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
                     ->where("t.estatus = 3")

@@ -582,65 +582,13 @@ function submitForm() {
                                 }
                             }},
                         {field: 'observacionSemaforo', width: 150, title: 'Obs. Semaforo'},
-                        //{field: 'blGuia', width: 150, title: 'BL/Guía', editor: {type: 'text'}},
-                        //{field: 'contenedorCaja', width: 150, title: 'Cont./Caja'},
-                        {field: 'descripcionPlanta', width: 150, title: 'Planta'},
-                        /*{field: 'revisionOperaciones', width: 90, title: 'Expediente',
-                            formatter: function (value, row) {
-                                if (parseInt(value) === 1) {
-                                    return 'Si';
-                                } else {
-                                    return '';
-                                }
-                            }},*/
                         {field: 'fechaEta', width: 140, title: 'Fecha ETA'},
                         {field: 'fechaPago', width: 140, title: 'Fecha Pago'},
-                        {field: 'fechaEnvioDocumentos', width: 140, title: 'Fecha Env. Documentos'},
                         {field: 'fechaLiberacion', width: 140, title: 'Fecha Liberación'},
                         {field: 'fechaFacturacion', width: 110, title: 'Fecha Facturación'},
-                        {field: 'nombreUsuario', width: 120, title: 'Usuario'},
-                        //{field: 'folio', width: 90, title: 'Folio', formatter: invoiceLink},
-                        {field: 'fechaFacturacionSica', width: 120, title: 'F. Facturacion Sica'},
-                        {field: 'honorarios', width: 90, title: 'Honorarios'},
-                        {field: 'justificado', width: 120, title: 'Justificado', 
-                            formatter(value, row){
-                                if (value == 1) {
-                                    return 'Si';
-                                } else {
-                                    return '';
-                                }
-                            }},
-                        /*{field: 'cumplimientoAdministrativo', width: 100, title: 'Cump. Admin.',
-                            formatter: function (value, row) {
-                                if (parseInt(value) === 1) {
-                                    return 'Si';
-                                } else if (parseInt(value) === 0) {
-                                    return 'No';
-                                } else {
-                                    return '';
-                                }
-                            }},
-                        {field: 'cumplimientoOperativo', width: 100, title: 'Cump. Ope.',
-                            formatter: function (value, row) {
-                                if (parseInt(value) === 1) {
-                                    return 'Si';
-                                } else if (parseInt(value) === 0) {
-                                    return 'No';
-                                } else {
-                                    return '';
-                                }
-                            }},*/
-                        /*{field: 'cumplimiento', width: 90, title: 'Cumplimiento',
-                            formatter: function (value, row) {
-                                if (parseInt(value) === 1) {
-                                    return 'Si';
-                                } else {
-                                    return '';
-                                }
-                            }},*/
                         {field: 'observaciones', width: 250, title: 'Observaciones'},
                         {field: 'ccConsolidado', width: 120, title: 'CC. Consolidado'},
-                        {field: 'revisionAdministracion', width: 120, title: 'Rev. Admon.',
+                        {field: 'revisionOperaciones', width: 140, title: 'Rev. Operaciones',
                             formatter: function (value, row) {
                                 if (parseInt(value) === 1) {
                                     return 'Si';                                    
@@ -648,7 +596,7 @@ function submitForm() {
                                     return '';
                                 }
                             }},
-                        {field: 'revisionOperaciones', width: 140, title: 'Rev. Operaciones',
+                        {field: 'revisionAdministracion', width: 120, title: 'Rev. Admon.',
                             formatter: function (value, row) {
                                 if (parseInt(value) === 1) {
                                     return 'Si';                                    
@@ -663,22 +611,7 @@ function submitForm() {
                                 } else {
                                     return '';
                                 }
-                            }},
-                        {field: 'mvhcCliente', width: 120, title: 'MV / HC Cliente',
-                            formatter: function (value, row) {
-                                if (parseInt(value) === 1) {
-                                    return 'Si';                                    
-                                } else {
-                                    return '';
-                                }
-                            }},
-                        {field: 'mvhcFirmada', width: 120, title: 'Firmada',
-                            formatter: function (value, row) {
-                                if (parseInt(value) === 1) {
-                                    return 'Si';                                    
-                                } else {
-                                    return '';
-                                }
+                            }}}
                             }}
                     ]]
             });
