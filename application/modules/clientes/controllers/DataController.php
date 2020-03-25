@@ -1615,7 +1615,7 @@ class Clientes_DataController extends Zend_Controller_Action {
                             if ($a_val['idArchivoValidacion']) {
                                 $file_val = $mppr_val->fileContent($a_val['idArchivoValidacion']);
                                 if ($file_val) {
-                                    $zip->addFromString($a_val['archivoNombre'], base64_decode(base64_decode($file_val["contenido"])));
+                                    $zip->addFromString($a_val['archivoNombre'], base64_decode($file_val["contenido"]));
                                 }
                             }
                         }
