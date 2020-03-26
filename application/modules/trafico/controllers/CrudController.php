@@ -916,6 +916,88 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
+    protected function _reporteLiberados($idAduana, $fecha, $tipoAduana = null, $idCliente = null, $tipoOperacion = null) {
+        try {
+            $sql = $this->_db->select()
+                    ->from(array("t" => "traficos"), array(
+                        "id",
+                        "patente",
+                        "aduana",
+                        "pedimento",
+                        "referencia",
+                        "rfcCliente",
+                        "ie",
+                        "blGuia",
+                        "contenedorCaja",
+                        "ordenCompra",
+                        "proveedores",
+                        "facturas",
+                        "cantidadFacturas",
+                        "cantidadPartes",
+                        "almacen",
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                        "estatus",
+                        "cvePedimento",
+                        "regimen",
+                        "idUsuario",
+                        "observacionSemaforo",
+                        "semaforo",
+                        "coves",
+                        "edocuments",
+                    ))
+                    ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
+                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                    ->where("t.estatus <> 4")
+                    ->where("t.pedimento IS NOT NULL")
+                    ->where("t.fechaLiberacion IS NOT NULL")
+                    ->where("t.fechaLiberacion BETWEEN '{$fecha} 00:00:00' AND '{$fecha} 23:59:59' ")
+                    ->order(array("pedimento ASC"));
+            if (isset($tipoAduana)) {
+                if ($tipoAduana == 1) {
+                    $sql->where("a.tipoAduana = 1 AND t.cvePedimento IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3')");
+                } elseif ($tipoAduana == 2) {
+                    $sql->where("a.tipoAduana = 2 OR (a.tipoAduana = 1 AND t.cvePedimento NOT IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3'))");
+                } else {
+                    $sql->where('a.tipoAduana = ?', $tipoAduana);
+                }
+            }
+            
+            /*if (isset($filtro)) {
+                if ($filtro == 3) {
+                    $sql->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                            ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                            ->where("fechaLiberacion IS NULL");
+                } else {
+                    $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                            ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+                    $this->_filtroReportes($sql, $filtro);
+                }
+            } else {
+                $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                        ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+            }*/
+            if (isset($idCliente)) {
+                $sql->where("t.idCliente = ?", $idCliente);
+            }
+            if (isset($tipoOperacion)) {
+                $sql->where("t.ie = ?", $tipoOperacion);
+            }
+            if ((int) $idAduana != 0) {
+                $sql->where("t.idAduana = ?", $idAduana);
+            }
+            $stmt = $this->_db->fetchAll($sql);
+            if ($stmt) {
+                return $stmt;
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
+        }
+    }
+
     /**
      * 
      * @param int $page
@@ -1660,7 +1742,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if ($input->isValid("fecha") && $input->isValid("tipo")) {
                 
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-                $rows = $this->_reporte(null, null, $input->idAduana, $input->fecha, $input->fecha, 99, null, $input->idCliente, $input->tipoOperacion);
+                $rows = $this->_reporteLiberados($input->idAduana, $input->fecha, 99, $input->idCliente, $input->tipoOperacion);
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                 
