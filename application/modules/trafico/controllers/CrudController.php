@@ -955,7 +955,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     ->where("t.fechaLiberacion IS NOT NULL")
                     ->where("t.fechaLiberacion BETWEEN '{$fecha} 00:00:00' AND '{$fecha} 23:59:59' ")
                     ->order(array("pedimento ASC"));
-            if (isset($tipoAduana)) {
+            if (isset($tipoAduana) && $tipoAduana != 50) {
                 if ($tipoAduana == 1) {
                     $sql->where("a.tipoAduana = 1 AND t.cvePedimento IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3')");
                 } elseif ($tipoAduana == 2) {
@@ -964,21 +964,6 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     $sql->where('a.tipoAduana = ?', $tipoAduana);
                 }
             }
-            
-            /*if (isset($filtro)) {
-                if ($filtro == 3) {
-                    $sql->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                            ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                            ->where("fechaLiberacion IS NULL");
-                } else {
-                    $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                            ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
-                    $this->_filtroReportes($sql, $filtro);
-                }
-            } else {
-                $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                        ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
-            }*/
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -1742,7 +1727,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if ($input->isValid("fecha") && $input->isValid("tipo")) {
                 
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-                $rows = $this->_reporteLiberados($input->idAduana, $input->fecha, 99, $input->idCliente, $input->tipoOperacion);
+                $rows = $this->_reporteLiberados($input->idAduana, $input->fecha, $input->tipo, $input->idCliente, $input->tipoOperacion);
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                 
