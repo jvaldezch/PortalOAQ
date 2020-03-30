@@ -1734,7 +1734,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if ($input->isValid("fecha") && $input->isValid("tipo")) {
                 
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-                $rows = $this->_reporteLiberados($input->idAduana, $input->fecha, $input->tipo, $input->idCliente, $input->tipoOperacion);
+                $rows = $this->_reporteLiberados($input->idAduana, $input->fecha, $input->tipo, $input->idCliente, $input->tipoOperacion, $input->pagados);
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                 
