@@ -916,7 +916,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _reporteLiberados($idAduana, $fecha, $tipoAduana = null, $idCliente = null, $tipoOperacion = null) {
+    protected function _reporteLiberados($idAduana, $fecha, $tipoAduana = null, $idCliente = null, $tipoOperacion = null, $pagados = null) {
         try {
             $sql = $this->_db->select()
                     ->from(array("t" => "traficos"), array(
@@ -952,9 +952,14 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
                     ->where("t.estatus <> 4")
                     ->where("t.pedimento IS NOT NULL")
-                    ->where("t.fechaLiberacion IS NOT NULL")
-                    ->where("t.fechaLiberacion BETWEEN '{$fecha} 00:00:00' AND '{$fecha} 23:59:59' ")
                     ->order(array("pedimento ASC"));
+            if (!$pagados) {
+                $sql->where("t.fechaLiberacion IS NOT NULL")
+                    ->where("t.fechaLiberacion BETWEEN '{$fecha} 00:00:00' AND '{$fecha} 23:59:59' ");
+            } else {
+                $sql->where("t.fechaPago IS NOT NULL")
+                    ->where("t.fechaPago BETWEEN '{$fecha} 00:00:00' AND '{$fecha} 23:59:59' ");
+            }
             if (isset($tipoAduana) && $tipoAduana != 50) {
                 if ($tipoAduana == 1) {
                     $sql->where("a.tipoAduana = 1 AND t.cvePedimento IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3')");
@@ -1713,7 +1718,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "idCliente" => array("StringTrim", "StripTags", "Digits"),
                 "idAduana" => array("StringTrim", "StripTags", "Digits"),
                 "tipoOperacion" => array("StringTrim", "StripTags", "StringToUpper"),
-                "excel" => array("StringToLower")
+                "excel" => array("StringToLower"),
+                "pagados" => array("StringToLower")
             );
             $v = array(
                 "fecha" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")), 
@@ -1721,6 +1727,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                 "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
                 "tipoOperacion" => array("NotEmpty"),
+                "pagados" => array("NotEmpty"),
                 "excel" => array("NotEmpty")
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
@@ -1737,6 +1744,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $view->idCliente = $input->idCliente;
                 $view->idAduana = $input->idAduana;
                 $view->tipoOperacion = $input->tipoOperacion;
+                $view->pagados = $input->pagados;
                 
                 $view->url = "/trafico/crud/traficos-liberados";
                 
