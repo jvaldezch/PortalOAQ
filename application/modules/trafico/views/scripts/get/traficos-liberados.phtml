@@ -93,7 +93,7 @@ function semaforo($value)
             current: new Date(<?= date('Y', strtotime($this->fecha)) ?>, <?= date('m', strtotime($this->fecha)) - 1 ?>, <?= date('d', strtotime($this->fecha)) ?>),
             onSelect: function(date) {
                 var fecha = date.getFullYear() + "-" + (date.getMonth() + 1).pad() + "-" + date.getDate().pad();
-                var uri = '<?= $this->url ?>?fecha=' + fecha + '&tipo=<?= $this->tipo ?>';
+                var uri = '<?= $this->url ?>?fecha=' + fecha + '&tipo=<?= $this->tipo ?><?= isset($this->pagados) ? '&pagados=true' : '' ?>';
                 window.location.href = uri;
             }
         });
