@@ -2017,7 +2017,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#fechaEta, #fechaEnvioDocumentos, #fechaVistoBueno, #fechaRevalidacion, #fechaPrevio, #fechaPago, #fechaLiberacion, #fechaEtaAlmacen').datetimepicker({
+    $('#fechaEta, #fechaEnvioDocumentos, #fechaVistoBueno, #fechaRevalidacion, #fechaPrevio, #fechaEtaAlmacen').datetimepicker({
         language: 'es',
         autoclose: true,
     });
