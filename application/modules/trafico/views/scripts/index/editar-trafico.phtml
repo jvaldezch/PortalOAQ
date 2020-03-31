@@ -433,22 +433,17 @@
 <?php
 $dates = array(
     array("name" => "fechaEta", "label" => "ETA"),
-    array("name" => "fechaNotificacion", "label" => "Notificación"),
     array("name" => "fechaEnvioDocumentos", "label" => "Envío de documentos"),
-    array("name" => "fechaEir", "label" => "Sharepoint"),
-    array("name" => "fechaEnvioProforma", "label" => "Envío proforma"),
     array("name" => "fechaVistoBueno", "label" => "Visto bueno"),
     array("name" => "fechaRevalidacion", "label" => "Revalidación"),
     array("name" => "fechaPrevio", "label" => "Previo"),
-    array("name" => "fechaPago", "label" => "Pago"),
-    array("name" => "fechaLiberacion", "label" => "Liberación"),
+    array("name" => "fechaPago", "label" => "Pago", "readonly" => true),
+    array("name" => "fechaLiberacion", "label" => "Liberación", "readonly" => true),
     array("name" => "fechaEtaAlmacen", "label" => "ETA almacen"),
-    array("name" => "fechaFacturacion", "label" => "Facturación", "readonly" => true),
 );
 ?>
 <div id="slider" class="slider">
     <div class="handle">
-        <!--<div class="traffic-icon traffic-icon-calendar"></div>-->
         <div style="font-size:1.4em; color: #2f3b58;">
             <i class="far fa-calendar-alt"></i>
         </div>
@@ -463,8 +458,8 @@ $dates = array(
                 <?php foreach($dates as $item) { ?>
                     <tr>
                         <td><?= $item["label"] ?></td>
-                        <td style="width: 95px">
-                            <input type="text" class="traffic-input-date" name="<?= $item["name"] ?>" id="<?= $item["name"] ?>" <?= isset($item["readonly"]) ? 'readonly="true"' : '' ?> />
+                        <td>
+                            <input type="text" style="width: 130px; text-align: center" name="<?= $item["name"] ?>" id="<?= $item["name"] ?>" <?= isset($item["readonly"]) ? 'readonly="true"' : '' ?> />
                         </td>
                     </tr>
                 <?php } ?>
@@ -482,7 +477,6 @@ $dates = array(
 <script type="text/javascript">
     
     function stringPadLeft(value) {
-        console.log(value);
         let str = "" + value;
         let pad = "00";
         return pad.substring(0, pad.length - str.length) + str;

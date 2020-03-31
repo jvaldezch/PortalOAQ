@@ -2016,5 +2016,10 @@ $(document).ready(function () {
 
         }
     });
+
+    $('#fechaEta, #fechaEnvioDocumentos, #fechaVistoBueno, #fechaRevalidacion, #fechaPrevio, #fechaPago, #fechaLiberacion, #fechaEtaAlmacen').datetimepicker({
+        language: 'es',
+        autoclose: true,
+    });
     
 });

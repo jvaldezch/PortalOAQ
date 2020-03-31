@@ -645,6 +645,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 ->appendStylesheet("/js/common/highlight/styles/monokai.css")
                 ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
                 ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css")
+                ->appendStylesheet("/js/common/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css")
                 ->appendStylesheet("/css/jquery.timepicker.css")
                 ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
@@ -656,6 +657,8 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
                 ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
                 ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+                ->appendFile("/js/common/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js")
+                ->appendFile("/js/common/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.es.js")
                 ->appendFile("/js/common/toast/jquery.toast.min.js?")
                 ->appendFile("/easyui/jquery.easyui.min.js")
                 ->appendFile("/easyui/jquery.edatagrid.js")

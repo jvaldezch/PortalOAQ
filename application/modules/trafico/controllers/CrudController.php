@@ -53,24 +53,24 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $v = array(
                     "idTrafico" =>                array("NotEmpty", new Zend_Validate_Int()),
                     "pedimento" =>                array("NotEmpty", new Zend_Validate_Int()),
-                    "fechaEta" =>                 array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 10
-                    "fechaEtaAlmacen" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 28
-                    "fechaPago" =>                array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 2
+                    "fechaEta" =>                 array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 10
+                    "fechaEtaAlmacen" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 28
+                    "fechaPago" =>                array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 2
                     "fechaEntrada" =>             array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 1
                     "fechaPresentacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
-                    "fechaEir" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
-                    "fechaLiberacion" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 8
+                    "fechaEir" =>                 array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
+                    "fechaLiberacion" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 8
                     "fechaNotificacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 9
-                    "fechaRevalidacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 20
-                    "fechaPrevio" =>              array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 21
+                    "fechaRevalidacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 20
+                    "fechaPrevio" =>              array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 21
                     "fechaDeposito" =>            array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 22
                     "fechaRecepcionDocs" =>       array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 11
                     "fechaPresentacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
                     "fechaCitaDespacho" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 25
-                    "fechaVistoBueno" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 29
+                    "fechaVistoBueno" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 29
                     "fechaInstruccionEspecial" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 54
                     "fechaEnvioProforma" =>       array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 26
-                    "fechaEnvioDocumentos" =>     array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 27
+                    "fechaEnvioDocumentos" =>     array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 27
                     "horaRecepcionDocs" =>        array("NotEmpty", new Zend_Validate_Regex("/(\d{2}):(\d{2}) (AM|PM)/")),
                 );
                 $i = new Zend_Filter_Input($f, $v, $r->getPost());
@@ -154,31 +154,14 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if ($input->isValid("idTrafico")) {
                 $sql = $this->_db->select()
                         ->from(array("t" => "traficos"), array(
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
-                            //new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaVistoBuenoTercero,'%Y-%m-%d %T') AS fechaVistoBuenoTercero"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
-                            //new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d') AS fechaPago"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
-                            //new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d') AS fechaLiberacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEir,'%Y-%m-%d') AS fechaEir")
+                            new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d %H:%i') AS fechaEta"),
+                            new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %H:%i') AS fechaEnvioDocumentos"),
+                            new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %H:%i') AS fechaVistoBueno"),
+                            new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d %H:%i') AS fechaRevalidacion"),
+                            new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %H:%i') AS fechaPrevio"),
+                            new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %H:%i') AS fechaPago"),
+                            new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %H:%i') AS fechaLiberacion"),
+                            new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d %H:%i') AS fechaEtaAlmacen")
                         ))
                         ->where("t.id = ?", $input->idTrafico);
                 $stmt = $this->_db->fetchRow($sql);
