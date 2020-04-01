@@ -228,16 +228,6 @@ $(document).ready(function() {
                         }
                     }
                 },
-                // {
-                //     field: "fechaInstruccionEspecial",
-                //     width: 90,
-                //     title: "Justificación",
-                //     formatter(value, row) {
-                //         if (row.fechaInstruccionEspecial !== null) {
-                //             return "Si";
-                //         }
-                //     }
-                // },
                 {
                     field: "diasDespacho",
                     width: 100,
@@ -248,37 +238,6 @@ $(document).ready(function() {
                         }
                     }
                 },
-                // {
-                //     field: "cumplimientoOperativo",
-                //     width: 100,
-                //     title: "Cump. Ope.",
-                //     formatter: function (value, row) {
-                //         if (parseInt(row.cumplimientoOperativo) === 1) {
-                //             return 'Si';
-                //         }
-                //         if (parseInt(row.cumplimientoOperativo) === 0) {
-                //             return 'No';
-                //         }
-                //     },
-                //     editor: {
-                //         type: 'combobox',
-                //         options: {
-                //             panelHeight: 'auto',
-                //             valueField: 'value',
-                //             textField: 'name',
-                //             data: [
-                //                 {
-                //                     value: '0',
-                //                     name: 'No'
-                //                 },
-                //                 {
-                //                     value: '1',
-                //                     name: 'Si'
-                //                 }
-                //             ]
-                //         }
-                //     }
-                // },
                 {
                     field: "observaciones",
                     width: 250,

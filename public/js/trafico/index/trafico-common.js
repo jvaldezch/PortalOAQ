@@ -104,6 +104,44 @@ function justification() {
     }
 }
 
+window.menuHandler = function(item) {
+    if (item.name == 'open') {
+        openTraffic();
+    }
+    if (item.name == 'soia') {
+        soia();
+    }
+    if (item.name == 'documents') {
+        documentsComplete();
+    }
+    if (item.name == 'cancel') {
+        cancelOperation();
+    }
+    if (item.name == 'justification') {
+        justification();
+    }
+    if (item.name == 'delete') {
+        deleteTraffic();
+    }
+    if (item.name == 'status') {
+        let row = $('#dg').datagrid('getSelected');
+        let idTrafico = row.id;
+        cambiarEstatus(idTrafico, item.status);
+    }
+};
+
+function cambiarEstatus(idTrafico, estatus) {
+    $.ajax({
+        url: "/trafico/post/cambiar-estatus", type: 'POST', dataType: 'json', async: false,
+        data: {idTrafico: idTrafico, estatus: estatus},
+        success: function (res) {
+            if (res.success === true) {
+                $('#dg').datagrid('reload');
+            }
+        }
+    });
+}
+
 function formatEstatus(val, row) {
     if (parseInt(val) === 1) {
         return '<div class="semaphore-black"></div>';

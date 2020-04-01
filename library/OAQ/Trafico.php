@@ -2006,4 +2006,11 @@ class OAQ_Trafico {
         }
     }
 
+    public function cambiarEstatus($estatus) {
+        if (($this->traficos->actualizarEstatus($this->idTrafico, $estatus))) {
+            return true;
+        }
+        return;
+    }
+
 }

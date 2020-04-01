@@ -1,14 +1,22 @@
 <div class="row-fluid">
-    <div id="mm" class="easyui-menu" style="width: 220px;">
-        <div onclick="javascript:openTraffic()">Abrir</div>
-        <div onclick="javascript:soia()">Estatus SOIA</div>
-        <div onclick="javascript:documentsComplete()">Documentos completos</div>
-        <div onclick="javascript:cancelOperation()">Cancelar Operación</div>
-        <div onclick="javascript:justification()">Justificar</div>
-        <div onclick="javascript:deleteTraffic()">Eliminar</div>
+    <div id="mm" class="easyui-menu" data-options="onClick:menuHandler" style="width: 220px;">
+        <div data-options="name:'open'">Abrir</div>
+        <div data-options="name:'soia'">Estatus SOIA</div>
+        <div data-options="name:'documents'">Documentos completos</div>
+        <div data-options="name:'cancel'">Cancelar Operación</div>
+        <div data-options="name:'justification'">Justificar</div>
+        <div data-options="name:'delete'">Eliminar</div>
+        <div class="menu-sep"></div>
+        <div data-options="name:'status', status: 1, iconCls:'icon-status-1'">Programado</div>
+        <div data-options="name:'status', status: 7, iconCls:'icon-status-7'">En captura</div>
+        <div data-options="name:'status', status: 5, iconCls:'icon-status-5'">Proforma</div>
+        <div data-options="name:'status', status: 2, iconCls:'icon-status-2'">Pagado</div>
+        <div data-options="name:'status', status: 3, iconCls:'icon-status-3'">Liberado</div>
+        <div data-options="name:'status', status: 8, iconCls:'icon-status-8'">Urgente</div>
         <div class="menu-sep"></div>
         <div>Salir</div>
     </div>
+
     <div style="float: left; margin-left: 2px"> 
         <img style="float: left" src="/images/menus/traffic.png" />
         <h5 style="float: left; margin-left: 5px" style="margin: 0;">TRÁFICOS</h5>

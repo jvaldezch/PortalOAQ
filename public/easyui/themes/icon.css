@@ -94,3 +94,22 @@
 .icon-large-chart{
 	background:url('icons/large_chart.png') no-repeat center center;
 }
+
+.icon-status-1 {
+	background:url('icons/status-1.png') no-repeat center center;
+}
+.icon-status-2 {
+	background:url('icons/status-2.png') no-repeat center center;
+}
+.icon-status-3 {
+	background:url('icons/status-3.png') no-repeat center center;
+}
+.icon-status-5 {
+	background:url('icons/status-5.png') no-repeat center center;
+}
+.icon-status-7 {
+	background:url('icons/status-7.png') no-repeat center center;
+}
+.icon-status-8 {
+	background:url('icons/status-8.png') no-repeat center center;
+}

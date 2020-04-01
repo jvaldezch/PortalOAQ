@@ -1434,6 +1434,40 @@ class Trafico_PostController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
+    
+    public function cambiarEstatusAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "idTrafico" => "Digits",
+                    "estatus" => "Digits"
+                );
+                $v = array(
+                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                    "estatus" => array("NotEmpty", new Zend_Validate_Int()),
+                );
+                $i = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($i->isValid("idTrafico") && $i->isValid("estatus")) {
+                    $trafico = new OAQ_Trafico(array("idTrafico" => $i->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+                    if (($trafico->cambiarEstatus($i->estatus))) {
+                        $this->_helper->json(array("success" => true));
+                    }
+                    $this->_helper->json(array("success" => false));
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
 
     public function leerMensajeAction() {
         try {
