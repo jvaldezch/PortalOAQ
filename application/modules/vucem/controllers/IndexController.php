@@ -30,6 +30,7 @@ class Vucem_IndexController extends Zend_Controller_Action {
                 ->appendFile("/js/common/js.cookie.js")
                 ->appendFile("/js/common/jquery.blockUI.js")
                 ->appendFile("/js/common/DT_bootstrap.js")
+                ->appendFile("/js/common/mensajero.js?" . time())
                 ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
         $this->_logger = Zend_Registry::get("logDb");
@@ -57,6 +58,9 @@ class Vucem_IndexController extends Zend_Controller_Action {
         $this->_svucem->setExpirationSeconds($this->_appconfig->getParam("session-exp"));
         $news = new Application_Model_NoticiasInternas();
         $this->view->noticias = $news->obtenerTodos();
+        if (APPLICATION_ENV == "development") {
+            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
+        }
     }
 
     public function indexAction() {

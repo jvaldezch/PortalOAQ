@@ -1093,42 +1093,84 @@ class Bodega_GetController extends Zend_Controller_Action {
                 $model = new Trafico_Model_TraficosMapper();
                 $row = $model->obtenerPorId($input->id);
 
-                $misc = new OAQ_Misc();
-
-                $mppr = new Bodega_Model_Bultos();
                 $mpr = new Bodega_Model_Bodegas();
-
                 $b = $mpr->obtener($row['idBodega']);
 
+                $filename = "FORMATO_ENTRADA_{$row['referencia']}.pdf";
+
                 $data = array(
-                    "filename" => "ETIQUETAS_{$row['referencia']}",
+                    "title" => "FORMATO DE ENTRADA",
+                    "title_logo" => "pdf_logo.jpg",
+                    "company" => $this->_appconfig->getParam('empresa'),
+                    "filename" => $filename,
                     "bultos" => array(),
                     "nombre_bodega" => $b['nombre'],
                     "referencia" => $row['referencia'],
                     "rfc_cliente" => $row['rfcCliente'],
+                    "nom_cliente" => $row['nombreCliente'],
+                    "fecha_entrada" => $row['fechaEntrada'],
+                    "fecha_descarga" => $row['fechaDescarga'],
+                    "fecha_revision" => $row['fechaRevision'],
+                    "peso_kg" => $row['pesoKg'],
+                    "bultos" => $row['bultos'],
                 );
 
-                for ($i = 1; $i <= (int) $row['bultos']; $i++) {
-                    if (!($r = $mppr->verificar($i, $row['id']))) {
-                        $arr = array(
-                            "idTrafico" => $input->id,
-                            "idBodega" => 1,
-                            "numBulto" => $i,
-                            "uuid" => $misc->getUuid($row['referencia'] . $row['rfcCliente'] . $i),
-                            "creado" => date("Y-m-d H:i:s")
-                        );
-                        if (($id = $mppr->agregar($arr))) {
-                            $data['bultos'][$i] = array("id_bulto" => $r['id'], "uuid" => $arr['uuid']);
-                        }
-                    } else {
-                        $data['bultos'][$i] = array("id_bulto" => $r['id'], "uuid" => $r['uuid']);
-                    }
-                }
+                $print = new OAQ_Imprimir_FormatoEntrada($data, "P", "pt", "LETTER");
+                $print->crear();
+                $print->set_filename($filename);
+                $print->Output($print->get_filename(), "I");
 
-                $print = new OAQ_Imprimir_CodigoBarras($data, "L", "pt", "LETTER");
-                $print->set_filename($data['filename'] . ".pdf");
-                $print->Create();
-                $print->Output($data['filename'] . ".pdf");
+            } else {
+                
+            }
+        } catch (Zend_Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function formatoSalidaAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "id" => array("Digits"),
+            );
+            $v = array(
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id")) {
+
+                $model = new Trafico_Model_TraficosMapper();
+                $row = $model->obtenerPorId($input->id);
+
+                $mpr = new Bodega_Model_Bodegas();
+                $b = $mpr->obtener($row['idBodega']);
+
+                $filename = "SALIDA_BODEGA_{$row['referencia']}.pdf";
+
+                $data = array(
+                    "title" => "SALIDA DE BODEGA",
+                    "title_logo" => "pdf_logo.jpg",
+                    "company" => $this->_appconfig->getParam('empresa'),
+                    "filename" => $filename,
+                    "bultos" => array(),
+                    "nombre_bodega" => $b['nombre'],
+                    "referencia" => $row['referencia'],
+                    "rfc_cliente" => $row['rfcCliente'],
+                    "nom_cliente" => $row['nombreCliente'],
+                    "fecha_entrada" => $row['fechaEntrada'],
+                    "fecha_descarga" => $row['fechaDescarga'],
+                    "fecha_revision" => $row['fechaRevision'],
+                    "fecha_salida" => $row['fechaSalida'],
+                    "peso_kg" => $row['pesoKg'],
+                    "bultos" => $row['bultos'],
+                );
+
+                $print = new OAQ_Imprimir_FormatoSalidaBodega($data, "P", "pt", "LETTER");
+                $print->crear();
+                $print->set_filename($filename);
+                $print->Output($print->get_filename(), "I");
+
             } else {
                 
             }

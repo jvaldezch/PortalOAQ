@@ -26,6 +26,7 @@ class Vucem_CatalogoController extends Zend_Controller_Action {
                 ->appendFile("/js/principal.js")
                 ->appendFile("/js/jquery.dataTables.min.js")
                 ->appendFile("/js/DT_bootstrap.js")
+                ->appendFile("/js/common/mensajero.js?" . time())
                 ->appendFile("/js/jquery.blockUI.js");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_logger = Zend_Registry::get("logDb");
@@ -44,6 +45,9 @@ class Vucem_CatalogoController extends Zend_Controller_Action {
         $this->view->menu = $mapper->obtenerPorRol($this->_session->idRol);
         $this->view->username = $this->_session->username;
         $this->view->rol = $this->_session->role;
+        if (APPLICATION_ENV == "development") {
+            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
+        }
     }
 
 }

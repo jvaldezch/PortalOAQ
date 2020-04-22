@@ -19,6 +19,30 @@
   background-color: #ad0129;
   color: #fff;
 }
+.traffic-navbar .nav > li a > .badge,
+.traffic-navbar-mobile .nav > li a > .badge {
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+.traffic-navbar .nav > li a > .badge-counter,
+.traffic-navbar-mobile .nav > li a > .badge-counter {
+  font-size: 10px;
+  line-height: 10px;
+  margin-left: 3px;
+}
+.traffic-navbar .nav > li a > .fa-exclamation-circle,
+.traffic-navbar-mobile .nav > li a > .fa-exclamation-circle {
+  color: green;
+}
+.traffic-navbar .nav > li a > strong,
+.traffic-navbar-mobile .nav > li a > strong {
+  display: inline-block;
+  width: 90px;
+}
+#m-alert-messages {
+  max-height: 250px;
+  overflow-y: auto;
+}
 .traffic-navbar-inner {
   background-repeat: repeat-x;
   border: 1px solid #2e3850;
@@ -107,4 +131,3 @@
   background-color: #e5e5e5;
   color: #fff;
 }
-/*# sourceMappingURL=navbar.css.map */

@@ -181,4 +181,37 @@ class Application_Model_Mensajes {
         }
     }
 
+    public function obtenerTodoNoLeido() {
+        try {
+            $sql = $this->_db_table->select()
+                    ->setIntegrityCheck(false)
+                    ->from(array("m" => "mensajes"), array("*"))
+                    ->joinLeft(array("t" => "traficos"), "t.id = m.idTrafico", array("referencia"))
+                    ->order("creado ASC");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function cantidadNoLeido() {
+        try {
+            $sql = $this->_db_table->select()
+                    ->setIntegrityCheck(false)
+                    ->from(array("m" => "mensajes"), array("count(*) AS total"))
+                    ->where("leido = 0");
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return $stmt['total'];
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
 }

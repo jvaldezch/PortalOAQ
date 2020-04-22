@@ -60,7 +60,10 @@ class Dashboard_MainController extends Zend_Controller_Action {
     }
 
     public function preDispatch() {
-        $this->_session = null ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace("Dashboard");
+        $this->_session = null ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace("Dashboard");        
+        if (APPLICATION_ENV == "development") {
+            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
+        }
     }
 
     public function indexAction() {

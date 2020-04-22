@@ -41,6 +41,9 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $this->view->menu = $mapper->obtenerPorRol(6);
         $this->view->username = $this->_session->username;
         $this->view->rol = "cliente";
+        if (APPLICATION_ENV == "development") {
+            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
+        }
     }
 
     public function indexAction() {

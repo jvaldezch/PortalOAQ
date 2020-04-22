@@ -26,6 +26,7 @@ class Archivo_ExpedienteController extends Zend_Controller_Action {
                 ->appendFile("/js/common/jquery.validate.min.js")
                 ->appendFile("/js/common/js.cookie.js")
                 ->appendFile("/js/common/jquery.blockUI.js")
+                ->appendFile("/js/common/mensajero.js?" . time())
                 ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $context = stream_context_create(array(
@@ -55,6 +56,9 @@ class Archivo_ExpedienteController extends Zend_Controller_Action {
         $this->_arch->setExpirationSeconds($this->_appconfig->getParam("session-exp"));
         $news = new Application_Model_NoticiasInternas();
         $this->view->noticias = $news->obtenerTodos();
+        if (APPLICATION_ENV == "development") {
+            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
+        }
     }
 
     public function indexAction() {

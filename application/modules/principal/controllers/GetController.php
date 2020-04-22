@@ -492,4 +492,15 @@ class Principal_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function misMensajesAction() {
+        try {            
+            $mppr = new Application_Model_Mensajes();
+            $rows = $mppr->obtenerTodoNoLeido();
+            $total = $mppr->cantidadNoLeido();
+            $this->_helper->json(array('success' => true, "results" => array("messages" => $rows, "noLeido" => $total)));
+        } catch (Exception $ex) {
+            $this->_helper->json(array('success' => false, 'message' => $ex->getMessage()));
+        }
+    }
+
 }
