@@ -87,7 +87,7 @@ class Clientes_ExpedienteController extends Zend_Controller_Action {
                 
                 $model = new Archivo_Model_RepositorioMapper();
                 if ($traffic->getRfcCliente() == 'STE071214BE7') {
-                    $file_type = array(2, 3, 40, 33, 34, 23, 438);
+                    $file_type = array(2, 3, 40, 33, 34, 23, 438, 1010, 1020, 1030);
                     $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana(), $file_type);
                 } else {
                     $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana());
@@ -100,6 +100,10 @@ class Clientes_ExpedienteController extends Zend_Controller_Action {
                 
                 $gallery = new Trafico_Model_Imagenes();
                 $this->view->gallery = $gallery->miniaturas($arr['idTrafico']);
+
+                $val = new OAQ_ArchivosValidacion();                
+                $arr_val = $val->archivosDePedimento($traffic->getPatente(), $traffic->getAduana(), $traffic->getPedimento());
+                $this->view->validacion = $arr_val;
                 
             }
             
@@ -200,7 +204,7 @@ class Clientes_ExpedienteController extends Zend_Controller_Action {
                     
                     $model = new Archivo_Model_RepositorioMapper();
                     if ($traffic->getRfcCliente() == 'STE071214BE7') {
-                        $file_type = array(2, 3, 40, 33, 34, 23, 438);
+                        $file_type = array(2, 3, 40, 33, 34, 23, 438, 1010, 1020, 1030);
                         $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana(), $file_type);
                     } else {
                         $files = $model->getFilesByReferenceCustomers($traffic->getReferencia(), $traffic->getPatente(), $traffic->getAduana());
@@ -237,6 +241,20 @@ class Clientes_ExpedienteController extends Zend_Controller_Action {
                                     $added[] = $tmpfile;
                                 }
                                 unset($tmpfile);
+                            }
+                        }
+
+                        $val = new OAQ_ArchivosValidacion();                
+                        $arch_val = $val->archivosDePedimento($traffic->getPatente(), $traffic->getAduana(), $traffic->getPedimento());
+                        if (!empty($arch_val)) {
+                            $mppr_val = new Automatizacion_Model_ArchivosValidacionMapper();
+                            foreach ($arch_val as $a_val) {
+                                if ($a_val['idArchivoValidacion']) {
+                                    $file_val = $mppr_val->fileContent($a_val['idArchivoValidacion']);
+                                    if ($file_val) {
+                                        $zip->addFromString($a_val['archivoNombre'], base64_decode(base64_decode($file_val["contenido"])));
+                                    }
+                                }
                             }
                         }
                         

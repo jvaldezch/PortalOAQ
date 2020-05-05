@@ -187,7 +187,8 @@ class Application_Model_Mensajes {
                     ->setIntegrityCheck(false)
                     ->from(array("m" => "mensajes"), array("*"))
                     ->joinLeft(array("t" => "traficos"), "t.id = m.idTrafico", array("referencia"))
-                    ->order("creado ASC");
+                    ->order("creado ASC")
+                    ->limit(20);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();

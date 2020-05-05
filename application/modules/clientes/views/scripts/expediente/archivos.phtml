@@ -31,6 +31,44 @@
                 </td>
             </tr>
         <?php } ?>
+        <?php if (isset($this->validacion) && !empty($this->validacion)) { ?>
+            <?php if (isset($this->validacion["validacion"]) && !empty($this->validacion["validacion"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <?= $this->validacion["validacion"]["archivoNombre"] ?>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
+            <?php if (isset($this->validacion["firma"]) && !empty($this->validacion["firma"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <?= $this->validacion["firma"]["archivoNombre"] ?>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
+            <?php if (isset($this->validacion["banco"]) && !empty($this->validacion["banco"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <?= $this->validacion["banco"]["archivoNombre"] ?>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
+            <?php if (isset($this->validacion["pago"]) && !empty($this->validacion["pago"])) { ?>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align: left">
+                        <?= $this->validacion["pago"]["archivoNombre"] ?>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            <?php } ?>
+        <?php } ?> 
     </tbody>
 </table>
 

@@ -422,4 +422,44 @@ class Principal_PostController extends Zend_Controller_Action {
         }
     }
 
+    public function enviarPedimentoAction() {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "idTrafico" => "Digits",
+                );
+                $v = array(
+                    "idTrafico" => "NotEmpty",
+                );
+                $input = new Zend_Filter_Input($f, $v, $request->getPost());
+                if ($input->isValid("idTrafico")) {
+                    $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
+                    $aduanet = new Aduanet_Pedimentos();
+                    if($aduanet->login() === true) {
+                        $r = $aduanet->pedimento();
+                        if ($r) {
+                            $aduanet->agregarFacturas();
+                        }
+                    }
+
+                    $this->_helper->json(array("success" => true));
+
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $e) {
+            $this->_helper->json(array("success" => false, "message" => $e->getMessage()));
+        }
+    }
+
 }
