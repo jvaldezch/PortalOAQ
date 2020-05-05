@@ -1890,6 +1890,27 @@ class OAQ_Trafico {
         return;
     }
 
+    public function obtenerPartidas() {
+        $mppr = new Trafico_Model_TraficoFacturasMapper();
+        $mppr_p = new Trafico_Model_FactProd();
+        $arr = $mppr->obtenerDetalleFacturas($this->idTrafico);
+
+        $ids = array();
+
+        foreach ($arr as $item) {
+            $ids[] = (int) $item["idFactura"];
+        }
+
+        if (!empty($ids)) {
+            $partidas = $mppr_p->obtenerPartidas($ids);
+            if (!empty($partidas)) {
+                return $partidas;
+            }
+        }
+        
+        return;
+    }
+
     public function obtenerDatos() {
         $tn = new Trafico_Model_TraficoGuiasMapper();
         $arr = $this->traficos->encabezado($this->idTrafico);

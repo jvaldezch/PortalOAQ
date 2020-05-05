@@ -1809,4 +1809,174 @@ class OAQ_ExcelReportes {
         $writer->close();
     }
 
+    public function csvAduanet($patente, $aduana, $pedimento, $referencia, $partidas) {
+        $border = (new BorderBuilder())
+                ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+                ->build();
+        $tstyle = (new StyleBuilder())
+                ->setFontBold()
+                ->setFontSize(10)
+                ->setFontName("Arial")
+                ->setFontColor(Color::BLACK)
+                ->setBackgroundColor("c6d9f0")
+                ->setBorder($border)
+                ->build();
+        $dstyle = (new StyleBuilder())
+                ->setFontSize(10)
+                ->setFontName("Arial")
+                ->setFontColor(Color::BLACK)
+                ->build();
+        $writer = WriterFactory::create(Type::XLSX);
+        if (APPLICATION_ENV == "production" || APPLICATION_ENV == "staging") {
+            $writer->setTempFolder($this->appConfig->getParam("tmpDir"));            
+        } else {
+            $writer->setTempFolder("C:\\wamp64\\tmp");            
+        }
+        $writer->openToBrowser("formato_partidas_m3_{$referencia}_" . time() . ".xlsx");
+        $writer->addRowWithStyle(array(
+            "PATENTE",
+            "REFERENCIA PED",
+            "NUMPEDIMENTO",
+            "ADUANA",
+            "SEC. FRACCION",
+            "FRACCION",
+            "DESC. MERCANCIA",
+            "PRECIO PAGADO",
+            "VALOR DOLARES",
+            "VALOR ADUANA",
+            "PRECIO UNITARIO",
+            "VALOR COMERCIAL",
+            "CANTIDAD UMC",
+            "UNIDAD UMC",
+            "CANTIDAD UMT",
+            "UNIDAD UMT",
+            "VALOR AGREGADO",
+            "VINCULACION",
+            "METODO VALORACION",
+            "CODIGO PRODUCTO",
+            "MARCA",
+            "MODELO MERCANCIA",
+            "PAIS ORIGEN",
+            "PAIS VENDEDOR",
+            "TASA DTA",
+            "TIPO DTA",
+            "TASADV",
+            "TIPO ADV",
+            "TAS ADE",
+            "TIPO ADE",
+            "TAS IVA",
+            "TIPO IVA",
+            "TAS IEP",
+            "TIPO IEP",
+            "TAS ISA",
+            "TIPO ISA",
+            "MONTO",
+            "TASCC",
+            "TIPO CC",
+            "TLC",
+            "PROSEC",
+            "ISAN",
+            "BANISA",
+            "PREDET",
+            "APL303",
+            "VAL MERCANCIA",
+            "MONTO IGI",
+            "FORPAG",
+            "IMPTOT",
+            "CONOBS",
+            "TASITV",
+            "TIPITV",
+            "TASAD3",
+            "TIPAD3",
+            "TASAD4",
+            "TIPAD4",
+            "TASIEP2",
+            "TIPEP2",
+            "CVEOBS",
+            "OBSERVACION",
+            "IDENTIFICADOR",
+            "COMPLEMENTO1",
+            "COMPLEMENTO2",
+            "COMPLEMENTO3",
+            "CVEGRAVAMEN",
+            "CVEPAGO",
+            "%PAGO",
+            "IMPORTEGRAVADO",
+                ), $tstyle);
+        foreach ($partidas as $row) {
+            $writer->addRowWithStyle(array(
+                $patente,
+                $referencia,
+                $pedimento,
+                $aduana,
+                "", // sec. fraccion
+                $row['fraccion'],
+                $row['descripcion'],
+                "", // precio pagado
+                $row['valorUsd'],
+                "", // valor aduana
+                $row['precioUnitario'],
+                $row['valorComercial'],
+                $row['cantidadFactura'], // CANTIDAD UMC
+                $row['umc'], // UNIDAD UMC
+                $row['cantidadTarifa'], // CANTIDAD UMT
+                $row['umt'], // UNIDAD UMT
+                "", // VALOR AGREGADO
+                "", // VINCULACION
+                "", // METODO VALORACION
+                "", // CODIGO PRODUCTO
+                $row['marca'], // MARCA
+                $row['modelo'], // MODELO MERCANCIA
+                $row['paisOrigen'], // PAIS ORIGEN
+                $row['paisVendedor'], // PAIS VENDEDOR
+                "", // TASA DTA
+                "", // TIPO DTA
+                "", // TASADV
+                "", // TIPO ADV
+                "", // TAS ADE
+                "", // TIPO ADE
+                "", // TAS IVA
+                "", // TIPO IVA
+                "", // TAS IEP
+                "", // TIPO IEP
+                "", // TAS ISA
+                "", // TIPO ISA
+                "", // MONTO
+                "", // TASCC
+                "", // TIPO CC
+                $row['tlc'], // TLC
+                $row['prosec'], // PROSEC
+                "", // ISAN
+                "", // BANISA
+                "", // PREDET
+                "", // APL303
+                "", // VAL MERCANCIA
+                "", // MONTO IGI
+                "", // FORPAG
+                "", // IMPTOT
+                "", // CONOBS
+                "", // TASITV
+                "", // TIPITV
+                "", // TASAD3
+                "", // TIPAD3
+                "", // TASAD4
+                "", // TIPAD4
+                "", // TASIEP2
+                "", // TIPEP2
+                "", // CVEOBS
+                "", // OBSERVACION
+                "", // IDENTIFICADOR
+                "", // COMPLEMENTO1
+                "", // COMPLEMENTO2
+                "", // COMPLEMENTO3
+                "", // CVEGRAVAMEN
+                "", // CVEPAGO
+                "", // %PAGO
+                "", // IMPORTEGRAVADO
+                    ), $dstyle);
+        }
+        $writer->close();
+    }
+    
+
 }

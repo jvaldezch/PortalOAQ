@@ -502,5 +502,31 @@ class Principal_GetController extends Zend_Controller_Action {
             $this->_helper->json(array('success' => false, 'message' => $ex->getMessage()));
         }
     }
+    
+    public function csvAduanetAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => "Digits",
+                "idPedimento" => "Digits",
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                "idPedimento" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico") && $input->isValid("idPedimento")) {
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
+                $aduanet = new Aduanet_Pedimentos();
+                $aduanet->csvAduanet($input->idTrafico);
+
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => true, "html" => $ex->getMessage()));
+        }
+    }
 
 }

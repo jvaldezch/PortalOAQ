@@ -125,4 +125,21 @@ class Aduanet_Pedimentos
             throw new Exception("Exception on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+
+    public function csvAduanet($idTrafico)
+    {
+        try {
+            $trafico = new OAQ_Trafico(array("idTrafico" => $idTrafico));
+
+            $arr = $trafico->obtenerDatos();
+            $partidas = $trafico->obtenerPartidas();
+
+            $e = new OAQ_ExcelReportes();
+            $e->csvAduanet($arr['patente'], $arr['aduana'], $arr['pedimento'], $arr['referencia'], $partidas);
+
+            
+        } catch (Exception $e) {
+            throw new Exception("Exception on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
 }

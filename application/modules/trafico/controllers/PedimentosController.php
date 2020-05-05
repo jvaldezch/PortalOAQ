@@ -78,6 +78,7 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/pedimentos/");
                 $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
 
+                $view->idTrafico = $input->id;
                 $view->idPedimento = $row['id'];
 
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));

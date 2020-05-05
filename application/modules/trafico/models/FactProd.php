@@ -76,6 +76,51 @@ class Trafico_Model_FactProd {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+
+    public function obtenerPartidas($idFacturas) {
+        try {
+            $sql = $this->_db_table->select()
+                    ->from($this->_db_table, array(
+                        "id",
+                        "idFactura",
+                        "orden",
+                        "numParte",
+                        "fraccion",
+                        "subFraccion",
+                        "descripcion",
+                        "descripcionIngles",
+                        "ROUND(precioUnitario, 5) AS precioUnitario",
+                        "ROUND(valorComercial, 4) AS valorComercial",
+                        "valorUsd",
+                        "ROUND(cantidadFactura, 4) AS cantidadFactura",
+                        "cantidadTarifa",
+                        "umc",
+                        "umt",
+                        "cantidadOma",
+                        "oma",
+                        "observaciones",
+                        "marca",
+                        "modelo",
+                        "subModelo",
+                        "numSerie",
+                        "tlc",
+                        "tlcue",
+                        "prosec",
+                        "iva",
+                        "advalorem",
+                        "paisOrigen",
+                        "paisVendedor",
+                    ))
+                    ->where('idFactura IN (?)', $idFacturas);
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
     
     public function obtener($idFactura) {
         try {
