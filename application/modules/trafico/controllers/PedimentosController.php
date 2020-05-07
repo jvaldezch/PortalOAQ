@@ -104,35 +104,28 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                     if (!empty($d)) {
                         $tipoCambio = $d['tipoCambio'];
                         $view->tipoCambio = $d['tipoCambio'];
+                        $view->destinoOrigen = $d['destinoOrigen'];
+                        $view->aduanaDespacho = $d['aduanaDespacho'];
+                        $view->transEntrada = $d['transEntrada'];
+                        $view->transArribo = $d['transArribo'];
+                        $view->transSalida = $d['transSalida'];
                     }
                 }
-                $partidas = $trafico->obtenerPartidas();
+                $partidas = $trafico->obtenerProductosPartidas();
+
+                $facturas = $trafico->obtenerFacturasPedimento();
 
                 if (!empty($partidas)) {
-                    $m = new Pedimento_Model_PedimentoPartidas();
-                    $i = 1;
-                    $m->borrarTodo($row['id']);
-                    foreach ($partidas as $p) {                        
-                        $arr = array(
-                            "idPedimento" => $row['id'],
-                            "secuencia" => $i,
-                            "fraccion" => $p['fraccion'],
-                            "descripcion" => $p['descripcion'],
-                            "cantidadUmc" => $p['cantidadFactura'],
-                            "umc" => $p['umc'],
-                            "cantidadUmt" => $p['cantidadTarifa'],
-                            "umt" => $p['umt'],
-                            "paisOrigen" => $p['paisOrigen'],
-                            "paisVendedor" => $p['paisVendedor'],
-                            "valorAduana" => $tipoCambio * $p['valorComercial'],
-                            "valorUsd" => $p['valorUsd'],
-                            "valorComercial" => $p['valorComercial'],
-                            "precioUnitario" => $p['precioUnitario'],
-                        );
-                        $i++;
-                        $m->agregar($arr);
-                    }
-                    $view->partidas = $m->obtener($row['id']);
+                    $view->partidas = $pedimento->procesarProductos($row['id'], $tipoCambio, $partidas);
+                }
+
+                if (!empty($facturas)) {
+                    $pedimento->procesarFacturas($row['id'], $facturas);
+
+                    $invoices = $pedimento->obtenerFacturasProveedor($row['id']);
+                    $view->facturas = $invoices;
+
+                    $this->_firephp->info($invoices);
                 }
 
                 $medios = new Pedimento_Model_MedioTransporte();

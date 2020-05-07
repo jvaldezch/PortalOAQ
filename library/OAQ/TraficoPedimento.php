@@ -75,4 +75,89 @@ class OAQ_TraficoPedimento {
         return $this;
     }
 
+    public function procesarProductos($idPedimento, $tipoCambio, $productos, $overwrite=null) {
+        $m = new Pedimento_Model_PedimentoPartidas();
+        if (($m->total($idPedimento) > 0) && !$overwrite) {
+            return $m->obtener($idPedimento);
+        }
+        $i = 1;
+        $m->borrarTodo($idPedimento);
+        foreach ($productos as $p) {
+            $arr = array(
+                "idPedimento" => $idPedimento,
+                "secuencia" => $i,
+                "fraccion" => $p['fraccion'],
+                "descripcion" => $p['descripcion'],
+                "cantidadUmc" => $p['cantidadFactura'],
+                "umc" => $p['umc'],
+                "cantidadUmt" => $p['cantidadTarifa'],
+                "umt" => $p['umt'],
+                "paisOrigen" => $p['paisOrigen'],
+                "paisVendedor" => $p['paisVendedor'],
+                "valorAduana" => $tipoCambio * $p['valorComercial'],
+                "valorUsd" => $p['valorUsd'],
+                "valorComercial" => $p['valorComercial'],
+                "precioUnitario" => $p['precioUnitario'],
+                "creado" => date("Y-m-D H:i:s"),
+            );
+            $i++;
+            $m->agregar($arr);
+        }
+        return $m->obtener($idPedimento);
+    }
+
+    public function obtenerFacturasProveedor($idPedimento) {
+        $m = new Pedimento_Model_PedimentoFacturas();
+        $proveedores = $m->obtenerProveedores($idPedimento);
+
+        $arr = array();
+
+        foreach($proveedores as $p) {
+            $arr[] = array(
+                "proveedor" => $m->datosProveedor($idPedimento, $p['idFiscal'], $p['razonSocial'], $p['pais']),
+                "facturas" => $m->facturasProveedor($idPedimento, $p['idFiscal'], $p['razonSocial'], $p['pais']),
+            );
+        }
+
+        return $arr;
+    }
+
+    public function procesarFacturas($idPedimento, $facturas, $overwrite=null) {
+        $m = new Pedimento_Model_PedimentoFacturas();
+        $i = 1;
+        $m->borrarTodo($idPedimento);
+        foreach ($facturas as $f) {
+            $arr = array(
+                "idPedimento" => $idPedimento,
+                "idProveedor" => $f['idPro'],
+                "idFactura" => $f['idFactura'],
+                "vinculacion" => null,
+                "numFactura" => $f['numFactura'],
+                "edocument" => $f['cove'],
+                "fecha" => $f['fechaFactura'],
+                "incoterm" => $f['incoterm'],
+                "monedaFactura" => $f['divisa'],
+                "valorMonedaFactura" => $f['valorFacturaMonExt'],
+                "factorMonedaFactura" => $f['factorMonExt'],
+                "valorDolares" => $f['valorFacturaUsd'],
+                "idFiscal" => $f['identificador'],
+                "razonSocial" => $f['nombre'],
+                "calle" => $f['calle'],
+                "numExterior" => $f['numExt'],
+                "numInterior" => $f['numInt'],
+                "colonia" => $f['colonia'],
+                "localidad" => $f['localidad'],
+                "ciudad" => $f['cuidad'],
+                "municipio" => $f['municipio'],
+                "codigoPostal" => $f['codigoPostal'],
+                "estado" => $f['estado'],
+                "pais" => $f['pais'],
+                "creado" => date("Y-m-D H:i:s"),
+            );
+            $i++;
+            $m->agregar($arr);
+        }
+        return $m->obtener($idPedimento);
+    }
+
 }

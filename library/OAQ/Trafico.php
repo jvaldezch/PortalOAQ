@@ -1890,7 +1890,16 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerPartidas($agrupado = null) {
+    public function obtenerFacturasPedimento() {
+        $mppr = new Trafico_Model_TraficoFacturasMapper();
+        $arr = $mppr->obtenerFacturasPedimento($this->idTrafico);
+        if (!empty($arr)) {
+            return $arr;
+        }
+        return;
+    }
+
+    public function obtenerProductosPartidas($agrupado = null) {
         $mppr = new Trafico_Model_TraficoFacturasMapper();
         $mppr_p = new Trafico_Model_FactProd();
         $arr = $mppr->obtenerDetalleFacturas($this->idTrafico);

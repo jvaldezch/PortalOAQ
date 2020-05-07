@@ -38,10 +38,10 @@ $(document).ready(function () {
         });
     });
 
-    $(document.body).on("change", "#tipoCambio", function() {
+    $(document.body).on("change", "#tipoCambio, #destinoOrigen, #pesoBruto, #aduanaDespacho, #regimen, #transEntrada, #transArribo, #transSalida", function() {
         $.ajax({url: '/pedimento/post/actualizar',
             type: "POST",
-            data: {idPedimento: $("#idPedimento").val(), name: 'tipoCambio', value: $(this).val()},
+            data: {idPedimento: $("#idPedimento").val(), name: $(this).attr("name"), value: $(this).val()},
             success: function (res) {
                 if (res.success === true) {
                 }

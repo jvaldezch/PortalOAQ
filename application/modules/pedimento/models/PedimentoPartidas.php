@@ -30,6 +30,18 @@ class Pedimento_Model_PedimentoPartidas
         return null;
     }
 
+    public function total($idPedimento)
+    {
+        $sql = $this->_db_table->select()
+            ->from($this->_db_table, array("count(*) AS total"))
+            ->where("idPedimento = ?", $idPedimento);
+        $stmt = $this->_db_table->fetchRow($sql);
+        if ($stmt) {
+            return $stmt['total'];
+        }
+        return null;
+    }
+
     public function agregar($arr)
     {
         $stmt = $this->_db_table->insert($arr);

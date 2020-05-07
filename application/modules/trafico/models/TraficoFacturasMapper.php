@@ -177,6 +177,32 @@ class Trafico_Model_TraficoFacturasMapper {
         }
     }
 
+    /**
+     * 
+     * @param int $idTrafico
+     * @param int $idUsuario
+     * @return type
+     * @throws Exception
+     */
+    public function obtenerFacturasPedimento($idTrafico) {
+        try {
+            $sql = $this->_db_table->select()
+                    ->setIntegrityCheck(false)
+                    ->from(array("f" => "trafico_facturas"), array("cvePro", "cove"))
+                    ->joinLeft(array("d" => "trafico_factdetalle"), "d.idFactura = f.id", array("*"))
+                    ->joinLeft(array("p" => "trafico_factpro"), "p.id = d.idPro", array("*"))
+                    ->where("f.idTrafico = ?", $idTrafico)
+                    ->where("f.estatus = 1")
+                    ->order("f.numFactura ASC");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
     public function obtenerFacturasWs($idTrafico) {
         try {
             $sql = $this->_db_table->select();

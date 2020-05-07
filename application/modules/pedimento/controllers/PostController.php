@@ -61,9 +61,7 @@ class Pedimento_PostController extends Zend_Controller_Action
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idPedimento")) {
-
                     $pedimento = new OAQ_TraficoPedimento(array("id" => $input->idPedimento));
-
                     $arr = array(
                         "$input->name" => $input->value,
                         "actualizado" => date("Y-m-d H:i:s")
@@ -71,7 +69,6 @@ class Pedimento_PostController extends Zend_Controller_Action
                     if (($pedimento->actualizar($arr))) {
                         $this->_helper->json(array("success" => true));
                     }
-
                 } else {
                     throw new Exception("Invalid input!");
                 }

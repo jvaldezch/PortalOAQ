@@ -95,7 +95,7 @@
         </td>
         <th width="170">PESO BRUTO</th>
         <td width="180">
-            <input type="text" id="pesoBruto" name="pesoBruto" class="traffic-input-small" />
+            <input type="text" id="pesoBruto" name="pesoBruto" class="traffic-input-small" value="<?= isset($this->pesoBruto) ? $this->pesoBruto : '' ?>" />
         </td>
         <th width="120">ADUANA E/S</th>
         <td>
@@ -128,7 +128,7 @@
     </tr>
     <tr>
         <td>
-            <select id="transEntrada" name="transEntrada" class="traffic-select-small">
+            <select id="transEntrada" name="transEntrada" class="traffic-select-medium">
                 <option value="">---</option>
                 <?php foreach ($this->medios AS $item) { ?>
                     <option value="<?= $item['clave'] ?>" <?= ($this->transArribo !== $item['clave']) ? '' : 'selected=true' ?>>
@@ -137,7 +137,7 @@
             </select>
         </td>
         <td>
-            <select id="transArribo" name="transArribo" class="traffic-select-small">
+            <select id="transArribo" name="transArribo" class="traffic-select-medium">
                 <option value="">---</option>
                 <?php foreach ($this->medios AS $item) { ?>
                     <option value="<?= $item['clave'] ?>" <?= ($this->transArribo !== $item['clave']) ? '' : 'selected=true' ?>>
@@ -146,7 +146,7 @@
             </select>
         </td>
         <td>
-            <select id="transSalida" name="transSalida" class="traffic-select-small">
+            <select id="transSalida" name="transSalida" class="traffic-select-medium">
                 <option value="">---</option>
                 <?php foreach ($this->medios AS $item) { ?>
                     <option value="<?= $item['clave'] ?>" <?= ($this->transArribo !== $item['clave']) ? '' : 'selected=true' ?>>
@@ -301,16 +301,63 @@
 </table>
 
 <table class="traffic-table table-pedimento">
-    <tbody>
+    <thead>
     <tr>
-        <th colspan="4">DATOS DEL PROVEEDOR O COMPRADOR</th>
+        <th colspan="7">            
+            <div style="float: left; margin-left: 10px">
+                <i class="fas fa-sync" style="font-size: 14px"></i>
+            </div>
+            DATOS DEL PROVEEDOR O COMPRADOR
+        </th>
     </tr>
     <tr>
         <th>Id fiscal</th>
-        <th>Nombre, denominación o razón social</th>
-        <th>Domicilio</th>
+        <th colspan="2">Nombre, denominación o razón social</th>
+        <th colspan="3">Domicilio</th>
         <th>Vincuación</th>
     </tr>
+    </thead>
+    <tbody id="facturas-pedimento">
+        <?php if (isset($this->facturas) && !empty($this->facturas)) { ?>
+            <?php foreach ($this->facturas as $item) { ?>
+                <tr>
+                    <td><?= $item['proveedor']['idFiscal'] ?></td>
+                    <td colspan="2"><?= $item['proveedor']['razonSocial'] ?></td>
+                    <td colspan="3"><?= implode(",", array_filter(array($item['proveedor']['calle'], $item['proveedor']['numExterior'], $item['proveedor']['numInterior'], $item['proveedor']['colonia'], $item['proveedor']['municipio'], $item['proveedor']['estado'], $item['proveedor']['codigoPostal'], $item['proveedor']['pais']))) ?></td>
+                    <td>
+                        <input type="checkbox" id="proveedor-vinculacion" data-id="<?= $item['id'] ?>" />
+                    </td>
+                </tr>
+                <?php if (!empty($item['facturas'])) { ?>
+                    <tr>
+                        <td><b>NUM. FACTURA</b></td>
+                        <td><b>FECHA</b></td>
+                        <td><b>INCOTERM</b></td>
+                        <td><b>MONEDA FACT.</b></td>
+                        <td><b>VAL. MON. FACT.</b></td>
+                        <td><b>FACTOR MON. FACT.</b></td>
+                        <td><b>VAL. DOLARES</b></td>
+                    </tr>
+                    <?php foreach ($item['facturas'] as $f) { ?>
+                        <tr>
+                            <td><?= $f['numFactura'] ?></td>
+                            <td><?= date("d/m/Y", strtotime($f['fecha'])) ?></td>
+                            <td><?= $f['incoterm'] ?></td>
+                            <td><?= $f['monedaFactura'] ?></td>
+                            <td><?= $f['valorMonedaFactura'] ?></td>
+                            <td><?= $f['factorMonedaFactura'] ?></td>
+                            <td><?= $f['valorDolares'] ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } ?>
+            <?php } ?>
+        <?php } else { ?>
+        <tr>
+            <td colspan="4">
+                <em>No hay facturas</em>
+            </td>
+        </tr>
+        <?php } ?>
     </tbody>
 </table>
 
