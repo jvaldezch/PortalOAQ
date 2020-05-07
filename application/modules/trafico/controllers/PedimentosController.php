@@ -112,7 +112,6 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                     }
                 }
                 $partidas = $trafico->obtenerProductosPartidas();
-
                 $facturas = $trafico->obtenerFacturasPedimento();
 
                 if (!empty($partidas)) {
@@ -121,11 +120,8 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
 
                 if (!empty($facturas)) {
                     $pedimento->procesarFacturas($row['id'], $facturas);
-
                     $invoices = $pedimento->obtenerFacturasProveedor($row['id']);
                     $view->facturas = $invoices;
-
-                    $this->_firephp->info($invoices);
                 }
 
                 $medios = new Pedimento_Model_MedioTransporte();
