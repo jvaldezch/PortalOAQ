@@ -68,8 +68,9 @@ class Pedimento_PostController extends Zend_Controller_Action
                         "$input->name" => $input->value,
                         "actualizado" => date("Y-m-d H:i:s")
                     );
-
-                    $this->_helper->json(array("success" => true));
+                    if (($pedimento->actualizar($arr))) {
+                        $this->_helper->json(array("success" => true));
+                    }
 
                 } else {
                     throw new Exception("Invalid input!");

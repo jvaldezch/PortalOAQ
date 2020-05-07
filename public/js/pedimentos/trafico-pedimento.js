@@ -37,4 +37,15 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document.body).on("change", "#tipoCambio", function() {
+        $.ajax({url: '/pedimento/post/actualizar',
+            type: "POST",
+            data: {idPedimento: $("#idPedimento").val(), name: 'tipoCambio', value: $(this).val()},
+            success: function (res) {
+                if (res.success === true) {
+                }
+            }
+        });
+    });
 });

@@ -36,6 +36,11 @@ class OAQ_TraficoPedimento {
         return $id;
     }
 
+    public function detalle() {
+        $m = new Pedimento_Model_PedimentoDetalle();
+        return $m->obtener($this->idTrafico);
+    }
+
     public function actualizar($arr) {
         if (($this->pedimentos->actualizar($this->id, $arr))) {
             return true;

@@ -71,44 +71,81 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
 
                 $pedimento = new OAQ_TraficoPedimento(array("idTrafico" => $input->id));
                 $row = $pedimento->buscar($this->_session->username);
-
+                
                 $cvemppr = new Trafico_Model_CvePedimentos();
-
+                
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/pedimentos/");
                 $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
-
+                
                 $view->idTrafico = $input->id;
                 $view->idPedimento = $row['id'];
-
+                
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
-
+                
                 $view->patente = $trafico->getPatente();
                 $view->aduana = $trafico->getAduana();
                 $view->pedimento = $trafico->getPedimento();
                 $view->tipoOperacion = $trafico->getTipoOperacion();
-
+                
                 $view->cves = $cvemppr->obtenerClaves();
-
+                
                 $row = $trafico->obtenerDatos();
-
+                
                 $cust = $trafico->obtenerCliente();
-
+                
                 $view->cvePedimento = $row['cvePedimento'];
                 $view->rfcCliente = $row['rfcCliente'];
                 $view->nomCliente = $cust['nombre'];
+                
+                $tipoCambio = 0;
+                if ($row['id']) {
+                    $d = $pedimento->detalle();
+                    if (!empty($d)) {
+                        $tipoCambio = $d['tipoCambio'];
+                        $view->tipoCambio = $d['tipoCambio'];
+                    }
+                }
+                $partidas = $trafico->obtenerPartidas();
+
+                if (!empty($partidas)) {
+                    $m = new Pedimento_Model_PedimentoPartidas();
+                    $i = 1;
+                    $m->borrarTodo($row['id']);
+                    foreach ($partidas as $p) {                        
+                        $arr = array(
+                            "idPedimento" => $row['id'],
+                            "secuencia" => $i,
+                            "fraccion" => $p['fraccion'],
+                            "descripcion" => $p['descripcion'],
+                            "cantidadUmc" => $p['cantidadFactura'],
+                            "umc" => $p['umc'],
+                            "cantidadUmt" => $p['cantidadTarifa'],
+                            "umt" => $p['umt'],
+                            "paisOrigen" => $p['paisOrigen'],
+                            "paisVendedor" => $p['paisVendedor'],
+                            "valorAduana" => $tipoCambio * $p['valorComercial'],
+                            "valorUsd" => $p['valorUsd'],
+                            "valorComercial" => $p['valorComercial'],
+                            "precioUnitario" => $p['precioUnitario'],
+                        );
+                        $i++;
+                        $m->agregar($arr);
+                    }
+                    $view->partidas = $m->obtener($row['id']);
+                }
 
                 $medios = new Pedimento_Model_MedioTransporte();
                 $view->medios = $medios->obtenerTodos();
 
-                $destinos = new Pedimento_Model_MedioTransporte();
+                $destinos = new Pedimento_Model_Destinos();
                 $view->destinos = $destinos->obtenerTodos();
 
                 $a_despacho = new Pedimento_Model_AduanasDespacho();
                 $view->a_despacho = $a_despacho->obtenerTodos();
 
                 $paises = new Pedimento_Model_Paises();
-                $view->paises = $paises->obtenerTodos();
+                $view->paises = $paises->obtenerTodos();                
 
                 $this->_helper->json(array("success" => true, "html" => $view->render("captura-pedimento.phtml")));
             } else {
