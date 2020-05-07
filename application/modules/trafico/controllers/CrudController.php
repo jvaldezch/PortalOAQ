@@ -423,7 +423,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $v["facturas"] = array("NotEmpty");
                 $v["cantidadFacturas"] = array("NotEmpty");
                 $v["cantidadPartes"] = array("NotEmpty");
-                $v["observaciones"] = array("NotEmpty");
+                //$v["observaciones"] = array("NotEmpty");
                 $v["tipoCarga"] = array("NotEmpty");
                 $v["almacen"] = array("NotEmpty");
                 $v["idPlanta"] = array("NotEmpty");
@@ -468,11 +468,15 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     if ($i->isValid("fechaLiberacion")) {
                         $estatus = 3;
                     }
+                    $obs = '';
+                    if ($i->isValid("observaciones")) {
+                        $obs = $i->observaciones;
+                    }
                     $arr = array(
                         "estatus" => $estatus,
                         "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : $row['blGuia'],
                         "contenedorCaja" => ($i->isValid("contenedorCaja")) ? $i->contenedorCaja : $row['contenedorCaja'],
-                        "observaciones" => ($i->isValid("observaciones")) ? $i->observaciones : $row['observaciones'],
+                        "observaciones" => $obs,
                         "ordenCompra" => ($i->isValid("ordenCompra")) ? $i->ordenCompra : $row['ordenCompra'],
                         "carrierNaviera" => ($i->isValid("carrierNaviera")) ? $i->carrierNaviera : $row['carrierNaviera'],
                         "proveedores" => ($i->isValid("proveedores")) ? $i->proveedores : $row['proveedores'],
