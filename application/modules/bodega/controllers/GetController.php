@@ -1110,7 +1110,14 @@ class Bodega_GetController extends Zend_Controller_Action {
                     "nom_cliente" => $row['nombreCliente'],
                     "fecha_entrada" => $row['fechaEntrada'],
                     "fecha_descarga" => $row['fechaDescarga'],
-                    "fecha_revision" => $row['fechaRevision'],
+                    "fecha_revision" => $row['fechaRevision'],                    
+                    "descripcionMercancia" => $row['descripcionMercancia'],
+                    "comentarios" => $row['comentarios'],
+                    "observaciones" => $row['observaciones'],
+                    "valorDolares" => $row['valorDolares'],
+                    "valorComercial" => $row['valorComercial'],
+                    "divisa" => $row['divisa'],
+                    "ubicacion" => $row['ubicacion'],
                     "peso_kg" => $row['pesoKg'],
                     "bultos" => $row['bultos'],
                 );
@@ -1163,6 +1170,12 @@ class Bodega_GetController extends Zend_Controller_Action {
                     "fecha_revision" => $row['fechaRevision'],
                     "fecha_salida" => $row['fechaSalida'],
                     "peso_kg" => $row['pesoKg'],
+                    "bultos" => $row['bultos'],
+                    "descripcionMercancia" => $row['descripcionMercancia'],
+                    "valorDolares" => $row['valorDolares'],
+                    "valorComercial" => $row['valorComercial'],
+                    "divisa" => $row['divisa'],
+                    "ubicacion" => $row['ubicacion'],
                     "bultos" => $row['bultos'],
                 );
 

@@ -2,24 +2,33 @@
     html {
         overflow-y: scroll;
     }
+
     .l-btn-text {
         line-height: 22px;
     }
+
     .slider {
         background-color: #fefefe;
         border-left: 1px #bac5d2 solid;
         color: #333;
         padding: 10px;
     }
-    .slider h3, table {
+
+    .slider h3,
+    table {
         margin: 0;
     }
+
     .slider table {
         margin-top: 10px;
     }
-    .slider p, table th, table td {
+
+    .slider p,
+    table th,
+    table td {
         font-size: 11px;
     }
+
     .slider .handle {
         background-color: #fefefe;
         left: -40px;
@@ -34,21 +43,25 @@
         border-bottom: 1px #bac5d2 solid;
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
-        box-shadow: -2px 2px 1px rgba(0,0,0,0.2);
+        box-shadow: -2px 2px 1px rgba(0, 0, 0, 0.2);
     }
-    .slider table th, .slider table td {
+
+    .slider table th,
+    .slider table td {
         border: 1px #fdfdfd solid;
     }
+
     .slider table td {
         text-align: left;
         font-weight: normal;
         background-color: #fefefe;
     }
+
     .jconfirm {
         z-index: 999 !important;
     }
 </style>
-<div style="float: right; margin-top: 3px; margin-right: 50px">        
+<div style="float: right; margin-top: 3px; margin-right: 50px">
     <div style="float: right; margin-top: 3px">
         <a href="/bodega/get/imprimir-etiquetas?id=<?= $this->basico["id"] ?>" target="_blank" class="traffic-btn">
             <i class="fas fa-qrcode"></i> Imprimir etiquetas
@@ -70,7 +83,9 @@
         <a href="#information" data-toggle="tab">Información</a>
     </li>
     <li>
-        <a href="#files" data-toggle="tab"><div id="estatusChecklist" style="float:left; margin-right: 5px"></div>Archivos</a>
+        <a href="#files" data-toggle="tab">
+            <div id="estatusChecklist" style="float:left; margin-right: 5px"></div>Archivos
+        </a>
     </li>
     <li>
         <a href="#vucem" data-toggle="tab">VUCEM</a>
@@ -87,15 +102,16 @@
                     line-height: 14px;
                     padding: 2px 2px !important;
                 }
+
                 label {
-                    line-height: 14px;        
+                    line-height: 14px;
                 }
             </style>
-            <?= $this->inputHidden("hidden","idCliente", $this->basico["idCliente"]) ?>
+            <?= $this->inputHidden("hidden", "idCliente", $this->basico["idCliente"]) ?>
             <div style="width: 100%">
                 <div style="float: left; width: 50%">
                     <form id="form-information">
-                        <?= $this->inputHidden("hidden","idTrafico", $this->idTrafico) ?>
+                        <?= $this->inputHidden("hidden", "idTrafico", $this->idTrafico) ?>
                         <table class="traffic-table traffic-table-left">
                             <tr>
                                 <th colspan="6" class="invoice-title"><?= $this->basico["nombreAduana"] ?></th>
@@ -103,7 +119,7 @@
                             <tr>
                                 <th style="text-align: right">Referencia</th>
                                 <td colspan="5">
-                                    <div style="float: left; padding: 2px">                                        
+                                    <div style="float: left; padding: 2px">
                                         <?= $this->basico["referencia"] ?>
                                     </div>
                                     <?php if ($this->basico["fechaLiberacion"] == null || $this->edit === true) { ?>
@@ -122,7 +138,7 @@
                             <tr>
                                 <th style="text-align: right">RFC Cliente</th>
                                 <td><?= $this->basico["rfc"] ?></td>
-                                <th style="text-align: right">Nombre</th>                
+                                <th style="text-align: right">Nombre</th>
                                 <td colspan="3"><?= $this->basico["nombreCliente"] ?></td>
                             </tr>
                             <tr>
@@ -159,7 +175,7 @@
                                 <th style="text-align: right; vertical-align: middle">Línea Transporte</th>
                                 <td colspan="5">
                                     <input class="traffic-input-large" id="lineaTransporte" name="lineaTransporte" value="<?= $this->basico["lineaTransporte"] ?>" />
-                                </td>                            
+                                </td>
                             </tr>
                             <tr>
                                 <th style="text-align: right; vertical-align: middle">Proveedor</th>
@@ -167,13 +183,13 @@
                                     <input class="traffic-input-large" id="proveedores" name="proveedores" value="<?= $this->basico["proveedores"] ?>" />
                                     <br>
                                     <small style="color: #888">Este campo no actualiza el nombre del proveedor en la factura.</small>
-                                </td>                            
+                                </td>
                             </tr>
                             <tr>
                                 <th style="text-align: right; vertical-align: middle">Ubicación</th>
                                 <td colspan="5">
                                     <input class="traffic-input-small" id="ubicacion" name="ubicacion" value="<?= $this->basico["ubicacion"] ?>" />
-                                </td>                            
+                                </td>
                             </tr>
                             <tr>
                                 <th style="text-align: right; vertical-align: middle">Bodega</th>
@@ -201,11 +217,61 @@
                                     <input class="traffic-input-small" id="contenedorCajaSalida" name="contenedorCajaSalida" value="<?= $this->basico["contenedorCajaSalida"] ?>" />
                                 </td>
                             </tr>
+                            <tr>
+                                <th>
+                                    Descripción mercancia
+                                </th>
+                                <td colspan="2">
+                                    <textarea name="descripcionMercancia" id="descripcionMercancia"><?= $this->basico["descripcionMercancia"] ?></textarea>
+                                </td>
+                                <th>
+                                    Valor dolares
+                                </th>
+                                <td colspan="2">
+                                    <input type="text" class="traffic-input" name="valorDolares" id="valorDolares" value="<?= number_format($this->basico["valorDolares"], 2) ?>" style="text-align: right; width: 120px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Comentarios
+                                </th>
+                                <td colspan="2">
+                                    <textarea name="comentarios" id="comentarios"><?= $this->basico["comentarios"] ?></textarea>
+                                </td>
+                                <th>
+                                    Valor comercial
+                                </th>
+                                <td>
+                                    <input type="text" class="traffic-input" name="valorComercial" id="valorComercial" value="<?= number_format($this->basico["valorComercial"], 2) ?>" style="text-align: right; width: 120px" />
+                                </td>
+                                <td>
+                                    <select name="divisa" id="divisa" class="traffic-select-small" style="width: 70px !important">
+                                        <option value="">--</option>
+                                        <?php foreach($this->divisas as $item) { ?>
+                                            <option value="<?= $item['codigo'] ?>" <?= (isset($this->basico["divisa"]) && $this->basico["divisa"] == $item['codigo']) ? 'selected="true"' : '' ?>><?= $item['codigo'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Observaciones
+                                </th>
+                                <td colspan="2">
+                                    <textarea name="observaciones" id="observaciones"><?= $this->basico["observaciones"] ?></textarea>
+                                </td>
+                                <th>
+                                    Factor moneda
+                                </th>
+                                <td colspan="2">
+                                    <input type="text" class="traffic-input" name="factor" id="factor" readonly="true" value="<?= number_format($this->basico["factor"], 2) ?>" style="text-align: right; width: 120px" />
+                                </td>
+                            </tr>
                         </table><!-- informacion -->
                     </form>
                     <form id="form-invoice">
-                        <?= $this->inputHidden("hidden","factura") ?>
-                        <?= $this->inputHidden("hidden","idTrafico", $this->idTrafico) ?>
+                        <?= $this->inputHidden("hidden", "factura") ?>
+                        <?= $this->inputHidden("hidden", "idTrafico", $this->idTrafico) ?>
                         <table class="traffic-table traffic-table-left" style="height: 100px">
                             <tr>
                                 <th colspan="5" class="invoice-title">
@@ -214,12 +280,12 @@
                             </tr>
                             <tr>
                                 <th style="text-align: left"><label for="numFactura">Num. Factura:</label></th>
-                                <th>                        
+                                <th>
                                     <div style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
                                         <i class="fas fa-code" id="cargarXml" style="cursor: pointer" title="Subir CDFi (XML)"></i>
                                         &nbsp;
                                         <i class="fas fa-file-excel" id="loadTemplate" style="cursor: pointer" title="Cargar plantilla"></i>
-                                    </div>                        
+                                    </div>
                                 </th>
                             </tr>
                             <tr>
@@ -251,7 +317,7 @@
                                         <i onclick="loadInvoices();" id="loadInvoices" class="fas fa-sync-alt" style="cursor: pointer"></i>
                                     </div>
                                 </th>
-                            </tr>                    
+                            </tr>
                         </thead>
                         <tbody id="traffic-invoices">
                             <tr>
@@ -273,7 +339,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <input type="checkbox" id="selectAllPackages"/>
+                                    <input type="checkbox" id="selectAllPackages" />
                                 </th>
                                 <th>
                                     No.
@@ -288,7 +354,7 @@
                                 <th><span id="cargado">C</span></th>
                                 <th><span id="escaneado">E</span></th>
                                 <th></th>
-                            </tr>                    
+                            </tr>
                         </thead>
                         <tbody id="traffic-packages">
                             <tr>
@@ -320,12 +386,12 @@
                                     </td>
                                 </tr>
                             </tbody>
-                        </table>            
+                        </table>
                         <table class="traffic-table traffic-table-left">
                             <thead>
                                 <tr>
                                     <th colspan="3" class="traffic-table-title">COMENTARIOS</th>
-                                </tr>                
+                                </tr>
                                 <tr>
                                     <th style="width: 150px">Usuario</th>
                                     <th>Comentario/mensaje</th>
@@ -345,12 +411,12 @@
                             </tbody>
                         </table>
                         <table class="traffic-table traffic-table-left">
-                            <tbody>                    
+                            <tbody>
                                 <tr>
                                     <td colspan="2">
-                                        <form id="commentsForm" method="post" enctype="multipart/form-data">                    
-                                            <input type="hidden" name="idTrafico" id="idTrafico" value="<?= $this->idTrafico ?>" >
-                                            <input type="file" name="filess" id="filess" visibility="hidden" style="display: none"/>
+                                        <form id="commentsForm" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="idTrafico" id="idTrafico" value="<?= $this->idTrafico ?>">
+                                            <input type="file" name="filess" id="filess" visibility="hidden" style="display: none" />
                                             <textarea id="comment" name="comment" class="traffic-textarea-medium"></textarea>
                                             <div id="attachedFiles"></div>
                                         </form>
@@ -399,20 +465,20 @@
                             <button type="submit" id="btn-upload-files" class="traffic-btn traffic-btn-right">
                                 <i class="fas fa-upload"></i> Subir archivo(s)
                             </button>
-                            
+
                             <button class="traffic-btn traffic-btn-right" id="help" href="/trafico/get/ayuda-documentos" style="width: 30px; min-width: 25px" data-hasqtip="3" aria-describedby="qtip-3">
                                 <i class="fas fa-question"></i>
                             </button>
-                            
+
                             <button id="btn-download" class="traffic-btn traffic-btn-right" data-id="<?= $this->basico["id"] ?>" style="min-width: 5px" title="Descargar expediente">
                                 <i class="fas fa-cloud-download-alt"></i>
                             </button>
-                            
+
                             <button id="checklist" class="traffic-btn traffic-btn-right" style="min-width: 5px" title="Checklist de expediente">
                                 <i class="fas fa-clipboard-list"></i>
-                            </button>                            
-                            
-                            <?php if(isset($this->basico["fechaLiberacion"])) { ?>
+                            </button>
+
+                            <?php if (isset($this->basico["fechaLiberacion"])) { ?>
                                 <button id="xml-pedimento" class="traffic-btn traffic-btn-right" title="Obtener XML de pedimento" style="min-width: 5px">
                                     <i class="far fa-file-code"></i> XML
                                 </button>
@@ -421,8 +487,8 @@
                     </tr>
                 </table>
                 <div class="progress progress-striped active">
-                    <div class="bar bar-success"></div >
-                    <div class="percent">0%</div >
+                    <div class="bar bar-success"></div>
+                    <div class="percent">0%</div>
                 </div>
             </form>
             <div id="traffic-files" style="display: none; min-height: 100px"></div>
@@ -447,8 +513,8 @@
                     </tr>
                 </table>
                 <div class="progress progress-striped active">
-                    <div class="barImage bar-success"></div >
-                    <div class="percentImage">0%</div >
+                    <div class="barImage bar-success"></div>
+                    <div class="percentImage">0%</div>
                 </div>
             </form>
             <div id="traffic-photos" style="display: none; min-height: 100px"></div>
@@ -468,7 +534,7 @@
         </div>
         <div class="tab-pane" id="vucem">
             <div class="traffic-cols">
-                <table class="traffic-table">           
+                <table class="traffic-table">
                     <thead>
                         <tr>
                             <th colspan="5" class="traffic-table-title">OPERACIONES EN VENTANILLA ÚNICA</th>
@@ -492,7 +558,7 @@
                     </thead>
                     <tbody id="vucemSignatures"></tbody>
                 </table>
-                <table class="traffic-table">           
+                <table class="traffic-table">
                     <thead>
                         <tr>
                             <th colspan="10">
@@ -555,7 +621,7 @@ $dates = array(
         <?= $this->inputHidden("hidden", "idTrafico", $this->idTrafico) ?>
         <table>
             <tbody>
-                <?php foreach($dates as $item) { ?>
+                <?php foreach ($dates as $item) { ?>
                     <tr>
                         <td><?= $item["label"] ?></td>
                         <td style="width: 115px">

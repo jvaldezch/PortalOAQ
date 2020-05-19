@@ -129,6 +129,7 @@ class Bodega_IndexController extends Zend_Controller_Action {
                 ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
                 ->appendFile("/js/common/moment.min.js")
+                ->appendFile("//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
                 ->appendFile("/js/common/jquery-datetimepicker/jquery.datetimepicker.full.min.js")
                 ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
                 ->appendFile("/js/common/jquery.qtip.min.js")
@@ -176,6 +177,9 @@ class Bodega_IndexController extends Zend_Controller_Action {
                 "idBodega" => $basico["idBodega"]
             ));
             $this->view->form = $form;
+
+            $mppr = new Vucem_Model_VucemMonedasMapper();
+            $this->view->divisas = $mppr->obtenerMonedas();
         } else {
             throw new Exception("Invalid input!");
         }

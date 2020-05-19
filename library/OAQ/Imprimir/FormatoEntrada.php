@@ -80,7 +80,7 @@ class OAQ_Imprimir_FormatoEntrada extends TCPDF {
         $this->SetFillColor($this->_shaden[0], $this->_shaden[1], $this->_shaden[2]);
         $this->SetLineStyle(array("width" => 0.5, "cap" => "butt", "join" => " 'miter'", "dash" => 0, "color" => array(70, 70, 70)));
         $lineh = 9;
-        $fontSize = 12;
+        $fontSize = 9;
         $col1 = 100;
         $col2 = 430;
         $ln = 20;
@@ -88,59 +88,59 @@ class OAQ_Imprimir_FormatoEntrada extends TCPDF {
         $this->_fontNormal(100, date("d-m-Y"), null, 2, "B", null, $lineh, $fontSize);
 
         $this->Ln(50);
-        $this->_fontNormal(200, "Cliente:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(200, $this->_data["nom_cliente"], null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Cliente:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(300, $this->_data["nom_cliente"], null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Referencia:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(200, $this->_data["referencia"], null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Referencia:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(300, $this->_data["referencia"], null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Fecha entrada:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, $this->_data["fecha_entrada"], null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Fecha entrada:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, $this->_data["fecha_entrada"], null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Ubicación:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(200, "", null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Ubicación:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(150, $this->_data["ubicacion"], null, 2, null, null, $lineh, $fontSize);
 
         $this->Ln(40);
-        $this->_fontNormal(200, "Descripción de mercancia:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, "", null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Descripción de mercancia:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, $this->_data["descripcionMercancia"], null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Peso:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, $this->_data["peso_kg"] . ' kg', null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Peso:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, $this->_data["peso_kg"] . ' kg', null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "NP:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, "", null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "NP:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, "", null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Bultos:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, $this->_data["bultos"], null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Bultos:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, $this->_data["bultos"], null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Val. Comercial:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, "", null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Val. Comercial:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, number_format($this->_data["valorComercial"], 2) . ' ' . $this->_data["divisa"], null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Val. Dólares:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, "", null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Val. Dólares:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, number_format($this->_data["valorDolares"], 2), null, 2, null, null, $lineh, $fontSize);
 
         $this->Ln(30);
-        $this->_fontNormal(200, "Comentarios:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, "", null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Comentarios:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, $this->_data["comentarios"], null, 2, null, null, $lineh, $fontSize);
 
         $this->Ln(50);
-        $this->_fontNormal(200, "¿Discrepancias en mercancia?:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(150, "¿Discrepancias en mercancia?:", "R", 2, "", "B", $lineh, $fontSize);
         $this->_fontNormal(50, "Si", null, 2, null, null, $lineh, $fontSize);
         $this->_fontNormal(50, "No", null, 2, null, null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "¿Daños en mercancia?:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(150, "¿Daños en mercancia?:", "R", 2, "", "B", $lineh, $fontSize);
         $this->_fontNormal(50, "Si", null, 2, null, null, $lineh, $fontSize);
         $this->_fontNormal(50, "No", null, 2, null, null, $lineh, $fontSize);
 
         $this->Ln(30);
-        $this->_fontNormal(200, "Observaciones:", "R", 2, "", "B", $lineh, $fontSize);
-        $this->_fontNormal(230, "", null, 2, null, null, $lineh, $fontSize);
+        $this->_fontNormal(150, "Observaciones:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(280, $this->_data["observaciones"], null, 2, null, null, $lineh, $fontSize);
 
         $this->Ln(40);
-        $this->_fontNormal(200, "Fecha de descarga:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(150, "Fecha de descarga:", "R", 2, "", "B", $lineh, $fontSize);
         $this->_fontNormal(130, $this->_data["fecha_descarga"], null, 2, "B", null, $lineh, $fontSize);
         $this->Ln($ln);
-        $this->_fontNormal(200, "Fecha de revisión:", "R", 2, "", "B", $lineh, $fontSize);
+        $this->_fontNormal(150, "Fecha de revisión:", "R", 2, "", "B", $lineh, $fontSize);
         $this->_fontNormal(130, $this->_data["fecha_revision"], null, 2, "B", null, $lineh, $fontSize);
         
     }

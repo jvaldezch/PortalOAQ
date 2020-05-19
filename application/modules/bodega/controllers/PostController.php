@@ -292,6 +292,10 @@ class Bodega_PostController extends Zend_Controller_Action {
                     "ubicacion" => array("StringToUpper"),
                     "contenedorCajaEntrada" => array("StringToUpper"),
                     "contenedorCajaSalida" => array("StringToUpper"),
+                    "descripcionMercancia" => array("StringToUpper"),
+                    "comentarios" => array("StringToUpper"),
+                    "observaciones" => array("StringToUpper"),
+                    "divisa" => array("StringToUpper"),
                 );
                 $v = array(
                     "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
@@ -306,6 +310,13 @@ class Bodega_PostController extends Zend_Controller_Action {
                     "pesoKg" => "NotEmpty",
                     "pesoLbs" => "NotEmpty",
                     "bultos" => "NotEmpty",
+                    "descripcionMercancia" => "NotEmpty",
+                    "comentarios" => "NotEmpty",
+                    "observaciones" => "NotEmpty",
+                    "valorDolares" => "NotEmpty",
+                    "valorComercial" => "NotEmpty",
+                    "factor" => "NotEmpty",
+                    "divisa" => "NotEmpty",
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idTrafico")) {
@@ -322,6 +333,13 @@ class Bodega_PostController extends Zend_Controller_Action {
                         "pesoKg" => ($input->isValid("pesoKg")) ? $input->pesoKg : null,
                         "pesoLbs" => ($input->isValid("pesoLbs")) ? $input->pesoLbs : null,
                         "bultos" => ($input->isValid("bultos")) ? $input->bultos : null,
+                        "descripcionMercancia" => ($input->isValid("descripcionMercancia")) ? $input->descripcionMercancia : null,
+                        "comentarios" => ($input->isValid("comentarios")) ? $input->comentarios : null,
+                        "observaciones" => ($input->isValid("observaciones")) ? $input->observaciones : null,
+                        "valorDolares" => ($input->isValid("valorDolares")) ? filter_var($input->valorDolares, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : null,
+                        "valorComercial" => ($input->isValid("valorComercial")) ? filter_var($input->valorComercial, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : null,
+                        "factor" => ($input->isValid("factor")) ? filter_var($input->factor, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : null,
+                        "divisa" => ($input->isValid("divisa")) ? $input->divisa : null,
                     );
                     if (($trafico->actualizar($arr))) {
                         $this->_helper->json(array("success" => true));

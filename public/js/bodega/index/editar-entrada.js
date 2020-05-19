@@ -682,15 +682,6 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("input", "#ubicacion, #contenedorCajaEntrada, #contenedorCajaSalida, #numFactura, #proveedor, #number, #comment, #proveedores, #blGuia, #lineaTransporte, #placas, #candados", function() {
-        var input = $(this);
-        var start = input[0].selectionStart;
-        $(this).val(function (_, val) {
-            return val.toUpperCase();
-        });
-        input[0].selectionStart = input[0].selectionEnd = start;
-    });
-
     var bar = $(".barImage");
     var percent = $(".percentImage");
     
@@ -1480,5 +1471,52 @@ $(document).ready(function () {
             });
         }
     });
+
+    function calcularFactor() {
+        let vc = numeral($("#valorComercial").val());
+        let vd = numeral($("#valorDolares").val());
+
+        $("#valorComercial").val(vc.format('0,0.00'));
+        $("#valorDolares").val(vd.format('0,0.00'));
+
+        if (parseInt(vc.value()) !== 0) {
+            let f;
+            f = vd.value() / vc.value();
+            $("#factor").val(numeral(f).format('0.0000'));
+        } else {
+            $("#factor").val(numeral('0').format('0.0000'));
+        }
+    }
+
+    $(document).on("change", "#valorComercial", function() {
+        calcularFactor();
+    });
+
+    $(document).on("change", "#valorDolares", function() {
+        calcularFactor();
+    });
+
+    $(document).on("keypress", "#valorDolares", function(e) {
+        if (e.keyCode == 13) {
+            calcularFactor();
+        }
+    });
+
+    $(document).on("keypress", "#valorComercial", function(e) {
+        if (e.keyCode == 13) {
+            calcularFactor();
+        }
+    });
+
+    $(document).on("input", "#descripcionMercancia, #comentarios, #observaciones, #ubicacion, #contenedorCajaEntrada, #contenedorCajaSalida, #numFactura, #proveedor, #number, #comment, #proveedores, #blGuia, #lineaTransporte, #placas, #candados", function() {
+        var input = $(this);
+        var start = input[0].selectionStart;
+        $(this).val(function (_, val) {
+            return val.toUpperCase();
+        });
+        input[0].selectionStart = input[0].selectionEnd = start;
+    });
+
+    calcularFactor();
     
 });
