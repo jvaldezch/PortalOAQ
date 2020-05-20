@@ -5,6 +5,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
@@ -12,6 +13,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -129,6 +131,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                         $view->estado = $row["estado"];                        
                         $view->codigoPostal = $row["codigoPostal"];                        
                         $view->pais = $row["pais"];
+                        $view->vinculacion = $row["vinculacion"];
                     }
                 }
                 $this->_helper->json(array("success" => true, "html" => $view->render("editar-proveedor.phtml")));
@@ -566,6 +569,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                     "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                     "idProv" => array("NotEmpty", new Zend_Validate_Int()),
+                    "vinculacion" => array("NotEmpty"),
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idTrafico") && $input->isValid("idCliente")) {
@@ -589,6 +593,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                         "estado" => $post["estado"],
                         "codigoPostal" => $post["codigoPostal"],
                         "pais" => $post["pais"],
+                        "vinculacion" => $input->isValid("vinculacion") ? 1 : 0,
                     );
                     if ($input->isValid("idCliente") && $input->isValid("idProv")) {
                         $arr["modificado"] = date("Y-m-d H:i:s");

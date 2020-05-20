@@ -5,6 +5,7 @@ class Pedimento_GetController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
@@ -16,6 +17,7 @@ class Pedimento_GetController extends Zend_Controller_Action {
         } catch (Zend_Config_Exception $e) {
         }
         $this->_logger = Zend_Registry::get("logDb");
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -30,6 +32,86 @@ class Pedimento_GetController extends Zend_Controller_Action {
             $session->actualizarSesion();
         } else {
             $this->getResponse()->setRedirect($this->_appconfig->getParam("link-logout"));
+        }
+    }
+
+    public function agruparPartidasAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idPedimento" => "Digits",
+                "idTrafico" => "Digits",
+            );
+            $v = array(
+                "idPedimento" => array("NotEmpty", new Zend_Validate_Int()),
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idPedimento") && $input->isValid("idTrafico")) {
+                $pedimento = new OAQ_TraficoPedimento(array("idTrafico" => $input->idTrafico));
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
+                $partidas = $trafico->obtenerProductosPartidas(true);
+
+                $tipoCambio = 0;
+                $row = $trafico->obtenerDatos();
+                if ($row['id']) {$d = $pedimento->detalle();
+                    if (!empty($d)) {
+                        $tipoCambio = $d['tipoCambio'];
+                    }
+                }
+
+                $invoices = $pedimento->procesarProductos($input->idPedimento, $tipoCambio, $partidas);
+
+                $this->_helper->json(array("success" => true));
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function cargarPartidasAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idPedimento" => "Digits",
+                "idTrafico" => "Digits",
+            );
+            $v = array(
+                "idPedimento" => array("NotEmpty", new Zend_Validate_Int()),
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idPedimento") && $input->isValid("idTrafico")) {
+                
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+
+                $pedimento = new OAQ_TraficoPedimento(array("idTrafico" => $input->idTrafico));
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
+                $partidas_fact = $trafico->obtenerProductosPartidas();
+
+                $tipoCambio = 0;
+                $row = $trafico->obtenerDatos();
+                if ($row['id']) {$d = $pedimento->detalle();
+                    if (!empty($d)) {
+                        $tipoCambio = $d['tipoCambio'];
+                    }
+                }
+
+                $view->partidas = $partidas_fact;
+                $view->tipoCambio = $tipoCambio;
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("partidas-facturas.phtml")));
+
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
         }
     }
 

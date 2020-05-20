@@ -3,9 +3,11 @@
 class Trafico_Model_FactProd {
 
     protected $_db_table;
+    protected $_firephp;
 
     public function __construct() {
         $this->_db_table = new Trafico_Model_DbTable_FactProd();
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function agregar($arr) {
@@ -80,7 +82,8 @@ class Trafico_Model_FactProd {
     public function obtenerPartidas($idFacturas) {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array(
+                    ->setIntegrityCheck(false)
+                    ->from(array("p" => "trafico_factprod"), array(
                         "id",
                         "idFactura",
                         "orden",
@@ -98,7 +101,7 @@ class Trafico_Model_FactProd {
                         "umt",
                         "cantidadOma",
                         "oma",
-                        "observaciones",
+                        "observaciones AS observacion",
                         "marca",
                         "modelo",
                         "subModelo",
@@ -111,7 +114,46 @@ class Trafico_Model_FactProd {
                         "paisOrigen",
                         "paisVendedor",
                     ))
-                    ->where('idFactura IN (?)', $idFacturas);
+                    ->where('p.idFactura IN (?)', $idFacturas);
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function obtenerPartidasAgrupadas($idFacturas) {
+        try {
+            $sql = $this->_db_table->select()
+                    ->from(array("p" => "trafico_factprod"), array(
+                        "fraccion",
+                        "descripcion",
+                        "ROUND(SUM(valorComercial)/SUM(cantidadFactura), 5) AS precioUnitario",
+                        "ROUND(SUM(valorComercial), 4) AS valorComercial",
+                        "ROUND(SUM(valorUsd), 4) AS valorUsd",
+                        "ROUND(SUM(cantidadFactura), 4) AS cantidadFactura",
+                        "ROUND(SUM(cantidadTarifa), 4) AS cantidadTarifa",
+                        "umc",
+                        "umt",
+                        "marca",
+                        "modelo",
+                        "subModelo",
+                        "numSerie",
+                        "tlc",
+                        "tlcue",
+                        "prosec",
+                        "iva",
+                        "advalorem",
+                        "paisOrigen",
+                        "paisVendedor",
+                        "GROUP_CONCAT(CONCAT('NP: ', numParte) SEPARATOR ', ') AS observacion"
+                    ))
+                    ->where('p.idFactura IN (?)', $idFacturas)
+                    ->group(array("p.fraccion", "p.umc", "p.umt", "p.paisOrigen", "p.paisVendedor"));
+            //$this->_firephp->info($sql->assemble());
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();

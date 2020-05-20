@@ -1911,7 +1911,11 @@ class OAQ_Trafico {
         }
 
         if (!empty($ids)) {
-            $partidas = $mppr_p->obtenerPartidas($ids);
+            if (!$agrupado) {
+                $partidas = $mppr_p->obtenerPartidas($ids);
+            } else {
+                $partidas = $mppr_p->obtenerPartidasAgrupadas($ids);
+            }
             if (!empty($partidas)) {
                 return $partidas;
             }

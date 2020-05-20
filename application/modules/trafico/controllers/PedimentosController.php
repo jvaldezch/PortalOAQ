@@ -111,11 +111,11 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                         $view->transSalida = $d['transSalida'];
                     }
                 }
-                $partidas = $trafico->obtenerProductosPartidas();
+                $partidas_fact = $trafico->obtenerProductosPartidas(true);
                 $facturas = $trafico->obtenerFacturasPedimento();
 
-                if (!empty($partidas)) {
-                    $view->partidas = $pedimento->procesarProductos($row['id'], $tipoCambio, $partidas);
+                if (!empty($partidas_fact)) {
+                    $view->partidas = $pedimento->procesarProductos($row['id'], $tipoCambio, $partidas_fact);
                 }
 
                 if (!empty($facturas)) {
@@ -134,7 +134,13 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                 $view->a_despacho = $a_despacho->obtenerTodos();
 
                 $paises = new Pedimento_Model_Paises();
-                $view->paises = $paises->obtenerTodos();                
+                $view->paises = $paises->obtenerTodos();
+
+                $model = new Trafico_Model_ClientesMapper();
+                $customer = $model->datosCliente($row['idCliente']);
+                $view->data = $customer;
+
+                $this->_firephp->info($customer);
 
                 $this->_helper->json(array("success" => true, "html" => $view->render("captura-pedimento.phtml")));
             } else {

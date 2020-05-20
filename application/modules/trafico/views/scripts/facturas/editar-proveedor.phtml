@@ -28,10 +28,10 @@
                     <label style="float: left; width: 70px; text-align: right">Tipo Iden.:<span style="color:red"> *</span></label>
                     <select name="tipoIdentificador" id="tipoIdentificador" style="float: left; width: 110px">
                         <option value="">---</option>
-                        <option value="0"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 0) ? ' selected="true"' : '' ?>>Tax ID</option>
-                        <option value="1"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 1) ? ' selected="true"' : '' ?>>RFC</option>
-                        <option value="2"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 2) ? ' selected="true"' : '' ?>>CURP</option>
-                        <option value="3"<?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 3) ? ' selected="true"' : '' ?>>Sin Tax ID</option>
+                        <option value="0" <?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 0) ? ' selected="true"' : '' ?>>Tax ID</option>
+                        <option value="1" <?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 1) ? ' selected="true"' : '' ?>>RFC</option>
+                        <option value="2" <?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 2) ? ' selected="true"' : '' ?>>CURP</option>
+                        <option value="3" <?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 3) ? ' selected="true"' : '' ?>>Sin Tax ID</option>
                     </select>
                 </td>
             </tr>
@@ -84,12 +84,18 @@
                     <label style="float: left; width: 110px; text-align: right">País:&nbsp;<span style="color:red"> *</span></label>
                     <select name="pais" id="pais" style="float: left; width: 250px">
                         <option value="">---</option>
-                        <?php if(isset($this->paisSelect)) {?>
-                            <?php foreach ($this->paisSelect as $item) {?>
-                                <option value="<?= $item["cve_pais"] ?>" <?= (isset($this->pais) && ($this->pais == $item["cve_pais"])) ? ' selected="true"' : '' ?>><?= $item["cve_pais"] . " - " . $item["nombre"] ?></option>                        
+                        <?php if (isset($this->paisSelect)) { ?>
+                            <?php foreach ($this->paisSelect as $item) { ?>
+                                <option value="<?= $item["cve_pais"] ?>" <?= (isset($this->pais) && ($this->pais == $item["cve_pais"])) ? ' selected="true"' : '' ?>><?= $item["cve_pais"] . " - " . $item["nombre"] ?></option>
                             <?php } ?>
                         <?php } ?>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="float: left; width: 110px; text-align: right">Vinculación:&nbsp;</label>
+                    <input type="checkbox" name="vinculacion" id="vinculacion" style="float: left" <?= ($this->vinculacion == 1) ? 'checked="true"' : '' ?>>
                 </td>
             </tr>
             <tr>
@@ -102,22 +108,31 @@
 </form>
 
 <script type="text/javascript">
-    
     $("#frmProvider").validate({
-        errorPlacement: function (error, element) {
+        errorPlacement: function(error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "errorlabel",
         rules: {
-            nombre: {required: true},
-            calle: {required: true},
-            numExt: {required: true},
-            codigoPostal: {required: true},
-            pais: {required: true}
+            nombre: {
+                required: true
+            },
+            calle: {
+                required: true
+            },
+            numExt: {
+                required: true
+            },
+            codigoPostal: {
+                required: true
+            },
+            pais: {
+                required: true
+            }
         },
         messages: {
             nombre: "SE REQUIERE",
@@ -127,14 +142,13 @@
             pais: "SE REQUIERE"
         }
     });
-    
-    $(document.body).on("input", "#nombre, #calle, #numInt, #numExt, #colonia, #municipio, #estado, #codigoPostal, #localidad", function (evt) {
+
+    $(document.body).on("input", "#nombre, #calle, #numInt, #numExt, #colonia, #municipio, #estado, #codigoPostal, #localidad", function(evt) {
         var input = $(this);
         var start = input[0].selectionStart;
-        $(this).val(function (_, val) {
+        $(this).val(function(_, val) {
             return val.toUpperCase();
         });
         input[0].selectionStart = input[0].selectionEnd = start;
     });
-    
 </script>

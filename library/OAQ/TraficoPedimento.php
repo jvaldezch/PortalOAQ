@@ -98,7 +98,8 @@ class OAQ_TraficoPedimento {
                 "valorUsd" => $p['valorUsd'],
                 "valorComercial" => $p['valorComercial'],
                 "precioUnitario" => $p['precioUnitario'],
-                "creado" => date("Y-m-D H:i:s"),
+                "observacion" => $p['observacion'],
+                "creado" => date("Y-m-d H:i:s"),
             );
             $i++;
             $m->agregar($arr);
@@ -152,6 +153,7 @@ class OAQ_TraficoPedimento {
                 "codigoPostal" => $f['codigoPostal'],
                 "estado" => $f['estado'],
                 "pais" => $f['pais'],
+                "vinculacion" => $f['vinculacion'],
                 "creado" => date("Y-m-D H:i:s"),
             );
             $i++;

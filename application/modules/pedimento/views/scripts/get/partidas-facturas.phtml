@@ -1,0 +1,108 @@
+<div style="overflow-x: auto">
+    <table class="traffic-table table-pedimento">
+        <thead>
+            <tr>
+                <th colspan="16">
+                    <div style="float: left; margin-left: 10px">
+                        <i class="fas fa-sync" style="font-size: 14px"></i>
+                        &nbsp;
+                        <i class="fas fa-book-open" style="font-size: 14px" onclick="verPartidas();" style="cursor: pointer"></i>
+                    </div>
+                    PARTIDAS
+                    <div style="float: right; margin-right: 10px">
+                        <!--<input type="checkbox" id="agrupar-partidas" /> Agrupar partidas-->
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th rowspan="3">SEC</th>
+                <th>FRACCION</th>
+                <th>SUBD.</th>
+                <th>VINC.</th>
+                <th>MET VAL</th>
+                <th>UMC</th>
+                <th>CANT. UMC</th>
+                <th>UMT</th>
+                <th>CANT. UMT</th>
+                <th>P. C/V</th>
+                <th>P. O/D</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <th colspan="10">DESCRIPCION</th>
+                <th>CON</th>
+                <th>TASA</th>
+                <th>TT</th>
+                <th>FP</th>
+                <th>IMPORTE</th>
+            </tr>
+            <tr>
+                <th colspan="3">VAL. ADU.</th>
+                <th colspan="3">IMP. PRECIO PAG.</th>
+                <th colspan="2">PRECIO UNT.</th>
+                <th colspan="2">VAL. AGREG.</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        
+    <tbody>
+    <?php if (isset($this->partidas) && !empty($this->partidas)) { 
+        $s = 1; ?>
+        <?php foreach ($this->partidas as $item) { ?>
+            <tr>
+                <td rowspan="4"><?= $s++ ?></td>
+                <td><?= $item['fraccion'] ?></td>
+                <td><input type="checkbox" class="subdivision" data-id="<?= $item['id'] ?>" />&nbsp;</td>
+                <td><input type="checkbox" class="vinculacion" data-id="<?= $item['id'] ?>" />&nbsp;</td>
+                <td>&nbsp;</td>
+                <td><?= $item['umc'] ?></td>
+                <td><?= $item['cantidadFactura'] ?></td>
+                <td><?= $item['umt'] ?></td>
+                <td><?= $item['cantidadTarifa'] ?></td>
+                <td><?= $item['paisOrigen'] ?></td>
+                <td><?= $item['paisVendedor'] ?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="10"><?= $item['descripcion'] ?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="3"><?= $item['valorComercial'] * $this->tipoCambio ?></td>
+                <td colspan="3"><?= $item['valorComercial'] ?></td>
+                <td colspan="2"><?= $item['precioUnitario'] ?></td>
+                <td colspan="2"></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="15"><?= $item['observacion'] ?></td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td colspan="18"><em>No hay partidas.</em></td>
+        </tr>
+    <?php } ?>
+    </tbody>
+    </table>
+</div>

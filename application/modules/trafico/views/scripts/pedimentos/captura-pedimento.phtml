@@ -305,7 +305,7 @@
     <tr>
         <th colspan="7">            
             <div style="float: left; margin-left: 10px">
-                <i class="fas fa-sync" style="font-size: 14px"></i>
+                <button onclick="procesarFacturas();" style="background-color: #fff; border-radius: 3px; border: 1px #444 solid" title="Procesar facturas"><i class="fas fa-sync" style="font-size: 14px; cursor: pointer"></i></button>
             </div>
             DATOS DEL PROVEEDOR O COMPRADOR
         </th>
@@ -323,9 +323,9 @@
                 <tr>
                     <td><?= $item['proveedor']['idFiscal'] ?></td>
                     <td colspan="2"><?= $item['proveedor']['razonSocial'] ?></td>
-                    <td colspan="3"><?= implode(",", array_filter(array($item['proveedor']['calle'], $item['proveedor']['numExterior'], $item['proveedor']['numInterior'], $item['proveedor']['colonia'], $item['proveedor']['municipio'], $item['proveedor']['estado'], $item['proveedor']['codigoPostal'], $item['proveedor']['pais']))) ?></td>
+                    <td colspan="3"><?= implode(" ,", array_filter(array($item['proveedor']['calle'], $item['proveedor']['numExterior'], $item['proveedor']['numInterior'], $item['proveedor']['colonia'], $item['proveedor']['municipio'], $item['proveedor']['estado'], $item['proveedor']['codigoPostal'], $item['proveedor']['pais']))) ?></td>
                     <td>
-                        <input type="checkbox" id="proveedor-vinculacion" data-id="<?= $item['id'] ?>" />
+                        <input type="checkbox" id="proveedor-vinculacion" data-id="<?= $item['id'] ?>" <?= ($item['proveedor']['vinculacion'] == 1) ? 'checked="true"' : '' ?> />
                     </td>
                 </tr>
                 <?php if (!empty($item['facturas'])) { ?>
@@ -436,13 +436,13 @@
     <tr>
         <th colspan="16">
             <div style="float: left; margin-left: 10px">
-                <i class="fas fa-sync" style="font-size: 14px"></i>
+                <button onclick="procesarPartidas();" style="background-color: #fff; border-radius: 3px; border: 1px #444 solid" title="Procesar partidas"><i class="fas fa-sync" style="font-size: 14px; cursor: pointer"></i></button>
                 &nbsp;
-                <i class="fas fa-book-open" style="font-size: 14px"></i>
+                <button onclick="verPartidas();" style="background-color: #fff; border-radius: 3px; border: 1px #444 solid" title="Ver partidas de las facturas"><i class="fas fa-book-open" style="font-size: 14px; cursor: pointer"></i></button>
             </div>
             PARTIDAS
             <div style="float: right; margin-right: 10px">
-                <input type="checkbox" id="agrupar-partidas" /> Agrupar partidas
+                <!--<input type="checkbox" id="agrupar-partidas" /> Agrupar partidas-->
             </div>
         </th>
     </tr>
@@ -488,7 +488,7 @@
     <?php if (isset($this->partidas) && !empty($this->partidas)) { ?>
         <?php foreach ($this->partidas as $item) { ?>
             <tr>
-                <td rowspan="3"><?= $item['secuencia'] ?></td>
+                <td rowspan="4"><?= $item['secuencia'] ?></td>
                 <td><?= $item['fraccion'] ?></td>
                 <td><input type="checkbox" class="subdivision" data-id="<?= $item['id'] ?>" />&nbsp;</td>
                 <td><input type="checkbox" class="vinculacion" data-id="<?= $item['id'] ?>" />&nbsp;</td>
@@ -523,6 +523,9 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="15"><?= $item['observacion'] ?></td>
             </tr>
         <?php } ?>
     <?php } else { ?>
