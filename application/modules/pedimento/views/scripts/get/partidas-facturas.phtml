@@ -52,57 +52,60 @@
                 <th>&nbsp;</th>
             </tr>
         </thead>
-        
-    <tbody>
-    <?php if (isset($this->partidas) && !empty($this->partidas)) { 
-        $s = 1; ?>
-        <?php foreach ($this->partidas as $item) { ?>
-            <tr>
-                <td rowspan="4"><?= $s++ ?></td>
-                <td><?= $item['fraccion'] ?></td>
-                <td><input type="checkbox" class="subdivision" data-id="<?= $item['id'] ?>" />&nbsp;</td>
-                <td><input type="checkbox" class="vinculacion" data-id="<?= $item['id'] ?>" />&nbsp;</td>
-                <td>&nbsp;</td>
-                <td><?= $item['umc'] ?></td>
-                <td><?= $item['cantidadFactura'] ?></td>
-                <td><?= $item['umt'] ?></td>
-                <td><?= $item['cantidadTarifa'] ?></td>
-                <td><?= $item['paisOrigen'] ?></td>
-                <td><?= $item['paisVendedor'] ?></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="10"><?= $item['descripcion'] ?></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="3"><?= $item['valorComercial'] * $this->tipoCambio ?></td>
-                <td colspan="3"><?= $item['valorComercial'] ?></td>
-                <td colspan="2"><?= $item['precioUnitario'] ?></td>
-                <td colspan="2"></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="15"><?= $item['observacion'] ?></td>
-            </tr>
-        <?php } ?>
-    <?php } else { ?>
-        <tr>
-            <td colspan="18"><em>No hay partidas.</em></td>
-        </tr>
-    <?php } ?>
-    </tbody>
+
+        <tbody>
+            <?php if (isset($this->partidas) && !empty($this->partidas)) {
+                $s = 1; ?>
+                <?php foreach ($this->partidas as $item) { ?>
+                    <tr>
+                        <td rowspan="5"><?= $s++ ?></td>
+                        <td><?= $item['fraccion'] ?></td>
+                        <td><input type="checkbox" class="subdivision" data-id="<?= $item['id'] ?>" />&nbsp;</td>
+                        <td><input type="checkbox" class="vinculacion" data-id="<?= $item['id'] ?>" />&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><?= $item['umc'] ?></td>
+                        <td><?= $item['cantidadUmc'] ?></td>
+                        <td><?= $item['umt'] ?></td>
+                        <td><?= $item['cantidadUmt'] ?></td>
+                        <td><?= $item['paisOrigen'] ?></td>
+                        <td><?= $item['paisVendedor'] ?></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"><?= $item['descripcion'] ?></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><?= $item['valorComercial'] * $this->tipoCambio ?></td>
+                        <td colspan="3"><?= $item['valorComercial'] ?></td>
+                        <td colspan="2"><?= $item['precioUnitario'] ?></td>
+                        <td colspan="2"></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="15"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="15"><?= $item['observacion'] ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="18"><em>No hay partidas.</em></td>
+                </tr>
+            <?php } ?>
+        </tbody>
     </table>
 </div>

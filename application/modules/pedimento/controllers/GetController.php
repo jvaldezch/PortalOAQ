@@ -1,13 +1,15 @@
 <?php
 
-class Pedimento_GetController extends Zend_Controller_Action {
+class Pedimento_GetController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_firephp;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -20,7 +22,8 @@ class Pedimento_GetController extends Zend_Controller_Action {
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         try {
             $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") :
                 $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
@@ -35,7 +38,8 @@ class Pedimento_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function agruparPartidasAction() {
+    public function agruparPartidasAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -55,7 +59,8 @@ class Pedimento_GetController extends Zend_Controller_Action {
 
                 $tipoCambio = 0;
                 $row = $trafico->obtenerDatos();
-                if ($row['id']) {$d = $pedimento->detalle();
+                if ($row['id']) {
+                    $d = $pedimento->detalle();
                     if (!empty($d)) {
                         $tipoCambio = $d['tipoCambio'];
                     }
@@ -72,7 +77,8 @@ class Pedimento_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function cargarPartidasAction() {
+    public function cargarPartidasAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -85,7 +91,7 @@ class Pedimento_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("idPedimento") && $input->isValid("idTrafico")) {
-                
+
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
 
@@ -96,7 +102,8 @@ class Pedimento_GetController extends Zend_Controller_Action {
 
                 $tipoCambio = 0;
                 $row = $trafico->obtenerDatos();
-                if ($row['id']) {$d = $pedimento->detalle();
+                if ($row['id']) {
+                    $d = $pedimento->detalle();
                     if (!empty($d)) {
                         $tipoCambio = $d['tipoCambio'];
                     }
@@ -106,7 +113,6 @@ class Pedimento_GetController extends Zend_Controller_Action {
                 $view->tipoCambio = $tipoCambio;
 
                 $this->_helper->json(array("success" => true, "html" => $view->render("partidas-facturas.phtml")));
-
             } else {
                 throw new Exception("Invalid input!");
             }
@@ -114,5 +120,4 @@ class Pedimento_GetController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-
 }

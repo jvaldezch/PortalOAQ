@@ -436,9 +436,11 @@
     <tr>
         <th colspan="16">
             <div style="float: left; margin-left: 10px">
-                <button onclick="procesarPartidas();" style="background-color: #fff; border-radius: 3px; border: 1px #444 solid" title="Procesar partidas"><i class="fas fa-sync" style="font-size: 14px; cursor: pointer"></i></button>
+                <button onclick="recargarPartidas();" style="background-color: #fff; border-radius: 3px; border: 1px #444 solid" title="Procesar partidas"><i class="fas fa-sync" style="font-size: 14px; cursor: pointer"></i></button>
                 &nbsp;
                 <button onclick="verPartidas();" style="background-color: #fff; border-radius: 3px; border: 1px #444 solid" title="Ver partidas de las facturas"><i class="fas fa-book-open" style="font-size: 14px; cursor: pointer"></i></button>
+                &nbsp;
+                <button onclick="configuracionPartidas();" style="background-color: #fff; border-radius: 3px; border: 1px #444 solid" title="Configuración de partidas"><i class="fas fa-cog" style="font-size: 14px; cursor: pointer"></i></button>
             </div>
             PARTIDAS
             <div style="float: right; margin-right: 10px">
@@ -488,15 +490,15 @@
     <?php if (isset($this->partidas) && !empty($this->partidas)) { ?>
         <?php foreach ($this->partidas as $item) { ?>
             <tr>
-                <td rowspan="4"><?= $item['secuencia'] ?></td>
-                <td><?= $item['fraccion'] ?></td>
+                <td rowspan="5"><?= $item['secuencia'] ?></td>
+                <td><a onclick="consultaFraccion('<?= $item['fraccion'] ?>');" style="cursor: pointer"><?= $item['fraccion'] ?></a></td>
                 <td><input type="checkbox" class="subdivision" data-id="<?= $item['id'] ?>" />&nbsp;</td>
                 <td><input type="checkbox" class="vinculacion" data-id="<?= $item['id'] ?>" />&nbsp;</td>
                 <td>&nbsp;</td>
                 <td><?= $item['umc'] ?></td>
-                <td><?= $item['cantidadFactura'] ?></td>
+                <td><?= $item['cantidadUmc'] ?></td>
                 <td><?= $item['umt'] ?></td>
-                <td><?= $item['cantidadTarifa'] ?></td>
+                <td><?= $item['cantidadUmt'] ?></td>
                 <td><?= $item['paisOrigen'] ?></td>
                 <td><?= $item['paisVendedor'] ?></td>
                 <td>&nbsp;</td>
@@ -523,6 +525,9 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="15"></td>
             </tr>
             <tr>
                 <td colspan="15"><?= $item['observacion'] ?></td>

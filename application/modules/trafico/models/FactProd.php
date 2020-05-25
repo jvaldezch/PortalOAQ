@@ -1,16 +1,19 @@
 <?php
 
-class Trafico_Model_FactProd {
+class Trafico_Model_FactProd
+{
 
     protected $_db_table;
     protected $_firephp;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_FactProd();
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function agregar($arr) {
+    public function agregar($arr)
+    {
         try {
             $stmt = $this->_db_table->insert($arr);
             if ($stmt) {
@@ -21,8 +24,9 @@ class Trafico_Model_FactProd {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function actualizar($idProducto, $arr) {
+
+    public function actualizar($idProducto, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $idProducto));
             if ($stmt) {
@@ -34,41 +38,42 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function obtenerProducto($id) {
+    public function obtenerProducto($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array(
-                        "id",
-                        "idFactura",
-                        "orden",
-                        "numParte",
-                        "fraccion",
-                        "subFraccion",
-                        "descripcion",
-                        "descripcionIngles",
-                        "ROUND(precioUnitario, 5) AS precioUnitario",
-                        "ROUND(valorComercial, 4) AS valorComercial",
-                        "valorUsd",
-                        "ROUND(cantidadFactura, 4) AS cantidadFactura",
-                        "cantidadTarifa",
-                        "umc",
-                        "umt",
-                        "cantidadOma",
-                        "oma",
-                        "observaciones",
-                        "marca",
-                        "modelo",
-                        "subModelo",
-                        "numSerie",
-                        "tlc",
-                        "tlcue",
-                        "prosec",
-                        "iva",
-                        "advalorem",
-                        "paisOrigen",
-                        "paisVendedor",
-                    ))
-                    ->where('id = ?', $id);
+                ->from($this->_db_table, array(
+                    "id",
+                    "idFactura",
+                    "orden",
+                    "numParte",
+                    "fraccion",
+                    "subFraccion",
+                    "descripcion",
+                    "descripcionIngles",
+                    "ROUND(precioUnitario, 5) AS precioUnitario",
+                    "ROUND(valorComercial, 4) AS valorComercial",
+                    "valorUsd",
+                    "ROUND(cantidadFactura, 4) AS cantidadFactura",
+                    "cantidadTarifa",
+                    "umc",
+                    "umt",
+                    "cantidadOma",
+                    "oma",
+                    "observaciones",
+                    "marca",
+                    "modelo",
+                    "subModelo",
+                    "numSerie",
+                    "tlc",
+                    "tlcue",
+                    "prosec",
+                    "iva",
+                    "advalorem",
+                    "paisOrigen",
+                    "paisVendedor",
+                ))
+                ->where('id = ?', $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -79,42 +84,44 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function obtenerPartidas($idFacturas) {
+    public function obtenerPartidas($idFacturas)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("p" => "trafico_factprod"), array(
-                        "id",
-                        "idFactura",
-                        "orden",
-                        "numParte",
-                        "fraccion",
-                        "subFraccion",
-                        "descripcion",
-                        "descripcionIngles",
-                        "ROUND(precioUnitario, 5) AS precioUnitario",
-                        "ROUND(valorComercial, 4) AS valorComercial",
-                        "valorUsd",
-                        "ROUND(cantidadFactura, 4) AS cantidadFactura",
-                        "cantidadTarifa",
-                        "umc",
-                        "umt",
-                        "cantidadOma",
-                        "oma",
-                        "observaciones AS observacion",
-                        "marca",
-                        "modelo",
-                        "subModelo",
-                        "numSerie",
-                        "tlc",
-                        "tlcue",
-                        "prosec",
-                        "iva",
-                        "advalorem",
-                        "paisOrigen",
-                        "paisVendedor",
-                    ))
-                    ->where('p.idFactura IN (?)', $idFacturas);
+                ->setIntegrityCheck(false)
+                ->from(array("p" => "trafico_factprod"), array(
+                    "id",
+                    "idFactura",
+                    "orden",
+                    "numParte",
+                    "fraccion",
+                    "subFraccion",
+                    "descripcion",
+                    "descripcionIngles",
+                    "ROUND(precioUnitario, 5) AS precioUnitario",
+                    "ROUND(valorComercial, 4) AS valorComercial",
+                    "valorUsd",
+                    "ROUND(cantidadFactura, 4) AS cantidadFactura",
+                    "cantidadTarifa",
+                    "umc",
+                    "umt",
+                    "cantidadOma",
+                    "oma",
+                    "CONCAT('F:', f.numFactura, ' ', p.observaciones) AS observacion",
+                    "marca",
+                    "modelo",
+                    "subModelo",
+                    "numSerie",
+                    "tlc",
+                    "tlcue",
+                    "prosec",
+                    "iva",
+                    "advalorem",
+                    "paisOrigen",
+                    "paisVendedor",
+                ))
+                ->joinLeft(array("f" => "trafico_facturas"), "p.idFactura = f.id", array())
+                ->where('p.idFactura IN (?)', $idFacturas);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -125,78 +132,38 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function obtenerPartidasAgrupadas($idFacturas) {
+    public function obtenerPartidasAgrupadas($idFacturas)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from(array("p" => "trafico_factprod"), array(
-                        "fraccion",
-                        "descripcion",
-                        "ROUND(SUM(valorComercial)/SUM(cantidadFactura), 5) AS precioUnitario",
-                        "ROUND(SUM(valorComercial), 4) AS valorComercial",
-                        "ROUND(SUM(valorUsd), 4) AS valorUsd",
-                        "ROUND(SUM(cantidadFactura), 4) AS cantidadFactura",
-                        "ROUND(SUM(cantidadTarifa), 4) AS cantidadTarifa",
-                        "umc",
-                        "umt",
-                        "marca",
-                        "modelo",
-                        "subModelo",
-                        "numSerie",
-                        "tlc",
-                        "tlcue",
-                        "prosec",
-                        "iva",
-                        "advalorem",
-                        "paisOrigen",
-                        "paisVendedor",
-                        "GROUP_CONCAT(CONCAT('NP: ', numParte) SEPARATOR ', ') AS observacion"
-                    ))
-                    ->where('p.idFactura IN (?)', $idFacturas)
-                    ->group(array("p.fraccion", "p.umc", "p.umt", "p.paisOrigen", "p.paisVendedor"));
-            //$this->_firephp->info($sql->assemble());
-            $stmt = $this->_db_table->fetchAll($sql);
-            if ($stmt) {
-                return $stmt->toArray();
-            }
-            return;
-        } catch (Zend_Db_Adapter_Exception $e) {
-            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
-        }
-    }
-    
-    public function obtener($idFactura) {
-        try {
-            $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array(
-                        "id",
-                        "idFactura",
-                        "orden",
-                        "ordenProducto",
-                        "numParte",
-                        "fraccion",
-                        "subFraccion",
-                        "descripcion",
-                        "ROUND(precioUnitario, 6) AS precioUnitario",
-                        "ROUND(cantidadFactura * precioUnitario, 4) AS valorComercial",
-                        "valorUsd",
-                        "ROUND(cantidadFactura, 4) AS cantidadFactura",
-                        "cantidadTarifa",
-                        "umc",
-                        "umt",
-                        "paisOrigen",
-                        "paisVendedor",
-                        "tlc",
-                        "prosec",
-                        "cantidadOma",
-                        "oma",
-                        "observaciones",
-                        "marca",
-                        "modelo",
-                        "subModelo",
-                        "numSerie"
-                    ))
-                    ->where('idFactura = ?', $idFactura)
-                    ->order("ordenProducto ASC");
+                ->setIntegrityCheck(false)
+                ->from(array("p" => "trafico_factprod"), array(
+                    "fraccion",
+                    "descripcion",
+                    "ROUND(SUM(valorComercial)/SUM(cantidadFactura), 5) AS precioUnitario",
+                    "ROUND(SUM(valorComercial), 4) AS valorComercial",
+                    "ROUND(SUM(valorUsd), 4) AS valorUsd",
+                    "ROUND(SUM(cantidadFactura), 4) AS cantidadFactura",
+                    "ROUND(SUM(cantidadTarifa), 4) AS cantidadTarifa",
+                    "umc",
+                    "umt",
+                    "marca",
+                    "modelo",
+                    "subModelo",
+                    "numSerie",
+                    "tlc",
+                    "tlcue",
+                    "prosec",
+                    "iva",
+                    "advalorem",
+                    "paisOrigen",
+                    "paisVendedor",
+                    "GROUP_CONCAT(CONCAT('N/P: ', numParte) SEPARATOR ', ') AS observacion",
+                    "CONCAT('F: ', f.numFactura, ' ', GROUP_CONCAT(CONCAT('N/P: ', p.numParte) SEPARATOR ', ')) AS observacion"
+                ))
+                ->joinLeft(array("f" => "trafico_facturas"), "p.idFactura = f.id", array())
+                ->where('p.idFactura IN (?)', $idFacturas)
+                ->group(array("p.fraccion", "p.umc", "p.umt", "p.paisOrigen", "p.paisVendedor"));
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -207,7 +174,52 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function borrar($id) {
+    public function obtener($idFactura)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->from($this->_db_table, array(
+                    "id",
+                    "idFactura",
+                    "orden",
+                    "ordenProducto",
+                    "numParte",
+                    "fraccion",
+                    "subFraccion",
+                    "descripcion",
+                    "ROUND(precioUnitario, 6) AS precioUnitario",
+                    "ROUND(cantidadFactura * precioUnitario, 4) AS valorComercial",
+                    "valorUsd",
+                    "ROUND(cantidadFactura, 4) AS cantidadFactura",
+                    "cantidadTarifa",
+                    "umc",
+                    "umt",
+                    "paisOrigen",
+                    "paisVendedor",
+                    "tlc",
+                    "prosec",
+                    "cantidadOma",
+                    "oma",
+                    "observaciones",
+                    "marca",
+                    "modelo",
+                    "subModelo",
+                    "numSerie"
+                ))
+                ->where('idFactura = ?', $idFactura)
+                ->order("ordenProducto ASC");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function borrar($id)
+    {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $id));
             if ($stmt) {
@@ -219,7 +231,8 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function borrarIdFactura($idFactura) {
+    public function borrarIdFactura($idFactura)
+    {
         try {
             $stmt = $this->_db_table->delete(array("idFactura = ?" => $idFactura));
             if ($stmt) {
@@ -231,7 +244,8 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function prepareData($data, $idFactura = null) {
+    public function prepareData($data, $idFactura = null)
+    {
         if (isset($data) && $data !== false && !empty($data)) {
             $array = array(
                 'numParte' => isset($data["numParte"]) ? $data["numParte"] : null,
@@ -270,7 +284,8 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function prepareDataFromRest($data, $idFactura = null) {
+    public function prepareDataFromRest($data, $idFactura = null)
+    {
         if (isset($data) && $data !== false && !empty($data)) {
             $array = array(
                 'numParte' => isset($data["numParte"]) ? $data["numParte"] : null,
@@ -318,10 +333,11 @@ class Trafico_Model_FactProd {
         }
     }
 
-    public function getRows($idPro) {
+    public function getRows($idPro)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idFactura = ?", $idPro);
+                ->where("idFactura = ?", $idPro);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -331,8 +347,9 @@ class Trafico_Model_FactProd {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function insert($arr) {
+
+    public function insert($arr)
+    {
         try {
             $stmt = $this->_db_table->insert($arr);
             if ($stmt) {
@@ -343,12 +360,13 @@ class Trafico_Model_FactProd {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function sumarValorComercial($idFactura) {
+
+    public function sumarValorComercial($idFactura)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array(new Zend_Db_Expr("sum(valorComercial) as valorComercial")))
-                    ->where("idFactura = ?", $idFactura);
+                ->from($this->_db_table, array(new Zend_Db_Expr("sum(valorComercial) as valorComercial")))
+                ->where("idFactura = ?", $idFactura);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->valorComercial;
@@ -358,5 +376,4 @@ class Trafico_Model_FactProd {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-
 }

@@ -115,7 +115,8 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                 $facturas = $trafico->obtenerFacturasPedimento();
 
                 if (!empty($partidas_fact)) {
-                    $view->partidas = $pedimento->procesarProductos($row['id'], $tipoCambio, $partidas_fact);
+                    $partidas = $pedimento->procesarProductos($row['id'], $tipoCambio, $partidas_fact);
+                    $view->partidas = $partidas;
                 }
 
                 if (!empty($facturas)) {

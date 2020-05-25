@@ -5,7 +5,8 @@
  *
  * @author Jaime E. Valdez <jvaldezch@gmail.com>
  */
-class OAQ_Trafico {
+class OAQ_Trafico
+{
 
     protected $idTrafico;
     protected $idCliente;
@@ -38,115 +39,143 @@ class OAQ_Trafico {
     protected $misc;
     protected $_firephp;
 
-    function setIdTrafico($idTrafico) {
+    function setIdTrafico($idTrafico)
+    {
         $this->idTrafico = $idTrafico;
     }
 
-    function setFecha($fecha) {
+    function setFecha($fecha)
+    {
         $this->fecha = $fecha;
     }
 
-    function setUsuario($usuario) {
+    function setUsuario($usuario)
+    {
         $this->usuario = $usuario;
     }
 
-    function setIdUsuario($idUsuario) {
+    function setIdUsuario($idUsuario)
+    {
         $this->idUsuario = $idUsuario;
     }
 
-    function setIdBodega($idBodega) {
+    function setIdBodega($idBodega)
+    {
         $this->idBodega = $idBodega;
     }
 
-    function setPatente($patente) {
+    function setPatente($patente)
+    {
         $this->patente = $patente;
     }
 
-    function setAduana($aduana) {
+    function setAduana($aduana)
+    {
         $this->aduana = $aduana;
     }
 
-    function setPedimento($pedimento) {
+    function setPedimento($pedimento)
+    {
         $this->pedimento = $pedimento;
     }
 
-    function setReferencia($referencia) {
+    function setReferencia($referencia)
+    {
         $this->referencia = $referencia;
     }
 
-    function setFolio($folio) {
+    function setFolio($folio)
+    {
         $this->folio = $folio;
     }
 
-    function setIdFactura($idFactura) {
+    function setIdFactura($idFactura)
+    {
         $this->idFactura = $idFactura;
     }
 
-    function getPatente() {
+    function getPatente()
+    {
         return $this->patente;
     }
 
-    function getAduana() {
+    function getAduana()
+    {
         return $this->aduana;
     }
 
-    function getPedimento() {
+    function getPedimento()
+    {
         return $this->pedimento;
     }
 
-    function getClavePedimento() {
+    function getClavePedimento()
+    {
         return $this->clavePedimento;
     }
 
-    function getIdBodega() {
+    function getIdBodega()
+    {
         return $this->idBodega;
     }
 
-    function getIdCliente() {
+    function getIdCliente()
+    {
         return $this->idCliente;
     }
 
-    function getIdAduana() {
+    function getIdAduana()
+    {
         return $this->idAduana;
     }
 
-    function getReferencia() {
+    function getReferencia()
+    {
         return $this->referencia;
     }
 
-    function getTipoOperacion() {
+    function getTipoOperacion()
+    {
         return $this->ie;
     }
 
-    function setIdCliente($idCliente) {
+    function setIdCliente($idCliente)
+    {
         $this->idCliente = $idCliente;
     }
 
-    function setIdAduana($idAduana) {
+    function setIdAduana($idAduana)
+    {
         $this->idAduana = $idAduana;
     }
 
-    function setIe($ie) {
+    function setIe($ie)
+    {
         $this->ie = $ie;
     }
 
-    function setIdPlanta($idPlanta) {
+    function setIdPlanta($idPlanta)
+    {
         $this->idPlanta = $idPlanta;
     }
 
-    function setClavePedimento($clavePedimento) {
+    function setClavePedimento($clavePedimento)
+    {
         $this->clavePedimento = $clavePedimento;
     }
 
-    function setRfcCliente($rfcCliente) {
+    function setRfcCliente($rfcCliente)
+    {
         $this->rfcCliente = $rfcCliente;
     }
 
-    function getRfcCliente() {
+    function getRfcCliente()
+    {
         return $this->rfcCliente;
     }
 
-    public function __construct(array $options = null) {
+    public function __construct(array $options = null)
+    {
 
         $this->_firephp = Zend_Registry::get("firephp");
 
@@ -186,7 +215,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $method = "set" . $name;
         if (("mapper" == $name) || !method_exists($this, $method)) {
             throw new Exception("Invalid property " . __METHOD__ . " " . $name);
@@ -194,7 +224,8 @@ class OAQ_Trafico {
         $this->$method($value);
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         $method = "get" . $name;
         if (("mapper" == $name) || !method_exists($this, $method)) {
             throw new Exception("Invalid property " . __METHOD__);
@@ -202,7 +233,8 @@ class OAQ_Trafico {
         return $this->$method();
     }
 
-    public function setOptions(array $options) {
+    public function setOptions(array $options)
+    {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
             $method = "set" . ucfirst($key);
@@ -213,7 +245,8 @@ class OAQ_Trafico {
         return $this;
     }
 
-    protected function _agregarBitacora($idTrafico, $idAduana, $patente, $aduana, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $usuario) {
+    protected function _agregarBitacora($idTrafico, $idAduana, $patente, $aduana, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $usuario)
+    {
         $mppr = new Bitacora_Model_BitacoraPedimentos();
         $arr = array(
             "idTrafico" => $idTrafico,
@@ -230,7 +263,8 @@ class OAQ_Trafico {
         $mppr->agregar($arr);
     }
 
-    protected function _obtenerEstatus($value) {
+    protected function _obtenerEstatus($value)
+    {
         switch ($value) {
             case 1:
                 $msg = "y esta en proceso de captura.";
@@ -250,7 +284,8 @@ class OAQ_Trafico {
         return $msg;
     }
 
-    public function recuperarTrafico($idTrafico) {
+    public function recuperarTrafico($idTrafico)
+    {
         if (($arr = $this->traficos->obtenerPorId($idTrafico))) {
             $this->traficos->actualizarDatosTrafico($idTrafico, array(
                 "idAduana" => $this->idAduana,
@@ -265,7 +300,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function cancelarTrafico($idTrafico) {
+    public function cancelarTrafico($idTrafico)
+    {
         if (($arr = $this->traficos->obtenerPorId($idTrafico))) {
             $this->traficos->actualizarDatosTrafico($idTrafico, array(
                 "estatus" => 4
@@ -275,7 +311,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function comprobarTrafico() {
+    public function comprobarTrafico()
+    {
         $row = $this->traficos->busquedaReferencia($this->idAduana, $this->referencia);
         if (!empty($row)) {
             if ($row["pedimento"] != $this->pedimento) {
@@ -308,7 +345,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _obtenerRegimen($tipoOperacion, $cvePedimento) {
+    protected function _obtenerRegimen($tipoOperacion, $cvePedimento)
+    {
         $regimen = null;
         if (null !== ($reg = $this->claves->buscarRegimen($cvePedimento))) {
             if ($tipoOperacion == "TOCE.IMP") {
@@ -320,7 +358,8 @@ class OAQ_Trafico {
         return $regimen;
     }
 
-    public function nuevoTrafico($array) {
+    public function nuevoTrafico($array)
+    {
         $arr = $this->aduanas->obtenerAduana($this->idAduana);
         if (isset($arr) && !empty($arr)) {
             $regimen = $this->_obtenerRegimen($array["ie"], $array["cvePedimento"]);
@@ -348,7 +387,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function nuevaEntradaBodega($array) {
+    public function nuevaEntradaBodega($array)
+    {
 
         if (isset($array["idCliente"])) {
 
@@ -371,7 +411,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function agregarTrafico($array) {
+    public function agregarTrafico($array)
+    {
         $aduana = $this->aduanas->obtenerAduana($array["idAduana"]);
         if (isset($aduana) && !empty($aduana)) {
             $regimen = null;
@@ -416,7 +457,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function crearTrafico($idAduana, $idCliente, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $pedimentoRectificar, $fechaEta, $tipoCambio, $consolidado, $rectificacion, $planta = null) {
+    public function crearTrafico($idAduana, $idCliente, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $pedimentoRectificar, $fechaEta, $tipoCambio, $consolidado, $rectificacion, $planta = null)
+    {
         $aduana = $this->aduanas->obtenerAduana($idAduana);
         $cliente = $this->clientes->datosCliente($idCliente);
         if (isset($aduana) && !empty($aduana)) {
@@ -473,7 +515,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function obtenerFiltrosFechas() {
+    public function obtenerFiltrosFechas()
+    {
         $fechas = array(
             1 => array("label" => "fechaEntrada", "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
             2 => array("label" => "fechaPago", "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
@@ -501,7 +544,8 @@ class OAQ_Trafico {
         return $fechas;
     }
 
-    public function actualizarGuias($guias) {
+    public function actualizarGuias($guias)
+    {
         if (is_array($guias) && !empty($guias)) {
             $g = "";
             foreach ($guias as $item) {
@@ -511,7 +555,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function agregarGuia($idTrafico, $idUsuario, $guias) {
+    public function agregarGuia($idTrafico, $idUsuario, $guias)
+    {
         $mppr = new Trafico_Model_TraficoGuiasMapper();
         $arr_guias = explode(",", preg_replace('/\s+/', '', $guias));
         if (is_array($arr_guias)) {
@@ -523,7 +568,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function actualizarFecha($tipo, $fecha, $usuario = null) {
+    public function actualizarFecha($tipo, $fecha, $usuario = null)
+    {
         if (isset($this->idTrafico) && isset($this->idUsuario)) {
             $dates = new Trafico_Model_TraficoFechasMapper();
             if (($res = $dates->buscar($this->idTrafico, $tipo)) === null) {
@@ -603,7 +649,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _bitacora($tipo, $fecha) {
+    protected function _bitacora($tipo, $fecha)
+    {
         try {
             $tipoFecha = "";
             switch ($tipo) {
@@ -657,11 +704,13 @@ class OAQ_Trafico {
         }
     }
 
-    public function actualizarFechaPago($fecha) {
+    public function actualizarFechaPago($fecha)
+    {
         $this->traficos->actualizarFechaPago($this->idTrafico, $fecha);
     }
 
-    public function actualizarSemaforo($estatus, $observacion = null) {
+    public function actualizarSemaforo($estatus, $observacion = null)
+    {
         $this->traficos->actualizarSemaforo($this->idTrafico, $estatus, $observacion);
         $mapper = new Vucem_Model_VucemPedimentosEstado();
         if (!($id = $mapper->verificarDesdeTrafico($this->idTrafico))) {
@@ -679,15 +728,18 @@ class OAQ_Trafico {
         }
     }
 
-    public function actualizarFechaFacturacion($fecha) {
+    public function actualizarFechaFacturacion($fecha)
+    {
         $this->traficos->actualizarFechaFacturacion($this->idTrafico, $fecha);
     }
 
-    public function actualizarFechaLiberacion($fecha) {
+    public function actualizarFechaLiberacion($fecha)
+    {
         $this->traficos->actualizarFechaLiberacion($this->idTrafico, $fecha);
     }
 
-    public function asignarmeOperacion() {
+    public function asignarmeOperacion()
+    {
         if ($this->trafico->getEstatus() !== 3) {
             $this->traficos->asignarAUsuario($this->idTrafico, $this->idUsuario);
             $this->bitacora->agregarBitacora("EL USUARIO " . strtoupper($this->usuario) . " RECLAMO LA OPERACIÓN");
@@ -696,11 +748,12 @@ class OAQ_Trafico {
         return;
     }
 
-    public function subirArchivoTemporal($idMensaje = null, $idComentario = null) {
+    public function subirArchivoTemporal($idMensaje = null, $idComentario = null)
+    {
         $upload = new Zend_File_Transfer_Adapter_Http();
         $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1kB", "max" => "6MB"))
-                ->addValidator("Extension", false, array("extension" => "jpg,pdf,jpeg,png", "case" => false));
+            ->addValidator("Size", false, array("min" => "1kB", "max" => "6MB"))
+            ->addValidator("Extension", false, array("extension" => "jpg,pdf,jpeg,png", "case" => false));
         if (APPLICATION_ENV === "production") {
             $dir = "/home/samba-share/expedientes/temporal";
         } else {
@@ -730,7 +783,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function buscarGuia($numGuia) {
+    public function buscarGuia($numGuia)
+    {
         $sis = new Application_Model_ServiciosRestAduana();
         $row = $sis->obtenerSistema(2);
         if (!empty($row) && isset($row["idServicio"])) {
@@ -756,7 +810,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function buscarTrafico() {
+    public function buscarTrafico()
+    {
         $mapper = new Trafico_Model_TraficosMapper();
         if (($id = $mapper->buscarReferencia($this->patente, $this->aduana, $this->referencia))) {
             return $id;
@@ -764,7 +819,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function datosDeSistema($patente, $aduana, $referencia) {
+    public function datosDeSistema($patente, $aduana, $referencia)
+    {
 
         $adu = new Trafico_Model_TraficoAduanasMapper();
         if (($idAduana = $adu->idAduana($patente, $aduana))) {
@@ -790,7 +846,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _buscarServicio($sistema) {
+    protected function _buscarServicio($sistema)
+    {
         $sis = new Application_Model_ServiciosRestAduana();
         $row = $sis->obtenerServicio($this->idAduana, $sistema);
         if (!empty($row) && isset($row["idServicio"])) {
@@ -809,7 +866,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _buscarSistema() {
+    protected function _buscarSistema()
+    {
         $sis = new Application_Model_ServiciosRestAduana();
         $row = $sis->obtenerSistema($this->idAduana);
         if (!empty($row) && isset($row["idServicio"])) {
@@ -828,7 +886,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _buscarReferencia(Zend_Rest_Client $client, $patente, $aduana, $referencia) {
+    protected function _buscarReferencia(Zend_Rest_Client $client, $patente, $aduana, $referencia)
+    {
         try {
             $response = $client->restPost("/{$this->sistema}/buscar-referencia", array(
                 'patente' => $patente,
@@ -848,7 +907,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _encabezadoPedimento(Zend_Rest_Client $client) {
+    protected function _encabezadoPedimento(Zend_Rest_Client $client)
+    {
         if (($this->patente == 3107 && $this->aduana = 240) || ($this->patente == 3574 && $this->aduana = 800)) {
             $response = $client->restPost("/{$this->sistema}/referencia", array(
                 'patente' => $this->patente,
@@ -874,7 +934,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _facturasPedimento(Zend_Rest_Client $client) {
+    protected function _facturasPedimento(Zend_Rest_Client $client)
+    {
         try {
             $response = $client->restPost("/{$this->sistema}/encabezado-facturas", array(
                 'patente' => $this->patente,
@@ -895,7 +956,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _detalleFactura(Zend_Rest_Client $client, $numFatura) {
+    protected function _detalleFactura(Zend_Rest_Client $client, $numFatura)
+    {
         $response = $client->restPost("/{$this->sistema}/detalle-factura", array(
             'patente' => $this->patente,
             'aduana' => $this->aduana,
@@ -913,7 +975,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _proveedorFactura(Zend_Rest_Client $client, $cvePro = null, $numFactura = null) {
+    protected function _proveedorFactura(Zend_Rest_Client $client, $cvePro = null, $numFactura = null)
+    {
         if ($this->sistema == 'casa') {
             $response = $client->restPost("/{$this->sistema}/proveedor-factura", array(
                 'cvePro' => $cvePro,
@@ -949,7 +1012,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _destinatarioFactura(Zend_Rest_Client $client, $cvePro) {
+    protected function _destinatarioFactura(Zend_Rest_Client $client, $cvePro)
+    {
         $response = $client->restPost("/{$this->sistema}/destinatario-factura", array(
             'cvePro' => $cvePro,
         ));
@@ -963,7 +1027,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _productosFactura(Zend_Rest_Client $client, $numFactura) {
+    protected function _productosFactura(Zend_Rest_Client $client, $numFactura)
+    {
         if ($this->sistema == 'casa') {
             $response = $client->restPost("/{$this->sistema}/productos-factura", array(
                 'patente' => $this->patente,
@@ -995,7 +1060,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _actualizarEnTrafico($arr) {
+    protected function _actualizarEnTrafico($arr)
+    {
         $tipoOperacion = null;
         if ((int) $arr["tipoOperacion"] === 1) {
             $tipoOperacion = "TOCE.IMP";
@@ -1017,7 +1083,8 @@ class OAQ_Trafico {
         $this->traficos->actualizarDatosTrafico($this->idTrafico, $update);
     }
 
-    protected function _actualizarEncabezadoPedimento($arr) {
+    protected function _actualizarEncabezadoPedimento($arr)
+    {
         try {
             $mppr = new Trafico_Model_TraficoPedimento();
             if (!empty($arr)) {
@@ -1027,13 +1094,14 @@ class OAQ_Trafico {
                     $mppr->actualizar($id, $arr);
                 }
                 return;
-            }        
+            }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
 
-    protected function _actualizarFacturasTrafico($arr, $sistema = null) {
+    protected function _actualizarFacturasTrafico($arr, $sistema = null)
+    {
         $mppr = new Trafico_Model_TraficoFacturasMapper();
         if (!empty($arr)) {
             foreach ($arr as $item) {
@@ -1047,11 +1115,12 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _actualizarFechas() {
-        
+    protected function _actualizarFechas()
+    {
     }
 
-    protected function _obtenerTrafico() {
+    protected function _obtenerTrafico()
+    {
         $arr = $this->traficos->obtenerPorId($this->idTrafico);
         $this->patente = $arr["patente"];
         $this->aduana = $arr["aduana"];
@@ -1060,7 +1129,8 @@ class OAQ_Trafico {
         $this->idCliente = $arr["idCliente"];
     }
 
-    public function importarFacturaDesdeSistema($numFactura, $sistema = null) {
+    public function importarFacturaDesdeSistema($numFactura, $sistema = null)
+    {
         $this->_obtenerTrafico();
         $client = null;
         if (!isset($sistema)) {
@@ -1098,7 +1168,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _verificarDetalleFactura($arr, $id_prov) {
+    protected function _verificarDetalleFactura($arr, $id_prov)
+    {
         $mppr = new Trafico_Model_FactDetalle();
         if (!empty($arr) && isset($id_prov)) {
             if (!($id = $mppr->verificar($this->idFactura, $arr[0]["numFactura"]))) {
@@ -1111,7 +1182,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _verificarDestinatario($arr) {
+    protected function _verificarDestinatario($arr)
+    {
         $mppr = new Trafico_Model_FactDest();
         if (!isset($arr["identificador"])) {
             throw new Exception("Factura no tiene identificador del destinatario (TaxId)");
@@ -1136,7 +1208,8 @@ class OAQ_Trafico {
         return $id;
     }
 
-    protected function _verificarProveedor($arr) {
+    protected function _verificarProveedor($arr)
+    {
         $mppr = new Trafico_Model_FactPro();
         if (!isset($arr["identificador"])) {
             throw new Exception("Factura no tiene identificador del proveedor (TaxId)");
@@ -1161,7 +1234,8 @@ class OAQ_Trafico {
         return $id;
     }
 
-    protected function _productosTrafico($arr) {
+    protected function _productosTrafico($arr)
+    {
         $mppr = new Trafico_Model_FactProd();
         $mdl = new Trafico_Model_ClientesPartes();
         if (isset($this->idFactura)) {
@@ -1179,7 +1253,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _transferirDatosTrafico($arr) {
+    protected function _transferirDatosTrafico($arr)
+    {
         if (!empty($arr)) {
             if (isset($arr[0]["proveedor"]) && (int) $arr[0]["tipoOperacion"] == 1) {
                 $id_prov = $this->_verificarProveedor($arr[0]["proveedor"]);
@@ -1203,7 +1278,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function actualizarDesdeServicio($servicio) {
+    public function actualizarDesdeServicio($servicio)
+    {
         $this->_obtenerTrafico();
         if (($client = $this->_buscarServicio($servicio))) {
             $arr = $this->_encabezadoPedimento($client);
@@ -1222,7 +1298,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function actualizarDesdeSistema() {
+    public function actualizarDesdeSistema()
+    {
         $this->_obtenerTrafico();
         if (($client = $this->_buscarSistema())) {
             $arr = $this->_encabezadoPedimento($client);
@@ -1241,7 +1318,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _obtenerServicioRest($idServicio) {
+    protected function _obtenerServicioRest($idServicio)
+    {
         $mppr = new Application_Model_ServiciosRest();
         if (($arr = $mppr->obtener($idServicio))) {
             $client = new Zend_Rest_Client($arr['url']);
@@ -1256,7 +1334,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _detalleOperacion(Zend_Rest_Client $client) {
+    protected function _detalleOperacion(Zend_Rest_Client $client)
+    {
         $response = $client->restPost("/{$this->sistema}/detalle-operacion", array(
             'patente' => $this->patente,
             'aduana' => $this->aduana,
@@ -1274,7 +1353,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerDatosDesdeSistema() {
+    public function obtenerDatosDesdeSistema()
+    {
         $this->_obtenerTrafico();
         if (($client = $this->_buscarSistema())) {
             $arr = $this->_detalleOperacion($client);
@@ -1293,14 +1373,16 @@ class OAQ_Trafico {
         }
     }
 
-    public function actualizar($arr) {
+    public function actualizar($arr)
+    {
         if (($this->traficos->actualizarTrafico($this->idTrafico, $arr))) {
             return true;
         }
         return;
     }
 
-    public function actualizarDesdeSitawin() {
+    public function actualizarDesdeSitawin()
+    {
         $arro = $this->traficos->obtenerPorId($this->idTrafico);
         $this->patente = $arro["patente"];
         $this->aduana = $arro["aduana"];
@@ -1408,7 +1490,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _encabezadoParaActualizar($row) {
+    protected function _encabezadoParaActualizar($row)
+    {
         $tipoOperacion = null;
         if ((int) $row["tipoOperacion"] === 1) {
             $tipoOperacion = "TOCE.IMP";
@@ -1429,7 +1512,8 @@ class OAQ_Trafico {
         );
     }
 
-    protected function _sitawin() {
+    protected function _sitawin()
+    {
         $misc = new OAQ_Misc();
         $db = $misc->sitawinTrafico($this->patente, $this->aduana);
         if (isset($db)) {
@@ -1442,7 +1526,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerBitacora() {
+    public function obtenerBitacora()
+    {
         $mppr = new Trafico_Model_BitacoraMapper();
         $arr = $mppr->obtener($this->patente, $this->aduana, $this->pedimento, $this->referencia);
         if (!empty($arr)) {
@@ -1451,7 +1536,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerBitacoraBodega() {
+    public function obtenerBitacoraBodega()
+    {
         $mppr = new Trafico_Model_BitacoraMapper();
         $arr = $mppr->obtenerBitacoraBodega($this->referencia);
         if (!empty($arr)) {
@@ -1460,7 +1546,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function crearZip($idUsuario, $role) {
+    public function crearZip($idUsuario, $role)
+    {
 
         $exp = new OAQ_Expediente_Descarga();
         $misc = new OAQ_Misc();
@@ -1513,8 +1600,8 @@ class OAQ_Trafico {
                     }
                     unset($tmpfile);
                 }
-            }            
-            
+            }
+
             $val = new OAQ_ArchivosValidacion();
             if (isset($this->pedimento)) {
                 $arch_val = $val->archivosDePedimento($this->patente, $this->aduana, $this->pedimento);
@@ -1546,7 +1633,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function obtenerComentarios() {
+    public function obtenerComentarios()
+    {
         $mppr = new Trafico_Model_ComentariosMapper();
         $arr = $mppr->obtenerTodos($this->idTrafico);
         if (!empty($arr)) {
@@ -1555,7 +1643,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function agregarComentario($mensaje) {
+    public function agregarComentario($mensaje)
+    {
         $mppr = new Trafico_Model_ComentariosMapper();
         $stmt = $mppr->agregar($this->idTrafico, $this->idUsuario, $mensaje);
         if ($stmt) {
@@ -1564,7 +1653,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerArchivosComentarios() {
+    public function obtenerArchivosComentarios()
+    {
         $mppr = new Archivo_Model_RepositorioTemporalMapper();
         $arr = $mppr->archivosTrafico($this->idTrafico);
         if (!empty($arr)) {
@@ -1573,7 +1663,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _buscarIndexRepositorio() {
+    protected function _buscarIndexRepositorio()
+    {
         $mppr = new Archivo_Model_RepositorioIndex();
         if (($arr = $mppr->buscarIndex($this->patente, $this->aduana, $this->pedimento, $this->referencia))) {
             if ($arr["idTrafico"] == null) {
@@ -1586,7 +1677,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function verificarIndexRepositorios() {
+    public function verificarIndexRepositorios()
+    {
         if (($id = $this->_buscarIndexRepositorio())) {
             $rs = new Archivo_Model_RepositorioMapper();
             if (!($rs->buscarRepositorio($this->patente, $this->aduana, $this->referencia))) {
@@ -1597,7 +1689,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _buscarArchivoEnRepositorio($nombreArchivo) {
+    protected function _buscarArchivoEnRepositorio($nombreArchivo)
+    {
         $mppr = new Archivo_Model_Repositorio();
         if (($mppr->buscarArchivo($this->patente, $this->aduana, $this->pedimento, $this->referencia, $nombreArchivo))) {
             return true;
@@ -1605,7 +1698,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _agregarArchivoEnRepositorio($tipoArchivo, $nombreArchivo, $edocument = null) {
+    protected function _agregarArchivoEnRepositorio($tipoArchivo, $nombreArchivo, $edocument = null)
+    {
         $mppr = new Archivo_Model_Repositorio();
         $added = $mppr->agregar(array(
             "id_trafico" => $this->idTrafico,
@@ -1627,7 +1721,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function agregarArchivoExpediente($tipoArchivo, $nombreArchivo, $edocument = null) {
+    public function agregarArchivoExpediente($tipoArchivo, $nombreArchivo, $edocument = null)
+    {
         $misc = new OAQ_Misc();
         $misc->set_baseDir($this->appconfig->getParam("expdest"));
         $directory = $misc->nuevoDirectorioExpediente($this->patente, $this->aduana, $misc->trimUpper($this->referencia));
@@ -1640,7 +1735,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function guardarDetalleCove($arr, $filename) {
+    public function guardarDetalleCove($arr, $filename)
+    {
         $arr['filename'] = basename($filename);
         $pdf = new OAQ_Imprimir_CoveDetalle2019($arr, "P", "pt", "LETTER");
         $pdf->set_filename($filename);
@@ -1652,7 +1748,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function borrar() {
+    public function borrar()
+    {
         $db = Zend_Registry::get("oaqintranet");
 
         /* $sql = $db->select()
@@ -1671,10 +1768,10 @@ class OAQ_Trafico {
           } */
 
         $sql = $db->select()
-                ->from("repositorio_index", array("id"))
-                ->where("patente = ?", $this->patente)
-                ->where("aduana = ?", $this->aduana)
-                ->where("referencia = ?", $this->referencia);
+            ->from("repositorio_index", array("id"))
+            ->where("patente = ?", $this->patente)
+            ->where("aduana = ?", $this->aduana)
+            ->where("referencia = ?", $this->referencia);
         $stmt_repoi = $db->fetchAll($sql);
         if (!empty($stmt_repoi)) {
             foreach ($stmt_repoi as $item) {
@@ -1683,8 +1780,8 @@ class OAQ_Trafico {
         }
 
         $sql = $db->select()
-                ->from("trafico_facturas", array("id"))
-                ->where("idTrafico = ?", $this->idTrafico);
+            ->from("trafico_facturas", array("id"))
+            ->where("idTrafico = ?", $this->idTrafico);
         $stmt_facts = $db->fetchAll($sql);
         if (!empty($stmt_facts)) {
             foreach ($stmt_facts as $item) {
@@ -1724,7 +1821,8 @@ class OAQ_Trafico {
         return true;
     }
 
-    public function descargaPedimento($idCliente = null, $patente = null) {
+    public function descargaPedimento($idCliente = null, $patente = null)
+    {
 
         if (isset($idCliente)) {
             $mpp = new Trafico_Model_SellosClientes();
@@ -1791,7 +1889,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _analizar($xmlPedimento) {
+    protected function _analizar($xmlPedimento)
+    {
         $array = $this->_datosXmlPedimento($xmlPedimento);
         if (!empty($array)) {
             $this->_agregarDb($array);
@@ -1800,7 +1899,8 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _datosXmlPedimento($xmlPedimento) {
+    protected function _datosXmlPedimento($xmlPedimento)
+    {
 
         $vu = new OAQ_VucemEnh();
         $array = $vu->xmlStrToArray(file_get_contents($xmlPedimento));
@@ -1847,7 +1947,8 @@ class OAQ_Trafico {
         return;
     }
 
-    protected function _agregarDb($arr) {
+    protected function _agregarDb($arr)
+    {
 
         $mppr = new Vucem_Model_VucemPedimentosMapper();
 
@@ -1860,11 +1961,13 @@ class OAQ_Trafico {
         }
     }
 
-    protected function _nombreArchivo($prefix, $ext = '.xml') {
+    protected function _nombreArchivo($prefix, $ext = '.xml')
+    {
         return $this->_directorio() . DIRECTORY_SEPARATOR . $prefix . '_' . $this->aduana . "-" . $this->patente . "-" . $this->pedimento . $ext;
     }
 
-    protected function _directorio() {
+    protected function _directorio()
+    {
         $this->misc->set_baseDir($this->directorio);
         $path = $this->misc->nuevoDirectorioExpediente($this->patente, $this->aduana, $this->referencia);
         if (file_exists($path)) {
@@ -1873,7 +1976,8 @@ class OAQ_Trafico {
         throw new Exception("Unable to find directory");
     }
 
-    protected function _guardarArchivoXml($filename, $xml) {
+    protected function _guardarArchivoXml($filename, $xml)
+    {
         try {
             file_put_contents($filename, $xml);
         } catch (Exception $ex) {
@@ -1881,7 +1985,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function obtenerFacturas() {
+    public function obtenerFacturas()
+    {
         $mppr = new Trafico_Model_TraficoFacturasMapper();
         $arr = $mppr->obtenerDetalleFacturas($this->idTrafico);
         if (!empty($arr)) {
@@ -1890,7 +1995,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerFacturasPedimento() {
+    public function obtenerFacturasPedimento()
+    {
         $mppr = new Trafico_Model_TraficoFacturasMapper();
         $arr = $mppr->obtenerFacturasPedimento($this->idTrafico);
         if (!empty($arr)) {
@@ -1899,7 +2005,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerProductosPartidas($agrupado = null) {
+    public function obtenerProductosPartidas($agrupado = null)
+    {
         $mppr = new Trafico_Model_TraficoFacturasMapper();
         $mppr_p = new Trafico_Model_FactProd();
         $arr = $mppr->obtenerDetalleFacturas($this->idTrafico);
@@ -1920,11 +2027,12 @@ class OAQ_Trafico {
                 return $partidas;
             }
         }
-        
+
         return;
     }
 
-    public function obtenerDatos() {
+    public function obtenerDatos()
+    {
         $tn = new Trafico_Model_TraficoGuiasMapper();
         $arr = $this->traficos->encabezado($this->idTrafico);
         if (!empty($arr)) {
@@ -1941,7 +2049,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerProductosFactura($idFactura) {
+    public function obtenerProductosFactura($idFactura)
+    {
         $mppr = new Trafico_Model_FactProd();
         $arr = $mppr->obtener($idFactura);
         if (!empty($arr)) {
@@ -1950,7 +2059,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function obtenerCliente() {
+    public function obtenerCliente()
+    {
         $arr = $this->clientes->datosCliente($this->idCliente);
         if (!empty($arr)) {
             return $arr;
@@ -1958,7 +2068,8 @@ class OAQ_Trafico {
         return;
     }
 
-    public function seleccionConsolidarTraficos(array $arr) {
+    public function seleccionConsolidarTraficos(array $arr)
+    {
         if (is_array($arr)) {
             $array = [];
             foreach ($arr as $item) {
@@ -1976,21 +2087,24 @@ class OAQ_Trafico {
         }
     }
 
-    public function consolidarTraficos($idMaster, $id) {
+    public function consolidarTraficos($idMaster, $id)
+    {
         if (($this->traficos->traficoMaster($idMaster, $id))) {
             return true;
         }
         return;
     }
 
-    public function traficosConsolidados() {
+    public function traficosConsolidados()
+    {
         if (($arr = $this->traficos->traficosConsolidados($this->idTrafico))) {
             return $arr;
         }
         return;
     }
 
-    public function asignarOrdenCarga(array $arr, $ordenCarga) {
+    public function asignarOrdenCarga(array $arr, $ordenCarga)
+    {
         if (is_array($arr)) {
             foreach ($arr as $item) {
                 $this->traficos->actualizarOrdenCarga($item, $ordenCarga);
@@ -2001,7 +2115,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function removerSufijos($referencia) {
+    public function removerSufijos($referencia)
+    {
         if (isset($referencia)) {
             if (preg_match("/C$|H$|R$|G$/", $referencia) && !preg_match("/-C$|-H$|-R$|-G$/", $referencia)) {
                 return substr($referencia, 0, -1);
@@ -2015,7 +2130,8 @@ class OAQ_Trafico {
         }
     }
 
-    public function contarCovesEdocuments() {
+    public function contarCovesEdocuments()
+    {
         $vucem = new Trafico_Model_TraficoVucem();
         $arr = array(
             "coves" => $vucem->contarCoves($this->idTrafico),
@@ -2025,7 +2141,8 @@ class OAQ_Trafico {
         return $arr;
     }
 
-    public function archivosDeExpediente($customer = null) {
+    public function archivosDeExpediente($customer = null)
+    {
         try {
 
             $mppr = new Archivo_Model_RepositorioMapper();
@@ -2034,17 +2151,15 @@ class OAQ_Trafico {
                 $files = $mppr->getFilesByReferenceCustomers($this->referencia, $this->patente, $this->aduana);
                 return $files;
             }
-
         } catch (Exception $ex) {
-
         }
     }
 
-    public function cambiarEstatus($estatus) {
+    public function cambiarEstatus($estatus)
+    {
         if (($this->traficos->actualizarEstatus($this->idTrafico, $estatus))) {
             return true;
         }
         return;
     }
-
 }

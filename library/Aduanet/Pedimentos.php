@@ -142,4 +142,43 @@ class Aduanet_Pedimentos
             throw new Exception("Exception on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+
+    public function trafica($fraccion)
+    {
+        try {
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $this->_endpoint . "/api/tarifa",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_POSTFIELDS => "fraccion=" . $fraccion, 
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+
+            $row = json_decode($response, true);
+
+            if ($row['success'] == true) {
+                return $row;
+            } else {
+                $this->_firephp->warn($row);
+                return;
+            }
+        } catch (Exception $e) {
+            throw new Exception("Exception on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
 }
