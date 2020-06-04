@@ -1584,6 +1584,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 ->appendFile("/js/common/highcharts/js/modules/data.js")
                 ->appendFile("/js/common/highcharts/js/modules/exporting.js")
                 ->appendFile("/js/trafico/index/graficas.js?" . time());
+
         $months = array(
             1 => "Enero",
             2 => "Febrero",
@@ -1598,6 +1599,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
             11 => "Noviembre",
             12 => "Diciembre",
         );
+
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "year" => array("Digits"),
@@ -1620,10 +1622,12 @@ class Trafico_IndexController extends Zend_Controller_Action {
         if ($input->isValid("year")) {
             $year = $input->year;
         }
+
         $month = (int) date("m");
         if ($input->isValid("month")) {
             $month = $input->month;
         }
+
         $this->view->idCliente = $input->isValid('idCliente') ? $input->idCliente : null;
         $this->view->idAduana = $input->isValid('idAduana') ? $input->idAduana : null;
         
@@ -1631,10 +1635,18 @@ class Trafico_IndexController extends Zend_Controller_Action {
         foreach ($arr as $value) {
             $arrp[] = (int) $value;
         }
+
+        $arr_p = $mapper->obtenerPagadosGrafica($year - 1, $input->idCliente, $input->idAduana);
+        foreach ($arr_p as $value) {
+            $arrp_p[] = (int) $value;
+        }
+
         $this->view->pagados = $arrp;
+        $this->view->pagados_p = $arrp_p;
+
         if (isset($arr) && !empty($arr)) {
-            $graph[] = array(
-                "name" => "Pedimentos",
+            $graph = array(
+                "name" => "Pedimentos 2020",
                 "colorByPoint" => "true",
                 "data" => array(
                     (int) $arr["Ene"] ? (int) $arr["Ene"] : null,
@@ -1653,12 +1665,43 @@ class Trafico_IndexController extends Zend_Controller_Action {
             );
             $this->view->arr = json_encode($graph);
         }
+
+        if (isset($arr_p) && !empty($arr_p)) {
+            $graph_p = array(
+                "name" => "Pedimentos 2019",
+                "colorByPoint" => "true",
+                "data" => array(
+                    (int) $arr_p["Ene"] ? (int) $arr_p["Ene"] : null,
+                    (int) $arr_p["Feb"] ? (int) $arr_p["Feb"] : null,
+                    (int) $arr_p["Mar"] ? (int) $arr_p["Mar"] : null,
+                    (int) $arr_p["Abr"] ? (int) $arr_p["Abr"] : null,
+                    (int) $arr_p["May"] ? (int) $arr_p["May"] : null,
+                    (int) $arr_p["Jun"] ? (int) $arr_p["Jun"] : null,
+                    (int) $arr_p["Jul"] ? (int) $arr_p["Jul"] : null,
+                    (int) $arr_p["Ago"] ? (int) $arr_p["Ago"] : null,
+                    (int) $arr_p["Sep"] ? (int) $arr_p["Sep"] : null,
+                    (int) $arr_p["Oct"] ? (int) $arr_p["Oct"] : null,
+                    (int) $arr_p["Nov"] ? (int) $arr_p["Nov"] : null,
+                    (int) $arr_p["Dic"] ? (int) $arr_p["Dic"] : null
+                )
+            );
+            $this->view->arr_p = json_encode($graph_p);
+        }
+
         $arrl = $mapper->obtenerLiberadosGrafica($year, $input->idCliente, $input->idAduana);
         $arrlib = [];
         foreach ($arrl as $value) {
             $arrlib[] = (int) $value;
         }
         $this->view->liberados = $arrlib;
+
+        $arrl_p = $mapper->obtenerLiberadosGrafica($year - 1, $input->idCliente, $input->idAduana);
+        $arrlib_p = [];
+        foreach ($arrl_p as $value) {
+            $arrlib_p[] = (int) $value;
+        }
+        $this->view->liberados_p = $arrlib_p;
+
         $tipos = $mapper->obtenerTipoOperacionesGrafica($year, $month, $input->idCliente, $input->idAduana);
         $this->view->tipoOperaciones = array(
             array("name" => "Aéreas", "y" => (int) $tipos["aereas"]),
@@ -1671,8 +1714,13 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $this->view->arrTerre = $mapper->obtenerPorDiasGraficaTerrestres($year, $month, 4);
         
         $arra = $mapper->obtenerPorAduanaGrafica($year, $month);
-        $this->view->porAduanaEtiquetas = $arra["labels"];
         $this->view->porAduana = $arra["data"];
+
+        $arra_p = $mapper->obtenerPorAduanaGrafica($year - 1, $month);
+        $this->view->porAduanaP = $arra_p["data"];
+
+        $this->view->porAduanaEtiquetas = array_unique(array_merge($arra["labels"], $arra_p["labels"]), SORT_REGULAR);
+
         $comp = $mapper->obtenerLiberadosVsCompleto($year, $month);
         $this->view->sinc = $comp;
         

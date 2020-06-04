@@ -14,6 +14,9 @@ class Trafico_Model_TraficosReportes {
                     ->setIntegrityCheck(false)
                     ->from(array("t" => "traficos"), array(
                         "a.nombre AS name",
+                        "a.abbrv",
+                        "a.patente",
+                        "a.aduana",
                         new Zend_Db_Expr("count(t.id) AS y")
                     ))
                     ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
@@ -27,11 +30,19 @@ class Trafico_Model_TraficosReportes {
                 $arrl = [];
                 $arr = [];
                 foreach ($stmt->toArray() as $value) {
-                    array_push($arrl, $value["name"]);
-                    $arr[] = array(
-                        "name" => $value["name"],
-                        "y" => (int) $value["y"],
-                    );
+                    if ($value["abbrv"]) {
+                        array_push($arrl, $value["abbrv"]);
+                        $arr[] = array(
+                            "name" => $value["abbrv"],
+                            "y" => (int) $value["y"],
+                        );
+                    } else {
+                        array_push($arrl, $value["aduana"] . '-' . $value['patente']);                        
+                        $arr[] = array(
+                            "name" => $value["aduana"] . '-' . $value['patente'],
+                            "y" => (int) $value["y"],
+                        );
+                    }
                 }
                 return array(
                     "labels" => $arrl,

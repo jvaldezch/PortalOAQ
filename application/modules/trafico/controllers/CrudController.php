@@ -2394,6 +2394,72 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
+    protected function _semaforos($year, $idCliente, $idAduana) {
+        $fields = array(
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 1 THEN 1 ELSE 0 END) AS Ene"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 2 THEN 1 ELSE 0 END) AS Feb"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 3 THEN 1 ELSE 0 END) AS Mar"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 4 THEN 1 ELSE 0 END) AS Abr"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 5 THEN 1 ELSE 0 END) AS May"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 6 THEN 1 ELSE 0 END) AS Jun"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 7 THEN 1 ELSE 0 END) AS Jul"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 8 THEN 1 ELSE 0 END) AS Ago"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 9 THEN 1 ELSE 0 END) AS Sep"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 10 THEN 1 ELSE 0 END) AS 'Oct'"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 11 THEN 1 ELSE 0 END) AS Nov"),
+            new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 12 THEN 1 ELSE 0 END) AS Dic"),
+        );
+        $sql = $this->_db->select()
+                ->from(array("t" => "traficos"), $fields)
+                ->where("YEAR(t.fechaLiberacion) = ?", $year)
+                ->where("t.estatus NOT IN (1,2,4)")
+                ->where("t.semaforo = 2");
+        if ($idCliente) {
+            $sql->where('t.idCliente = ?', $idCliente);
+        }
+        if ($idAduana) {
+            $sql->where('t.idAduana = ?', $idAduana);
+        }
+        $stmt = $this->_db->fetchRow($sql);
+        $data = [];
+        foreach ($stmt as $k => $value) {
+            $data[] = array(
+                "name" => $k,
+                "y" => (int) $value,
+            );
+        }
+        return $data;
+    }
+    
+    public function graficaSemaforosAction() {
+        try {
+            $f = array(
+                '*' => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
+                'year' => array(new Zend_Filter_Digits()),
+                'idCliente' => array(new Zend_Filter_Digits()),
+                'idAduana' => array(new Zend_Filter_Digits()),
+            );
+            $v = array(
+                'year' => array('NotEmpty', new Zend_Validate_Int()),
+                'idCliente' => array('NotEmpty', new Zend_Validate_Int()),
+                'idAduana' => array('NotEmpty', new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid('year')) {
+                //$data = $this->_semaforos($input->year, $input->idCliente, $input->idAduana);
+
+                $arr = array(
+                    $this->_semaforos($input->year - 1, $input->idCliente, $input->idAduana),
+                    $this->_semaforos($input->year, $input->idCliente, $input->idAduana)
+                );
+
+                $this->_helper->json(array("success" => true, "data" => $arr));
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     protected function _reporteTraficosFacturacion($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null) {
         try {
             $sql = $this->_db->select()

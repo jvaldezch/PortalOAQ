@@ -18,90 +18,46 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
 var chartUsers;
 
-function usuarios(year, month, idCliente, idAduana) {
+function semaforo(year, month, idCliente, idAduana) {
     $.ajax({
-        url: '/trafico/crud/grafica-usuarios',
+        url: '/trafico/crud/grafica-semaforos',
         type: "GET",
         dataType: "json",
-        data: {year: year, month: month, idCliente: idCliente, idAduana: idAduana},
+        data: {year: year, idCliente: idCliente, idAduana: idAduana},
         success: function(res) {
             if (res.success === true) {
-                $("#porUsuarios").highcharts({
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
+                console.log(res.data);
+                $("#semaforo").highcharts({
+                    chart: { type: 'column' },
+                    title: { text: `Rojo ${year - 1} vs ${year}` },
+                    subtitle: {  },
+                    xAxis: {
+                        categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        type: 'category'
                     },
-                    title: {
-                        text: 'Tráficos por usuario, ' + year
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                    },
+                    yAxis: {title: { text: 'Operaciones con semaforo rojo' }},
+                    legend: { enabled: false },
                     plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
+                        series: {
+                            borderWidth: 0,
                             dataLabels: {
                                 enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                }
+                                format: '{point.y}'
                             }
                         }
                     },
-                    series: [{
-                        name: 'Usuarios',
-                        colorByPoint: true,
-                        data: res.results
-                    }]
-                });
-            }
-        },
-        cache: false
-    });
-}
-
-function cumplimiento(year, month, idCliente, idAduana) {
-    $.ajax({
-        url: '/trafico/crud/grafica-cumplimiento',
-        type: "GET",
-        dataType: "json",
-        data: {year: year, month: month, idCliente: idCliente, idAduana: idAduana},
-        success: function(res) {
-            if (res.success === true) {
-                $("#cumplimiento").highcharts({
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Cumplimiento, ' + year
-                    },
                     tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
                     },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                }
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Usuarios',
-                        colorByPoint: true,
-                        data: res.results
+                    series: [{ 
+                        name: `Rojos ${year - 1}`, 
+                        colorByPoint: true, 
+                        data: res.data[0]
+                    },{ 
+                        name: `Rojos ${year}`, 
+                        colorByPoint: true, 
+                        data: res.data[1]
                     }]
                 });
             }
@@ -140,7 +96,6 @@ $(document).ready(function () {
         $("#idAduana").val(parseInt(d[0]));
     }
     
-    usuarios($("#year").val(), $("#month").val(), $("#idCliente").val(), $("#idAduana").val());
-    cumplimiento($("#year").val(), $("#month").val(), $("#idCliente").val(), $("#idAduana").val());
+    semaforo($("#year").val(), $("#month").val(), $("#idCliente").val(), $("#idAduana").val());
     
 });

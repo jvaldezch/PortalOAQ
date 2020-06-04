@@ -120,4 +120,77 @@ class Pedimento_GetController extends Zend_Controller_Action
             throw new Exception($ex->getMessage());
         }
     }
+
+    public function configuracionPartidasAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idPedimento" => "Digits",
+                "idTrafico" => "Digits",
+            );
+            $v = array(
+                "idPedimento" => array("NotEmpty", new Zend_Validate_Int()),
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idPedimento") && $input->isValid("idTrafico")) {
+
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+
+                $pedimento = new OAQ_TraficoPedimento(array("idTrafico" => $input->idTrafico));
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("configuracion-partidas.phtml")));
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function recargarPartidasAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idPedimento" => "Digits",
+                "idTrafico" => "Digits",
+                "group" => array("StringToLower"),
+            );
+            $v = array(
+                "idPedimento" => array("NotEmpty", new Zend_Validate_Int()),
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                "group" => array("NotEmpty"),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idPedimento") && $input->isValid("idTrafico")) {
+                $group = filter_var($input->group, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+                $pedimento = new OAQ_TraficoPedimento(array("idTrafico" => $input->idTrafico));
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+
+                $partidas_fact = $trafico->obtenerProductosPartidas();
+
+                $row = $trafico->obtenerDatos();
+                $tipoCambio = 0;
+                if ($row['id']) {
+                    $d = $pedimento->detalle();
+                    if (!empty($d)) {
+                        $tipoCambio = $d['tipoCambio'];
+                    }
+                }
+
+                $partidas = $pedimento->procesarProductos($row['id'], $tipoCambio, $partidas_fact);
+                $this->_helper->json(array("success" => true, "results" => $partidas));
+
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
 }

@@ -6,12 +6,57 @@ window.procesarPartidas = function () {
   alert("Funcionalidad pendiente.");
 };
 
-window.recargarPartidas = function () {
-  alert("Funcionalidad pendiente.");
+window.recargarPartidas = function (val) {
+  $.ajax({
+    url: `/pedimento/get/recargar-partidas?idPedimento=${$(
+      "#idPedimento"
+    ).val()}&idTrafico=${$("#idTrafico").val()}&group=${val}`,
+    type: "GET",
+    beforeSend: function () {
+      $(".table-partidas").LoadingOverlay("show", {
+        color: "rgba(255, 255, 255, 0.9)",
+      });
+    },
+    success: function (res) {
+      $(".table-partidas").LoadingOverlay("hide", true);
+      if (res.success === true) {
+        console.log(res.results);
+      }
+    },
+  });
 };
 
 window.configuracionPartidas = function () {
-  alert("Funcionalidad pendiente.");
+  $.confirm({
+    title: "Configuración de partidas.",
+    escapeKey: "cerrar",
+    boxWidth: "550px",
+    useBootstrap: false,
+    type: "blue",
+    buttons: {
+      cerrar: { action: function () {} },
+    },
+    content: function () {
+      var self = this;
+      return $.ajax({
+        url: `/pedimento/get/configuracion-partidas?idPedimento=${$(
+          "#idPedimento"
+        ).val()}&idTrafico=${$("#idTrafico").val()}`,
+        dataType: "json",
+        method: "get",
+      })
+        .done(function (res) {
+          var html = "";
+          if (res.success === true) {
+            html = res.html;
+          }
+          self.setContent(html);
+        })
+        .fail(function () {
+          self.setContent("Something went wrong.");
+        });
+    },
+  });
 };
 
 let fields = {
@@ -315,4 +360,12 @@ $(document).ready(function () {
       });
     }
   );
+
+  $(document.body).on("click", "#agrupar-partidas", function () {
+    if ($(this).is(":checked")) {
+      recargarPartidas(true);
+    } else {
+      recargarPartidas(false);      
+    }
+  });
 });
