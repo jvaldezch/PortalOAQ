@@ -1,17 +1,20 @@
 <style>
     table.graphs {
-        width: 350px; 
+        width: 350px;
         margin: auto;
         border-spacing: 2px;
         border-collapse: separate;
     }
+
     table.graphs th,
     table.graphs td {
-        font-size: 12px;    
+        font-size: 12px;
     }
+
     table.graphs th {
         background-color: #f3f3f3;
     }
+
     table.graphs td {
         padding-left: 10px;
     }
@@ -31,11 +34,11 @@
             <tr>
                 <td>
                     <select name="year" id="year" class="traffic-select-small">
-                        <?php foreach(range(date("Y"), 2016) as $item) { ?>
+                        <?php foreach (range(date("Y"), 2016) as $item) { ?>
                             <option value="<?= $item ?>"><?= $item ?></option>
                         <?php } ?>
                     </select>
-                </select>
+                    </select>
                 </td>
                 <td>
                     <select name="month" id="month" class="traffic-select-small">
@@ -82,201 +85,203 @@
 </form>
 <div style="clear: both"></div>
 <div style="float: left; width: 100%">
-    <div style="float: left; width: 50%">
-        <div id="pagados" style="height: 350px"></div>   
-    </div>
-    <div style="float: left; width: 50%">
-        <div id="liberados" style="height: 350px"></div>
-        <table class="graphs" style="width: 100%">
-            <thead>
-                <tr>
-                    <th colspan="14"><?= $this->year ?></th>
-                </tr>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Ene</th>
-                    <th>Feb</th>
-                    <th>Mar</th>
-                    <th>Abr</th>
-                    <th>May</th>
-                    <th>Jun</th>
-                    <th>Jul</th>
-                    <th>Ago</th>
-                    <th>Sep</th>
-                    <th>Oct</th>
-                    <th>Nov</th>
-                    <th>Dic</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Pagados</td>
-                    <td><?= $this->pagados[0] ?></td>
-                    <td><?= $this->pagados[1] ?></td>
-                    <td><?= $this->pagados[2] ?></td>
-                    <td><?= $this->pagados[3] ?></td>
-                    <td><?= $this->pagados[4] ?></td>
-                    <td><?= $this->pagados[5] ?></td>
-                    <td><?= $this->pagados[6] ?></td>
-                    <td><?= $this->pagados[7] ?></td>
-                    <td><?= $this->pagados[8] ?></td>
-                    <td><?= $this->pagados[9] ?></td>
-                    <td><?= $this->pagados[10] ?></td>
-                    <td><?= $this->pagados[11] ?></td>
-                    <td><?= array_sum($this->pagados) ?></td>
-                </tr>
-                <tr>
-                    <td>Liberados</td>
-                    <td><?= $this->liberados[0] ?></td>
-                    <td><?= $this->liberados[1] ?></td>
-                    <td><?= $this->liberados[2] ?></td>
-                    <td><?= $this->liberados[3] ?></td>
-                    <td><?= $this->liberados[4] ?></td>
-                    <td><?= $this->liberados[5] ?></td>
-                    <td><?= $this->liberados[6] ?></td>
-                    <td><?= $this->liberados[7] ?></td>
-                    <td><?= $this->liberados[8] ?></td>
-                    <td><?= $this->liberados[9] ?></td>
-                    <td><?= $this->liberados[10] ?></td>
-                    <td><?= $this->liberados[11] ?></td>
-                    <td><?= array_sum($this->liberados) ?></td>
-                </tr>
-                <tr>
-                    <th colspan="14"><?= $this->year -1 ?></th>
-                </tr>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Ene</th>
-                    <th>Feb</th>
-                    <th>Mar</th>
-                    <th>Abr</th>
-                    <th>May</th>
-                    <th>Jun</th>
-                    <th>Jul</th>
-                    <th>Ago</th>
-                    <th>Sep</th>
-                    <th>Oct</th>
-                    <th>Nov</th>
-                    <th>Dic</th>
-                    <th>Total</th>
-                </tr>
-                <tr>
-                    <td>Pagados</td>
-                    <td><?= $this->pagados_p[0] ?></td>
-                    <td><?= $this->pagados_p[1] ?></td>
-                    <td><?= $this->pagados_p[2] ?></td>
-                    <td><?= $this->pagados_p[3] ?></td>
-                    <td><?= $this->pagados_p[4] ?></td>
-                    <td><?= $this->pagados_p[5] ?></td>
-                    <td><?= $this->pagados_p[6] ?></td>
-                    <td><?= $this->pagados_p[7] ?></td>
-                    <td><?= $this->pagados_p[8] ?></td>
-                    <td><?= $this->pagados_p[9] ?></td>
-                    <td><?= $this->pagados_p[10] ?></td>
-                    <td><?= $this->pagados_p[11] ?></td>
-                    <td><?= array_sum($this->pagados_p) ?></td>
-                </tr>
-                <tr>
-                    <td>Liberados</td>
-                    <td><?= $this->liberados_p[0] ?></td>
-                    <td><?= $this->liberados_p[1] ?></td>
-                    <td><?= $this->liberados_p[2] ?></td>
-                    <td><?= $this->liberados_p[3] ?></td>
-                    <td><?= $this->liberados_p[4] ?></td>
-                    <td><?= $this->liberados_p[5] ?></td>
-                    <td><?= $this->liberados_p[6] ?></td>
-                    <td><?= $this->liberados_p[7] ?></td>
-                    <td><?= $this->liberados_p[8] ?></td>
-                    <td><?= $this->liberados_p[9] ?></td>
-                    <td><?= $this->liberados_p[10] ?></td>
-                    <td><?= $this->liberados_p[11] ?></td>
-                    <td><?= array_sum($this->liberados_p) ?></td>
-                </tr>
-                <tr>
-                    <th colspan="14"><?= $this->year -1 ?> vs <?= $this->year ?></th>
-                </tr>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Ene</th>
-                    <th>Feb</th>
-                    <th>Mar</th>
-                    <th>Abr</th>
-                    <th>May</th>
-                    <th>Jun</th>
-                    <th>Jul</th>
-                    <th>Ago</th>
-                    <th>Sep</th>
-                    <th>Oct</th>
-                    <th>Nov</th>
-                    <th>Dic</th>
-                    <th>Total</th>
-                </tr>
-                <tr>
-                    <td>Pagados</td>
-                    <td><?= $this->pagados[0] - $this->pagados_p[0] ?></td>
-                    <td><?= $this->pagados[1] - $this->pagados_p[1] ?></td>
-                    <td><?= $this->pagados[2] - $this->pagados_p[2] ?></td>
-                    <td><?= $this->pagados[3] - $this->pagados_p[3] ?></td>
-                    <td><?= $this->pagados[4] - $this->pagados_p[4] ?></td>
-                    <td><?= $this->pagados[5] - $this->pagados_p[5] ?></td>
-                    <td><?= $this->pagados[6] - $this->pagados_p[6] ?></td>
-                    <td><?= $this->pagados[7] - $this->pagados_p[7] ?></td>
-                    <td><?= $this->pagados[8] - $this->pagados_p[8] ?></td>
-                    <td><?= $this->pagados[9] - $this->pagados_p[9] ?></td>
-                    <td><?= $this->pagados[10] - $this->pagados_p[10] ?></td>
-                    <td><?= $this->pagados[11] - $this->pagados_p[11] ?></td>
-                    <td><?= array_sum($this->pagados) - array_sum($this->pagados_p)  ?></td>
-                </tr>
-                <tr>
-                    <td>Liberados</td>
-                    <td><?= $this->liberados[0] - $this->liberados_p[0] ?></td>
-                    <td><?= $this->liberados[1] - $this->liberados_p[1] ?></td>
-                    <td><?= $this->liberados[2] - $this->liberados_p[2] ?></td>
-                    <td><?= $this->liberados[3] - $this->liberados_p[3] ?></td>
-                    <td><?= $this->liberados[4] - $this->liberados_p[4] ?></td>
-                    <td><?= $this->liberados[5] - $this->liberados_p[5] ?></td>
-                    <td><?= $this->liberados[6] - $this->liberados_p[6] ?></td>
-                    <td><?= $this->liberados[7] - $this->liberados_p[7] ?></td>
-                    <td><?= $this->liberados[8] - $this->liberados_p[8] ?></td>
-                    <td><?= $this->liberados[9] - $this->liberados_p[9] ?></td>
-                    <td><?= $this->liberados[10] - $this->liberados_p[10] ?></td>
-                    <td><?= $this->liberados[11] - $this->liberados_p[11] ?></td>
-                    <td><?= array_sum($this->liberados) - array_sum($this->liberados_p) ?></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div id="pagados" style="height: 450px"></div>
 </div>
 <div style="float: left; width: 100%">
-    <div style="float: left; width: 50%">
-        <div id="porAduana" style="height: 350px"></div>   
-    </div>
-    <div style="float: left; width: 50%">
-        <div id="semaforo" style="height: 350px"></div>
-    </div>
+    <div id="liberados" style="height: 450px"></div>
 </div>
 <div style="float: left; width: 100%">
-    <div style="float: left; width: 50%">
-    </div>
+    <table class="graphs" style="width: 100%">
+        <thead>
+            <tr>
+                <th colspan="14"><?= $this->year ?></th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Ene</th>
+                <th>Feb</th>
+                <th>Mar</th>
+                <th>Abr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jul</th>
+                <th>Ago</th>
+                <th>Sep</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dic</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pagados</td>
+                <td><?= $this->pagados[0] ?></td>
+                <td><?= $this->pagados[1] ?></td>
+                <td><?= $this->pagados[2] ?></td>
+                <td><?= $this->pagados[3] ?></td>
+                <td><?= $this->pagados[4] ?></td>
+                <td><?= $this->pagados[5] ?></td>
+                <td><?= $this->pagados[6] ?></td>
+                <td><?= $this->pagados[7] ?></td>
+                <td><?= $this->pagados[8] ?></td>
+                <td><?= $this->pagados[9] ?></td>
+                <td><?= $this->pagados[10] ?></td>
+                <td><?= $this->pagados[11] ?></td>
+                <td><?= array_sum($this->pagados) ?></td>
+            </tr>
+            <tr>
+                <td>Liberados</td>
+                <td><?= $this->liberados[0] ?></td>
+                <td><?= $this->liberados[1] ?></td>
+                <td><?= $this->liberados[2] ?></td>
+                <td><?= $this->liberados[3] ?></td>
+                <td><?= $this->liberados[4] ?></td>
+                <td><?= $this->liberados[5] ?></td>
+                <td><?= $this->liberados[6] ?></td>
+                <td><?= $this->liberados[7] ?></td>
+                <td><?= $this->liberados[8] ?></td>
+                <td><?= $this->liberados[9] ?></td>
+                <td><?= $this->liberados[10] ?></td>
+                <td><?= $this->liberados[11] ?></td>
+                <td><?= array_sum($this->liberados) ?></td>
+            </tr>
+            <tr>
+                <th colspan="14"><?= $this->year - 1 ?></th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Ene</th>
+                <th>Feb</th>
+                <th>Mar</th>
+                <th>Abr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jul</th>
+                <th>Ago</th>
+                <th>Sep</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dic</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td>Pagados</td>
+                <td><?= $this->pagados_p[0] ?></td>
+                <td><?= $this->pagados_p[1] ?></td>
+                <td><?= $this->pagados_p[2] ?></td>
+                <td><?= $this->pagados_p[3] ?></td>
+                <td><?= $this->pagados_p[4] ?></td>
+                <td><?= $this->pagados_p[5] ?></td>
+                <td><?= $this->pagados_p[6] ?></td>
+                <td><?= $this->pagados_p[7] ?></td>
+                <td><?= $this->pagados_p[8] ?></td>
+                <td><?= $this->pagados_p[9] ?></td>
+                <td><?= $this->pagados_p[10] ?></td>
+                <td><?= $this->pagados_p[11] ?></td>
+                <td><?= array_sum($this->pagados_p) ?></td>
+            </tr>
+            <tr>
+                <td>Liberados</td>
+                <td><?= $this->liberados_p[0] ?></td>
+                <td><?= $this->liberados_p[1] ?></td>
+                <td><?= $this->liberados_p[2] ?></td>
+                <td><?= $this->liberados_p[3] ?></td>
+                <td><?= $this->liberados_p[4] ?></td>
+                <td><?= $this->liberados_p[5] ?></td>
+                <td><?= $this->liberados_p[6] ?></td>
+                <td><?= $this->liberados_p[7] ?></td>
+                <td><?= $this->liberados_p[8] ?></td>
+                <td><?= $this->liberados_p[9] ?></td>
+                <td><?= $this->liberados_p[10] ?></td>
+                <td><?= $this->liberados_p[11] ?></td>
+                <td><?= array_sum($this->liberados_p) ?></td>
+            </tr>
+            <tr>
+                <th colspan="14"><?= $this->year - 1 ?> vs <?= $this->year ?></th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Ene</th>
+                <th>Feb</th>
+                <th>Mar</th>
+                <th>Abr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jul</th>
+                <th>Ago</th>
+                <th>Sep</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dic</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td>Pagados</td>
+                <td><?= $this->pagados[0] - $this->pagados_p[0] ?></td>
+                <td><?= $this->pagados[1] - $this->pagados_p[1] ?></td>
+                <td><?= $this->pagados[2] - $this->pagados_p[2] ?></td>
+                <td><?= $this->pagados[3] - $this->pagados_p[3] ?></td>
+                <td><?= $this->pagados[4] - $this->pagados_p[4] ?></td>
+                <td><?= $this->pagados[5] - $this->pagados_p[5] ?></td>
+                <td><?= $this->pagados[6] - $this->pagados_p[6] ?></td>
+                <td><?= $this->pagados[7] - $this->pagados_p[7] ?></td>
+                <td><?= $this->pagados[8] - $this->pagados_p[8] ?></td>
+                <td><?= $this->pagados[9] - $this->pagados_p[9] ?></td>
+                <td><?= $this->pagados[10] - $this->pagados_p[10] ?></td>
+                <td><?= $this->pagados[11] - $this->pagados_p[11] ?></td>
+                <td><?= array_sum($this->pagados) - array_sum($this->pagados_p)  ?></td>
+            </tr>
+            <tr>
+                <td>Liberados</td>
+                <td><?= $this->liberados[0] - $this->liberados_p[0] ?></td>
+                <td><?= $this->liberados[1] - $this->liberados_p[1] ?></td>
+                <td><?= $this->liberados[2] - $this->liberados_p[2] ?></td>
+                <td><?= $this->liberados[3] - $this->liberados_p[3] ?></td>
+                <td><?= $this->liberados[4] - $this->liberados_p[4] ?></td>
+                <td><?= $this->liberados[5] - $this->liberados_p[5] ?></td>
+                <td><?= $this->liberados[6] - $this->liberados_p[6] ?></td>
+                <td><?= $this->liberados[7] - $this->liberados_p[7] ?></td>
+                <td><?= $this->liberados[8] - $this->liberados_p[8] ?></td>
+                <td><?= $this->liberados[9] - $this->liberados_p[9] ?></td>
+                <td><?= $this->liberados[10] - $this->liberados_p[10] ?></td>
+                <td><?= $this->liberados[11] - $this->liberados_p[11] ?></td>
+                <td><?= array_sum($this->liberados) - array_sum($this->liberados_p) ?></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-
-<div style="clear: both"></div>
+<div style="float: left; width: 100%">
+    <div id="porAduana" style="height: 450px"></div>
+</div>
+<div style="float: left; width: 100%">
+    <div id="semaforo" style="height: 450px"></div>
+</div>
 <?php if (isset($this->arr)) { ?>
     <script type="text/javascript">
         var c_y = jQuery.parseJSON('<?= $this->arr ?>');
         var p_y = jQuery.parseJSON('<?= $this->arr_p ?>');
 
         $("#pagados").highcharts({
-            chart: { type: 'column' },
-            title: { text: 'Pedimentos Pagados <?= $this->year - 1 ?> vs <?= $this->year ?>' },
-            subtitle: {  },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Pedimentos Pagados <?= $this->year - 1 ?> vs <?= $this->year ?>'
+            },
+            subtitle: {},
             xAxis: {
                 categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
                 type: 'category'
             },
-            yAxis: {title: { text: 'Total de pedimentos pagados' }},
-            legend: { enabled: false },
+            yAxis: {
+                title: {
+                    text: 'Número de pedimentos pagados'
+                }
+            },
+            legend: {
+                enabled: true
+            },
             plotOptions: {
                 series: {
                     borderWidth: 0,
@@ -291,24 +296,36 @@
                 pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
             },
             series: [{
-                name: 'Pagados <?= $this->year ?>',
-                data: c_y.data
-            }, {
-                name: 'Pagados <?= $this->year -1 ?>',
+                name: 'Pedimentos pagados <?= $this->year - 1 ?>',
+                color: '#0000FF',
                 data: p_y.data
+            }, {
+                name: 'Pedimentos pagados <?= $this->year ?>',
+                color: '#00FF00',
+                data: c_y.data
             }]
         });
-        
+
         $("#liberados").highcharts({
-            chart: { type: 'column' },
-            title: { text: 'Pedimentos Pagados vs Liberados <?= $this->year ?>' },
-            subtitle: {  },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Pedimentos Pagados vs Liberados <?= $this->year ?>'
+            },
+            subtitle: {},
             xAxis: {
                 categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
                 type: 'category'
             },
-            yAxis: { title: { text: 'Cantidad Pedimentos' }  },
-            legend: { enabled: true },
+            yAxis: {
+                title: {
+                    text: 'Cantidad Pedimentos'
+                }
+            },
+            legend: {
+                enabled: true
+            },
             plotOptions: {
                 series: {
                     borderWidth: 0,
@@ -324,25 +341,37 @@
             },
             series: [{
                 name: 'Pagados',
+                color: '#0000FF',
                 data: <?= json_encode($this->pagados) ?>
 
             }, {
                 name: 'Liberados',
+                color: '#00FF00',
                 data: <?= json_encode($this->liberados) ?>
 
             }]
         });
-        
+
         $("#porAduana").highcharts({
-            chart: { type: 'column' },
-            title: { text: 'Pedimentos Liberados por Aduana <?= $this->month ?>, <?= $this->year - 1 ?> vs <?= $this->year ?>' },
-            subtitle: {  },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Pedimentos Liberados por Aduana <?= $this->month ?>, <?= $this->year - 1 ?> vs <?= $this->year ?>'
+            },
+            subtitle: {},
             xAxis: {
                 categories: <?= json_encode($this->porAduanaEtiquetas) ?>,
                 type: 'category'
             },
-            yAxis: {title: { text: 'Total de pedimentos pagados' }},
-            legend: { enabled: false },
+            yAxis: {
+                title: {
+                    text: 'Total de pedimentos pagados'
+                }
+            },
+            legend: {
+                enabled: true
+            },
             plotOptions: {
                 series: {
                     borderWidth: 0,
@@ -356,14 +385,16 @@
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
             },
-            series: [{ 
-                name: 'Operaciones <?= $this->year ?>', 
-                colorByPoint: true, 
-                data: <?= json_encode($this->porAduana) ?> 
-            }, { 
-                name: 'Operaciones <?= $this->year - 1 ?>', 
-                colorByPoint: true, 
-                data: <?= json_encode($this->porAduanaP) ?> 
+            series: [{
+                name: 'Operaciones <?= $this->year - 1 ?>',
+                //colorByPoint: true,
+                color: '#0000FF',
+                data: <?= json_encode($this->porAduanaP) ?>
+            }, {
+                name: 'Operaciones <?= $this->year ?>',
+                //colorByPoint: true,
+                color: '#00FF00',
+                data: <?= json_encode($this->porAduana) ?>
             }]
         });
     </script>

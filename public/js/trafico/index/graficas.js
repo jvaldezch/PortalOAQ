@@ -26,7 +26,6 @@ function semaforo(year, month, idCliente, idAduana) {
         data: {year: year, idCliente: idCliente, idAduana: idAduana},
         success: function(res) {
             if (res.success === true) {
-                console.log(res.data);
                 $("#semaforo").highcharts({
                     chart: { type: 'column' },
                     title: { text: `Rojo ${year - 1} vs ${year}` },
@@ -36,7 +35,7 @@ function semaforo(year, month, idCliente, idAduana) {
                         type: 'category'
                     },
                     yAxis: {title: { text: 'Operaciones con semaforo rojo' }},
-                    legend: { enabled: false },
+                    legend: { enabled: true },
                     plotOptions: {
                         series: {
                             borderWidth: 0,
@@ -51,12 +50,12 @@ function semaforo(year, month, idCliente, idAduana) {
                         pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
                     },
                     series: [{ 
-                        name: `Rojos ${year - 1}`, 
-                        colorByPoint: true, 
+                        name: `Operaciones en rojo ${year - 1}`,
+                        color: '#0000FF',
                         data: res.data[0]
                     },{ 
-                        name: `Rojos ${year}`, 
-                        colorByPoint: true, 
+                        name: `Operaciones en rojo ${year}`, 
+                        color: '#00FF00',
                         data: res.data[1]
                     }]
                 });
