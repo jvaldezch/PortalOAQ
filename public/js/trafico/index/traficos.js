@@ -108,14 +108,14 @@ $(document).ready(function() {
                 }
             },
             {
-                text: "Actualizar",
+                text: "Act.",
                 iconCls: "icon-reload",
                 handler: function () {
                     $("#dg").edatagrid("reload");
                 }
             },
             {
-                text: "Descarga",
+                text: "Desc.",
                 iconCls: "icon-download",
                 handler: function (param) {
                     descargaReporte();
@@ -151,7 +151,7 @@ $(document).ready(function() {
                     title: "",
                     formatter: formatUpload
                 },
-                {field: 'estatusExpediente', width: 30, title: "",
+                {field: 'estatusExpdnt', width: 30, title: "",
                     formatter: formatArchive},
                 {field: "patente", width: 50, title: "Patente"},
                 {field: "aduana", width: 50, title: "Aduana"},

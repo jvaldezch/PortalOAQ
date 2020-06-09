@@ -10,6 +10,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
     protected $_filtrosCookies;
     protected $_db;
     protected $_res;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
@@ -18,6 +19,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_db = Zend_Registry::get("oaqintranet");
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -235,7 +237,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         "semaforo",
                         "coves",
                         "edocuments",
-                        new Zend_Db_Expr("CASE WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NULL THEN 1 WHEN t.revisionAdministracion IS NULL AND t.revisionOperaciones IS NOT NULL THEN 2 WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NOT NULL THEN 3 ELSE 0 END AS estatusExpediente"),
+                        new Zend_Db_Expr("CASE WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NULL THEN 1 WHEN t.revisionAdministracion IS NULL AND t.revisionOperaciones IS NOT NULL THEN 2 WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NOT NULL THEN 3 ELSE 0 END AS estatusExpdnt"),
                     ))
                     ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
                     ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
@@ -2154,6 +2156,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
             "expos" => filter_var($request->getCookie("expos"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "fdates" => filter_var($request->getCookie("fdates"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "ninvoices" => filter_var($request->getCookie("ninvoices"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+            "checklist" => filter_var($request->getCookie("checklist"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "dateini" => filter_var($request->getCookie("dateini"), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=> "/^\d{4}\-\d{2}\-\d{2}$/"))),
             "dateend" => filter_var($request->getCookie("dateend"), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=> "/^\d{4}\-\d{2}\-\d{2}$/"))),
         );
@@ -2242,6 +2245,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
                             ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
+            }
+            if ($filtrosCookies["checklist"] == true) {
+                $sql->where("(CASE WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NULL THEN 1 WHEN t.revisionAdministracion IS NULL AND t.revisionOperaciones IS NOT NULL THEN 2 WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NOT NULL THEN 3 ELSE 0 END) < 2");
             }
             if ($filtrosCookies["liberadas"] == true) {
                 $sql->where("t.estatus = 3");
