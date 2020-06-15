@@ -390,12 +390,10 @@ $(document).ready(function () {
         errorClass: "traffic-error",
         rules: {
             razon_soc: {
-                required: true,
-                regex: /^[-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú.,& ]+$/
+                required: true
             },
             calle: {
-                required: true,
-                regex: /^[\/-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú.,+- ]+$/
+                required: true
             },
             numext: {required: true},
             estado: {required: true},
