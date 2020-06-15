@@ -840,7 +840,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             }
             $r = $this->getRequest();
             if ($r->isPost()) {
-                $addr = array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú.,&+-\/ ]+$/"));
+                //$addr = array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9ÑñÁÉÍÓÚáéíóú.,&+-\/ ]+$/"));
                 $f = array(
                     "*" => array("StringTrim", "StripTags", "StringToUpper"),
                     "id" => "Digits",
@@ -851,15 +851,15 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                     "rfcCliente" => array(new Zend_Validate_Regex("/^[-_a-zA-Z0-9]+$/"), "presence" => "required"),
                     "cp" => array("NotEmpty", new Zend_Validate_Regex("/^[0-9]+$/")),
-                    "razon_soc" => $addr,
-                    "calle" => $addr,
-                    "numext" => $addr,
-                    "numint" => $addr,
-                    "colonia" => $addr,
-                    "localidad" => $addr,
-                    "municipio" => $addr,
-                    "estado" => $addr,
-                    "pais" => $addr,
+                    "razon_soc" => array("NotEmpty"),
+                    "calle" => array("NotEmpty"),
+                    "numext" => array("NotEmpty"),
+                    "numint" => array("NotEmpty"),
+                    "colonia" => array("NotEmpty"),
+                    "localidad" => array("NotEmpty"),
+                    "municipio" => array("NotEmpty"),
+                    "estado" => array("NotEmpty"),
+                    "pais" => array("NotEmpty"),
                 );
                 $i = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($i->isValid("idCliente")) {
