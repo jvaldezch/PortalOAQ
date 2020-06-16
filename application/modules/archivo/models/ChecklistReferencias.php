@@ -114,4 +114,8 @@ class Archivo_Model_ChecklistReferencias {
         }
     }
 
+    public function buscar() {
+        
+    }
+
 }

@@ -1688,6 +1688,16 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $this->view->arr_p = json_encode($graph_p);
         }
 
+        
+        $yes = date('Y-m-d', strtotime('-1 day', strtotime(date("Y-m-d"))));
+        $arr_lda = $mapper->obtenerLiberadosPorFecha($yes, $input->idCliente, $input->idAduana);
+        $this->view->arr_lda = $arr_lda;
+
+        $oyb = date('Y-m-d', strtotime('-6 months', strtotime(date("Y-m-d"))));
+        $arr_oyb = $mapper->obtenerLiberadosPorFecha($oyb, $input->idCliente, $input->idAduana, date("Y-m-d"));
+        $this->view->arr_oyb = $arr_oyb;
+
+
         $arrl = $mapper->obtenerLiberadosGrafica($year, $input->idCliente, $input->idAduana);
         $arrlib = [];
         foreach ($arrl as $value) {

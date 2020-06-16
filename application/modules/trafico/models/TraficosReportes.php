@@ -1,30 +1,33 @@
 <?php
 
-class Trafico_Model_TraficosReportes {
+class Trafico_Model_TraficosReportes
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_Traficos();
     }
 
-    public function obtenerPorAduanaGrafica($year, $month) {
+    public function obtenerPorAduanaGrafica($year, $month)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("t" => "traficos"), array(
-                        "a.nombre AS name",
-                        "a.abbrv",
-                        "a.patente",
-                        "a.aduana",
-                        new Zend_Db_Expr("count(t.id) AS y")
-                    ))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
-                    ->where("YEAR(t.fechaPago) = ?", $year)
-                    ->where("MONTH(t.fechaPago) = ?", $month)
-                    ->where("t.fechaPago IS NOT NULL")
-                    ->where("t.estatus NOT IN (4)")
-                    ->group("t.idAduana");
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), array(
+                    "a.nombre AS name",
+                    "a.abbrv",
+                    "a.patente",
+                    "a.aduana",
+                    new Zend_Db_Expr("count(t.id) AS y")
+                ))
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(t.fechaPago) = ?", $year)
+                ->where("MONTH(t.fechaPago) = ?", $month)
+                ->where("t.fechaPago IS NOT NULL")
+                ->where("t.estatus NOT IN (4)")
+                ->group("t.idAduana");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $arrl = [];
@@ -37,7 +40,7 @@ class Trafico_Model_TraficosReportes {
                             "y" => (int) $value["y"],
                         );
                     } else {
-                        array_push($arrl, $value["aduana"] . '-' . $value['patente']);                        
+                        array_push($arrl, $value["aduana"] . '-' . $value['patente']);
                         $arr[] = array(
                             "name" => $value["aduana"] . '-' . $value['patente'],
                             "y" => (int) $value["y"],
@@ -55,7 +58,8 @@ class Trafico_Model_TraficosReportes {
         }
     }
 
-    public function obtenerPorDiasGraficaAereas($year, $month, $tipoAduana) {
+    public function obtenerPorDiasGraficaAereas($year, $month, $tipoAduana)
+    {
         try {
             $fields = array(
                 new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 2 THEN 1 ELSE 0 END) AS 2dias"),
@@ -64,14 +68,14 @@ class Trafico_Model_TraficosReportes {
                 new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 7 THEN 1 ELSE 0 END) AS mayor"),
             );
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("t" => "traficos"), $fields)
-                    ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
-                    ->where("YEAR(t.fechaLiberacion) = ?", $year)
-                    ->where("MONTH(t.fechaLiberacion) = ?", $month)
-                    ->where("a.tipoAduana = ?", $tipoAduana)
-                    ->where("(t.fechaLiberacion IS NOT NULL AND t.fechaRevalidacion IS NOT NULL AND t.fechaEnvioDocumentos IS NOT NULL)")
-                    ->where("t.estatus = 3");
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), $fields)
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(t.fechaLiberacion) = ?", $year)
+                ->where("MONTH(t.fechaLiberacion) = ?", $month)
+                ->where("a.tipoAduana = ?", $tipoAduana)
+                ->where("(t.fechaLiberacion IS NOT NULL AND t.fechaRevalidacion IS NOT NULL AND t.fechaEnvioDocumentos IS NOT NULL)")
+                ->where("t.estatus = 3");
             if ($tipoAduana) {
                 $sql->where("t.cvePedimento NOT IN ('A3', 'E1', 'F4', 'F5', 'G1', 'V1', 'F5')");
             }
@@ -84,8 +88,9 @@ class Trafico_Model_TraficosReportes {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function obtenerPorDiasGraficaMaritimas($year, $month) {
+
+    public function obtenerPorDiasGraficaMaritimas($year, $month)
+    {
         try {
             $fields = array(
                 new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 2 THEN 1 ELSE 0 END) AS 2dias"),
@@ -94,41 +99,14 @@ class Trafico_Model_TraficosReportes {
                 new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 7 THEN 1 ELSE 0 END) AS mayor"),
             );
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("t" => "traficos"), $fields)
-                    ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
-                    ->where("YEAR(t.fechaLiberacion) = ?", $year)
-                    ->where("MONTH(t.fechaLiberacion) = ?", $month)
-                    ->where("a.tipoAduana = 3")
-                    ->where("(t.fechaLiberacion IS NOT NULL AND t.fechaRevalidacion IS NOT NULL AND t.fechaEnvioDocumentos IS NOT NULL)")
-                    ->where("t.estatus = 3");
-            $stmt = $this->_db_table->fetchRow($sql);
-            if ($stmt) {
-                return $stmt->toArray();
-            }
-            return;
-        } catch (Zend_Db_Adapter_Exception $e) {
-            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
-        }
-    }
-    
-    public function obtenerPorDiasGraficaTerrestres($year, $month) {
-        try {
-            $fields = array(
-                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 2 THEN 1 ELSE 0 END) AS 2dias"),
-                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 2 AND datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 5 THEN 1 ELSE 0 END) AS 5dias"),
-                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 5 AND datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 7 THEN 1 ELSE 0 END) AS 7dias"),
-                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 7 THEN 1 ELSE 0 END) AS mayor"),
-            );
-            $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("t" => "traficos"), $fields)
-                    ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
-                    ->where("YEAR(t.fechaLiberacion) = ?", $year)
-                    ->where("MONTH(t.fechaLiberacion) = ?", $month)
-                    ->where("a.tipoAduana = 4")
-                    ->where("(t.fechaLiberacion IS NOT NULL AND t.fechaRevalidacion IS NOT NULL AND t.fechaEnvioDocumentos IS NOT NULL)")
-                    ->where("t.estatus = 3");
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), $fields)
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(t.fechaLiberacion) = ?", $year)
+                ->where("MONTH(t.fechaLiberacion) = ?", $month)
+                ->where("a.tipoAduana = 3")
+                ->where("(t.fechaLiberacion IS NOT NULL AND t.fechaRevalidacion IS NOT NULL AND t.fechaEnvioDocumentos IS NOT NULL)")
+                ->where("t.estatus = 3");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -139,7 +117,36 @@ class Trafico_Model_TraficosReportes {
         }
     }
 
-    public function obtenerTipoOperacionesGrafica($year, $month, $idCliente = null, $idAduana = null) {
+    public function obtenerPorDiasGraficaTerrestres($year, $month)
+    {
+        try {
+            $fields = array(
+                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 2 THEN 1 ELSE 0 END) AS 2dias"),
+                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 2 AND datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 5 THEN 1 ELSE 0 END) AS 5dias"),
+                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 5 AND datediff(t.fechaLiberacion, t.fechaRevalidacion) <= 7 THEN 1 ELSE 0 END) AS 7dias"),
+                new Zend_Db_Expr("SUM(CASE WHEN datediff(t.fechaLiberacion, t.fechaRevalidacion) > 7 THEN 1 ELSE 0 END) AS mayor"),
+            );
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), $fields)
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(t.fechaLiberacion) = ?", $year)
+                ->where("MONTH(t.fechaLiberacion) = ?", $month)
+                ->where("a.tipoAduana = 4")
+                ->where("(t.fechaLiberacion IS NOT NULL AND t.fechaRevalidacion IS NOT NULL AND t.fechaEnvioDocumentos IS NOT NULL)")
+                ->where("t.estatus = 3");
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function obtenerTipoOperacionesGrafica($year, $month, $idCliente = null, $idAduana = null)
+    {
         try {
             $fields = array(
                 new Zend_Db_Expr("SUM(CASE WHEN a.tipoAduana = 1 AND t.cvePedimento IN ('A3', 'E1', 'F4', 'F5', 'G1', 'V1', 'F5') THEN 1 ELSE 0 END) AS especiales"),
@@ -148,13 +155,13 @@ class Trafico_Model_TraficosReportes {
                 new Zend_Db_Expr("SUM(CASE WHEN a.tipoAduana = 4 THEN 1 ELSE 0 END) AS terrestres"),
             );
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("t" => "traficos"), $fields)
-                    ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
-                    ->where("YEAR(t.fechaLiberacion) = ?", $year)
-                    ->where("MONTH(t.fechaLiberacion) = ?", $month)
-                    ->where("t.fechaLiberacion IS NOT NULL")
-                    ->where("t.estatus = 3");
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), $fields)
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(t.fechaLiberacion) = ?", $year)
+                ->where("MONTH(t.fechaLiberacion) = ?", $month)
+                ->where("t.fechaLiberacion IS NOT NULL")
+                ->where("t.estatus = 3");
             if ($idCliente) {
                 $sql->where('t.idCliente = ?', $idCliente);
             }
@@ -173,7 +180,8 @@ class Trafico_Model_TraficosReportes {
         }
     }
 
-    public function obtenerLiberadosVsCompleto($year, $month) {
+    public function obtenerLiberadosVsCompleto($year, $month)
+    {
         try {
             $fields = array(
                 new Zend_Db_Expr("SUM(CASE WHEN fechaLiberacion IS NOT NULL THEN 1 ELSE 0 END) AS liberados"),
@@ -183,11 +191,11 @@ class Trafico_Model_TraficosReportes {
                 new Zend_Db_Expr("SUM(CASE WHEN (fechaEnvioDocumentos IS NOT NULL AND fechaRevalidacion IS NOT NULL) THEN 1 ELSE 0 END) AS completo"),
             );
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, $fields)
-                    ->where("estatus = 3")
-                    ->where("fechaLiberacion IS NOT NULL")
-                    ->where("YEAR(fechaLiberacion) = ?", $year)
-                    ->where("MONTH(fechaLiberacion) = ?", $month);
+                ->from($this->_db_table, $fields)
+                ->where("estatus = 3")
+                ->where("fechaLiberacion IS NOT NULL")
+                ->where("YEAR(fechaLiberacion) = ?", $year)
+                ->where("MONTH(fechaLiberacion) = ?", $month);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -197,8 +205,9 @@ class Trafico_Model_TraficosReportes {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function obtenerLiberadosGrafica($year, $idCliente = null, $idAduana = null) {
+
+    public function obtenerLiberadosGrafica($year, $idCliente = null, $idAduana = null)
+    {
         try {
             $fields = array(
                 new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 1 THEN 1 ELSE 0 END) AS Ene"),
@@ -215,10 +224,10 @@ class Trafico_Model_TraficosReportes {
                 new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 12 THEN 1 ELSE 0 END) AS Dic"),
             );
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, $fields)
-                    ->where("estatus = 3")
-                    ->where("fechaLiberacion IS NOT NULL")
-                    ->where("YEAR(fechaLiberacion) = ?", $year);
+                ->from($this->_db_table, $fields)
+                ->where("estatus = 3")
+                ->where("fechaLiberacion IS NOT NULL")
+                ->where("YEAR(fechaLiberacion) = ?", $year);
             if ($idCliente) {
                 $sql->where('idCliente = ?', $idCliente);
             }
@@ -235,7 +244,8 @@ class Trafico_Model_TraficosReportes {
         }
     }
 
-    public function obtenerPagadosGrafica($year, $idCliente = null, $idAduana = null) {
+    public function obtenerPagadosGrafica($year, $idCliente = null, $idAduana = null)
+    {
         try {
             $fields = array(
                 new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaPago) = 1 THEN 1 ELSE 0 END) AS Ene"),
@@ -252,9 +262,9 @@ class Trafico_Model_TraficosReportes {
                 new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaPago) = 12 THEN 1 ELSE 0 END) AS Dic"),
             );
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, $fields)
-                    ->where("estatus = 3")
-                    ->where("YEAR(fechaPago) = ?", $year);
+                ->from($this->_db_table, $fields)
+                ->where("estatus = 3")
+                ->where("YEAR(fechaPago) = ?", $year);
             if ($idCliente) {
                 $sql->where('idCliente = ?', $idCliente);
             }
@@ -271,4 +281,41 @@ class Trafico_Model_TraficosReportes {
         }
     }
 
+    public function obtenerLiberadosPorFecha($yesterday, $idCliente = null, $idAduana = null, $today = null)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), array(
+                    "t.idCliente", 
+                    "count(*) AS total", 
+                    new Zend_Db_Expr("SUM(CASE WHEN t.semaforo = 2 THEN 1 ELSE 0 END) AS rojos"),
+                    new Zend_Db_Expr("SUM(CASE WHEN t.cvePedimento = 'R1' THEN 1 ELSE 0 END) AS rectificaciones"),
+                    "c.nombre AS razonSocial"
+                ))
+                ->where("estatus = 3")
+                ->where("t.fechaLiberacion IS NOT NULL")                
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array())
+                ->group(("t.idCliente"))
+                ->order("c.nombre ASC");
+            if (!isset($today)) {
+                $sql->where("t.fechaLiberacion BETWEEN '{$yesterday} 00:00:00' AND '{$yesterday} 23:59:59' ");
+            } else {
+                $sql->where("t.fechaLiberacion BETWEEN '{$yesterday} 00:00:00' AND '{$today} 23:59:59' ");
+            }
+            if ($idCliente) {
+                $sql->where('t.idCliente = ?', $idCliente);
+            }
+            if ($idAduana) {
+                $sql->where('t.idAduana = ?', $idAduana);
+            }
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
 }

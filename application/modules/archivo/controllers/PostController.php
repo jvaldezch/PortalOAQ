@@ -310,23 +310,51 @@ class Archivo_PostController extends Zend_Controller_Action {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/post/");
                 $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
                 $arr = $index->datos($idRepo);
-                if (count($arr)) {
+
+                if ($arr['patente'] == null) {
+                    $trfc = new OAQ_Trafico(array("idTrafico" => $input->idTrafico));
+                    $d = $trfc->obtenerDatos();
+                    $u = array(
+                        "idAduana" => $d['idAduana'],
+                        "patente" => $d['patente'],
+                        "aduana" => $d['aduana'],
+                        "pedimento" => $d['pedimento'],
+                    );
+                    if ($index->actualizarChecklist($idRepo, $u)) {
+                        $arr = $index->datos($idRepo);
+                    }
+                }
+
+                // actualizar el repositorio_index
+
+                /*if (count($arr)) {
                     $view->idRepo = $idRepo;
                     $view->idTrafico = $arr["idTrafico"];
                     $view->patente = $arr["patente"];
                     $view->aduana = $arr["aduana"];
                     $view->pedimento = $arr["pedimento"];
                     $view->referencia = $arr["referencia"];
+
                     $row = new Archivo_Model_Table_ChecklistReferencias();
+
+                    $this->_firephp->info($arr);
+
                     $table = new Archivo_Model_ChecklistReferencias();
                     $row->setPatente($arr["patente"]);
                     $row->setAduana($arr["aduana"]);
                     $row->setReferencia($arr["referencia"]);
                     $row->setPedimento($arr["pedimento"]);
                     $table->find($row);
+
                     $model = new Trafico_Model_TraficoAduanasMapper();
-                    $idAduana = $model->idAduana($arr["patente"], $arr["aduana"]);
+                    if (!$arr['idAduana']) {
+                        $idAduana = $model->idAduana($arr["patente"], $arr["aduana"]);
+                    } else {
+                        $idAduana = $arr['idAduana'];
+                    }
+
                     if (null !== ($row->getId())) {
                         $view->data = json_decode($row->getChecklist());
                         $view->observaciones = $row->getObservaciones();
@@ -361,7 +389,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                     if (isset($logs) && !empty($logs)) {
                         $view->bitacora = $logs;
                     }
-                }
+                }*/
                 $this->_helper->json(array("success" => true, "html" => $view->render("checklist.phtml")));
             } else {
                 throw new Exception("Invalid request type!");

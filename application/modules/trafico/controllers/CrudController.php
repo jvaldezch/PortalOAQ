@@ -425,14 +425,13 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $v["facturas"] = array("NotEmpty");
                 $v["cantidadFacturas"] = array("NotEmpty");
                 $v["cantidadPartes"] = array("NotEmpty");
-                //$v["observaciones"] = array("NotEmpty");
+                $v["observaciones"] = array("NotEmpty");
                 $v["tipoCarga"] = array("NotEmpty");
                 $v["almacen"] = array("NotEmpty");
                 $v["idPlanta"] = array("NotEmpty");
                 $v["cumplimientoAdministrativo"] = array("NotEmpty");
                 $v["cumplimientoOperativo"] = array("NotEmpty");
                 $v["ccConsolidado"] = array("NotEmpty");
-                
                 $v["fechaEtd"] = array("NotEmpty");
                 $v["fechaEta"] = array("NotEmpty");
                 $v["fechaNotificacion"] = array("NotEmpty");
@@ -474,6 +473,10 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     if ($i->isValid("observaciones")) {
                         $obs = $i->observaciones;
                     }
+                    $cc = '';
+                    if ($i->isValid("ccConsolidado")) {
+                        $cc = $i->ccConsolidado;
+                    }
                     $arr = array(
                         "estatus" => $estatus,
                         "blGuia" => ($i->isValid("blGuia")) ? $i->blGuia : $row['blGuia'],
@@ -490,7 +493,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         "idPlanta" => ($i->isValid("idPlanta")) ? $i->idPlanta : $row['idPlanta'],
                         "cumplimientoAdministrativo" => ($i->isValid("cumplimientoAdministrativo")) ? $i->cumplimientoAdministrativo : $row['cumplimientoAdministrativo'],
                         "cumplimientoOperativo" => ($i->isValid("cumplimientoOperativo")) ? $i->cumplimientoOperativo : $row['cumplimientoOperativo'],
-                        "ccConsolidado" => ($i->isValid("ccConsolidado")) ? $i->ccConsolidado : $row['ccConsolidado'],
+                        "ccConsolidado" => $cc,
                         "fechaEtd" => ($i->isValid("fechaEtd")) ? $i->fechaEtd : $row['fechaEtd'],
                         "fechaEta" => ($i->isValid("fechaEta")) ? $i->fechaEta : $row['fechaEta'],
                         "fechaNotificacion" => ($i->isValid("fechaNotificacion")) ? $i->fechaNotificacion : $row['fechaNotificacion'],
