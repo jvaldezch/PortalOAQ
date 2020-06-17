@@ -329,7 +329,7 @@ class Archivo_PostController extends Zend_Controller_Action {
 
                 // actualizar el repositorio_index
 
-                /*if (count($arr)) {
+                if (count($arr)) {
                     $view->idRepo = $idRepo;
                     $view->idTrafico = $arr["idTrafico"];
                     $view->patente = $arr["patente"];
@@ -339,28 +339,20 @@ class Archivo_PostController extends Zend_Controller_Action {
 
                     $row = new Archivo_Model_Table_ChecklistReferencias();
 
-                    $this->_firephp->info($arr);
-
                     $table = new Archivo_Model_ChecklistReferencias();
-                    $row->setPatente($arr["patente"]);
-                    $row->setAduana($arr["aduana"]);
-                    $row->setReferencia($arr["referencia"]);
-                    $row->setPedimento($arr["pedimento"]);
-                    $table->find($row);
 
+                    if (($r = $table->buscarChecklist($arr["patente"], $arr["aduana"], $arr["pedimento"], $arr["referencia"]))) {
+                        $view->data = json_decode($r['checklist']);
+                        $view->observaciones = $r['observaciones'];
+                        $view->completo = $r['completo'];
+                        $view->revOp = $r['revisionOperaciones'];
+                        $view->revAdm = $r['revisionAdministracion'];
+                    }
                     $model = new Trafico_Model_TraficoAduanasMapper();
                     if (!$arr['idAduana']) {
                         $idAduana = $model->idAduana($arr["patente"], $arr["aduana"]);
                     } else {
                         $idAduana = $arr['idAduana'];
-                    }
-
-                    if (null !== ($row->getId())) {
-                        $view->data = json_decode($row->getChecklist());
-                        $view->observaciones = $row->getObservaciones();
-                        $view->completo = $row->getCompleto();
-                        $view->revOp = $row->getRevisionOperaciones();
-                        $view->revAdm = $row->getRevisionAdministracion();
                     }
                     if (isset($idAduana)) {
                         $checklist = new OAQ_Checklist();
@@ -384,12 +376,14 @@ class Archivo_PostController extends Zend_Controller_Action {
                     if (isset($tipos)) {
                         $view->tipos = $tipos;
                     }
+
                     $log = new Archivo_Model_ChecklistReferenciasBitacora();
                     $logs = $log->obtener($arr["patente"], $arr["aduana"], $arr["pedimento"], $arr["referencia"]);
                     if (isset($logs) && !empty($logs)) {
                         $view->bitacora = $logs;
                     }
-                }*/
+                    
+                }
                 $this->_helper->json(array("success" => true, "html" => $view->render("checklist.phtml")));
             } else {
                 throw new Exception("Invalid request type!");

@@ -1,14 +1,17 @@
 <?php
 
-class Archivo_Model_ChecklistReferencias {
+class Archivo_Model_ChecklistReferencias
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Archivo_Model_DbTable_ChecklistReferencias();
     }
 
-    public function save(Archivo_Model_Table_ChecklistReferencias $t) {
+    public function save(Archivo_Model_Table_ChecklistReferencias $t)
+    {
         try {
             $row = array(
                 "id" => $t->getId(),
@@ -40,8 +43,9 @@ class Archivo_Model_ChecklistReferencias {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function update(Archivo_Model_Table_ChecklistReferencias $t) {
+
+    public function update(Archivo_Model_Table_ChecklistReferencias $t)
+    {
         try {
             $row = array(
                 "checklist" => $t->getChecklist(),
@@ -56,7 +60,7 @@ class Archivo_Model_ChecklistReferencias {
                 "actualizado" => $t->getActualizado(),
             );
             $stmt = $this->_db_table->update($row, array("id = ?" => $t->getId()));
-            if($stmt) {
+            if ($stmt) {
                 return true;
             }
             return false;
@@ -65,13 +69,14 @@ class Archivo_Model_ChecklistReferencias {
         }
     }
 
-    public function find(Archivo_Model_Table_ChecklistReferencias $t) {
+    public function find(Archivo_Model_Table_ChecklistReferencias $t)
+    {
         try {
             $stmt = $this->_db_table->fetchRow(
-                    $this->_db_table->select()
-                            ->where("patente = ?", $t->getPatente())
-                            ->where("aduana = ?", $t->getAduana())
-                            ->where("referencia = ?", $t->getReferencia())
+                $this->_db_table->select()
+                    ->where("patente = ?", $t->getPatente())
+                    ->where("aduana = ?", $t->getAduana())
+                    ->where("referencia = ?", $t->getReferencia())
             );
             if (0 == count($stmt)) {
                 return;
@@ -97,13 +102,14 @@ class Archivo_Model_ChecklistReferencias {
         }
     }
 
-    public function buscar($patente, $aduana, $referencia) {
+    public function buscar($patente, $aduana, $referencia)
+    {
         try {
             $stmt = $this->_db_table->fetchRow(
-                    $this->_db_table->select()
-                            ->where("patente = ?", $patente)
-                            ->where("aduana = ?", $aduana)
-                            ->where("referencia = ?", $referencia)
+                $this->_db_table->select()
+                    ->where("patente = ?", $patente)
+                    ->where("aduana = ?", $aduana)
+                    ->where("referencia = ?", $referencia)
             );
             if ($stmt) {
                 return $stmt;
@@ -114,8 +120,22 @@ class Archivo_Model_ChecklistReferencias {
         }
     }
 
-    public function buscar() {
-        
+    public function buscarChecklist($patente, $aduana, $pedimento, $referencia)
+    {
+        try {
+            $stmt = $this->_db_table->fetchRow(
+                $this->_db_table->select()
+                    ->where("patente = ?", $patente)
+                    ->where("aduana = ?", $aduana)
+                    ->where("pedimento = ?", $pedimento)
+                    ->where("referencia = ?", $referencia)
+            );
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
+        }
     }
-
 }
