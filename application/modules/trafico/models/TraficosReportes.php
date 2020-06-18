@@ -318,4 +318,38 @@ class Trafico_Model_TraficosReportes
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+
+    public function obtenerNoLiberadosPorFecha($yesterday, $idCliente = null, $idAduana = null, $today = null)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), array(
+                    "t.idCliente", 
+                    "count(*) AS total", 
+                    new Zend_Db_Expr("SUM(CASE WHEN t.semaforo = 2 THEN 1 ELSE 0 END) AS rojos"),
+                    new Zend_Db_Expr("SUM(CASE WHEN t.cvePedimento = 'R1' THEN 1 ELSE 0 END) AS rectificaciones"),
+                    "c.nombre AS razonSocial"
+                ))
+                ->where("t.estatus NOT IN (4)")                
+                ->where("t.fechaLiberacion IS NULL")                
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array())
+                ->where("t.fechaEta BETWEEN '{$yesterday} 00:00:00' AND '{$today} 23:59:59' ")
+                ->group(("t.idCliente"))
+                ->order("c.nombre ASC");
+            if ($idCliente) {
+                $sql->where('t.idCliente = ?', $idCliente);
+            }
+            if ($idAduana) {
+                $sql->where('t.idAduana = ?', $idAduana);
+            }
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
 }

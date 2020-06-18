@@ -245,6 +245,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
                     ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
                     ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
+                    ->where("t.estatus <> 4")
                     ->order(array("fechaEta DESC"))
                     ->limit($rows, ($page - 1) * $rows);
             if (isset($bodega)) {
