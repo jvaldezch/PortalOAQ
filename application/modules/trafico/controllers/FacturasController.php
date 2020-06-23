@@ -822,6 +822,53 @@ class Trafico_FacturasController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
+    
+    public function actualizarProveedorAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idProv" => "Digits",
+                "tipoIden" => "Digits",
+                "tipoOperacion" => "Digits",
+            );
+            $v = array(
+                "idProv" => array("NotEmpty", new Zend_Validate_Int()),
+                "tipoIden" => array("NotEmpty", new Zend_Validate_Int()),
+                "tipoOperacion" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idProv") && $input->isValid("tipoIden") && $input->isValid("tipoOperacion")) {
+                if ($input->tipoOperacion == 1) {
+                    $mppr = new Trafico_Model_FactPro();
+                    $arr = array(
+                        "tipoIdentificador" => $input->tipoIden,
+                    );
+                    if (($mppr->actualizar($input->idProv, $arr))) {
+                        $this->_helper->json(array("success" => true));
+                    } else {
+                        throw new Exception("No se pudo actualizar el proveedor.");
+                    }
+                } else if ($input->tipoOperacion == 2) {
+                    $mppr = new Trafico_Model_FactDest();
+                    $arr = array(
+                        "tipoIdentificador" => $input->tipoIden,
+                    );
+                    if (($mppr->actualizar($input->idProv, $arr))) {
+                        $this->_helper->json(array("success" => true));
+                    } else {
+                        throw new Exception("No se pudo actualizar el proveedor.");
+                    }
+
+                } else {
+                    throw new Exception("Tipo de operación no válido.");
+                }
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
 
     public function guardarAction() {
         try {

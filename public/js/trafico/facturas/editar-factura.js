@@ -149,6 +149,23 @@ window.proveedores = function () {
     });
 };
 
+window.actualizarIdProveedor = function (idProv, tipoIden, tipoOperacion) {
+    let top = (tipoOperacion == 'TOCE.IMP') ? 1 : 2;
+    return $.ajax({url: '/trafico/facturas/actualizar-proveedor',
+        data: {idProv: idProv, tipoIden: tipoIden, tipoOperacion: top},
+        beforeSend: function() {
+            $("body").LoadingOverlay("show", {color: "rgba(255, 255, 255, 0.9)"});
+        },
+        success: function (res) {
+            $("body").LoadingOverlay("hide");
+            if (res.success === true) {
+            } else {
+                $.alert({title: "¡Advertencia!", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, content: res.message});
+            }
+        }
+    });
+};
+
 window.proveedor = function () {
     return $.ajax({url: '/trafico/facturas/proveedor',
         data: {idFactura: $('#idFactura').val()},
@@ -156,10 +173,11 @@ window.proveedor = function () {
             if (res.success === true) {
                 localStorage.setItem("proveedorFactura", JSON.stringify(res.result));
                 var row = res.result;
+                console.log(row);
                 $('#idProv').val(row.id);
                 $('#tipoIdentificador').val(row.tipoIdentificador);
                 if (row.tipoIdentificador === null || row.tipoIdentificador === "") {
-                    $("#tipoIdentificador").after('<span style="float: left; color: red; font-size: 9px; margin-left: 5px">Favor de editar proveedor para corregir tipo de identificador.</span>');
+                    $("#tipoIdentificador").after('<span style="float: left; color: red; font-size: 9px; margin-left: 5px" id="errorTipoIdentificador">Favor de editar proveedor para corregir tipo de identificador.</span>');
                 }
                 $('#identificador').val(row.identificador);
                 $('#calle').val(row.calle);
@@ -449,6 +467,16 @@ $(document).ready(function () {
         $("#formInvoice :input").prop("disabled", true);
     }
     
+    $(document).on("change", "#tipoIdentificador", function() {
+        let idp = $("#idProv").val();
+        let top = $("#tipoOperacion").val();
+        let itp = $(this).val();
+        if (itp !== null) {
+            $("#errorTipoIdentificador").hide();
+            actualizarIdProveedor(idp, itp, top);
+        }
+    });
+
     $(document).on("input", "#observaciones, #identificador, #calle, #numExt, #numInt, #colonia, #localidad, #municipio, #estado", function() {
         var input = $(this);
         var start = input[0].selectionStart;

@@ -125,7 +125,7 @@
                             <label style="float: left; width: 80px; text-align: right">Referencia:</label>
                             <input style="float: left; width: 90px; text-align: center" type="text" value="<?= $this->invoice["referencia"] ?>" disabled="true">
                             <label style="float: left; width: 80px; text-align: right">Tipo Ope.:</label>
-                            <input style="float: left; width: 70px; text-align: center" type="text" value="<?= $this->invoice["ie"] ?>" disabled="true">
+                            <input style="float: left; width: 70px; text-align: center" type="text" id="tipoOperacion" value="<?= $this->invoice["ie"] ?>" disabled="true">
                             <?php if (!isset($this->closed)) { ?>
                                 <i class="far fa-save" onclick="guardar();" title="Guardar" style="float: right; margin-right: 10px"></i>
                                 <i class="fas fa-download" onclick="importarFactura();" title="Importar factura" style="float: right"></i>
@@ -173,7 +173,7 @@
                                             <label style="float: left; width: 80px; text-align: right">Iden:</label>
                                             <input name="identificador" id="identificador" style="float: left; width: 150px" type="text" value="">
                                             <label style="float: left; width: 65px; text-align: right">Tipo Iden.:</label>
-                                            <select name="tipoIdentificador" id="tipoIdentificador" style="float: left; width: 110px" disabled="true">
+                                            <select name="tipoIdentificador" id="tipoIdentificador" style="float: left; width: 110px">
                                                 <option value="">---</option>
                                                 <option value="0">Tax ID</option>
                                                 <option value="1">RFC</option>
