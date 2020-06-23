@@ -51,7 +51,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $this->view->myHelpers = new Application_View_Helper_MyHelpers();
         $this->_noTodo = array("corresponsal");
         $this->_rolesEditarTrafico = array("trafico", "super", "trafico_ejecutivo", "gerente");
-        $this->_todosClientes = array("trafico", "super", "trafico_ejecutivo");
+        $this->_todosClientes = array("trafico", "super", "trafico_ejecutivo", "gerente");
         $news = new Application_Model_NoticiasInternas();
         $this->view->noticias = $news->obtenerTodos();
         if (APPLICATION_ENV == "development") {
@@ -1713,19 +1713,22 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
         $this->view->liberados_p = $arrlib_p;
 
-        $tipos = $mapper->obtenerTipoOperacionesGrafica($year, $month, $input->idCliente, $input->idAduana);
+        /*$tipos = $mapper->obtenerTipoOperacionesGrafica($year, $month, $input->idCliente, $input->idAduana);
         $this->view->tipoOperaciones = array(
             array("name" => "Aéreas", "y" => (int) $tipos["aereas"]),
             array("name" => "Marítimas", "y" => (int) $tipos["maritimas"]),
             array("name" => "Terrestres", "y" => (int) $tipos["terrestres"]),
             array("name" => "Especiales", "y" => (int) $tipos["especiales"]),
         );
-        $this->view->arrAreas = $mapper->obtenerPorDiasGraficaAereas($year, $month, 1);
-        $this->view->arrMarit = $mapper->obtenerPorDiasGraficaMaritimas($year, $month, 3);
-        $this->view->arrTerre = $mapper->obtenerPorDiasGraficaTerrestres($year, $month, 4);
+        //$this->view->arrAreas = $mapper->obtenerPorDiasGraficaAereas($year, $month, 1);
+        //$this->view->arrMarit = $mapper->obtenerPorDiasGraficaMaritimas($year, $month, 3);
+        //$this->view->arrTerre = $mapper->obtenerPorDiasGraficaTerrestres($year, $month, 4);*/
         
         $arra = $mapper->obtenerPorAduanaGrafica($year, $month);
         $this->view->porAduana = $arra["data"];
+
+        $rojos_arra = $mapper->obtenerRojosPorAduanaGrafica($year, $month);
+        $this->view->rojoPorAduana = $rojos_arra;
 
         $arra_p = $mapper->obtenerPorAduanaGrafica($year - 1, $month);
         $this->view->porAduanaP = $arra_p["data"];
