@@ -58,6 +58,53 @@ class Trafico_Model_TraficosReportes
         }
     }
 
+    public function obtenerRojosPorAduanaGrafica($year)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), array(
+                    "a.nombre AS name",
+                    "a.abbrv",
+                    "a.patente",
+                    "a.aduana",
+                    new Zend_Db_Expr("SUM(CASE WHEN t.semaforo = 2 THEN 1 ELSE 0 END) AS y")
+                ))
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(t.fechaPago) = ?", $year)
+                ->where("t.fechaPago IS NOT NULL")
+                ->where("t.estatus NOT IN (4)")
+                ->group("t.idAduana");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                $arrl = [];
+                $arr = [];
+                foreach ($stmt->toArray() as $value) {
+                    if ($value["abbrv"] && $value["y"] > 0) {
+                        array_push($arrl, $value["abbrv"]);
+                        $arr[] = array(
+                            "name" => $value["abbrv"],
+                            "y" => (int) $value["y"],
+                        );
+                    } else if ($value["y"] > 0) {
+                        array_push($arrl, $value["aduana"] . '-' . $value['patente']);
+                        $arr[] = array(
+                            "name" => $value["aduana"] . '-' . $value['patente'],
+                            "y" => (int) $value["y"],
+                        );
+                    }
+                }
+                return array(
+                    "labels" => $arrl,
+                    "data" => $arr
+                );
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
     public function obtenerPorDiasGraficaAereas($year, $month, $tipoAduana)
     {
         try {
@@ -290,14 +337,17 @@ class Trafico_Model_TraficosReportes
                     "t.idCliente", 
                     "count(*) AS total", 
                     new Zend_Db_Expr("SUM(CASE WHEN t.semaforo = 2 THEN 1 ELSE 0 END) AS rojos"),
-                    new Zend_Db_Expr("SUM(CASE WHEN t.cvePedimento = 'R1' THEN 1 ELSE 0 END) AS rectificaciones"),
-                    "c.nombre AS razonSocial"
+                    new Zend_Db_Expr("SUM(CASE WHEN t.ie = 'TOCE.IMP' THEN 1 ELSE 0 END) AS impos"),
+                    new Zend_Db_Expr("SUM(CASE WHEN t.ie = 'TOCE.EXP' THEN 1 ELSE 0 END) AS expos"),
+                    "c.nombre AS razonSocial",
+                    "a.nombre AS nombreAduana",
                 ))
-                ->where("estatus = 3")
+                ->where("t.estatus = 3")
                 ->where("t.fechaLiberacion IS NOT NULL")                
                 ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array())
-                ->group(("t.idCliente"))
-                ->order("c.nombre ASC");
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->group(array("t.idAduana", "t.idCliente", "t.ie"))
+                ->order(array("t.idAduana ASC", "c.nombre ASC", "t.ie DESC"));
             if (!isset($today)) {
                 $sql->where("t.fechaLiberacion BETWEEN '{$yesterday} 00:00:00' AND '{$yesterday} 23:59:59' ");
             } else {
@@ -328,15 +378,19 @@ class Trafico_Model_TraficosReportes
                     "t.idCliente", 
                     "count(*) AS total", 
                     new Zend_Db_Expr("SUM(CASE WHEN t.semaforo = 2 THEN 1 ELSE 0 END) AS rojos"),
-                    new Zend_Db_Expr("SUM(CASE WHEN t.cvePedimento = 'R1' THEN 1 ELSE 0 END) AS rectificaciones"),
-                    "c.nombre AS razonSocial"
+                    new Zend_Db_Expr("SUM(CASE WHEN t.ie = 'TOCE.IMP' THEN 1 ELSE 0 END) AS impos"),
+                    new Zend_Db_Expr("SUM(CASE WHEN t.ie = 'TOCE.EXP' THEN 1 ELSE 0 END) AS expos"),
+                    "c.nombre AS razonSocial",
+                    "a.nombre AS nombreAduana",
                 ))
                 ->where("t.estatus NOT IN (4)")                
                 ->where("t.fechaLiberacion IS NULL")                
                 ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array())
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
                 ->where("t.fechaEta BETWEEN '{$yesterday} 00:00:00' AND '{$today} 23:59:59' ")
-                ->group(("t.idCliente"))
-                ->order("c.nombre ASC");
+                ->where("t.idAduana IS NOT NULL")
+                ->group(array("t.idAduana", "t.idCliente", "t.ie"))
+                ->order(array("t.idAduana ASC", "c.nombre ASC", "t.ie DESC"));
             if ($idCliente) {
                 $sql->where('t.idCliente = ?', $idCliente);
             }

@@ -19,7 +19,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
 var chartUsers;
 
 function semaforo(year, month, idCliente, idAduana) {
-    $.ajax({
+    /*$.ajax({
         url: '/trafico/crud/grafica-semaforos',
         type: "GET",
         dataType: "json",
@@ -62,7 +62,7 @@ function semaforo(year, month, idCliente, idAduana) {
             }
         },
         cache: false
-    });
+    });*/
 }
 
 $(document).ready(function () {
@@ -95,6 +95,6 @@ $(document).ready(function () {
         $("#idAduana").val(parseInt(d[0]));
     }
     
-    semaforo($("#year").val(), $("#month").val(), $("#idCliente").val(), $("#idAduana").val());
+    //semaforo($("#year").val(), $("#month").val(), $("#idCliente").val(), $("#idAduana").val());
     
 });

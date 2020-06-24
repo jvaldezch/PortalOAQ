@@ -264,7 +264,9 @@
         margin-top: 0;
         margin-bottom: 0;
     }
-    .table th, .table td {
+
+    .table th,
+    .table td {
         vertical-align: middle;
     }
 </style>
@@ -274,10 +276,10 @@
         <thead>
             <tr>
                 <th style="text-align: center;">#</th>
+                <th>Aduana</th>
                 <th>Razón social</th>
-                <th>Cantidad</th>
                 <th>Rojos</th>
-                <th>Rectis.</th>
+                <th>Tipo Operación</th>
                 <th>Observaciones</th>
             </tr>
         </thead>
@@ -293,10 +295,16 @@
                     $totale = $totale + $item['rectificaciones']; ?>
                     <tr>
                         <td style="text-align: center;"><?= $i++ ?></td>
+                        <td><?= $item['nombreAduana'] ?></td>
                         <td><?= $item['razonSocial'] ?></td>
-                        <td style="text-align: center;"><?= $item['total'] ?></td>
                         <td style="text-align: center;"><?= $item['rojos'] ?></td>
-                        <td style="text-align: center;"><?= $item['rectificaciones'] ?></td>
+                        <td style="text-align: center;"><?php
+                                                        if ($item['impos'] > 0) {
+                                                            echo  $item['impos'] . ' IMP';
+                                                        } else if ($item['expos'] > 0) {
+                                                            echo  $item['expos'] . ' EXP';
+                                                        }
+                                                        ?></td>
                         <td></td>
                     </tr>
                 <?php } ?>
@@ -313,10 +321,10 @@
         <thead>
             <tr>
                 <th style="text-align: center;">#</th>
+                <th>Aduana</th>
                 <th>Razón social</th>
-                <th>Cantidad</th>
                 <th>Rojos</th>
-                <th>Rectis.</th>
+                <th>Tipo Operación</th>
                 <th>Observaciones</th>
             </tr>
         </thead>
@@ -332,10 +340,16 @@
                     $totale = $totale + $item['rectificaciones']; ?>
                     <tr>
                         <td style="text-align: center;"><?= $i++ ?></td>
+                        <td><?= $item['nombreAduana'] ?></td>
                         <td><?= $item['razonSocial'] ?></td>
-                        <td style="text-align: center;"><?= $item['total'] ?></td>
                         <td style="text-align: center;"><?= $item['rojos'] ?></td>
-                        <td style="text-align: center;"><?= $item['rectificaciones'] ?></td>
+                        <td style="text-align: center;"><?php
+                                                        if ($item['impos'] > 0) {
+                                                            echo  $item['impos'] . ' IMP';
+                                                        } else if ($item['expos'] > 0) {
+                                                            echo  $item['expos'] . ' EXP';
+                                                        }
+                                                        ?></td>
                         <td></td>
                     </tr>
                 <?php } ?>
@@ -513,6 +527,46 @@
                 //colorByPoint: true,
                 color: '#00FF00',
                 data: <?= json_encode($this->porAduana) ?>
+            }]
+        });
+
+        $("#semaforo").highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Pedimentos rojos por Aduana <?= $this->year ?>'
+            },
+            subtitle: {},
+            xAxis: {
+                categories: <?= json_encode($this->rojoPorAduana['labels']) ?>,
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Total de rojos'
+                }
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },
+            series: [{
+                name: 'Operaciones <?= $this->year ?>',
+                color: '#0000FF',
+                data: <?= json_encode($this->rojoPorAduana['data']) ?>
             }]
         });
     </script>
