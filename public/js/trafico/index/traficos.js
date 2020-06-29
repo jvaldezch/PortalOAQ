@@ -56,11 +56,6 @@ $(document).ready(function() {
         idField: "id",
         url: "/trafico/crud/traficos",
         updateUrl: "/trafico/crud/trafico-actualizar",
-        rowStyler: function (index, row) {
-            if (row.diasRetraso >= 3 && !row.fechaLiberacion) {
-                return 'background-color: #ffdada;';
-            }
-        },
         queryParams: {
             fechaInicio: dateini,
             fechaFin: dateend
