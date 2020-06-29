@@ -190,6 +190,9 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
                     $view->clientes = $rows;
                 }
             }
+            $er = new Operaciones_Model_IncidenciaTipoError();
+            $view->tipoError = $er->obtener();
+
             if (!empty($res["idsClientes"])) {
                 
             }
@@ -216,6 +219,7 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
                 $v = array(
                     "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                    "tipoError" => array("NotEmpty", new Zend_Validate_Int()),
                     "pedimento" => "NotEmpty",
                     "referencia" => "NotEmpty",
                     "fecha" => "NotEmpty",
@@ -233,8 +237,9 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
                     $arr = array(
                         "idAduana" => $input->idAduana,
                         "idCliente" => $input->idCliente,
-                        "pedimento" => $input->pedimento,
+                        "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                         "referencia" => $input->referencia,
+                        "tipoError" => ($input->tipoError) ? 1 : null,
                         "fecha" => $input->fecha,
                         "multa" => $input->multa,
                         "acta" => $input->acta,

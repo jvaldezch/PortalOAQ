@@ -35,6 +35,19 @@
                 </td>
             </tr>
             <tr>
+                <th style="text-align: right">TIPO DE ERROR:</th>
+                <td>
+                    <?php if (isset($this->tipoError) && !empty($this->tipoError)) { ?>
+                        <select class="traffic-select-large" name="tipoError" id="tipoError">
+                            <option value="">-- Seleccionar --</option>
+                            <?php foreach ($this->tipoError as $item) { ?>
+                                <option value="<?= $item['id'] ?>"><?= $item['tipoError'] ?></option>
+                            <?php } ?>
+                        </select>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
                 <th style="text-align: right">PEDIMENTO:</th>
                 <td>
                     <input class="traffic-input-medium" type="text" name="pedimento" id="pedimento" />

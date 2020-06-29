@@ -58,7 +58,7 @@ class Trafico_Model_TraficosReportes
         }
     }
 
-    public function obtenerRojosPorAduanaGrafica($year)
+    public function obtenerRojosPorAduanaGrafica($year, $month)
     {
         try {
             $sql = $this->_db_table->select()
@@ -72,6 +72,7 @@ class Trafico_Model_TraficosReportes
                 ))
                 ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
                 ->where("YEAR(t.fechaPago) = ?", $year)
+                ->where("MONTH(t.fechaPago) = ?", $month)
                 ->where("t.fechaPago IS NOT NULL")
                 ->where("t.estatus NOT IN (4)")
                 ->group("t.idAduana");

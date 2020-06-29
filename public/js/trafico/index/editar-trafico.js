@@ -1422,6 +1422,46 @@ $(document).ready(function () {
         });
     });
     
+    $(document.body).on("click", "#errores", function () {
+        $.confirm({title: 'Errores', closeIcon: true, backgroundDismiss: true, type: 'dark', typeAnimated: true, escapeKey: "cerrar", boxWidth: "500px", useBootstrap: false,
+            buttons: {
+                guardar: {
+                    btnClass: "btn-green",
+                    action: function () {
+                        if ($("#formErrores").valid()) {
+                            $("#formErrores").ajaxSubmit({type: "POST", dataType: "json",
+                                success: function (res) {
+                                    if (res.success === true) {
+                                    } else {
+                                        $.alert({title: "Error", type: "red", content: res.message, boxWidth: "250px", useBootstrap: false});
+                                    }
+                                }
+                            });
+                        } else {
+                            return false;
+                        }
+                    }
+                },
+                cerrar: {
+                    action: function () {}
+                }
+            },
+            content: function () {
+                let self = this;
+                return $.ajax({url: "/trafico/get/errores?idTrafico=" + $("#idTrafico").val(), dataType: "json", method: "GET"
+                }).done(function (res) {
+                    let html = "";
+                    if(res.success === true) {
+                        html = res.html;
+                    }
+                    self.setContent(html);
+                }).fail(function () {
+                    self.setContent("Something went wrong.");
+                });
+            }
+        });
+    });
+    
     $(document.body).on("click", "#ordenRemision", function (ev) {
         ev.preventDefault();
         let id = $(this).data("id");

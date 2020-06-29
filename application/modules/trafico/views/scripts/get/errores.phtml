@@ -1,0 +1,20 @@
+<form id="formErrores">
+    <table>
+        <tbody>
+            <tr>
+                <th style="text-align: right">TIPO DE ERROR:</th>
+                <td>
+                    <?php if (isset($this->tipoError) && !empty($this->tipoError)) { ?>
+                        <select class="traffic-select-large" name="tipoError" id="tipoError">
+                            <option value="">-- Seleccionar --</option>
+                            <?php foreach ($this->tipoError as $item) { ?>
+                                <option value="<?= $item['id'] ?>"><?= $item['tipoError'] ?></option>
+                            <?php } ?>
+                        </select>
+                    <?php } ?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script src="/js/trafico/get/errores.js"></script>

@@ -794,6 +794,34 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function erroresAction() {
+        $this->_helper->viewRenderer->setNoRender(false);
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => "Digits",
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico")) {
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+                $view->idTrafico = $input->idTrafico;
+                $mapper = new Trafico_Model_TraficosMapper();
+                $arr = $mapper->obtenerPorId($input->idTrafico);
+                
+                $er = new Operaciones_Model_IncidenciaTipoError();
+                $view->tipoError = $er->obtener();
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("errores.phtml")));
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
     public function importarPlantillaAction() {
         $this->_helper->viewRenderer->setNoRender(false);
         try {

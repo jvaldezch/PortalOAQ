@@ -259,6 +259,9 @@
 <div style="float: left; width: 100%">
     <div id="semaforo" style="height: 450px"></div>
 </div>
+<div style="float: left; width: 100%">
+    <div id="incidencias" style="height: 450px"></div>
+</div>
 <style>
     .btn-toolbar {
         margin-top: 0;
@@ -567,6 +570,48 @@
                 name: 'Operaciones <?= $this->year ?>',
                 color: '#0000FF',
                 data: <?= json_encode($this->rojoPorAduana['data']) ?>
+            }]
+        });
+
+        var rpt_inci = jQuery.parseJSON('<?= $this->incidencias ?>');
+
+        $("#incidencias").highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Incidencias <?= $this->year ?>'
+            },
+            subtitle: {},
+            xAxis: {
+                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Total de incidencias'
+                }
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },
+            series: [{
+                name: 'Incidencias <?= $this->year ?>',
+                color: '#0000FF',
+                data: rpt_inci.data
             }]
         });
     </script>

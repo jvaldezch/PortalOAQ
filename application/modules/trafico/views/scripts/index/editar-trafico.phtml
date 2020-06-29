@@ -113,6 +113,11 @@
             <button id="semaforo" class="traffic-btn">
                 <i class="fas fa-tasks"></i> Semáforo
             </button>
+            <?php if(isset($this->edit)) { ?>
+                <button id="errores" class="traffic-btn">
+                <i class="fas fa-exclamation-triangle"></i> Errores
+                </button>
+            <?php } ?>
             <?php if(isset($this->basico["fechaInstruccionEspecial"])) { ?>
                 <button id="desjustificar" data-id="<?= $this->idTrafico ?>" class="traffic-btn">
                     <i class="fas fa-comment"></i> No justificar

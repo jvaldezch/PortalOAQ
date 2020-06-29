@@ -1,6 +1,7 @@
 <?php
 
-class Trafico_IndexController extends Zend_Controller_Action {
+class Trafico_IndexController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_soapClient;
@@ -11,31 +12,33 @@ class Trafico_IndexController extends Zend_Controller_Action {
     protected $_todosClientes;
     protected $_noTodo;
 
-    public function init() {
+    public function init()
+    {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time())
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css");
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time())
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery.blockUI.js")
-                ->appendFile("/js/common/principal.js?" . time());
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_soapClient = new Zend_Soap_Client($this->_config->app->endpoint);
         $contextSwitch = $this->_helper->getHelper("contextSwitch");
         $contextSwitch->addActionContext("json-customers-by-name", "xml")
-                ->addActionContext("comments", array("xml", "json"))
-                ->initContext();
+            ->addActionContext("comments", array("xml", "json"))
+            ->initContext();
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -59,25 +62,27 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function reporteDeOperacionesAction() {
+    public function reporteDeOperacionesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Reporte de operaciones";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()->appendStylesheet("/extjs/resources/css/ext-all.css")
-                ->appendStylesheet("/extjs/resources/css/ext-all-neptune-rtl.css")
-                ->appendStylesheet("/css/principal.css");
+            ->appendStylesheet("/extjs/resources/css/ext-all-neptune-rtl.css")
+            ->appendStylesheet("/css/principal.css");
         $this->view->headScript()->appendFile("/extjs/bootstrap.js")
-                ->appendFile("/js/ext_operaciones.js");
+            ->appendFile("/js/ext_operaciones.js");
         $users = new Usuarios_Model_UsuariosMapper();
         $company = $users->getUserCompanyRelatedInfo($this->_session->id);
         $this->view->aduana = $company["aduana"];
         $this->view->patente = $company["patente"];
     }
 
-    public function editarClienteAction() {
+    public function editarClienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar cliente";
         $this->view->headMeta()->appendName("description", "");
-        $this->view->headScript()                
-                ->appendFile("/js/trafico/index/editar-cliente.js?" . time());
+        $this->view->headScript()
+            ->appendFile("/js/trafico/index/editar-cliente.js?" . time());
         $gets = $this->_request->getParams();
         if (isset($gets)) {
             $filters = array(
@@ -111,7 +116,8 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function excelConsultaTraficoAction() {
+    public function excelConsultaTraficoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $search = NULL ? $search = new Zend_Session_Namespace("") : $search = new Zend_Session_Namespace("TraficoOAQ");
@@ -140,7 +146,8 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $reports->traficReport($headers, $traficos, "traficos", "Trafico de aduana", $search->aduana, "Trafico de aduana");
     }
 
-    public function editOperationAction() {
+    public function editOperationAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $request = $this->getRequest();
@@ -155,7 +162,8 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function getCustomersAction() {
+    public function getCustomersAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $cus = new Application_Model_CustomersMapper();
@@ -170,32 +178,33 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function ultimasSolicitudesAction() {
+    public function ultimasSolicitudesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Últimas solicitudes";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/trafico/index/ultimas-solicitudes.js?" . time());
-        
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/trafico/index/ultimas-solicitudes.js?" . time());
+
         $referencias = new OAQ_Referencias();
         $res = $referencias->restricciones($this->_session->id, $this->_session->role);
         $page = $this->_request->getParam("page", null);
         $pageSize = $this->_request->getParam("size", 20);
-        
+
         $complemento = $this->_request->getParam("complementos", null);
         $pendiente = $this->_request->getParam("pendiente", null);
         $aduana = $this->_request->getParam("aduanas", null);
         $depositado = $this->_request->getParam("depositado", null);
         $warning = $this->_request->getParam("warning", null);
         $idCliente = $this->_request->getParam("idCliente", null);
-        
+
         if (isset($aduana) && is_int((int) $aduana)) {
             $adu = $aduana;
             $this->view->idAduana = $aduana;
@@ -263,14 +272,15 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function crearNuevaSolicitudAction() {
+    public function crearNuevaSolicitudAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Crear nueva solicitud de anticipo";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/trafico/index/crear-nueva-solicitud.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/trafico/index/crear-nueva-solicitud.js?" . time());
         if (!in_array($this->_session->role, $this->_rolesEditarTrafico)) {
             $this->view->error = "Usted no tiene permisos para consultar esta página.";
         } else {
@@ -290,14 +300,15 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function solicitudesCorresponsalAction() {
+    public function solicitudesCorresponsalAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Solicitudes de corresponsal";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/trafico/index/solicitudes-corresponsal.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/trafico/index/solicitudes-corresponsal.js?" . time());
         $mdl = new Application_Model_UsuariosAduanasMapper();
         $aduanas = $mdl->aduanasUsuario($this->_session->id);
         $tbl = new Trafico_Model_TraficoCliAduanasMapper();
@@ -308,7 +319,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
         } else {
             $customs = $mppr->aduanasDeUsuario($this->_session->id);
         }
-        
+
         $tipoOperacion = array(
             "TOCE.IMP" => "Importación",
             "TOCE.EXP" => "Exportación",
@@ -331,11 +342,12 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function editarSolicitudAnticipoAction() {
+    public function editarSolicitudAnticipoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar solicitud anticipo";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/trafico/index/editar-solicitud-anticipo.js?" . time());
+            ->appendFile("/js/trafico/index/editar-solicitud-anticipo.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -379,21 +391,22 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function editarSolicitudAction() {
+    public function editarSolicitudAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar solicitud";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jquery.timepicker.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/bootstrap/bootstrap-datepicker/css/datepicker.css");
+            ->appendStylesheet("/css/jquery.timepicker.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/bootstrap/bootstrap-datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.number.min.js")
-                ->appendFile("/js/common/zebra_dialog.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/jquery.timepicker.min.js")
-                ->appendFile("/js/trafico/index/editar-solicitud.js?" . time());
+            ->appendFile("/js/common/jquery.number.min.js")
+            ->appendFile("/js/common/zebra_dialog.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/jquery.timepicker.min.js")
+            ->appendFile("/js/trafico/index/editar-solicitud.js?" . time());
         if (in_array($this->_session->role, $this->_noTodo)) {
             $this->view->corresponsal = true;
         }
@@ -468,16 +481,17 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function verSolicitudAction() {
+    public function verSolicitudAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Ver solicitud";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/trafico/index/ver-solicitud.js?" . time());
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/trafico/index/ver-solicitud.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -509,7 +523,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $data["header"] = $header;
             $this->view->data = $data;
             $solicitud = new OAQ_SolicitudesAnticipo($input->id);
-            
+
             $procesos = array(
                 "" => "---",
                 "1" => "SOLICITAR AUTORIZACIÓN",
@@ -519,11 +533,10 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 "6" => "AUTORIZADO BANAMEX",
                 "10" => "COTIZACIÓN"
             );
-            
+
             $form = new Trafico_Form_SolicitudTrafico(array("procesos" => $procesos));
-            
+
             if ($header["tramite"] == 1 && $header["autorizada"] == 2) {
-                
             }
             if ($header["deposito"] == 1) {
                 $form->proceso->setMultiOptions(array(
@@ -538,7 +551,6 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 "proceso" => $solicitud->proceso($header["autorizada"], $header["autorizadaHsbc"], $header["autorizadaBanamex"]),
             ));
             if ($solicitud->proceso($header["autorizada"]) == 2) {
-                
             }
             if ($solicitud->proceso($header["autorizada"]) == 3 && $header["deposito"] == 1) {
                 $form->esquema->setAttribs(array("disable" => "disable"));
@@ -552,28 +564,30 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    protected function _arrayValue($value, $array) {
+    protected function _arrayValue($value, $array)
+    {
         if (isset($array[$value])) {
             return $array[$value];
         }
         return 0;
     }
 
-    public function nuevaSolicitudAction() {
+    public function nuevaSolicitudAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Nueva solicitud de anticipo";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()->appendStylesheet("/css/jquery.selectBoxIt.css")
-                ->appendStylesheet("/css/rich_calendar.css")
-                ->appendStylesheet("/css/nuevo-estilo.css");
+            ->appendStylesheet("/css/rich_calendar.css")
+            ->appendStylesheet("/css/nuevo-estilo.css");
         $this->view->headScript()->appendFile("/js/jquery.form.min.js")
-                ->appendFile("/js/jquery.validate.min.js")
-                ->appendFile("/js/additional-methods.min.js")
-                ->appendFile("/js/jquery-ui-1.9.2.min.js")
-                ->appendFile("/js/jquery.selectBoxIt.min.js")
-                ->appendFile("/js/rich_calendar.js")
-                ->appendFile("/js/rc_lang_en.js")
-                ->appendFile("/js/domready.js")
-                ->appendFile("/js/calendar.js");
+            ->appendFile("/js/jquery.validate.min.js")
+            ->appendFile("/js/additional-methods.min.js")
+            ->appendFile("/js/jquery-ui-1.9.2.min.js")
+            ->appendFile("/js/jquery.selectBoxIt.min.js")
+            ->appendFile("/js/rich_calendar.js")
+            ->appendFile("/js/rc_lang_en.js")
+            ->appendFile("/js/domready.js")
+            ->appendFile("/js/calendar.js");
         $id = $this->_getParam("id", null);
         $model = new Trafico_Model_TraficosMapper();
         if (isset($id) && $id != "") {
@@ -582,18 +596,19 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function crearTraficoMultipleAction() {
+    public function crearTraficoMultipleAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Crear múltiples tráfico";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/trafico/index/crear-trafico-multiple.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/trafico/index/crear-trafico-multiple.js?" . time());
         $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
         if (in_array($this->_session->role, $this->_todosClientes)) {
             $customs = $mppr->aduanasDeUsuario(null, 1);
@@ -606,20 +621,21 @@ class Trafico_IndexController extends Zend_Controller_Action {
         ));
         $this->view->form = $form;
     }
-    
-    public function crearTraficoAction() {
+
+    public function crearTraficoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Crear tráfico";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/js/trafico/index/crear-trafico.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/trafico/index/crear-trafico.js?" . time());
         $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
         if (in_array($this->_session->role, $this->_todosClientes)) {
             $customs = $mppr->aduanasDeUsuario();
@@ -634,43 +650,44 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function editarTraficoAction() {
+    public function editarTraficoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar tráfico";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/fakeLoader.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/css/jqModal.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/modal/magnific-popup.css")
-                ->appendStylesheet("/js/common/highlight/styles/monokai.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css")
-                ->appendStylesheet("/js/common/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css")
-                ->appendStylesheet("/css/jquery.timepicker.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/css/fakeLoader.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/css/jqModal.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/modal/magnific-popup.css")
+            ->appendStylesheet("/js/common/highlight/styles/monokai.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css")
+            ->appendStylesheet("/js/common/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css")
+            ->appendStylesheet("/css/jquery.timepicker.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.timepicker.min.js")
-                ->appendFile("/js/common/fakeLoader.min.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/common/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js")
-                ->appendFile("/js/common/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.es.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/trafico/index/editar-trafico.js?" . time())
-                ->appendFile("/js/common/jquery.slidereveal.min.js")
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/js/common/jquery.timepicker.min.js")
+            ->appendFile("/js/common/fakeLoader.min.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/common/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js")
+            ->appendFile("/js/common/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.es.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/trafico/index/editar-trafico.js?" . time())
+            ->appendFile("/js/common/jquery.slidereveal.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/mensajero.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -682,8 +699,6 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
         if ($input->isValid("id")) {
             if ($this->_session->role == "inhouse") {
-//                $this->view->deleted = true;
-//                return;
             }
             if ($this->_session->role == "super") {
                 $this->view->edit = true;
@@ -700,16 +715,15 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 $this->view->deleted = true;
                 return;
             }
-            
+
             $mpr = new Trafico_Model_TipoCarga();
             $tc = $mpr->obtener($basico['tipoAduana']);
             if (!empty($tc)) {
                 $this->view->tipoCargas = $tc;
             } else {
-                
             }
             $this->view->basico = $basico;
-            
+
             $dates = new Trafico_Model_TraficoFechasMapper();
             $fechas = $dates->obtenerFechas($input->id);
             $this->view->fechas = $fechas;
@@ -722,17 +736,17 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $otros = $obs->obtener($input->id);
             $this->view->otros = $otros;
             $repo = new Archivo_Model_RepositorioMapper();
-            if(!($repo->buscarTipoArchivo($basico["patente"], $basico["aduana"], $basico["referencia"], 32))) {
+            if (!($repo->buscarTipoArchivo($basico["patente"], $basico["aduana"], $basico["referencia"], 32))) {
                 $this->view->printUrl = "/automatizacion/vucem/print-pedimento-sitawin?patente={$basico["patente"]}&aduana={$basico["aduana"]}&pedimento=" . $basico["pedimento"];
             }
-            if(!($repo->buscarTipoArchivo($basico["patente"], $basico["aduana"], $basico["referencia"], 33))) {
+            if (!($repo->buscarTipoArchivo($basico["patente"], $basico["aduana"], $basico["referencia"], 33))) {
                 $this->view->printSimpUrl = "/automatizacion/vucem/print-pedimento-simplificado-sitawin?patente={$basico["patente"]}&aduana={$basico["aduana"]}&pedimento=" . $basico["pedimento"];
             }
             $tiposFechas = new Trafico_Model_TraficoFechasAduanaMapper();
             $json = $tiposFechas->obtener($basico["tipoAduana"], $basico["ie"], $basico["cvePedimento"]);
             $arrFechas = json_decode($json["fechas"], true);
             $this->view->tiposFechas = $arrFechas;
-            
+
             $pmppr = new Trafico_Model_ClientesPlantas();
             $plantas = $pmppr->obtener($basico['idCliente']);
             if (!empty(($plantas))) {
@@ -742,16 +756,17 @@ class Trafico_IndexController extends Zend_Controller_Action {
             }
         }
     }
-    
-    public function modificarTraficoAction() {
+
+    public function modificarTraficoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Modificar trafico";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/trafico/index/modificar-trafico.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/trafico/index/modificar-trafico.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -763,7 +778,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
         if ($input->isValid("id")) {
             $model = new Trafico_Model_TraficosMapper();
             $row = $model->obtenerPorId($input->id);
-                        
+
             if ($row["pagado"] === null || $this->_session->role == "super") {
                 $mapper = new Trafico_Model_TraficoUsuAduanasMapper();
                 if (in_array($this->_session->role, $this->_todosClientes)) {
@@ -771,15 +786,15 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 } else {
                     $customs = $mapper->aduanasDeUsuario($this->_session->id);
                 }
-                
+
                 $pmppr = new Trafico_Model_ClientesPlantas();
                 $plantas = $pmppr->obtener($row['idCliente']);
-//                if (!empty(($plantas))) {
-//                    $this->view->plantas = $plantas;
-//                } else {
-//                    $this->view->plantas = null;
-//                }
-                
+                //                if (!empty(($plantas))) {
+                //                    $this->view->plantas = $plantas;
+                //                } else {
+                //                    $this->view->plantas = null;
+                //                }
+
                 $form = new Trafico_Form_CrearTraficoNew(array("aduanas" => $customs, "aduana" => $row["idAduana"]));
                 $form->populate(array(
                     "aduana" => $row["idAduana"],
@@ -795,8 +810,8 @@ class Trafico_IndexController extends Zend_Controller_Action {
                     "nombreBuque" => $row["nombreBuque"],
                     "idRepositorio" => $row["idRepositorio"],
                 ));
-                if(isset($row["rfcSociedad"])) {
-                    $this->view->rfcSociedad = $row["rfcSociedad"];                    
+                if (isset($row["rfcSociedad"])) {
+                    $this->view->rfcSociedad = $row["rfcSociedad"];
                 }
                 $form->cliente->setAttrib("disabled", null);
                 $this->view->form = $form;
@@ -805,23 +820,24 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function traficoAction() {
+    public function traficoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Trafico";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jquery.qtip.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/jquery.timepicker.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/css/jquery.qtip.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/jquery.timepicker.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/trafico/index/trafico.js?" . time())
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/trafico/index/trafico.js?" . time())
+            ->appendFile("/js/common/mensajero.js?" . time());
         $request = new Zend_Controller_Request_Http();
         $all = filter_var($request->getCookie("allOperations"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         $pagadas = filter_var($request->getCookie("pagadas"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
@@ -874,14 +890,15 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function clientesAction() {
+    public function clientesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Clientes";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/trafico/index/clientes.js?" . time());
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/trafico/index/clientes.js?" . time());
         $request = new Zend_Controller_Request_Http();
         $filter = $request->getCookie("filter");
         $f = array(
@@ -911,30 +928,31 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $this->view->paginator = $paginator;
     }
 
-    public function datosClienteAction() {
+    public function datosClienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Datos cliente";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jqModal.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/css/jqModal.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/js/trafico/index/datos-cliente.js?" . time());
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/trafico/index/datos-cliente.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -953,10 +971,10 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $adu = new Trafico_Model_TraficoCliAduanasMapper();
             $aduanas = $adu->clienteAduanas($input->id);
             $this->view->aduanas = $aduanas;
-            
+
             $tbl = new Trafico_Model_ContactosCliMapper();
             $this->view->contactos = $tbl->obtenerTodos($input->id);
-            
+
             $mdl = new Vucem_Model_VucemClientesMapper();
             $address = $mdl->datosCliente($data["rfc"]);
             $this->view->token = sha1("dss78454" . $data["rfc"] . "oaq2013*");
@@ -1002,7 +1020,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
                 "webaccess" => ($model->accesoPortal($input->id)) ? 1 : 0,
                 "dashboard" => $model->accesoDashboard($input->id),
             ));
-            if ($model->accesoDashboard($input->id)) {                
+            if ($model->accesoDashboard($input->id)) {
                 $urlDashboard = "http://localhost:8090/dashboard/main?code=" . $model->accesoDashboard($input->id);
                 if (APPLICATION_ENV == "production") {
                     $urlDashboard = "https://192.168.200.11/dashboard/main?code=" . $model->accesoDashboard($input->id);
@@ -1014,41 +1032,43 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $tarifas = new Trafico_Model_Tarifas();
             $this->view->tarifas = $tarifas->obtenerTarifasCliente($input->id);
             $this->view->formAccess = $formAccess;
-            
+
             $alerts = new Trafico_Model_ClientesAlertas();
             $this->view->alertas = $alerts->ultimaActividad($input->id);
-            
+
             $mppr = new Trafico_Model_ClientesPlantas();
             $arr = $mppr->obtener($input->id);
             $this->view->plantas = $arr;
         }
     }
 
-    public function oficinasAction() {
+    public function oficinasAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Oficinas y corresponsales";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/DT_bootstrap.css");
+            ->appendStylesheet("/css/DT_bootstrap.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/js/trafico/index/oficinas.js?" . time());
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/DT_bootstrap.js")
+            ->appendFile("/js/trafico/index/oficinas.js?" . time());
         $model = new Trafico_Model_TraficoAduanasMapper();
         $data = $model->obtener();
         $this->view->data = $data;
     }
 
-    public function datosOficinaAction() {
+    public function datosOficinaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Datos oficina";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/trafico/index/datos-oficina.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/trafico/index/datos-oficina.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -1080,21 +1100,24 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function layoutAction() {
+    public function layoutAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Layout example";
         $this->view->headMeta()->appendName("description", "");
     }
-    
-    public function mejoraAction() {
+
+    public function mejoraAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Nuevo cliente";
         $this->view->headMeta()->appendName("description", "");
     }
 
-    public function nuevoClienteAction() {
+    public function nuevoClienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Nuevo cliente";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/trafico/index/nuevo-cliente.js?" . time());
+            ->appendFile("/js/trafico/index/nuevo-cliente.js?" . time());
         $form = new Trafico_Form_NuevoCliente();
         $this->view->form = $form;
         $mppr = new Application_Model_UsuariosEmpresas();
@@ -1103,18 +1126,19 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $this->view->empresas = $arr;
         }
     }
-    
-    public function editarOficinaAction() {
+
+    public function editarOficinaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar oficina";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css");
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/trafico/index/nueva-oficina.js?" . time());
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/trafico/index/nueva-oficina.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -1139,50 +1163,53 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevaOficinaAction() {
+    public function nuevaOficinaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Nueva oficina";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css");
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/trafico/index/nueva-oficina.js?" . time());
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/trafico/index/nueva-oficina.js?" . time());
         $form = new Trafico_Form_NuevaOficina();
         $this->view->form = $form;
     }
-    
-    public function agentesAduanalesAction() {
+
+    public function agentesAduanalesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Agentes Aduanales";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/DT_bootstrap.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css");
+            ->appendStylesheet("/css/DT_bootstrap.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/js/trafico/index/agentes-aduanales.js?" . time());
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/DT_bootstrap.js")
+            ->appendFile("/js/trafico/index/agentes-aduanales.js?" . time());
         $mapper = new Trafico_Model_Agentes();
-        $this->view->data = $mapper->todos();        
+        $this->view->data = $mapper->todos();
     }
-    
-    public function editarAgenteAduanalAction() {
+
+    public function editarAgenteAduanalAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar Agente Aduanal";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/trafico/index/editar-agente-aduanal.js?" . time());
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/trafico/index/editar-agente-aduanal.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -1204,39 +1231,42 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $this->view->form = $form;
         }
     }
-    
-    public function agregarAgenteAduanalAction() {
+
+    public function agregarAgenteAduanalAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Agregar Agente Aduanal";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jquery.qtip.min.css");
+            ->appendStylesheet("/css/jquery.qtip.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/trafico/index/agregar-agente-aduanal.js?" . time());
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/trafico/index/agregar-agente-aduanal.js?" . time());
         $form = new Trafico_Form_NuevoAgente();
         $this->view->form = $form;
     }
-    
-    public function catalogosAction() {
+
+    public function catalogosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Catalogos";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/trafico/index/catalogos.js?" . time());
+            ->appendFile("/js/trafico/index/catalogos.js?" . time());
     }
-    
-    public function reportesEnhAction() {
+
+    public function reportesEnhAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Reportes";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/trafico/index/reportes-enh.js?" . time());
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/trafico/index/reportes-enh.js?" . time());
         if ($this->_session->role == "super") {
             $this->view->menur = array(
                 "1" => "Traficos",
@@ -1335,7 +1365,8 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function verFolioAction() {
+    public function verFolioAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Ver folio";
         $this->view->headMeta()->appendName("description", "");
         $f = array(
@@ -1350,7 +1381,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $mppr = new Automatizacion_Model_RptCuentas();
             $mapper = new Automatizacion_Model_RptCuentaConceptos();
             $arr = $mppr->folio($input->id);
-            
+
             $arrc = $mapper->conceptos($arr['id']);
             if (!empty($arrc)) {
                 $arr['conceptos'] = $arrc;
@@ -1361,11 +1392,12 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevaTarifaAction() {
+    public function nuevaTarifaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Nueva Tarifa";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/trafico/index/nueva-tarifa.js?" . time());
+            ->appendFile("/js/trafico/index/nueva-tarifa.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -1400,28 +1432,29 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $this->view->notas = $notes->obtenerTodos();
     }
 
-    public function traficosV2Action() {
+    public function traficosV2Action()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Tráficos V2";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/js/common/popmodal/popModal.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/js/common/popmodal/popModal.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/popmodal/popModal.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/popmodal/popModal.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/common/mensajero.js?" . time());
         if ($this->_session->role == "inhouse") {
             $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());
         } else {
@@ -1429,124 +1462,130 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function traficosAction() {
+    public function traficosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Tráficos";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/css/mobile-style.css?" . time());
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/css/mobile-style.css?" . time());
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/mensajero.js?" . time());
         if ($this->_session->role == "inhouse") {
             $this->view->headScript()->appendFile("/js/trafico/index/trafico-common.js?" . time())
-                    ->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());
+                ->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());
         } else {
             $this->view->headScript()->appendFile("/js/trafico/index/trafico-common.js?" . time());
             $this->view->headScript()->appendFile("/js/trafico/index/traficos.js?" . time());
         }
     }
-    
-    public function traficoAereoAction() {
+
+    public function traficoAereoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Tráfico Aéreo";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/mensajero.js?" . time());
         if ($this->_session->role == "inhouse") {
-            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());            
+            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());
         } else {
             $this->view->headScript()->appendFile("/js/trafico/index/trafico-aereo.js?" . time());
         }
     }
-    
-    public function traficoTerrestreAction() {
+
+    public function traficoTerrestreAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Tráfico Terrestre";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/mensajero.js?" . time());
         if ($this->_session->role == "inhouse") {
-            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());            
+            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());
         } else {
             $this->view->headScript()->appendFile("/js/trafico/index/trafico-terrestre.js?" . time());
         }
     }
-    
-    public function traficoMaritimoAction() {
+
+    public function traficoMaritimoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Tráfico Marítimo";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/mensajero.js?" . time());
         if ($this->_session->role == "inhouse") {
-            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());            
+            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());
         } else {
             $this->view->headScript()->appendFile("/js/trafico/index/trafico-maritimo.js?" . time());
         }
     }
-    
-    public function traficoOpsEspecialesAction() {
+
+    public function traficoOpsEspecialesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Tráfico Operaciones Especiales";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/mensajero.js?" . time());
         if ($this->_session->role == "inhouse") {
-            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());            
+            $this->view->headScript()->appendFile("/js/trafico/index/traficos-inhouse.js?" . time());
         } else {
             $this->view->headScript()->appendFile("/js/trafico/index/trafico-ops-especiales.js?" . time());
         }
     }
-    
-    public function editarTarifaAction() {
+
+    public function editarTarifaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar Tarifa";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/trafico/index/nueva-tarifa.js?" . time());
+            ->appendFile("/js/trafico/index/nueva-tarifa.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -1576,14 +1615,15 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function graficasAction() {
+    public function graficasAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Gráficas";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/common/highcharts/js/highcharts.js")
-                ->appendFile("/js/common/highcharts/js/modules/data.js")
-                ->appendFile("/js/common/highcharts/js/modules/exporting.js")
-                ->appendFile("/js/trafico/index/graficas.js?" . time());
+            ->appendFile("/js/common/highcharts/js/highcharts.js")
+            ->appendFile("/js/common/highcharts/js/modules/data.js")
+            ->appendFile("/js/common/highcharts/js/modules/exporting.js")
+            ->appendFile("/js/trafico/index/graficas.js?" . time());
 
         $months = array(
             1 => "Enero",
@@ -1617,7 +1657,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
         $this->view->year = $input->isValid("year") ? $input->year : (int) date("Y");
         $this->view->month = $input->isValid("month") ? $months[$input->month] : $months[(int) date("m")];
         $mapper = new Trafico_Model_TraficosReportes();
-        
+
         $year = (int) date("Y");
         if ($input->isValid("year")) {
             $year = $input->year;
@@ -1630,7 +1670,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
 
         $this->view->idCliente = $input->isValid('idCliente') ? $input->idCliente : null;
         $this->view->idAduana = $input->isValid('idAduana') ? $input->idAduana : null;
-        
+
         $arr = $mapper->obtenerPagadosGrafica($year, $input->idCliente, $input->idAduana);
         foreach ($arr as $value) {
             $arrp[] = (int) $value;
@@ -1688,7 +1728,7 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $this->view->arr_p = json_encode($graph_p);
         }
 
-        
+
         $yes = date('Y-m-d', strtotime('-1 day', strtotime(date("Y-m-d"))));
         $arr_lda = $mapper->obtenerLiberadosPorFecha($yes, $input->idCliente, $input->idAduana);
         $this->view->arr_lda = $arr_lda;
@@ -1713,17 +1753,6 @@ class Trafico_IndexController extends Zend_Controller_Action {
         }
         $this->view->liberados_p = $arrlib_p;
 
-        /*$tipos = $mapper->obtenerTipoOperacionesGrafica($year, $month, $input->idCliente, $input->idAduana);
-        $this->view->tipoOperaciones = array(
-            array("name" => "Aéreas", "y" => (int) $tipos["aereas"]),
-            array("name" => "Marítimas", "y" => (int) $tipos["maritimas"]),
-            array("name" => "Terrestres", "y" => (int) $tipos["terrestres"]),
-            array("name" => "Especiales", "y" => (int) $tipos["especiales"]),
-        );
-        //$this->view->arrAreas = $mapper->obtenerPorDiasGraficaAereas($year, $month, 1);
-        //$this->view->arrMarit = $mapper->obtenerPorDiasGraficaMaritimas($year, $month, 3);
-        //$this->view->arrTerre = $mapper->obtenerPorDiasGraficaTerrestres($year, $month, 4);*/
-        
         $arra = $mapper->obtenerPorAduanaGrafica($year, $month);
         $this->view->porAduana = $arra["data"];
 
@@ -1737,37 +1766,58 @@ class Trafico_IndexController extends Zend_Controller_Action {
 
         $comp = $mapper->obtenerLiberadosVsCompleto($year, $month);
         $this->view->sinc = $comp;
-        
+
         $mppr = new Trafico_Model_ClientesMapper();
         $this->view->clientes = $mppr->obtenerClientes();
-        
+
         $mpprc = new Trafico_Model_TraficoAduanasMapper();
         $this->view->aduanas = $mpprc->obtenerTodas();
-        
+
+        $inc_mppr = new Operaciones_Model_Incidencias();
+        $in = $inc_mppr->reporte($year, $input->idCliente, $input->idAduana);
+
+        $graph_inc = array(
+            "data" => array(
+                (int) $in["Ene"] ? (int) $in["Ene"] : null,
+                (int) $in["Feb"] ? (int) $in["Feb"] : null,
+                (int) $in["Mar"] ? (int) $in["Mar"] : null,
+                (int) $in["Abr"] ? (int) $in["Abr"] : null,
+                (int) $in["May"] ? (int) $in["May"] : null,
+                (int) $in["Jun"] ? (int) $in["Jun"] : null,
+                (int) $in["Jul"] ? (int) $in["Jul"] : null,
+                (int) $in["Ago"] ? (int) $in["Ago"] : null,
+                (int) $in["Sep"] ? (int) $in["Sep"] : null,
+                (int) $in["Oct"] ? (int) $in["Oct"] : null,
+                (int) $in["Nov"] ? (int) $in["Nov"] : null,
+                (int) $in["Dic"] ? (int) $in["Dic"] : null
+            )
+        );
+        $this->view->incidencias = json_encode($graph_inc);
     }
-    
-    public function verTraficoAction() {
+
+    public function verTraficoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Ver tráfico";
-        $this->view->headMeta()->appendName("description", "");        
+        $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/fakeLoader.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/highlight/styles/monokai.css");
+            ->appendStylesheet("/css/fakeLoader.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/highlight/styles/monokai.css");
         $this->view->headScript()
-                ->appendFile("/js/common/fakeLoader.min.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/jquery.slidereveal.min.js")
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/js/trafico/index/ver-trafico.js?" . time())
-                ->appendFile("/js/common/mensajero.js?" . time());
+            ->appendFile("/js/common/fakeLoader.min.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/jquery.slidereveal.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/trafico/index/ver-trafico.js?" . time())
+            ->appendFile("/js/common/mensajero.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -1783,40 +1833,40 @@ class Trafico_IndexController extends Zend_Controller_Action {
             $this->view->basico = $basico;
         }
     }
-    
-    public function editarTraficosAction() {
+
+    public function editarTraficosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar tráficos";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/fakeLoader.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/css/jqModal.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/modal/magnific-popup.css")
-                ->appendStylesheet("/js/common/highlight/styles/monokai.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css")
-                ->appendStylesheet("/css/jquery.timepicker.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/css/fakeLoader.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/css/jqModal.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/modal/magnific-popup.css")
+            ->appendStylesheet("/js/common/highlight/styles/monokai.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css")
+            ->appendStylesheet("/css/jquery.timepicker.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.timepicker.min.js")
-                ->appendFile("/js/common/fakeLoader.min.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/trafico/index/editar-traficos.js?" . time())
-                ->appendFile("/js/common/jquery.slidereveal.min.js")
-                ->appendFile("/js/common/loadingoverlay.min.js");
+            ->appendFile("/js/common/jquery.timepicker.min.js")
+            ->appendFile("/js/common/fakeLoader.min.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/trafico/index/editar-traficos.js?" . time())
+            ->appendFile("/js/common/jquery.slidereveal.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js");
     }
-
 }
