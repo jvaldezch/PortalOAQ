@@ -173,22 +173,23 @@ window.proveedor = function () {
             if (res.success === true) {
                 localStorage.setItem("proveedorFactura", JSON.stringify(res.result));
                 var row = res.result;
-                console.log(row);
-                $('#idProv').val(row.id);
-                $('#tipoIdentificador').val(row.tipoIdentificador);
-                if (row.tipoIdentificador === null || row.tipoIdentificador === "") {
-                    $("#tipoIdentificador").after('<span style="float: left; color: red; font-size: 9px; margin-left: 5px" id="errorTipoIdentificador">Favor de editar proveedor para corregir tipo de identificador.</span>');
+                if (row) {
+                    $('#idProv').val(row.id);
+                    $('#tipoIdentificador').val(row.tipoIdentificador);
+                    if (row.tipoIdentificador === null || row.tipoIdentificador === "") {
+                        $("#tipoIdentificador").after('<span style="float: left; color: red; font-size: 9px; margin-left: 5px" id="errorTipoIdentificador">Favor de editar proveedor para corregir tipo de identificador.</span>');
+                    }
+                    $('#identificador').val(row.identificador);
+                    $('#calle').val(row.calle);
+                    $('#numExt').val(row.numExt);
+                    $('#numInt').val(row.numInt);
+                    $('#colonia').val(row.colonia);
+                    $('#localidad').val(row.localidad);
+                    $('#municipio').val(row.municipio);
+                    $('#estado').val(row.estado);
+                    $('#codigoPostal').val(row.codigoPostal);
+                    $('#pais').val(row.pais);
                 }
-                $('#identificador').val(row.identificador);
-                $('#calle').val(row.calle);
-                $('#numExt').val(row.numExt);
-                $('#numInt').val(row.numInt);
-                $('#colonia').val(row.colonia);
-                $('#localidad').val(row.localidad);
-                $('#municipio').val(row.municipio);
-                $('#estado').val(row.estado);
-                $('#codigoPostal').val(row.codigoPostal);
-                $('#pais').val(row.pais);
             }
         }
     });
