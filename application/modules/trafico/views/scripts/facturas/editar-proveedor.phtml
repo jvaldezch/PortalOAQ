@@ -11,7 +11,7 @@
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Id:&nbsp;<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 110px; text-align: right">Id:</label>
                     <input style="float: left; width: 50px" type="text" name="idProveedor" id="idProveedor" value="<?= $this->idProv ?>" disabled="true">
                 </td>
             </tr>
@@ -23,10 +23,10 @@
             </tr>
             <tr>
                 <td>
-                    <label style="float: left; width: 110px; text-align: right">Iden:&nbsp;<span style="color:red"> *</span></label>
+                    <label style="float: left; width: 110px; text-align: right">Iden:</label>
                     <input style="float: left; width: 100px" type="text" name="identificador" id="identificador" value="<?= $this->identificador ?>">
                     <label style="float: left; width: 70px; text-align: right">Tipo Iden.:<span style="color:red"> *</span></label>
-                    <select name="tipoIdentificador" id="tipoIdentificador" style="float: left; width: 110px">
+                    <select name="tipoIdentificador" id="ntipoIdentificador" style="float: left; width: 110px">
                         <option value="">---</option>
                         <option value="0" <?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 0) ? ' selected="true"' : '' ?>>Tax ID</option>
                         <option value="1" <?= (isset($this->tipoIdentificador) && $this->tipoIdentificador == 1) ? ' selected="true"' : '' ?>>RFC</option>

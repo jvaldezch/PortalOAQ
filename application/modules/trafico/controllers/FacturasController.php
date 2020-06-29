@@ -308,7 +308,6 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                 "idCliente" => "Digits",
                 "idProveedor" => "Digits",
                 "idFactura" => array("Digits"),
-                "idProveedor" => "Digits",
                 "idProducto" => array("Digits"),
             );
             $v = array(
@@ -316,7 +315,6 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                 "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                 "idProveedor" => array("NotEmpty", new Zend_Validate_Int()),
                 "idFactura" => array("NotEmpty", new Zend_Validate_Int()),
-                "idProveedor" => array("NotEmpty", new Zend_Validate_Int()),
                 "idProducto" => array("NotEmpty", new Zend_Validate_Int()),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());

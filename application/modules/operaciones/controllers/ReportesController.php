@@ -150,6 +150,8 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
                         $view->clientes = $rows;
                     }
                 }
+                $er = new Operaciones_Model_IncidenciaTipoError();
+                $view->tipoError = $er->obtener();
 
                 $this->_helper->json(array("success" => true, "html" => $view->render("editar-incidencia.phtml")));
             } else {
