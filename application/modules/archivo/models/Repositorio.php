@@ -1,10 +1,12 @@
 <?php
 
-class Archivo_Model_Repositorio {
+class Archivo_Model_Repositorio
+{
 
     protected $_dbTable;
 
-    public function setDbTable($dbTable) {
+    public function setDbTable($dbTable)
+    {
         if (is_string($dbTable)) {
             $dbTable = new $dbTable();
         }
@@ -15,14 +17,16 @@ class Archivo_Model_Repositorio {
         return $this;
     }
 
-    public function getDbTable() {
+    public function getDbTable()
+    {
         if (null === $this->_dbTable) {
             $this->setDbTable("Archivo_Model_DbTable_Repositorio");
         }
         return $this->_dbTable;
     }
 
-    public function agregar($arr) {
+    public function agregar($arr)
+    {
         try {
             $stmt = $this->getDbTable()->insert($arr);
             if ($stmt) {
@@ -34,11 +38,12 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function get(Archivo_Model_Table_Repositorio $tbl) {
+    public function get(Archivo_Model_Table_Repositorio $tbl)
+    {
         try {
             $stmt = $this->getDbTable()->fetchRow(
-                    $this->getDbTable()->select()
-                            ->where("id = ?", $tbl->getId())
+                $this->getDbTable()->select()
+                    ->where("id = ?", $tbl->getId())
             );
             if (0 == count($stmt)) {
                 return;
@@ -49,11 +54,12 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function getPdf($basename) {
+    public function getPdf($basename)
+    {
         try {
             $stmt = $this->getDbTable()->fetchRow(
-                    $this->getDbTable()->select()
-                            ->where("nom_archivo REGEXP '{$basename}.pdf$'")
+                $this->getDbTable()->select()
+                    ->where("nom_archivo REGEXP '{$basename}.pdf$'")
             );
             if (0 == count($stmt)) {
                 return;
@@ -64,12 +70,13 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function find(Archivo_Model_Table_Repositorio $tbl) {
+    public function find(Archivo_Model_Table_Repositorio $tbl)
+    {
         try {
             $stmt = $this->getDbTable()->fetchRow(
-                    $this->getDbTable()->select()
-                            ->where("emisor_rfc = ?", $tbl->getEmisor_rfc())
-                            ->where("folio = ?", $tbl->getFolio())
+                $this->getDbTable()->select()
+                    ->where("emisor_rfc = ?", $tbl->getEmisor_rfc())
+                    ->where("folio = ?", $tbl->getFolio())
             );
             if (0 == count($stmt)) {
                 return;
@@ -80,13 +87,14 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function findEdocument(Archivo_Model_Table_Repositorio $tbl) {
+    public function findEdocument(Archivo_Model_Table_Repositorio $tbl)
+    {
         try {
             $stmt = $this->getDbTable()->fetchRow(
-                    $this->getDbTable()->select()
-                            ->where("referencia = ?", $tbl->getReferencia())
-                            ->where("nom_archivo = ?", $tbl->getNom_archivo())
-                            ->where("edocument = ?", $tbl->getEdocument())
+                $this->getDbTable()->select()
+                    ->where("referencia = ?", $tbl->getReferencia())
+                    ->where("nom_archivo = ?", $tbl->getNom_archivo())
+                    ->where("edocument = ?", $tbl->getEdocument())
             );
             if (0 == count($stmt)) {
                 return;
@@ -97,12 +105,13 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function findFile(Archivo_Model_Table_Repositorio $tbl) {
+    public function findFile(Archivo_Model_Table_Repositorio $tbl)
+    {
         try {
             $stmt = $this->getDbTable()->fetchRow(
-                    $this->getDbTable()->select()
-                            ->where("referencia = ?", $tbl->getReferencia())
-                            ->where("nom_archivo = ?", $tbl->getNom_archivo())
+                $this->getDbTable()->select()
+                    ->where("referencia = ?", $tbl->getReferencia())
+                    ->where("nom_archivo = ?", $tbl->getNom_archivo())
             );
             if (0 == count($stmt)) {
                 return;
@@ -113,7 +122,8 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    protected function _getData(Archivo_Model_Table_Repositorio $tbl, $stmt) {
+    protected function _getData(Archivo_Model_Table_Repositorio $tbl, $stmt)
+    {
         $tbl->setId($stmt->id);
         $tbl->setRfc_cliente($stmt->rfc_cliente);
         $tbl->setTipo_archivo($stmt->tipo_archivo);
@@ -145,12 +155,13 @@ class Archivo_Model_Repositorio {
         $tbl->setModificadoPor($stmt->modificadoPor);
     }
 
-    public function findUuid(Archivo_Model_Table_Repositorio $tbl) {
+    public function findUuid(Archivo_Model_Table_Repositorio $tbl)
+    {
         try {
             $stmt = $this->getDbTable()->fetchRow(
-                    $this->getDbTable()->select()
-                            ->where("uuid = ?", $tbl->getUuid())
-                            ->where("nom_archivo REGEXP '.xml$'")
+                $this->getDbTable()->select()
+                    ->where("uuid = ?", $tbl->getUuid())
+                    ->where("nom_archivo REGEXP '.xml$'")
             );
             if (0 == count($stmt)) {
                 return;
@@ -161,7 +172,8 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function save(Archivo_Model_Table_Repositorio $tbl) {
+    public function save(Archivo_Model_Table_Repositorio $tbl)
+    {
         try {
             $data = array(
                 "id" => $tbl->getId(),
@@ -206,17 +218,18 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function facturasTerminalSinRfc($fecha) {
+    public function facturasTerminalSinRfc($fecha)
+    {
         try {
             $stmt = $this->getDbTable()->fetchAll(
-                    $this->getDbTable()->select()
-                            ->distinct()
-                            ->from("repositorio", array("uuid"))
-                            ->where("emisor_rfc = 'TLO050804QY7'")
-                            ->where("rfc_cliente IS NULL")
-                            ->where("creado LIKE ?", $fecha . "%")
-                            ->order("creado DESC")
-                            ->limit(50)
+                $this->getDbTable()->select()
+                    ->distinct()
+                    ->from("repositorio", array("uuid"))
+                    ->where("emisor_rfc = 'TLO050804QY7'")
+                    ->where("rfc_cliente IS NULL")
+                    ->where("creado LIKE ?", $fecha . "%")
+                    ->order("creado DESC")
+                    ->limit(50)
             );
             if (0 == count($stmt)) {
                 return;
@@ -227,18 +240,19 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function facturasTerminalSinDatos($fecha) {
+    public function facturasTerminalSinDatos($fecha)
+    {
         try {
             $stmt = $this->getDbTable()->fetchAll(
-                    $this->getDbTable()->select()
-                            ->from("repositorio", array("id", "nom_archivo", "ubicacion"))
-                            ->where("emisor_rfc IS NULL")
-                            ->where("receptor_rfc IS NULL")
-                            ->where("nom_archivo REGEXP '^TLO050804QY7'")
-                            ->where("nom_archivo REGEXP '.xml$'")
-                            ->where("creado LIKE ?", $fecha . "%")
-                            ->order("creado DESC")
-                            ->limit(50)
+                $this->getDbTable()->select()
+                    ->from("repositorio", array("id", "nom_archivo", "ubicacion"))
+                    ->where("emisor_rfc IS NULL")
+                    ->where("receptor_rfc IS NULL")
+                    ->where("nom_archivo REGEXP '^TLO050804QY7'")
+                    ->where("nom_archivo REGEXP '.xml$'")
+                    ->where("creado LIKE ?", $fecha . "%")
+                    ->order("creado DESC")
+                    ->limit(50)
             );
             if (0 == count($stmt)) {
                 return;
@@ -249,7 +263,8 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function update($uuid, $data) {
+    public function update($uuid, $data)
+    {
         try {
             $this->getDbTable()->update($data, array("uuid = ?" => $uuid));
         } catch (Zend_Db_Exception $ex) {
@@ -257,7 +272,8 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function borrarExpediente($arr) {
+    public function borrarExpediente($arr)
+    {
         try {
             if (is_array($arr) && !empty($arr)) {
                 $tbl = new Archivo_Model_DbTable_Repositorio();
@@ -273,7 +289,8 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function borrarVacio($patente, $aduana, $referencia) {
+    public function borrarVacio($patente, $aduana, $referencia)
+    {
         try {
             $tbl = new Archivo_Model_DbTable_Repositorio();
             $stmt = $tbl->delete(array(
@@ -291,15 +308,16 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function buscarRepositorio($patente, $aduana, $referencia) {
+    public function buscarRepositorio($patente, $aduana, $referencia)
+    {
         try {
             $stmt = $this->getDbTable()->fetchAll(
-                    $this->getDbTable()->select()
-                            ->from("repositorio", array("pedimento", "rfc_cliente AS rfcCliente"))
-                            ->where("patente = ?", $patente)
-                            ->where("aduana = ?", $aduana)
-                            ->where("referencia = ?", $referencia)
-                            ->where("tipo_archivo = 9999")
+                $this->getDbTable()->select()
+                    ->from("repositorio", array("pedimento", "rfc_cliente AS rfcCliente"))
+                    ->where("patente = ?", $patente)
+                    ->where("aduana = ?", $aduana)
+                    ->where("referencia = ?", $referencia)
+                    ->where("tipo_archivo = 9999")
             );
             if (0 == count($stmt)) {
                 return;
@@ -310,16 +328,17 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function buscarArchivo($patente, $aduana, $pedimento, $referencia, $nombreArchivo) {
+    public function buscarArchivo($patente, $aduana, $pedimento, $referencia, $nombreArchivo)
+    {
         try {
             $stmt = $this->getDbTable()->fetchRow(
-                    $this->getDbTable()->select()
-                            ->from("repositorio", array("id"))
-                            ->where("patente = ?", $patente)
-                            ->where("aduana = ?", $aduana)
-                            ->where("pedimento = ?", $pedimento)
-                            ->where("referencia = ?", $referencia)
-                            ->where("nom_archivo = ?", $nombreArchivo)
+                $this->getDbTable()->select()
+                    ->from("repositorio", array("id"))
+                    ->where("patente = ?", $patente)
+                    ->where("aduana = ?", $aduana)
+                    ->where("pedimento = ?", $pedimento)
+                    ->where("referencia = ?", $referencia)
+                    ->where("nom_archivo = ?", $nombreArchivo)
             );
             if (0 == count($stmt)) {
                 return;
@@ -330,14 +349,15 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function buscarMal() {
+    public function buscarMal()
+    {
         try {
             $stmt = $this->getDbTable()->fetchAll(
-                    $this->getDbTable()->select()
-                            ->from("repositorio", array("id", "patente", "aduana", "referencia", "rfc_cliente", "pedimento", "creado"))
-                            ->where("pedimento = 0")
-                            ->where("YEAR(creado) = 2017")
-                            ->where("tipo_archivo = 9999")
+                $this->getDbTable()->select()
+                    ->from("repositorio", array("id", "patente", "aduana", "referencia", "rfc_cliente", "pedimento", "creado"))
+                    ->where("pedimento = 0")
+                    ->where("YEAR(creado) = 2017")
+                    ->where("tipo_archivo = 9999")
             );
             if (0 == count($stmt)) {
                 return;
@@ -348,7 +368,8 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function actualizarRepositorio($id, $pedimento, $rfcCliente) {
+    public function actualizarRepositorio($id, $pedimento, $rfcCliente)
+    {
         try {
             $arr = array(
                 "pedimento" => $pedimento,
@@ -360,11 +381,12 @@ class Archivo_Model_Repositorio {
         }
     }
 
-    public function archivos($referencia, $patente = null) {
+    public function archivos($referencia, $patente = null)
+    {
         try {
             $sql = $this->getDbTable()->select()
-                    ->from("repositorio", array("id", "tipo_archivo", "sub_tipo_archivo"))
-                    ->where("referencia = ?", $referencia);
+                ->from("repositorio", array("id", "tipo_archivo", "sub_tipo_archivo"))
+                ->where("referencia = ?", $referencia);
             if (isset($patente)) {
                 $sql->where("patente = ?", $patente);
             }
@@ -377,12 +399,13 @@ class Archivo_Model_Repositorio {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function obtenerPorArregloId($arr) {
+
+    public function obtenerPorArregloId($arr)
+    {
         try {
             $sql = $this->getDbTable()->select()
-                    ->from("repositorio", array("nom_archivo", "ubicacion", "tipo_archivo"))
-                    ->where("id IN (?)", $arr);
+                ->from("repositorio", array("nom_archivo", "ubicacion", "tipo_archivo"))
+                ->where("id IN (?)", $arr);
             $stmt = $this->getDbTable()->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -393,4 +416,52 @@ class Archivo_Model_Repositorio {
         }
     }
 
+    public function buscarCoves($patente, $aduana, $referencia)
+    {
+        try {
+            $this->_firephp = Zend_Registry::get("firephp");
+            $sql = $this->getDbTable()->select()
+                ->from(array("a" => "repositorio"), array(
+                    "a.id",
+                    "a.nom_archivo",
+                    "a.tipo_archivo",
+                    "(SELECT nom_archivo FROM repositorio AS r WHERE r.nom_archivo = REPLACE(a.nom_archivo, '.pdf', '.xml') AND a.patente = r.patente AND a.referencia = r.referencia) AS xml"
+                ))
+                ->where("patente = ?", $patente)
+                ->where("aduana = ?", $aduana)
+                ->where("referencia = ?", $referencia)
+                ->where("nom_archivo REGEXP 'COVE[0-9A-Z]{9}(.*).pdf'");
+            $stmt = $this->getDbTable()->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return [];
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
+
+    public function buscarEdocuments($patente, $aduana, $referencia)
+    {
+        try {
+            $sql = $this->getDbTable()->select()
+                ->from(array("a" => "repositorio"), array(
+                    "a.id",
+                    "a.nom_archivo",
+                    "a.tipo_archivo",
+                    "(SELECT nom_archivo FROM repositorio AS r WHERE r.nom_archivo = REPLACE(a.nom_archivo, '.pdf', '.xml') AND a.patente = r.patente AND a.referencia = r.referencia) AS xml"
+                ))
+                ->where("a.patente = ?", $patente)
+                ->where("a.aduana = ?", $aduana)
+                ->where("a.referencia = ?", $referencia)
+                ->where("a.nom_archivo REGEXP 'ED[0-9A-Z]{13}(.*).pdf'");
+            $stmt = $this->getDbTable()->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return [];
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
 }

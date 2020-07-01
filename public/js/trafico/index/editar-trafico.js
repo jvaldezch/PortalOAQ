@@ -1516,13 +1516,21 @@ $(document).ready(function () {
     $(document.body).on("click", "#xml-pedimento", function (ev) {
         ev.preventDefault();
         let idTrafico = $("#idTrafico").val();
-        $.ajax({url: "/trafico/pedimentos/descarga", cache: false, dataType: "json", data: {idTrafico: idTrafico}, type: "GET",
-            success: function (res) {
-                if (res.success === true) {
-                    
-                } else {
-                    $.alert({title: "Error", type: "red", content: res.message, boxWidth: "250px", useBootstrap: false});
-                }
+        $.confirm({ title: "Descarga VUCEM XML", escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false, type: "blue",
+            buttons: {
+                cerrar: {action: function () {}}
+            },
+            content: function () {
+                let self = this;
+                return $.ajax({
+                    url: "/trafico/pedimentos/descarga",
+                    method: "get",
+                    data: {idTrafico: idTrafico}
+                }).done(function (res) {
+                    self.setContent(res.html);
+                }).fail(function () {
+                    self.setContent("Something went wrong.");
+                });
             }
         });
     });

@@ -1,0 +1,110 @@
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th style="width: 90px">
+                Pedimento
+            </th>
+            <td style="text-align: right;">
+                <button onclick="descargaXmlpedimento()">Descargar XML</button>
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 90px">
+                COVES
+            </th>
+            <td style="text-align: left;">
+                <?php foreach ($this->coves as $item) { 
+                    preg_match('/COVE[0-9A-Z]{9}/', $item['nom_archivo'], $m);
+                    ?>
+                    <?= $m[0] ?>
+                    <?= ($item['xml'] == null) ? '<button style="float: right" onclick="descargaXmlCove();">Descargar XML</button>' : '' ?><br>
+                <?php } ?>
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 90px">
+                EDOCUMENTS
+            </th>
+            <td style="text-align: left;">
+                <?php foreach ($this->edocuments as $item) {  
+                    preg_match('/ED[0-9A-Z]{13}/', $item['nom_archivo'], $m);
+                    ?>
+                    <?= $m[0] ?>
+                    <?= ($item['xml'] == null) ? '<button style="float: right">Descargar XML</button>' : '' ?><br>
+                <?php } ?>
+            </td>
+        </tr>
+    </thead>
+</table>
+<script>
+    window.descargaXmlpedimento = function() {
+        $.ajax({
+            url: "/trafico/pedimentos/descarga-xml",
+            cache: false,
+            dataType: "json",
+            data: {
+                idTrafico: $("#idTrafico").val()
+            },
+            type: "GET",
+            success: function(res) {
+                if (res.success === true) {
+                    if (res.message) {
+                        $.alert({
+                            title: "Advertencia",
+                            type: "orange",
+                            content: res.message,
+                            boxWidth: "350px",
+                            useBootstrap: false,
+                        });
+                    }
+                    loadFiles();
+                } else {
+                    $.alert({
+                        title: "Error",
+                        type: "red",
+                        content: res.message,
+                        boxWidth: "350px",
+                        useBootstrap: false,
+                    });
+                }
+            },
+        });
+    };
+    
+    window.descargaXmlCove = function(id, cove) {
+        $.ajax({
+            url: "/trafico/pedimentos/descarga-xml-cove",
+            cache: false,
+            dataType: "json",
+            data: {
+                idTrafico: $("#idTrafico").val(),
+                id: id,
+                cove: cove,
+            },
+            type: "GET",
+            success: function(res) {
+                if (res.success === true) {
+                    if (res.message) {
+                        $.alert({
+                            title: "Advertencia",
+                            type: "orange",
+                            content: res.message,
+                            boxWidth: "350px",
+                            useBootstrap: false,
+                        });
+                    }
+                    loadFiles();
+                } else {
+                    $.alert({
+                        title: "Error",
+                        type: "red",
+                        content: res.message,
+                        boxWidth: "350px",
+                        useBootstrap: false,
+                    });
+                }
+            },
+        });
+    };
+</script>
+<script scr="/js/trafico/pedimentos/descarga.js"></script>

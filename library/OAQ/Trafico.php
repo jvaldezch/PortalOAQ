@@ -1701,6 +1701,13 @@ class OAQ_Trafico
     protected function _agregarArchivoEnRepositorio($tipoArchivo, $nombreArchivo, $edocument = null)
     {
         $mppr = new Archivo_Model_Repositorio();
+
+        $exists = $this->_buscarArchivoEnRepositorio(basename($nombreArchivo));
+
+        if ($exists) {
+            return true;
+        }
+        
         $added = $mppr->agregar(array(
             "id_trafico" => $this->idTrafico,
             "rfc_cliente" => $this->rfcCliente,
@@ -1878,14 +1885,19 @@ class OAQ_Trafico
                 if (file_exists($ped_filename)) {
                     $this->_analizar($ped_filename);
                 }
-                return true;
+                return array(
+                    "success" => true,
+                    "message" => null,
+                );
             } else {
                 return $resp;
             }
         } else {
             $this->_analizar($ped_filename);
-            die();
-            return true;
+            return array(
+                "success" => true,
+                "message" => "El pedimento ya existe en el repositorio.",
+            );
         }
     }
 
@@ -1894,7 +1906,6 @@ class OAQ_Trafico
         $array = $this->_datosXmlPedimento($xmlPedimento);
         if (!empty($array)) {
             $this->_agregarDb($array);
-
             $this->_agregarArchivoEnRepositorio(91, $xmlPedimento);
         }
     }
@@ -1949,9 +1960,7 @@ class OAQ_Trafico
 
     protected function _agregarDb($arr)
     {
-
         $mppr = new Vucem_Model_VucemPedimentosMapper();
-
         if (!($mppr->verificar($this->patente, $this->aduana, $this->pedimento))) {
             $arr["idTrafico"] = $this->idTrafico;
             $arr["patente"] = $this->patente;
@@ -2161,5 +2170,24 @@ class OAQ_Trafico
             return true;
         }
         return;
+    }
+
+    public function covesDeTrafico() {
+        // 21 xml
+        // 22 pdf
+        // COVE203QF8G96 caracteres 
+        $mppr = new Archivo_Model_Repositorio();
+        $rows = $mppr->buscarCoves($this->patente, $this->aduana, $this->referencia);
+        return $rows;
+
+    }
+
+    public function edocumentsDeTrafico() {
+        // 27 xml
+        // 56 pdf 
+        // 0438200HTNYG6 13 caracteres
+        $mppr = new Archivo_Model_Repositorio();
+        $rows = $mppr->buscarEdocuments($this->patente, $this->aduana, $this->referencia);
+        return $rows;        
     }
 }

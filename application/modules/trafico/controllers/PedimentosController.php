@@ -34,7 +34,42 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
     public function descargaAction() {
         try {
             $f = array(
-                "idTrafico" => array("StringTrim", "StripTags", "StringToUpper"),
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => array("Digits"),
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico")) {
+
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/pedimentos/");
+                $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+                $row = $trafico->obtenerDatos();
+
+                $coves = $trafico->covesDeTrafico();
+                $edocuments = $trafico->edocumentsDeTrafico();
+
+                $view->coves = $coves;
+                $view->edocuments = $edocuments;
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("descarga.phtml")));
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function descargaXmlAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => array("Digits"),
             );
             $v = array(
                 "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
@@ -45,11 +80,48 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                 if (($res = $trafico->descargaPedimento($trafico->getIdCliente())) === true) {
                     $this->_helper->json(array("success" => true));
                 } else {
-                    if (($res = $trafico->descargaPedimento(null, $trafico->getPatente())) === true) {
-                        $this->_helper->json(array("success" => true));
+                    $res = $trafico->descargaPedimento(null, $trafico->getPatente());
+                    if ($res['success'] == true) {
+                        $this->_helper->json(array("success" => true, "message" => $res['message']));
+                    } else {
+                        $this->_helper->json(array("success" => false, "message" => $res));
                     }
-                    $this->_helper->json(array("success" => false, "message" => $res));
                 }
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function descargaXmlCoveAction() {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => array("Digits"),
+                "id" => array("Digits"),
+                "cove" => array("StringToUpper"),
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+                "cove" => array("NotEmpty"),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico") && $input->isValid("id") && $input->isValid("cove")) {
+                /*$trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+                if (($res = $trafico->descargaPedimento($trafico->getIdCliente())) === true) {
+                    $this->_helper->json(array("success" => true));
+                } else {
+                    $res = $trafico->descargaPedimento(null, $trafico->getPatente());
+                    if ($res['success'] == true) {
+                        $this->_helper->json(array("success" => true, "message" => $res['message']));
+                    } else {
+                        $this->_helper->json(array("success" => false, "message" => $res));
+                    }
+                }*/
+                $this->_helper->json(array("success" => true));
             } else {
                 throw new Exception("Invalid input!");
             }
