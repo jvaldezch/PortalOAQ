@@ -237,6 +237,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         "semaforo",
                         "coves",
                         "edocuments",
+                        "revisionAdministracion",
+                        "revisionOperaciones",
+                        "completo",
                         new Zend_Db_Expr("CASE WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NULL THEN 1 WHEN t.revisionAdministracion IS NULL AND t.revisionOperaciones IS NOT NULL THEN 2 WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NOT NULL THEN 3 ELSE 0 END AS estatusExpdnt"),
                     ))
                     ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
@@ -580,9 +583,6 @@ class Trafico_CrudController extends Zend_Controller_Action {
         if ((int) $filtro == 2) {
             $sql->where("t.fechaPago IS NOT NULL AND fechaLiberacion IS NOT NULL");
         }
-//        if ((int) $filtro == 3) {
-//            $sql->where("fechaLiberacion IS NULL");
-//        }
     }
 
     protected function _reporteIncompletos($page, $rows, $idAduana, $fechaInicio, $fechaFin, $idCliente = null) {
@@ -2251,7 +2251,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 }
             }
             if ($filtrosCookies["checklist"] == true) {
-                $sql->where("(CASE WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NULL THEN 1 WHEN t.revisionAdministracion IS NULL AND t.revisionOperaciones IS NOT NULL THEN 2 WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NOT NULL THEN 3 ELSE 0 END) < 2");
+                $sql->where("t.revisionAdministracion IS NULL OR t.revisionOperaciones IS NULL OR t.completo IS NULL");
             }
             if ($filtrosCookies["liberadas"] == true) {
                 $sql->where("t.estatus = 3");

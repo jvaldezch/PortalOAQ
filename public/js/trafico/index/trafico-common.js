@@ -159,16 +159,21 @@ function formatEstatus(val, row) {
 }
 
 function formatArchive(val, row) {
-    if (parseInt(val) === 1) {
-        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
-    } else if (parseInt(val) === 2) {
-        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #0099ff; cursor: pointer; padding-top: 2px"></i>';
-    } else if (parseInt(val) === 3) {
+    if (row.revisionAdministracion == null && row.revisionOperaciones == null) {
+        // sin checklist
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c1c1c1; cursor: pointer; padding-top: 2px"></i>';
+    }
+    if (row.revisionAdministracion == null && row.revisionOperaciones == 1) {
+        // rev. operaciones
         return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #F59211; cursor: pointer; padding-top: 2px"></i>';
-    } else if (parseInt(val) === 4) {
+    }
+    if (row.revisionAdministracion == 1 && row.revisionOperaciones == null) {
+        // rev. admon
+        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #0099ff; cursor: pointer; padding-top: 2px"></i>';
+    }
+    if (row.revisionAdministracion == 1 && row.revisionOperaciones == 1) {
+        // completo
         return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: green; cursor: pointer; padding-top: 2px"></i>';
-    } else {
-        return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c2c2c2; cursor: pointer; padding-top: 2px"></i>';
     }
 }
 
