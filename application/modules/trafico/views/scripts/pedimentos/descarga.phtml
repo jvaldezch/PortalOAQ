@@ -13,11 +13,14 @@
                 COVES
             </th>
             <td style="text-align: left;">
-                <?php foreach ($this->coves as $item) { 
+                <?php foreach ($this->coves as $item) {
+                    if ($item['edocument']) {
+                        continue;
+                    }
                     preg_match('/COVE[0-9A-Z]{9}/', $item['nom_archivo'], $m);
-                    ?>
+                ?>
                     <?= $m[0] ?>
-                    <?= ($item['xml'] == null) ? "<button style=\"float: right\" onclick=\"descargaXmlCove(". $item['id'] .",'". $m[0] ."');\">Descargar XML</button>" : '' ?><br>
+                    <?= ($item['xml'] == null) ? "<button style=\"float: right\" onclick=\"descargaXmlCove(" . $item['id'] . ",'" . $m[0] . "');\">Descargar XML</button>" : '' ?><br>
                 <?php } ?>
             </td>
         </tr>
@@ -26,9 +29,12 @@
                 EDOCUMENTS
             </th>
             <td style="text-align: left;">
-                <?php foreach ($this->edocuments as $item) {  
+                <?php foreach ($this->edocuments as $item) {
+                    if ($item['edocument']) {
+                        continue;
+                    }
                     preg_match('/ED[0-9A-Z]{13}/', $item['nom_archivo'], $m);
-                    ?>
+                ?>
                     <?= $m[0] ?>
                     <?= ($item['xml'] == null) ? '<button style="float: right">Descargar XML</button>' : '' ?><br>
                 <?php } ?>
@@ -70,7 +76,7 @@
             },
         });
     };
-    
+
     window.descargaXmlCove = function(id, cove) {
         $.ajax({
             url: "/trafico/pedimentos/descarga-xml-cove",

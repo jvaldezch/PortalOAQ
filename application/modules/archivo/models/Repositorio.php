@@ -433,6 +433,7 @@ class Archivo_Model_Repositorio
                     "a.id",
                     "a.nom_archivo",
                     "a.tipo_archivo",
+                    "a.edocument",
                     "(SELECT nom_archivo FROM repositorio AS r WHERE r.nom_archivo = REPLACE(a.nom_archivo, '.pdf', '.xml') AND a.patente = r.patente AND a.referencia = r.referencia) AS xml"
                 ))
                 ->where("patente = ?", $patente)
@@ -457,6 +458,7 @@ class Archivo_Model_Repositorio
                     "a.id",
                     "a.nom_archivo",
                     "a.tipo_archivo",
+                    "a.edocument",
                     "(SELECT nom_archivo FROM repositorio AS r WHERE r.nom_archivo = REPLACE(a.nom_archivo, '.pdf', '.xml') AND a.patente = r.patente AND a.referencia = r.referencia) AS xml"
                 ))
                 ->where("a.patente = ?", $patente)
