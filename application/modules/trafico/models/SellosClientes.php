@@ -125,6 +125,45 @@ class Trafico_Model_SellosClientes {
         }
     }
     
+    public function obtenerPorIdCliente($id) {
+        try {
+            $sql = $this->_db_table->select()
+                    ->setIntegrityCheck(false)
+                    ->from(array("s" => "trafico_sellos_clientes"), array(
+                        "key_nom",
+                        "certificado_nom",
+                        new Zend_Db_Expr("AES_DECRYPT(`key`,'{$this->_key}') AS `key`"),
+                        new Zend_Db_Expr("AES_DECRYPT(`spem`,'{$this->_key}') AS `spem`"),
+                        new Zend_Db_Expr("AES_DECRYPT(`certificado`,'{$this->_key}') AS `certificado`"),
+                        new Zend_Db_Expr("AES_DECRYPT(`password_spem`,'{$this->_key}') AS `password_spem`"),
+                        new Zend_Db_Expr("AES_DECRYPT(`password_ws`,'{$this->_key}') AS `password_ws`"),
+                        "sha",
+                    ))
+                    ->joinLeft(array("a" => "trafico_clientes"), "a.id = s.idCliente", array("rfc", "nombre AS razon"))
+                    ->where("s.idCliente = ?", $id)
+                    ->limit(1);
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return array(
+                    "figura" => 5,
+                    "rfc" => $stmt["rfc"],
+                    "razon" => $stmt["razon"],
+                    "key" => $stmt["key"],
+                    "cer" => $stmt["certificado"],
+                    "spem" => $stmt["spem"],
+                    "spem_pswd" => $stmt["password_spem"],
+                    "ws_pswd" => $stmt["password_ws"],
+                    "sha" => $stmt["sha"],
+                    "key_nom" => $stmt["key_nom"],
+                    "cer_nom" => $stmt["certificado_nom"],
+                );
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
+    
     public function agregar($arr) {
         try {
             $stmt = $this->_db_table->insert($arr);

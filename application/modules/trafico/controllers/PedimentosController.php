@@ -110,17 +110,20 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("idTrafico") && $input->isValid("id") && $input->isValid("cove")) {
-                /*$trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
-                if (($res = $trafico->descargaPedimento($trafico->getIdCliente())) === true) {
-                    $this->_helper->json(array("success" => true));
-                } else {
-                    $res = $trafico->descargaPedimento(null, $trafico->getPatente());
-                    if ($res['success'] == true) {
-                        $this->_helper->json(array("success" => true, "message" => $res['message']));
-                    } else {
-                        $this->_helper->json(array("success" => false, "message" => $res));
-                    }
-                }*/
+
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+                $repo = new Archivo_Model_Repositorio();
+
+                $out_dir = $trafico->directorioExpediente();
+                $file = $repo->obtenerPorArregloId($input->id);
+                $res = $trafico->descargaCove($trafico->getIdCliente(), $input->cove, $out_dir, $file[0]['nom_archivo']);
+
+                if (isset($res['xml']) && file_exists($res['xml'])) {
+                    $trafico->agregarArchivoExpediente(21, $res['xml'], $input->cove);
+                }
+                if (isset($res['pdf']) && file_exists($res['pdf'])) {
+                    $trafico->agregarArchivoExpediente(27, $res['pdf'], $input->cove);
+                }
                 $this->_helper->json(array("success" => true));
             } else {
                 throw new Exception("Invalid input!");

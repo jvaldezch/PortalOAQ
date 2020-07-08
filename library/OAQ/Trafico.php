@@ -1707,7 +1707,7 @@ class OAQ_Trafico
         if ($exists) {
             return true;
         }
-        
+
         $added = $mppr->agregar(array(
             "id_trafico" => $this->idTrafico,
             "rfc_cliente" => $this->rfcCliente,
@@ -1826,6 +1826,94 @@ class OAQ_Trafico
         $db->delete("trafico_vucem", array("idTrafico = ?" => $this->idTrafico));
         $db->delete("traficos", array("id = ?" => $this->idTrafico));
         return true;
+    }
+
+    public function descargaCove($idCliente, $cove, $out_dir, $nom_archivo)
+    {
+        if (isset($idCliente)) {
+            $mpp = new Trafico_Model_SellosClientes();
+            $sello = $mpp->obtenerPorIdCliente($idCliente);
+        }
+
+        if (!isset($sello)) {
+            return "No se encuentra sello.";
+        }
+
+        $cadena = "|{$sello["rfc"]}|{$cove}|";
+
+        $pkeyid = openssl_get_privatekey(base64_decode($sello['spem']), $sello['spem_pswd']);
+
+        openssl_sign($cadena, $signature, $pkeyid, OPENSSL_ALGO_SHA256);
+
+        $data = array(
+            "username" => $sello["rfc"],
+            "password" => $sello["ws_pswd"],
+            "certificado" => $sello['cer'],
+            "firma" => base64_encode($signature),
+        );
+
+        $res = array();
+
+        $con = new OAQ_XmlCoves($data, $cove, $cadena);
+
+        $f_xml_con = $out_dir . DIRECTORY_SEPARATOR . preg_replace('/\\.[^.\\s]{3,4}$/', '', $nom_archivo) . '_CON.xml';
+        $f_xml_res = $out_dir . DIRECTORY_SEPARATOR . preg_replace('/\\.[^.\\s]{3,4}$/', '', $nom_archivo) . '.xml';
+
+        $f_xml_con_acuse = $out_dir . DIRECTORY_SEPARATOR . preg_replace('/\\.[^.\\s]{3,4}$/', '', $nom_archivo) . '_CON_ACUSE.xml';
+        $f_xml_res_acuse = $out_dir . DIRECTORY_SEPARATOR . preg_replace('/\\.[^.\\s]{3,4}$/', '', $nom_archivo) . '_ACUSE.xml';
+        $f_xml_acuse_pdf = $out_dir . DIRECTORY_SEPARATOR . preg_replace('/\\.[^.\\s]{3,4}$/', '', $nom_archivo) . '_ACUSE.pdf';
+
+
+        if (!file_exists($f_xml_con)) {
+            $con->xmlConsultaEdocument();
+            $xml_con = $con->getXml();
+            file_put_contents($f_xml_con, $xml_con);
+        } else {
+            $xml_con = file_get_contents($f_xml_con);
+        }
+
+        if ($xml_con) {
+            if (!file_exists($f_xml_res)) {
+                $con->descargaEdocument($xml_con);
+                $xml_res = $con->getResponse();
+                if ($xml_res) {
+                    file_put_contents($f_xml_res, $xml_res);
+                }
+            }
+            if (file_exists($f_xml_res)) {
+                $res['xml'] = $f_xml_res;
+            }
+        }
+
+        if (!file_exists($f_xml_con_acuse)) {
+            $con->xmlConsultaAcuseEdocument();
+            $xml_con_acuse = $con->getXml();
+            file_put_contents($f_xml_con_acuse, $xml_con_acuse);
+        } else {
+            $xml_con_acuse = file_get_contents($f_xml_con_acuse);
+        }
+
+        if ($xml_con_acuse) {
+            if (!file_exists($f_xml_res_acuse)) {
+                $con->descargaAcuseEdocument($xml_con_acuse);
+                $xml_res_acuse = $con->getResponse();
+                file_put_contents($f_xml_res_acuse, "<S:Envelope>" . $con->stringInsideTags($xml_res_acuse, "S:Envelope") . "</S:Envelope>");
+            } else {
+                $xml_res_acuse = file_get_contents($f_xml_res_acuse);
+            }
+            if ($xml_res_acuse) {
+
+                if (!file_exists($f_xml_acuse_pdf)) {
+                    if (($con->analizarRespuesaAcuse($xml_res_acuse, $f_xml_acuse_pdf))) {
+                        $res['pdf'] = $f_xml_acuse_pdf;
+                    }
+                } else{
+                    $res['pdf'] = $f_xml_acuse_pdf;
+                }
+            }
+        }
+
+        return $res;
     }
 
     public function descargaPedimento($idCliente = null, $patente = null)
@@ -1976,6 +2064,16 @@ class OAQ_Trafico
     }
 
     protected function _directorio()
+    {
+        $this->misc->set_baseDir($this->directorio);
+        $path = $this->misc->nuevoDirectorioExpediente($this->patente, $this->aduana, $this->referencia);
+        if (file_exists($path)) {
+            return $path;
+        }
+        throw new Exception("Unable to find directory");
+    }
+
+    public function directorioExpediente()
     {
         $this->misc->set_baseDir($this->directorio);
         $path = $this->misc->nuevoDirectorioExpediente($this->patente, $this->aduana, $this->referencia);
@@ -2172,22 +2270,23 @@ class OAQ_Trafico
         return;
     }
 
-    public function covesDeTrafico() {
+    public function covesDeTrafico()
+    {
         // 21 xml
         // 22 pdf
         // COVE203QF8G96 caracteres 
         $mppr = new Archivo_Model_Repositorio();
         $rows = $mppr->buscarCoves($this->patente, $this->aduana, $this->referencia);
         return $rows;
-
     }
 
-    public function edocumentsDeTrafico() {
+    public function edocumentsDeTrafico()
+    {
         // 27 xml
         // 56 pdf 
         // 0438200HTNYG6 13 caracteres
         $mppr = new Archivo_Model_Repositorio();
         $rows = $mppr->buscarEdocuments($this->patente, $this->aduana, $this->referencia);
-        return $rows;        
+        return $rows;
     }
 }

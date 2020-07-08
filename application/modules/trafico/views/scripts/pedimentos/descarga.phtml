@@ -17,7 +17,7 @@
                     preg_match('/COVE[0-9A-Z]{9}/', $item['nom_archivo'], $m);
                     ?>
                     <?= $m[0] ?>
-                    <?= ($item['xml'] == null) ? '<button style="float: right" onclick="descargaXmlCove();">Descargar XML</button>' : '' ?><br>
+                    <?= ($item['xml'] == null) ? "<button style=\"float: right\" onclick=\"descargaXmlCove(". $item['id'] .",'". $m[0] ."');\">Descargar XML</button>" : '' ?><br>
                 <?php } ?>
             </td>
         </tr>

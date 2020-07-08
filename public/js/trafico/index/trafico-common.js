@@ -7,7 +7,7 @@
 function openTraffic() {
     var row = $('#dg').datagrid('getSelected');
     if (row) {
-        var win = window.open('/trafico/index/editar-trafico?id=' + row.id, '_blank');
+        var win = window.open(`/trafico/index/editar-trafico?id=${row.id}`, '_blank');
         win.focus();
     }
 }

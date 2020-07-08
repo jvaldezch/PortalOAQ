@@ -7,7 +7,8 @@
  *
  * @author Jaime E. Valdez jvaldezch at gmail
  */
-class OAQ_XmlPedimentos {
+class OAQ_XmlPedimentos
+{
 
     protected $_dir;
     protected $_array;
@@ -25,39 +26,47 @@ class OAQ_XmlPedimentos {
     protected $_numeroOperacion;
     protected $_partida;
 
-    function get_dir() {
+    function get_dir()
+    {
         return $this->_dir;
     }
 
-    function set_dir($_dir) {
+    function set_dir($_dir)
+    {
         $this->_dir = $_dir;
     }
 
-    function set_aduana($_aduana) {
+    function set_aduana($_aduana)
+    {
         $this->_aduana = $_aduana;
     }
 
-    function set_patente($_patente) {
+    function set_patente($_patente)
+    {
         $this->_patente = $_patente;
     }
 
-    function set_pedimento($_pedimento) {
+    function set_pedimento($_pedimento)
+    {
         $this->_pedimento = $_pedimento;
     }
 
-    function set_array($_array) {
+    function set_array($_array)
+    {
         $this->_array = $_array;
     }
 
-    function set_numeroOperacion($_numeroOperacion) {
+    function set_numeroOperacion($_numeroOperacion)
+    {
         $this->_numeroOperacion = $_numeroOperacion;
     }
 
-    function set_partida($_partida) {
+    function set_partida($_partida)
+    {
         $this->_partida = $_partida;
     }
-    
-    
+
+
 
     /**
      * 
@@ -66,16 +75,17 @@ class OAQ_XmlPedimentos {
      * @param boolean $partida
      * @throws Exception
      */
-    function __construct($partida = null, $estado = null) {
+    function __construct($partida = null, $estado = null)
+    {
         try {
             $this->_domtree = new DOMDocument("1.0", "UTF-8");
             $this->_domtree->formatOutput = true;
             $this->_envelope = $this->_domtree->createElementNS("http://schemas.xmlsoap.org/soap/envelope/", "soapenv:Envelope");
             if (!isset($partida) && !isset($estado)) {
                 $this->_envelope->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:con", "http://www.ventanillaunica.gob.mx/pedimentos/ws/oxml/consultarpedimentocompleto");
-            } else if(isset($partida)) {
+            } else if (isset($partida)) {
                 $this->_envelope->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:con", "http://www.ventanillaunica.gob.mx/pedimentos/ws/oxml/consultarpartida");
-            } else if(isset($estado)) {
+            } else if (isset($estado)) {
                 $this->_envelope->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:con", "http://www.ventanillaunica.gob.mx/pedimentos/ws/oxml/consultarestadopedimentos");
             }
             $this->_envelope->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:com", "http://www.ventanillaunica.gob.mx/pedimentos/ws/oxml/comunes");
@@ -97,7 +107,8 @@ class OAQ_XmlPedimentos {
      * @return string
      * @throws Exception
      */
-    public function replace($string) {
+    public function replace($string)
+    {
         try {
             return str_replace(array("S:", "soapenv:", "oxml:", "con:", "wsse:", "wsu:", "env:"), "", $string);
         } catch (Exception $e) {
@@ -112,7 +123,8 @@ class OAQ_XmlPedimentos {
      * @return string
      * @throws Exception
      */
-    public function getXml() {
+    public function getXml()
+    {
         try {
             return (string) $this->_domtree->saveXML();
         } catch (Exception $e) {
@@ -127,7 +139,8 @@ class OAQ_XmlPedimentos {
      * @return type
      * @throws Exception
      */
-    public function saveToDisk($type) {
+    public function saveToDisk($type)
+    {
         try {
             if ($this->get_dir() !== null) {
                 if (file_exists($this->get_dir())) {
@@ -150,7 +163,8 @@ class OAQ_XmlPedimentos {
      * 
      * @return type
      */
-    protected function _credenciales() {
+    protected function _credenciales()
+    {
         try {
             $security = $this->_domtree->createElement("wsse:Security");
             $security->setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:wsse", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
@@ -173,7 +187,8 @@ class OAQ_XmlPedimentos {
      * 
      * @throws Exception
      */
-    public function consultaPedimentoCompleto() {
+    public function consultaPedimentoCompleto()
+    {
         try {
             $this->_service = $this->_domtree->createElement("con:consultarPedimentoCompletoPeticion");
             $this->_peticion = $this->_domtree->createElement("con:peticion");
@@ -187,14 +202,15 @@ class OAQ_XmlPedimentos {
             throw new Exception("Zend Exception found on <strong>" . __METHOD__ . "</strong> : " . $ex->getMessage());
         }
     }
-    
+
     /**
      * 
      * Consulta XML para la consulta de un pedimento
      * 
      * @throws Exception
      */
-    public function consultaEstadoPedimento() {
+    public function consultaEstadoPedimento()
+    {
         try {
             $this->_service = $this->_domtree->createElement("con:consultarEstadoPedimentosPeticion");
             $this->_service->appendChild($this->_domtree->createElement("con:numeroOperacion", $this->_numeroOperacion));
@@ -216,7 +232,8 @@ class OAQ_XmlPedimentos {
      * 
      * @throws Exception
      */
-    public function consultaPartida() {
+    public function consultaPartida()
+    {
         try {
             $this->_service = $this->_domtree->createElement("con:consultarPartidaPeticion");
             $this->_peticion = $this->_domtree->createElement("con:peticion");
@@ -232,5 +249,4 @@ class OAQ_XmlPedimentos {
             throw new Exception("Zend Exception found on <strong>" . __METHOD__ . "</strong> : " . $ex->getMessage());
         }
     }
-
 }
