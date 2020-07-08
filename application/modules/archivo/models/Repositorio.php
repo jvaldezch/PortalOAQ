@@ -381,6 +381,15 @@ class Archivo_Model_Repositorio
         }
     }
 
+    public function actualizarArchivo($id, $arr)
+    {
+        try {
+            $this->getDbTable()->update($arr, array("id = ?" => $id));
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception " . __METHOD__ . " : " . $ex->getMessage());
+        }
+    }
+
     public function archivos($referencia, $patente = null)
     {
         try {
@@ -419,7 +428,6 @@ class Archivo_Model_Repositorio
     public function buscarCoves($patente, $aduana, $referencia)
     {
         try {
-            $this->_firephp = Zend_Registry::get("firephp");
             $sql = $this->getDbTable()->select()
                 ->from(array("a" => "repositorio"), array(
                     "a.id",

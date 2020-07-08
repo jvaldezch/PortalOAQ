@@ -120,6 +120,7 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
 
                 if (isset($res['xml']) && file_exists($res['xml'])) {
                     $trafico->agregarArchivoExpediente(21, $res['xml'], $input->cove);
+                    $repo->actualizarArchivo($input->id, array("edocument" => $input->cove));
                 }
                 if (isset($res['pdf']) && file_exists($res['pdf'])) {
                     $trafico->agregarArchivoExpediente(27, $res['pdf'], $input->cove);
