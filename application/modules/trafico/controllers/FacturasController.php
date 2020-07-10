@@ -118,7 +118,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                         $providers = new Trafico_Model_FactDest();
                         $row = $providers->obtener($input->idProv);
                     }
-                    if (!empty($row)) {
+                    if (!empty($row)) {                        
                         $view->nombre = $row["nombre"];                        
                         $view->tipoIdentificador = $row["tipoIdentificador"];                        
                         $view->identificador = $row["identificador"];                        
@@ -624,13 +624,15 @@ class Trafico_FacturasController extends Zend_Controller_Action {
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $f = array(
-                    "idTrafico" => array("StringTrim", "StripTags", "Digits"),
+                    "orden" => array("StringTrim", "StripTags", "Digits"),
                     "idCliente" => array("StringTrim", "StripTags", "Digits"),
                     "idProveedor" => array("StringTrim", "StripTags", "Digits"),
                     "idFactura" => array("StringTrim", "StripTags", "Digits"),
                     "idProducto" => array("StringTrim", "StripTags", "Digits"),
+                    "idProducto" => array("StringTrim", "StripTags", "Digits"),
                 );
                 $v = array(
+                    "orden" => array("NotEmpty", new Zend_Validate_Int()),
                     "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                     "idProveedor" => array("NotEmpty", new Zend_Validate_Int()),
@@ -643,6 +645,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                     $mppr = new Trafico_Model_FactProd();
                     $mdl = new Trafico_Model_ClientesPartes();
                     $arr = array(
+                        "orden" => $post["orden"],
                         "numParte" => $post["numParte"],
                         "fraccion" => $post["fraccion"],
                         "descripcion" => $post["descripcion"],
