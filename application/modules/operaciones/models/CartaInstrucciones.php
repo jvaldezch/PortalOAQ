@@ -10,7 +10,10 @@ class Operaciones_Model_CartaInstrucciones {
 
     public function cartasSelect($idsClientes = null) {
         try {
-            $sql = $this->_db_table->select();
+            $sql = $this->_db_table->select()
+                ->from(array("i" => "carta_instrucciones"), array("*"))
+                ->setIntegrityCheck(false)
+                ->joinLeft(array("c" => "trafico_clientes"), "i.idCliente = c.id", array("nombre AS razonSocial"));
             if (isset($idsClientes) && !empty($idsClientes)) {
                 $sql->where("idCliente IN (?)", $idsClientes);
             }

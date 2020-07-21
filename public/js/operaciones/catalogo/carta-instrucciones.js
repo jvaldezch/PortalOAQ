@@ -111,7 +111,7 @@ $(document).ready(function () {
                     }},
                 {field: 'send', width: 24, title: '', 
                     formatter: function(val, row){
-                        return '<i class="fas fa-paper-plane" data-id="' + row.id + '" style="cursor: pointer"></i>';
+                        return '<i class="fas fa-share" data-id="' + row.id + '" style="cursor: pointer"></i>';
                     }},
                 {field: 'print', width: 24, title: '', 
                     formatter: function(val, row){
@@ -123,6 +123,7 @@ $(document).ready(function () {
         ],
         columns: [
             [
+                {field: "razonSocial", width: 400, title: "Cliente"},
                 {field: "patente", width: 60, title: "Patente"},
                 {field: "aduana", width: 60, title: "Aduana"},
                 {field: "pedimento", width: 80, title: "Pedimento"},
@@ -212,10 +213,10 @@ $(document).ready(function () {
         });
     });
     
-    $(document.body).on("click", ".fa-paper-plane", function (ev) {
+    $(document.body).on("click", ".fa-share", function (ev) {
         ev.preventDefault();
-        var id = $(this).data("id");
-        $.confirm({ title: "Enviar a tráfico", escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false, type: "blue",
+        let id = $(this).data("id");
+        $.confirm({ title: "Enviar a tráfico", escapeKey: "cerrar", boxWidth: "950px", useBootstrap: false, type: "blue",
             buttons: {
                 confirmar: {btnClass: "btn-blue", action: function () {
                     
@@ -226,6 +227,7 @@ $(document).ready(function () {
                 var self = this;
                 return $.ajax({
                     url: "/operaciones/get/enviar-carta",
+                    data: {id: id},
                     method: "get"
                 }).done(function (res) {
                     self.setContent(res.html);

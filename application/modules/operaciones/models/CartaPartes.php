@@ -1,31 +1,90 @@
 <?php
 
-class Operaciones_Model_CartaPartes {
+class Operaciones_Model_CartaPartes
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Operaciones_Model_DbTable_CartaPartes();
     }
-    
-    public function cartaPartesSelect($id) {
+
+    public function cartaPartesSelect($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("p" => "carta_partes"), array("*"))
-                    ->joinLeft(array("i" => "carta_instrucciones_partes"), "p.idDelivery = i.id", array("*"))
-                    ->where("p.idCarta = ?", $id);
+                ->setIntegrityCheck(false)
+                ->from(array("p" => "carta_partes"), array("*"))
+                ->joinLeft(array("i" => "carta_instrucciones_partes"), "p.idDelivery = i.id", array("*"))
+                ->where("p.idCarta = ?", $id);
             return $sql;
         } catch (Exception $ex) {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
 
-    public function verificar($idCarta, $idDelivery) {
+    public function cartaPartes($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idCarta = ?", $idCarta)
-                    ->where("idDelivery = ?", $idDelivery);
+                ->setIntegrityCheck(false)
+                ->from(array("p" => "carta_partes"), array("*"))
+                ->joinLeft(array("i" => "carta_instrucciones_partes"), "p.idDelivery = i.id", array("*"))
+                ->where("p.idCarta = ?", $id);
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return [];
+        } catch (Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }    
+
+    public function invoices($id)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("p" => "carta_partes"), array(""))
+                ->joinLeft(array("i" => "carta_instrucciones_partes"), "p.idDelivery = i.id", array("billDocument AS numfactura", "providerName AS nomProveedor"))
+                ->where("p.idCarta = ?", $id)
+                ->group("i.billDocument");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return [];
+        } catch (Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }    
+
+    public function providers($id)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("p" => "carta_partes"), array("*"))
+                ->joinLeft(array("i" => "carta_instrucciones_partes"), "p.idDelivery = i.id", array("*"))
+                ->where("p.idCarta = ?", $id);
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return [];
+        } catch (Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
+
+    public function verificar($idCarta, $idDelivery)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->where("idCarta = ?", $idCarta)
+                ->where("idDelivery = ?", $idDelivery);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -36,7 +95,8 @@ class Operaciones_Model_CartaPartes {
         }
     }
 
-    public function agregar($arr) {
+    public function agregar($arr)
+    {
         try {
             $stmt = $this->_db_table->insert($arr);
             if ($stmt) {
@@ -47,5 +107,4 @@ class Operaciones_Model_CartaPartes {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
 }

@@ -10,7 +10,7 @@
 class Aduanet_Pedimentos
 {
 
-    protected $_endpoint = "http://199.167.184.210:5004";
+    protected $_endpoint = "http://69.28.88.157:5004";
     protected $_firephp;
     protected $_token = null;
 

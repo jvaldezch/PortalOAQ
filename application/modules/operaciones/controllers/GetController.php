@@ -5,6 +5,7 @@ class Operaciones_GetController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_todosClientes;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
@@ -24,6 +25,7 @@ class Operaciones_GetController extends Zend_Controller_Action {
         } else {
             $this->getResponse()->setRedirect($this->_appconfig->getParam("link-logout"));
         }
+        $this->_todosClientes = array("trafico", "super", "trafico_ejecutivo", "gerente");
     }
     
     public function subirArchivoAction() {
@@ -301,17 +303,52 @@ class Operaciones_GetController extends Zend_Controller_Action {
     
     public function enviarCartaAction() {
         try {
-            $view = new Zend_View();
-            $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-            $referencias = new OAQ_Referencias();
-            $res = $referencias->restricciones($this->_session->id, $this->_session->role);            
-            if (!empty($res["idsClientes"])) {
-                $rows = $referencias->obtenerClientes(null, $res["idsClientes"]);
-                if (!empty($rows)) {
-                    $view->clientes = $rows;
+            
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "id" => array("Digits"),
+            );
+            $v = array(
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id")) {
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+
+                // $mppr = new Operaciones_Model_CartaInstrucciones();
+
+                $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
+                if (in_array($this->_session->role, $this->_todosClientes)) {
+                    $customs = $mppr->aduanasDeUsuario();
+                } else {
+                    $customs = $mppr->aduanasDeUsuario($this->_session->id);
                 }
+                if (!empty($customs)) {
+                    $form = new Trafico_Form_CrearTraficoNew(array("aduanas" => $customs));
+                } else {
+                    $form = new Trafico_Form_CrearTraficoNew();
+                }
+                $view->form = $form;
+
+                $mppr = new Operaciones_Model_CartaPartes();
+
+                $rows = $mppr->invoices($input->id);
+
+                $view->rows = $rows;
+
+                /*$referencias = new OAQ_Referencias();
+                $res = $referencias->restricciones($this->_session->id, $this->_session->role);            
+                if (!empty($res["idsClientes"])) {
+                    $rows = $referencias->obtenerClientes(null, $res["idsClientes"]);
+                    if (!empty($rows)) {
+                        $view->clientes = $rows;
+                    }
+                }*/
+                $this->_helper->json(array("success" => true, "html" => $view->render("enviar-carta.phtml")));
+            } else {
+                throw new Exception("Invalid input!");
             }
-            $this->_helper->json(array("success" => true, "html" => $view->render("imprimir-carta.phtml")));
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
