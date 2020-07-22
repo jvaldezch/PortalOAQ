@@ -1,6 +1,8 @@
 
 let emailData = {};
+
 emailData["emails"] = {};
+emailData["archivos"] = {};
     
 let base = "/trafico/index/editar-trafico";
 
@@ -1634,7 +1636,7 @@ $(document).ready(function () {
     
     $(document.body).on("click", "#sendEmail", function (ev) {
         let id = $(this).data("id");
-        $.confirm({ title: "Enviar email", escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false, type: "blue",
+        $.confirm({ title: "Enviar email", escapeKey: "cerrar", boxWidth: "750px", useBootstrap: false, type: "blue",
             buttons: {
                 enviar: {btnClass: "btn-blue", action: function () {
                     if (jQuery.isEmptyObject(emailData["archivos"])) {

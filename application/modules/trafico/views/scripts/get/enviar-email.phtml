@@ -1,15 +1,12 @@
-<script type="text/javascript">
-    var emailData = {};
-    emailData["emails"] = {};
-    emailData["archivos"] = {};
-</script>
-<p style="font-size: 11px">¿Desea enviar un correo electrónico con pedimentos adjuntos a los siguientes contactos?</p>
+<p style="font-size: 12px; padding: 10px 0">¿Desea enviar un correo electrónico con pedimentos adjuntos a los siguientes contactos?</p>
 
 <?php if (isset($this->contacts)) { ?>
-    <table style="width: 100%">
+    <table class="traffic-table traffic-table-left">
         <thead>
             <tr>
-                <th>&nbsp;</th>
+                <th>
+                    <input type="checkbox" id="all-emails" checked="true" />
+                </th>
                 <th style="text-align: left; font-size: 11px">Email</th>
                 <th style="text-align: left; font-size: 11px">Nombre receptor</th>
             </tr>
@@ -17,7 +14,7 @@
         <tbody>
             <?php foreach ($this->contacts as $k => $contact) { ?>
                 <tr>
-                    <td style="text-align: center"><input type="checkbox" checked="true" /></td>
+                    <td style="text-align: center"><input type="checkbox" checked="true" class="customer-email" /></td>
                     <td style="text-align: left; font-size: 11px"><?= $contact["email"] ?></td>
                     <td style="text-align: left; font-size: 11px"><?= $contact["nombre"] ?></td>
                 </tr>
@@ -29,10 +26,10 @@
     <p style="font-size: 11px; margin: 5px 0; color: #ff3333">No hay contactos para este cliente.</p>
 <?php } ?>
 
-<p style="font-size: 11px">Con los siguiente archivos adjuntos:</p>
+<p style="font-size: 12px; padding: 10px 0">Con los siguiente archivos adjuntos:</p>
 
 <?php if (isset($this->archivos)) { ?>
-    <table style="width: 100%">
+    <table class="traffic-table traffic-table-left">
         <thead>
             <tr>
                 <th>&nbsp;</th>
@@ -54,4 +51,6 @@
 <?php } else { ?>
     <p style="font-size: 11px; margin: 5px 0; color: #ff3333">No hay archivos (pedimentos) para enviar.</p>
 <?php } ?>
+
+<script src="/js/trafico/post/enviar-email.js"></script>
     
