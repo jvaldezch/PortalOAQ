@@ -1826,7 +1826,7 @@ class Archivo_Model_RepositorioMapper {
                     ->where("patente = ?", $patente)
                     ->where("aduana = ?", $aduana)
                     ->where("referencia = ?", $referencia)
-                    ->where("tipo_archivo NOT IN (?)", array(29, 31, 89, 99, 2001, 9999))
+                    ->where("tipo_archivo NOT IN (?)", array(29, 31, 89, 2001, 9999))
                     ->where("ftp IS NULL")
                     ->where("borrado IS NULL");
             if (isset($rfcCliente)) {
