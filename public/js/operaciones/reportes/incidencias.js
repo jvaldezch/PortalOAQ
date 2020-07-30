@@ -111,7 +111,7 @@ $(document).ready(function () {
           },
         },
         { field: "nombre", width: 350, title: "Cliente" },
-        { field: "tipoError", width: 90, title: "Tipo Error" },
+        { field: "tipoError", width: 120, title: "Tipo Error" },
         { field: "acta", width: 90, title: "Acta" },
         { field: "multa", width: 120, title: "Multa" },
         {

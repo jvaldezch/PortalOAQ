@@ -1,35 +1,38 @@
 <?php
 
-class Operaciones_ReportesController extends Zend_Controller_Action {
+class Operaciones_ReportesController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_redirector;
 
-    public function init() {
+    public function init()
+    {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/additional-methods.min.js")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery.blockUI.js")
-                ->appendFile("/js/common/mensajero.js?" . time())
-                ->appendFile("/js/common/principal.js?" . time());
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/additional-methods.min.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/mensajero.js?" . time())
+            ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -47,30 +50,32 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
         }
     }
 
-    public function incidenciasAction() {
+    public function incidenciasAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . " Incidencias";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/easyui/themes/metro/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/easyui/themes/color.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/easyui/themes/metro/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/easyui/themes/color.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/operaciones/reportes/incidencias.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/operaciones/reportes/incidencias.js?" . time());
     }
 
-    public function obtenerIncidenciasAction() {
+    public function obtenerIncidenciasAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -106,7 +111,8 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
         }
     }
 
-    public function editarIncidenciaAction() {
+    public function editarIncidenciaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -162,7 +168,8 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevaIncidenciaAction() {
+    public function nuevaIncidenciaAction()
+    {
         try {
             $view = new Zend_View();
             $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/reportes/");
@@ -196,7 +203,6 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
             $view->tipoError = $er->obtener();
 
             if (!empty($res["idsClientes"])) {
-                
             }
             $this->_helper->json(array("success" => true, "html" => $view->render("nueva-incidencia.phtml")));
         } catch (Exception $ex) {
@@ -204,7 +210,8 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarIncidenciaAction() {
+    public function agregarIncidenciaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -213,6 +220,8 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
             if ($request->isPost()) {
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
+                    "idAduana" => "Digits",
+                    "idCliente" => "Digits",
                     "referencia" => "StringToUpper",
                     "responsable" => "StringToUpper",
                     "observaciones" => "StringToUpper",
@@ -221,7 +230,7 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
                 $v = array(
                     "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
                     "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
-                    "tipoError" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idTipoError" => "NotEmpty",
                     "pedimento" => "NotEmpty",
                     "referencia" => "NotEmpty",
                     "fecha" => "NotEmpty",
@@ -233,15 +242,15 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
                     "comentarios" => "NotEmpty",
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
-                if ($input->isValid("idAduana") && $input->isValid("idCliente")) {
+                if ($input->isValid("idAduana") && $input->isValid("idCliente") && $input->isValid("idTipoError")) {
                     $mppr = new Operaciones_Model_Incidencias();
 
                     $arr = array(
                         "idAduana" => $input->idAduana,
                         "idCliente" => $input->idCliente,
+                        "idTipoError" => $input->idTipoError,
                         "pedimento" => str_pad($input->pedimento, 7, '0', STR_PAD_LEFT),
                         "referencia" => $input->referencia,
-                        "tipoError" => ($input->tipoError) ? 1 : null,
                         "fecha" => $input->fecha,
                         "multa" => $input->multa,
                         "acta" => $input->acta,
@@ -252,7 +261,7 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
                         "creada" => date("Y-m-d H:i:s"),
                         "creada_por" => $this->_session->username,
                     );
-                    if (!($mppr->verificar($input->idAduana, $input->idCliente, $input->acta))) {
+                    if (!($mppr->verificar($input->idAduana, $input->idCliente, $input->pedimento, $input->referencia))) {
                         if (($mppr->agregar($arr))) {
                             $this->_helper->json(array("success" => true));
                         }
@@ -270,7 +279,8 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarIncidenciaAction() {
+    public function actualizarIncidenciaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -327,7 +337,8 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarIncidenciaAction() {
+    public function borrarIncidenciaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -357,5 +368,4 @@ class Operaciones_ReportesController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $e->getMessage()));
         }
     }
-
 }

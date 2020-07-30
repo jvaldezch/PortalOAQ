@@ -262,6 +262,9 @@
 <div style="float: left; width: 100%">
     <div id="incidencias" style="height: 450px"></div>
 </div>
+<div style="float: left; width: 100%">
+    <div id="incidencias_aduana" style="height: 450px"></div>
+</div>
 <style>
     .btn-toolbar {
         margin-top: 0;
@@ -613,6 +616,54 @@
                 color: '#0000FF',
                 data: rpt_inci.data
             }]
+        });
+
+        $("#incidencias_aduana").highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Incidencias por Aduana <?= $this->year ?>'
+            },
+            subtitle: {},
+            xAxis: {
+                categories: <?= json_encode($this->incidencias_aduana['labels']) ?>,
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Total de incidencias'
+                }
+            },
+            legend: {
+                enabled: true
+            },
+            /*plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },*/
+            /*tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },*/
+            /*series: [{
+                name: 'Operaciones <?= $this->year ?>',
+                color: '#0000FF',
+                data: <?= json_encode($this->incidencias_aduana['data']) ?>
+            }]*/
+            /*series: [{
+                name : 'Error',
+                data : [1, 1],
+            },{
+                name : 'Cliente',
+                data : [0, 1],
+            }]*/
+            series: <?= json_encode($this->incidencias_aduana['data']) ?>
         });
     </script>
 <?php } ?>

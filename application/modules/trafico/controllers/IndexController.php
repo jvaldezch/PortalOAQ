@@ -1793,6 +1793,9 @@ class Trafico_IndexController extends Zend_Controller_Action
             )
         );
         $this->view->incidencias = json_encode($graph_inc);
+
+        $inc_adu = $inc_mppr->obtenerIncidenciasPorAduanaGrafica($year);
+        $this->view->incidencias_aduana = $inc_adu;
     }
 
     public function verTraficoAction()

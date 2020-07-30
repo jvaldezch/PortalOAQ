@@ -38,7 +38,7 @@
                 <th style="text-align: right">TIPO DE ERROR:</th>
                 <td>
                     <?php if (isset($this->tipoError) && !empty($this->tipoError)) { ?>
-                        <select class="traffic-select-large" name="tipoError" id="tipoError">
+                        <select class="traffic-select-large" name="idTipoError" id="idTipoError">
                             <option value="">-- Seleccionar --</option>
                             <?php foreach ($this->tipoError as $item) { ?>
                                 <option value="<?= $item['id'] ?>"><?= $item['tipoError'] ?></option>
@@ -104,41 +104,4 @@
         </tbody>
     </table>
 </form>
-<script type="text/javascript">    
-    
-    $("#form_incidence").validate({
-        errorPlacement: function (error, element) {
-            $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
-        },
-        errorElement: "span",
-        errorClass: "traffic-error",
-        rules: {
-            idAduana: "required",
-            idCliente: "required"
-        },
-        messages: {
-            idAduana: "Campo necesario",
-            idCliente: "Campo necesario"
-        }
-    });
-    
-    $("#fecha").datepicker({
-        calendarWeeks: true,
-        autoclose: true,
-        language: "es",
-        format: "yyyy-mm-dd"
-    });
-
-    $(document).on("input", "#responsable, #comentarios, #observaciones, #referencia", function() {
-        var input = $(this);
-        var start = input[0].selectionStart;
-        $(this).val(function (_, val) {
-            return val.toUpperCase();
-        });
-        input[0].selectionStart = input[0].selectionEnd = start;
-    });
-    
-</script>
+<script type="text/javascript" src="/js/operaciones/reportes/nueva-incidendia.js"></script> 
