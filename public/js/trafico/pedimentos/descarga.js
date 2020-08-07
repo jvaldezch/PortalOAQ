@@ -128,7 +128,6 @@ window.descargaManualEdocument = function () {
         $("#numEdocument").val("");
         if (res.results.length > 0) {
           $("#eds-consulta").html("");
-          console.log(res.results);
           for (var prop in res.results) {
             let o = res.results[prop];
 

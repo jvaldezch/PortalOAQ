@@ -68,7 +68,7 @@
         <?php foreach ($this->consultaEds as $item) { ?>
             <tr id="eds-consulta-<?= $item['id'] ?>">
                 <td><?= $item['edocument'] ?></td>
-                <td></td>
+                <td><?= $item['mensaje'] ?></td>
                 <td><?= $item['creado'] ?></td>
                 <td><?= $item['actualizado'] ?></td>
                 <td><i class="fas fa-trash-alt" onclick="deleteEdocument(<?= $item['id'] ?>)" style="cursor: pointer"></i></td>
