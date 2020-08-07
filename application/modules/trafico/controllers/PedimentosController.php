@@ -1,13 +1,15 @@
 <?php
 
-class Trafico_PedimentosController extends Zend_Controller_Action {
+class Trafico_PedimentosController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_firephp;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -16,7 +18,8 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -31,7 +34,8 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
      * /trafico/pedimentos/descarga?idTrafico=42677
      * 
      */
-    public function descargaAction() {
+    public function descargaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -56,6 +60,9 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
                 $view->coves = $coves;
                 $view->edocuments = $edocuments;
 
+                $model = new Trafico_Model_ConsultaEdocuments();
+                $view->consultaEds = $model->obtener($input->idTrafico);
+
                 $this->_helper->json(array("success" => true, "html" => $view->render("descarga.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -65,7 +72,8 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaXmlAction() {
+    public function descargaXmlAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -95,7 +103,8 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaXmlCoveAction() {
+    public function descargaXmlCoveAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -134,7 +143,72 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
         }
     }
 
-    public function capturaPedimentoAction() {
+    public function removerXmlEdocumentAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => array("Digits"),
+                "id" => array("Digits"),
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico") && $input->isValid("id")) {
+                $model = new Trafico_Model_ConsultaEdocuments();
+                if (($model->borrar($input->idTrafico, $input->id))) {
+                    $this->_helper->json(array("success" => true));
+                } else {
+                    throw new Exception("No se pudo borrar.");
+                }
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function descargaXmlEdocumentAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "idTrafico" => array("Digits"),
+                "edocument" => array("StringToUpper"),
+            );
+            $v = array(
+                "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                "edocument" => array("NotEmpty"),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idTrafico") && $input->isValid("edocument")) {
+                $model = new Trafico_Model_ConsultaEdocuments();
+                if (!($model->verificar($input->idTrafico, $input->edocument))) {
+                    $arr = array(
+                        "idTrafico" => $input->idTrafico,
+                        "edocument" => $input->edocument,
+                    );
+                    if (($model->agregar($arr))) {
+                        $this->_helper->json(array("success" => true, "results" => $model->obtener($input->idTrafico)));
+                    } else {
+                        throw new Exception("El Edocument ya ha sido agregado.");
+                    }
+                } else {
+                    throw new Exception("El Edocument ya ha sido agregado.");
+                }
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function capturaPedimentoAction()
+    {
         try {
             $f = array(
                 "id" => array("StringTrim", "StripTags", "StringToUpper"),
@@ -147,33 +221,33 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
 
                 $pedimento = new OAQ_TraficoPedimento(array("idTrafico" => $input->id));
                 $row = $pedimento->buscar($this->_session->username);
-                
+
                 $cvemppr = new Trafico_Model_CvePedimentos();
-                
+
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/pedimentos/");
                 $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
-                
+
                 $view->idTrafico = $input->id;
                 $view->idPedimento = $row['id'];
-                
+
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
-                
+
                 $view->patente = $trafico->getPatente();
                 $view->aduana = $trafico->getAduana();
                 $view->pedimento = $trafico->getPedimento();
                 $view->tipoOperacion = $trafico->getTipoOperacion();
-                
+
                 $view->cves = $cvemppr->obtenerClaves();
-                
+
                 $row = $trafico->obtenerDatos();
-                
+
                 $cust = $trafico->obtenerCliente();
-                
+
                 $view->cvePedimento = $row['cvePedimento'];
                 $view->rfcCliente = $row['rfcCliente'];
                 $view->nomCliente = $cust['nombre'];
-                
+
                 $tipoCambio = 0;
                 if ($row['id']) {
                     $d = $pedimento->detalle();
@@ -227,5 +301,4 @@ class Trafico_PedimentosController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-
 }

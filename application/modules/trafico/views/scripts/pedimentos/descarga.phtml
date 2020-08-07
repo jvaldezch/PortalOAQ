@@ -19,12 +19,12 @@
                     }
                     preg_match('/COVE[0-9A-Z]{9}/', $item['nom_archivo'], $m);
                 ?>
-                    <?= $m[0] ?>
-                    <?= ($item['xml'] == null) ? "<button style=\"float: right\" onclick=\"descargaXmlCove(" . $item['id'] . ",'" . $m[0] . "');\">Descargar XML</button>" : '' ?><br>
+                    <?= $item['nom_archivo'] ?>
+                    <?= ($item['xml'] == null) ? "<button style=\"float: right\" onclick=\"descargaXmlCove(" . $item['id'] . ",'" . $m[0] . "');\">Descargar XML</button><br>" : '' ?><br>
                 <?php } ?>
             </td>
         </tr>
-        <tr>
+        <!--<tr>
             <th style="width: 90px">
                 EDOCUMENTS
             </th>
@@ -35,91 +35,45 @@
                     }
                     preg_match('/ED[0-9A-Z]{13}/', $item['nom_archivo'], $m);
                 ?>
-                    <?= $m[0] ?>
+                    <?= $item['nom_archivo'] ?>
                     <?= ($item['xml'] == null) ? '<button style="float: right">Descargar XML</button>' : '' ?><br>
                 <?php } ?>
             </td>
-        </tr>
+        </tr>-->
         <tr>
-            <th>ED</th>
+            <th>EDOCUMENTS</th>
             <td style="text-align: left;">
-                <input type="text" />
-                <button style="float: right">
+                <input type="text" name="numEdocument" id="numEdocument" />
+                <button style="float: right" onclick="descargaManualEdocument()">
                     Descarga Manual XML
                 </button>
             </td>
         </tr>
     </thead>
 </table>
-<script>
-    window.descargaXmlpedimento = function() {
-        $.ajax({
-            url: "/trafico/pedimentos/descarga-xml",
-            cache: false,
-            dataType: "json",
-            data: {
-                idTrafico: $("#idTrafico").val()
-            },
-            type: "GET",
-            success: function(res) {
-                if (res.success === true) {
-                    if (res.message) {
-                        $.alert({
-                            title: "Advertencia",
-                            type: "orange",
-                            content: res.message,
-                            boxWidth: "350px",
-                            useBootstrap: false,
-                        });
-                    }
-                    loadFiles();
-                } else {
-                    $.alert({
-                        title: "Error",
-                        type: "red",
-                        content: res.message,
-                        boxWidth: "350px",
-                        useBootstrap: false,
-                    });
-                }
-            },
-        });
-    };
-
-    window.descargaXmlCove = function(id, cove) {
-        $.ajax({
-            url: "/trafico/pedimentos/descarga-xml-cove",
-            cache: false,
-            dataType: "json",
-            data: {
-                idTrafico: $("#idTrafico").val(),
-                id: id,
-                cove: cove,
-            },
-            type: "GET",
-            success: function(res) {
-                if (res.success === true) {
-                    if (res.message) {
-                        $.alert({
-                            title: "Advertencia",
-                            type: "orange",
-                            content: res.message,
-                            boxWidth: "350px",
-                            useBootstrap: false,
-                        });
-                    }
-                    loadFiles();
-                } else {
-                    $.alert({
-                        title: "Error",
-                        type: "red",
-                        content: res.message,
-                        boxWidth: "350px",
-                        useBootstrap: false,
-                    });
-                }
-            },
-        });
-    };
-</script>
-<script scr="/js/trafico/pedimentos/descarga.js"></script>
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th colspan="5">EDOCUMENTS PARA CONSULTA (11 pm)</th>
+        </tr>
+        <tr>
+            <th>Edocument</th>
+            <th>Mensaje</th>
+            <th>Creado</th>
+            <th>Actualizado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="eds-consulta">
+        <?php foreach ($this->consultaEds as $item) { ?>
+            <tr id="eds-consulta-<?= $item['id'] ?>">
+                <td><?= $item['edocument'] ?></td>
+                <td></td>
+                <td><?= $item['creado'] ?></td>
+                <td><?= $item['actualizado'] ?></td>
+                <td><i class="fas fa-trash-alt" onclick="deleteEdocument(<?= $item['id'] ?>)" style="cursor: pointer"></i></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<script src="/js/trafico/pedimentos/descarga.js"></script>
