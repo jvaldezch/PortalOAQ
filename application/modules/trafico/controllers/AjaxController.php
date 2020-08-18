@@ -1563,6 +1563,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
 
                     $model = new Trafico_Model_TraficoSolicitudesMapper();
                     $row = $model->obtener($data["idSolicitud"]);
+                    
                     if (($found = $model->verificar($row["idCliente"], $row["idAduana"], $row["tipoOperacion"], $row["pedimento"], $row["referencia"]))) {
                         $comp = isset($row["complmento"]) ? $row["complemento"] + 1 : 1;
                         $added = $model->agregarComplemento($row["idCliente"], $row["idAduana"], $row["tipoOperacion"], $row["pedimento"], $row["referencia"], $comp, $this->_session->id);

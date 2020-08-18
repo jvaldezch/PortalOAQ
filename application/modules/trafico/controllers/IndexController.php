@@ -259,15 +259,22 @@ class Trafico_IndexController extends Zend_Controller_Action
             $form->populate($input->getEscaped());
         }
         if (!empty($res["idsAduana"])) {
+
             $mapper = new Trafico_Model_TraficoAduanasMapper();
             $this->view->filters = $mapper->obtenerTodas($res["idsAduana"]);
-            $data = $model->obtenerSolicitudesTrafico($res["idsAduana"], isset($search) ? $search : null, $comp, $adu, $pend, $dep, $war, $idCliente);
-            if (isset($data) && !empty($data)) {
-                $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($data));
-                $paginator->setItemCountPerPage($pageSize);
-                $paginator->setCurrentPageNumber($page);
-                $this->view->paginator = $paginator;
-            }
+            // $data = $model->obtenerSolicitudesTrafico($res["idsAduana"], isset($search) ? $search : null, $comp, $adu, $pend, $dep, $war, $idCliente);
+            // if (isset($data) && !empty($data)) {
+            //     $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($data));
+            //     $paginator->setItemCountPerPage($pageSize);
+            //     $paginator->setCurrentPageNumber($page);
+            //     $this->view->paginator = $paginator;
+            // }
+            $select = $model->obtenerSolicitudesTraficoSelect($res["idsAduana"], isset($search) ? $search : null, $comp, $adu, $pend, $dep, $war, $idCliente);            
+            $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
+            $paginator->setItemCountPerPage($pageSize);
+            $paginator->setCurrentPageNumber($page);
+            $this->view->paginator = $paginator;
+            
         }
         $this->view->form = $form;
     }

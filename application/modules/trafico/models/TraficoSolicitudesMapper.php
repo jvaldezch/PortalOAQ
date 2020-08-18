@@ -1,26 +1,32 @@
 <?php
 
-class Trafico_Model_TraficoSolicitudesMapper {
+class Trafico_Model_TraficoSolicitudesMapper
+{
 
     protected $_db_table;
+    protected $_firephp;
 
-    public function __construct() {
+    public function __construct()
+    {
+        $this->_firephp = Zend_Registry::get("firephp");
         $this->_db_table = new Trafico_Model_DbTable_TraficoSolicitudes();
     }
 
-    public function verificar($idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia) {
+    public function verificar($idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("id", "creado", new Zend_Db_Expr("CASE WHEN activa IS NULL THEN 'INACTIVA' ELSE 'ACTIVA' END AS activa"), new Zend_Db_Expr("CASE WHEN generada IS NULL THEN 'NO GENERADA' ELSE 'GENERADA' END AS generada"), new Zend_Db_Expr("CASE WHEN enviada IS NULL THEN 'NO ENVIADA' ELSE 'ENVIADA' END AS enviada"), new Zend_Db_Expr("CASE WHEN borrada IS NULL THEN 'NO BORRADA' ELSE 'BORRADA' END AS borrada")))
-                    ->joinLeft(array("u" => "usuarios"), "u.id = s.idUsuario", array("usuario"))
-                    ->where("s.idCliente = ?", $idCliente)
-                    ->where("s.idAduana = ?", $idAduana)
-                    ->where("s.tipoOperacion = ?", $tipoOperacion)
-                    ->where("s.pedimento = ?", $pedimento)
-                    ->where("s.referencia = ?", $referencia)
-                    ->where("s.borrada IS NULL")
-                    ->where("s.complemento IS NULL");
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("id", "creado", new Zend_Db_Expr("CASE WHEN activa IS NULL THEN 'INACTIVA' ELSE 'ACTIVA' END AS activa"), new Zend_Db_Expr("CASE WHEN generada IS NULL THEN 'NO GENERADA' ELSE 'GENERADA' END AS generada"), new Zend_Db_Expr("CASE WHEN enviada IS NULL THEN 'NO ENVIADA' ELSE 'ENVIADA' END AS enviada"), new Zend_Db_Expr("CASE WHEN borrada IS NULL THEN 'NO BORRADA' ELSE 'BORRADA' END AS borrada")))
+                ->joinLeft(array("u" => "usuarios"), "u.id = s.idUsuario", array("usuario"))
+                ->where("s.idCliente = ?", $idCliente)
+                ->where("s.idAduana = ?", $idAduana)
+                ->where("s.tipoOperacion = ?", $tipoOperacion)
+                ->where("s.pedimento = ?", $pedimento)
+                ->where("s.referencia = ?", $referencia)
+                // ->where("s.borrada IS NULL")
+                ->where("s.complemento IS NULL");
+            $this->_firephp->info($sql->assemble());
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -30,35 +36,18 @@ class Trafico_Model_TraficoSolicitudesMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function buscar($patente, $aduana, $referencia) {
+
+    public function buscar($patente, $aduana, $referencia)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(["s" => "trafico_solicitudes"], ["pedimento"])
-                    ->joinLeft(["c" => "trafico_clientes"], "s.idCliente = c.id", array("rfc as rfcCliente"))
-                    ->joinLeft(["a" => "trafico_aduanas"], "s.idAduana = a.id", array(""))
-                    ->where("a.patente = ?", $patente)
-                    ->where("a.aduana = ?", $aduana)
-                    ->where("s.referencia = ?", $referencia);
-            $stmt = $this->_db_table->fetchRow($sql);
-            if ($stmt) {
-                return $stmt->toArray();
-            }
-            return false;
-        } catch (Zend_Db_Adapter_Exception $e) {
-            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
-        }
-    }
-    
-    public function buscarReferencia($referencia) {
-        try {
-            $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(["s" => "trafico_solicitudes"], ["id", "referencia", "pedimento", "enviada"])
-                    ->joinLeft(["c" => "trafico_clientes"], "s.idCliente = c.id", array("rfc as rfcCliente"))
-                    ->joinLeft(["a" => "trafico_aduanas"], "s.idAduana = a.id", array("patente", "aduana"))
-                    ->where("s.referencia = ?", $referencia);
+                ->setIntegrityCheck(false)
+                ->from(["s" => "trafico_solicitudes"], ["pedimento"])
+                ->joinLeft(["c" => "trafico_clientes"], "s.idCliente = c.id", array("rfc as rfcCliente"))
+                ->joinLeft(["a" => "trafico_aduanas"], "s.idAduana = a.id", array(""))
+                ->where("a.patente = ?", $patente)
+                ->where("a.aduana = ?", $aduana)
+                ->where("s.referencia = ?", $referencia);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -69,7 +58,27 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function agregar($idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia, $idUsuario, $planta = null) {
+    public function buscarReferencia($referencia)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(["s" => "trafico_solicitudes"], ["id", "referencia", "pedimento", "enviada"])
+                ->joinLeft(["c" => "trafico_clientes"], "s.idCliente = c.id", array("rfc as rfcCliente"))
+                ->joinLeft(["a" => "trafico_aduanas"], "s.idAduana = a.id", array("patente", "aduana"))
+                ->where("s.referencia = ?", $referencia);
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return false;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function agregar($idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia, $idUsuario, $planta = null)
+    {
         try {
             $data = array(
                 "idCliente" => $idCliente,
@@ -91,7 +100,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function guardar($id, $idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia) {
+    public function guardar($id, $idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia)
+    {
         try {
             $arr = array(
                 "idCliente" => $idCliente,
@@ -110,7 +120,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function agregarComplemento($idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia, $complemento, $idUsuario) {
+    public function agregarComplemento($idCliente, $idAduana, $tipoOperacion, $pedimento, $referencia, $complemento, $idUsuario)
+    {
         try {
             $data = array(
                 "idCliente" => $idCliente,
@@ -132,18 +143,19 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function obtenerMisSolicitudes($idUsuario) {
+    public function obtenerMisSolicitudes($idUsuario)
+    {
         try {
             $det = new Trafico_Model_TraficoSolDetalleMapper();
             $con = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->where("s.enviada IS NULL")
-                    ->where("s.idUsuario = ?", $idUsuario)
-                    ->order("creado DESC");
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->where("s.enviada IS NULL")
+                ->where("s.idUsuario = ?", $idUsuario)
+                ->order("creado DESC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $data = array();
@@ -168,24 +180,25 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtener($id, $patente = null, $aduana = null) {
+    public function obtener($id, $patente = null, $aduana = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente", "rfc as rfcCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "bl", "numFactura", "cvePed"))
-                    ->joinLeft(array("u" => "usuarios"), "u.id = s.idUsuario", array("nombre", "usuario as nomUsuario", "empresa"))
-                    ->where("s.id = ?", $id);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente", "rfc as rfcCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "bl", "numFactura", "cvePed"))
+                ->joinLeft(array("u" => "usuarios"), "u.id = s.idUsuario", array("nombre", "usuario as nomUsuario", "empresa"))
+                ->where("s.id = ?", $id);
             if (isset($patente) && isset($aduana)) {
                 if (!is_array($patente) && !is_array($aduana)) {
                     $sql->where("a.patente = ?", $patente)
-                            ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
+                        ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
                 } else {
                     $sql->where("a.patente IN (?)", $patente)
-                            ->where("a.aduana IN (?)", $aduana);
+                        ->where("a.aduana IN (?)", $aduana);
                 }
             }
             $stmt = $this->_db_table->fetchRow($sql);
@@ -201,12 +214,13 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function exists($id) {
+    public function exists($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array())
-                    ->where("s.id = ?", $id);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array())
+                ->where("s.id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -230,32 +244,33 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtenerSolicitudes($patente = null, $aduana = null, $buscar = null, $complementos = null, $idAduana = null, $pend = null, $dep = null, $war = null) {
+    public function obtenerSolicitudes($patente = null, $aduana = null, $buscar = null, $complementos = null, $idAduana = null, $pend = null, $dep = null, $war = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->where("s.generada IS NOT NULL")
-                    ->where("s.borrada IS NULL")
-                    ->order(array("d.fechaEta DESC", "s.creado DESC"))
-                    ->limit(200);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->where("s.generada IS NOT NULL")
+                ->where("s.borrada IS NULL")
+                ->order(array("d.fechaEta DESC", "s.creado DESC"))
+                ->limit(200);
             if (isset($buscar) && $buscar != "") {
                 $sql->where("d.bl LIKE ?", "%{$buscar}%")
-                        ->orWhere("d.numFactura LIKE ?", "%{$buscar}%")
-                        ->orWhere("s.referencia LIKE ?", "%{$buscar}%")
-                        ->where("s.generada = 1");
+                    ->orWhere("d.numFactura LIKE ?", "%{$buscar}%")
+                    ->orWhere("s.referencia LIKE ?", "%{$buscar}%")
+                    ->where("s.generada = 1");
             }
             if (isset($patente) && isset($aduana)) {
                 if (!is_array($patente) && !is_array($aduana)) {
                     $sql->where("a.patente = ?", $patente)
-                            ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
+                        ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
                 } else {
                     $sql->where("a.patente IN (?)", $patente)
-                            ->where("a.aduana IN (?)", $aduana);
+                        ->where("a.aduana IN (?)", $aduana);
                 }
             }
             if (isset($complementos) && $complementos == true) {
@@ -291,16 +306,17 @@ class Trafico_Model_TraficoSolicitudesMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function obtenerEstatus($pedimento, $referencia) {
+
+    public function obtenerEstatus($pedimento, $referencia)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->where("s.generada IS NOT NULL")
-                    ->where("s.borrada IS NULL")
-                    ->where("s.pedimento = ?", $pedimento)
-                    ->where("s.referencia = ?", $referencia);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->where("s.generada IS NOT NULL")
+                ->where("s.borrada IS NULL")
+                ->where("s.pedimento = ?", $pedimento)
+                ->where("s.referencia = ?", $referencia);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -325,20 +341,21 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtenerSolicitudesTrafico($aduanas, $buscar = null, $complementos = null, $idAduana = null, $pend = null, $dep = null, $war = null, $idCliente = null) {
+    public function obtenerSolicitudesTrafico($aduanas, $buscar = null, $complementos = null, $idAduana = null, $pend = null, $dep = null, $war = null, $idCliente = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
-                    ->where("s.generada IS NOT NULL")
-                    ->where("s.borrada IS NULL")
-                    ->order(array("d.fechaEta DESC", "s.creado DESC"))
-                    ->limit(200);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
+                ->where("s.generada IS NOT NULL")
+                ->where("s.borrada IS NULL")
+                ->order(array("d.fechaEta DESC", "s.creado DESC"))
+                ->limit(200);
             if (isset($buscar) && $buscar != "") {
                 $sql->where("(d.bl LIKE '%{$buscar}%' OR d.numFactura LIKE '%{$buscar}%' OR s.referencia LIKE '%{$buscar}%' OR s.pedimento LIKE '%{$buscar}%') AND s.generada = 1");
             }
@@ -359,8 +376,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
             }
             if (isset($dep) && $dep !== false) {
                 $sql->where("s.depositado IS NULL")
-                        ->where("s.autorizadaHsbc IS NULL")
-                        ->where("s.autorizadaBanamex IS NULL");
+                    ->where("s.autorizadaHsbc IS NULL")
+                    ->where("s.autorizadaBanamex IS NULL");
             }
             if (isset($war) && $war !== false) {
                 $sql->where("(time_to_sec(timediff(d.fechaEta, s.enviada)) / 3600) <= 48");
@@ -384,6 +401,56 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
+    public function obtenerSolicitudesTraficoSelect($aduanas, $buscar = null, $complementos = null, $idAduana = null, $pend = null, $dep = null, $war = null, $idCliente = null)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array(
+                    "*", 
+                    new Zend_Db_Expr("(SELECT SUM(CASE WHEN t.concepto <> 'ANTICIPO' THEN t.importe ELSE 0 END) FROM trafico_solconcepto as t WHERE t.idSolicitud = s.id) AS subtotal"),
+                    new Zend_Db_Expr("(SELECT SUM(CASE WHEN t.concepto = 'ANTICIPO' THEN t.importe ELSE 0 END) FROM trafico_solconcepto as t WHERE t.idSolicitud = s.id) AS anticipo")
+                ))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
+                ->where("s.generada IS NOT NULL")
+                ->where("s.borrada IS NULL")
+                ->order(array("d.fechaEta DESC", "s.creado DESC"))
+                ->limit(200);
+            if (isset($buscar) && $buscar != "") {
+                $sql->where("(d.bl LIKE '%{$buscar}%' OR d.numFactura LIKE '%{$buscar}%' OR s.referencia LIKE '%{$buscar}%' OR s.pedimento LIKE '%{$buscar}%') AND s.generada = 1");
+            }
+            if (isset($aduanas)) {
+                $sql->where("s.idAduana IN (?)", $aduanas);
+            }
+            if (isset($idCliente) && $idCliente != '') {
+                $sql->where("s.idCliente = ?", $idCliente);
+            }
+            if (isset($complementos) && $complementos == true) {
+                $sql->where("s.complemento = 1");
+            }
+            if (isset($idAduana) && $idAduana !== false && $idAduana !== "") {
+                $sql->where("s.idAduana = ?", $idAduana);
+            }
+            if (isset($pend) && $pend !== false) {
+                $sql->where("s.aprobada IS NULL");
+            }
+            if (isset($dep) && $dep !== false) {
+                $sql->where("s.depositado IS NULL")
+                    ->where("s.autorizadaHsbc IS NULL")
+                    ->where("s.autorizadaBanamex IS NULL");
+            }
+            if (isset($war) && $war !== false) {
+                $sql->where("(time_to_sec(timediff(d.fechaEta, s.enviada)) / 3600) <= 48");
+            }
+            return $sql;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
     /**
      * 
      * @param string $buscar
@@ -393,21 +460,22 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function solicitudesAnticipo($buscar = null, $complementos = null, $dep = null, $war = null, $idAduana = null) {
+    public function solicitudesAnticipo($buscar = null, $complementos = null, $dep = null, $war = null, $idAduana = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
-                    ->where("s.generada IS NOT NULL")
-                    ->where("s.autorizada IS NOT NULL")
-                    ->where("s.borrada IS NULL")
-                    ->order(array("d.fechaEta DESC", "s.creado DESC"))
-                    ->limit(200);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
+                ->where("s.generada IS NOT NULL")
+                ->where("s.autorizada IS NOT NULL")
+                ->where("s.borrada IS NULL")
+                ->order(array("d.fechaEta DESC", "s.creado DESC"))
+                ->limit(200);
             if (isset($buscar) && $buscar != "") {
                 $sql->where("(d.bl LIKE '%{$buscar}%' OR d.numFactura LIKE '%{$buscar}%' OR s.referencia LIKE '%{$buscar}%') AND s.generada = 1");
             }
@@ -451,21 +519,22 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function solicitudesEnTramite($buscar = null, $complementos = null, $dep = null, $war = null, $idAduana = null) {
+    public function solicitudesEnTramite($buscar = null, $complementos = null, $dep = null, $war = null, $idAduana = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
-                    ->where("s.tramite IS NOT NULL")
-                    ->where("s.deposito IS NULL")
-                    ->where("s.borrada IS NULL")
-                    ->order(array("d.fechaEta DESC", "s.creado DESC"))
-                    ->limit(200);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
+                ->where("s.tramite IS NOT NULL")
+                ->where("s.deposito IS NULL")
+                ->where("s.borrada IS NULL")
+                ->order(array("d.fechaEta DESC", "s.creado DESC"))
+                ->limit(200);
             if (isset($buscar) && $buscar != "") {
                 $sql->where("(d.bl LIKE '%{$buscar}%' OR d.numFactura LIKE '%{$buscar}%' OR s.referencia LIKE '%{$buscar}%') AND s.generada = 1");
             }
@@ -511,22 +580,23 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function solicitudesSupervision($buscar = null, $complementos = null, $war = null, $idAduana = null) {
+    public function solicitudesSupervision($buscar = null, $complementos = null, $war = null, $idAduana = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
-                    ->where("s.generada IS NOT NULL")
-                    ->where("s.autorizada IS NOT NULL")
-                    ->where("s.depositado IS NULL AND s.deposito IS NULL")
-                    ->where("s.borrada IS NULL")
-                    ->order(array("d.fechaEta DESC", "s.creado DESC"))
-                    ->limit(200);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->joinLeft(array("q" => "trafico_esquemafondos"), "q.id = s.esquema", array("descripcion as esquemaFondo"))
+                ->where("s.generada IS NOT NULL")
+                ->where("s.autorizada IS NOT NULL")
+                ->where("s.depositado IS NULL AND s.deposito IS NULL")
+                ->where("s.borrada IS NULL")
+                ->order(array("d.fechaEta DESC", "s.creado DESC"))
+                ->limit(200);
             if (isset($buscar) && $buscar != "") {
                 $sql->where("(d.bl LIKE '%{$buscar}%' OR d.numFactura LIKE '%{$buscar}%' OR s.referencia LIKE '%{$buscar}%') AND s.generada = 1");
             }
@@ -570,32 +640,33 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtenerSolicitudesEtaVencido($patente = null, $aduana = null, $fechaIni = null, $fechaFin = null) {
+    public function obtenerSolicitudesEtaVencido($patente = null, $aduana = null, $fechaIni = null, $fechaFin = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->where("s.generada = 1")
-                    ->where("s.deposito IS NULL")
-                    ->where("s.borrada IS NULL")
-                    ->where("(time_to_sec(timediff(d.fechaEta, s.enviada)) / 3600) >= 24")
-                    ->order("d.fechaEta DESC");
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->where("s.generada = 1")
+                ->where("s.deposito IS NULL")
+                ->where("s.borrada IS NULL")
+                ->where("(time_to_sec(timediff(d.fechaEta, s.enviada)) / 3600) >= 24")
+                ->order("d.fechaEta DESC");
             if (isset($patente) && isset($aduana)) {
                 if (!is_array($patente) && !is_array($aduana)) {
                     $sql->where("a.patente = ?", $patente)
-                            ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
+                        ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
                 } else {
                     $sql->where("a.patente IN (?)", $patente)
-                            ->where("a.aduana IN (?)", $aduana);
+                        ->where("a.aduana IN (?)", $aduana);
                 }
             }
             if (isset($fechaIni) && isset($fechaFin)) {
                 $sql->where("s.enviada >= ?", date("Y-m-d", strtotime($fechaIni)) . " 00:00:00")
-                        ->where("s.enviada <= ?", date("Y-m-d", strtotime($fechaFin)) . " 23:59:59");
+                    ->where("s.enviada <= ?", date("Y-m-d", strtotime($fechaFin)) . " 23:59:59");
             }
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
@@ -622,31 +693,32 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtenerSolicitudesDepositadas($patente = null, $aduana = null, $fechaIni = null, $fechaFin = null) {
+    public function obtenerSolicitudesDepositadas($patente = null, $aduana = null, $fechaIni = null, $fechaFin = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->where("s.generada = 1")
-                    ->where("s.deposito = 1")
-                    ->where("s.borrada IS NULL")
-                    ->order("d.fechaEta DESC");
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->where("s.generada = 1")
+                ->where("s.deposito = 1")
+                ->where("s.borrada IS NULL")
+                ->order("d.fechaEta DESC");
             if (isset($patente) && isset($aduana)) {
                 if (!is_array($patente) && !is_array($aduana)) {
                     $sql->where("a.patente = ?", $patente)
-                            ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
+                        ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
                 } else {
                     $sql->where("a.patente IN (?)", $patente)
-                            ->where("a.aduana IN (?)", $aduana);
+                        ->where("a.aduana IN (?)", $aduana);
                 }
             }
             if (isset($fechaIni) && isset($fechaFin)) {
                 $sql->where("s.depositado >= ?", date("Y-m-d", strtotime($fechaIni)) . " 00:00:00")
-                        ->where("s.depositado <= ?", date("Y-m-d", strtotime($fechaFin)) . " 23:59:59");
+                    ->where("s.depositado <= ?", date("Y-m-d", strtotime($fechaFin)) . " 23:59:59");
             }
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
@@ -663,7 +735,7 @@ class Trafico_Model_TraficoSolicitudesMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
+
     /**
      * 
      * @param int $patente
@@ -673,7 +745,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
      * @return boolean
      * @throws Exception
      */
-    public function reporteSolicitudes($idAduana = null, $fechaIni = null, $fechaFin = null, $noDepositado = null, $complemento = null) {
+    public function reporteSolicitudes($idAduana = null, $fechaIni = null, $fechaFin = null, $noDepositado = null, $complemento = null)
+    {
         try {
             $fields = array(
                 "a.aduana",
@@ -693,16 +766,16 @@ class Trafico_Model_TraficoSolicitudesMapper {
                 new Zend_Db_Expr("((select SUM(l.importe) as importe from trafico_solconcepto l where l.idSolicitud = s.id and l.concepto <> 'ANTICIPO') - (select l.importe from trafico_solconcepto l where l.idSolicitud = s.id and l.concepto = 'ANTICIPO')) AS total"),
             );
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), $fields)
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array(""))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array(""))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array(""))
-                    ->where("s.generada = 1")
-                    ->where("s.borrada IS NULL")
-                    ->order("d.fechaEta DESC");
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), $fields)
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array(""))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array(""))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array(""))
+                ->where("s.generada = 1")
+                ->where("s.borrada IS NULL")
+                ->order("d.fechaEta DESC");
             if (isset($idAduana)) {
-                $sql->where("s.idAduana = ?", $idAduana);                
+                $sql->where("s.idAduana = ?", $idAduana);
             }
             if (isset($complemento) && $complemento == 1) {
                 $sql->where("s.complemento IS NOT NULL");
@@ -714,7 +787,7 @@ class Trafico_Model_TraficoSolicitudesMapper {
             }
             if (isset($fechaIni) && isset($fechaFin)) {
                 $sql->where("s.enviada >= ?", date("Y-m-d", strtotime($fechaIni)) . " 00:00:00")
-                        ->where("s.enviada <= ?", date("Y-m-d", strtotime($fechaFin)) . " 23:59:59");
+                    ->where("s.enviada <= ?", date("Y-m-d", strtotime($fechaFin)) . " 23:59:59");
             }
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
@@ -726,11 +799,12 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function buscarId(Trafico_Model_Table_TraficoSolicitudes $tbl) {
+    public function buscarId(Trafico_Model_Table_TraficoSolicitudes $tbl)
+    {
         try {
             $stmt = $this->_db_table->fetchRow(
-                    $this->_db_table->select()
-                            ->where("id = ?", $tbl->getId())
+                $this->_db_table->select()
+                    ->where("id = ?", $tbl->getId())
             );
             if (0 == count($stmt)) {
                 return;
@@ -760,25 +834,26 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function buscarPorBlFactura($patente = null, $aduana = null) {
+    public function buscarPorBlFactura($patente = null, $aduana = null)
+    {
         try {
             $model = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes"), array("*"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
-                    ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
-                    ->where("s.generada = 1")
-                    ->where("s.borrada IS NULL")
-                    ->order("d.fechaEta DESC");
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes"), array("*"))
+                ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
+                ->joinLeft(array("d" => "trafico_soldetalle"), "d.idSolicitud = s.id", array("fechaEta", "peca", "bl", "numFactura"))
+                ->where("s.generada = 1")
+                ->where("s.borrada IS NULL")
+                ->order("d.fechaEta DESC");
             if (isset($patente) && isset($aduana)) {
                 if (!is_array($patente) && !is_array($aduana)) {
                     $sql->where("a.patente = ?", $patente)
-                            ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
+                        ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
                 } else {
                     $sql->where("a.patente IN (?)", $patente)
-                            ->where("a.aduana IN (?)", $aduana);
+                        ->where("a.aduana IN (?)", $aduana);
                 }
             }
             $stmt = $this->_db_table->fetchAll($sql);
@@ -797,7 +872,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function establecerIdTrafico($id, $idTrafico) {
+    public function establecerIdTrafico($id, $idTrafico)
+    {
         try {
             $stmt = $this->_db_table->update(array("idTrafico" => $idTrafico), array("id = ?" => $id));
             if ($stmt) {
@@ -809,7 +885,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function activarSolicitud($id) {
+    public function activarSolicitud($id)
+    {
         try {
             $stmt = $this->_db_table->update(array("enviada" => date("Y-m-d H:i:s"), "actualizada" => date("Y-m-d H:i:s"), "generada" => 1), array("id = ?" => $id));
             if ($stmt) {
@@ -821,7 +898,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function borrarSolicitud($id) {
+    public function borrarSolicitud($id)
+    {
         try {
             $stmt = $this->_db_table->update(array("actualizada" => date("Y-m-d H:i:s"), "borrada" => 1), array("id = ?" => $id));
             if ($stmt) {
@@ -833,7 +911,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $id));
             if ($stmt) {
@@ -845,7 +924,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function aprobarSolicitud($id) {
+    public function aprobarSolicitud($id)
+    {
         try {
             $stmt = $this->_db_table->update(array("aprobada" => date("Y-m-d H:i:s"), "autorizada" => 1), array("id = ?" => $id));
             if ($stmt) {
@@ -859,7 +939,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function esquemaSolicitud($id, $esquema) {
+    public function esquemaSolicitud($id, $esquema)
+    {
         try {
             $stmt = $this->_db_table->update(array("aprobada" => date("Y-m-d H:i:s"), "autorizada" => $esquema), array("id = ?" => $id));
             if ($stmt) {
@@ -871,7 +952,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function tramiteSolicitud($id) {
+    public function tramiteSolicitud($id)
+    {
         try {
             $stmt = $this->_db_table->update(array("tramitada" => date("Y-m-d H:i:s"), "tramite" => 1), array("id = ?" => $id));
             if ($stmt) {
@@ -883,7 +965,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function depositarSolicitud($id) {
+    public function depositarSolicitud($id)
+    {
         try {
             $stmt = $this->_db_table->update(array("depositado" => date("Y-m-d H:i:s"), "deposito" => 1), array("id = ?" => $id));
             if ($stmt) {
@@ -895,14 +978,15 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function propietario($idSolicitud) {
+    public function propietario($idSolicitud)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_solicitudes", array("idUsuario", "idAduana", "pedimento", "referencia")))
-                    ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("patente", "aduana"))
-                    ->joinLeft(array("u" => "usuarios"), "u.id = s.idUsuario", array("email", "nombre"))
-                    ->where("s.id = ?", $idSolicitud);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_solicitudes", array("idUsuario", "idAduana", "pedimento", "referencia")))
+                ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("patente", "aduana"))
+                ->joinLeft(array("u" => "usuarios"), "u.id = s.idUsuario", array("email", "nombre"))
+                ->where("s.id = ?", $idSolicitud);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -913,7 +997,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function updateRequest($id, $arr) {
+    public function updateRequest($id, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
             if ($stmt) {
@@ -925,12 +1010,13 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function decripcionEsquemaFondos($id) {
+    public function decripcionEsquemaFondos($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_esquemafondos", array("descripcion")))
-                    ->where("s.id = ?", $id);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_esquemafondos", array("descripcion")))
+                ->where("s.id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 $arr = $stmt->toArray();
@@ -942,16 +1028,17 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function find(Trafico_Model_Table_TraficoSolicitudes $t) {
+    public function find(Trafico_Model_Table_TraficoSolicitudes $t)
+    {
         try {
             $stmt = $this->_db_table->fetchRow(
-                    $this->_db_table->select()
-                            ->where("idCliente = ?", $t->getIdCliente())
-                            ->where("idAduana = ?", $t->getIdAduana())
-                            ->where("tipoOperacion = ?", $t->getTipoOperacion())
-                            ->where("pedimento = ?", $t->getPedimento())
-                            ->where("referencia = ?", $t->getReferencia())
-                            ->where("complemento IS NULL")
+                $this->_db_table->select()
+                    ->where("idCliente = ?", $t->getIdCliente())
+                    ->where("idAduana = ?", $t->getIdAduana())
+                    ->where("tipoOperacion = ?", $t->getTipoOperacion())
+                    ->where("pedimento = ?", $t->getPedimento())
+                    ->where("referencia = ?", $t->getReferencia())
+                    ->where("complemento IS NULL")
             );
             if (0 == count($stmt)) {
                 return;
@@ -982,7 +1069,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function save(Trafico_Model_Table_TraficoSolicitudes $t) {
+    public function save(Trafico_Model_Table_TraficoSolicitudes $t)
+    {
         try {
             $arr = array(
                 "id" => $t->getId(),
@@ -1017,7 +1105,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function actualizar($idSolicitud, $arr) {
+    public function actualizar($idSolicitud, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $idSolicitud));
             if ($stmt) {
@@ -1029,7 +1118,8 @@ class Trafico_Model_TraficoSolicitudesMapper {
         }
     }
 
-    public function update(Trafico_Model_Table_TraficoSolicitudes $t) {
+    public function update(Trafico_Model_Table_TraficoSolicitudes $t)
+    {
         try {
             $arr = array(
                 "idCliente" => $t->getIdCliente(),
@@ -1062,5 +1152,4 @@ class Trafico_Model_TraficoSolicitudesMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-
 }
