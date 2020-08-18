@@ -213,7 +213,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
+                        // new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
