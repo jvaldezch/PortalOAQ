@@ -370,7 +370,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 if ($input->isValid("page") && $input->isValid("rows")) {
 
                     $referencias = new OAQ_Trafico_Referencias($this->_session->id, $this->_session->role);
-                    $arr = $referencias->referencias($input->page, $input->rows);
+                    $arr = $referencias->referencias($input->page, $input->rows, $input->filterRules, $input->tipoAduana, $input->bodega);
 
                     $this->_helper->json($arr);
 
