@@ -227,8 +227,10 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
                         new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
-                        new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEta), 0) AS diasDespacho"),
-                        new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
+                        new Zend_Db_Expr("diasDespacho"),
+                        new Zend_Db_Expr("diasRetraso"),
+                        // new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEta), 0) AS diasDespacho"),
+                        // new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
                         "estatusRepositorio",
                         "cumplimientoAdministrativo",
                         "cumplimientoOperativo",
@@ -308,7 +310,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
     
-    public function traficosAction() {
+    /*public function traficosAction() {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -336,6 +338,42 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         "rows" => empty($rows) ? array() : $rows,
                     );
                     $this->_helper->json($arr);
+                } else {
+                    throw new Exception("Invalid input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }*/
+    
+    public function traficosAction() {
+        try {
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "page" => array("Digits"),
+                    "rows" => array("Digits"),
+                    "tipoAduana" => array("Digits"),
+                );
+                $v = array(
+                    "page" => array(new Zend_Validate_Int(), "default" => 1),
+                    "rows" => array(new Zend_Validate_Int(), "default" => 20),
+                    "tipoAduana" => array(new Zend_Validate_Int(), "NotEmpty"),
+                    "filterRules" => "NotEmpty",
+                    "bodega" => "NotEmpty",
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("page") && $input->isValid("rows")) {
+
+                    $referencias = new OAQ_Trafico_Referencias($this->_session->id, $this->_session->role);
+                    $arr = $referencias->referencias($input->page, $input->rows);
+
+                    $this->_helper->json($arr);
+
                 } else {
                     throw new Exception("Invalid input!");
                 }

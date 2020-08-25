@@ -226,9 +226,10 @@ $(document).ready(function () {
     input[0].selectionStart = input[0].selectionEnd = start;
   });
 
-  revisarMensajes();
+  // revisarMensajes();
   
-  setInterval(function () {
-    revisarMensajes();
-  }, 60 * 5000);
+  // setInterval(function () {
+  //   revisarMensajes();
+  // }, 60 * 5000);
+  
 });
