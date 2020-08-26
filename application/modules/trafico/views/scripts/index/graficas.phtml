@@ -89,7 +89,7 @@
 <table class="traffic-table traffic-table-left">
     <thead>
         <tr>
-            <th colspan="7">REPORTE INDICADORES MENSUALES, <?= $this->year ?>, <?= date("F", mktime(0, 0, 0, $this->month, 10)) ?></th>
+            <th colspan="7">REPORTE INDICADORES MENSUALES, <?= $this->year ?>, <?= strftime("%A, %d de %B de %Y", mktime(0, 0, 0, $this->month, 10)) ?></th>
         </tr>
         <tr>
             <th>Aduana</th>
