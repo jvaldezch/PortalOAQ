@@ -1810,7 +1810,6 @@ class Trafico_IndexController extends Zend_Controller_Action
         $this->view->incidencias_aduana = $inc_adu;
 
         $indicadores = $mapper->indicadores($year, $month);
-
         $this->view->indicadores = $indicadores;
     }
 

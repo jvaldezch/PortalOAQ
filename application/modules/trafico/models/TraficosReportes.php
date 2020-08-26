@@ -416,7 +416,8 @@ class Trafico_Model_TraficosReportes
                 ->from(array("t" => "traficos"), array(
                     "a.abbrv",
                     "count(*) AS total",
-                    new Zend_Db_Expr("SUM(CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN 1 ELSE 0 END) AS justificadas"),                    
+                    new Zend_Db_Expr("SUM(CASE WHEN t.ie = 'TOCE.EXP' THEN 1 ELSE 0 END) AS expos"),
+                    new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo = 1 THEN 1 ELSE 0 END) AS cumplimientoOperativo"),                    
                     "AVG(diasDespacho) AS promedio",
                     "AVG(CASE WHEN t.fechaInstruccionEspecial IS NULL THEN diasDespacho ELSE NULL END) AS promedioSinJustificacion",
                     "AVG(CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN diasDespacho ELSE NULL END) AS promedioConJustificacion",
@@ -450,6 +451,7 @@ class Trafico_Model_TraficosReportes
                 ->setIntegrityCheck(false)
                 ->from(array("t" => "traficos"), array(
                     "count(*) AS total",
+                    new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo = 1 THEN 1 ELSE 0 END) AS cumplimientoOperativo"),
                     new Zend_Db_Expr("SUM(CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN 1 ELSE 0 END) AS justificadas"),
                     "AVG(diasDespacho) AS promedio",
                     "AVG(CASE WHEN t.fechaInstruccionEspecial IS NULL THEN diasDespacho ELSE NULL END) AS promedioSinJustificacion",
