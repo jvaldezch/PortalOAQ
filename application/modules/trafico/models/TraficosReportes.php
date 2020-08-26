@@ -407,4 +407,68 @@ class Trafico_Model_TraficosReportes
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+
+    public function indicadores($year, $month)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), array(
+                    "a.abbrv",
+                    "count(*) AS total",
+                    new Zend_Db_Expr("SUM(CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN 1 ELSE 0 END) AS justificadas"),                    
+                    "AVG(diasDespacho) AS promedio",
+                    "AVG(CASE WHEN t.fechaInstruccionEspecial IS NULL THEN diasDespacho ELSE NULL END) AS promedioSinJustificacion",
+                    "AVG(CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN diasDespacho ELSE NULL END) AS promedioConJustificacion",
+                ))
+                ->where("t.estatus NOT IN (4)")                
+                ->where("t.fechaLiberacion IS NOT NULL")                
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array())
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(fechaLiberacion) = ?", $year)
+                ->where("MONTH(fechaLiberacion) = ?", $month)
+                ->where("t.idAduana IS NOT NULL")
+                ->group(array("t.idAduana"))
+                ->order(array("total DESC"));
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return array(
+                    "rows" => $stmt->toArray(),
+                    "total" => $this->indicadoresTotal($year, $month),
+                );
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function indicadoresTotal($year, $month)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("t" => "traficos"), array(
+                    "count(*) AS total",
+                    new Zend_Db_Expr("SUM(CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN 1 ELSE 0 END) AS justificadas"),
+                    "AVG(diasDespacho) AS promedio",
+                    "AVG(CASE WHEN t.fechaInstruccionEspecial IS NULL THEN diasDespacho ELSE NULL END) AS promedioSinJustificacion",
+                    "AVG(CASE WHEN t.fechaInstruccionEspecial IS NOT NULL THEN diasDespacho ELSE NULL END) AS promedioConJustificacion",
+                ))
+                ->where("t.estatus NOT IN (4)")                
+                ->where("t.fechaLiberacion IS NOT NULL")                
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array())
+                ->joinLeft(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array())
+                ->where("YEAR(fechaLiberacion) = ?", $year)
+                ->where("MONTH(fechaLiberacion) = ?", $month)
+                ->where("t.idAduana IS NOT NULL");
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
 }

@@ -1624,6 +1624,8 @@ class Trafico_IndexController extends Zend_Controller_Action
 
     public function graficasAction()
     {
+        setlocale(LC_TIME, 'es_ES','es_ES.UTF-8');
+
         $this->view->title = $this->_appconfig->getParam("title") . " Gráficas";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
@@ -1655,14 +1657,16 @@ class Trafico_IndexController extends Zend_Controller_Action
             "idAduana" => array("Digits"),
         );
         $v = array(
-            "year" => array("NotEmpty", new Zend_Validate_Int()),
-            "month" => array("NotEmpty", new Zend_Validate_Int()),
+            "year" => array("NotEmpty", new Zend_Validate_Int(), "default" => date("Y")),
+            "month" => array("NotEmpty", new Zend_Validate_Int(), "default" => date("m")),
             "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
             "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+
         $this->view->year = $input->isValid("year") ? $input->year : (int) date("Y");
         $this->view->month = $input->isValid("month") ? $months[$input->month] : $months[(int) date("m")];
+
         $mapper = new Trafico_Model_TraficosReportes();
 
         $year = (int) date("Y");
@@ -1674,6 +1678,7 @@ class Trafico_IndexController extends Zend_Controller_Action
         if ($input->isValid("month")) {
             $month = $input->month;
         }
+        $this->view->month = $input->month;
 
         $this->view->idCliente = $input->isValid('idCliente') ? $input->idCliente : null;
         $this->view->idAduana = $input->isValid('idAduana') ? $input->idAduana : null;
@@ -1693,7 +1698,7 @@ class Trafico_IndexController extends Zend_Controller_Action
 
         if (isset($arr) && !empty($arr)) {
             $graph = array(
-                "name" => "Pedimentos 2020",
+                "name" => "Pedimentos " . $input->year,
                 "colorByPoint" => "true",
                 "data" => array(
                     (int) $arr["Ene"] ? (int) $arr["Ene"] : null,
@@ -1803,6 +1808,10 @@ class Trafico_IndexController extends Zend_Controller_Action
 
         $inc_adu = $inc_mppr->obtenerIncidenciasPorAduanaGrafica($year);
         $this->view->incidencias_aduana = $inc_adu;
+
+        $indicadores = $mapper->indicadores($year, $month);
+
+        $this->view->indicadores = $indicadores;
     }
 
     public function verTraficoAction()
