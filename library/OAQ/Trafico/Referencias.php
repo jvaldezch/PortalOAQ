@@ -59,6 +59,7 @@ class OAQ_Trafico_Referencias
                 $sql->where("t.idAduana IS NULL");
             }
         }
+
         if (isset($filterRules)) {
             $filter = json_decode(html_entity_decode($filterRules));
             foreach ($filter AS $item) {
@@ -138,7 +139,7 @@ class OAQ_Trafico_Referencias
                 $sql->where("t.estatus NOT IN (3, 4)");
             }
             if ($filtrosCookies["allOperations"] !== true) {
-                $sql->where("t.idUsuario = ?", $this->_session->id);
+                $sql->where("t.idUsuario = ?", $this->_sessionId);
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.creado >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
