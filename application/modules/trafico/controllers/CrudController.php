@@ -132,6 +132,10 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     if ($i->isValid("fechaInstruccionEspecial")) {
                         $trafico->actualizarFecha(54, $i->fechaInstruccionEspecial, $this->_session->username);
                     }
+                    
+                    $this->_db->query("UPDATE traficos AS t SET t.diasRetraso = DATEDIFF(t.fechaPago, t.fechaEta) WHERE t.fechaPago IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
+                    $this->_db->query("UPDATE traficos AS t SET t.diasDespacho = DATEDIFF(fechaLiberacion, fechaEta) WHERE t.fechaLiberacion IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
+
                     $this->_helper->json(array("success" => true));
                 } else {
                     $this->_helper->json(array("success" => false));                    
@@ -563,9 +567,14 @@ class Trafico_CrudController extends Zend_Controller_Action {
                             $trafico->actualizarFecha($k, $i->$v["label"], $this->_session->username);
                         }
                     }
+
+                    $this->_db->query("UPDATE traficos AS t SET t.diasRetraso = DATEDIFF(t.fechaPago, t.fechaEta) WHERE t.fechaPago IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
+                    $this->_db->query("UPDATE traficos AS t SET t.diasDespacho = DATEDIFF(fechaLiberacion, fechaEta) WHERE t.fechaLiberacion IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
+
                     if ($this->_update($i->id, $arr)) {
                         $this->_helper->json(array("success" => true));
                     }
+
                     $this->_helper->json(array("success" => false));
                 } else {
                     $this->_helper->json(array("success" => false, "msg" => "Invalid input!"));
