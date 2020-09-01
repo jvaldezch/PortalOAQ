@@ -5,7 +5,6 @@
 var tipo_archivos;
 
 window.get_file_type = function(i) {
-    console.log(i);
     if (tipo_archivos[i]) {
         return tipo_archivos[i]['nombre'];
     } else {

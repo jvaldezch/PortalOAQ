@@ -39,7 +39,6 @@ $(document).ready(function () {
             }
         }
         if ((boxes).size() > 0) {
-            console.log("Here!");
         }
     });
 

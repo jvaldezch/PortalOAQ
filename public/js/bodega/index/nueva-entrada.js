@@ -89,7 +89,6 @@ $(document).ready(function () {
                     if (res.proveedores) {
                         $('#idProveedor').empty().append($("<option />").val('').text("---"));
                         $.each(res.proveedores, function(i, value) {
-                            console.log(value);
                             $("#idProveedor").append($("<option />").val(value.id).text(value.text));
                         });
                         $("#idProveedor").removeAttr("disabled");
@@ -113,7 +112,6 @@ $(document).ready(function () {
                         if (res.embarcadores) {
                             /*$('#idProveedor').empty().append($("<option />").val('').text("---"));
                             $.each(res.proveedores, function(i, value) {
-                                console.log(value);
                                 $("#idProveedor").append($("<option />").val(value.id).text(value.text));
                             });
                             $("#idProveedor").removeAttr("disabled");*/

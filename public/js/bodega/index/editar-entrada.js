@@ -381,7 +381,6 @@ window.loadComments = function() {
 
 
             } else {
-                console.log(res.results['comentarios']);
                 $("#trafficLog").html('<tr><td colspan="3" style="font-size: 10px !important; line-height: 11px">No hay comentarios</td></tr>');
             }
         }       

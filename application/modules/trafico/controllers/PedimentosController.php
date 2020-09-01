@@ -291,8 +291,6 @@ class Trafico_PedimentosController extends Zend_Controller_Action
                 $customer = $model->datosCliente($row['idCliente']);
                 $view->data = $customer;
 
-                $this->_firephp->info($customer);
-
                 $this->_helper->json(array("success" => true, "html" => $view->render("captura-pedimento.phtml")));
             } else {
                 throw new Exception("Invalid input!");

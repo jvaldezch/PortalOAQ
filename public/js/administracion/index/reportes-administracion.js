@@ -39,7 +39,6 @@ function grafica(idAduana, fechaInicio, fechaFin) {
         },
         success: function (res) {
             if (res.success === true) {
-                console.log(res);
                 $("#container").highcharts({
                     chart: { type: 'column' },
                     title: { text: 'Facturación ' + res.aduana },

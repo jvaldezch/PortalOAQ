@@ -40,7 +40,6 @@ class Aduanet_Pedimentos
                 }
                 return true;
             } else {
-                $this->_firephp->warn("No response");
                 return false;
             }
         } catch (Exception $e) {
@@ -79,7 +78,6 @@ class Aduanet_Pedimentos
             if ($row['success'] == true) {
                 return $row['results'];
             } else {
-                $this->_firephp->warn("No response");
                 return;
             }
         } catch (Exception $e) {
@@ -118,7 +116,6 @@ class Aduanet_Pedimentos
             if ($row['success'] == true) {
                 return $row;
             } else {
-                $this->_firephp->warn($row);
                 return;
             }
         } catch (Exception $e) {
@@ -173,7 +170,6 @@ class Aduanet_Pedimentos
             if ($row['success'] == true) {
                 return $row;
             } else {
-                $this->_firephp->warn($row);
                 return;
             }
         } catch (Exception $e) {

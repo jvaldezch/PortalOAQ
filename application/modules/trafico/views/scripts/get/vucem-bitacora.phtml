@@ -76,7 +76,7 @@
                         <?php if(!isset($item["numeroOperacion"])) { ?>
                             <i class="fas fa-upload vucem-send" data-id="<?= $item["id"] ?>" onclick="enviarAVucem(<?= $item["id"] ?>);" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
                         <?php } ?>
-                        <i class="fab fa-uniregistry vucem-request consultarVucem" data-id="<?= $item["id"] ?>" style="cursor: pointer" title="Transmitir a VUCEM"></i>&nbsp;
+                        <i class="fab fa-uniregistry vucem-request consultarVucem" data-id="<?= $item["id"] ?>" style="cursor: pointer" title="Consulta respuesta de VUCEM"></i>&nbsp;
 
                         <script>consultaDetalleLog(<?= $item["id"] ?>);</script>
 

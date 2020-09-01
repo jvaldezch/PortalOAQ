@@ -12,7 +12,6 @@ function loadFiles() {
 }
 $("body").on("click", ".openfile", function (e) {
     e.preventDefault();
-    console.log($(this).attr("href"));
     window.open($(this).attr("href"), "_blank", "toolbar=0,location=0,menubar=0,height=550,width=800,scrollbars=yes");
 });
 

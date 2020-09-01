@@ -27,6 +27,7 @@ class OAQ_TraficoVucem {
     protected $coveArray;
     protected $appConfig;
     protected $filename;
+    protected $_firephp;
 
     function setIdTrafico($idTrafico) {
         $this->idTrafico = $idTrafico;
@@ -101,6 +102,7 @@ class OAQ_TraficoVucem {
         if (is_array($options)) {
             $this->setOptions($options);
         }
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function __set($name, $value) {
@@ -615,7 +617,7 @@ class OAQ_TraficoVucem {
                     if (APPLICATION_ENV == "production") {
                         $misc->set_baseDir($this->_appconfig->getParam("expdest"));
                     } else {
-                        $misc->set_baseDir("D:\\wamp64\\tmp\\expedientes");
+                        $misc->set_baseDir("D:\\xampp\\tmp\\expedientes");
                     }
 
                     $vucem = new OAQ_TraficoVucem();
@@ -697,7 +699,7 @@ class OAQ_TraficoVucem {
                 if (APPLICATION_ENV == 'production') {
                     $directory = $this->appConfig->getParam("expdest");
                 } else {
-                    $directory = "D:\\wamp64\\tmp\\expedientes";
+                    $directory = "D:\\xampp\\tmp\\expedientes";
                 }
                 $sello = $this->_obtenerSello($idVucem);
                 $vucemFiles = new OAQ_VucemArchivos(array(
@@ -1295,7 +1297,7 @@ class OAQ_TraficoVucem {
                     if (APPLICATION_ENV == "production") {
                         $misc->set_baseDir($this->appConfig->getParam("expdest"));
                     } else {
-                        $misc->set_baseDir("D:\\wamp64\\tmp\\expedientes");
+                        $misc->set_baseDir("D:\\xampp\\tmp\\expedientes");
                     }
 
                     $this->setPatente($trafico->getPatente());
@@ -1359,6 +1361,7 @@ class OAQ_TraficoVucem {
             $misc = new OAQ_Misc();
             
             $data = $this->_armarEdocument($id, $arr["idTrafico"], $arr["idArchivo"], $arr["tipoDocumento"]);
+            
             $data["edoc"] = $arr["edocument"];
             $data["patente"] = $trafico->getPatente();
             $data["aduana"] = $trafico->getAduana();
@@ -1370,7 +1373,7 @@ class OAQ_TraficoVucem {
             if (APPLICATION_ENV == 'production') {
                 $directory = $this->appConfig->getParam("expdest");
             } else {
-                $directory = "D:\\wamp64\\tmp\\expedientes";
+                $directory = "D:\\xampp\\tmp\\expedientes";
             }
             $sello = $this->_obtenerSello($id);
             
@@ -1397,16 +1400,16 @@ class OAQ_TraficoVucem {
             
             $xml = new OAQ_Xml(false, true);
             $xml->set_dir($directory);
-            $xml->xmlEdocument($data, true);
+            $xml->xmlEdocument($ed, true);
             $xml->saveToDisk(null, $xml_filename);
+
             if (file_exists($directory . DIRECTORY_SEPARATOR . $xml_filename)) {
                 $trafico->agregarArchivoExpediente(27, $directory . DIRECTORY_SEPARATOR . $xml_filename, $arr["edocument"]);
             }
-            
-            $print = new OAQ_PrintEdocuments();
-            $print->set_data($data);
-            $print->set_dir($directory);
-            $print->saveEdocument($pdf_filename);
+
+            $print = new OAQ_Imprimir_ImprimirEdocument2019($data, "P", "pt", "LETTER");
+            $print->Create();
+            $print->Output($directory . DIRECTORY_SEPARATOR . $pdf_filename . '.pdf', "F");
             
             if (file_exists($directory . DIRECTORY_SEPARATOR . $pdf_filename . '.pdf')) {
                 $trafico->agregarArchivoExpediente(56, $directory . DIRECTORY_SEPARATOR . $pdf_filename . '.pdf', $arr["edocument"]);

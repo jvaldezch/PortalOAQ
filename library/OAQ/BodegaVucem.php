@@ -601,7 +601,7 @@ class OAQ_BodegaVucem {
                     if (APPLICATION_ENV == "production") {
                         $misc->set_baseDir($this->_appconfig->getParam("expdest"));
                     } else {
-                        $misc->set_baseDir("D:\\wamp64\\tmp\\expedientes");
+                        $misc->set_baseDir("D:\\xampp\\tmp\\expedientes");
                     }
 
                     $vucem = new OAQ_TraficoVucem();
@@ -683,7 +683,7 @@ class OAQ_BodegaVucem {
                 if (APPLICATION_ENV == 'production') {
                     $directory = $this->appConfig->getParam("expdest");
                 } else {
-                    $directory = "D:\\wamp64\\tmp\\expedientes";
+                    $directory = "D:\\xampp\\tmp\\expedientes";
                 }
                 $sello = $this->_obtenerSello($idVucem);
                 $vucemFiles = new OAQ_VucemArchivos(array(
@@ -1266,7 +1266,7 @@ class OAQ_BodegaVucem {
                     if (APPLICATION_ENV == "production") {
                         $misc->set_baseDir($this->appConfig->getParam("expdest"));
                     } else {
-                        $misc->set_baseDir("D:\\wamp64\\tmp\\expedientes");
+                        $misc->set_baseDir("D:\\xampp\\tmp\\expedientes");
                     }
 
                     $this->setPatente($trafico->getPatente());
@@ -1341,7 +1341,7 @@ class OAQ_BodegaVucem {
             if (APPLICATION_ENV == 'production') {
                 $directory = $this->appConfig->getParam("expdest");
             } else {
-                $directory = "D:\\wamp64\\tmp\\expedientes";
+                $directory = "D:\\xampp\\tmp\\expedientes";
             }
             $sello = $this->_obtenerSello($id);
             

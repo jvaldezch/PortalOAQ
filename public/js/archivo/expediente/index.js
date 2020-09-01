@@ -5,7 +5,6 @@
 var editingId;
 
 function borrar(id) {
-    console.log(id);
     $.messager.confirm('Confirmar', '¿Está seguro de que desea borrar el archivo seleccionado?', function (r) {
         if (r) {
             $('#files').treegrid('remove', id);
@@ -29,7 +28,6 @@ function guardar() {
         $('#files').treegrid('endEdit', editingId);
         var row = $('#files').treegrid('getSelected');
         if (row) {
-            console.log(row.tipoArchivo);
         }
         $('#files').treegrid('update', {
             id: editingId,

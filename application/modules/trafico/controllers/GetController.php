@@ -5,6 +5,7 @@ class Trafico_GetController extends Zend_Controller_Action {
     protected $_session;
     protected $_config;
     protected $_appconfig;
+    protected $_firephp;
 
     public function init() {
         $this->_helper->layout()->disableLayout();
@@ -13,6 +14,7 @@ class Trafico_GetController extends Zend_Controller_Action {
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_logger = Zend_Registry::get("logDb");
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch() {
@@ -1333,26 +1335,10 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $misc = new OAQ_Misc();
 
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
-                /* if (isset($arr["idFactura"])) {
-                  $vucem->setPatente($trafico->getPatente());
-                  $vucem->setAduana($trafico->getAduana());
-                  $vucem->setPedimento($trafico->getPedimento());
-                  $vucem->setReferencia($trafico->getReferencia());
-                  $xml = $vucem->enviarCove($input->id, $input->idTrafico, $arr["idFactura"], false);
-                  if ($xml) {
-                  $this->view->contenido = $xml;
-                  }
-                  } */
                 if (isset($arr["idArchivo"])) {
-                    /* $vucem->setPatente($trafico->getPatente());
-                      $vucem->setAduana($trafico->getAduana());
-                      $vucem->setPedimento($trafico->getPedimento());
-                      $vucem->setReferencia($trafico->getReferencia());
-                      $xml = $vucem->enviarEdocument($input->id, $input->idTrafico, $arr["idArchivo"], $arr["tipoDocumento"], false);
-                      if ($xml) {
-                      $this->view->contenido = $xml;
-                      } */
+
                     $data = $vucem->_armarEdocument($input->id, $arr["idTrafico"], $arr["idArchivo"], $arr["tipoDocumento"]);
+
                     $data["edoc"] = $arr["edocument"];
                     $data["patente"] = $trafico->getPatente();
                     $data["aduana"] = $trafico->getAduana();
@@ -1360,6 +1346,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                     $data["pedimento"] = $trafico->getPedimento();
                     $data["numTramite"] = $arr["numeroOperacion"];
                     $data["actualizado"] = date("Y-m-d H:i:s");
+                    $data['titulo'] = "ED_" . $trafico->getAduana() . '-' . $trafico->getPatente() . '-' . $trafico->getPedimento() . '_' . $arr["tipoDocumento"] . '_' . $arr["nombreArchivo"];
 
                     if (APPLICATION_ENV == 'production') {
                         $directory = $this->appConfig->getParam("expdest");
@@ -1370,9 +1357,9 @@ class Trafico_GetController extends Zend_Controller_Action {
                     $sello = $vucem->_obtenerSello($input->id);
 
                     $directory = $misc->nuevoDirectorio($directory, $trafico->getPatente(), $trafico->getAduana(), $trafico->getReferencia());
-
-                    $xml_filename = "ED" . $data["edoc"] . "_" . $trafico->getAduana() . '-' . $trafico->getPatente() . '-' . $trafico->getPedimento() . "_" . preg_replace('/\..+$/', '.xml', $arr["nombreArchivo"]);
-                    $pdf_filename = "ED" . $data["edoc"] . "_" . $trafico->getAduana() . '-' . $trafico->getPatente() . '-' . $trafico->getPedimento() . "_" . preg_replace('/\..+$/', '', $arr["nombreArchivo"]);
+                    
+                    $xml_filename = "ED" . $data["edoc"] . "_" . $trafico->getAduana() . '-' . $trafico->getPatente() . '-' . $trafico->getPedimento() . '_' . $arr["tipoDocumento"] . "_" . preg_replace('/\..+$/', '.xml', $arr["nombreArchivo"]);
+                    $pdf_filename = "ED" . $data["edoc"] . "_" . $trafico->getAduana() . '-' . $trafico->getPatente() . '-' . $trafico->getPedimento() . '_' . $arr["tipoDocumento"] . "_" . preg_replace('/\..+$/', '', $arr["nombreArchivo"]);
 
                     $ed["archivo"] = array(
                         "idTipoDocumento" => $arr["tipoDocumento"],
@@ -1380,7 +1367,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                         "archivo" => base64_encode(file_get_contents($directory . DIRECTORY_SEPARATOR . $arr["nombreArchivo"])),
                         "hash" => sha1_file($directory . DIRECTORY_SEPARATOR . $arr["nombreArchivo"]),
                         "correoElectronico" => "soporte@oaq.com.mx",
-                        "rfcConsulta" => $rfcConsulta
+                        "rfcConsulta" => isset($rfcConsulta) ? $rfcConsulta : null
                     );
                     $ed["usuario"] = array(
                         "username" => $sello["rfc"],
@@ -1522,8 +1509,17 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                 $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
                 $mppr = new Trafico_Model_VucemMapper();
+
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico));
+                $keys = new Trafico_Model_CliSello();
+                $id_sello_cli = $keys->obtenerDefault($trafico->getIdCliente());
+                if ($id_sello_cli) {
+                    $mppr->establecerSelloCliente($input->idTrafico, $id_sello_cli);
+                }
                 $arr = $mppr->obtener($input->idTrafico);
+
                 if (isset($arr) && !empty($arr)) {
                     $view->results = $arr;
                 }
@@ -1616,11 +1612,14 @@ class Trafico_GetController extends Zend_Controller_Action {
                     }
                 }
                 if (isset($arr["idArchivo"])) {
+
                     $vucem->setPatente($trafico->getPatente());
                     $vucem->setAduana($trafico->getAduana());
                     $vucem->setPedimento($trafico->getPedimento());
                     $vucem->setReferencia($trafico->getReferencia());
+
                     $arr = $vucem->enviarEdocument($input->id, $input->idTrafico, $arr["idArchivo"], $arr["tipoDocumento"]);
+
                     if (!empty($arr)) {
                         if ($vucem->analizarEnvioEdocument($mppr, $input->idTrafico, $input->id, $this->_session->id, $arr)) {
                             $this->_helper->json(array("success" => true));
@@ -2073,6 +2072,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $mppr = new Trafico_Model_CliSello();
                 $id = $mppr->obtenerDefault($input->idCliente);
                 if (isset($id)) {
+
                     $this->_helper->json(array("success" => true, "id" => $id));
                 }
                 $this->_helper->json(array("success" => false));

@@ -20,7 +20,7 @@ class OAQ_Imprimir_ImprimirEdocument2019 extends TCPDF {
         $this->SetAuthor("Jaime E. Valdez");
         if (isset($this->_data["titulo"])) {
             $this->SetTitle($this->_data["titulo"]);
-        } else {
+        } else if (isset($this->_data["edoc"])) {
             $this->SetTitle("ACUSE_" . $this->_data["edoc"]);
         }
         $this->SetSubject("");

@@ -2,7 +2,6 @@
 
 function loadPhotos() {
     var idTrafico = $("#idTrafico").val();
-    console.log(idTrafico);
     if (idTrafico !== undefined) {
         $.ajax({url: "/trafico/post/cargar-fotos", dataType: "json", timeout: 10000, type: "POST", 
             data: {id: $("#idTrafico").val(), borrar: 0, uri: '/clientes/get/download-photos'},

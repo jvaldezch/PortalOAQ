@@ -42,7 +42,7 @@ class OAQ_Facturas_CuentasDeGasto {
             $this->_basedir = "/home/samba-share/expedientes";
         } else {
             $this->_backup = "D:\\wamp64\\tmp\\facturacion";
-            $this->_basedir = "D:\\wamp64\\tmp\\expedientes";
+            $this->_basedir = "D:\\xampp\\tmp\\expedientes";
         }
         $context = stream_context_create(array(
             "ssl" => array(

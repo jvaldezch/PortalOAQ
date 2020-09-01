@@ -24,8 +24,6 @@ $(document).ready(function () {
     $("#fecha-inicio, #fecha-fin").on("change", function (evt) {
         var val = $(this).val();
         var id = $(this).attr("id");
-        console.log(val);
-        console.log(id);
         
         Cookies.set(id, val);
     });

@@ -24,9 +24,7 @@ class Trafico_Model_TraficoSolicitudesMapper
                 ->where("s.tipoOperacion = ?", $tipoOperacion)
                 ->where("s.pedimento = ?", $pedimento)
                 ->where("s.referencia = ?", $referencia)
-                // ->where("s.borrada IS NULL")
                 ->where("s.complemento IS NULL");
-            $this->_firephp->info($sql->assemble());
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();

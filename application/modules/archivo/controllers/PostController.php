@@ -654,7 +654,6 @@ class Archivo_PostController extends Zend_Controller_Action {
                                             $insert["tipo_archivo"] = 1030;
                                         }                                       
                                         if(!($model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $fileinfo["name"]))) {
-                                            $this->_firephp->info($insert);
                                             $model->agregar($insert);
                                         } else {                                            
                                             $errors[] = array(

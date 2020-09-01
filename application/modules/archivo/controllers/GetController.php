@@ -591,7 +591,7 @@ class Archivo_GetController extends Zend_Controller_Action {
                     if (APPLICATION_ENV == "production") {
                         $misc->set_baseDir($this->_appconfig->getParam("expdest"));
                     } else {
-                        $misc->set_baseDir("D:\\wamp64\\tmp\\expedientes");
+                        $misc->set_baseDir("D:\\xampp\\tmp\\expedientes");
                     }
                     if (($path = $misc->directorioExpedienteDigital($arr["patente"], $arr["aduana"], $arr["referencia"]))) {
 

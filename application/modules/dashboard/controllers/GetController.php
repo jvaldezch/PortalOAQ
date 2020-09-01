@@ -123,7 +123,6 @@ class Dashboard_GetController extends Zend_Controller_Action {
                     'CD. DE MEXICO' => $mapper->porAduana($cust["rfc"], 3574, 470, date("Y-m-d")),
                 );                                
             }
-            $this->_firephp->info($array);
 
             $totalMes = $mapper->totalMes($cust["rfc"], date("Y-m-d"));
             $totalPorLiberar = $mapper->totalPorLiberar($cust["rfc"], date("Y-m-d"));

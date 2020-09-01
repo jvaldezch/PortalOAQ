@@ -950,8 +950,6 @@ class Bodega_PostController extends Zend_Controller_Action {
                             "errors" => array("errors" => "El archivo ya existe."),
                         );
                     }
-
-                    $this->_firephp->info($path . DIRECTORY_SEPARATOR . $filename);
                 } else {
                     $error = $upload->getErrors();
                     $errors[] = array(
@@ -1765,8 +1763,6 @@ class Bodega_PostController extends Zend_Controller_Action {
                         "escaneado" => $input->isValid("escaneado") ? date("Y-m-d H:i:s") : null,
                         "actualizado" => date("Y-m-d H:i:s")
                     );
-
-                    $this->_firephp->info($arr);
 
                     if (($model->actualizar($input->idBulto, $arr))) {
                         $this->_helper->json(array("success" => true));

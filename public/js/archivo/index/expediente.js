@@ -590,7 +590,6 @@ $(document).ready(function () {
         $.confirm({ title: "Enviar email", escapeKey: "cerrar", boxWidth: "550px", useBootstrap: false, type: "blue",
             buttons: {
                 enviar: {btnClass: "btn-blue", action: function () {
-                    console.log(emailData);
                     if (jQuery.isEmptyObject(emailData["archivos"])) {
                         $.alert({title: "Advertencia", content: 'No ha seleccionado archivos para enviar.', type: "red", boxWidth: "350px", useBootstrap: false});
                         return false;

@@ -1642,7 +1642,6 @@ class Trafico_PostController extends Zend_Controller_Action {
                                     }
                                 }                           
                             } else {
-                                $this->_firephp->info("Invoice not found");                                
                             }
                         }
                     }
