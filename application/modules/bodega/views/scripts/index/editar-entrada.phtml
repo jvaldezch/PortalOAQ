@@ -60,7 +60,26 @@
     .jconfirm {
         z-index: 999 !important;
     }
+    .warehouse-status {
+        float: left; 
+        margin-top: 2px; 
+        margin-left: 5px;
+    }
+    .warehouse-status .warehouse-status-active,
+    .warehouse-status .warehouse-status-inactive {
+        float:left;
+        display: block;
+        border: 1px #999 solid;
+        font-size: 11px;
+        margin: 5px 2px 2px 2px;
+        padding: 0 5px 0 5px;
+    }
+    .warehouse-status .warehouse-status-active {
+        background-color: #3f4c6b;
+        color: #fff;
+    }
 </style>
+
 <div style="float: right; margin-top: 3px; margin-right: 50px">
     <div style="float: right; margin-top: 3px">
         <a href="/bodega/get/imprimir-etiquetas?id=<?= $this->basico["id"] ?>" target="_blank" class="traffic-btn">
@@ -77,6 +96,18 @@
         </button>
     </div>
 </div>
+<div class="warehouse-status">
+    <div class="<?= ($this->basico['estatusCarga'] == 2) ? 'warehouse-status-active' : 'warehouse-status-inactive' ?>">
+        Descargado
+    </div>
+    <div class="<?= ($this->basico['estatusCarga'] == 3) ? 'warehouse-status-active' : 'warehouse-status-inactive' ?>">
+        Revisión
+    </div>
+    <div class="<?= ($this->basico['estatusCarga'] == 4) ? 'warehouse-status-active' : 'warehouse-status-inactive' ?>">
+        Cargado
+    </div>
+</div>
+
 <div class="traffic-clear-5"></div>
 <ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0;">
     <li>

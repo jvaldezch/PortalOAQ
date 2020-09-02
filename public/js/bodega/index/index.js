@@ -18,17 +18,15 @@ window.abrir = function() {
 };
 
 window.formatEstatus = function(val, row) {
-    if (val === 1) {
+    if (parseInt(val) === 1) {
         return '<div class="semaphore-black"></div>';
-    } else if (val === 2) {
-        return '<div class="semaphore-blue"></div>';
-    } else if (val === 3) {
-        return '<div class="semaphore-green"></div>';
-    } else if (val === 5) {
+    } else if (parseInt(val) === 2) {
         return '<div class="semaphore-yellow"></div>';
-    } else if (val === 6) {
-        return '<div class="semaphore-red"></div>';
-    }
+    } else if (parseInt(val) === 3) {
+        return '<div class="semaphore-blue"></div>';
+    } else if (parseInt(val) === 4) {
+        return '<div class="semaphore-green"></div>';
+    } 
 };
 
 window.formatMensajero = function(val, row) {
@@ -345,7 +343,7 @@ $(document).ready(function () {
         frozenColumns: [
             [
                 {
-                    field: "estatus",
+                    field: "estatusCarga",
                     width: 20,
                     title: "",
                     formatter: formatEstatus

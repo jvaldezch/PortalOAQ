@@ -391,10 +391,10 @@
                     <th><?= $item['abbrv'] ?></th>
                     <td><?= $item['total'] ?></td>
                     <td><?= $item['justificadas'] ?></td>
-                    <td><?= $item['promedio'] ?></td>
-                    <td><?= $item['promedioSinJustificacion'] ?></td>
-                    <td><?= $item['promedioConJustificacion'] ?></td>
-                    <td><?= sprintf("%.2f%%", ($item['cumplimientoOperativo'] / $item['total']) * 100) ?></td>
+                    <td><?= round($item['promedio']) ?></td>
+                    <td><?= round($item['promedioSinJustificacion']) ?></td>
+                    <td><?= round($item['promedioConJustificacion']) ?></td>
+                    <td><?= number_format(round(($item['cumplimientoOperativo'] / $item['total']) * 100), 0, '.', ',') . ' %' ?></td>
                     <td></td>
                 </tr>
             <?php } ?>
@@ -403,10 +403,10 @@
             <th>Total general</th>
             <td><?= $this->indicadores['total']['total'] ?></td>
             <td><?= $this->indicadores['total']['justificadas'] ?></td>
-            <td><?= $this->indicadores['total']['promedio'] ?></td>
-            <td><?= $this->indicadores['total']['promedioSinJustificacion'] ?></td>
-            <td><?= $this->indicadores['total']['promedioConJustificacion'] ?></td>
-            <td><?= sprintf("%.2f%%", ($this->indicadores['total']['cumplimientoOperativo'] / $this->indicadores['total']['total']) * 100) ?></td>
+            <td><?= round($this->indicadores['total']['promedio']) ?></td>
+            <td><?= round($this->indicadores['total']['promedioSinJustificacion']) ?></td>
+            <td><?= round($this->indicadores['total']['promedioConJustificacion']) ?></td>
+            <td><?= number_format(round(($this->indicadores['total']['cumplimientoOperativo'] / $this->indicadores['total']['total']) * 100), 0, '.', ',') . ' %' ?></td>
             <td></td>
         </tr>
     </tbody>

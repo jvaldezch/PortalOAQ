@@ -1,6 +1,7 @@
 <?php
 
-class Bodega_PostController extends Zend_Controller_Action {
+class Bodega_PostController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
@@ -9,7 +10,8 @@ class Bodega_PostController extends Zend_Controller_Action {
     protected $_db;
     protected $_firephp;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -19,7 +21,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -30,7 +33,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerProveedoresAction() {
+    public function obtenerProveedoresAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -70,7 +74,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarProveedorAction() {
+    public function agregarProveedorAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -136,7 +141,6 @@ class Bodega_PostController extends Zend_Controller_Action {
                     } else {
                         throw new Exception("No se pudo agregar");
                     }
-
                 } else {
                     throw new Exception("Invalid input!");
                 }
@@ -148,7 +152,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerEmbarcadorAction() {
+    public function obtenerEmbarcadorAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -194,7 +199,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerConsignatarioAction() {
+    public function obtenerConsignatarioAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -240,7 +246,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevaEntradaAction() {
+    public function nuevaEntradaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -273,7 +280,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarEntradaAction() {
+    public function actualizarEntradaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -356,7 +364,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function entradaActualizarAction() {
+    public function entradaActualizarAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -415,7 +424,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarFechasEntradaAction() {
+    public function guardarFechasEntradaAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -457,7 +467,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevoTraficoAction() {
+    public function nuevoTraficoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -542,7 +553,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function entradasAction() {
+    public function entradasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -588,43 +600,48 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    protected function _todos($page, $rows, $warehouses, $filterRules = null, $cookies = null) {
+    protected function _todos($page, $rows, $warehouses, $filterRules = null, $cookies = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "id",
-                        "idTrafico",
-                        "estatus",
-                        "referencia",
-                        "cvePedimento",
-                        "regimen",
-                        "rfcCliente",
-                        "blGuia",
-                        "contenedorCaja",
-                        "ordenCarga",
-                        "ordenCompra",
-                        "carrierNaviera",
-                        "proveedores",
-                        "facturas",
-                        "observaciones",
-                        "bultos",
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d') AS fechaPago"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d') AS fechaLiberacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos"),
-                        new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEta), 0) AS diasDespacho"),
-                        "idPlanta",
-                        "idUsuario"
-                    ))
-                    ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
-                    ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
-                    ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
-                    ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
-                    ->joinLeft(array("b" => "trafico_bodegas"), "b.id = t.idBodega", array("siglas"))
-                    ->where("t.idBodega IN (?)", $warehouses)
-                    ->order(array("fechaEta DESC"))
-                    ->limit($rows, ($page - 1) * $rows);
+                ->from(array("t" => "traficos"), array(
+                    "id",
+                    "idTrafico",
+                    "estatus",
+                    new Zend_Db_Expr("CASE WHEN t.fechaDescarga IS NOT NULL THEN 2 
+                    WHEN t.fechaDescarga IS NOT NULL AND t.fechaRevision IS NOT NULL THEN 3
+                    WHEN t.fechaCarga IS NOT NULL THEN 4
+                    ELSE 1 END AS estatusCarga"),
+                    "referencia",
+                    "cvePedimento",
+                    "regimen",
+                    "rfcCliente",
+                    "blGuia",
+                    "contenedorCaja",
+                    "ordenCarga",
+                    "ordenCompra",
+                    "carrierNaviera",
+                    "proveedores",
+                    "facturas",
+                    "observaciones",
+                    "bultos",
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d') AS fechaPago"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d') AS fechaLiberacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos"),
+                    new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEta), 0) AS diasDespacho"),
+                    "idPlanta",
+                    "idUsuario"
+                ))
+                ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
+                ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
+                ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
+                ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
+                ->joinLeft(array("b" => "trafico_bodegas"), "b.id = t.idBodega", array("siglas"))
+                ->where("t.idBodega IN (?)", $warehouses)
+                ->order(array("fechaEta DESC"))
+                ->limit($rows, ($page - 1) * $rows);
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchAll($sql);
             if ($stmt) {
@@ -636,13 +653,14 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    protected function _total($warehouses, $filterRules = null, $cookies = null) {
+    protected function _total($warehouses, $filterRules = null, $cookies = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array("count(*) AS total"))
+                ->from(array("t" => "traficos"), array("count(*) AS total"))
                 ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
-                    ->where("t.idBodega IN (?)", $warehouses);
+                ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
+                ->where("t.idBodega IN (?)", $warehouses);
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchRow($sql);
             if ($stmt) {
@@ -654,10 +672,11 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    protected function _filters(Zend_Db_Select $sql, $filterRules = null, $filtrosCookies = null) {
+    protected function _filters(Zend_Db_Select $sql, $filterRules = null, $filtrosCookies = null)
+    {
         if (isset($filterRules)) {
             $filter = json_decode(html_entity_decode($filterRules));
-            foreach ($filter AS $item) {
+            foreach ($filter as $item) {
                 if ($item->field == "referencia" && $item->value != "") {
                     $sql->where("t.referencia LIKE ?", "%" . trim($item->value) . "%");
                 }
@@ -692,7 +711,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.fechaPago >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
-                                ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                            ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
             }
@@ -701,7 +720,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.fechaLiberacion >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
-                                ->where("t.fechaLiberacion <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                            ->where("t.fechaLiberacion <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
             } else {
@@ -720,7 +739,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.fechaPago >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
-                                ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                            ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
             }
@@ -729,7 +748,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.fechaPago >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
-                                ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                            ->where("t.fechaPago <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
             }
@@ -738,7 +757,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.fechaLiberacion >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
-                                ->where("t.fechaLiberacion <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                            ->where("t.fechaLiberacion <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
             } else {
@@ -749,21 +768,22 @@ class Bodega_PostController extends Zend_Controller_Action {
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.creado >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
-                                ->where("t.creado <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                            ->where("t.creado <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
             } else {
                 if ($filtrosCookies["fdates"] == true) {
                     if ($filtrosCookies["dateini"] !== null && $filtrosCookies["dateend"] !== null) {
                         $sql->where("t.fechaEta >= ?", date('Y-m-d', strtotime($filtrosCookies["dateini"])))
-                                ->where("t.fechaEta <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
+                            ->where("t.fechaEta <= ?", date('Y-m-d', strtotime($filtrosCookies["dateend"])));
                     }
                 }
             }
         }
     }
 
-    protected function _cookies() {
+    protected function _cookies()
+    {
         $request = new Zend_Controller_Request_Http();
         $filtrosCookies = array(
             "allOperations" => filter_var($request->getCookie("allOperations"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
@@ -778,7 +798,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         return $filtrosCookies;
     }
 
-    public function asignarOrdenCargaAction() {
+    public function asignarOrdenCargaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -813,7 +834,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function consolidarTraficosAction() {
+    public function consolidarTraficosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -850,7 +872,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function removerEntradaAction() {
+    public function removerEntradaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -879,7 +902,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function subirArchivosAction() {
+    public function subirArchivosAction()
+    {
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
@@ -920,8 +944,8 @@ class Bodega_PostController extends Zend_Controller_Action {
             $model = new Archivo_Model_RepositorioMapper();
             $upload = new Zend_File_Transfer_Adapter_Http();
             $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                    ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
-                    ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false));
+                ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false));
 
             if (($path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia))) {
                 $upload->setDestination($path);
@@ -968,7 +992,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function subirImagenesAction() {
+    public function subirImagenesAction()
+    {
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
@@ -1010,8 +1035,8 @@ class Bodega_PostController extends Zend_Controller_Action {
 
             $upload = new Zend_File_Transfer_Adapter_Http();
             $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                    ->addValidator("Size", false, array("min" => "1kB", "max" => "20MB"))
-                    ->addValidator("Extension", false, array("extension" => "jpg,png", "case" => false));
+                ->addValidator("Size", false, array("min" => "1kB", "max" => "20MB"))
+                ->addValidator("Extension", false, array("extension" => "jpg,png", "case" => false));
 
             if (($path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia))) {
                 $upload->setDestination($path);
@@ -1066,7 +1091,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarFacturaAction() {
+    public function borrarFacturaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1110,7 +1136,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarEntradaAction() {
+    public function borrarEntradaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1140,7 +1167,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarNotificacionAction() {
+    public function enviarNotificacionAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1171,7 +1199,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarArchivoAction() {
+    public function borrarArchivoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1206,7 +1235,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarEdocumentAction() {
+    public function enviarEdocumentAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1276,7 +1306,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarVucemAction() {
+    public function borrarVucemAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1307,7 +1338,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function establecerSelloVucemAction() {
+    public function establecerSelloVucemAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1345,7 +1377,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarFacturaAction() {
+    public function agregarFacturaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1380,7 +1413,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function seleccionarFacturasAction() {
+    public function seleccionarFacturasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1426,7 +1460,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function subirPlantillaAction() {
+    public function subirPlantillaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1444,8 +1479,8 @@ class Bodega_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $upload->addValidator("Count", false, array("min" => 1, "max" => 1))
-                        ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
-                        ->addValidator("Extension", false, array("extension" => "xls,xlsx", "case" => false));
+                    ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                    ->addValidator("Extension", false, array("extension" => "xls,xlsx", "case" => false));
                 if (APPLICATION_ENV == "production") {
                     $directory = $this->_appconfig->getParam("tmpDir");
                 } else {
@@ -1485,7 +1520,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarComentarioTraficoAction() {
+    public function agregarComentarioTraficoAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -1529,7 +1565,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function vucemEnviarFacturasAction() {
+    public function vucemEnviarFacturasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1571,7 +1608,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerPlantasAction() {
+    public function obtenerPlantasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1623,7 +1661,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerTransportesAction() {
+    public function obtenerTransportesAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1663,7 +1702,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarProveedorAction() {
+    public function guardarProveedorAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -1725,7 +1765,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarBultoAction() {
+    public function guardarBultoAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -1778,7 +1819,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarBultoAction() {
+    public function borrarBultoAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -1816,7 +1858,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarBultoAction() {
+    public function agregarBultoAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -1864,7 +1907,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function subdividirAction() {
+    public function subdividirAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -1883,7 +1927,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("id") && $input->isValid("ids")) {
 
-                    $ids = explode("," ,$input->ids);
+                    $ids = explode(",", $input->ids);
 
                     $bodega = new OAQ_Bodega(array("idTrafico" => $input->id));
                     if ($bodega->subdividir($ids, $input->bultos_restantes, $input->n_referencia)) {
@@ -1902,7 +1946,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function cambiarTipoBultoAction() {
+    public function cambiarTipoBultoAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -1919,7 +1964,7 @@ class Bodega_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("id") && $input->isValid("ids") && $input->isValid("tipoBulto")) {
 
-                    $ids = explode("," ,$input->ids);
+                    $ids = explode(",", $input->ids);
 
                     $mppr = new Bodega_Model_Bultos();
 
@@ -1929,7 +1974,6 @@ class Bodega_PostController extends Zend_Controller_Action {
                         }
                     }
                     $this->_helper->json(array("success" => true));
-
                 } else {
                     throw new Exception("Invalid input!");
                 }
@@ -1941,7 +1985,8 @@ class Bodega_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarATraficoAction() {
+    public function enviarATraficoAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -2006,7 +2051,6 @@ class Bodega_PostController extends Zend_Controller_Action {
                     } else {
                         $this->_helper->json(array("success" => false));
                     }
-
                 } else {
                     throw new Exception("Invalid input!");
                 }
@@ -2017,6 +2061,4 @@ class Bodega_PostController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-
 }
-
