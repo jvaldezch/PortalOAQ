@@ -948,6 +948,7 @@ class Bodega_PostController extends Zend_Controller_Action
                 ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false));
 
             if (($path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia))) {
+                $this->_firephp->info($path);
                 $upload->setDestination($path);
             } else {
                 throw new Exception("Could not set base directory.");
