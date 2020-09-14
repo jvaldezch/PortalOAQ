@@ -14,6 +14,7 @@ class OAQ_Misc {
     protected $_logger;
     protected $_baseDir;
     protected $_newDir;
+    protected $_firephp;
     
     function get_baseDir() {
         return $this->_baseDir;
@@ -36,6 +37,7 @@ class OAQ_Misc {
         );
         $this->_queryCache = Zend_Cache::factory('Core', 'File', $this->_frontendOptions, $this->_backendOptions);
         $this->_logger = Zend_Registry::get("logDb");
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     /**
@@ -2272,7 +2274,7 @@ class OAQ_Misc {
                     if (file_exists($this->_newDir)) {
                         return $this->_newDir;
                     } else {
-                        throw new Exception("Base cannot be created!");
+                        throw new Exception("Base cannot be created. {$this->_newDir}");
                     }
                 } else {
                     throw new Exception("Base is not readable nor writable!");                    
