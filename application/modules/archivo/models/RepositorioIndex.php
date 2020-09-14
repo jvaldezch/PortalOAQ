@@ -1,61 +1,65 @@
 <?php
 
-class Archivo_Model_RepositorioIndex {
+class Archivo_Model_RepositorioIndex
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Archivo_Model_DbTable_RepositorioIndex();
     }
 
-    public function paginatorSelectCorresponsales($filtro = false, $search = null, $aduanas = null) {
+    public function paginatorSelectCorresponsales($filtro = false, $search = null, $aduanas = null)
+    {
         $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("r" => "repositorio_index"), array("id", "patente", "aduana", "pedimento", "referencia", "rfcCliente", "nombreCliente", "completo", "revisionOperaciones", "revisionAdministracion", "modificado", "modificadoPor", "creado", "creadoPor"))
-                    ->order("r.creado DESC")
-                    ->limit(250);
-            if ($filtro !== false) {
-                if ((int) $filtro == 1) {
-                    $sql->where("completo = 1");
-                } else if ((int) $filtro == 2) {
-                    $sql->where("revisionOperaciones = 1 AND (completo IS NULL OR completo = 0) AND revisionAdministracion IS NULL");
-                } else if ((int) $filtro == 3) {
-                    $sql->where("revisionAdministracion = 1 AND (completo IS NULL OR completo = 0) AND revisionOperaciones IS NULL");
-                } else if ((int) $filtro == 4) {
-                    $sql->where("(revisionOperaciones = 1 AND revisionAdministracion = 1) AND (completo IS NULL OR completo = 0)");
-                }
+            ->setIntegrityCheck(false)
+            ->from(array("r" => "repositorio_index"), array("id", "patente", "aduana", "pedimento", "referencia", "rfcCliente", "nombreCliente", "completo", "revisionOperaciones", "revisionAdministracion", "modificado", "modificadoPor", "creado", "creadoPor"))
+            ->order("r.creado DESC")
+            ->limit(250);
+        if ($filtro !== false) {
+            if ((int) $filtro == 1) {
+                $sql->where("completo = 1");
+            } else if ((int) $filtro == 2) {
+                $sql->where("revisionOperaciones = 1 AND (completo IS NULL OR completo = 0) AND revisionAdministracion IS NULL");
+            } else if ((int) $filtro == 3) {
+                $sql->where("revisionAdministracion = 1 AND (completo IS NULL OR completo = 0) AND revisionOperaciones IS NULL");
+            } else if ((int) $filtro == 4) {
+                $sql->where("(revisionOperaciones = 1 AND revisionAdministracion = 1) AND (completo IS NULL OR completo = 0)");
             }
-            if (isset($search[0])) {
-                $sql->where("patente LIKE ?", $search[0]);
+        }
+        if (isset($search[0])) {
+            $sql->where("patente LIKE ?", $search[0]);
+        }
+        if (isset($search[1])) {
+            $sql->where("aduana LIKE ?", $search[1]);
+        }
+        if (isset($search[2])) {
+            $sql->where("pedimento LIKE ?", $search[2]);
+        }
+        if (isset($search[3])) {
+            $sql->where("referencia LIKE ?", $search[3]);
+        }
+        if (isset($aduanas) && !empty($aduanas)) {
+            foreach ($aduanas as $adu) {
+                $pats[] = $adu["patente"];
+                $adus[] = $adu["aduana"];
             }
-            if (isset($search[1])) {
-                $sql->where("aduana LIKE ?", $search[1]);
+            if (!empty($pats) && !empty($adus)) {
+                $sql->where("patente IN (" . implode(',', $pats) . ") AND aduana IN (" . implode(',', $adus) . ")");
             }
-            if (isset($search[2])) {
-                $sql->where("pedimento LIKE ?", $search[2]);
-            }
-            if (isset($search[3])) {
-                $sql->where("referencia LIKE ?", $search[3]);
-            }
-            if (isset($aduanas) && !empty($aduanas)) {
-                foreach ($aduanas as $adu) {
-                    $pats[] = $adu["patente"];
-                    $adus[] = $adu["aduana"];
-                }
-                if (!empty($pats) && !empty($adus)) {
-                    $sql->where("patente IN (" . implode(',', $pats) . ") AND aduana IN (" . implode(',', $adus) . ")");
-                }
-            }
-            return $sql;
+        }
+        return $sql;
     }
-    
-    public function paginatorSelect($filtro = false, $search = null, $idsAduana = null, $rfcs = null) {
+
+    public function paginatorSelect($filtro = false, $search = null, $idsAduana = null, $rfcs = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("r" => "repositorio_index"), array("id", "patente", "aduana", "pedimento", "referencia", "rfcCliente", "nombreCliente", "completo", "revisionOperaciones", "revisionAdministracion", "modificado", "modificadoPor", "creado", "creadoPor"))
-                    ->order("r.creado DESC")
-                    ->limit(250);
+                ->setIntegrityCheck(false)
+                ->from(array("r" => "repositorio_index"), array("id", "patente", "aduana", "pedimento", "referencia", "rfcCliente", "nombreCliente", "completo", "revisionOperaciones", "revisionAdministracion", "modificado", "modificadoPor", "creado", "creadoPor"))
+                ->order("r.creado DESC")
+                ->limit(250);
             if ($filtro !== false) {
                 if ((int) $filtro == 1) {
                     $sql->where("completo = 1");
@@ -100,11 +104,12 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function datos($id, $idsAduana = null, $rfcs = null) {
+    public function datos($id, $idsAduana = null, $rfcs = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("*"))
-                    ->where("id = ?", $id);
+                ->from($this->_db_table, array("*"))
+                ->where("id = ?", $id);
             if (isset($idsAduana) && !empty($idsAduana)) {
                 $sql->where("idAduana IN (?)", $idsAduana);
             }
@@ -121,11 +126,12 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function buscarPorTrafico($idTrafico) {
+    public function buscarPorTrafico($idTrafico)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id"))
-                    ->where("idTrafico = ?", $idTrafico);
+                ->from($this->_db_table, array("id"))
+                ->where("idTrafico = ?", $idTrafico);
             $stmt = $this->_db_table->fetchRow($sql);
             if (isset($stmt) && !empty($stmt)) {
                 return $stmt->id;
@@ -135,12 +141,13 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function obtenerPorTrafico($idTrafico) {
+
+    public function obtenerPorTrafico($idTrafico)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id"))
-                    ->where("idTrafico = ?", $idTrafico);
+                ->from($this->_db_table, array("id"))
+                ->where("idTrafico = ?", $idTrafico);
             $stmt = $this->_db_table->fetchRow($sql);
             if (isset($stmt) && !empty($stmt)) {
                 return $stmt->toArray();
@@ -150,12 +157,13 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function buscar($patente, $aduana, $referencia, $pedimento = null) {
+
+    public function buscar($patente, $aduana, $referencia, $pedimento = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id"))
-                    ->where("referencia = ?", $referencia);
+                ->from($this->_db_table, array("id"))
+                ->where("referencia = ?", $referencia);
             if (isset($pedimento)) {
                 $sql->where("pedimento = ?", $pedimento);
             }
@@ -174,33 +182,16 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function buscarIndex($patente, $aduana, $pedimento, $referencia) {
+
+    public function buscarIndex($patente, $aduana, $pedimento, $referencia)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id", "idTrafico"))
-                    ->where("patente = ?", $patente)
-                    ->where("aduana = ?", $aduana)
-                    ->where("pedimento = ?", $pedimento)
-                    ->where("referencia = ?", $referencia);
-            $stmt = $this->_db_table->fetchRow($sql);
-            if ($stmt) {
-                return $stmt->toArray();
-            }
-            return;
-        } catch (Zend_Db_Exception $ex) {
-            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
-        }
-    }
-    
-    public function buscarDatos($patente, $aduana, $pedimento, $referencia) {
-        try {
-            $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("*"))
-                    ->where("patente = ?", $patente)
-                    ->where("aduana = ?", $aduana)
-                    ->where("pedimento = ?", $pedimento)
-                    ->where("referencia = ?", $referencia);
+                ->from($this->_db_table, array("id", "idTrafico"))
+                ->where("patente = ?", $patente)
+                ->where("aduana = ?", $aduana)
+                ->where("pedimento = ?", $pedimento)
+                ->where("referencia = ?", $referencia);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -211,7 +202,27 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function agregarDesdeTrafico($idTrafico, $idAduana, $rfcCliente, $patente, $aduana, $pedimento, $referencia, $usuario, $nombreCliente = null) {
+    public function buscarDatos($patente, $aduana, $pedimento, $referencia)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->from($this->_db_table, array("*"))
+                ->where("patente = ?", $patente)
+                ->where("aduana = ?", $aduana)
+                ->where("pedimento = ?", $pedimento)
+                ->where("referencia = ?", $referencia);
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
+
+    public function agregarDesdeTrafico($idTrafico, $idAduana, $rfcCliente, $patente, $aduana, $pedimento, $referencia, $usuario, $nombreCliente = null)
+    {
         try {
             $arr = array(
                 "idTrafico" => $idTrafico,
@@ -234,8 +245,29 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function agregar($idAduana, $rfcCliente, $patente, $aduana, $pedimento, $referencia, $usuario, $nombreCliente = null, $idTrafico = null) {
+
+    public function agregarDesdeBodega($idTrafico, $rfcCliente, $referencia, $usuario)
+    {
+        try {
+            $arr = array(
+                "idTrafico" => $idTrafico,
+                "rfcCliente" => $rfcCliente,
+                "referencia" => $referencia,
+                "creado" => date("Y-m-d H:i:s"),
+                "creadoPor" => $usuario,
+            );
+            $stmt = $this->_db_table->insert($arr);
+            if ($stmt) {
+                return $stmt;
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
+
+    public function agregar($idAduana, $rfcCliente, $patente, $aduana, $pedimento, $referencia, $usuario, $nombreCliente = null, $idTrafico = null)
+    {
         try {
             $arr = array(
                 "idAduana" => $idAduana,
@@ -259,7 +291,8 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function modificacion($id, $modificadoPor) {
+    public function modificacion($id, $modificadoPor)
+    {
         try {
             $arr = array(
                 "modificado" => date("Y-m-d H:i:s"),
@@ -275,7 +308,8 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function actualizarChecklist($id, $arr) {
+    public function actualizarChecklist($id, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
             if ($stmt) {
@@ -287,7 +321,8 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function actualizar($id, $patente, $aduana, $pedimento, $referencia, $modificadoPor) {
+    public function actualizar($id, $patente, $aduana, $pedimento, $referencia, $modificadoPor)
+    {
         try {
             $arr = array(
                 "patente" => $patente,
@@ -307,7 +342,8 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function borrar($id) {
+    public function borrar($id)
+    {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $id));
             if ($stmt) {
@@ -318,8 +354,9 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function update($id, $arr) {
+
+    public function update($id, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
             if ($stmt) {
@@ -331,14 +368,15 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function archivosDeRepositorio($patente, $aduana, $referencia) {
+    public function archivosDeRepositorio($patente, $aduana, $referencia)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from("repositorio", array("id", "tipo_archivo", "sub_tipo_archivo"))
-                    ->where("referencia = ?", $referencia)
-                    ->where("patente = ?", $patente)
-                    ->where("aduana = ?", $aduana);
+                ->setIntegrityCheck(false)
+                ->from("repositorio", array("id", "tipo_archivo", "sub_tipo_archivo"))
+                ->where("referencia = ?", $referencia)
+                ->where("patente = ?", $patente)
+                ->where("aduana = ?", $aduana);
             $stmt = $this->_db_table->fetchAll($sql);
             if (isset($stmt) && !empty($stmt)) {
                 return $stmt->toArray();
@@ -349,7 +387,8 @@ class Archivo_Model_RepositorioIndex {
         }
     }
 
-    public function actualizarRegistroArchivo($id, $arr) {
+    public function actualizarRegistroArchivo($id, $arr)
+    {
         try {
             $this->_db = Zend_Registry::get("oaqintranet");
             $stmt = $this->_db->update("repositorio", $arr, "id = {$id}");
@@ -361,8 +400,9 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function actualizarArchivo($id, $arr) {
+
+    public function actualizarArchivo($id, $arr)
+    {
         try {
             $this->_db = Zend_Registry::get("oaqintranet");
             $stmt = $this->_db->update("repositorio", $arr, "id = {$id} AND tipo_archivo <> 9999");
@@ -374,8 +414,9 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function borrarEnRepositorio($id) {
+
+    public function borrarEnRepositorio($id)
+    {
         try {
             $this->_db = Zend_Registry::get("oaqintranet");
             $stmt = $this->_db->delete("repositorio", "id = {$id} AND tipo_archivo = 9999");
@@ -387,28 +428,29 @@ class Archivo_Model_RepositorioIndex {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function verificarFacturaTerminal() {
+
+    public function verificarFacturaTerminal()
+    {
         try {
-            
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function obtenerNoCompletos($fecha, $revOp = null, $revAdm = null) {
+
+    public function obtenerNoCompletos($fecha, $revOp = null, $revAdm = null)
+    {
         try {
             if (!isset($fecha)) {
                 $fecha = date("Y-m-d");
             }
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("r" => "repositorio_index"), array("id", "patente", "aduana", "pedimento", "referencia", "modificadoPor" , "creadoPor"))
-                    ->joinLeft(array("t" => "traficos"), "r.patente = t.patente AND r.aduana = t.aduana AND r.referencia = t.referencia", array("fechaPago" , "fechaLiberacion"))
-                    ->where("r.completo IS NULL")
-                    ->where("t.fechaLiberacion IS  NOT NULL")
-                    ->where("r.creado >= ?", $fecha)
-                    ->order(array("r.patente", "r.aduana"));
+                ->setIntegrityCheck(false)
+                ->from(array("r" => "repositorio_index"), array("id", "patente", "aduana", "pedimento", "referencia", "modificadoPor", "creadoPor"))
+                ->joinLeft(array("t" => "traficos"), "r.patente = t.patente AND r.aduana = t.aduana AND r.referencia = t.referencia", array("fechaPago", "fechaLiberacion"))
+                ->where("r.completo IS NULL")
+                ->where("t.fechaLiberacion IS  NOT NULL")
+                ->where("r.creado >= ?", $fecha)
+                ->order(array("r.patente", "r.aduana"));
             if (isset($revOp)) {
                 $sql->where("revisionOperaciones IS NULL");
             }
@@ -420,10 +462,8 @@ class Archivo_Model_RepositorioIndex {
                 return $stmt->toArray();
             }
             return;
-            
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception on " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-
 }

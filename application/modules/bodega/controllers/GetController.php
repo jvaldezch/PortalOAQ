@@ -365,9 +365,10 @@ class Bodega_GetController extends Zend_Controller_Action {
                     $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
                     $mppr = new Trafico_Model_TraficosMapper();
                     $array = $mppr->obtenerPorId($input->id);
+
                     $repo = new Archivo_Model_RepositorioMapper();
 
-                    $traficos = new OAQ_Trafico(array("idTrafico" => $input->id));
+                    $traficos = new OAQ_Bodega(array("idTrafico" => $input->id, "idBodega" => $array['idBodega']));
                     if (($arr = $traficos->traficosConsolidados())) {
                         $referencias = array($array["referencia"]);
                         foreach ($arr as $item) {
@@ -379,7 +380,7 @@ class Bodega_GetController extends Zend_Controller_Action {
                     }
                     $view->archivos = $archivos;
 
-                    $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
+                    $trafico = new OAQ_Bodega(array("idTrafico" => $input->id, "idBodega" => $array['idBodega'], "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                     $index = $trafico->verificarIndexRepositorios();
 
                     if (in_array($this->_session->role, array("super", "gerente", "trafico_ejecutivo", "trafico"))) {

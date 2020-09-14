@@ -5,7 +5,8 @@
  *
  * @author Jaime E. Valdez <jvaldezch@gmail.com>
  */
-class OAQ_Bodega {
+class OAQ_Bodega
+{
 
     protected $idTrafico;
     protected $idBodega;
@@ -36,111 +37,138 @@ class OAQ_Bodega {
     protected $misc;
     protected $_firephp;
 
-    function setIdTrafico($idTrafico) {
+    function setIdTrafico($idTrafico)
+    {
         $this->idTrafico = $idTrafico;
     }
 
-    function setFecha($fecha) {
+    function setFecha($fecha)
+    {
         $this->fecha = $fecha;
     }
 
-    function setUsuario($usuario) {
+    function setUsuario($usuario)
+    {
         $this->usuario = $usuario;
     }
 
-    function setIdUsuario($idUsuario) {
+    function setIdUsuario($idUsuario)
+    {
         $this->idUsuario = $idUsuario;
     }
 
-    function setPatente($patente) {
+    function setPatente($patente)
+    {
         $this->patente = $patente;
     }
 
-    function setAduana($aduana) {
+    function setAduana($aduana)
+    {
         $this->aduana = $aduana;
     }
 
-    function setPedimento($pedimento) {
+    function setPedimento($pedimento)
+    {
         $this->pedimento = $pedimento;
     }
 
-    function setReferencia($referencia) {
+    function setReferencia($referencia)
+    {
         $this->referencia = $referencia;
     }
 
-    function setFolio($folio) {
+    function setFolio($folio)
+    {
         $this->folio = $folio;
     }
-    
-    function setIdFactura($idFactura) {
+
+    function setIdFactura($idFactura)
+    {
         $this->idFactura = $idFactura;
     }
-    
-    function getPatente() {
+
+    function getPatente()
+    {
         return $this->patente;
     }
 
-    function getAduana() {
+    function getAduana()
+    {
         return $this->aduana;
     }
 
-    function getPedimento() {
+    function getPedimento()
+    {
         return $this->pedimento;
     }
-    
-    function getIdCliente() {
+
+    function getIdCliente()
+    {
         return $this->idCliente;
     }
 
-    function getIdAduana() {
+    function getIdAduana()
+    {
         return $this->idAduana;
     }
-    
-    function getReferencia() {
+
+    function getReferencia()
+    {
         return $this->referencia;
     }
-    
-    function getTipoOperacion() {
+
+    function getTipoOperacion()
+    {
         return $this->ie;
     }
-    
-    function setIdCliente($idCliente) {
+
+    function setIdCliente($idCliente)
+    {
         $this->idCliente = $idCliente;
     }
 
-    function setIdAduana($idAduana) {
+    function setIdAduana($idAduana)
+    {
         $this->idAduana = $idAduana;
     }
-    
-    function setIe($ie) {
+
+    function setIe($ie)
+    {
         $this->ie = $ie;
     }
-    
-    function setIdPlanta($idPlanta) {
+
+    function setIdPlanta($idPlanta)
+    {
         $this->idPlanta = $idPlanta;
     }
 
-    function setClavePedimento($clavePedimento) {
+    function setClavePedimento($clavePedimento)
+    {
         $this->clavePedimento = $clavePedimento;
     }
 
-    function setRfcCliente($rfcCliente) {
+    function setRfcCliente($rfcCliente)
+    {
         $this->rfcCliente = $rfcCliente;
     }
-    
-    function getRfcCliente() {
+
+    function getRfcCliente()
+    {
         return $this->rfcCliente;
     }
-    
-    function getIdBodega() {
+
+    function getIdBodega()
+    {
         return $this->idBodega;
     }
 
-    function setIdBodega($idBodega) {
+    function setIdBodega($idBodega)
+    {
         $this->idBodega = $idBodega;
     }
-            
-    public function __construct(array $options = null) {
+
+    public function __construct(array $options = null)
+    {
         $this->_firephp = Zend_Registry::get("firephp");
 
         $this->appconfig = new Application_Model_ConfigMapper();
@@ -173,7 +201,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $method = "set" . $name;
         if (("mapper" == $name) || !method_exists($this, $method)) {
             throw new Exception("Invalid property {$name} " . __METHOD__);
@@ -181,7 +210,8 @@ class OAQ_Bodega {
         $this->$method($value);
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         $method = "get" . $name;
         if (("mapper" == $name) || !method_exists($this, $method)) {
             throw new Exception("Invalid property " . __METHOD__);
@@ -189,7 +219,8 @@ class OAQ_Bodega {
         return $this->$method();
     }
 
-    public function setOptions(array $options) {
+    public function setOptions(array $options)
+    {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
             $method = "set" . ucfirst($key);
@@ -199,8 +230,9 @@ class OAQ_Bodega {
         }
         return $this;
     }
-    
-    protected function _agregarBitacora($idTrafico, $idAduana, $patente, $aduana, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $usuario) {
+
+    protected function _agregarBitacora($idTrafico, $idAduana, $patente, $aduana, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $usuario)
+    {
         $mppr = new Bitacora_Model_BitacoraPedimentos();
         $arr = array(
             "idTrafico" => $idTrafico,
@@ -216,8 +248,9 @@ class OAQ_Bodega {
         );
         $mppr->agregar($arr);
     }
-    
-    protected function _obtenerEstatus($value) {
+
+    protected function _obtenerEstatus($value)
+    {
         switch ($value) {
             case 1:
                 $msg = "y esta en proceso de captura.";
@@ -236,23 +269,25 @@ class OAQ_Bodega {
         }
         return $msg;
     }
-    
-    public function recuperarTrafico($idTrafico) {
+
+    public function recuperarTrafico($idTrafico)
+    {
         if (($arr = $this->traficos->obtenerPorId($idTrafico))) {
             $this->traficos->actualizarDatosTrafico($idTrafico, array(
-               "idAduana" => $this->idAduana,
-               "idCliente" => $this->idCliente,
-               "estatus" => 1,
-               "pedimento" => $this->pedimento,
-               "referencia" => $this->referencia,
-               "idUsuario" => $this->idUsuario,
+                "idAduana" => $this->idAduana,
+                "idCliente" => $this->idCliente,
+                "estatus" => 1,
+                "pedimento" => $this->pedimento,
+                "referencia" => $this->referencia,
+                "idUsuario" => $this->idUsuario,
             ));
             return true;
         }
         return;
     }
 
-    public function comprobarTrafico() {
+    public function comprobarTrafico()
+    {
         $row = $this->traficos->busquedaReferencia($this->idAduana, $this->referencia);
         if (!empty($row)) {
             if ($row["pedimento"] != $this->pedimento) {
@@ -280,12 +315,13 @@ class OAQ_Bodega {
                     "message" => "Un tráfico ya existe en el sistema con la misma referencia pero distinto pedimento.",
                 );
             }
-            throw new Exception("La referencia existe " . $this->_obtenerEstatus($row['estatus']));  
+            throw new Exception("La referencia existe " . $this->_obtenerEstatus($row['estatus']));
         }
         return;
     }
-    
-    protected function _obtenerRegimen($tipoOperacion, $cvePedimento) {
+
+    protected function _obtenerRegimen($tipoOperacion, $cvePedimento)
+    {
         $regimen = null;
         if (null !== ($reg = $this->claves->buscarRegimen($cvePedimento))) {
             if ($tipoOperacion == "TOCE.IMP") {
@@ -297,18 +333,19 @@ class OAQ_Bodega {
         return $regimen;
     }
 
-    public function nuevoTrafico($array) {
+    public function nuevoTrafico($array)
+    {
         $arr = $this->aduanas->obtenerAduana($this->idAduana);
         if (isset($arr) && !empty($arr)) {
             $regimen = $this->_obtenerRegimen($array["ie"], $array["cvePedimento"]);
             $cliente = $this->clientes->datosCliente($array["idCliente"]);
-            
+
             $array["patente"] = $arr["patente"];
             $array["aduana"] = $arr["aduana"];
             $array["regimen"] = $regimen;
             $array["rfcCliente"] = $cliente["rfc"];
             $array["estatus"] = 1;
-            
+
             if (($idTrafico = $this->traficos->nuevoTrafico($array))) {
 
                 $referencias = new OAQ_Referencias();
@@ -320,21 +357,21 @@ class OAQ_Bodega {
                 $this->_agregarBitacora($idTrafico, $array["idAduana"], $array["patente"], $array["aduana"], $array["pedimento"], $array["referencia"], $array["ie"], $array["cvePedimento"], $this->usuario);
                 return array("success" => true, "id" => $idTrafico);
             }
-            
         } else {
             throw new Exception("La aduana seleccionada no existe.");
         }
     }
 
-    public function nuevaEntradaBodega($array) {
-        
+    public function nuevaEntradaBodega($array)
+    {
+
         if (isset($array["idCliente"])) {
 
             $cliente = $this->clientes->datosCliente($array["idCliente"]);
 
             $array["rfcCliente"] = $cliente["rfc"];
             $array["estatus"] = 1;
-            
+
             if (($idTrafico = $this->traficos->nuevoTrafico($array))) {
 
                 $referencias = new OAQ_Referencias();
@@ -345,15 +382,12 @@ class OAQ_Bodega {
                 $this->actualizarFecha(10, $array["fechaEta"]);
 
                 return array("success" => true, "id" => $idTrafico);
-
-            } 
-            
-
+            }
         }
-
     }
-    
-    public function agregarTrafico($array) {
+
+    public function agregarTrafico($array)
+    {
         $aduana = $this->aduanas->obtenerAduana($array["idAduana"]);
         if (isset($aduana) && !empty($aduana)) {
             $regimen = null;
@@ -398,7 +432,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function crearTrafico($idAduana, $idCliente, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $pedimentoRectificar, $fechaEta, $tipoCambio, $consolidado, $rectificacion, $planta = null) {
+    public function crearTrafico($idAduana, $idCliente, $pedimento, $referencia, $tipoOperacion, $cvePedimento, $pedimentoRectificar, $fechaEta, $tipoCambio, $consolidado, $rectificacion, $planta = null)
+    {
         $aduana = $this->aduanas->obtenerAduana($idAduana);
         $cliente = $this->clientes->datosCliente($idCliente);
         if (isset($aduana) && !empty($aduana)) {
@@ -454,8 +489,9 @@ class OAQ_Bodega {
             return array("success" => false, "message" => "No se pudo encontrar aduana.");
         }
     }
-    
-    public function obtenerFiltrosFechas() {
+
+    public function obtenerFiltrosFechas()
+    {
         $fechas = array(
             1  => array("label" => "fechaEntrada",            "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
             2  => array("label" => "fechaPago",               "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
@@ -478,12 +514,13 @@ class OAQ_Bodega {
             51 => array("label" => "fechaSolicitudTransfer",  "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
             52 => array("label" => "fechaArriboTransfer",     "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
             53 => array("label" => "fechaVistoBuenoTercero",  "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
-            54 => array("label" => "fechaInstruccionEspecial","regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
+            54 => array("label" => "fechaInstruccionEspecial", "regx" => "/^\d{4}-\d{2}-\d{2} (\d{2}):(\d{2}):(\d{2})$/"),
         );
         return $fechas;
     }
 
-    public function actualizarGuias($guias) {
+    public function actualizarGuias($guias)
+    {
         if (is_array($guias) && !empty($guias)) {
             $g = "";
             foreach ($guias as $item) {
@@ -493,7 +530,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function actualizarFecha($tipo, $fecha, $usuario = null) {
+    public function actualizarFecha($tipo, $fecha, $usuario = null)
+    {
         if (isset($this->idTrafico) && isset($this->idUsuario)) {
             $dates = new Trafico_Model_TraficoFechasMapper();
             if (($res = $dates->buscar($this->idTrafico, $tipo)) === null) {
@@ -572,8 +610,9 @@ class OAQ_Bodega {
             throw new Exception("IdTrafico or idUsuario is not set!");
         }
     }
-    
-    protected function _bitacora($tipo, $fecha) {
+
+    protected function _bitacora($tipo, $fecha)
+    {
         try {
             $tipoFecha = "";
             switch ($tipo) {
@@ -625,16 +664,18 @@ class OAQ_Bodega {
             if ($tipoFecha !== "") {
                 $this->bitacora->agregarBitacora($tipoFecha);
             }
-        } catch(Zend_Exception $ex) {
+        } catch (Zend_Exception $ex) {
             throw new Exception($ex->getMessage());
         }
     }
 
-    public function actualizarFechaPago($fecha) {
+    public function actualizarFechaPago($fecha)
+    {
         $this->traficos->actualizarFechaPago($this->idTrafico, $fecha);
     }
 
-    public function actualizarSemaforo($estatus, $observacion = null) {
+    public function actualizarSemaforo($estatus, $observacion = null)
+    {
         $this->traficos->actualizarSemaforo($this->idTrafico, $estatus, $observacion);
         $mapper = new Vucem_Model_VucemPedimentosEstado();
         if (!($id = $mapper->verificarDesdeTrafico($this->idTrafico))) {
@@ -652,15 +693,18 @@ class OAQ_Bodega {
         }
     }
 
-    public function actualizarFechaFacturacion($fecha) {
+    public function actualizarFechaFacturacion($fecha)
+    {
         $this->traficos->actualizarFechaFacturacion($this->idTrafico, $fecha);
     }
 
-    public function actualizarFechaLiberacion($fecha) {
+    public function actualizarFechaLiberacion($fecha)
+    {
         $this->traficos->actualizarFechaLiberacion($this->idTrafico, $fecha);
     }
 
-    public function asignarmeOperacion() {
+    public function asignarmeOperacion()
+    {
         if ($this->trafico->getEstatus() !== 3) {
             $this->traficos->asignarAUsuario($this->idTrafico, $this->idUsuario);
             $this->bitacora->agregarBitacora("EL USUARIO " . strtoupper($this->usuario) . " RECLAMO LA OPERACIÓN");
@@ -669,11 +713,12 @@ class OAQ_Bodega {
         return;
     }
 
-    public function subirArchivoTemporal($idMensaje = null, $idComentario = null) {
+    public function subirArchivoTemporal($idMensaje = null, $idComentario = null)
+    {
         $upload = new Zend_File_Transfer_Adapter_Http();
         $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1kB", "max" => "6MB"))
-                ->addValidator("Extension", false, array("extension" => "jpg,pdf,jpeg,png", "case" => false));
+            ->addValidator("Size", false, array("min" => "1kB", "max" => "6MB"))
+            ->addValidator("Extension", false, array("extension" => "jpg,pdf,jpeg,png", "case" => false));
         if (APPLICATION_ENV === "production") {
             $dir = "/home/samba-share/expedientes/temporal";
         } else {
@@ -703,7 +748,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function buscarGuia($numGuia) {
+    public function buscarGuia($numGuia)
+    {
         $sis = new Application_Model_ServiciosRestAduana();
         $row = $sis->obtenerSistema(2);
         if (!empty($row) && isset($row["idServicio"])) {
@@ -728,16 +774,18 @@ class OAQ_Bodega {
             }
         }
     }
-    
-    public function buscarEntrada($referencia) {
+
+    public function buscarEntrada($referencia)
+    {
         $mapper = new Bodega_Model_Entradas();
         if (($id = $mapper->buscarEntrada($this->idBodega, $referencia))) {
             return $id;
         }
         return;
     }
-    
-    public function buscarTrafico() {
+
+    public function buscarTrafico()
+    {
         $mapper = new Trafico_Model_TraficosMapper();
         if (($id = $mapper->buscarReferencia($this->patente, $this->aduana, $this->referencia))) {
             return $id;
@@ -745,11 +793,12 @@ class OAQ_Bodega {
         return;
     }
 
-    public function datosDeSistema($patente, $aduana, $referencia) {
-        
+    public function datosDeSistema($patente, $aduana, $referencia)
+    {
+
         $adu = new Trafico_Model_TraficoAduanasMapper();
         if (($idAduana = $adu->idAduana($patente, $aduana))) {
-            
+
             $sis = new Application_Model_ServiciosRestAduana();
             $row = $sis->obtenerSistema($idAduana);
             if (!empty($row) && isset($row["idServicio"])) {
@@ -763,40 +812,21 @@ class OAQ_Bodega {
                 $arr = $this->_buscarReferencia($client, $patente, $aduana, $referencia);
                 if (!empty($arr)) {
                     return $arr;
-                } 
+                }
                 return;
             }
             return;
-            
         }
         return;
     }
-    
-    protected function _buscarServicio($sistema) {
+
+    protected function _buscarServicio($sistema)
+    {
         $sis = new Application_Model_ServiciosRestAduana();
         $row = $sis->obtenerServicio($this->idAduana, $sistema);
         if (!empty($row) && isset($row["idServicio"])) {
             $mppr = new Application_Model_ServiciosRest();
-            if (($arr = $mppr->obtener($row["idServicio"]))) {   
-                $client = new Zend_Rest_Client($arr['url']);
-                $httpClient = $client->getHttpClient();
-                $httpClient->setConfig(array('timeout' => 60));
-                $client->setHttpClient($httpClient);
-                $this->sistema = $arr['sistema'];
-            }
-        }
-        if (isset($client)) {
-            return $client;
-        }
-        return;
-    }
-    
-    protected function _buscarSistema() {
-        $sis = new Application_Model_ServiciosRestAduana();
-        $row = $sis->obtenerSistema($this->idAduana);
-        if (!empty($row) && isset($row["idServicio"])) {
-            $mppr = new Application_Model_ServiciosRest();
-            if (($arr = $mppr->obtener($row["idServicio"]))) {   
+            if (($arr = $mppr->obtener($row["idServicio"]))) {
                 $client = new Zend_Rest_Client($arr['url']);
                 $httpClient = $client->getHttpClient();
                 $httpClient->setConfig(array('timeout' => 60));
@@ -810,7 +840,28 @@ class OAQ_Bodega {
         return;
     }
 
-    protected function _buscarReferencia(Zend_Rest_Client $client, $patente, $aduana, $referencia) {
+    protected function _buscarSistema()
+    {
+        $sis = new Application_Model_ServiciosRestAduana();
+        $row = $sis->obtenerSistema($this->idAduana);
+        if (!empty($row) && isset($row["idServicio"])) {
+            $mppr = new Application_Model_ServiciosRest();
+            if (($arr = $mppr->obtener($row["idServicio"]))) {
+                $client = new Zend_Rest_Client($arr['url']);
+                $httpClient = $client->getHttpClient();
+                $httpClient->setConfig(array('timeout' => 60));
+                $client->setHttpClient($httpClient);
+                $this->sistema = $arr['sistema'];
+            }
+        }
+        if (isset($client)) {
+            return $client;
+        }
+        return;
+    }
+
+    protected function _buscarReferencia(Zend_Rest_Client $client, $patente, $aduana, $referencia)
+    {
         try {
             $response = $client->restPost("/{$this->sistema}/buscar-referencia", array(
                 'patente' => $patente,
@@ -829,8 +880,9 @@ class OAQ_Bodega {
             return false;
         }
     }
-    
-    protected function _encabezadoPedimento(Zend_Rest_Client $client) {
+
+    protected function _encabezadoPedimento(Zend_Rest_Client $client)
+    {
         $response = $client->restPost("/{$this->sistema}/buscar-pedimento", array(
             'patente' => $this->patente,
             'aduana' => $this->aduana,
@@ -847,7 +899,8 @@ class OAQ_Bodega {
         }
     }
 
-    protected function _facturasPedimento(Zend_Rest_Client $client) {
+    protected function _facturasPedimento(Zend_Rest_Client $client)
+    {
         $response = $client->restPost("/{$this->sistema}/encabezado-facturas", array(
             'patente' => $this->patente,
             'aduana' => $this->aduana,
@@ -863,8 +916,9 @@ class OAQ_Bodega {
             return false;
         }
     }
-    
-    protected function _detalleFactura(Zend_Rest_Client $client, $numFatura) {
+
+    protected function _detalleFactura(Zend_Rest_Client $client, $numFatura)
+    {
         $response = $client->restPost("/{$this->sistema}/detalle-factura", array(
             'patente' => $this->patente,
             'aduana' => $this->aduana,
@@ -881,8 +935,9 @@ class OAQ_Bodega {
             return false;
         }
     }
-    
-    protected function _proveedorFactura(Zend_Rest_Client $client, $cvePro = null, $numFactura = null) {
+
+    protected function _proveedorFactura(Zend_Rest_Client $client, $cvePro = null, $numFactura = null)
+    {
         if ($this->sistema == 'casa') {
             $response = $client->restPost("/{$this->sistema}/proveedor-factura", array(
                 'cvePro' => $cvePro,
@@ -917,8 +972,9 @@ class OAQ_Bodega {
             return false;
         }
     }
-    
-    protected function _destinatarioFactura(Zend_Rest_Client $client, $cvePro) {
+
+    protected function _destinatarioFactura(Zend_Rest_Client $client, $cvePro)
+    {
         $response = $client->restPost("/{$this->sistema}/destinatario-factura", array(
             'cvePro' => $cvePro,
         ));
@@ -931,20 +987,21 @@ class OAQ_Bodega {
             return false;
         }
     }
-    
-    protected function _productosFactura(Zend_Rest_Client $client, $numFactura) {
+
+    protected function _productosFactura(Zend_Rest_Client $client, $numFactura)
+    {
         if ($this->sistema == 'casa') {
             $response = $client->restPost("/{$this->sistema}/productos-factura", array(
                 'patente' => $this->patente,
                 'aduana' => $this->aduana,
                 'pedimento' => $this->pedimento,
                 'numFactura' => $numFactura,
-            ));            
+            ));
         } else if ($this->sistema == 'slam') {
             $response = $client->restPost("/{$this->sistema}/productos-factura", array(
                 'referencia' => $this->referencia,
                 'numFactura' => $numFactura,
-            )); 
+            ));
         } else if ($this->sistema == 'aduanet') {
             $response = $client->restPost("/{$this->sistema}/proveedor-factura", array(
                 'patente' => $this->patente,
@@ -964,12 +1021,13 @@ class OAQ_Bodega {
         }
     }
 
-    protected function _actualizarEnTrafico($arr) {
+    protected function _actualizarEnTrafico($arr)
+    {
         $tipoOperacion = null;
         if ((int) $arr["tipoOperacion"] === 1) {
             $tipoOperacion = "TOCE.IMP";
         } else if ((int) $arr["tipoOperacion"] === 2) {
-            $tipoOperacion = "TOCE.EXP";            
+            $tipoOperacion = "TOCE.EXP";
         }
         $update = array(
             "ie" => $tipoOperacion,
@@ -985,8 +1043,9 @@ class OAQ_Bodega {
         );
         $this->traficos->actualizarDatosTrafico($this->idTrafico, $update);
     }
-    
-    protected function _actualizarEncabezadoPedimento($arr) {
+
+    protected function _actualizarEncabezadoPedimento($arr)
+    {
         $mppr = new Trafico_Model_TraficoPedimento();
         if (!empty($arr)) {
             if (!($id = $mppr->verificar($this->idTrafico, $this->pedimento))) {
@@ -998,7 +1057,8 @@ class OAQ_Bodega {
         }
     }
 
-    protected function _actualizarFacturasTrafico($arr, $sistema = null) {
+    protected function _actualizarFacturasTrafico($arr, $sistema = null)
+    {
         $mppr = new Trafico_Model_TraficoFacturasMapper();
         if (!empty($arr)) {
             foreach ($arr as $item) {
@@ -1011,12 +1071,13 @@ class OAQ_Bodega {
             }
         }
     }
-    
-    protected function _actualizarFechas() {
-        
+
+    protected function _actualizarFechas()
+    {
     }
-    
-    protected function _obtenerTrafico() {
+
+    protected function _obtenerTrafico()
+    {
         $arr = $this->traficos->obtenerPorId($this->idTrafico);
         $this->patente = $arr["patente"];
         $this->aduana = $arr["aduana"];
@@ -1025,7 +1086,8 @@ class OAQ_Bodega {
         $this->idCliente = $arr["idCliente"];
     }
 
-    public function importarFacturaDesdeSistema($numFactura, $sistema = null) {
+    public function importarFacturaDesdeSistema($numFactura, $sistema = null)
+    {
         $this->_obtenerTrafico();
         $client = null;
         if (!isset($sistema)) {
@@ -1036,7 +1098,7 @@ class OAQ_Bodega {
         if ($client) {
             $arr = $this->_encabezadoPedimento($client);
             if ($arr !== false) {
-                $arr_inv = $this->_detalleFactura($client, $numFactura);                
+                $arr_inv = $this->_detalleFactura($client, $numFactura);
                 if ($arr_inv !== false) {
                     if ($arr_inv[0]["tipoOperacion"] == 1) {
                         $arr_prov = $this->_proveedorFactura($client, $arr_inv[0]["cvePro"], $arr_inv[0]["numFactura"]);
@@ -1044,26 +1106,27 @@ class OAQ_Bodega {
                             $arr_inv[0]["proveedor"] = $arr_prov[0];
                         }
                     } else {
-                        $arr_prov = $this->_destinatarioFactura($client, $arr_inv[0]["cvePro"], $arr_inv[0]["numFactura"]);                        
+                        $arr_prov = $this->_destinatarioFactura($client, $arr_inv[0]["cvePro"], $arr_inv[0]["numFactura"]);
                         if ($arr_prov !== false) {
                             $arr_inv[0]["destinatario"] = $arr_prov[0];
                         }
                     }
                     $arr_prod = $this->_productosFactura($client, $numFactura);
-                    
+
                     if ($arr_prod !== false) {
                         $arr_inv[0]["productos"] = $arr_prod;
                     }
                     $this->_transferirDatosTrafico($arr_inv);
                     return $arr_inv[0];
                 }
-            }            
+            }
         } else {
             throw new Exception("No hay sistema para la aduana seleccionada.");
         }
     }
 
-    protected function _verificarDetalleFactura($arr, $id_prov) {
+    protected function _verificarDetalleFactura($arr, $id_prov)
+    {
         $mppr = new Trafico_Model_FactDetalle();
         if (!empty($arr) && isset($id_prov)) {
             if (!($id = $mppr->verificar($this->idFactura, $arr[0]["numFactura"]))) {
@@ -1075,8 +1138,9 @@ class OAQ_Bodega {
             }
         }
     }
-    
-    protected function _verificarDestinatario($arr) {
+
+    protected function _verificarDestinatario($arr)
+    {
         $mppr = new Trafico_Model_FactDest();
         if (!($id = $mppr->verificarDestinatario($this->idCliente, $arr["cvePro"], $arr["identificador"]))) {
             $row = array(
@@ -1097,8 +1161,9 @@ class OAQ_Bodega {
         }
         return $id;
     }
-    
-    protected function _verificarProveedor($arr) {
+
+    protected function _verificarProveedor($arr)
+    {
         $mppr = new Trafico_Model_FactPro();
         if (!($id = $mppr->verificarProveedor($this->idCliente, $arr["cvePro"], $arr["identificador"]))) {
             $row = array(
@@ -1119,8 +1184,9 @@ class OAQ_Bodega {
         }
         return $id;
     }
-    
-    protected function _productosTrafico($arr) {
+
+    protected function _productosTrafico($arr)
+    {
         $mppr = new Trafico_Model_FactProd();
         $mdl = new Trafico_Model_ClientesPartes();
         if (isset($this->idFactura)) {
@@ -1138,7 +1204,8 @@ class OAQ_Bodega {
         }
     }
 
-    protected function _transferirDatosTrafico($arr) {
+    protected function _transferirDatosTrafico($arr)
+    {
         if (!empty($arr)) {
             if (isset($arr[0]["proveedor"]) && (int) $arr[0]["tipoOperacion"] == 1) {
                 $id_prov = $this->_verificarProveedor($arr[0]["proveedor"]);
@@ -1162,7 +1229,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function actualizarDesdeServicio($servicio) {
+    public function actualizarDesdeServicio($servicio)
+    {
         $this->_obtenerTrafico();
         if (($client = $this->_buscarServicio($servicio))) {
             $arr = $this->_encabezadoPedimento($client);
@@ -1181,7 +1249,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function actualizarDesdeSistema() {
+    public function actualizarDesdeSistema()
+    {
         $this->_obtenerTrafico();
         if (($client = $this->_buscarSistema())) {
             $arr = $this->_encabezadoPedimento($client);
@@ -1199,10 +1268,11 @@ class OAQ_Bodega {
             throw new Exception("No hay sistema para la aduana seleccionada.");
         }
     }
-    
-    protected function _obtenerServicioRest($idServicio) {
+
+    protected function _obtenerServicioRest($idServicio)
+    {
         $mppr = new Application_Model_ServiciosRest();
-        if (($arr = $mppr->obtener($idServicio))) {   
+        if (($arr = $mppr->obtener($idServicio))) {
             $client = new Zend_Rest_Client($arr['url']);
             $httpClient = $client->getHttpClient();
             $httpClient->setConfig(array('timeout' => 60));
@@ -1215,7 +1285,8 @@ class OAQ_Bodega {
         return;
     }
 
-    protected function _detalleOperacion(Zend_Rest_Client $client) {
+    protected function _detalleOperacion(Zend_Rest_Client $client)
+    {
         $response = $client->restPost("/{$this->sistema}/detalle-operacion", array(
             'patente' => $this->patente,
             'aduana' => $this->aduana,
@@ -1233,7 +1304,8 @@ class OAQ_Bodega {
         return;
     }
 
-    public function obtenerDatosDesdeSistema() {
+    public function obtenerDatosDesdeSistema()
+    {
         $this->_obtenerTrafico();
         if (($client = $this->_buscarSistema())) {
             $arr = $this->_detalleOperacion($client);
@@ -1252,14 +1324,16 @@ class OAQ_Bodega {
         }
     }
 
-    public function actualizar($arr) {
+    public function actualizar($arr)
+    {
         if (($this->traficos->actualizarTrafico($this->idTrafico, $arr))) {
             return true;
         }
         return;
     }
-    
-    public function actualizarDesdeSitawin() {
+
+    public function actualizarDesdeSitawin()
+    {
         $arro = $this->traficos->obtenerPorId($this->idTrafico);
         $this->patente = $arro["patente"];
         $this->aduana = $arro["aduana"];
@@ -1337,10 +1411,10 @@ class OAQ_Bodega {
                     $update["cvePedimento"] = $arro["cvePedimento"];
                 }
                 if ($update["firmaValidacion"] == "" || $update["firmaValidacion"] == null) {
-                    $update["firmaValidacion"] = $arro["firmaValidacion"];                    
+                    $update["firmaValidacion"] = $arro["firmaValidacion"];
                 }
                 if ($update["firmaBanco"] == "" || $update["firmaBanco"] == null) {
-                    $update["firmaBanco"] = $arro["firmaBanco"];                    
+                    $update["firmaBanco"] = $arro["firmaBanco"];
                 }
                 if ($update["ie"] == "" || $update["ie"] == null) {
                     $update["ie"] = $arro["ie"];
@@ -1367,12 +1441,13 @@ class OAQ_Bodega {
         }
     }
 
-    protected function _encabezadoParaActualizar($row) {
+    protected function _encabezadoParaActualizar($row)
+    {
         $tipoOperacion = null;
         if ((int) $row["tipoOperacion"] === 1) {
             $tipoOperacion = "TOCE.IMP";
         } else if ((int) $row["tipoOperacion"] === 2) {
-            $tipoOperacion = "TOCE.EXP";            
+            $tipoOperacion = "TOCE.EXP";
         }
         return array(
             "ie" => $tipoOperacion,
@@ -1388,7 +1463,8 @@ class OAQ_Bodega {
         );
     }
 
-    protected function _sitawin() {
+    protected function _sitawin()
+    {
         $misc = new OAQ_Misc();
         $db = $misc->sitawinTrafico($this->patente, $this->aduana);
         if (isset($db)) {
@@ -1400,8 +1476,9 @@ class OAQ_Bodega {
         }
         return;
     }
-    
-    public function obtenerBitacora() {
+
+    public function obtenerBitacora()
+    {
         $mppr = new Trafico_Model_BitacoraMapper();
         $arr = $mppr->obtener($this->patente, $this->aduana, $this->pedimento, $this->referencia);
         if (!empty($arr)) {
@@ -1409,17 +1486,18 @@ class OAQ_Bodega {
         }
         return;
     }
-    
-    public function crearZip($idUsuario, $role) {
-        
+
+    public function crearZip($idUsuario, $role)
+    {
+
         $exp = new OAQ_Expediente_Descarga();
         $misc = new OAQ_Misc();
-        
+
         $mppr = new Archivo_Model_RepositorioMapper();
-        
+
         $referencias = new OAQ_Referencias();
         $res = $referencias->restricciones($idUsuario, $role);
-        
+
         if (!in_array($role, array("inhouse", "cliente", "proveedor"))) {
             $files = $mppr->getFilesByReferenceUsers($this->referencia, $this->patente, $this->aduana);
         } else if (in_array($role, array("proveedor"))) {
@@ -1434,7 +1512,7 @@ class OAQ_Bodega {
             if (APPLICATION_ENV === "production" || APPLICATION_ENV === "staging") {
                 $zipDir = "/tmp/zips";
             } else {
-                $zipDir = "D:\\xampp\\tmp\\zips";                
+                $zipDir = "D:\\xampp\\tmp\\zips";
             }
             if (!file_exists($zipDir)) {
                 mkdir($zipDir, 0777, true);
@@ -1451,7 +1529,7 @@ class OAQ_Bodega {
                 if (file_exists($file["ubicacion"])) {
                     $tmpfile = $zipDir . DIRECTORY_SEPARATOR . sha1($file["ubicacion"]);
                     copy($file["ubicacion"], $tmpfile);
-                    
+
                     if ($this->rfcCliente == 'GCO980828GY0') {
                         if (($zip->addFile($tmpfile, $exp->filename($this->patente, $this->aduana, $this->pedimento, basename($file["ubicacion"]), $file["tipo_archivo"], $this->rfcCliente, $file))) === true) {
                             $added[] = $tmpfile;
@@ -1460,7 +1538,7 @@ class OAQ_Bodega {
                         if (($zip->addFile($tmpfile, $exp->filename($this->patente, $this->aduana, $this->pedimento, basename($file["ubicacion"]), $file["tipo_archivo"]))) === true) {
                             $added[] = $tmpfile;
                         }
-                    }                    
+                    }
                     unset($tmpfile);
                 }
             }
@@ -1477,10 +1555,10 @@ class OAQ_Bodega {
             }
             return;
         }
-        
     }
-    
-    public function obtenerComentarios() {
+
+    public function obtenerComentarios()
+    {
         $mppr = new Trafico_Model_ComentariosMapper();
         $arr = $mppr->obtenerTodos($this->idTrafico);
         if (!empty($arr)) {
@@ -1488,8 +1566,9 @@ class OAQ_Bodega {
         }
         return;
     }
-    
-    public function agregarComentario($mensaje) {
+
+    public function agregarComentario($mensaje)
+    {
         $mppr = new Trafico_Model_ComentariosMapper();
         $stmt = $mppr->agregar($this->idTrafico, $this->idUsuario, $mensaje);
         if ($stmt) {
@@ -1497,8 +1576,9 @@ class OAQ_Bodega {
         }
         return;
     }
-    
-    public function obtenerArchivosComentarios() {
+
+    public function obtenerArchivosComentarios()
+    {
         $mppr = new Archivo_Model_RepositorioTemporalMapper();
         $arr = $mppr->archivosTrafico($this->idTrafico);
         if (!empty($arr)) {
@@ -1507,20 +1587,29 @@ class OAQ_Bodega {
         return;
     }
 
-    protected function _buscarIndexRepositorio() {
+    protected function _buscarIndexRepositorio()
+    {
         $mppr = new Archivo_Model_RepositorioIndex();
-        if (($arr = $mppr->buscarIndex($this->patente, $this->aduana, $this->pedimento, $this->referencia))) {
-            if ($arr["idTrafico"] == null) {
-                $mppr->update($arr["id"], array("idTrafico" => $this->idTrafico));
+        if (isset($this->patente) && isset($this->aduana) && isset($this->pedimento)) {
+            if (($arr = $mppr->buscarIndex($this->patente, $this->aduana, $this->pedimento, $this->referencia))) {
+                if ($arr["idTrafico"] == null) {
+                    $mppr->update($arr["id"], array("idTrafico" => $this->idTrafico));
+                }
+                return $arr["id"];
+            } else {
+                return $mppr->agregarDesdeTrafico($this->idTrafico, $this->idAduana, $this->rfcCliente, $this->patente, $this->aduana, $this->pedimento, $this->referencia, $this->usuario);
             }
-            return $arr["id"];
-        } else {
-            return $mppr->agregarDesdeTrafico($this->idTrafico, $this->idAduana, $this->rfcCliente, $this->patente, $this->aduana, $this->pedimento, $this->referencia, $this->usuario);
+        } else if (isset($this->idTrafico) && isset($this->referencia)) {
+            if (($arr = $mppr->buscarPorTrafico($this->idTrafico))) {
+            } else {
+                return $mppr->agregarDesdeBodega($this->idTrafico, $this->rfcCliente, $this->referencia, $this->usuario);
+            }
         }
         return;
     }
 
-    public function verificarIndexRepositorios() {
+    public function verificarIndexRepositorios()
+    {
         if (($id = $this->_buscarIndexRepositorio())) {
             $rs = new Archivo_Model_RepositorioMapper();
             if (!($rs->buscarRepositorio($this->patente, $this->aduana, $this->referencia))) {
@@ -1531,7 +1620,8 @@ class OAQ_Bodega {
         return;
     }
 
-    protected function _buscarArchivoEnRepositorio($nombreArchivo) {
+    protected function _buscarArchivoEnRepositorio($nombreArchivo)
+    {
         $mppr = new Archivo_Model_Repositorio();
         if (($mppr->buscarArchivo($this->patente, $this->aduana, $this->pedimento, $this->referencia, $nombreArchivo))) {
             return true;
@@ -1539,7 +1629,8 @@ class OAQ_Bodega {
         return;
     }
 
-    protected function _agregarArchivoEnRepositorio($tipoArchivo, $nombreArchivo, $edocument = null) {
+    protected function _agregarArchivoEnRepositorio($tipoArchivo, $nombreArchivo, $edocument = null)
+    {
         $mppr = new Archivo_Model_Repositorio();
         $added = $mppr->agregar(array(
             "id_trafico" => $this->idTrafico,
@@ -1561,7 +1652,8 @@ class OAQ_Bodega {
         return;
     }
 
-    public function agregarArchivoExpediente($tipoArchivo, $nombreArchivo, $edocument = null) {
+    public function agregarArchivoExpediente($tipoArchivo, $nombreArchivo, $edocument = null)
+    {
         $misc = new OAQ_Misc();
         $misc->set_baseDir($this->appconfig->getParam("expdest"));
         $directory = $misc->nuevoDirectorioExpediente($this->patente, $this->aduana, $misc->trimUpper($this->referencia));
@@ -1574,7 +1666,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function guardarDetalleCove($arr, $filename) {        
+    public function guardarDetalleCove($arr, $filename)
+    {
         $arr['filename'] = basename($filename);
         $pdf = new OAQ_Imprimir_CoveDetalle2019($arr, "P", "pt", "LETTER");
         $pdf->set_filename($filename);
@@ -1586,13 +1679,14 @@ class OAQ_Bodega {
         return;
     }
 
-    public function borrar() {
-        
+    public function borrar()
+    {
+
         $db = Zend_Registry::get("oaqintranet");
 
         $sql = $db->select()
-                ->from("repositorio_index", array("id"))
-                ->where("idTrafico = ?", $this->idTrafico);
+            ->from("repositorio_index", array("id"))
+            ->where("idTrafico = ?", $this->idTrafico);
         $stmt_repoi = $db->fetchAll($sql);
         if (!empty($stmt_repoi)) {
             foreach ($stmt_repoi as $item) {
@@ -1601,8 +1695,8 @@ class OAQ_Bodega {
         }
 
         $sql = $db->select()
-                ->from("trafico_facturas", array("id"))
-                ->where("idTrafico = ?", $this->idTrafico);
+            ->from("trafico_facturas", array("id"))
+            ->where("idTrafico = ?", $this->idTrafico);
         $stmt_facts = $db->fetchAll($sql);
         if (!empty($stmt_facts)) {
             foreach ($stmt_facts as $item) {
@@ -1627,20 +1721,21 @@ class OAQ_Bodega {
         return true;
     }
 
-    public function descargaPedimento($idCliente = null, $patente = null) {
-        
+    public function descargaPedimento($idCliente = null, $patente = null)
+    {
+
         if (isset($idCliente)) {
             $mpp = new Trafico_Model_SellosClientes();
             $sello = $mpp->obtenerPorId($idCliente);
         }
-        
+
         if (isset($patente)) {
             if ($patente == 3589) {
                 $firmantes = new Vucem_Model_VucemFirmanteMapper();
                 $sello = $firmantes->obtenerDetalleFirmante("MALL640523749");
             }
         }
-        
+
         if (!isset($sello)) {
             return "No se encuentra sello.";
         }
@@ -1669,10 +1764,10 @@ class OAQ_Bodega {
         if (!file_exists($con_filename)) {
             $this->_guardarArchivoXml($con_filename, $xml->getXml());
         }
-        
+
         $ped_filename = $this->_nombreArchivo('PEDIMENTO');
         if (!file_exists($ped_filename)) {
-            
+
             $serv->consumirPedimento();
 
             $res = new OAQ_Respuestas();
@@ -1687,25 +1782,25 @@ class OAQ_Bodega {
             } else {
                 return $resp;
             }
-            
         } else {
             $this->_analizar($ped_filename);
             die();
             return true;
         }
-        
     }
 
-    protected function _analizar($xmlPedimento) {
+    protected function _analizar($xmlPedimento)
+    {
         $array = $this->_datosXmlPedimento($xmlPedimento);
         if (!empty($array)) {
             $this->_agregarDb($array);
-            
+
             $this->_agregarArchivoEnRepositorio(91, $xmlPedimento);
         }
     }
 
-    protected function _datosXmlPedimento($xmlPedimento) {
+    protected function _datosXmlPedimento($xmlPedimento)
+    {
 
         $vu = new OAQ_VucemEnh();
         $array = $vu->xmlStrToArray(file_get_contents($xmlPedimento));
@@ -1752,8 +1847,9 @@ class OAQ_Bodega {
         return;
     }
 
-    protected function _agregarDb($arr) {
-        
+    protected function _agregarDb($arr)
+    {
+
         $mppr = new Vucem_Model_VucemPedimentosMapper();
 
         if (!($mppr->verificar($this->patente, $this->aduana, $this->pedimento))) {
@@ -1765,11 +1861,13 @@ class OAQ_Bodega {
         }
     }
 
-    protected function _nombreArchivo($prefix, $ext = '.xml') {
+    protected function _nombreArchivo($prefix, $ext = '.xml')
+    {
         return $this->_directorio() . DIRECTORY_SEPARATOR . $prefix . '_' . $this->aduana . "-" . $this->patente . "-" . $this->pedimento . $ext;
     }
 
-    protected function _directorio() {
+    protected function _directorio()
+    {
         $this->misc->set_baseDir($this->directorio);
         $path = $this->misc->nuevoDirectorioExpediente($this->patente, $this->aduana, $this->referencia);
         if (file_exists($path)) {
@@ -1778,7 +1876,8 @@ class OAQ_Bodega {
         throw new Exception("Unable to find directory");
     }
 
-    protected function _guardarArchivoXml($filename, $xml) {
+    protected function _guardarArchivoXml($filename, $xml)
+    {
         try {
             file_put_contents($filename, $xml);
         } catch (Exception $ex) {
@@ -1786,7 +1885,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function obtenerFacturas() {
+    public function obtenerFacturas()
+    {
         $mppr = new Trafico_Model_TraficoFacturasMapper();
         $arr = $mppr->obtenerDetalleFacturas($this->idTrafico);
         if (!empty($arr)) {
@@ -1795,7 +1895,8 @@ class OAQ_Bodega {
         return;
     }
 
-    public function obtenerDatos() {
+    public function obtenerDatos()
+    {
         $tn = new Trafico_Model_TraficoGuiasMapper();
         $arr = $this->traficos->encabezado($this->idTrafico);
         if (!empty($arr)) {
@@ -1812,7 +1913,8 @@ class OAQ_Bodega {
         return;
     }
 
-    public function buscarSubdivision() {
+    public function buscarSubdivision()
+    {
         $array = array('A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'J', 'K');
         foreach ($array as $v) {
             $n_referencia = $this->referencia . $v;
@@ -1824,7 +1926,8 @@ class OAQ_Bodega {
         }
     }
 
-    public function obtenerProductosFactura($idFactura) {
+    public function obtenerProductosFactura($idFactura)
+    {
         $mppr = new Trafico_Model_FactProd();
         $arr = $mppr->obtener($idFactura);
         if (!empty($arr)) {
@@ -1832,9 +1935,10 @@ class OAQ_Bodega {
         }
         return;
     }
-    
-    public function seleccionConsolidarTraficos(array $arr) {
-        if (is_array($arr)) {            
+
+    public function seleccionConsolidarTraficos(array $arr)
+    {
+        if (is_array($arr)) {
             $array = [];
             foreach ($arr as $item) {
                 $row = $this->traficos->encabezado($item);
@@ -1848,24 +1952,27 @@ class OAQ_Bodega {
             return $array;
         } else {
             throw new Exception("No array provided");
-        }     
+        }
     }
-    
-    public function consolidarTraficos($idMaster, $id) {
+
+    public function consolidarTraficos($idMaster, $id)
+    {
         if (($this->traficos->traficoMaster($idMaster, $id))) {
             return true;
         }
         return;
     }
-    
-    public function traficosConsolidados() {
+
+    public function traficosConsolidados()
+    {
         if (($arr = $this->traficos->traficosConsolidados($this->idTrafico))) {
             return $arr;
         }
         return;
     }
-    
-    public function asignarOrdenCarga(array $arr, $ordenCarga) {
+
+    public function asignarOrdenCarga(array $arr, $ordenCarga)
+    {
         if (is_array($arr)) {
             foreach ($arr as $item) {
                 $this->traficos->actualizarOrdenCarga($item, $ordenCarga);
@@ -1873,10 +1980,11 @@ class OAQ_Bodega {
             return true;
         } else {
             throw new Exception("No array provided");
-        }     
+        }
     }
-    
-    public function removerSufijos($referencia) {
+
+    public function removerSufijos($referencia)
+    {
         if (isset($referencia)) {
             if (preg_match("/C$|H$|R$|G$/", $referencia) && !preg_match("/-C$|-H$|-R$|-G$/", $referencia)) {
                 return substr($referencia, 0, -1);
@@ -1889,11 +1997,11 @@ class OAQ_Bodega {
             throw new Exception("Referencia is not been set!");
         }
     }
-    
-    public function enviarNotificacion() {
-        $emails = new OAQ_EmailsBodega();        
+
+    public function enviarNotificacion()
+    {
+        $emails = new OAQ_EmailsBodega();
         if (APPLICATION_ENV == "production") {
-            
         } else {
             $emails->addTo("soporte@oaq.com.mx", "Soporte OAQ");
         }
@@ -1905,7 +2013,8 @@ class OAQ_Bodega {
         return null;
     }
 
-    public function enviarATrafico($idAduana, $tipoOperacion, $cvePedimento, $pedimento) {
+    public function enviarATrafico($idAduana, $tipoOperacion, $cvePedimento, $pedimento)
+    {
         $custom = new Trafico_Model_TraficoAduanasMapper();
         $adu = $custom->aduana($idAduana);
 
@@ -1924,7 +2033,8 @@ class OAQ_Bodega {
         return null;
     }
 
-    public function subdividir($bultos_ids, $bultos_restantes, $n_referencia) {
+    public function subdividir($bultos_ids, $bultos_restantes, $n_referencia)
+    {
         try {
             $old_traffic = $this->traficos->obtenerRegistroCompleto($this->idTrafico);
             if ($old_traffic) {
@@ -1953,18 +2063,14 @@ class OAQ_Bodega {
                             if (($mppr->agregar($item))) {
                                 $mppr->borrar($old_bulto_id);
                             }
-
                         }
                     }
-
                 }
 
                 $this->traficos->actualizarDatosTrafico($this->idTrafico, array("bultos" => $bultos_restantes));
-
             }
             return true;
         } catch (Zend_Application_Exception $e) {
         }
     }
-
 }

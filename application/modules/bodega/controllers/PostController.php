@@ -948,7 +948,6 @@ class Bodega_PostController extends Zend_Controller_Action
                 ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false));
 
             $path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia);
-            $this->_firephp->info($path);
 
             if (($path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia))) {
                 $upload->setDestination($path);
