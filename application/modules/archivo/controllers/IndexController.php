@@ -1,6 +1,7 @@
 <?php
 
-class Archivo_IndexController extends Zend_Controller_Action {
+class Archivo_IndexController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_soapClient;
@@ -9,25 +10,26 @@ class Archivo_IndexController extends Zend_Controller_Action {
     protected $_redirector;
     protected $_arch;
 
-    public function init() {
+    public function init()
+    {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery.blockUI.js")
-                ->appendFile("/js/common/mensajero.js?" . time())
-                ->appendFile("/js/common/principal.js?" . time());
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/mensajero.js?" . time())
+            ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $context = stream_context_create(array(
             "ssl" => array(
@@ -39,7 +41,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $this->_soapClient = new Zend_Soap_Client($this->_config->app->endpoint, array("stream_context" => $context));
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -61,26 +64,27 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function cuentasDeGastoAction() {
+    public function cuentasDeGastoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Cuentas de gasto";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/archivo/index/cuentas-de-gasto.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/archivo/index/cuentas-de-gasto.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "page" => "Digits",
@@ -128,7 +132,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function readFileAction() {
+    public function readFileAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $misc = new OAQ_Misc();
@@ -147,37 +152,38 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
         echo $filecontent;
     }
-    
-    public function indexAction() {
+
+    public function indexAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Expediente Digital";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/archivo/index/index.js?" . time())
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js");
+            ->appendFile("/js/archivo/index/index.js?" . time())
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js");
         $request = new Zend_Controller_Request_Http();
         $filtro = filter_var($request->getCookie("filtro"), FILTER_VALIDATE_INT);
-        
+
         if ($request->getCookie("fecha-fin")) {
-            $fecha_fin = filter_var($request->getCookie("fecha-fin"),FILTER_VALIDATE_REGEXP,array("options"=>array("regexp"=> '/^\d{4}-\d{2}-\d{2}$/')));
+            $fecha_fin = filter_var($request->getCookie("fecha-fin"), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => '/^\d{4}-\d{2}-\d{2}$/')));
             $this->view->fecha_fin = $fecha_fin;
         } else {
             $fecha_fin = date("Y-m-d");
             setcookie('fecha-fin', $fecha_fin, time() + (3600 * 24 * 5), '/');
         }
-        
+
         if ($request->getCookie("fecha-inicio")) {
-            $fecha_inicio = filter_var($request->getCookie("fecha-inicio"),FILTER_VALIDATE_REGEXP,array("options"=>array("regexp"=> '/^\d{4}-\d{2}-\d{2}$/')));
+            $fecha_inicio = filter_var($request->getCookie("fecha-inicio"), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => '/^\d{4}-\d{2}-\d{2}$/')));
             $this->view->fecha_inicio = $fecha_inicio;
         } else {
             $fecha_inicio = date('Y-m-d', strtotime('-90 day', strtotime($fecha_fin)));
             setcookie('fecha-inicio', $fecha_inicio, time() + (3600 * 24 * 5), '/');
         }
-        
+
         $this->view->fecha_inicio = $fecha_inicio;
         $this->view->fecha_fin = $fecha_fin;
-        
+
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "page" => "Digits",
@@ -201,14 +207,14 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $repo = new Archivo_Model_RepositorioIndex();
         $referencias = new OAQ_Referencias();
         $res = $referencias->restricciones($this->_session->id, $this->_session->role);
-        
+
         $search = array(
-            $i->isValid("patente") ? $i->patente : null, 
-            $i->isValid("aduana") ? $i->aduana : null, 
-            $i->isValid("pedimento") ? str_pad($i->pedimento, 7, '0', STR_PAD_LEFT) : null, 
-            $i->isValid("referencia") ? $i->referencia : null, 
-            $i->isValid("rfcCliente") ? $i->rfcCliente : null, 
-            $fecha_inicio, 
+            $i->isValid("patente") ? $i->patente : null,
+            $i->isValid("aduana") ? $i->aduana : null,
+            $i->isValid("pedimento") ? str_pad($i->pedimento, 7, '0', STR_PAD_LEFT) : null,
+            $i->isValid("referencia") ? $i->referencia : null,
+            $i->isValid("rfcCliente") ? $i->rfcCliente : null,
+            $fecha_inicio,
             $fecha_fin
         );
 
@@ -225,7 +231,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
             if ($this->_session->role == "proveedor") {
                 $this->view->disableUpload = true;
             }
-            if(!empty($res["rfcs"])) {
+            if (!empty($res["rfcs"])) {
                 $select = $repo->paginatorSelect($filtro, $search, null, $res["rfcs"]);
             } else {
                 $this->view->error = 'Su usuario no tiene RFC asignado(s), favor de comunicarse con <a href="mailto:soporte@oaq.com.mx">soporte@oaq.com.mx</a>';
@@ -240,7 +246,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $form->populate(array(
             "patente" => $i->patente,
             "aduana" => $i->aduana,
-            "pedimento" => $i->isValid("pedimento") ? str_pad($i->pedimento, 7, '0', STR_PAD_LEFT): null,
+            "pedimento" => $i->isValid("pedimento") ? str_pad($i->pedimento, 7, '0', STR_PAD_LEFT) : null,
             "referencia" => $i->referencia,
             "rfcCliente" => $i->rfcCliente,
         ));
@@ -248,11 +254,12 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function referenciasAction() {
+    public function referenciasAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Repositorio de referencias";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/archivo/index/referencias.js?" . time());
+            ->appendFile("/js/archivo/index/referencias.js?" . time());
         $request = new Zend_Controller_Request_Http();
         $revisadosOp = $request->getCookie("revisadosOp");
         $revisadosAdm = $request->getCookie("revisadosAdm");
@@ -280,7 +287,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $model = new Application_Model_UsuariosAduanasMapper();
         $aduanas = $model->aduanasUsuario($this->_session->id, $i->patente, $i->aduana);
         $inh = new Usuarios_Model_UsuarioInhouse();
-        if(!in_array($this->_session->role, array("inhouse"))) {
+        if (!in_array($this->_session->role, array("inhouse"))) {
             if (isset($aduanas) && !empty($aduanas)) {
                 if ($aduanas["patente"][0] != "0" && $aduanas["aduana"][0] != "0") {
                     if (isset($i->referencia) && $i->referencia != "") {
@@ -304,14 +311,14 @@ class Archivo_IndexController extends Zend_Controller_Action {
             }
         } else { // inhouse
             $rfcs = $inh->obtenerRfcClientes($this->_session->id);
-            if(isset($rfcs) && !empty($rfcs)) {
+            if (isset($rfcs) && !empty($rfcs)) {
                 if (isset($i->referencia) && $i->referencia != "") {
                     $result = $arch->searchInhouse($i->referencia, $rfcs);
                 } elseif (isset($i->pedimento) && $i->pedimento != "") {
                     $result = $arch->searchByDocumentInhouse($i->pedimento, $rfcs);
                 } else {
-                    $select = $arch->paginatorSelectInhouse($rfcs, $revisados, $completos);                
-                }           
+                    $select = $arch->paginatorSelectInhouse($rfcs, $revisados, $completos);
+                }
             } else {
                 $this->view->error = "NO TIENE RFC DE CLIENTE ASIGNADO: ENVIAR UN CORREO A <a href=\"mailto:soporte@oaq.com.mx\" style=\"color: #0000ff;\">soporte@oaq.com.mx</a>.";
             }
@@ -338,25 +345,27 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function modificarExpedienteAction() {
+    public function modificarExpedienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Modificar expediente";
         $this->view->headMeta()->appendName("description", "");
     }
-    
-    public function modificarReferenciaAction() {
+
+    public function modificarReferenciaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Modificar referencia";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jquery.selectBoxIt.css")
-                ->appendStylesheet("/css/nuevo-estilo.css?")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/css/jquery.selectBoxIt.css")
+            ->appendStylesheet("/css/nuevo-estilo.css?")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/additional-methods.min.js")
-                ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
-                ->appendFile("/js/common/jquery.selectBoxIt.min.js")
-                ->appendFile("/js/archivo/index/modificar-referencia.js?" . time());
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/additional-methods.min.js")
+            ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
+            ->appendFile("/js/common/jquery.selectBoxIt.min.js")
+            ->appendFile("/js/archivo/index/modificar-referencia.js?" . time());
         $gets = $this->_request->getParams();
         $model = new Archivo_Model_RepositorioMapper();
         $info = $model->getInfo($gets["patente"], $gets["ref"]);
@@ -369,7 +378,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         );
     }
 
-    public function subirArchivosAction() {
+    public function subirArchivosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Subir archivos";
         $this->view->headMeta()->appendName("description", "");
 
@@ -377,32 +387,32 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $upload = NULL ? $upload = new Zend_Session_Namespace("") : $upload = new Zend_Session_Namespace("Upload");
 
         $this->view->headLink()->setContainer(
-                new Zend_View_Helper_Placeholder_Container()
+            new Zend_View_Helper_Placeholder_Container()
         );
         $this->view->headScript()->exchangeArray(array());
         $this->view->headLink()
-                ->appendStylesheet("/css/general/stylesheet.css")
-                ->appendStylesheet("/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/js/jquery-upload/css/jquery.fileupload-ui.css")
-                ->appendStylesheet($this->_appconfig->getParam("main-css"))
-                ->appendStylesheet($this->_appconfig->getParam("bootstrap-css"));
+            ->appendStylesheet("/css/general/stylesheet.css")
+            ->appendStylesheet("/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/jquery-upload/css/jquery.fileupload-ui.css")
+            ->appendStylesheet($this->_appconfig->getParam("main-css"))
+            ->appendStylesheet($this->_appconfig->getParam("bootstrap-css"));
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headScript()->appendFile("/js/jquery-upload/js/jquery-1.10.2.min.js")
-                ->appendFile("/js/jquery-upload/js/vendor/jquery.ui.widget.js")
-                ->appendFile("/js/jquery-upload/js/tmpl.min.js")
-                ->appendFile("/js/jquery-upload/js/load-image.min.js")
-                ->appendFile("/js/jquery-upload/js/canvas-to-blob.min.js")
-                ->appendFile("/js/jquery-upload/js/bootstrap.min.js")
-                ->appendFile("/js/jquery-upload/js/jquery.fileupload.js")
-                ->appendFile("/js/jquery-upload/js/jquery.fileupload-process.js")
-                ->appendFile("/js/jquery-upload/js/jquery.fileupload-image.js")
-                ->appendFile("/js/jquery-upload/js/jquery.fileupload-audio.js")
-                ->appendFile("/js/jquery-upload/js/jquery.fileupload-video.js")
-                ->appendFile("/js/jquery-upload/js/jquery.fileupload-validate.js")
-                ->appendFile("/js/jquery-upload/js/jquery.fileupload-ui.js")
-                ->appendFile("/js/jquery-upload/js/main.js")
-                ->appendFile("/js/date.js")
-                ->appendFile("/js/principal.js");
+            ->appendFile("/js/jquery-upload/js/vendor/jquery.ui.widget.js")
+            ->appendFile("/js/jquery-upload/js/tmpl.min.js")
+            ->appendFile("/js/jquery-upload/js/load-image.min.js")
+            ->appendFile("/js/jquery-upload/js/canvas-to-blob.min.js")
+            ->appendFile("/js/jquery-upload/js/bootstrap.min.js")
+            ->appendFile("/js/jquery-upload/js/jquery.fileupload.js")
+            ->appendFile("/js/jquery-upload/js/jquery.fileupload-process.js")
+            ->appendFile("/js/jquery-upload/js/jquery.fileupload-image.js")
+            ->appendFile("/js/jquery-upload/js/jquery.fileupload-audio.js")
+            ->appendFile("/js/jquery-upload/js/jquery.fileupload-video.js")
+            ->appendFile("/js/jquery-upload/js/jquery.fileupload-validate.js")
+            ->appendFile("/js/jquery-upload/js/jquery.fileupload-ui.js")
+            ->appendFile("/js/jquery-upload/js/main.js")
+            ->appendFile("/js/date.js")
+            ->appendFile("/js/principal.js");
 
         $ref = $this->_request->getParam("ref");
         $pat = $this->_request->getParam("patente");
@@ -424,7 +434,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function descargarArchivoAction() {
+    public function descargarArchivoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -457,7 +468,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function crearZipProveedoresAction() {
+    public function crearZipProveedoresAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -470,7 +482,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
             if ($data["ids"] == "0") {
                 if (!isset($search->arch_rfc) && isset($search->arch_fini) && isset($search->arch_ffin)) {
                     $result = $archive->getXmlPaths($search->arch_fini, $search->arch_ffin);
-                } if (isset($search->arch_rfc) && isset($search->arch_fini) && isset($search->arch_ffin)) {
+                }
+                if (isset($search->arch_rfc) && isset($search->arch_fini) && isset($search->arch_ffin)) {
                     $result = $archive->getXmlPaths($search->arch_fini, $search->arch_ffin, $search->arch_rfc, $search->arch_rfcc);
                 }
             } else {
@@ -503,7 +516,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function crearZipAction() {
+    public function crearZipAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $search = NULL ? $search = new Zend_Session_Namespace("") : $search = new Zend_Session_Namespace("OAQCtaGastos");
@@ -514,7 +528,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
             if ($data["ids"] == "0") {
                 if (!isset($search->arch_rfc) && isset($search->arch_fini) && isset($search->arch_ffin)) {
                     $result = $archive->getXmlPaths($search->arch_fini, $search->arch_ffin);
-                } if (isset($search->arch_rfc) && isset($search->arch_fini) && isset($search->arch_ffin)) {
+                }
+                if (isset($search->arch_rfc) && isset($search->arch_fini) && isset($search->arch_ffin)) {
                     $result = $archive->getXmlPaths($search->arch_fini, $search->arch_ffin, $search->arch_rfc);
                 }
             } else {
@@ -539,7 +554,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function downloadCreatedZipAction() {
+    public function downloadCreatedZipAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -555,7 +571,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         unlink($filename);
     }
 
-    public function enviarEmailAction() {
+    public function enviarEmailAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(false);
         $search = NULL ? $search = new Zend_Session_Namespace("") : $search = new Zend_Session_Namespace("OAQCtaGastos");
@@ -569,7 +586,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function movimientosReferenciaAction() {
+    public function movimientosReferenciaAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(false);
 
@@ -582,7 +600,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function loadFileAction() {
+    public function loadFileAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(false);
 
@@ -604,7 +623,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function loadFileRepoAction() {
+    public function loadFileRepoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(false);
         error_reporting(E_ALL);
@@ -637,20 +657,22 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    protected function _cleanXml($xml) {
+    protected function _cleanXml($xml)
+    {
         return preg_replace("#<soapenv:Header(.*?)>(.*?)</soapenv:Header>#is", "", $xml);
     }
 
-    public function proveedoresAction() {
+    public function proveedoresAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Facturas proveedores";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/jquery.timepicker.css");
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/jquery.timepicker.css");
         $this->view->headScript()
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/archivo/index/proveedores.js?" . time());
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/archivo/index/proveedores.js?" . time());
         $form = new Archivo_Form_Proveedores();
         $f = array(
             "*" => array("StringTrim", "StripTags"),
@@ -687,16 +709,17 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
         $this->view->form = $form;
     }
-    
-    public function nuevoRepositorioAction() {
+
+    public function nuevoRepositorioAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Archivos expediente";
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
-                ->appendFile("/js/archivo/index/nuevo-repositorio.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
+            ->appendFile("/js/archivo/index/nuevo-repositorio.js?" . time());
         if (in_array($this->_session->role, array("proveedor", "cliente", "inhouse"))) {
             $this->_helper->redirector->gotoUrl("/archivo");
         }
@@ -707,7 +730,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $this->view->id = $this->_session->id;
     }
 
-    public function verArchivosReferenciaAction() {
+    public function verArchivosReferenciaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Archivos archivos de referencia";
         $this->view->headScript()->appendFile("/js/jquery.validate.min.js");
 
@@ -743,7 +767,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function pedimentosPagadosAction() {
+    public function pedimentosPagadosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Pedimentos Pagados (M3)";
         $this->view->headMeta()->appendName("description", "");
         $rfc = $this->_request->getParam("rfc", null);
@@ -791,7 +816,8 @@ class Archivo_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function setFileTypeAction() {
+    public function setFileTypeAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         if (!$this->getRequest()->isXmlHttpRequest()) {
@@ -803,51 +829,54 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function analisisM3Action() {
+    public function analisisM3Action()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Analisis M3";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/common/typeahead.min.js")
-                ->appendFile("/js/common/jquery.fileDownload.js")
-                ->appendFile("/js/archivo/index/analisis-m3.js?" . time());
+            ->appendFile("/js/common/typeahead.min.js")
+            ->appendFile("/js/common/jquery.fileDownload.js")
+            ->appendFile("/js/archivo/index/analisis-m3.js?" . time());
         $form = new Archivo_Form_AnalisisM3();
         $this->view->form = $form;
     }
 
-    public function nuevaReferenciaAction() {
+    public function nuevaReferenciaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Archivos expediente";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css");
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
-                ->appendFile("/js/archivo/index/nueva-referencia.js?" . time());
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
+            ->appendFile("/js/archivo/index/nueva-referencia.js?" . time());
         $model = new Application_Model_UsuariosAduanasMapper();
         $patentes = $model->patentesUsuario($this->_session->id);
         $form = new Archivo_Form_NuevaReferencia(array("patentes" => $patentes, "id" => $this->_session->id));
         $this->view->form = $form;
         $this->view->id = $this->_session->id;
     }
-    
-    public function expedienteAction() {
+
+    public function expedienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Expediente";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jquery.qtip.min.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/css/jquery.qtip.min.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/archivo/index/expediente.js?" . time());
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/archivo/index/expediente.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
         );
@@ -868,7 +897,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
                 "referencia" => $arr["referencia"],
                 "rfc_cliente" => $arr["rfcCliente"],
             ));
-            if (isset($arr["idTrafico"]) && $arr["idTrafico"] !== null) {                
+            if (isset($arr["idTrafico"]) && $arr["idTrafico"] !== null) {
                 $this->view->idTrafico = $arr["idTrafico"];
             }
             $this->view->form = $form;
@@ -885,7 +914,7 @@ class Archivo_IndexController extends Zend_Controller_Action {
                     $this->view->disableUpload = true;
                 }
                 if ($this->_session->role == "inhouse") {
-                    $this->view->noFtp = true;                    
+                    $this->view->noFtp = true;
                 }
                 $files = $repo->countFilesByReferenceCustomers($arr["referencia"], $arr["patente"], $arr["aduana"]);
             }
@@ -893,7 +922,6 @@ class Archivo_IndexController extends Zend_Controller_Action {
                 $this->view->empty = true;
             }
             if (strtoupper(substr(PHP_OS, 0, 3)) === "WIN") {
-                
             } else {
                 $directory = $this->_appconfig->getParam("expdest") . DIRECTORY_SEPARATOR . $arr["patente"] . DIRECTORY_SEPARATOR . $arr["aduana"] . DIRECTORY_SEPARATOR . $arr["referencia"];
                 if (file_exists($directory)) {
@@ -924,19 +952,20 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function archivosExpedienteAction() {
+    public function archivosExpedienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Archivos expediente";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jquery.qtip.min.css")
-                ->appendStylesheet("/css/jquery.selectBoxIt.css")
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/css/jquery.qtip.min.css")
+            ->appendStylesheet("/css/jquery.selectBoxIt.css")
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.qtip.min.js")                
-                ->appendFile("/js/common/additional-methods.min.js")
-                ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/archivo/index/archivos-expediente.js?" . time());
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/common/additional-methods.min.js")
+            ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/archivo/index/archivos-expediente.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags", "StringToUpper"),
             "patente" => "Digits",
@@ -989,27 +1018,29 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function digitalizacionMasivaAction() {
+    public function digitalizacionMasivaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Digitalización masiva";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/archivo/index/digitalizacion-masiva.js?" . time());
+            ->appendFile("/js/archivo/index/digitalizacion-masiva.js?" . time());
         $mapper = new Archivo_Model_RepositorioTemporalMapper();
         $rows = $mapper->fetchAll();
         $this->view->data = $rows;
     }
 
-    public function archivosValidacionAction() {
+    public function archivosValidacionAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Archivos de validación";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/bootstrap-datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/js/common/bootstrap/bootstrap-datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/archivo/index/archivos-validacion.js?" . time());
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/archivo/index/archivos-validacion.js?" . time());
         $f = array(
             "page" => array("StringTrim", "StripTags", "Digits"),
             "aduana" => array("StringTrim", "StripTags", "Digits"),
@@ -1059,51 +1090,68 @@ class Archivo_IndexController extends Zend_Controller_Action {
         }
         $this->view->form = $form;
     }
-    
-    public function ftpAction() {
+
+    public function ftpAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " FTP M3";
+        $this->view->headLink()
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/DT_bootstrap.css");
+        $this->view->headScript()
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/DT_bootstrap.js")
+            ->appendFile("/js/archivo/index/ftp.js?" . time());
         $this->view->headMeta()->appendName("description", "");
-        $f = array(
-            "*" => array("StringTrim", "StripTags"),
-            "page" => "Digits",
-            "size" => "Digits",
-        );
-        $v = array(
-            "page" => array(new Zend_Validate_Int(), "default" => 1),
-            "size" => array(new Zend_Validate_Int(), "default" => 15),
-        );
-        $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+        // $f = array(
+        //     "*" => array("StringTrim", "StripTags"),
+        //     "page" => "Digits",
+        //     "size" => "Digits",
+        // );
+        // $v = array(
+        //     "page" => array(new Zend_Validate_Int(), "default" => 1),
+        //     "size" => array(new Zend_Validate_Int(), "default" => 15),
+        // );
+        // $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
         $mapper = new Archivo_Model_FtpMapper();
-        $arr = $mapper->fetchAll();
-        if (isset($arr) && !empty($arr)) {
-            $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($arr));
-            $paginator->setItemCountPerPage($i->size);
-            $paginator->setCurrentPageNumber($i->page);
-            $this->view->paginator = $paginator;
-        }
+        $this->view->rows = $mapper->fetchAll();
+        // if (isset($arr) && !empty($arr)) {
+        //     $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($arr));
+        //     $paginator->setItemCountPerPage($i->size);
+        //     $paginator->setCurrentPageNumber($i->page);
+        //     $this->view->paginator = $paginator;
+        // }
     }
 
-    public function reportesAction() {
+    public function reportesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Reportes de expediente digital";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/jquery.selectBoxIt.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/css/jquery.selectBoxIt.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
-                ->appendFile("/js/common/jquery.selectBoxIt.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/archivo/index/reportes.js?" . time());
+            ->appendFile("/js/common/jquery-ui-1.9.2.min.js")
+            ->appendFile("/js/common/jquery.selectBoxIt.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/archivo/index/reportes.js?" . time());
     }
 
-    public function nuevoFtpAction() {
+    public function nuevoFtpAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " NUEVO FTP";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/archivo/index/nuevo-ftp.js?" . time());
+            ->appendFile("/js/archivo/index/nuevo-ftp.js?" . time());
         $form = new Trafico_Form_NuevoFtp();
         $this->view->form = $form;
     }
-
 }

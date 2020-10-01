@@ -1,37 +1,45 @@
-<table class="traffic-table traffic-table-left">
-    <tr>
-        <th>Tipo:</th>
-        <th>RFC:</th>
-        <th>URL/IP:</th>
-        <th>Puerto:</th>
-        <th>Carpeta:</th>
-        <th>Usuario:</th>
-        <th>Contraseña:</th>
-        <th>Activo:</th>
-    </tr>
-    <?php if (isset($this->paginator) && !empty($this->paginator)) { ?>
-        <?php foreach ($this->paginator as $item) { ?>
+<div class="traffic-clear-5"></div>
+<table class="traffic-table traffic-table-left" id="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Tipo:</th>
+            <th>RFC:</th>
+            <th>URL/IP:</th>
+            <th>Puerto:</th>
+            <th>Carpeta:</th>
+            <th>Usuario:</th>
+            <th>Contraseña:</th>
+            <th>Activo:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->rows) && !empty($this->rows)) { ?>
+            <?php foreach ($this->rows as $item) { ?>
+                <tr>
+                    <td>
+                        <button class="send" style="line-height: 12px;" data-id="<?= $item["id"] ?>">Enviar</button>
+                    </td>
+                    <td style="text-align: center;"><?= strtoupper($item["type"]) ?></td>
+                    <td style="text-align: center;"><?= $item["rfc"] ?></td>
+                    <td><?= $item["url"] ?></td>
+                    <td><?= $item["port"] ?></td>
+                    <td><?= $item["remoteFolder"] ?></td>
+                    <td><?= $item["user"] ?></td>
+                    <td style="text-align: center;"><?= $item["password"] ?></td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="activo" <?= ($item["active"] == 1) ? " checked=\"true\"" : "" ?>>
+                    </td>
+                </tr>
+            <?php } ?>
+        <?php } else { ?>
             <tr>
-                <td><?= $item["type"] ?></td>
-                <td><?= $item["rfc"] ?></td>
-                <td><?= $item["url"] ?></td>
-                <td><?= $item["port"] ?></td>
-                <td><?= $item["remoteFolder"] ?></td>
-                <td><?= $item["user"] ?></td>
-                <td><?= $item["password"] ?></td>
-                <td>
-                    <input type="checkbox" class="alert" data-id="<?= $item["id"] ?>" data-alert="activo" <?= ($item["active"] == 1) ? " checked=\"true\"" : "" ?>>
+                <td colspan="9">
+                    <em>No hubo resultados.</em>
                 </td>
             </tr>
-        <?php } ?>    
-    <?php } else { ?>    
-        <tr>
-            <td>
-                <em>No hubo resultados.</em>
-            </td>
-        </tr>
-    <?php } ?>    
+        <?php } ?>
+    </tbody>
 </table>
-<?= (isset($this->paginator)) ? $this->paginationControl($this->paginator) : null ?>
-<div class="traffic-clear-10"></div>
-<a href="/archivo/index/nuevo-ftp" class="traffic-btn-create traffic-btn-right">NUEVO FTP</a>
+
+<a href="/archivo/index/nuevo-ftp" class="traffic-btn traffic-btn-right">NUEVO FTP</a>

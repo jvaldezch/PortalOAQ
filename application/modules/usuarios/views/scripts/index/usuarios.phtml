@@ -7,7 +7,7 @@
                     <th>Aduana</th>
                     <th>Usuario</th>
                     <th>Nombre</th>
-                    <th>Email</th>                
+                    <th>Email</th>
                     <th>Rol</th>
                     <th>Último acceso</th>
                     <th>&nbsp;</th>
@@ -23,7 +23,7 @@
                             </a>
                         </td>
                         <td><?= $item["nombre"] ?></td>
-                        <td><?= $item["email"] ?></td>                
+                        <td><?= $item["email"] ?></td>
                         <td><?= ucfirst($item["rol"]) ?></td>
                         <td><?= isset($item["acceso"]) ? date("d/m/Y H:i a", strtotime($item["acceso"])) : "" ?></td>
                         <td style="text-align: center; width: 24px">
@@ -41,8 +41,7 @@
         <div class="traffic-clear-10"></div>
     <?php } ?>
     <script>
-
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#example').dataTable({
                 "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
                 "sPaginationType": "bootstrap",
@@ -50,7 +49,9 @@
                     "sLengthMenu": "_MENU_ registros por página"
                 },
                 "iDisplayLength": 10,
-                "aaSorting": [[10, "desc"]]
+                "aaSorting": [
+                    [10, "desc"]
+                ]
             });
         });
 
@@ -60,9 +61,11 @@
                 $.ajax({
                     url: "/usuarios/index/delete-user",
                     context: document.body,
-                    data: {id: value},
+                    data: {
+                        id: value
+                    },
                     type: 'GET'
-                }).done(function (data) {
+                }).done(function(data) {
                     var obj = jQuery.parseJSON(data);
                     if (obj.success === true) {
                         window.location.href = "/usuarios/index/usuarios";
@@ -72,7 +75,6 @@
                 });
             }
         }
-
     </script>
     <div class="traffic-clear-10"></div>
 </div>

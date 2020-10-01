@@ -1155,7 +1155,7 @@ class OAQ_Trafico
                         }
                     }
                     $arr_prod = $this->_productosFactura($client, $numFactura);
-
+                    
                     if ($arr_prod !== false) {
                         $arr_inv[0]["productos"] = $arr_prod;
                     }

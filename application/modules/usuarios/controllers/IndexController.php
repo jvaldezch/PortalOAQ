@@ -1,6 +1,7 @@
 <?php
 
-class Usuarios_IndexController extends Zend_Controller_Action {
+class Usuarios_IndexController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_soapClient;
@@ -9,28 +10,29 @@ class Usuarios_IndexController extends Zend_Controller_Action {
     protected $_redirector;
     protected $_key;
 
-    public function init() {
+    public function init()
+    {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
-        $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));        
+        $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/DT_bootstrap.css")
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/DT_bootstrap.css")
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery.blockUI.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/js/common/mensajero.js?" . time())
-                ->appendFile("/js/common/principal.js?" . time());
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/DT_bootstrap.js")
+            ->appendFile("/js/common/mensajero.js?" . time())
+            ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $context = stream_context_create(array(
             "ssl" => array(
@@ -42,7 +44,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $this->_soapClient = new Zend_Soap_Client($this->_config->app->endpoint, array("stream_context" => $context));
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -61,11 +64,12 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function usuariosAction() {
+    public function usuariosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Usuarios del sistema";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/mobile-style.css?" . time());
+            ->appendStylesheet("/css/mobile-style.css?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
@@ -73,34 +77,36 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $usuarios = $users->getUsers();
         $this->view->paginator = $usuarios;
     }
-    
-    public function actividadesAction() {
+
+    public function actividadesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Actividades de usuarios";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/material/easyui.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/material/easyui.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/usuarios/index/actividades.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/usuarios/index/actividades.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
     }
-    
-    public function dashboardAction() {
+
+    public function dashboardAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Dashboard RabbitMQ";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/usuarios/index/dashboard.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/usuarios/index/dashboard.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
@@ -112,22 +118,23 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function usuariosEnLineaAction() {
+    public function usuariosEnLineaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Usuarios en línea";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/usuarios/index/usuarios-en-linea.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/usuarios/index/usuarios-en-linea.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
         $mapper = new Application_Model_UsuarioSesiones();
         $offline = $mapper->usuariosNoActivos();
-        if(count($offline)) {
+        if (count($offline)) {
             foreach ($offline as $item) {
                 $mapper->borrar($item["id"]);
             }
@@ -136,11 +143,12 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $this->view->paginator = $arr;
     }
 
-    public function agregarUsuarioAction() {
+    public function agregarUsuarioAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Agregar nuevo usuario";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/usuarios/index/agregar-usuario.js?" . time());
+            ->appendFile("/js/usuarios/index/agregar-usuario.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
@@ -148,26 +156,27 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function editarUsuarioAction() {
+    public function editarUsuarioAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Editar usuario";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/css/mobile-style.css?" . time());
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/css/mobile-style.css?" . time());
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/usuarios/index/editar-usuario-datos.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario-vucem.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario-trafico.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario-validador.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario-expediente.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario-inhouse.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario-proveedor.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario-bodega.js?" . time())
-                ->appendFile("/js/usuarios/index/editar-usuario.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/usuarios/index/editar-usuario-datos.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-vucem.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-trafico.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-validador.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-expediente.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-inhouse.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-proveedor.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-bodega.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
@@ -216,16 +225,16 @@ class Usuarios_IndexController extends Zend_Controller_Action {
                 $repositorio = new Usuarios_Form_Aduanas();
                 $this->view->repositorio = $repositorio;
                 // INHOUSE
-                if($usuario["nombreRol"] == "inhouse" || $usuario["nombreRol"] == "proveedor") {
+                if ($usuario["nombreRol"] == "inhouse" || $usuario["nombreRol"] == "proveedor") {
                     $docs = new Archivo_Model_DocumentosMapper();
                     $this->view->inhouse = true;
                     $this->view->clientes = $html->getHtml();
-                    $this->view->proveedor = true;                    
+                    $this->view->proveedor = true;
                     $this->view->documentos = $docs->obtener();
                 }
-                
+
                 $mppr = new Bodega_Model_Bodegas();
-                
+
                 $bodegas = new Usuarios_Form_Bodegas(array("bodegas" => $mppr->obtenerTodos()));
                 $this->view->bodegas = $bodegas;
             }
@@ -234,7 +243,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function aduanasTraficoAction() {
+    public function aduanasTraficoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $idCliente = $this->_getParam("idCliente", null);
@@ -258,11 +268,12 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function menusAction() {
+    public function menusAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Editar Menus";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/usuarios/index/menus.js?" . time());
+            ->appendFile("/js/usuarios/index/menus.js?" . time());
         $mapper = new Application_Model_RolesMapper();
         $this->view->roles = $mapper->todos();
         $mapper = new Application_Model_MenusMapper();
@@ -272,11 +283,12 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $this->view->controllers = $controllers;
     }
 
-    public function misDatosAction() {
+    public function misDatosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Editar usuario";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/usuarios/index/mis-datos.js?" . time());
+            ->appendFile("/js/usuarios/index/mis-datos.js?" . time());
         $users = new Usuarios_Model_UsuariosMapper();
         $form = new Usuarios_Form_MisDatos();
         $arr = $users->obtenerDatosUsuario($this->_session->id, $this->_session->username);
@@ -284,11 +296,12 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function fielAction() {
+    public function fielAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " FIEL (VU)";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/usuarios/index/fiel.js?" . time());
+            ->appendFile("/js/usuarios/index/fiel.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
@@ -297,9 +310,10 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $this->view->data = $arr;
     }
 
-    public function nuevaFielAction() {
+    public function nuevaFielAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Nueva FIEL (VU)";
-        $this->view->headMeta()->appendName("description", "");        
+        $this->view->headMeta()->appendName("description", "");
         if (isset($this->_key->rfc)) {
             $this->view->rfc = $this->_key->rfc;
         }
@@ -334,19 +348,20 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function editarFielAction() {
+    public function editarFielAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Editar FIEL (VU)";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/highlight/styles/github.css")
-                ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/highlight/styles/github.css")
+            ->appendStylesheet("/css/jqModal.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/additional-methods.min.js")
-                ->appendFile("/js/common/jqModal.js")
-                ->appendFile("/js/common/highlight/highlight.pack.js")
-                ->appendFile("/js/usuarios/index/editar-fiel.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/additional-methods.min.js")
+            ->appendFile("/js/common/jqModal.js")
+            ->appendFile("/js/common/highlight/highlight.pack.js")
+            ->appendFile("/js/usuarios/index/editar-fiel.js?" . time());
         if ($this->_session->role == "super") {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -372,7 +387,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function firmaFielAction() {
+    public function firmaFielAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -408,7 +424,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerFielAction() {
+    public function obtenerFielAction()
+    {
         $this->_helper->layout()->disableLayout();
         $vucemFir = new Vucem_Model_VucemFirmanteMapper();
         $perm = new Vucem_Model_VucemPermisosMapper();
@@ -427,7 +444,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         $this->view->fiel = $fiel;
     }
 
-    public function asignarFielAction() {
+    public function asignarFielAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $perm = new Vucem_Model_VucemPermisosMapper();
@@ -448,7 +466,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function removerFielAction() {
+    public function removerFielAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $perm = new Vucem_Model_VucemPermisosMapper();
@@ -469,7 +488,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function downloadFileAction() {
+    public function downloadFileAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $type = $this->_request->getParam("type", null);
@@ -503,7 +523,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function cerFileUploadAction() {
+    public function cerFileUploadAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $rfc = strtoupper(filter_input(INPUT_POST, "rfc", FILTER_SANITIZE_SPECIAL_CHARS));
@@ -522,7 +543,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         return false;
     }
 
-    public function uploadNewKeyAction() {
+    public function uploadNewKeyAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $input = array();
@@ -561,7 +583,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function fileUploadAction() {
+    public function fileUploadAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $pwd = filter_input(INPUT_POST, "pwd-vu", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -596,7 +619,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         return false;
     }
 
-    public function wsPassAction() {
+    public function wsPassAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -652,7 +676,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function deleteUserAction() {
+    public function deleteUserAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         if (!$this->getRequest()->isXmlHttpRequest()) {
@@ -675,7 +700,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function addUserAction() {
+    public function addUserAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         if (!$this->getRequest()->isXmlHttpRequest()) {
@@ -710,11 +736,12 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function prefijosAction() {
+    public function prefijosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Prefijos";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/usuarios/index/prefijos.js?" . time());
+            ->appendFile("/js/usuarios/index/prefijos.js?" . time());
         try {
             if ($this->_session->role != "super") {
                 throw new Zend_Controller_Action_Exception("Forbidden", 403);
@@ -726,16 +753,17 @@ class Usuarios_IndexController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function alertasAction() {
+
+    public function alertasAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Alertas";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/usuarios/index/alertas.js?" . time());
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/usuarios/index/alertas.js?" . time());
         try {
             if ($this->_session->role != "super") {
                 throw new Zend_Controller_Action_Exception("Forbidden", 403);
@@ -747,7 +775,8 @@ class Usuarios_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function notificacionesAction() {
+    public function notificacionesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Notificaciones";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
@@ -783,22 +812,22 @@ class Usuarios_IndexController extends Zend_Controller_Action {
                 $this->view->paginator = $paginator;
                 $this->view->buscar = $input->buscar;
             }
-
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function aplicacionesAction() {
+
+    public function aplicacionesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Aplicaciones";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/additional-methods.min.js")
-                ->appendFile("/js/usuarios/index/aplicaciones.js?" . time());
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/additional-methods.min.js")
+            ->appendFile("/js/usuarios/index/aplicaciones.js?" . time());
         try {
             if ($this->_session->role != "super") {
                 throw new Zend_Controller_Action_Exception("Forbidden", 403);
@@ -809,12 +838,13 @@ class Usuarios_IndexController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function comunicadosAction() {
+
+    public function comunicadosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Comunicados";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/usuarios/index/comunicados.js?" . time());
+            ->appendFile("/js/usuarios/index/comunicados.js?" . time());
         try {
             if ($this->_session->role != "super") {
                 throw new Zend_Controller_Action_Exception("Forbidden", 403);
@@ -825,33 +855,34 @@ class Usuarios_IndexController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function analizarSellosAction() {
+
+    public function analizarSellosAction()
+    {
         $this->_helper->layout()->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);        
+        $this->_helper->viewRenderer->setNoRender(true);
         $mapper = new Vucem_Model_VucemFirmanteMapper();
         $arr = $mapper->certificados();
-        if(isset($arr) && !empty($arr)) {
+        if (isset($arr) && !empty($arr)) {
             foreach ($arr as $cer) {
                 $filename = "/tmp" . DIRECTORY_SEPARATOR . $cer["nombre"];
                 file_put_contents($filename, base64_decode($cer["contenido"]));
                 exec("openssl x509 -inform DER -in {$filename} -dates -noout", $output);
                 $data = array();
-                if(isset($output[0])) {
+                if (isset($output[0])) {
                     $exp = explode("=", $output[0]);
-                    if(isset($exp[1])) {
+                    if (isset($exp[1])) {
                         $data["valido_desde"] = date("Y-m-d H:i:s", strtotime($exp[1]));
                     }
                 }
-                if(isset($output[1])) {
+                if (isset($output[1])) {
                     $exp = explode("=", $output[1]);
-                    if(isset($exp[1])) {
+                    if (isset($exp[1])) {
                         $data["valido_hasta"] = date("Y-m-d H:i:s", strtotime($exp[1]));
                     }
                 }
-                if(isset($data) && !empty($data)) {
+                if (isset($data) && !empty($data)) {
                     $updated = $mapper->update($cer["id"], $data);
-                    if($updated) {
+                    if ($updated) {
                         unlink($filename);
                     }
                 }
@@ -859,5 +890,4 @@ class Usuarios_IndexController extends Zend_Controller_Action {
             }
         }
     }
-
 }
