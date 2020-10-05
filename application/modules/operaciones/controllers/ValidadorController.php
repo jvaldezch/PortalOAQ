@@ -24,9 +24,6 @@ class Operaciones_ValidadorController extends Zend_Controller_Action {
         }
         $this->_svucem = NULL ? $this->_svucem = new Zend_Session_Namespace("") : $this->_svucem = new Zend_Session_Namespace("OAQVucem");
         $this->_svucem->setExpirationSeconds($this->_appconfig->getParam("session-exp"));
-        if (APPLICATION_ENV == "development") {
-            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
-        }
     }
 
     public function obtenerArchivosValidacionAction() {

@@ -45,9 +45,6 @@ class Vucem_CoveController extends Zend_Controller_Action {
         $this->view->rol = $this->_session->role;
         $news = new Application_Model_NoticiasInternas();
         $this->view->noticias = $news->obtenerTodos();
-        if (APPLICATION_ENV == "development") {
-            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
-        }
     }
 
 }

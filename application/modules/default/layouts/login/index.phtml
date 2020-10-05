@@ -107,14 +107,6 @@
         <p><a href="/mobile/main">Versión móvil</a></p>
     </div>
 
-    <?php if (isset($this->browser_sync)) { ?>
-        <script id="__bs_script__">
-            //<![CDATA[
-            document.write("<?= $this->browser_sync ?>".replace("HOST", location.hostname));
-            //]]>
-        </script>
-    <?php } ?>
-
 </body>
 
 </html>

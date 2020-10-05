@@ -58,9 +58,6 @@ class Vucem_IndexController extends Zend_Controller_Action {
         $this->_svucem->setExpirationSeconds($this->_appconfig->getParam("session-exp"));
         $news = new Application_Model_NoticiasInternas();
         $this->view->noticias = $news->obtenerTodos();
-        if (APPLICATION_ENV == "development") {
-            $this->view->browser_sync = "<script async src='http://{$this->_config->app->browser_sync}/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>";
-        }
     }
 
     public function indexAction() {

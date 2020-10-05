@@ -163,15 +163,15 @@ function formatArchive(val, row) {
         // sin checklist
         return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #c1c1c1; cursor: pointer; padding-top: 2px"></i>';
     }
-    if (row.revisionAdministracion == null && row.revisionOperaciones == 1) {
+    if (row.revisionAdministracion == null && parseInt(row.revisionOperaciones) === 1) {
         // rev. operaciones
         return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #F59211; cursor: pointer; padding-top: 2px"></i>';
     }
-    if (row.revisionAdministracion == 1 && row.revisionOperaciones == null) {
+    if (parseInt(row.revisionAdministracion) === 1 && row.revisionOperaciones == null) {
         // rev. admon
         return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: #0099ff; cursor: pointer; padding-top: 2px"></i>';
     }
-    if (row.revisionAdministracion == 1 && row.revisionOperaciones == 1) {
+    if (parseInt(row.completo) === 1) {
         // completo
         return '<i class="fas fa-archive" data-id="' + row.id + '" style="font-size: 1.2em; color: green; cursor: pointer; padding-top: 2px"></i>';
     }

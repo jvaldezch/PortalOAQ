@@ -451,12 +451,15 @@ class Archivo_PostController extends Zend_Controller_Action {
                     $table = new Archivo_Model_ChecklistReferencias();
                     
                     $rev = $checklist->revision($this->_session->username, $this->_session->nombre, "elaboro", $this->_session->role);
-                    if ($i->isValid("idTrafico")) {
-                        
-                        $row->setIdTrafico($i->idTrafico);
-                        
+                    if ($i->isValid("idTrafico")) {                        
+                        $row->setIdTrafico($i->idTrafico);                        
                         $trafico = new OAQ_Trafico(array("idTrafico" => $i->idTrafico, "idUsuario" => $this->_session->id));
-                        
+                        $arr = array(
+                            "revisionOperaciones" => $i->revisionOperaciones,
+                            "revisionAdministracion" => $i->revisionAdministracion,
+                            "completo" => $i->completo
+                        );
+                        $trafico->actualizar($arr);
                     }
                     $row->setPatente($i->patente);
                     $row->setAduana($i->aduana);
