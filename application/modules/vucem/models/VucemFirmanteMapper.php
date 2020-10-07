@@ -1,23 +1,26 @@
 <?php
 
-class Vucem_Model_VucemFirmanteMapper {
+class Vucem_Model_VucemFirmanteMapper
+{
 
     protected $_db_table;
     protected $_key = "5203bfec0c3db@!b2295";
 
-    function __construct() {
+    function __construct()
+    {
         $this->_db_table = new Vucem_Model_DbTable_VucemFirmante();
     }
 
-    public function obtenerFirmantes($env = "prod", $username = null) {
+    public function obtenerFirmantes($env = "prod", $username = null)
+    {
         try {
             $sql = $this->_db_table->select();
             $sql->setIntegrityCheck(false)
-                    ->from(array("p" => "vucem_permisos"), array("p.idfirmante"))
-                    ->joinLeft(array("u" => "usuarios"), "u.id = p.idusuario")
-                    ->joinLeft(array("f" => "vucem_firmante"), "f.id = p.idfirmante", array("f.razon", "f.rfc"))
-                    ->where("f.tipo = ?", "prod")
-                    ->order("f.razon ASC");
+                ->from(array("p" => "vucem_permisos"), array("p.idfirmante"))
+                ->joinLeft(array("u" => "usuarios"), "u.id = p.idusuario")
+                ->joinLeft(array("f" => "vucem_firmante"), "f.id = p.idfirmante", array("f.razon", "f.rfc"))
+                ->where("f.tipo = ?", "prod")
+                ->order("f.razon ASC");
             if (isset($username)) {
                 $sql->where("u.usuario = ?", $username);
             }
@@ -31,26 +34,27 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function obtenerDetalleFirmanteId($id) {
+    public function obtenerDetalleFirmanteId($id)
+    {
         try {
             $sql = $this->_db_table->select();
             $sql->from("vucem_firmante", array(
-                        "razon",
-                        "rfc",
-                        "figura",
-                        "patente",
-                        "aduana",
-                        "key_nom",
-                        "certificado_nom",
-                        new Zend_Db_Expr("AES_DECRYPT(`key`,'{$this->_key}') AS `key`"),
-                        new Zend_Db_Expr("AES_DECRYPT(spem,'{$this->_key}') AS spem"),
-                        new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS certificado"),
-                        new Zend_Db_Expr("AES_DECRYPT(password_spem,'{$this->_key}') AS password_spem"),
-                        new Zend_Db_Expr("AES_DECRYPT(password_ws,'{$this->_key}') AS password_ws"),
-                        "sha",
-                    ))
-                    ->where("id = ?", $id)
-                    ->limit(1);
+                "razon",
+                "rfc",
+                "figura",
+                "patente",
+                "aduana",
+                "key_nom",
+                "certificado_nom",
+                new Zend_Db_Expr("AES_DECRYPT(`key`,'{$this->_key}') AS `key`"),
+                new Zend_Db_Expr("AES_DECRYPT(spem,'{$this->_key}') AS spem"),
+                new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS certificado"),
+                new Zend_Db_Expr("AES_DECRYPT(password_spem,'{$this->_key}') AS password_spem"),
+                new Zend_Db_Expr("AES_DECRYPT(password_ws,'{$this->_key}') AS password_ws"),
+                "sha",
+            ))
+                ->where("id = ?", $id)
+                ->limit(1);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 $data = array(
@@ -76,7 +80,8 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function actualizarWs($id, $ws) {
+    public function actualizarWs($id, $ws)
+    {
         try {
             $arr = array(
                 "password_ws" => new Zend_Db_Expr("AES_ENCRYPT('{$ws}','{$this->_key}')"),
@@ -91,26 +96,27 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function obtenerDetalleFirmante($rfc, $env = null, $patente = null, $aduana = null) {
+    public function obtenerDetalleFirmante($rfc, $env = null, $patente = null, $aduana = null)
+    {
         try {
             $sql = $this->_db_table->select();
             $sql->from("vucem_firmante", array(
-                        "id",
-                        "razon",
-                        "rfc",
-                        "figura",
-                        "patente",
-                        new Zend_Db_Expr("AES_DECRYPT(`key`,'{$this->_key}') AS llave"),
-                        new Zend_Db_Expr("AES_DECRYPT(spem,'{$this->_key}') AS spem"),
-                        new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS certificado"),
-                        new Zend_Db_Expr("AES_DECRYPT(password_spem,'{$this->_key}') AS password_spem"),
-                        new Zend_Db_Expr("AES_DECRYPT(password_ws,'{$this->_key}') AS password_ws"),
-                        "sha",
-                        "valido_hasta",
-                    ))
-                    ->where("rfc = ?", $rfc)
-                    ->where("tipo = 'prod'")
-                    ->limit(1);
+                "id",
+                "razon",
+                "rfc",
+                "figura",
+                "patente",
+                new Zend_Db_Expr("AES_DECRYPT(`key`,'{$this->_key}') AS llave"),
+                new Zend_Db_Expr("AES_DECRYPT(spem,'{$this->_key}') AS spem"),
+                new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS certificado"),
+                new Zend_Db_Expr("AES_DECRYPT(password_spem,'{$this->_key}') AS password_spem"),
+                new Zend_Db_Expr("AES_DECRYPT(password_ws,'{$this->_key}') AS password_ws"),
+                "sha",
+                "valido_hasta",
+            ))
+                ->where("rfc = ?", $rfc)
+                ->where("tipo = 'prod'")
+                ->limit(1);
             if (isset($patente)) {
                 $sql->where("patente = ?", $patente);
             }
@@ -141,11 +147,12 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function listadoFirmantes() {
+    public function listadoFirmantes()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from("vucem_firmante", array("id", "patente", "aduana", "razon", "rfc", "sha", "valido_desde", "valido_hasta"))
-                    ->order("razon ASC");
+                ->from("vucem_firmante", array("id", "patente", "aduana", "razon", "rfc", "sha", "valido_desde", "valido_hasta"))
+                ->order("razon ASC");
             if (($stmt = $this->_db_table->fetchAll($sql))) {
                 return $stmt->toArray();
             }
@@ -155,12 +162,13 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function certificados() {
+    public function certificados()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from("vucem_firmante", array("id", "certificado_nom as nombre", new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS contenido")))
-                    ->where("valido_desde IS NULL AND valido_hasta IS NULL")
-                    ->limit(10);
+                ->from("vucem_firmante", array("id", "certificado_nom as nombre", new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS contenido")))
+                ->where("valido_desde IS NULL AND valido_hasta IS NULL")
+                ->limit(10);
             if (($stmt = $this->_db_table->fetchAll($sql))) {
                 return $stmt->toArray();
             }
@@ -170,15 +178,16 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function firmanteId($rfc, $patente = null, $aduana = null) {
+    public function firmanteId($rfc, $patente = null, $aduana = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from("vucem_firmante", array("id"))
-                    ->where("rfc = ?", $rfc)
-                    ->where("tipo = 'prod'");
+                ->from("vucem_firmante", array("id"))
+                ->where("rfc = ?", $rfc)
+                ->where("tipo = 'prod'");
             if (isset($patente) && isset($aduana)) {
                 $sql->where("patente = ?", $patente)
-                        ->where("aduana = ?", $aduana);
+                    ->where("aduana = ?", $aduana);
             }
             if (($stmt = $this->_db_table->fetchRow($sql))) {
                 return $stmt->toArray();
@@ -189,11 +198,12 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function tipoFigura($rfc) {
+    public function tipoFigura($rfc)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from("vucem_firmante", array("figura"))
-                    ->where("rfc = ?", $rfc);
+                ->from("vucem_firmante", array("figura"))
+                ->where("rfc = ?", $rfc);
             if (($stmt = $this->_db_table->fetchRow($sql))) {
                 return $stmt["figura"];
             }
@@ -203,24 +213,25 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function archivosFirmante($rfc, $env = null, $patente = null, $aduana = null) {
+    public function archivosFirmante($rfc, $env = null, $patente = null, $aduana = null)
+    {
         try {
             $sql = $this->_db_table->select();
             $sql->from("vucem_firmante", array(
-                        new Zend_Db_Expr("AES_DECRYPT(`key`,'{$this->_key}') AS `key`"),
-                        "key_nom",
-                        new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS certificado"),
-                        "certificado_nom",
-                        new Zend_Db_Expr("AES_DECRYPT(pem,'{$this->_key}') AS pem"),
-                        "pem_nom",
-                        new Zend_Db_Expr("AES_DECRYPT(spem,'{$this->_key}') AS spem"),
-                        "spem_nom",
-                        new Zend_Db_Expr("AES_DECRYPT(req,'{$this->_key}') AS req"),
-                        "req_nom",
-                    ))
-                    ->where("rfc = ?", $rfc)
-                    ->where("tipo = ?", "prod")
-                    ->limit(1);
+                new Zend_Db_Expr("AES_DECRYPT(`key`,'{$this->_key}') AS `key`"),
+                "key_nom",
+                new Zend_Db_Expr("AES_DECRYPT(certificado,'{$this->_key}') AS certificado"),
+                "certificado_nom",
+                new Zend_Db_Expr("AES_DECRYPT(pem,'{$this->_key}') AS pem"),
+                "pem_nom",
+                new Zend_Db_Expr("AES_DECRYPT(spem,'{$this->_key}') AS spem"),
+                "spem_nom",
+                new Zend_Db_Expr("AES_DECRYPT(req,'{$this->_key}') AS req"),
+                "req_nom",
+            ))
+                ->where("rfc = ?", $rfc)
+                ->where("tipo = ?", "prod")
+                ->limit(1);
             if (isset($patente)) {
                 $sql->where("patente = ?", $patente);
             }
@@ -249,14 +260,15 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function verificarFirmante($tipo, $figura, $rfc, $patente, $aduana) {
+    public function verificarFirmante($tipo, $figura, $rfc, $patente, $aduana)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("tipo = ?", $tipo)
-                    ->where("figura = ?", $figura)
-                    ->where("rfc = ?", $rfc)
-                    ->where("patente = ?", $patente)
-                    ->where("aduana = ?", $aduana);
+                ->where("tipo = ?", $tipo)
+                ->where("figura = ?", $figura)
+                ->where("rfc = ?", $rfc)
+                ->where("patente = ?", $patente)
+                ->where("aduana = ?", $aduana);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -267,7 +279,8 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function agregarNuevoFirmante($tipo, $figura, $razonSocial, $rfc, $patente, $aduana) {
+    public function agregarNuevoFirmante($tipo, $figura, $razonSocial, $rfc, $patente, $aduana)
+    {
         try {
             $added = $this->_db_table->insert(array(
                 "tipo" => $tipo,
@@ -286,7 +299,8 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function queryBlob($query) {
+    public function queryBlob($query)
+    {
         try {
             $db = Zend_Registry::get("oaqintranet");
             $added = $db->query($query);
@@ -299,11 +313,12 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function fielDisponible() {
+    public function fielDisponible()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from("vucem_firmante", array("id", "tipo", "figura", "patente", "aduana", "razon", "rfc"))
-                    ->order(array("razon ASC", "patente", "aduana"));
+                ->from("vucem_firmante", array("id", "tipo", "figura", "patente", "aduana", "razon", "rfc"))
+                ->order(array("razon ASC", "patente", "aduana"));
 
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
@@ -315,7 +330,8 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function addNew($figura, $patente, $aduana, $razonSocial, $rfc, $cerPath, $keyPath, $reqPath, $pemPath, $spemPath, $passVu, $passFiel, $passWs, $passSpem, $username) {
+    public function addNew($figura, $patente, $aduana, $razonSocial, $rfc, $cerPath, $keyPath, $reqPath, $pemPath, $spemPath, $passVu, $passFiel, $passWs, $passSpem, $username)
+    {
         try {
             $data = array(
                 "tipo" => "prod",
@@ -351,14 +367,15 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function obtenerSellosDisponibles() {
+    public function obtenerSellosDisponibles()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("f" => "vucem_firmante"), array("f.rfc", "f.razon"))
-                    ->where("tipo <> 'dev'")
-                    ->group(array("f.razon", "f.rfc"))
-                    ->order("f.razon ASC");
+                ->setIntegrityCheck(false)
+                ->from(array("f" => "vucem_firmante"), array("f.rfc", "f.razon"))
+                ->where("tipo <> 'dev'")
+                ->group(array("f.razon", "f.rfc"))
+                ->order("f.razon ASC");
             if (($stmt = $this->_db_table->fetchAll($sql))) {
                 return $stmt->toArray();
             }
@@ -368,14 +385,15 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function patentesPorSello($rfc) {
+    public function patentesPorSello($rfc)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("f" => "vucem_firmante"), array("f.patente"))
-                    ->where("f.tipo <> 'dev'")
-                    ->where("f.rfc = ?", $rfc)
-                    ->group("f.patente");
+                ->setIntegrityCheck(false)
+                ->from(array("f" => "vucem_firmante"), array("f.patente"))
+                ->where("f.tipo <> 'dev'")
+                ->where("f.rfc = ?", $rfc)
+                ->group("f.patente");
             if (($stmt = $this->_db_table->fetchAll($sql))) {
                 return $stmt->toArray();
             }
@@ -385,15 +403,16 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function aduanasPorPatente($rfc, $patente) {
+    public function aduanasPorPatente($rfc, $patente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("f" => "vucem_firmante"), array("f.aduana"))
-                    ->where("f.tipo <> 'dev'")
-                    ->where("f.rfc = ?", $rfc)
-                    ->where("f.patente = ?", $patente)
-                    ->group("f.aduana");
+                ->setIntegrityCheck(false)
+                ->from(array("f" => "vucem_firmante"), array("f.aduana"))
+                ->where("f.tipo <> 'dev'")
+                ->where("f.rfc = ?", $rfc)
+                ->where("f.patente = ?", $patente)
+                ->group("f.aduana");
             if (($stmt = $this->_db_table->fetchAll($sql))) {
                 return $stmt->toArray();
             }
@@ -403,12 +422,13 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function nombreFirmante($rfc) {
+    public function nombreFirmante($rfc)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("f" => "vucem_firmante"), array("f.razon"))
-                    ->where("f.rfc = ?", $rfc);
+                ->setIntegrityCheck(false)
+                ->from(array("f" => "vucem_firmante"), array("f.razon"))
+                ->where("f.rfc = ?", $rfc);
             if (($stmt = $this->_db_table->fetchRow($sql))) {
                 return $stmt->toArray();
             }
@@ -418,11 +438,12 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function sellosPorRfc($rfc) {
+    public function sellosPorRfc($rfc)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("*"))
-                    ->where("rfc = ?", $rfc);
+                ->from($this->_db_table, array("*"))
+                ->where("rfc = ?", $rfc);
             if (($stmt = $this->_db_table->fetchAll($sql))) {
                 return $stmt->toArray();
             }
@@ -432,15 +453,16 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function sellosDeCliente($rfcCte) {
+    public function sellosDeCliente($rfcCte)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->distinct()
-                    ->from($this->_db_table, array("rfc", "id", "sha", "razon"))
-                    ->where("rfc = ?", $rfcCte)
-                    ->orWhere("figura = 1")
-                    ->where("rfc NOT IN ('GWT921026L97')")
-                    ->group(array("id", "rfc"));
+                ->distinct()
+                ->from($this->_db_table, array("rfc", "id", "sha", "razon"))
+                ->where("rfc = ?", $rfcCte)
+                ->orWhere("figura = 1")
+                ->where("rfc NOT IN ('GWT921026L97')")
+                ->group(array("id", "rfc"));
             if (($stmt = $this->_db_table->fetchAll($sql))) {
                 return $stmt->toArray();
             }
@@ -450,7 +472,8 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function update($id, $data) {
+    public function update($id, $data)
+    {
         try {
             $where = array(
                 "id = ?" => $id
@@ -465,7 +488,8 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $id));
             if ($stmt) {
@@ -477,12 +501,13 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function datosFirmante($rfc) {
+    public function datosFirmante($rfc)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("f" => "vucem_firmante"), array("*"))
-                    ->where("f.rfc = ?", $rfc);
+                ->setIntegrityCheck(false)
+                ->from(array("f" => "vucem_firmante"), array("*"))
+                ->where("f.rfc = ?", $rfc);
             if (($stmt = $this->_db_table->fetchRow($sql))) {
                 return $stmt->toArray();
             }
@@ -491,14 +516,15 @@ class Vucem_Model_VucemFirmanteMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function fechasVencimiento($id) {
+
+    public function fechasVencimiento($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("f" => "vucem_firmante"), array("*"))
-                    ->where("f.id = ?", $id)
-                    ->where("(valido_desde IS NULL OR valido_hasta IS NULL)");
+                ->setIntegrityCheck(false)
+                ->from(array("f" => "vucem_firmante"), array("*"))
+                ->where("f.id = ?", $id)
+                ->where("(valido_desde IS NULL OR valido_hasta IS NULL)");
             if (($stmt = $this->_db_table->fetchRow($sql))) {
                 return true;
             }
@@ -508,7 +534,8 @@ class Vucem_Model_VucemFirmanteMapper {
         }
     }
 
-    public function actualizarFechasVencimiento($id, $validoDesde, $validoHasta) {
+    public function actualizarFechasVencimiento($id, $validoDesde, $validoHasta)
+    {
         try {
             $arr = array(
                 "valido_desde" => date("Y-m-d H:i:s", strtotime($validoDesde)),
@@ -523,5 +550,4 @@ class Vucem_Model_VucemFirmanteMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-
 }

@@ -1,17 +1,20 @@
 <?php
 
-class Trafico_Model_CliSello {
+class Trafico_Model_CliSello
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_CliSello();
     }
 
-    public function verificar($idCliente) {
+    public function verificar($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idCliente = ?", $idCliente);
+                ->where("idCliente = ?", $idCliente);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -22,7 +25,8 @@ class Trafico_Model_CliSello {
         }
     }
 
-    public function actualizar($idCliente, $idSello, $tipo) {
+    public function actualizar($idCliente, $idSello, $tipo)
+    {
         try {
             $stmt = $this->_db_table->update(array("idSello" => $idSello, "tipo" => $tipo, "modificado" => date("Y-m-d H:i:s")), array("idCliente = ?" => $idCliente));
             if ($stmt) {
@@ -36,7 +40,8 @@ class Trafico_Model_CliSello {
         }
     }
 
-    public function agregar($idCliente, $idSello, $tipo) {
+    public function agregar($idCliente, $idSello, $tipo)
+    {
         try {
             $stmt = $this->_db_table->insert(array(
                 "idCliente" => $idCliente,
@@ -53,12 +58,13 @@ class Trafico_Model_CliSello {
         }
     }
 
-    public function obtenerDefault($idCliente) {
+    public function obtenerDefault($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_clisello"), array("idSello"))
-                    ->where("s.idCliente = ?", $idCliente);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_clisello"), array("idSello"))
+                ->where("s.idCliente = ?", $idCliente);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return (int) $stmt->idSello;
@@ -69,13 +75,14 @@ class Trafico_Model_CliSello {
         }
     }
 
-    public function obtener($idCliente) {
+    public function obtener($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("s" => "trafico_clisello"), array("*"))
-                    ->joinLeft(array("f" => "vucem_firmante"), "s.idSello = f.id", array("rfc", "razon"))
-                    ->where("s.idCliente = ?", $idCliente);
+                ->setIntegrityCheck(false)
+                ->from(array("s" => "trafico_clisello"), array("*"))
+                ->joinLeft(array("f" => "vucem_firmante"), "s.idSello = f.id", array("rfc", "razon"))
+                ->where("s.idCliente = ?", $idCliente);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -85,5 +92,4 @@ class Trafico_Model_CliSello {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-
 }

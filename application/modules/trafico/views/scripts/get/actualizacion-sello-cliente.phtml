@@ -23,9 +23,10 @@
             <tr>
                 <th class="traffic-table-title" colspan="7">
                     MODULO ANTERIOR VUCEM (POR PATENTE Y ADUANA)
-                </th>                    
+                </th>
             </tr>
             <tr>
+                <th></th>
                 <th>Patente</th>
                 <th>Certificado</th>
                 <th>.Key</th>
@@ -40,6 +41,11 @@
             <?php if (isset($this->firmantes) && !empty($this->firmantes)) { ?>
                 <?php foreach ($this->firmantes as $item) { ?>
                     <tr>
+                        <td>
+                            <?php if (isset($this->download)) { ?>
+                                <i class="fas fa-download download-key" data-id="<?= $item["id"] ?>" style="cursor: pointer"></i>
+                            <?php } ?>
+                        </td>
                         <td><?= $item["aduana"] . '-' . $item["patente"] ?></td>
                         <td><?= $item["certificado_nom"] ?></td>
                         <td><?= $item["key_nom"] ?></td>
@@ -49,9 +55,9 @@
                             <input type="checkbox" value="<?= $item["id"] ?>" class="archivo-sello" name="archivo-sello" />
                         </td>
                     </tr>
-                <?php } ?>            
+                <?php } ?>
                 <tr>
-                    <td colspan="6">
+                    <td colspan="7">
                         <button type="submit" id="updateKeys" class="traffic-btn traffic-btn-small traffic-btn-right" style="float: right">Actualizar</button>
                     </td>
                 </tr>
@@ -69,7 +75,7 @@
             <tr>
                 <th class="traffic-table-title" colspan="3">
                     BITACORA
-                </th>                    
+                </th>
             </tr>
             <tr>
                 <th>&nbsp;</th>

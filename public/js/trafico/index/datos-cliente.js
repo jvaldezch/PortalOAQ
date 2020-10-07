@@ -5,7 +5,8 @@
 
 function removerContacto(idContacto) {
     if (window.confirm("¿Está seguro que desea remover este contacto?")) {
-        $.ajax({url: "/trafico/ajax/remover-contacto-cliente", data: {id: idContacto}, dataType: "json", type: "POST",
+        $.ajax({
+            url: "/trafico/ajax/remover-contacto-cliente", data: { id: idContacto }, dataType: "json", type: "POST",
             success: function (res) {
                 if (res.success === true) {
                     window.location.replace("/trafico/index/datos-cliente?id=" + $("#idCliente").val());
@@ -19,10 +20,11 @@ function removeCustom(id) {
     console.log("id: " + id);
 }
 
-window.removerRfcConsulta = function(id) {
+window.removerRfcConsulta = function (id) {
     let idCliente = $("#idCliente").val();
-    $.ajax({url: "/trafico/post/remover-rfc-consulta", cache: false, dataType: "json", type: "POST",
-        data: {id: id},
+    $.ajax({
+        url: "/trafico/post/remover-rfc-consulta", cache: false, dataType: "json", type: "POST",
+        data: { id: id },
         success: function (res) {
             if (res.success === true) {
                 window.location.replace("/trafico/index/datos-cliente?id=" + idCliente);
@@ -32,8 +34,9 @@ window.removerRfcConsulta = function(id) {
 };
 
 function cargarArchivos() {
-    $.ajax({url: "/trafico/post/cargar-archivos-cliente", type: "POST", dataType: "json",
-        data: {idCliente: $("#idCliente").val()},
+    $.ajax({
+        url: "/trafico/post/cargar-archivos-cliente", type: "POST", dataType: "json",
+        data: { idCliente: $("#idCliente").val() },
         success: function (res) {
             if (res.success === true) {
                 $("#customerFiles").html(res.html);
@@ -45,14 +48,14 @@ function cargarArchivos() {
 function archivo(id, accion, tipoArchivo, fecha) {
     tipoArchivo = tipoArchivo || null;
     fecha = fecha || null;
-    $.post("/trafico/post/editar-archivo-fiscal", {id: id, accion: accion, tipoArchivo: tipoArchivo, fecha: fecha})
-            .done(function (res) {
-                if (res.success === true) {
-                    $("#fileDescription_" + id).html(res.select);
-                    $("#icon_" + id).html(res.icons);
-                    $("#fileExpiration_" + id).html(res.date);
-                }
-            });
+    $.post("/trafico/post/editar-archivo-fiscal", { id: id, accion: accion, tipoArchivo: tipoArchivo, fecha: fecha })
+        .done(function (res) {
+            if (res.success === true) {
+                $("#fileDescription_" + id).html(res.select);
+                $("#icon_" + id).html(res.icons);
+                $("#fileExpiration_" + id).html(res.date);
+            }
+        });
 }
 
 function editarArchivo(id) {
@@ -68,13 +71,15 @@ function guardarArchivo(id) {
 }
 
 function borrarArchivo(id) {
-    $.confirm({title: "Confirmar", content: '¿Está seguro de que desea eliminar el archivo?', escapeKey: "cerrar", boxWidth: "250px", useBootstrap: false,
+    $.confirm({
+        title: "Confirmar", content: '¿Está seguro de que desea eliminar el archivo?', escapeKey: "cerrar", boxWidth: "250px", useBootstrap: false,
         buttons: {
             si: {
                 btnClass: "btn-blue",
                 action: function () {
-                    $.ajax({url: "/trafico/post/borrar-archivo-cliente", dataType: "json", timeout: 3000, type: "POST",
-                        data: {id: id, idCliente: $("#idCliente").val()},
+                    $.ajax({
+                        url: "/trafico/post/borrar-archivo-cliente", dataType: "json", timeout: 3000, type: "POST",
+                        data: { id: id, idCliente: $("#idCliente").val() },
                         success: function (res) {
                             if (res.success === true) {
                                 cargarArchivos();
@@ -83,7 +88,7 @@ function borrarArchivo(id) {
                     });
                 }
             },
-            no: function () {}
+            no: function () { }
         }
     });
 }
@@ -92,24 +97,25 @@ function currentActive(current) {
 
     if (Cookies.get("active") === "#customer-information") {
     }
-    
+
     if (Cookies.get("active") === "#customer-documents") {
         cargarArchivos();
     }
-    
+
     if (Cookies.get("active") === "#customer-vucem") {
     }
-    
+
     if (Cookies.get("active") === "#customer-log") {
     }
-    
+
     if (Cookies.get("active") === "#customer-parts") {
         partes();
     }
 }
 
 window.paises = function (id) {
-    return $.ajax({url: '/trafico/facturas/paises',
+    return $.ajax({
+        url: '/trafico/facturas/paises',
         success: function (res) {
             if (res.success === true) {
                 for (let i = 0; i < res.result.length; i++) {
@@ -123,7 +129,8 @@ window.paises = function (id) {
 };
 
 window.monedas = function () {
-    return $.ajax({url: '/trafico/facturas/monedas',
+    return $.ajax({
+        url: '/trafico/facturas/monedas',
         success: function (res) {
             if (res.success === true) {
                 for (let i = 0; i < res.result.length; i++) {
@@ -137,12 +144,15 @@ window.monedas = function () {
 };
 
 window.obtenerSellos = function (idCliente) {
-    return $.ajax({url: '/trafico/get/obtener-sellos-cliente', type: "GET",
-        data: {idCliente: idCliente},
+    return $.ajax({
+        url: '/trafico/get/obtener-sellos-cliente', type: "GET",
+        data: { idCliente: idCliente },
         beforeSend: function () {
+            $("#customer-vucem").LoadingOverlay("show", {color: "rgba(255, 255, 255, 0.9)"});
             $("#sellos-cliente").html('');
         },
         success: function (res) {
+            $("#customer-vucem").LoadingOverlay("hide");
             if (res.success === true) {
                 $("#sellos-cliente").html(res.html);
                 return true;
@@ -153,8 +163,9 @@ window.obtenerSellos = function (idCliente) {
 };
 
 window.obtenerDefault = function (idCliente) {
-    return $.ajax({url: '/trafico/get/obtener-sello-default', type: "GET",
-        data: {idCliente: idCliente},
+    return $.ajax({
+        url: '/trafico/get/obtener-sello-default', type: "GET",
+        data: { idCliente: idCliente },
         success: function (res) {
             if (res.success === true) {
                 $("input[data-id=" + res.id + "]").prop("checked", true);
@@ -164,20 +175,22 @@ window.obtenerDefault = function (idCliente) {
 };
 
 window.actualizarSello = function (id) {
-    $.confirm({title: "Editar sello", escapeKey: "cerrar", type: "green", boxWidth: "90%", useBootstrap: false,
+    $.confirm({
+        title: "Editar sello", escapeKey: "cerrar", type: "green", boxWidth: "90%", useBootstrap: false,
         buttons: {
             cerrar: {
                 btnClass: "btn-red",
-                action: function(){}
+                action: function () { }
             }
         },
         content: function () {
             let self = this;
-            return $.ajax({url: "/trafico/get/actualizacion-sello-cliente", dataType: "json", method: "GET",
-                data: {id: id, idCliente: $('#idCliente').val()}
+            return $.ajax({
+                url: "/trafico/get/actualizacion-sello-cliente", dataType: "json", method: "GET",
+                data: { id: id, idCliente: $('#idCliente').val() }
             }).done(function (res) {
                 let html = "";
-                if(res.success === true) {
+                if (res.success === true) {
                     html = res.html;
                 }
                 self.setContent(html);
@@ -188,16 +201,16 @@ window.actualizarSello = function (id) {
     });
 };
 
-window.descargarPartes = function() {
+window.descargarPartes = function () {
     window.location.href = "/trafico/facturas/partes-cliente?idCliente=" + $('#idCliente').val() + "&excel=true";
 };
 
 let dg;
 
 window.partes = function () {
-    
+
     dg = $('#dg').edatagrid();
-    
+
     dg.edatagrid({
         pagination: true,
         singleSelect: true,
@@ -213,37 +226,40 @@ window.partes = function () {
             idCliente: $('#idCliente').val()
         },
         toolbar: [{
-                text: 'Guardar',
-                iconCls: 'icon-save',
-                handler: function () {
-                    descargarPartes();
-                }
-            }],
+            text: 'Guardar',
+            iconCls: 'icon-save',
+            handler: function () {
+                descargarPartes();
+            }
+        }],
         frozenColumns: [[
-                {field: 'idPro', width: 50, title: 'ID prov.'},
-                {field: 'identificador', width: 120, title: 'Tax Id'},
-                {field: 'nombreProveedor', width: 220, title: 'Nom. Proveedor'},
-                {field: 'fraccion', width: 80, title: 'Fracción'},
-                {field: 'numParte', width: 150, title: 'Num.Parte'}
-            ]],
+            { field: 'idPro', width: 50, title: 'ID prov.' },
+            { field: 'identificador', width: 120, title: 'Tax Id' },
+            { field: 'nombreProveedor', width: 220, title: 'Nom. Proveedor' },
+            { field: 'fraccion', width: 80, title: 'Fracción' },
+            { field: 'numParte', width: 150, title: 'Num.Parte' }
+        ]],
         columns: [[
-                {field: 'descripcion', width: 250, title: 'Descripción'},
-                {field: 'umc', width: 120, title: 'UMC'},
-                {field: 'umt', width: 120, title: 'UMT'},
-                {field: 'oma', width: 120, title: 'OMA'},
-                {field: 'paisOrigen', width: 120, title: 'País Origen'},
-                {field: 'paisVendedor', width: 120, title: 'País Vendedor'}
-            ]]
+            { field: 'descripcion', width: 250, title: 'Descripción' },
+            { field: 'umc', width: 120, title: 'UMC' },
+            { field: 'umt', width: 120, title: 'UMT' },
+            { field: 'oma', width: 120, title: 'OMA' },
+            { field: 'paisOrigen', width: 120, title: 'País Origen' },
+            { field: 'paisVendedor', width: 120, title: 'País Vendedor' }
+        ]]
     });
-    
+
 };
 
 function editarParteModal(titulo, idProducto) {
-    $.confirm({title: titulo, escapeKey: "cerrar", boxWidth: "590px", useBootstrap: false, type: "green",
+    $.confirm({
+        title: titulo, escapeKey: "cerrar", boxWidth: "590px", useBootstrap: false, type: "green",
         buttons: {
-            guardar: {btnClass: "btn-green", action: function () {
+            guardar: {
+                btnClass: "btn-green", action: function () {
                     if ($("#frmProduct").valid()) {
-                        $("#frmProduct").ajaxSubmit({url: "/trafico/facturas/guardar-parte", dataType: "json", type: "POST",
+                        $("#frmProduct").ajaxSubmit({
+                            url: "/trafico/facturas/guardar-parte", dataType: "json", type: "POST",
                             success: function (res) {
                                 if (res.success === true) {
                                     productos();
@@ -253,12 +269,14 @@ function editarParteModal(titulo, idProducto) {
                     } else {
                         return false;
                     }
-                }},
-            cerrar: {action: function () {}}
+                }
+            },
+            cerrar: { action: function () { } }
         },
         content: function () {
             let self = this;
-            return $.ajax({url: "/trafico/facturas/editar-parte?idProducto=" + idProducto, dataType: "json", method: "get"
+            return $.ajax({
+                url: "/trafico/facturas/editar-parte?idProducto=" + idProducto, dataType: "json", method: "get"
             }).done(function (res) {
                 let html = "";
                 if (res.success === true) {
@@ -283,14 +301,14 @@ $(document).ready(function () {
             console.log(res.success);
         });
     });
-    
+
     $(document.body).on("click", "input[name=tipoCliente]", function () {
         $.post("/trafico/post/cambiar-tipo-cliente", { idCliente: $("#idCliente").val(), value: $(this).val() }, function (res) {
             console.log(res.success);
         });
     });
 
-    $(document.body).on("change", "#peca, #inmex, #civa, #oea, #ic, #prosec, #ctpat",function() {
+    $(document.body).on("change", "#peca, #inmex, #civa, #oea, #ic, #prosec, #ctpat", function () {
         let obj = $(this);
         let inp = $("#" + obj.attr('name') + "_num");
         let v = 1;
@@ -304,7 +322,7 @@ $(document).ready(function () {
             { idCliente: $("#idCliente").val(), atributo: obj.attr('name'), value: v });
     });
 
-    $(document.body).on("change","#peca_num, #inmex_num, #civa_num, #oea_num, #ic_num, #prosec_num, #ctpat_num",function() {
+    $(document.body).on("change", "#peca_num, #inmex_num, #civa_num, #oea_num, #ic_num, #prosec_num, #ctpat_num", function () {
         let obj = $(this);
         $.post("/trafico/post/atributo-cliente",
             { idCliente: $("#idCliente").val(), atributo: obj.attr('name'), value: $(this).val() });
@@ -319,54 +337,58 @@ $(document).ready(function () {
         });
     });
 
-    $.ajax({url: "/webservice/ajax/estatus-web-service", dataType: "json", type: "POST",
-        data: {rfc: $("#rfcCliente").val()},
+    $.ajax({
+        url: "/webservice/ajax/estatus-web-service", dataType: "json", type: "POST",
+        data: { rfc: $("#rfcCliente").val() },
         success: function (res) {
             if (res.success === true) {
-                if(parseInt(res.value) === 1) {
+                if (parseInt(res.value) === 1) {
                     $('input[name=activateWs]').attr("checked", "true");
                 }
             }
         }
     });
-    
-    $.ajax({url: "/webservice/ajax/estatus-activo-cliente", dataType: "json", type: "POST",
-        data: {rfc: $("#rfcCliente").val()},
+
+    $.ajax({
+        url: "/webservice/ajax/estatus-activo-cliente", dataType: "json", type: "POST",
+        data: { rfc: $("#rfcCliente").val() },
         success: function (res) {
             if (res.success === true) {
                 $('input[name=activate]').attr("checked", "true");
             }
         }
     });
-    
+
     $(document.body).on("change", "input[name=activate]:radio", function () {
-        $.ajax({url: "/webservice/ajax/activar-cliente", dataType: "json", type: "POST",
-            data: {value: $(this).val(), rfc: $("#rfcCliente").val()}
+        $.ajax({
+            url: "/webservice/ajax/activar-cliente", dataType: "json", type: "POST",
+            data: { value: $(this).val(), rfc: $("#rfcCliente").val() }
         });
     });
-    
+
     $("input[name=activateWs]:radio").change(function () {
-        $.ajax({url: "/webservice/ajax/agregar-web-service", dataType: "json", type: "POST",
-            data: {value: $(this).val(), rfc: $("#rfcCliente").val()},
+        $.ajax({
+            url: "/webservice/ajax/agregar-web-service", dataType: "json", type: "POST",
+            data: { value: $(this).val(), rfc: $("#rfcCliente").val() },
             success: function (res) {
                 if (res.success === true) {
-                    
+
                 }
             }
         });
     });
-    
+
     let arr = [];
-    $("#traffic-tabs li a").each(function() {        
+    $("#traffic-tabs li a").each(function () {
         arr.push($(this).attr("href"));
     });
-    
+
     $("#traffic-tabs li a").on("click", function () {
         var href = $(this).attr("href");
         Cookies.set("active", href);
         currentActive(Cookies.get("active"));
     });
-    
+
     if (Cookies.get("active") !== undefined && jQuery.inArray(Cookies.get("active"), arr) !== -1) {
         $("a[href=\"" + Cookies.get("active") + "\"]").tab("show");
         currentActive(Cookies.get("active"));
@@ -374,17 +396,17 @@ $(document).ready(function () {
         $("a[href=\"#customer-information\"]").tab("show");
         Cookies.set("active", "#customer-information");
     }
-    
-    $.validator.addMethod("regex", function(value, element, regexpr) {          
+
+    $.validator.addMethod("regex", function (value, element, regexpr) {
         return regexpr.test(value);
     }, " Caracter no válido.");
-    
+
     $("#formAddress").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -395,9 +417,9 @@ $(document).ready(function () {
             calle: {
                 required: true
             },
-            numext: {required: true},
-            estado: {required: true},
-            pais: {required: true},
+            numext: { required: true },
+            estado: { required: true },
+            pais: { required: true },
             cp: {
                 required: true,
                 regex: /^[0-9]+$/
@@ -412,44 +434,45 @@ $(document).ready(function () {
                 required: " Campo necesario.",
                 regex: " Caracter no válido."
             },
-            numext: {required: " Campo necesario."},
-            estado: {required: " Campo necesario."},
-            pais: {required: " Campo necesario."},
+            numext: { required: " Campo necesario." },
+            estado: { required: " Campo necesario." },
+            pais: { required: " Campo necesario." },
             cp: {
                 required: " Campo necesario.",
                 regex: " Solo digitos."
             }
         }
     });
-    
+
     $(document.body).on("click", "#updateAddress", function (ev) {
         ev.preventDefault();
         if ($("#formAddress").valid()) {
-            $("#formAddress").ajaxSubmit({url: "/trafico/ajax/actualizar-direccion", dataType: "json", timeout: 3000, type: "POST",
+            $("#formAddress").ajaxSubmit({
+                url: "/trafico/ajax/actualizar-direccion", dataType: "json", timeout: 3000, type: "POST",
                 success: function (res) {
-                    if (res.success === true) {                        
+                    if (res.success === true) {
                         window.location.replace("/trafico/index/datos-cliente?id=" + res.id);
                     }
                 }
             });
         }
     });
-    
+
     $("#form-contact").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("label[for='" + element.attr("id") + "']")
-                    .append(error);
+                .closest("form")
+                .find("label[for='" + element.attr("id") + "']")
+                .append(error);
         },
         errorElement: "span",
         rules: {
-            nombre: {required: true},
+            nombre: { required: true },
             email: {
                 required: true,
                 email: true
             },
-            tipoContacto: {required: true}
+            tipoContacto: { required: true }
         },
         messages: {
             nombre: " Proporcionar nombre.",
@@ -457,13 +480,13 @@ $(document).ready(function () {
             tipoContacto: " Seleccionar tipo de contacto."
         }
     });
-    
+
     $("#formFiles").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -478,20 +501,20 @@ $(document).ready(function () {
             }
         }
     });
-    
+
     let bar = $(".bar");
     let percent = $(".percent");
-    
-    $.validator.addMethod("regx", function(value, element, regexpr) {          
+
+    $.validator.addMethod("regx", function (value, element, regexpr) {
         return regexpr.test(value);
     }, " Caracter no válido.");
-    
+
     $("#formAccess").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -502,7 +525,7 @@ $(document).ready(function () {
             password: { required: "Necesario" },
         }
     });
-    
+
     $(document.body).on("click", "#saveAccess", function (ev) {
         ev.preventDefault();
         if ($("#formAccess").valid()) {
@@ -512,17 +535,18 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (res) {
                     if (res.success === true) {
-                        $.toast({text: "<strong>Guardado</strong>", bgColor: "green", stack : 3, position : "bottom-right"});
+                        $.toast({ text: "<strong>Guardado</strong>", bgColor: "green", stack: 3, position: "bottom-right" });
                     }
                 }
             });
         }
     });
-    
+
     $(document.body).on("click", "#uploadFiles", function (ev) {
         ev.preventDefault();
         if ($("#formFiles").valid()) {
-            $("#formFiles").ajaxSubmit({dataType: "json", type: "POST",
+            $("#formFiles").ajaxSubmit({
+                dataType: "json", type: "POST",
                 beforeSend: function () {
                     let percentVal = "0%";
                     bar.width(percentVal);
@@ -535,7 +559,7 @@ $(document).ready(function () {
                 },
                 success: function (res) {
                     $("#file").val("");
-                    setTimeout(function(){ bar.width(0); percent.html(0); }, 500);
+                    setTimeout(function () { bar.width(0); percent.html(0); }, 500);
                     if (res.success === true) {
                         cargarArchivos();
                     }
@@ -543,35 +567,37 @@ $(document).ready(function () {
             });
         }
     });
-    
+
     cargarArchivos();
-    
+
     $(document.body).on("click", "#submit", function (ev) {
         ev.preventDefault();
         $(this).prop("disabled", true)
-                .addClass("disabled");
+            .addClass("disabled");
         if ($("#form-contact").valid()) {
-            $("#form-contact").ajaxSubmit({dataType: "json", timeout: 3000, type: "POST",
+            $("#form-contact").ajaxSubmit({
+                dataType: "json", timeout: 3000, type: "POST",
                 success: function (res) {
-                    if (res.success === true) {                        
+                    if (res.success === true) {
                         window.location.replace("/trafico/index/datos-cliente?id=" + res.id);
                     }
                 }
             });
         } else {
             $(this).removeProp("disabled")
-                    .removeClass("disabled");
+                .removeClass("disabled");
         }
     });
-    
+
     $(document.body).on("click", "input[name=vucem]", function (ev) {
         ev.preventDefault();
-        $.ajax({url: "/trafico/post/establecer-default", dataType: "json", type: "POST",
-            data: {idCliente: $("#idCliente").val(), idSello: $(this).data("id"), tipo: $(this).data("type")},
+        $.ajax({
+            url: "/trafico/post/establecer-default", dataType: "json", type: "POST",
+            data: { idCliente: $("#idCliente").val(), idSello: $(this).data("id"), tipo: $(this).data("type") },
             success: function (res) {
                 if (res.success === true) {
                 } else {
-                    $.alert({title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message});
+                    $.alert({ title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message });
                 }
             }
         });
@@ -585,21 +611,23 @@ $(document).ready(function () {
         });
         input[0].selectionStart = input[0].selectionEnd = start;
     });
-    
+
     /** CONTACTS FORM **/
-    
+
     $(document.body).on("click", "#addContact", function (ev) {
         ev.preventDefault();
-        $.confirm({title: "Agregar contacto", escapeKey: "cerrar", type: 'blue', boxWidth: "650px", useBootstrap: false,
+        $.confirm({
+            title: "Agregar contacto", escapeKey: "cerrar", type: 'blue', boxWidth: "650px", useBootstrap: false,
             buttons: {
                 cerrar: {
-                    action: function () {}
+                    action: function () { }
                 },
                 guardar: {
                     btnClass: "btn-blue",
                     action: function () {
                         if ($("#formContacts").valid()) {
-                            $("#formContacts").ajaxSubmit({url: "/trafico/ajax/agregar-contacto-cliente", cache: false, dataType: "json", type: "POST",
+                            $("#formContacts").ajaxSubmit({
+                                url: "/trafico/ajax/agregar-contacto-cliente", cache: false, dataType: "json", type: "POST",
                                 success: function (res) {
                                     if (res.success === true) {
                                         window.location.replace("/trafico/index/datos-cliente?id=" + res.id);
@@ -614,10 +642,11 @@ $(document).ready(function () {
             },
             content: function () {
                 let self = this;
-                return $.ajax({url: "/trafico/get/agregar-contacto?idCliente=" + $("#idCliente").val(), dataType: "json", method: "GET"
+                return $.ajax({
+                    url: "/trafico/get/agregar-contacto?idCliente=" + $("#idCliente").val(), dataType: "json", method: "GET"
                 }).done(function (res) {
                     let html = "";
-                    if(res.success === true) {
+                    if (res.success === true) {
                         html = res.html;
                     }
                     self.setContent(html);
@@ -627,7 +656,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $(document.body).on("change", ".alert", function () {
         if ($(this).is(":checked")) {
             let action = "add";
@@ -635,8 +664,9 @@ $(document).ready(function () {
             let action = "remove";
         }
         if (action) {
-            $.ajax({url: "/trafico/ajax/avisos-cliente", cache: false, dataType: "json", type: "POST",
-                data: {id: $(this).data("id"), action: action, alert: $(this).data("alert")},
+            $.ajax({
+                url: "/trafico/ajax/avisos-cliente", cache: false, dataType: "json", type: "POST",
+                data: { id: $(this).data("id"), action: action, alert: $(this).data("alert") },
                 success: function (res) {
                     if (res.success === true) {
                         window.location.replace("/trafico/index/datos-cliente?id=" + $("#idCliente").val());
@@ -645,35 +675,36 @@ $(document).ready(function () {
             });
         }
     });
-    
+
     $("#checklistHelp").jqm({
         ajax: "@href",
         modal: true,
         trigger: "#help"
     });
-    
+
     $("#checklistModal").jqm({
         ajax: "@href",
         modal: true,
         trigger: "#checklist"
     });
-    
+
     $("#addNewCustom").jqm({
         ajax: "/trafico/get/agregar-aduana-cliente?id=" + $("#idCliente").val(),
         modal: true,
         trigger: "#newCustom"
     });
-    
+
     $(document.body).on("click", "#closeModal", function (ev) {
         ev.preventDefault();
         $("#checklistHelp").jqmHide();
     });
-    
+
     $(document.body).on("click", ".reloadCertificate", function (ev) {
         ev.preventDefault();
         let id = $(this).data("id");
-        $.ajax({url: "/trafico/get/actualizar-sello", cache: false, dataType: "json", type: "GET",
-            data: {id: id},
+        $.ajax({
+            url: "/trafico/get/actualizar-sello", cache: false, dataType: "json", type: "GET",
+            data: { id: id },
             success: function (res) {
                 if (res.success === true) {
                     $(".reloadCertificate[data-id=" + id + "]").replaceWith(res.html);
@@ -681,149 +712,160 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $(document.body).on("click", "#help", function (ev) {
         ev.preventDefault();
     });
-    
+
     $(document.body).on("click", ".editarPlanta", function () {
         let idPlanta = $(this).data("id");
         let idCliente = $(this).data("cliente");
         $.confirm({
             title: "<strong>Nueva Planta</strong>", escapeKey: "cerrar", boxWidth: "500px", useBootstrap: false,
             buttons: {
-                guardar: { btnClass: "btn-blue",                    
-                    action: function(){
+                guardar: {
+                    btnClass: "btn-blue",
+                    action: function () {
                         let form = "#formNewPlant";
                         if (!$(form).valid()) {
                             return false;
                         } else {
-                            $(form).ajaxSubmit({dataType: "json", type: "POST",
+                            $(form).ajaxSubmit({
+                                dataType: "json", type: "POST",
                                 success: function (res) {
                                     if (res.success === true) {
                                         window.location.href = "/trafico/index/datos-cliente?id=" + idCliente;
                                     } else {
-                                        $.alert({title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message});
+                                        $.alert({ title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message });
                                     }
                                 }
                             });
                         }
-                    }                    
+                    }
                 },
-                cerrar: {btnClass: "btn-red", action: function(){}}
+                cerrar: { btnClass: "btn-red", action: function () { } }
             },
             content: function () {
                 let self = this;
-                return $.ajax({url: "/trafico/get/nueva-planta?idCliente=" + idCliente + "&idPlanta=" + idPlanta, dataType: "json", method: "GET"
+                return $.ajax({
+                    url: "/trafico/get/nueva-planta?idCliente=" + idCliente + "&idPlanta=" + idPlanta, dataType: "json", method: "GET"
                 }).done(function (res) {
                     let html = "";
-                    if(res.success === true) {html = res.html;}
+                    if (res.success === true) { html = res.html; }
                     self.setContent(html);
                 }).fail(function () { self.setContent("Something went wrong."); });
             }
         });
     });
-    
+
     $(document.body).on("click", ".borrarPlanta", function () {
         let idPlanta = $(this).data("id");
         let idCliente = $(this).data("cliente");
         $.confirm({
             title: "<strong>Confirmar</strong>", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, type: 'red',
             buttons: {
-                si: {btnClass: "btn-blue",
+                si: {
+                    btnClass: "btn-blue",
                     action: function () {
-                        $.ajax({url: "/trafico/post/planta-borrar", type: "POST", cache: false, dataType: "json",
-                            data: {idCliente: idCliente, idPlanta: idPlanta},
+                        $.ajax({
+                            url: "/trafico/post/planta-borrar", type: "POST", cache: false, dataType: "json",
+                            data: { idCliente: idCliente, idPlanta: idPlanta },
                             success: function (res) {
                                 if (res.success === true) {
                                     window.location.href = "/trafico/index/datos-cliente?id=" + idCliente;
                                 } else {
-                                    $.alert({title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message});
+                                    $.alert({ title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message });
                                 }
                             }
                         });
                     }
                 },
-                no: {action: function () {}}
+                no: { action: function () { } }
             },
             content: "¿Está seguro que desea borrar la planta?"
         });
     });
-    
+
     $(document.body).on("click", "#nuevaPlanta", function () {
         let idCliente = $(this).data("id");
         $.confirm({
             title: "<strong>Nueva Planta</strong>", escapeKey: "cerrar", boxWidth: "500px", useBootstrap: false,
             buttons: {
-                guardar: { btnClass: "btn-blue",                    
-                    action: function(){
+                guardar: {
+                    btnClass: "btn-blue",
+                    action: function () {
                         let form = "#formNewPlant";
                         if (!$(form).valid()) {
                             return false;
                         } else {
-                            $(form).ajaxSubmit({dataType: "json", type: "POST",
+                            $(form).ajaxSubmit({
+                                dataType: "json", type: "POST",
                                 success: function (res) {
                                     if (res.success === true) {
                                         window.location.href = "/trafico/index/datos-cliente?id=" + idCliente;
                                     } else {
-                                        $.alert({title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message});
+                                        $.alert({ title: "<strong>Error</strong>", closeIcon: true, backgroundDismiss: true, type: "red", escapeKey: "cerrar", boxWidth: "350px", useBootstrap: false, content: res.message });
                                     }
                                 }
                             });
                         }
-                    }                    
+                    }
                 },
-                cerrar: {btnClass: "btn-red", action: function(){}}
+                cerrar: { btnClass: "btn-red", action: function () { } }
             },
             content: function () {
                 let self = this;
-                return $.ajax({url: "/trafico/get/nueva-planta?idCliente=" + idCliente, dataType: "json", method: "GET"
+                return $.ajax({
+                    url: "/trafico/get/nueva-planta?idCliente=" + idCliente, dataType: "json", method: "GET"
                 }).done(function (res) {
                     let html = "";
-                    if(res.success === true) {html = res.html;}
+                    if (res.success === true) { html = res.html; }
                     self.setContent(html);
                 }).fail(function () { self.setContent("Something went wrong."); });
             }
         });
     });
-    
+
     $(document.body).on("click", "#nuevaTarifa", function (ev) {
         ev.preventDefault();
         localStorage.removeItem("tarifa");
         window.location.replace($(this).attr("href"));
     });
-    
+
     $(document.body).on("click", "#upload", function () {
         let id = $(this).data("id");
         let idCliente = $("#idCliente").val();
-        $.confirm({title: "Tarifa firmada", escapeKey: "cerrar", boxWidth: "500px", useBootstrap: false,
+        $.confirm({
+            title: "Tarifa firmada", escapeKey: "cerrar", boxWidth: "500px", useBootstrap: false,
             buttons: {
                 subir: {
                     text: "Subir tarifa",
-                    btnClass: "btn-blue",                    
-                    action: function(){
+                    btnClass: "btn-blue",
+                    action: function () {
                         if (!$("#formTemplate").valid()) {
                             return false;
                         } else {
-                            $("#formTemplate").ajaxSubmit({dataType: "json", type: "POST",
+                            $("#formTemplate").ajaxSubmit({
+                                dataType: "json", type: "POST",
                                 success: function (res) {
                                     window.location.href = "/trafico/index/datos-cliente?id=" + idCliente;
                                 }
                             });
                         }
-                    }                    
+                    }
                 },
                 cerrar: {
                     btnClass: "btn-red",
-                    action: function(){}
+                    action: function () { }
                 }
             },
             content: function () {
                 let self = this;
-                return $.ajax({url: "/trafico/get/subir-tarifa-firmada?idCliente=" + idCliente + "&idTarifa=" + id, dataType: "json", method: "GET"
+                return $.ajax({
+                    url: "/trafico/get/subir-tarifa-firmada?idCliente=" + idCliente + "&idTarifa=" + id, dataType: "json", method: "GET"
                 }).done(function (res) {
                     let html = "";
-                    if(res.success === true) {
+                    if (res.success === true) {
                         html = res.html;
                     }
                     self.setContent(html);
@@ -840,8 +882,9 @@ $(document).ready(function () {
         let id = $(this).data("id");
         let rfc = $("#rfc_edoc").val();
 
-        $.ajax({url: "/trafico/post/agregar-rfc-consulta-edoc", cache: false, dataType: "json", type: "POST",
-            data: {id: id, rfc:rfc },
+        $.ajax({
+            url: "/trafico/post/agregar-rfc-consulta-edoc", cache: false, dataType: "json", type: "POST",
+            data: { id: id, rfc: rfc },
             success: function (res) {
                 if (res.success === true) {
                     window.location.replace("/trafico/index/datos-cliente?id=" + id);
@@ -856,8 +899,9 @@ $(document).ready(function () {
         let id = $(this).data("id");
         let rfc = $("#rfc_cove").val();
 
-        $.ajax({url: "/trafico/post/agregar-rfc-consulta-cove", cache: false, dataType: "json", type: "POST",
-            data: {id: id, rfc:rfc },
+        $.ajax({
+            url: "/trafico/post/agregar-rfc-consulta-cove", cache: false, dataType: "json", type: "POST",
+            data: { id: id, rfc: rfc },
             success: function (res) {
                 if (res.success === true) {
                     window.location.replace("/trafico/index/datos-cliente?id=" + id);
@@ -865,35 +909,37 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $(document.body).on("click", ".openFile", function (ev) {
         ev.preventDefault();
         let id = $(this).data("id");
         window.open("/archivo/get/ver-archivo-cliente?id=" + id, "viewFile", "toolbar=0,location=0,menubar=0,height=550,width=880,scrollbars=yes");
     });
-    
+
     $(document.body).on("click", "#uploadKey", function (ev) {
         ev.preventDefault();
         let idCliente = $("#idCliente").val();
-        $.confirm({title: "Nuevo sello", escapeKey: "cerrar", type: "green", boxWidth: "750px", useBootstrap: false,
+        $.confirm({
+            title: "Nuevo sello", escapeKey: "cerrar", type: "green", boxWidth: "750px", useBootstrap: false,
             buttons: {
                 subir: {
                     text: "Subir sello",
-                    btnClass: "btn-green",                    
-                    action: function() {
+                    btnClass: "btn-green",
+                    action: function () {
 
                         if ($("#formUploadKey").valid()) {
-                            $("#formUploadKey").ajaxSubmit({dataType: "json", type: "POST",
+                            $("#formUploadKey").ajaxSubmit({
+                                dataType: "json", type: "POST",
                                 url: "/trafico/post/subir-sello",
-                                beforeSend: function() {
-                                    $.LoadingOverlay("show", {color: "rgba(255, 255, 255, 0.9)"});
+                                beforeSend: function () {
+                                    $.LoadingOverlay("show", { color: "rgba(255, 255, 255, 0.9)" });
                                 },
                                 success: function (res) {
                                     $.LoadingOverlay("hide");
                                     if (res.success === true) {
                                         window.location.replace("/trafico/index/datos-cliente?id=" + $("#idCliente").val());
                                     } else {
-                                        $.each(res.messages, function(key, value ) {
+                                        $.each(res.messages, function (key, value) {
                                             if (value.error === 'ws') {
                                                 validator.showErrors({
                                                     "pwdws": value.message
@@ -913,19 +959,20 @@ $(document).ready(function () {
                         } else {
                             return false;
                         }
-                    }                    
+                    }
                 },
                 cerrar: {
                     btnClass: "btn-red",
-                    action: function(){}
+                    action: function () { }
                 }
             },
             content: function () {
                 let self = this;
-                return $.ajax({url: "/trafico/get/subir-sello?idCliente=" + idCliente, dataType: "json", method: "GET"
+                return $.ajax({
+                    url: "/trafico/get/subir-sello?idCliente=" + idCliente, dataType: "json", method: "GET"
                 }).done(function (res) {
                     let html = "";
-                    if(res.success === true) {
+                    if (res.success === true) {
                         html = res.html;
                     }
                     self.setContent(html);
@@ -936,10 +983,10 @@ $(document).ready(function () {
         });
     });
 
-    $.when( obtenerSellos($("#idCliente").val()) ).done(function( res ) {
+    $.when(obtenerSellos($("#idCliente").val())).done(function (res) {
         if (res.success === true) {
             obtenerDefault($("#idCliente").val());
         }
     });
-    
+
 });

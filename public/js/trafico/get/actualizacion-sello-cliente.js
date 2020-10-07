@@ -23,6 +23,12 @@ let vald = $("#formUpdateKey").validate({
 
 $(document).ready(function () {
     
+    $(document.body).on('click', '.download-key', function(ev) {
+        ev.preventDefault();
+        let id = $(this).data('id');
+        window.open(`/trafico/get/descargar-sello-cliente?id=${id}`);
+    });
+
     $(document.body).on('click', '#updateKey', function(ev) {
         ev.preventDefault();
         if ($("#formUpdateKey").valid()) {

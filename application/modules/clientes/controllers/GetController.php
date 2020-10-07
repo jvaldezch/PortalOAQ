@@ -1,12 +1,14 @@
 <?php
 
-class Clientes_GetController extends Zend_Controller_Action {
+class Clientes_GetController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -15,7 +17,8 @@ class Clientes_GetController extends Zend_Controller_Action {
         $this->_logger = Zend_Registry::get("logDb");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -25,8 +28,9 @@ class Clientes_GetController extends Zend_Controller_Action {
             $this->getResponse()->setRedirect($this->_appconfig->getParam("link-logout"));
         }
     }
-    
-    public function reporteIvaAction() {
+
+    public function reporteIvaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -85,8 +89,9 @@ class Clientes_GetController extends Zend_Controller_Action {
             throw new Zend_Exception($ex->getMessage());
         }
     }
-    
-    public function descargaM3Action() {
+
+    public function descargaM3Action()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -135,8 +140,9 @@ class Clientes_GetController extends Zend_Controller_Action {
             throw new Zend_Exception($ex->getMessage());
         }
     }
-    
-    public function reporteAction() {
+
+    public function reporteAction()
+    {
         try {
             date_default_timezone_set('America/Mexico_City');
             $this->_helper->layout()->disableLayout();
@@ -152,22 +158,24 @@ class Clientes_GetController extends Zend_Controller_Action {
             $v = array(
                 "idAduana" => array("Digits", new Zend_Validate_Int()),
                 "idCliente" => array("Digits", new Zend_Validate_Int()),
-                "year" => array("Digits", new Zend_Validate_Int(),
+                "year" => array(
+                    "Digits", new Zend_Validate_Int(),
                     new Zend_Validate_Between(
-                            array(
-                        "min" => 2012,
-                        "max" => 2025,
-                        "inclusive" => true
-                            )
+                        array(
+                            "min" => 2012,
+                            "max" => 2025,
+                            "inclusive" => true
+                        )
                     )
                 ),
-                "month" => array("Digits", new Zend_Validate_Int(),
+                "month" => array(
+                    "Digits", new Zend_Validate_Int(),
                     new Zend_Validate_Between(
-                            array(
-                        "min" => 1,
-                        "max" => 12,
-                        "inclusive" => true
-                            )
+                        array(
+                            "min" => 1,
+                            "max" => 12,
+                            "inclusive" => true
+                        )
                     )
                 ),
                 "rfc" => new Zend_Validate_StringLength(array("max" => 25)),
@@ -175,29 +183,28 @@ class Clientes_GetController extends Zend_Controller_Action {
                 "fechaIni" => new Zend_Validate_Date(),
                 "fechaFin" => new Zend_Validate_Date(),
             );
-            
+
             $reportes = new OAQ_Reportes();
-            
+
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("tipo")) {
 
                 $viewsFolder = realpath(dirname(__FILE__)) . "/../views/scripts/get/";
                 $view = new Zend_View();
                 $view->setScriptPath($viewsFolder);
-                
+
                 $layout = $reportes->obtenerLayout($input->tipo);
                 $view->titulos = $reportes->anexoHeaders($input->tipo);
                 $view->tipo = $input->tipo;
-                
+
                 $rows = $reportes->obtenerDatos($input->tipo, $input->idAduana, $reportes->rfcCliente($input->idCliente), $input->fechaIni, $input->fechaFin);
                 if (isset($rows)) {
                     $view->data = $rows;
                 }
                 $this->view->content = $view->render($layout);
-                
+
                 $this->view->type = $input->tipo;
                 $this->view->excelLink = str_replace('/clientes/get/reporte?', '', $_SERVER["REQUEST_URI"]);
-                
             } else {
                 $this->view->error = "Los parámetros de consulta no son correctos.";
             }
@@ -206,7 +213,8 @@ class Clientes_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function excelAction() {
+    public function excelAction()
+    {
         try {
             date_default_timezone_set('America/Mexico_City');
             $this->_helper->layout()->disableLayout();
@@ -222,22 +230,24 @@ class Clientes_GetController extends Zend_Controller_Action {
             $v = array(
                 "idAduana" => array("Digits", new Zend_Validate_Int()),
                 "idCliente" => array("Digits", new Zend_Validate_Int()),
-                "year" => array("Digits", new Zend_Validate_Int(),
+                "year" => array(
+                    "Digits", new Zend_Validate_Int(),
                     new Zend_Validate_Between(
-                            array(
-                        "min" => 2012,
-                        "max" => 2025,
-                        "inclusive" => true
-                            )
+                        array(
+                            "min" => 2012,
+                            "max" => 2025,
+                            "inclusive" => true
+                        )
                     )
                 ),
-                "month" => array("Digits", new Zend_Validate_Int(),
+                "month" => array(
+                    "Digits", new Zend_Validate_Int(),
                     new Zend_Validate_Between(
-                            array(
-                        "min" => 1,
-                        "max" => 12,
-                        "inclusive" => true
-                            )
+                        array(
+                            "min" => 1,
+                            "max" => 12,
+                            "inclusive" => true
+                        )
                     )
                 ),
                 "rfc" => new Zend_Validate_StringLength(array("max" => 25)),
@@ -245,29 +255,29 @@ class Clientes_GetController extends Zend_Controller_Action {
                 "fechaIni" => new Zend_Validate_Date(),
                 "fechaFin" => new Zend_Validate_Date(),
             );
-            
+
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("tipo")) {
 
                 $reportes = new OAQ_Reportes();
                 $headers = $reportes->anexoHeaders($input->tipo);
-                $rows = $reportes->obtenerDatos($input->tipo, $input->idAduana, $reportes->rfcCliente($input->idCliente), $input->fechaIni, $input->fechaFin);                
+                $rows = $reportes->obtenerDatos($input->tipo, $input->idAduana, $reportes->rfcCliente($input->idCliente), $input->fechaIni, $input->fechaFin);
                 $reports = new OAQ_ExcelReportes();
                 $titles = array();
-                foreach($headers["titulos"] as $k => $v) {
+                foreach ($headers["titulos"] as $k => $v) {
                     $titles[] = $k;
                 }
                 $reports->reportesOperaciones($input->tipo, $input->fechaIni, $input->fechaFin, $titles, $rows);
-                
             } else {
                 $this->view->error = "Los parámetros de consulta no son correctos.";
             }
         } catch (Exception $ex) {
             $this->_helper->json(array("errorMsg" => $ex->getMessage()));
         }
-    }    
+    }
 
-    public function imageAction() {
+    public function imageAction()
+    {
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
@@ -296,7 +306,8 @@ class Clientes_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function downloadPhotosAction() {
+    public function downloadPhotosAction()
+    {
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
@@ -353,34 +364,35 @@ class Clientes_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("errorMsg" => $ex->getMessage()));
         }
     }
-    
-    public function proveedoresAction() {
+
+    public function proveedoresAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        try {            
+        try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
                 "page" => array("Digits"),
                 "rows" => array("Digits"),
                 "excel" => array("StringToLower"),
-            );            
+            );
             $v = array(
                 "page" => array(new Zend_Validate_Int(), "default" => 1),
                 "rows" => array(new Zend_Validate_Int(), "default" => 30),
                 "filterRules" => "NotEmpty",
                 "excel" => array("NotEmpty"),
             );
-            
+
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            
+
             $mppr = new Clientes_Model_Clientes();
             $idCliente = $mppr->obtenerId($this->_session->username);
-            
+
             if ($idCliente) {
-                
-                $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);                
+
+                $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                 $mapper = new Clientes_Model_FactPro();
-                
+
                 if ($dexcel == false) {
                     $arr = $mapper->obtenerPorCliente($idCliente, $input->page, $input->rows, $input->filterRules);
                     if (isset($arr)) {
@@ -389,26 +401,27 @@ class Clientes_GetController extends Zend_Controller_Action {
                         $this->_helper->json(array("total" => 0, "rows" => array()));
                     }
                 } else {
-                    $arr = $mapper->obtenerPorCliente($idCliente);                    
+                    $arr = $mapper->obtenerPorCliente($idCliente);
                     $reportes = new OAQ_ExcelReportes();
                     $reportes->reportesTrafico(83, $arr['rows']);
                 }
-            }            
+            }
         } catch (Exception $ex) {
             $this->_helper->json(array("errorMsg" => $ex->getMessage()));
         }
-    }    
-    
-    public function traficoAction() {
+    }
+
+    public function traficoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        try {            
+        try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
                 "page" => array("Digits"),
                 "rows" => array("Digits"),
                 "excel" => array("StringToLower"),
-            );            
+            );
             $v = array(
                 "page" => array(new Zend_Validate_Int(), "default" => 1),
                 "rows" => array(new Zend_Validate_Int(), "default" => 30),
@@ -434,7 +447,8 @@ class Clientes_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerComentariosAction() {
+    public function obtenerComentariosAction()
+    {
         try {
             $f = array(
                 "id_trafico" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -458,7 +472,8 @@ class Clientes_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerArchivosAction() {
+    public function obtenerArchivosAction()
+    {
         try {
             $f = array(
                 "id_trafico" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -468,13 +483,13 @@ class Clientes_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id_trafico")) {
-                
+
                 $mppr = new Trafico_Model_TraficosMapper();
                 $array = $mppr->obtenerPorId($input->id_trafico);
 
                 $repo = new Archivo_Model_RepositorioMapper();
                 $archivos = $repo->obtenerArchivosReferencia($array["referencia"]);
-//                $view->archivos = $archivos;
+                //                $view->archivos = $archivos;
 
                 /*$trafico = new OAQ_Trafico(array("idTrafico" => $input->id_trafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                 $index = $trafico->verificarIndexRepositorios();
@@ -490,8 +505,8 @@ class Clientes_GetController extends Zend_Controller_Action {
                 foreach ($archivos as $item) {
                     if (!in_array($item['tipo_archivo'], array(99, 29, 89, 2001, 9999))) {
                         $arr[] = array(
-                            'id' => (int) $item['id'], 
-                            'exists' => (file_exists($item["ubicacion"])) ? true : false, 
+                            'id' => (int) $item['id'],
+                            'exists' => (file_exists($item["ubicacion"])) ? true : false,
                             'nom_archivo' => $item['nom_archivo'],
                             'tipo_archivo' => (int) $item['tipo_archivo'],
                             'creado' => $item['creado'],
@@ -508,7 +523,8 @@ class Clientes_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerTiposArchivosAction() {
+    public function obtenerTiposArchivosAction()
+    {
         try {
             $mppr = new Archivo_Model_DocumentosMapper();
             $rows = $mppr->obtenerTodos();
@@ -523,5 +539,4 @@ class Clientes_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-
 }

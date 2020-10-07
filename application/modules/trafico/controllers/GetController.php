@@ -1,13 +1,15 @@
 <?php
 
-class Trafico_GetController extends Zend_Controller_Action {
+class Trafico_GetController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_firephp;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -17,7 +19,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -28,7 +31,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function ayudaDocumentosFiscalAction() {
+    public function ayudaDocumentosFiscalAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -43,7 +47,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function reporteTraficoAction() {
+    public function reporteTraficoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -64,7 +69,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function reportesTraficoAction() {
+    public function reportesTraficoAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -121,7 +127,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function reporteClientesAction() {
+    public function reporteClientesAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -142,7 +149,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function reporteTraficoSolicitudesAction() {
+    public function reporteTraficoSolicitudesAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -163,7 +171,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function excelReporteTraficoAction() {
+    public function excelReporteTraficoAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -193,7 +202,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function excelReporteTraficoSolicitudesAction() {
+    public function excelReporteTraficoSolicitudesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -225,7 +235,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function checklistClientesAction() {
+    public function checklistClientesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -258,7 +269,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function imprimirChecklistClientesAction() {
+    public function imprimirChecklistClientesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -310,7 +322,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function tarifaClientesAction() {
+    public function tarifaClientesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -333,7 +346,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarAduanaClienteAction() {
+    public function agregarAduanaClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -367,7 +381,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerClientesAction() {
+    public function obtenerClientesAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -392,7 +407,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerClavesPedimentoAction() {
+    public function obtenerClavesPedimentoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -412,7 +428,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerTarifaConceptoAction() {
+    public function obtenerTarifaConceptoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -437,7 +454,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerTarifaAction() {
+    public function obtenerTarifaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -462,7 +480,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function imprimirTarifaAction() {
+    public function imprimirTarifaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -514,7 +533,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function traficoTmpSeleccionarAction() {
+    public function traficoTmpSeleccionarAction()
+    {
         try {
             $f = array(
                 "id" => array("StringTrim", "StripTags", "Digits"),
@@ -538,7 +558,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function traficoTmpTodosAction() {
+    public function traficoTmpTodosAction()
+    {
         try {
             $view = new Zend_View();
             $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
@@ -553,7 +574,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function mensajeroEnTraficoAction() {
+    public function mensajeroEnTraficoAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -584,7 +606,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function alertasDeSolicitudesAction() {
+    public function alertasDeSolicitudesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -622,7 +645,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function alertasDeMensajesAction() {
+    public function alertasDeMensajesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -647,7 +671,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function mensajeroAction() {
+    public function mensajeroAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -682,7 +707,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function mensajesAction() {
+    public function mensajesAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $models = new Trafico_Model_TraficoUsuAduanasMapper();
@@ -708,7 +734,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function subirTarifaFirmadaAction() {
+    public function subirTarifaFirmadaAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -733,7 +760,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function facturasPedimentoAction() {
+    public function facturasPedimentoAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -770,7 +798,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function semaforoAction() {
+    public function semaforoAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -796,7 +825,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function erroresAction() {
+    public function erroresAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -813,7 +843,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $view->idTrafico = $input->idTrafico;
                 $mapper = new Trafico_Model_TraficosMapper();
                 $arr = $mapper->obtenerPorId($input->idTrafico);
-                
+
                 $er = new Operaciones_Model_IncidenciaTipoError();
                 $view->tipoError = $er->obtener();
 
@@ -824,7 +854,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function importarPlantillaAction() {
+    public function importarPlantillaAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -846,7 +877,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarContactoAction() {
+    public function agregarContactoAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -869,7 +901,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function vucemPreviewAction() {
+    public function vucemPreviewAction()
+    {
         $this->_helper->viewRenderer->setNoRender(false);
         try {
             $f = array(
@@ -896,7 +929,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function clientesAction() {
+    public function clientesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -915,7 +949,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function rfcDeClienteAction() {
+    public function rfcDeClienteAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -934,7 +969,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function imprimirFormatoSalidaAction() {
+    public function imprimirFormatoSalidaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -996,7 +1032,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function imprimirOrdenDeRemisionAction() {
+    public function imprimirOrdenDeRemisionAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1066,7 +1103,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarSelloAction() {
+    public function actualizarSelloAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1091,7 +1129,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function misMensajesAction() {
+    public function misMensajesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1111,7 +1150,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarDesdeServicioAction() {
+    public function actualizarDesdeServicioAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1133,7 +1173,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarDesdeSistemaAction() {
+    public function actualizarDesdeSistemaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1153,7 +1194,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function ordenRemisionAction() {
+    public function ordenRemisionAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1197,7 +1239,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevaPlantaAction() {
+    public function nuevaPlantaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1232,7 +1275,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerFechaAction() {
+    public function obtenerFechaAction()
+    {
         try {
             $f = array(
                 "idTrafico" => array("StringTrim", "StripTags", "Digits"),
@@ -1255,15 +1299,16 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function verEdocumentAction() {
+    public function verEdocumentAction()
+    {
         error_reporting(E_ALL & E_NOTICE);
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(false);
         $this->view->headLink()
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         try {
             $this->view->headScript()
-                    ->appendFile("/js/common/jquery-1.9.1.min.js");
+                ->appendFile("/js/common/jquery-1.9.1.min.js");
             $f = array(
                 "idFactura" => array("StringTrim", "StripTags", "Digits"),
                 "idTrafico" => array("StringTrim", "StripTags", "Digits"),
@@ -1315,7 +1360,8 @@ class Trafico_GetController extends Zend_Controller_Action {
      * http://localhost:8090/trafico/facturas/vucem-preview?id=84449&idTrafico=61090
      * 
      */
-    public function imprimirEdocumentAction() {
+    public function imprimirEdocumentAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1357,7 +1403,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                     $sello = $vucem->_obtenerSello($input->id);
 
                     $directory = $misc->nuevoDirectorio($directory, $trafico->getPatente(), $trafico->getAduana(), $trafico->getReferencia());
-                    
+
                     $xml_filename = "ED" . $data["edoc"] . "_" . $trafico->getAduana() . '-' . $trafico->getPatente() . '-' . $trafico->getPedimento() . '_' . $arr["tipoDocumento"] . "_" . preg_replace('/\..+$/', '.xml', $arr["nombreArchivo"]);
                     $pdf_filename = "ED" . $data["edoc"] . "_" . $trafico->getAduana() . '-' . $trafico->getPatente() . '-' . $trafico->getPedimento() . '_' . $arr["tipoDocumento"] . "_" . preg_replace('/\..+$/', '', $arr["nombreArchivo"]);
 
@@ -1389,7 +1435,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function imprimirCoveAction() {
+    public function imprimirCoveAction()
+    {
         try {
             $f = array(
                 "idFactura" => array("StringTrim", "StripTags", "Digits"),
@@ -1438,7 +1485,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function imprimirCoveDetalleAction() {
+    public function imprimirCoveDetalleAction()
+    {
         try {
             $f = array(
                 "idFactura" => array("StringTrim", "StripTags", "Digits"),
@@ -1496,7 +1544,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function vucemBitacoraAction() {
+    public function vucemBitacoraAction()
+    {
         try {
             $f = array(
                 "idTrafico" => array("StringTrim", "StripTags", "Digits"),
@@ -1531,7 +1580,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function vucemFirmasAction() {
+    public function vucemFirmasAction()
+    {
         try {
             $f = array(
                 "idTrafico" => array("StringTrim", "StripTags", "Digits"),
@@ -1580,7 +1630,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarVucemAction() {
+    public function enviarVucemAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1636,7 +1687,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function consultaRespuestaVucemAction() {
+    public function consultaRespuestaVucemAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1677,7 +1729,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function consultaDetalleLogAction() {
+    public function consultaDetalleLogAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1701,7 +1754,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarEmailAction() {
+    public function enviarEmailAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -1740,7 +1794,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function downloadPhotosAction() {
+    public function downloadPhotosAction()
+    {
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
@@ -1798,7 +1853,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function verificarChecklistAction() {
+    public function verificarChecklistAction()
+    {
         try {
             $f = array(
                 'idTrafico' => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -1836,7 +1892,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function verArchivosAction() {
+    public function verArchivosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1884,7 +1941,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function cargarXmlAction() {
+    public function cargarXmlAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1910,7 +1968,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function importarCdfiAction() {
+    public function importarCdfiAction()
+    {
         $f = array(
             "*" => array("StringTrim", "StripTags"),
         );
@@ -1932,7 +1991,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function subirSelloAction() {
+    public function subirSelloAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1958,7 +2018,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function subirSelloAgenteAction() {
+    public function subirSelloAgenteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1989,7 +2050,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerSellosClienteAction() {
+    public function obtenerSellosClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2025,7 +2087,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerSellosAgenteAction() {
+    public function obtenerSellosAgenteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2056,7 +2119,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerSelloDefaultAction() {
+    public function obtenerSelloDefaultAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2084,7 +2148,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizacionSelloClienteAction() {
+    public function actualizacionSelloClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2103,6 +2168,10 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                 $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+
+                if (in_array($this->_session->role, array("comercializacion", "super"))) {
+                    $view->download = true;
+                }
 
                 $mprr = new Trafico_Model_SellosLogs();
                 $view->logs = $mprr->obtenerLog($input->idCliente);
@@ -2126,7 +2195,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function mvhcEstatusObtenerAction() {
+    public function mvhcEstatusObtenerAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2162,7 +2232,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function vucemGuardarAction() {
+    public function vucemGuardarAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2198,7 +2269,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function cargarTiposEdocumentsAction() {
+    public function cargarTiposEdocumentsAction()
+    {
         try {
             $f = array(
                 "idArchivo" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2235,7 +2307,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function clientesCorresponsalAction() {
+    public function clientesCorresponsalAction()
+    {
         try {
             $f = array(
                 "idAduana" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2264,7 +2337,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaCarpetaExpedienteAction() {
+    public function descargaCarpetaExpedienteAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2289,7 +2363,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function permalinkAction() {
+    public function permalinkAction()
+    {
         require_once 'random_compat/psalm-autoload.php';
         try {
             $f = array(
@@ -2308,13 +2383,13 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $traffic = new OAQ_Trafico(array("idTrafico" => $input->id));
                 $id = $traffic->verificarIndexRepositorios();
                 if ($id) {
-                    
+
                     $mppr = new Archivo_Model_RepositorioPermalinks();
                     if (!($validar = $mppr->verificar($id))) {
                         $validar = base64_encode(random_bytes(32));
                         $mppr->agregar($input->id, $validar, $this->_session->username);
                     }
-                    
+
                     if (APPLICATION_ENV == "production") {
                         $uri = "https://oaq.dnsalias.net/clientes/expediente?code=" . urlencode($validar);
                     } else {
@@ -2338,7 +2413,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function permalinkTraficoAction() {
+    public function permalinkTraficoAction()
+    {
         require_once 'random_compat/psalm-autoload.php';
         try {
             $f = array(
@@ -2355,7 +2431,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
 
                 $traffic = new OAQ_Trafico(array("idTrafico" => $input->id));
-                    
+
                 $mppr = new Archivo_Model_RepositorioPermalinks();
                 if (!($validar = $mppr->verificarIdTrafico($input->id))) {
                     $validar = base64_encode(random_bytes(32));
@@ -2367,7 +2443,7 @@ class Trafico_GetController extends Zend_Controller_Action {
                 } else {
                     $uri = "http://localhost:8090/clientes/expediente/archivos?code=" . urlencode($validar);
                 }
-                
+
                 $view->uri = $uri;
                 if ($traffic->getIdCliente()) {
                     $cont = new Trafico_Model_ContactosCliMapper();
@@ -2375,7 +2451,6 @@ class Trafico_GetController extends Zend_Controller_Action {
                     (!empty($contacts)) ? $view->contacts = $contacts : null;
                 }
                 echo $view->render("permalink.phtml");
-
             } else {
                 throw new Exception("Invalid input!");
             }
@@ -2384,7 +2459,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function rawdataAction() {
+    public function rawdataAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2405,7 +2481,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaPlantillaCasaAction() {
+    public function descargaPlantillaCasaAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2426,7 +2503,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaPlantillaSlamAction() {
+    public function descargaPlantillaSlamAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -2447,7 +2525,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function subirArchivosAction() {
+    public function subirArchivosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2539,7 +2618,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerSoiaAction() {
+    public function obtenerSoiaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2569,7 +2649,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function soiaAction() {
+    public function soiaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2597,34 +2678,34 @@ class Trafico_GetController extends Zend_Controller_Action {
                 $uuid = $misc->getUuid(time());
 
                 switch ($arr['pedimento']) {
-                    case (preg_match('/^1/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^1/', $arr['pedimento']) ? true : false):
                         $year = 2011;
                         break;
-                    case (preg_match('/^2/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^2/', $arr['pedimento']) ? true : false):
                         $year = 2012;
                         break;
-                    case (preg_match('/^3/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^3/', $arr['pedimento']) ? true : false):
                         $year = 2013;
                         break;
-                    case (preg_match('/^4/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^4/', $arr['pedimento']) ? true : false):
                         $year = 2014;
                         break;
-                    case (preg_match('/^5/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^5/', $arr['pedimento']) ? true : false):
                         $year = 2015;
                         break;
-                    case (preg_match('/^6/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^6/', $arr['pedimento']) ? true : false):
                         $year = 2016;
                         break;
-                    case (preg_match('/^7/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^7/', $arr['pedimento']) ? true : false):
                         $year = 2017;
                         break;
-                    case (preg_match('/^8/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^8/', $arr['pedimento']) ? true : false):
                         $year = 2018;
                         break;
-                    case (preg_match('/^9/', $arr['pedimento']) ? true : false) :
+                    case (preg_match('/^9/', $arr['pedimento']) ? true : false):
                         $year = 2019;
                         break;
-                    default :
+                    default:
                         $year = 2020;
                 }
 
@@ -2827,7 +2908,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarFtpAction() {
+    public function enviarFtpAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2879,7 +2961,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarArchivosFtpAction() {
+    public function enviarArchivosFtpAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2904,7 +2987,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function buscarExpedienteIndexAction() {
+    public function buscarExpedienteIndexAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2939,7 +3023,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargarExpedienteAction() {
+    public function descargarExpedienteAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2977,7 +3062,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaSolicitudesAction() {
+    public function descargaSolicitudesAction()
+    {
         try {
             $f = array(
                 "ids" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
@@ -2989,7 +3075,6 @@ class Trafico_GetController extends Zend_Controller_Action {
             if ($input->isValid("ids")) {
                 if (!empty($input->ids) && is_array($input->ids)) {
                     foreach ($input->ids as $id) {
-                        
                     }
                 }
             } else {
@@ -3000,7 +3085,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarSolicitudAction() {
+    public function guardarSolicitudAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
@@ -3120,7 +3206,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function pdfFacturaAction() {
+    public function pdfFacturaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -3154,7 +3241,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function editarFacturaOriginalAction() {
+    public function editarFacturaOriginalAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -3189,7 +3277,8 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function vucemEnviarMultipleAction() {
+    public function vucemEnviarMultipleAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -3228,4 +3317,63 @@ class Trafico_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function descargarSelloClienteAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "id" => "Digits",
+            );
+            $v = array(
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id")) {
+
+                if (!in_array($this->_session->role, array("comercializacion", "super"))) {
+                    throw new Exception("Access denied!");
+                }
+
+                $mppr = new Vucem_Model_VucemFirmanteMapper();
+                $sello = $mppr->obtenerDetalleFirmanteId($input->id);
+
+                if (!empty($sello)) {
+
+                    $keyName = "/tmp" . DIRECTORY_SEPARATOR . $sello["key_nom"];
+                    $cerName = "/tmp" . DIRECTORY_SEPARATOR . $sello["cer_nom"];
+                    $txtFilename = "/tmp" . DIRECTORY_SEPARATOR . $sello["rfc"] . ".txt";
+
+                    $zipName = "/tmp" . DIRECTORY_SEPARATOR . str_replace(".key", ".zip", $sello["key_nom"]);
+
+                    if (file_exists($txtFilename)) {
+                        unlink($txtFilename);
+                    }
+                    $file = file_put_contents($txtFilename, "User: {$sello["rfc"]}\nPass: {$sello["spem_pswd"]}\nWS: {$sello["ws_pswd"]}", FILE_APPEND | LOCK_EX);
+
+                    file_put_contents($keyName, base64_decode($sello["key"]));
+                    file_put_contents($cerName, base64_decode($sello["cer"]));
+
+                    $zip = new ZipArchive();
+
+                    if ($zip->open($zipName, ZipArchive::CREATE) !== TRUE) {
+                        exit("cannot open <$zipName>\n");
+                    }
+                    $zip->addFile($keyName, basename($keyName));
+                    $zip->addFile($cerName, basename($cerName));
+                    $zip->addFile($txtFilename, basename($txtFilename));
+                    $zip->close();
+                    header("Content-Type: application/zip");
+                    header("Content-Disposition: attachment; filename=" . basename($zipName));
+                    header("Content-Length: " . filesize($zipName));
+                    readfile($zipName);
+                } else {
+                    throw new Exception("No key found!");
+                }
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
 }
