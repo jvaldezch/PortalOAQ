@@ -1,19 +1,22 @@
 <?php
 
-class Clientes_Model_Repositorio {
+class Clientes_Model_Repositorio
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Clientes_Model_DbTable_Repositorio();
     }
 
-    public function datos($id, $rfc = null) {
+    public function datos($id, $rfc = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("r" => "repositorio_index"), array("*"))
-                    ->where("r.id = ?", $id);
+                ->setIntegrityCheck(false)
+                ->from(array("r" => "repositorio_index"), array("*"))
+                ->where("r.id = ?", $id);
             if (isset($rfc)) {
                 $sql->where("rfcCliente = ?", $rfc);
             }
@@ -27,16 +30,17 @@ class Clientes_Model_Repositorio {
         }
     }
 
-    public function archivos($reference, $patente = null, $aduana = null) {
+    public function archivos($reference, $patente = null, $aduana = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "nom_archivo", "creado", "usuario", "ubicacion_pdf", "ubicacion", "folio"))
-                    ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
-                    ->where("a.referencia = ?", $reference)
-                    //->where("a.tipo_archivo NOT IN (?)", array(29, 31, 89, 2001, 9999))
-                    ->where("a.tipo_archivo NOT IN (?)", array(31, 89, 2001, 9999))
-                    ->order("nom_archivo ASC");
+                ->setIntegrityCheck(false)
+                ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "nom_archivo", "creado", "usuario", "ubicacion_pdf", "ubicacion", "folio"))
+                ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
+                ->where("a.referencia = ?", $reference)
+                //->where("a.tipo_archivo NOT IN (?)", array(29, 31, 89, 2001, 9999))
+                ->where("a.tipo_archivo NOT IN (?)", array(31, 89, 2001, 9999))
+                ->order("nom_archivo ASC");
             if (isset($patente)) {
                 $sql->where("a.patente = ?", $patente);
             }
@@ -53,16 +57,17 @@ class Clientes_Model_Repositorio {
         }
     }
 
-    public function archivosCliente($reference, $patente = null, $aduana = null) {
+    public function archivosCliente($reference, $patente = null, $aduana = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "nom_archivo", "creado", "usuario", "ubicacion_pdf", "ubicacion", "folio"))
-                    ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
-                    ->where("a.referencia = ?", $reference)
-                    ->where("a.tipo_archivo NOT IN (?)", array(29, 31, 89, 2001, 99, 9999))
-                    //->where("a.tipo_archivo NOT IN (?)", array(31, 89, 2001, 9999))
-                    ->order("nom_archivo ASC");
+                ->setIntegrityCheck(false)
+                ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "nom_archivo", "creado", "usuario", "ubicacion_pdf", "ubicacion", "folio"))
+                ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
+                ->where("a.referencia = ?", $reference)
+                ->where("a.tipo_archivo NOT IN (?)", array(29, 31, 89, 2001, 99, 9999))
+                //->where("a.tipo_archivo NOT IN (?)", array(31, 89, 2001, 9999))
+                ->order("nom_archivo ASC");
             if (isset($patente)) {
                 $sql->where("a.patente = ?", $patente);
             }
@@ -77,17 +82,18 @@ class Clientes_Model_Repositorio {
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
-    }   
+    }
 
-    public function complementosReferencia($referencia) {
+    public function complementosReferencia($referencia)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->distinct()
-                    ->from($this->_db_table, array("id", "uuid", "nom_archivo", "ubicacion", "tipo_archivo", "creado", "usuario", "edocument"))
-                    ->where("ftp IS NULL")
-                    ->where("tipo_archivo NOT IN (?)", array(29, 31, 89, 2001, 9999))
-                    ->where("referencia = ?", $referencia . '-C')
-                    ->order("nom_archivo ASC");
+                ->distinct()
+                ->from($this->_db_table, array("id", "uuid", "nom_archivo", "ubicacion", "tipo_archivo", "creado", "usuario", "edocument"))
+                ->where("ftp IS NULL")
+                ->where("tipo_archivo NOT IN (?)", array(29, 31, 89, 2001, 9999))
+                ->where("referencia = ?", $referencia . '-C')
+                ->order("nom_archivo ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -98,13 +104,15 @@ class Clientes_Model_Repositorio {
         }
     }
 
-    public function referencias($rfCliente, $pedimento = null, $referencia = null) {
+    public function referencias($rfCliente, $pedimento = null, $referencia = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("r" => "repositorio_index"), array("*"))
-                    ->where("r.rfcCliente = ?", $rfCliente)
-                    ->order("creado DESC");
+                ->setIntegrityCheck(false)
+                ->from(array("r" => "repositorio_index"), array("*"))
+                ->where("r.rfcCliente = ?", $rfCliente)
+                ->where("r.pedimento IS NOT NULL")
+                ->order("creado DESC");
             if (isset($pedimento)) {
                 $sql->where("r.pedimento = ?", $pedimento);
             }
@@ -121,15 +129,16 @@ class Clientes_Model_Repositorio {
         }
     }
 
-    public function buscarReferencia($referencia, $rfcCliente) {
+    public function buscarReferencia($referencia, $rfcCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from("repositorio", array("referencia", "patente", "pedimento", "rfc_cliente", "aduana", "creado"))
-                    ->where("referencia = ?", $referencia)
-                    ->where("rfc_cliente = '{$rfcCliente}' OR receptor_rfc = '{$rfcCliente}'")
-                    ->group("referencia")
-                    ->group("patente")
-                    ->group("aduana");
+                ->from("repositorio", array("referencia", "patente", "pedimento", "rfc_cliente", "aduana", "creado"))
+                ->where("referencia = ?", $referencia)
+                ->where("rfc_cliente = '{$rfcCliente}' OR receptor_rfc = '{$rfcCliente}'")
+                ->group("referencia")
+                ->group("patente")
+                ->group("aduana");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $arr = array();
@@ -151,15 +160,16 @@ class Clientes_Model_Repositorio {
         }
     }
 
-    public function buscarPedimento($pedimento, $rfcCliente) {
+    public function buscarPedimento($pedimento, $rfcCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from("repositorio", array("referencia", "patente", "pedimento", "rfc_cliente", "aduana", "creado"))
-                    ->where("pedimento = ?", $pedimento)
-                    ->where("rfc_cliente = '{$rfcCliente}' OR receptor_rfc = '{$rfcCliente}'")
-                    ->group("referencia")
-                    ->group("patente")
-                    ->group("aduana");
+                ->from("repositorio", array("referencia", "patente", "pedimento", "rfc_cliente", "aduana", "creado"))
+                ->where("pedimento = ?", $pedimento)
+                ->where("rfc_cliente = '{$rfcCliente}' OR receptor_rfc = '{$rfcCliente}'")
+                ->group("referencia")
+                ->group("patente")
+                ->group("aduana");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $arr = array();
@@ -181,14 +191,15 @@ class Clientes_Model_Repositorio {
         }
     }
 
-    public function obtenerExpedientes($rfcCliente) {
+    public function obtenerExpedientes($rfcCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("patente", "aduana", "pedimento", "referencia", "creado", "rfc_cliente"))
-                    ->group(array("referencia", "patente", "aduana"))
-                    ->where("rfc_cliente = ?", $rfcCliente)
-                    ->where("tipo_archivo = 9999")
-                    ->order("creado DESC");
+                ->from($this->_db_table, array("patente", "aduana", "pedimento", "referencia", "creado", "rfc_cliente"))
+                ->group(array("referencia", "patente", "aduana"))
+                ->where("rfc_cliente = ?", $rfcCliente)
+                ->where("tipo_archivo = 9999")
+                ->order("creado DESC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -199,16 +210,17 @@ class Clientes_Model_Repositorio {
         }
     }
 
-    public function archivosDeReferencia($patente, $aduana, $referencia) {
+    public function archivosDeReferencia($patente, $aduana, $referencia)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "nom_archivo", "creado", "usuario", "ubicacion_pdf", "ubicacion"))
-                    ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
-                    ->where("a.referencia = ?", $referencia)
-                    ->where("a.patente = ?", $patente)
-                    ->where("a.tipo_archivo NOT IN (29, 89, 9999)")
-                    ->order("a.nom_archivo ASC");
+                ->setIntegrityCheck(false)
+                ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "nom_archivo", "creado", "usuario", "ubicacion_pdf", "ubicacion"))
+                ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
+                ->where("a.referencia = ?", $referencia)
+                ->where("a.patente = ?", $patente)
+                ->where("a.tipo_archivo NOT IN (29, 89, 9999)")
+                ->order("a.nom_archivo ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -218,5 +230,4 @@ class Clientes_Model_Repositorio {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-
 }

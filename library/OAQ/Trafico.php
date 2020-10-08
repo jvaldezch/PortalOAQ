@@ -1140,21 +1140,36 @@ class OAQ_Trafico
         }
         if ($client) {
             $arr = $this->_encabezadoPedimento($client);
+
+            // $this->_firephp->info($arr);
+
             if ($arr !== false) {
+
                 $arr_inv = $this->_detalleFactura($client, $numFactura);
+
+                // $this->_firephp->info($arr_inv);
+
                 if ($arr_inv !== false) {
                     if ($arr_inv[0]["tipoOperacion"] == 1) {
                         $arr_prov = $this->_proveedorFactura($client, $arr_inv[0]["cvePro"], $arr_inv[0]["numFactura"]);
+
+                        // $this->_firephp->info($arr_prov);
+
                         if ($arr_prov !== false) {
                             $arr_inv[0]["proveedor"] = $arr_prov[0];
                         }
                     } else {
                         $arr_prov = $this->_destinatarioFactura($client, $arr_inv[0]["cvePro"], $arr_inv[0]["numFactura"]);
+
+                        // $this->_firephp->info($arr_prov);
+
                         if ($arr_prov !== false) {
                             $arr_inv[0]["destinatario"] = $arr_prov[0];
                         }
                     }
                     $arr_prod = $this->_productosFactura($client, $numFactura);
+
+                    // $this->_firephp->info($arr_prod);
                     
                     if ($arr_prod !== false) {
                         $arr_inv[0]["productos"] = $arr_prod;

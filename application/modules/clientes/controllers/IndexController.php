@@ -1,36 +1,39 @@
 <?php
 
-class Clientes_IndexController extends Zend_Controller_Action {
+class Clientes_IndexController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_redirector;
 
-    public function init() {
+    public function init()
+    {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper('Redirector');
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/DT_bootstrap.css")
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/DT_bootstrap.css")
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/js/common/jquery.blockUI.js");
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/DT_bootstrap.js")
+            ->appendFile("/js/common/jquery.blockUI.js");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace('') : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $this->_session->setExpirationSeconds($this->_appconfig->getParam('session-exp'));
@@ -43,14 +46,15 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $this->view->rol = "cliente";
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Clientes";
         $this->view->headMeta()->appendName('description', '');
-        $this->view->headScript()                
-                ->appendFile("/js/common/highcharts/js/highcharts.js")
-                ->appendFile("/js/common/highcharts/js/modules/data.js")
-                ->appendFile("/js/common/highcharts/js/modules/exporting.js")
-                ->appendFile("/js/clientes/index/index.js?" . time());
+        $this->view->headScript()
+            ->appendFile("/js/common/highcharts/js/highcharts.js")
+            ->appendFile("/js/common/highcharts/js/modules/data.js")
+            ->appendFile("/js/common/highcharts/js/modules/exporting.js")
+            ->appendFile("/js/clientes/index/index.js?" . time());
         $year = $this->_request->getParam('year', (int) date('Y'));
         $this->view->year = $year;
         $this->view->rfc = $this->_session->username;
@@ -81,23 +85,24 @@ class Clientes_IndexController extends Zend_Controller_Action {
                         11 => $mppr->traficosDeClientePorMes($this->_session->username, date("Y"), 11, $item["idAduana"]),
                         12 => $mppr->traficosDeClientePorMes($this->_session->username, date("Y"), 12, $item["idAduana"]),
                     );
-                    $data[] = $item;                
-                }                
+                    $data[] = $item;
+                }
             }
         }
         if (isset($data) && !empty($data)) {
             $this->view->results = $data;
-        }        
+        }
     }
-    
-    public function archivosExpedienteAction() {
+
+    public function archivosExpedienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Expediente";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/clientes/index/archivos-expediente.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/clientes/index/archivos-expediente.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => "Digits",
@@ -115,7 +120,7 @@ class Clientes_IndexController extends Zend_Controller_Action {
                 "aduana" => $arr["aduana"],
                 "pedimento" => $arr["pedimento"],
                 "referencia" => $arr["referencia"],
-            ));            
+            ));
             if (isset($arr["idTrafico"]) && $arr["idTrafico"] !== null) {
                 $this->view->idTrafico = $arr["idTrafico"];
             }
@@ -134,14 +139,13 @@ class Clientes_IndexController extends Zend_Controller_Action {
             if (!empty($complementos)) {
                 $this->view->complementos = $complementos;
             }
-            
+
             $val = new OAQ_ArchivosValidacion();
             if (isset($arr["pedimento"])) {
                 $this->view->validacion = $val->archivosDePedimento($arr["patente"], $arr["aduana"], $arr["pedimento"]);
             }
 
             if (strtoupper(substr(PHP_OS, 0, 3)) === "WIN") {
-                
             } else {
                 $directory = $this->_appconfig->getParam("expdest") . DIRECTORY_SEPARATOR . $arr["patente"] . DIRECTORY_SEPARATOR . $arr["aduana"] . DIRECTORY_SEPARATOR . $arr["referencia"];
                 if (file_exists($directory)) {
@@ -170,12 +174,13 @@ class Clientes_IndexController extends Zend_Controller_Action {
             throw new Exception("Invalid input!");
         }
     }
-    
-    public function expedienteAction() {
+
+    public function expedienteAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Expediente Digital";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/clientes/index/expediente.js?" . time());
+            ->appendFile("/js/clientes/index/expediente.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "page" => "Digits",
@@ -191,10 +196,10 @@ class Clientes_IndexController extends Zend_Controller_Action {
         );
         $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
         $form = new Archivo_Form_Referencias();
-        $mapper = new Clientes_Model_Repositorio();
-        $result = $mapper->referencias($this->_session->username, $i->pedimento, $i->referencia);
-        if (isset($result) && !empty($result)) {
-            $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($result));
+        $mppr = new Clientes_Model_Repositorio();
+        $rows = $mppr->referencias($this->_session->username, $i->pedimento, $i->referencia);
+        if (isset($rows) && !empty($rows)) {
+            $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_Array($rows));
             $paginator->setItemCountPerPage($i->size);
             $paginator->setCurrentPageNumber($i->page);
             $this->view->paginator = $paginator;
@@ -206,24 +211,26 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function cuentaDeGastosAction() {
+    public function cuentaDeGastosAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Cuenta de gastos";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/clientes/index/cuenta-de-gastos.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/clientes/index/cuenta-de-gastos.js?" . time());
     }
 
-    public function excelCuentaDeGastosAction() {
+    public function excelCuentaDeGastosAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -320,11 +327,12 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $reports->createSimpleReport($headers, $result, 'ctagastos', 'Cuenta de gastos', $search->fechaIni, $search->fechaFin, 'Reporte de cuenta de gastos', $search->rfc, $customerInfo['nombre']);
     }
 
-    public function archivosXmlAction() {
+    public function archivosXmlAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Archivos XML de cuenta de gastos";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headScript()
-                ->appendFile("/js/clientes/index/archivos-xml.js?" . time());
+            ->appendFile("/js/clientes/index/archivos-xml.js?" . time());
         $search = NULL ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQCtaGastos');
         $page = $this->_request->getParam('page', 1);
         $archive = new Archivo_Model_CuentasGastosMapper();
@@ -373,7 +381,8 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    public function excelPedimentosPagadosAction() {
+    public function excelPedimentosPagadosAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $search = NULL ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQPedimentos');
@@ -404,11 +413,12 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $reports->createSimpleReport($headers, $result, 'pedimentospag', 'Pedimentos Pagados', $search->fechaIni, $search->fechaFin, 'Reporte de pedimentos pagados', $this->_session->rfc, $this->_session->nombre);
     }
 
-    public function reporteAnexo24Action() {
+    public function reporteAnexo24Action()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Reporte de Anexo 24";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headScript()
-                ->appendFile("/js/clientes/index/reporte-anexo-24.js?" . time());
+            ->appendFile("/js/clientes/index/reporte-anexo-24.js?" . time());
         $this->view->rfc = $this->_session->username;
         $custs = new Trafico_Model_ClientesMapper();
         $cust  = $custs->buscarRfc($this->_session->username);
@@ -426,38 +436,41 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $this->view->arr = $array;
     }
 
-    public function reporteIvaAction() {
+    public function reporteIvaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Reporte I.V.A.";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/clientes/index/reporte-iva.js?" . time());
+            ->appendFile("/js/clientes/index/reporte-iva.js?" . time());
         $form = new Clientes_Form_ReporteIva();
         $this->view->form = $form;
     }
-    
-    public function reporteCovesAction() {
+
+    public function reporteCovesAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Reporte de COVES";
         $this->view->headMeta()->appendName("description", "");
         //$this->view->headLink()->setContainer(new Zend_View_Helper_Placeholder_Container());
         //$this->view->headScript()->setContainer(new Zend_View_Helper_Placeholder_Container());
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/css/DT_bootstrap.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/css/DT_bootstrap.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/js/clientes/index/reporte-coves.js?" . time());
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/DT_bootstrap.js")
+            ->appendFile("/js/clientes/index/reporte-coves.js?" . time());
         $coves = new Clientes_Model_CovesMapper();
         $solicitudes = $coves->getCoves($this->_session->rfc);
         $this->view->result = $solicitudes;
         $this->view->rfc = $this->_session->rfc;
     }
 
-    public function consultarCoveEnviadoAction() {
+    public function consultarCoveEnviadoAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Consulta COVE solicitado";
         $this->view->headMeta()->appendName('description', '');
         $vucemSol = new Clientes_Model_CovesMapper();
@@ -486,19 +499,20 @@ class Clientes_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function archivosM3Action() {
+    public function archivosM3Action()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Archivos M3";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headScript()
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/clientes/index/archivos-m3.js?" . time());
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/clientes/index/archivos-m3.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "page" => "Digits",
             "size" => "Digits",
         );
-        $v = array(            
+        $v = array(
             "page" => array(new Zend_Validate_Int(), "default" => 1),
             "size" => array(new Zend_Validate_Int(), "default" => 25),
             "fechaIni" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/"), "default" => date("Y-m-" . "01")),
@@ -522,8 +536,9 @@ class Clientes_IndexController extends Zend_Controller_Action {
             $this->view->fechaFin = $input->fechaFin;
         }
     }
-    
-    public function landingAction() {
+
+    public function landingAction()
+    {
         $this->_helper->layout->setLayout("gentelella/default");
         $this->view->title = $this->_appconfig->getParam("title") . " Bienvenido";
         $this->view->headMeta()->appendName("description", "");
@@ -532,95 +547,98 @@ class Clientes_IndexController extends Zend_Controller_Action {
         );
         $this->view->headScript()->exchangeArray(array());
         $this->view->headLink()
-                ->appendStylesheet("/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/font-awesome/css/font-awesome.min.css")
-                ->appendStylesheet("/gentelella/vendors/nprogress/nprogress.css")
-                ->appendStylesheet("/gentelella/vendors/iCheck/skins/flat/green.css")
-                ->appendStylesheet("/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css")
-                ->appendStylesheet("/gentelella/vendors/jqvmap/dist/jqvmap.min.css")
-                ->appendStylesheet("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css")
-                ->appendStylesheet("/gentelella/build/css/custom.min.css");
+            ->appendStylesheet("/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/font-awesome/css/font-awesome.min.css")
+            ->appendStylesheet("/gentelella/vendors/nprogress/nprogress.css")
+            ->appendStylesheet("/gentelella/vendors/iCheck/skins/flat/green.css")
+            ->appendStylesheet("/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css")
+            ->appendStylesheet("/gentelella/vendors/jqvmap/dist/jqvmap.min.css")
+            ->appendStylesheet("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css")
+            ->appendStylesheet("/gentelella/build/css/custom.min.css");
         $this->view->headScript()
-                ->appendFile("/gentelella/vendors/jquery/dist/jquery.min.js")
-                ->appendFile("/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")
-                ->appendFile("/gentelella/vendors/fastclick/lib/fastclick.js")
-                ->appendFile("/gentelella/vendors/nprogress/nprogress.js")
-                ->appendFile("/gentelella/vendors/Chart.js/dist/Chart.min.js")
-                ->appendFile("/gentelella/vendors/gauge.js/dist/gauge.min.js")
-                ->appendFile("/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js")
-                ->appendFile("/gentelella/vendors/iCheck/icheck.min.js")
-                ->appendFile("/gentelella/vendors/skycons/skycons.js")
-                ->appendFile("/gentelella/vendors/Flot/jquery.flot.js")
-                ->appendFile("/gentelella/vendors/Flot/jquery.flot.pie.js")
-                ->appendFile("/gentelella/vendors/Flot/jquery.flot.time.js")
-                ->appendFile("/gentelella/vendors/Flot/jquery.flot.stack.js")
-                ->appendFile("/gentelella/vendors/Flot/jquery.flot.resize.js")
-                ->appendFile("/gentelella/vendors/flot.orderbars/js/jquery.flot.orderBars.js")
-                ->appendFile("/gentelella/vendors/flot-spline/js/jquery.flot.spline.min.js")
-                ->appendFile("/gentelella/vendors/flot.curvedlines/curvedLines.js")
-                ->appendFile("/gentelella/vendors/DateJS/build/date.js")
-                ->appendFile("/gentelella/vendors/jqvmap/dist/jquery.vmap.js")
-                ->appendFile("/gentelella/vendors/jqvmap/dist/maps/jquery.vmap.world.js")
-                ->appendFile("/gentelella/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js")
-                ->appendFile("/gentelella/vendors/moment/min/moment.min.js")
-                ->appendFile("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js")
-                ->appendFile("/gentelella/build/js/custom.js?" . time());
+            ->appendFile("/gentelella/vendors/jquery/dist/jquery.min.js")
+            ->appendFile("/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")
+            ->appendFile("/gentelella/vendors/fastclick/lib/fastclick.js")
+            ->appendFile("/gentelella/vendors/nprogress/nprogress.js")
+            ->appendFile("/gentelella/vendors/Chart.js/dist/Chart.min.js")
+            ->appendFile("/gentelella/vendors/gauge.js/dist/gauge.min.js")
+            ->appendFile("/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js")
+            ->appendFile("/gentelella/vendors/iCheck/icheck.min.js")
+            ->appendFile("/gentelella/vendors/skycons/skycons.js")
+            ->appendFile("/gentelella/vendors/Flot/jquery.flot.js")
+            ->appendFile("/gentelella/vendors/Flot/jquery.flot.pie.js")
+            ->appendFile("/gentelella/vendors/Flot/jquery.flot.time.js")
+            ->appendFile("/gentelella/vendors/Flot/jquery.flot.stack.js")
+            ->appendFile("/gentelella/vendors/Flot/jquery.flot.resize.js")
+            ->appendFile("/gentelella/vendors/flot.orderbars/js/jquery.flot.orderBars.js")
+            ->appendFile("/gentelella/vendors/flot-spline/js/jquery.flot.spline.min.js")
+            ->appendFile("/gentelella/vendors/flot.curvedlines/curvedLines.js")
+            ->appendFile("/gentelella/vendors/DateJS/build/date.js")
+            ->appendFile("/gentelella/vendors/jqvmap/dist/jquery.vmap.js")
+            ->appendFile("/gentelella/vendors/jqvmap/dist/maps/jquery.vmap.world.js")
+            ->appendFile("/gentelella/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js")
+            ->appendFile("/gentelella/vendors/moment/min/moment.min.js")
+            ->appendFile("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js")
+            ->appendFile("/gentelella/build/js/custom.js?" . time());
     }
 
-    public function traficoAction() {
+    public function traficoAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Traficos";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/clientes/index/trafico.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/clientes/index/trafico.js?" . time());
     }
 
-    public function verTraficoAction() {
+    public function verTraficoAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Trafico";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/css/jquery.qtip.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/easyui/themes/default/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/css/jquery.qtip.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/js/common/jquery.qtip.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/js/clientes/index/ver-trafico.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/js/common/jquery.qtip.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/clientes/index/ver-trafico.js?" . time());
         $f = array(
-                "*" => array("StringTrim", "StripTags"),
-                "id" => array("Digits"),
-            );            
-            $v = array(
-                "id" => array(new Zend_Validate_Int(), "NotEmpty"),
-            );
-            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            if ($input->isValid("id")) {
-                $traficos = new OAQ_Trafico(array("idTrafico" => $input->id));
-                $arr = $traficos->obtenerDatos();
-                $this->view->id_trafico = $input->id;
-                $this->view->basico = $arr;
-            }
+            "*" => array("StringTrim", "StripTags"),
+            "id" => array("Digits"),
+        );
+        $v = array(
+            "id" => array(new Zend_Validate_Int(), "NotEmpty"),
+        );
+        $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+        if ($input->isValid("id")) {
+            $traficos = new OAQ_Trafico(array("idTrafico" => $input->id));
+            $arr = $traficos->obtenerDatos();
+            $this->view->id_trafico = $input->id;
+            $this->view->basico = $arr;
+        }
     }
-    
-    public function traficosAction() {
+
+    public function traficosAction()
+    {
         $this->_helper->layout->setLayout("gentelella/default");
         $this->view->title = $this->_appconfig->getParam("title") . " Traficos";
         $this->view->headMeta()->appendName("description", "");
@@ -628,40 +646,40 @@ class Clientes_IndexController extends Zend_Controller_Action {
             new Zend_View_Helper_Placeholder_Container()
         );
         $this->view->headScript()->exchangeArray(array());
-        $this->view->headLink()                
-                ->appendStylesheet("/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/font-awesome/css/font-awesome.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css")
-                ->appendStylesheet("/gentelella/build/css/custom.min.css");
+        $this->view->headLink()
+            ->appendStylesheet("/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/font-awesome/css/font-awesome.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css")
+            ->appendStylesheet("/gentelella/build/css/custom.min.css");
         $this->view->headScript()
-                ->appendFile("/gentelella/vendors/jquery/dist/jquery.min.js")
-                ->appendFile("/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")
-                ->appendFile("/gentelella/vendors/fastclick/lib/fastclick.js")
-                ->appendFile("/gentelella/vendors/nprogress/nprogress.js")
-                ->appendFile("/gentelella/vendors/iCheck/icheck.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js")
-                ->appendFile("/gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js")
-                ->appendFile("/gentelella/vendors/jszip/dist/jszip.min.js")
-                ->appendFile("/gentelella/vendors/pdfmake/build/pdfmake.min.js")
-                ->appendFile("/gentelella/vendors/pdfmake/build/vfs_fonts.js")
-                ->appendFile("/gentelella/vendors/moment/min/moment.min.js")
-                ->appendFile("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js")
-                ->appendFile("/gentelella/build/js/custom.js?" . time());
+            ->appendFile("/gentelella/vendors/jquery/dist/jquery.min.js")
+            ->appendFile("/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")
+            ->appendFile("/gentelella/vendors/fastclick/lib/fastclick.js")
+            ->appendFile("/gentelella/vendors/nprogress/nprogress.js")
+            ->appendFile("/gentelella/vendors/iCheck/icheck.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js")
+            ->appendFile("/gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js")
+            ->appendFile("/gentelella/vendors/jszip/dist/jszip.min.js")
+            ->appendFile("/gentelella/vendors/pdfmake/build/pdfmake.min.js")
+            ->appendFile("/gentelella/vendors/pdfmake/build/vfs_fonts.js")
+            ->appendFile("/gentelella/vendors/moment/min/moment.min.js")
+            ->appendFile("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js")
+            ->appendFile("/gentelella/build/js/custom.js?" . time());
         $request = new Zend_Controller_Request_Http();
         $impos = filter_var($request->getCookie("impos"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         $expos = filter_var($request->getCookie("expos"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
@@ -688,8 +706,9 @@ class Clientes_IndexController extends Zend_Controller_Action {
             $this->view->paginator = $paginator;
         }
     }
-    
-    public function expedientesAction() {
+
+    public function expedientesAction()
+    {
         $this->_helper->layout->setLayout("gentelella/default");
         $this->view->title = $this->_appconfig->getParam("title") . " Traficos";
         $this->view->headMeta()->appendName("description", "");
@@ -697,40 +716,40 @@ class Clientes_IndexController extends Zend_Controller_Action {
             new Zend_View_Helper_Placeholder_Container()
         );
         $this->view->headScript()->exchangeArray(array());
-        $this->view->headLink()                
-                ->appendStylesheet("/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/font-awesome/css/font-awesome.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css")
-                ->appendStylesheet("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css")
-                ->appendStylesheet("/gentelella/build/css/custom.min.css");
+        $this->view->headLink()
+            ->appendStylesheet("/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/font-awesome/css/font-awesome.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css")
+            ->appendStylesheet("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css")
+            ->appendStylesheet("/gentelella/build/css/custom.min.css");
         $this->view->headScript()
-                ->appendFile("/gentelella/vendors/jquery/dist/jquery.min.js")
-                ->appendFile("/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")
-                ->appendFile("/gentelella/vendors/fastclick/lib/fastclick.js")
-                ->appendFile("/gentelella/vendors/nprogress/nprogress.js")
-                ->appendFile("/gentelella/vendors/iCheck/icheck.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")
-                ->appendFile("/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js")
-                ->appendFile("/gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js")
-                ->appendFile("/gentelella/vendors/jszip/dist/jszip.min.js")
-                ->appendFile("/gentelella/vendors/pdfmake/build/pdfmake.min.js")
-                ->appendFile("/gentelella/vendors/pdfmake/build/vfs_fonts.js")
-                ->appendFile("/gentelella/vendors/moment/min/moment.min.js")
-                ->appendFile("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js")
-                ->appendFile("/gentelella/build/js/custom.js?" . time());
+            ->appendFile("/gentelella/vendors/jquery/dist/jquery.min.js")
+            ->appendFile("/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js")
+            ->appendFile("/gentelella/vendors/fastclick/lib/fastclick.js")
+            ->appendFile("/gentelella/vendors/nprogress/nprogress.js")
+            ->appendFile("/gentelella/vendors/iCheck/icheck.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.html5.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-buttons/js/buttons.print.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-responsive/js/dataTables.responsive.min.js")
+            ->appendFile("/gentelella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js")
+            ->appendFile("/gentelella/vendors/datatables.net-scroller/js/dataTables.scroller.min.js")
+            ->appendFile("/gentelella/vendors/jszip/dist/jszip.min.js")
+            ->appendFile("/gentelella/vendors/pdfmake/build/pdfmake.min.js")
+            ->appendFile("/gentelella/vendors/pdfmake/build/vfs_fonts.js")
+            ->appendFile("/gentelella/vendors/moment/min/moment.min.js")
+            ->appendFile("/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js")
+            ->appendFile("/gentelella/build/js/custom.js?" . time());
         $request = new Zend_Controller_Request_Http();
         $filtro = filter_var($request->getCookie("filtro"), FILTER_VALIDATE_INT);
         $f = array(
@@ -757,7 +776,7 @@ class Clientes_IndexController extends Zend_Controller_Action {
             $search = array($i->patente, $i->aduana, $i->pedimento, $i->referencia);
             $select = $repo->paginatorSelect($filtro, $search);
         } else {
-            $select = $repo->paginatorSelect($filtro);            
+            $select = $repo->paginatorSelect($filtro);
         }
         if (isset($select) && !empty($select)) {
             $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
@@ -774,28 +793,28 @@ class Clientes_IndexController extends Zend_Controller_Action {
         $this->view->rol = $this->_session->role;
         $this->view->form = $form;
     }
-    
-    public function catalogoDePartesAction() {
+
+    public function catalogoDePartesAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Consulta del catalogo";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/easyui/themes/metro/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/easyui/themes/color.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/easyui/themes/metro/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/easyui/themes/color.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/clientes/index/catalogo-de-partes.js?" . time());
-        
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/clientes/index/catalogo-de-partes.js?" . time());
+
         $mppr = new Clientes_Model_Clientes();
         $idCliente = $mppr->obtenerId($this->_session->username);
         if ($idCliente) {
             $this->view->idCliente = $idCliente;
         }
     }
-
 }
