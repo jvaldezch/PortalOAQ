@@ -1,19 +1,22 @@
 <?php
 
-class Archivo_GetController extends Zend_Controller_Action {
+class Archivo_GetController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -23,8 +26,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             $this->getResponse()->setRedirect($this->_appconfig->getParam("link-logout"));
         }
     }
-    
-    public function estatusFtpAction() {
+
+    public function estatusFtpAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -51,8 +55,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             throw new Zend_Exception($e->getMessage());
         }
     }
-    
-    public function permalinkAction() {
+
+    public function permalinkAction()
+    {
         require_once 'random_compat/psalm-autoload.php';
         try {
             $f = array(
@@ -77,8 +82,8 @@ class Archivo_GetController extends Zend_Controller_Action {
                     $uri = "http://localhost:8090/clientes/expediente?code=" . urlencode($validar);
                 }
                 echo "<p>El permalink sirve para enviarle este expediente a un cliente sin tener que enviar todos los archivos.</p><br>"
-                . "<input id=\"permalinkUri\" value=\"{$uri}\" class=\"traffic-input-large\" style=\"width: 650px !important\" />"
-                . "<script>$('#permalinkUri').focus(function() { $(this).select(); });</script>";
+                    . "<input id=\"permalinkUri\" value=\"{$uri}\" class=\"traffic-input-large\" style=\"width: 650px !important\" />"
+                    . "<script>$('#permalinkUri').focus(function() { $(this).select(); });</script>";
             } else {
                 throw new Exception("Invalid input!");
             }
@@ -86,8 +91,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             throw new Zend_Exception($e->getMessage());
         }
     }
-    
-    public function descargarArchivoAction() {
+
+    public function descargarArchivoAction()
+    {
         try {
             $f = array(
                 "id" => array("Digits", "StringTrim", "StripTags"),
@@ -136,7 +142,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargarCarpetaAction() {
+    public function descargarCarpetaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -164,7 +171,7 @@ class Archivo_GetController extends Zend_Controller_Action {
                     $files = $model->getFilesByReferenceCustomers($arr["referencia"], $arr["patente"], $arr["aduana"]);
                 }
                 $complementos = $model->complementosReferencia($arr["referencia"]);
-                
+
                 if (count($files)) {
                     $zipName = $exp->zipFilename($arr["patente"], $arr["aduana"], $arr["pedimento"], $misc->limpiarNombreReferencia($arr["referencia"]), $arr["rfcCliente"]);
                     $zipDir = "D:\\Tmp\zips";
@@ -203,8 +210,8 @@ class Archivo_GetController extends Zend_Controller_Action {
                                 unset($tmpfile);
                             }
                         }
-                    }           
-            
+                    }
+
                     $val = new OAQ_ArchivosValidacion();
                     if (isset($arr["pedimento"])) {
                         $arch_val = $val->archivosDePedimento($arr["patente"], $arr["aduana"], $arr["pedimento"]);
@@ -214,7 +221,8 @@ class Archivo_GetController extends Zend_Controller_Action {
                                 if ($a_val['idArchivoValidacion']) {
                                     $file_val = $mppr_val->fileContent($a_val['idArchivoValidacion']);
                                     if ($file_val) {
-                                        $zip->addFromString($a_val['archivoNombre'], base64_decode(base64_decode($file_val["contenido"])));
+                                        // $zip->addFromString($a_val['archivoNombre'], base64_decode(base64_decode($file_val["contenido"])));
+                                        $zip->addFromString($a_val['archivoNombre'], base64_decode($file_val["contenido"]));
                                     }
                                 }
                             }
@@ -257,7 +265,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function ayudaDocumentosAction() {
+    public function ayudaDocumentosAction()
+    {
         try {
             $this->_helper->viewRenderer->setNoRender(false);
             $mapper = new Archivo_Model_RepositorioPrefijos();
@@ -268,7 +277,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function imprimirPrefijosAction() {
+    public function imprimirPrefijosAction()
+    {
         try {
             $mapper = new Archivo_Model_RepositorioPrefijos();
             $arr = array(
@@ -293,7 +303,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargarArchivoTerminalAction() {
+    public function descargarArchivoTerminalAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -314,7 +325,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function pdfFacturaTerminalAction() {
+    public function pdfFacturaTerminalAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -335,7 +347,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function xmlFacturaTerminalAction() {
+    public function xmlFacturaTerminalAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -355,8 +368,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             throw new Zend_Exception($e->getMessage());
         }
     }
-    
-    public function verArchivoAction() {
+
+    public function verArchivoAction()
+    {
         try {
             $f = array(
                 "id" => array("Digits", "StringTrim", "StripTags"),
@@ -399,8 +413,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
-    public function verArchivoClienteAction() {
+
+    public function verArchivoClienteAction()
+    {
         try {
             $f = array(
                 "id" => array("Digits", "StringTrim", "StripTags"),
@@ -438,7 +453,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaArchivoClienteAction() {
+    public function descargaArchivoClienteAction()
+    {
         try {
             $f = array(
                 "id" => array("Digits", "StringTrim", "StripTags"),
@@ -468,8 +484,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
-    public function descargarFacturasTerminalAction() {
+
+    public function descargarFacturasTerminalAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -498,8 +515,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function reporteFacturasTerminalAction() {
+
+    public function reporteFacturasTerminalAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -520,8 +538,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function descargarFtpAction() {
+
+    public function descargarFtpAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -543,7 +562,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function mvhcEstatusObtenerAction() {
+    public function mvhcEstatusObtenerAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -556,12 +576,12 @@ class Archivo_GetController extends Zend_Controller_Action {
                 $mppr = new Archivo_Model_RepositorioIndex();
                 if (($arr = $mppr->datos($input->id))) {
                     $this->_helper->json(array(
-                            "success" => true, 
-                            "mvhcCliente" => $arr["mvhcCliente"], 
-                            "mvhcFirmado" => $arr["mvhcFirmada"], 
-                            "mvhcEnviada" => $arr["mvhcEnviada"], 
-                            "numGuia" => $arr["numGuia"],
-                                ));
+                        "success" => true,
+                        "mvhcCliente" => $arr["mvhcCliente"],
+                        "mvhcFirmado" => $arr["mvhcFirmada"],
+                        "mvhcEnviada" => $arr["mvhcEnviada"],
+                        "numGuia" => $arr["numGuia"],
+                    ));
                 } else {
                     throw new Exception("No data found!");
                 }
@@ -573,7 +593,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function recargarDirectorioAction() {
+    public function recargarDirectorioAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -586,7 +607,7 @@ class Archivo_GetController extends Zend_Controller_Action {
                 $mppr = new Archivo_Model_RepositorioIndex();
                 if (($arr = $mppr->datos($input->id))) {
                     $mdl = new Archivo_Model_RepositorioMapper();
-                    
+
                     $misc = new OAQ_Misc();
                     if (APPLICATION_ENV == "production") {
                         $misc->set_baseDir($this->_appconfig->getParam("expdest"));
@@ -608,12 +629,12 @@ class Archivo_GetController extends Zend_Controller_Action {
                                 if (!empty($archivos)) {
                                     foreach ($archivos as $item) {
                                         $tipoArchivo = $misc->tipoArchivo(basename($item));
-                                        
+
                                         $ext = pathinfo($item, PATHINFO_EXTENSION);
                                         if (preg_match('/msg/i', $ext)) {
                                             $tipoArchivo = 2001;
                                         }
-                                        
+
                                         if (!($mdl->verificarArchivo($arr["patente"], $arr["referencia"], basename($item)))) {
                                             $mdl->nuevoArchivo($tipoArchivo, null, $arr["patente"], $arr["aduana"], $arr["pedimento"], $arr["referencia"], basename($item), $item, $this->_session->username, $arr["rfcCliente"]);
                                         }
@@ -635,7 +656,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarEmailAction() {
+    public function enviarEmailAction()
+    {
         try {
             $f = array(
                 "id" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags(), new Zend_Filter_Digits()),
@@ -647,18 +669,18 @@ class Archivo_GetController extends Zend_Controller_Action {
             if ($input->isValid("id")) {
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-                
+
                 $referencias = new OAQ_Referencias();
                 $res = $referencias->restricciones($this->_session->id, $this->_session->role);
                 $mapper = new Archivo_Model_RepositorioIndex();
                 $arr = $mapper->datos($input->id, $res["idsAduana"], $res["rfcs"]);
-                
+
                 $repo = new Archivo_Model_RepositorioMapper();
-                $files = $repo->getFilesByReferenceUsers($arr["referencia"], $arr["patente"], $arr["aduana"], array(23, 32, 33));                
+                $files = $repo->getFilesByReferenceUsers($arr["referencia"], $arr["patente"], $arr["aduana"], array(23, 32, 33));
                 if (!empty($files)) {
                     $view->archivos = $files;
                 }
-                
+
                 if (isset($arr["rfcCliente"])) {
                     $cust = new Trafico_Model_ClientesMapper();
                     $cli = $cust->buscarRfc($arr["rfcCliente"]);
@@ -668,7 +690,7 @@ class Archivo_GetController extends Zend_Controller_Action {
                         (!empty($contacts)) ? $view->contacts = $contacts : null;
                     }
                 }
-                
+
                 $view->id = $input->id;
                 echo $view->render("enviar-email.phtml");
             } else {
@@ -678,8 +700,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function descargarArchivoTemporalAction() {
+
+    public function descargarArchivoTemporalAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -709,8 +732,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             throw new Zend_Exception($ex->getMessage());
         }
     }
-    
-    public function actualizarTraficoAction() {
+
+    public function actualizarTraficoAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -721,10 +745,10 @@ class Archivo_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id")) {
-                
+
                 $index = new Archivo_Model_RepositorioIndex();
                 $arr = $index->datos($input->id);
-                
+
                 if (isset($arr['idTrafico'])) {
                     $trafico = new OAQ_Trafico(array("idTrafico" => $arr['idTrafico'], "idUsuario" => $this->_session->id));
                     $array = array(
@@ -734,12 +758,11 @@ class Archivo_GetController extends Zend_Controller_Action {
                         "completo" => $arr['completo'],
                     );
                     $trafico->actualizar($array);
-                    
+
                     $this->_helper->json(array("success" => true));
                 }
-                
+
                 $this->_helper->json(array("success" => false));
-                
             } else {
                 $this->_helper->json(array("success" => false, "message" => "Invalid input!"));
             }
@@ -747,8 +770,9 @@ class Archivo_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function buscarTraficoAction() {
+
+    public function buscarTraficoAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -759,18 +783,18 @@ class Archivo_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id")) {
-                
+
                 $index = new Archivo_Model_RepositorioIndex();
                 $arr = $index->datos($input->id);
-                
+
                 $trafico = new Trafico_Model_TraficosMapper();
-                
+
                 if (($row = $trafico->search($arr['patente'], $arr['aduana'], $arr['referencia']))) {
-                    
+
                     $traffic = new OAQ_Trafico(array("idTrafico" => $row["id"], "idUsuario" => $this->_session->id));
-                    
+
                     $index->update($input->id, array("idTrafico" => $row["id"], "pedimento" => $row["pedimento"], "rfcCliente" => $row["rfcCliente"]));
-                    
+
                     $array = array(
                         "idRepositorio" => $arr['id'],
                         "revisionAdministracion" => $arr['revisionAdministracion'],
@@ -778,12 +802,11 @@ class Archivo_GetController extends Zend_Controller_Action {
                         "completo" => $arr['completo'],
                     );
                     $traffic->actualizar($array);
-                    
+
                     $this->_helper->json(array("success" => true));
                 }
-                
+
                 $this->_helper->json(array("success" => false));
-                
             } else {
                 $this->_helper->json(array("success" => false, "message" => "Invalid input!"));
             }
@@ -791,10 +814,11 @@ class Archivo_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function reporteCuentasDeGastosAction() {
+
+    public function reporteCuentasDeGastosAction()
+    {
         try {
-            
+
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
                 "page" => array("Digits"),
@@ -811,28 +835,29 @@ class Archivo_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("page") && $input->isValid("rows")) {
-                
+
                 $mppr = new Archivo_Model_CuentasGastosMapper();
                 $select = $mppr->searchSql($input->fechaIni, $input->fechaFin, $input->rfcCliente);
-                
+
                 $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
                 $paginator->setCurrentPageNumber($input->page);
                 $paginator->setItemCountPerPage($input->rows);
-                
+
                 $arr = array(
                     "total" => $paginator->getTotalItemCount(),
                     "rows" => iterator_to_array($paginator),
                     "paginator" => $paginator->getPages(),
                 );
-                
+
                 $this->_helper->json($arr);
-            }            
+            }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function descargarCuentasDeGastosAction() {
+
+    public function descargarCuentasDeGastosAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -850,30 +875,30 @@ class Archivo_GetController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("page") && $input->isValid("rows")) {
-                
+
                 if (APPLICATION_ENV == "production") {
                     $tmpDir = "/tmp/zipcuentas";
                     if (!file_exists($tmpDir)) {
                         mkdir($tmpDir, 0777, true);
-                    }                    
+                    }
                 } else {
                     $tmpDir = "D:\\xampp\\tmp\\zipcuentas";
                     if (!file_exists($tmpDir)) {
                         mkdir($tmpDir);
-                    }                                        
+                    }
                 }
-                
+
                 $mppr = new Archivo_Model_CuentasGastosMapper();
                 $arr = $mppr->getXmlPaths($input->fechaIni, $input->fechaFin, $input->rfcCliente, $input->ids);
-                
+
                 if (!empty($arr)) {
                     $misc = new OAQ_Misc();
                     $zipName = "CUENTASDEGASTOS_" . date("Ymd_Hms", time()) . ".zip";
                     $zipFilename = $tmpDir . DIRECTORY_SEPARATOR . $zipName;
-                    
+
                     $created = $misc->createZipFile($arr, $zipFilename);
                     if ($created == true) {
-                        
+
                         header("Content-type: application/zip");
                         header('Content-Disposition: attachment; filename="' . basename($zipFilename) . '"');
                         header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -882,15 +907,16 @@ class Archivo_GetController extends Zend_Controller_Action {
                         header("Expires: 0");
                         readfile(realpath($zipFilename));
                         unlink($zipFilename);
-                    }                    
+                    }
                 }
-            }            
+            }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function imprimirChecklistAction() {
+
+    public function imprimirChecklistAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -902,22 +928,22 @@ class Archivo_GetController extends Zend_Controller_Action {
                 "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            
+
             $index = new Archivo_Model_RepositorioIndex();
             if ($input->isValid("idTrafico")) {
                 $idRepo = $index->buscarPorTrafico($input->idTrafico);
-                
+
                 $arr = $index->datos($idRepo);
-                
+
                 $check = new Archivo_Model_ChecklistReferencias();
-                
+
                 $checklist = $check->buscar($arr['patente'], $arr['aduana'], $arr['referencia']);
-                
+
                 $checkjson = json_decode($checklist->checklist, true);
-                                
+
                 $log = new Archivo_Model_ChecklistReferenciasBitacora();
                 $logs = $log->obtener($arr["patente"], $arr["aduana"], $arr["pedimento"], $arr["referencia"]);
-                
+
                 $data = array(
                     "patente" => $arr['patente'],
                     "aduana" => $arr['aduana'],
@@ -934,8 +960,7 @@ class Archivo_GetController extends Zend_Controller_Action {
                 $print = new OAQ_Imprimir_Checklist($data, "P", "pt", "LETTER");
                 $print->checklist();
                 $print->set_filename("CHECKLIST_{$arr["referencia"]}.pdf");
-                $print->Output($print->get_filename(), "I");                
-                
+                $print->Output($print->get_filename(), "I");
             } else {
                 throw new Exception("Invalid input!");
             }
@@ -944,7 +969,8 @@ class Archivo_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function vistaPreviaAction() {
+    public function vistaPreviaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -964,7 +990,6 @@ class Archivo_GetController extends Zend_Controller_Action {
                 $view->results = $traffic->archivosDeExpediente(true);
 
                 $this->_helper->json(array("success" => true, "html" => $view->render("vista-previa.phtml")));
-
             } else {
                 throw new Exception("Invalid input!");
             }
@@ -972,5 +997,4 @@ class Archivo_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-
 }
