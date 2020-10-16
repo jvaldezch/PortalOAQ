@@ -178,9 +178,9 @@ class Archivo_Model_RepositorioMapper
     {
         try {
             $sql = $this->_db_table->select()
-                ->setIntegrityCheck(false)
-                ->from(array("a" => "repositorio"), array("count(*) AS total"))
-                ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
+                // ->setIntegrityCheck(false)
+                ->from($this->_db_table, array("count(*) AS total"))
+                // ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
                 ->where("a.referencia = ?", $reference)
                 ->where("a.tipo_archivo NOT IN (9999)");
             if (isset($patente)) {
