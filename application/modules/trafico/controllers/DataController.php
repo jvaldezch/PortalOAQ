@@ -807,7 +807,7 @@ class Trafico_DataController extends Zend_Controller_Action {
                     "almacen" => isset($post["almacen"]) ? $post["almacen"] : null,
                     "banco" => (isset($post["peca"]) && $post["peca"] == 1) ? null : isset($post["banco"]) ? $post["banco"] : null,
                     "mercancia" => isset($post["mercancia"]) ? $post["mercancia"] : null,
-                    "valorMercancia" => isset($post["valorMercancia"]) ? $post["valorMercancia"] : null,
+                    "valorMercancia" => isset($post["valorMercancia"]) ? (float) $post["valorMercancia"] : null,
                 );
                 if (!($id = $model->buscar($post["idSolicitud"]))) {
                     $row["creado"] = date("Y-m-d H:i:s");
