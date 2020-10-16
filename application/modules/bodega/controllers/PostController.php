@@ -658,13 +658,13 @@ class Bodega_PostController extends Zend_Controller_Action
         try {
             $sql = $this->_db->select()
                 ->from(array("t" => "traficos"), array("count(*) AS total"))
-                ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
+                // ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                // ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
                 ->where("t.idBodega IN (?)", $warehouses);
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchRow($sql);
             if ($stmt) {
-                return (int) $stmt['total'];
+                return (int) $stmt->total;
             }
             return;
         } catch (Zend_Db_Exception $ex) {
