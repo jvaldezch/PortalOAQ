@@ -160,6 +160,7 @@ class Archivo_GetController extends Zend_Controller_Action
                 $arr = $index->datos($input->id);
                 $model = new Archivo_Model_RepositorioMapper();
                 $referencias = new OAQ_Referencias();
+
                 $res = $referencias->restricciones($this->_session->id, $this->_session->role);
                 if (!in_array($this->_session->role, array("inhouse", "cliente", "proveedor"))) {
                     $files = $model->getFilesByReferenceUsers($arr["referencia"], $arr["patente"], $arr["aduana"]);
@@ -170,6 +171,7 @@ class Archivo_GetController extends Zend_Controller_Action
                 } else if (in_array($this->_session->role, array("cliente"))) {
                     $files = $model->getFilesByReferenceCustomers($arr["referencia"], $arr["patente"], $arr["aduana"]);
                 }
+                
                 $complementos = $model->complementosReferencia($arr["referencia"]);
 
                 if (count($files)) {

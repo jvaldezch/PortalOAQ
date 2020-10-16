@@ -6,11 +6,13 @@
  * and open the template in the editor.
  */
 
-class OAQ_Expediente_Descarga {
-    
+class OAQ_Expediente_Descarga
+{
+
     protected $arr;
 
-    protected function _year($pedimento) {
+    protected function _year($pedimento)
+    {
         $year = "00";
         if (preg_match('/^3/', (string) $pedimento)) {
             $year = "13";
@@ -35,8 +37,9 @@ class OAQ_Expediente_Descarga {
         }
         return $year;
     }
-    
-    public function prefijosGunderson($tipoArchivo) {
+
+    public function prefijosGunderson($tipoArchivo)
+    {
         if (in_array($tipoArchivo, array(1, 23, 24, 442))) { // Pedimiento Original
             return 2;
         } elseif (in_array($tipoArchivo, array(33))) { //Pedimento simplicado
@@ -90,8 +93,9 @@ class OAQ_Expediente_Descarga {
                 return null;
         }*/
     }
-    
-    public function zipFilename($patente, $aduana, $pedimento, $referencia, $rfcCliente) {
+
+    public function zipFilename($patente, $aduana, $pedimento, $referencia, $rfcCliente)
+    {
         if ($rfcCliente == "GCO980828GY0") {
             return $this->_year($pedimento) . "-" . $aduana . "-" . $patente . "-" . $pedimento . "_" . $referencia . ".zip";
         } else if ($rfcCliente == "ADM111215BS6") {
@@ -101,12 +105,13 @@ class OAQ_Expediente_Descarga {
         }
     }
 
-    public function filename($patente, $aduana, $pedimento, $nombre, $tipoArchivo, $rfcCliente, $row = null) {
+    public function filename($patente, $aduana, $pedimento, $nombre, $tipoArchivo, $rfcCliente = null, $row = null)
+    {
         $prefijos = new Archivo_Model_RepositorioPrefijos();
         if (!($prefijo = $prefijos->obtenerPrefijo($tipoArchivo))) {
             $prefijo = "";
         }
-        if ($rfcCliente == "GCO980828GY0") {
+        if (isset($rfcCliente) && $rfcCliente == "GCO980828GY0") {
             if (($pre = $this->prefijosGunderson($tipoArchivo))) {
                 $sf = "";
                 if ($pre == 1) {
@@ -120,11 +125,10 @@ class OAQ_Expediente_Descarga {
             } else {
                 return $this->_year($pedimento) . "-" . $aduana . "-" . $patente . "-" . $pedimento . "_" . $prefijo . str_replace($prefijo, "", $nombre);
             }
-        } else if ($rfcCliente == "ADM111215BS6") {
+        } else if (isset($rfcCliente) && $rfcCliente == "ADM111215BS6") {
             return $patente . "-" . $pedimento . "_" . $prefijo . $nombre;
         } else {
             return $prefijo . $nombre;
         }
     }
-
 }
