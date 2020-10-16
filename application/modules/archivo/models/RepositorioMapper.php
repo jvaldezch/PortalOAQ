@@ -182,8 +182,7 @@ class Archivo_Model_RepositorioMapper
                 ->from(array("a" => "repositorio"), array("count(*) AS total"))
                 ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
                 ->where("a.referencia = ?", $reference)
-                ->where("a.tipo_archivo NOT IN (9999)")
-                ->order("nom_archivo ASC");
+                ->where("a.tipo_archivo NOT IN (9999)");
             if (isset($patente)) {
                 $sql->where("a.patente = ?", $patente);
             }
