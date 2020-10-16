@@ -1,6 +1,7 @@
 <?php
 
-class Trafico_AjaxController extends Zend_Controller_Action {
+class Trafico_AjaxController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_svucem;
@@ -12,8 +13,9 @@ class Trafico_AjaxController extends Zend_Controller_Action {
     protected $_todosClientes;
     protected $_firephp;
 
-    public function init() {
-        $this->_helper->layout()->disableLayout();  
+    public function init()
+    {
+        $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
@@ -22,11 +24,12 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         $contextSwitch = $this->_helper->getHelper("contextSwitch");
         $this->_firephp = Zend_Registry::get("firephp");
         $contextSwitch->addActionContext("recent-coves", "json")
-                ->addActionContext("borrar-solicitud-cove", "json")
-                ->initContext();
+            ->addActionContext("borrar-solicitud-cove", "json")
+            ->initContext();
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -41,7 +44,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         $this->_todosClientes = array("trafico", "super", "trafico_operaciones", "trafico_aero");
     }
 
-    public function nuevoClienteAction() {
+    public function nuevoClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -93,7 +97,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerConceptoAction() {
+    public function removerConceptoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -129,7 +134,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerClienteAction() {
+    public function removerClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -163,7 +169,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerAlmacenAction() {
+    public function removerAlmacenAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -197,7 +204,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerContactoAction() {
+    public function removerContactoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -230,7 +238,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerContactoClienteAction() {
+    public function removerContactoClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -263,7 +272,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerTransporteAction() {
+    public function removerTransporteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -297,7 +307,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerBancoAction() {
+    public function removerBancoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -327,7 +338,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function datosBancoAction() {
+    public function datosBancoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -372,7 +384,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function cambiarOrdenAction() {
+    public function cambiarOrdenAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -405,7 +418,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarBancoAction() {
+    public function actualizarBancoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -449,7 +463,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function removerNavieraAction() {
+    public function removerNavieraAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -483,7 +498,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevoAlmacenAction() {
+    public function nuevoAlmacenAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -511,7 +527,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevaNavieraAction() {
+    public function nuevaNavieraAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -554,7 +571,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevoBancoAction() {
+    public function nuevoBancoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -604,7 +622,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevoTransporteAction() {
+    public function nuevoTransporteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -632,7 +651,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarClienteAduanaAction() {
+    public function agregarClienteAduanaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -660,7 +680,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarContactoAction() {
+    public function agregarContactoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -708,7 +729,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevaFacturacionAction() {
+    public function nuevaFacturacionAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -738,7 +760,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarSolicitudAction() {
+    public function borrarSolicitudAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -780,7 +803,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarContactoClienteAction() {
+    public function agregarContactoClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -833,7 +857,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarDireccionAction() {
+    public function actualizarDireccionAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -880,8 +905,9 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function obtenerGuiasAction() {
+
+    public function obtenerGuiasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -913,8 +939,9 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function borrarGuiaAction() {
+
+    public function borrarGuiaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -948,7 +975,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarGuiaAction() {
+    public function agregarGuiaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -963,7 +991,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                 if ($input->isValid()) {
                     $data = $input->getEscaped();
                     $mapper = new Trafico_Model_TraficoGuiasMapper();
-                    $added = $mapper->agregarGuia($data["idTrafico"], $data["tipoguia"], $data["number"], $this->_session->id, isset($data["transportista"]) ? $data["transportista"] :null);
+                    $added = $mapper->agregarGuia($data["idTrafico"], $data["tipoguia"], $data["number"], $this->_session->id, isset($data["transportista"]) ? $data["transportista"] : null);
                     if ($added == true) {
                         $trafico = new OAQ_Trafico(array("idTrafico" => $data["idTrafico"], "idUsuario" => $this->_session->id));
                         $trafico->actualizarGuias($mapper->obtenerGuias($data["idTrafico"]));
@@ -980,7 +1008,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarFacturaAction() {
+    public function agregarFacturaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1014,8 +1043,9 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function importarFacturaGetAction() {
+
+    public function importarFacturaGetAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1043,7 +1073,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function importarFacturaAction() {
+    public function importarFacturaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1082,7 +1113,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function cancelarEdicionAction() {
+    public function cancelarEdicionAction()
+    {
         try {
             $id = $this->getRequest()->getParam("id", null);
             $type = $this->getRequest()->getParam("type", null);
@@ -1101,7 +1133,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerTipoCambioAction() {
+    public function obtenerTipoCambioAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1128,7 +1161,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerFacturasAction() {
+    public function obtenerFacturasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1168,7 +1202,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarSolicitudAction() {
+    public function actualizarSolicitudAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1188,19 +1223,19 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idSolicitud") && $input->isValid("esquema") && $input->isValid("proceso")) {
-                    
+
                     $solicitud = new OAQ_SolicitudesAnticipo($input->idSolicitud);
                     $solicitud->set_username($this->_session->username);
                     $solicitud->set_esquema($input->esquema);
                     $solicitud->set_process($input->proceso);
-                    
-                    
+
+
                     if ($input->proceso == 1 && $solicitud->get_process() !== 3) {
                         if (true === $solicitud->aprobada($input->esquema)) {
                             $this->_helper->json(array("success" => true));
                         }
                     }
-                    
+
                     if ($input->proceso == 2 && $solicitud->get_process() !== 3) {
                         if (true === $solicitud->enviarTramite($input->esquema)) {
                             $this->_helper->json(array("success" => true, "message" => "Solicitud en tramite."));
@@ -1223,9 +1258,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                         // banamex
                         $this->_helper->json(array("success" => true));
                     }
-                    
+
                     throw new Exception("No se pudo procesar la solicitud.");
-                    
                 } else {
                     throw new Exception("Invalid input!");
                 }
@@ -1237,7 +1271,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function bancoDefaultAction() {
+    public function bancoDefaultAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1271,7 +1306,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function esquemaDefaultAction() {
+    public function esquemaDefaultAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1302,7 +1338,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function recuperarTraficoAction() {
+    public function recuperarTraficoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1359,8 +1396,9 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function nuevoTraficoAction() {
+
+    public function nuevoTraficoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1427,7 +1465,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                         if ($res["success"] === true) {
                             if ($input->isValid("blGuia")) {
                                 $mppr = new Trafico_Model_TraficoGuiasMapper();
-                                $guias = explode(',', $input->blGuia);                                
+                                $guias = explode(',', $input->blGuia);
                                 foreach ($guias as $guia) {
                                     $mppr->agregarGuia($res["id"], "H", preg_replace('/\s+/', '', $guia), $this->_session->id);
                                 }
@@ -1450,7 +1488,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function modificarTraficoAction() {
+    public function modificarTraficoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1487,11 +1526,11 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idTrafico")) {
-                    
+
                     $log = new Trafico_Model_BitacoraMapper();
-                    
+
                     $log_msg = "SE EDITÓ TRÁFICO: ";
-                    
+
                     if ($input->isValid("aduana") && trim($input->aduana) != '') {
                         $log_msg = $log_msg . "ADUANA: " . $input->aduana . " ";
                     }
@@ -1509,10 +1548,10 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     }
                     if ($input->isValid("operacion") && trim($input->operacion) != '') {
                         $log_msg = $log_msg . "TIPO DE OP.: " . $input->operacion . " ";
-                    }                    
-                    
+                    }
+
                     $referencias = new OAQ_Referencias();
-                    if($referencias->modificarTraficoReferencia($input->idTrafico, $input->aduana, $input->cliente, $input->pedimento, $input->referencia, $input->operacion, $input->cvePedimento, $input->contenedorCaja, $input->nombreBuque, $this->_session->username)) {
+                    if ($referencias->modificarTraficoReferencia($input->idTrafico, $input->aduana, $input->cliente, $input->pedimento, $input->referencia, $input->operacion, $input->cvePedimento, $input->contenedorCaja, $input->nombreBuque, $this->_session->username)) {
                         $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "idUsuario" => $this->_session->id, "usuario" => $this->_session->username));
                         $row = array(
                             "patente" => $trafico->getPatente(),
@@ -1537,14 +1576,16 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    protected function _curlNewMessage($id, $tipo) {
+    protected function _curlNewMessage($id, $tipo)
+    {
         $sender = new OAQ_WorkerSender("emails");
         $sender->enviarEmail($id);
         $misc = new OAQ_Misc();
         $misc->execCurl("enviar-email");
     }
 
-    public function agregarComplementoAction() {
+    public function agregarComplementoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1556,14 +1597,14 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     "*" => array("StringTrim", "StripTags"),
                 );
                 $input = new Zend_Filter_Input($filters, null, $post);
-                
+
                 if ($input->isValid("idSolicitud")) {
 
                     $data = $input->getEscaped();
 
                     $model = new Trafico_Model_TraficoSolicitudesMapper();
                     $row = $model->obtener($data["idSolicitud"]);
-                    
+
                     if (($found = $model->verificar($row["idCliente"], $row["idAduana"], $row["tipoOperacion"], $row["pedimento"], $row["referencia"]))) {
                         $comp = isset($row["complmento"]) ? $row["complemento"] + 1 : 1;
                         $added = $model->agregarComplemento($row["idCliente"], $row["idAduana"], $row["tipoOperacion"], $row["pedimento"], $row["referencia"], $comp, $this->_session->id);
@@ -1597,7 +1638,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                             "creado" => date("Y-m-d H:i:s"),
                         );
                         $logtbl->agregar($log);
-                        
+
                         $this->_helper->json(array("success" => true));
                     } else {
                         $this->_helper->json(array("success" => false, "message" => "No se encontro toda la información.", "data" => $row));
@@ -1613,7 +1654,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarEdocumentAction() {
+    public function enviarEdocumentAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1634,7 +1676,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idTrafico") && $input->isValid("idArchivo") && $input->isValid("tipo_documento")) {
-                
+
                     $tbl = new Trafico_Model_VucemMapper();
                     $repo = new Archivo_Model_RepositorioMapper();
                     $file = $repo->informacionVucem($input->idArchivo);
@@ -1644,7 +1686,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
 
                         $arr = $proc->convertirArchivoEdocument($input->idArchivo);
 
-                        if ($arr && isset($arr["filename"])) {                        
+                        if ($arr && isset($arr["filename"])) {
                             $edoc = array(
                                 "idTrafico" => $input->idTrafico,
                                 "idArchivo" => $input->idArchivo,
@@ -1658,7 +1700,6 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                             $tbl->agregar($edoc);
                             $this->_helper->json(array("success" => true));
                         }
-
                     } else {
                         $edoc = array(
                             "idTrafico" => $input->idTrafico,
@@ -1684,7 +1725,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function editarClienteAction() {
+    public function editarClienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1727,7 +1769,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarSolicitudAction() {
+    public function guardarSolicitudAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1823,14 +1866,16 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    protected function _arrayValue($value, $array) {
+    protected function _arrayValue($value, $array)
+    {
         if (isset($array[$value])) {
             return $array[$value];
         }
         return 0;
     }
 
-    public function solicitudDesdeTraficoAction() {
+    public function solicitudDesdeTraficoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1899,7 +1944,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function revisarSolicitudAction() {
+    public function revisarSolicitudAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1930,13 +1976,13 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                         $solicitud->setReferencia($table->getReferencia());
                         $solicitud->setCreado(date("Y-m-d H:i:s"));
                         $mapper->find($solicitud);
-                        if (null === ($solicitud->getId())) {                            
+                        if (null === ($solicitud->getId())) {
                             $this->_helper->json(array("success" => false));
                         } else {
-                            if($solicitud->getGenerada() == null) {
+                            if ($solicitud->getGenerada() == null) {
                                 $this->_helper->json(array("success" => true, "id" => $solicitud->getId(), "aduana" => $solicitud->getIdAduana()));
                             } else {
-                                $this->_helper->json(array("success" => true, "id" => $solicitud->getId()));                                
+                                $this->_helper->json(array("success" => true, "id" => $solicitud->getId()));
                             }
                         }
                     }
@@ -1947,7 +1993,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function cargarComentariosAction() {
+    public function cargarComentariosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1979,7 +2026,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function cargarRegistrosAction() {
+    public function cargarRegistrosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2021,7 +2069,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function cargarArchivosAction() {
+    public function cargarArchivosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2041,11 +2090,11 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
                     $mppr = new Trafico_Model_TraficosMapper();
                     $array = $mppr->obtenerPorId($input->id);
-                    
+
                     $repo = new Archivo_Model_RepositorioMapper();
                     $archivos = $repo->obtenerArchivosReferencia($array["referencia"]);
                     $view->archivos = $archivos;
-                    
+
                     $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                     $index = $trafico->verificarIndexRepositorios();
 
@@ -2066,7 +2115,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                             ));
                         }
                     }
-                    
+
                     if (in_array($this->_session->role, array("super", "gerente", "trafico_ejecutivo", "trafico"))) {
                         $view->canDelete = true;
                     }
@@ -2074,7 +2123,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     if (isset($array["pedimento"])) {
                         $view->validacion = $val->archivosDePedimento($array["patente"], $array["aduana"], $array["pedimento"]);
                     }
-                    
+
                     $complementos = $repo->complementosReferencia($array["referencia"]);
                     if (!empty($complementos)) {
                         $view->complementos = $complementos;
@@ -2087,7 +2136,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function subirArchivosAction() {
+    public function subirArchivosAction()
+    {
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
@@ -2114,8 +2164,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                 }
             }
             $errors = [];
-            
-            if(!is_writable($this->_appconfig->getParam("expdest"))) {
+
+            if (!is_writable($this->_appconfig->getParam("expdest"))) {
                 throw new Exception("Directory [" . $this->_appconfig->getParam("expdest") . "] is not writable.");
             }
             $misc = new OAQ_Misc();
@@ -2127,21 +2177,21 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             $model = new Archivo_Model_RepositorioMapper();
             $upload = new Zend_File_Transfer_Adapter_Http();
             $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                    ->addValidator("Size", false, array("min" => "1", "max" => "25MB"));
-                    //->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false))
-                    //->addValidator(new Zend_Validate_Regex('/(.*\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpg|msg))|A[0-9]{7}.([0-9]{3})|E[0-9]{7}.([0-9]{3})|M[0-9]{7}.([0-9]{3})|m[0-9]{7}.err/i'));
+                ->addValidator("Size", false, array("min" => "1", "max" => "25MB"));
+            //->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false))
+            //->addValidator(new Zend_Validate_Regex('/(.*\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpg|msg))|A[0-9]{7}.([0-9]{3})|E[0-9]{7}.([0-9]{3})|M[0-9]{7}.([0-9]{3})|m[0-9]{7}.err/i'));
             if (($path = $misc->directorioExpedienteDigital($input->patente, $input->aduana, $input->referencia))) {
                 $upload->setDestination($path);
             }
             $files = $upload->getFileInfo();
             $up = array();
             $nup = array();
-            foreach ($files as $fieldname => $fileinfo) { 
-                if (($upload->isUploaded($fieldname))) {                    
+            foreach ($files as $fieldname => $fileinfo) {
+                if (($upload->isUploaded($fieldname))) {
                     if (!preg_match('/\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpe?g|bmp|png|msg|([0-9]{3})|err)(?:[\?\#].*)?$/i', $fileinfo["name"])) {
                         continue;
                     }
-                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));                    
+                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));
                     if (preg_match('/^A[0-9]{7}.([0-9]{3})$/i', basename($fileinfo["name"]))) {
                         $tipoArchivo = 1030;
                     }
@@ -2154,11 +2204,11 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                     if (preg_match('/^m[0-9]{7}.err$/i', basename($fileinfo["name"]))) {
                         $tipoArchivo = 1020;
                     }
-                    
+
                     $ext = pathinfo($fileinfo["name"], PATHINFO_EXTENSION);
                     if (preg_match('/msg/i', $ext)) {
                         $tipoArchivo = 2001;
-                    }                    
+                    }
 
                     if ($tipoArchivo == 99) {
                         $nup[] = $fileinfo["name"];
@@ -2172,7 +2222,7 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                         $upload->receive($fieldname);
                         if (in_array($tipoArchivo, array(1010, 1020, 1030))) {
                             $up[] = $fileinfo["name"];
-                            $model->nuevoArchivo($tipoArchivo, null, $input->patente, $input->aduana, $input->pedimento, $input->referencia, $filename, $path . DIRECTORY_SEPARATOR . $filename, $this->_session->username, $input->rfcCliente);                            
+                            $model->nuevoArchivo($tipoArchivo, null, $input->patente, $input->aduana, $input->pedimento, $input->referencia, $filename, $path . DIRECTORY_SEPARATOR . $filename, $this->_session->username, $input->rfcCliente);
                         }
                         if (($misc->renombrarArchivo($path, $fileinfo["name"], $filename))) {
                             $up[] = $fileinfo["name"];
@@ -2184,7 +2234,6 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                             "errors" => array("errors" => "El archivo ya existe."),
                         );
                     }
-
                 } else {
                     $error = $upload->getErrors();
                     $errors[] = array(
@@ -2203,7 +2252,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function tiposArchivosAction() {
+    public function tiposArchivosAction()
+    {
         try {
             $filters = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2221,10 +2271,10 @@ class Trafico_AjaxController extends Zend_Controller_Action {
                 $html = "<select id=\"select_" . $input->id . "\" class=\"traffic-select-large\">";
                 foreach ($d as $doc) {
                     $html .= "<option value=\"" . $doc["id"] . "\""
-                            . (($doc["id"] == $type) ? " selected=\"selected\"" : "")
-                            . ">"
-                            . $doc["id"] . " - " . $doc["nombre"]
-                            . "</option>";
+                        . (($doc["id"] == $type) ? " selected=\"selected\"" : "")
+                        . ">"
+                        . $doc["id"] . " - " . $doc["nombre"]
+                        . "</option>";
                 }
                 $html .= "</select>";
                 echo $html;
@@ -2236,7 +2286,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function cambiarTipoArchivoAction() {
+    public function cambiarTipoArchivoAction()
+    {
         try {
             $filters = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2303,7 +2354,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function avisosClienteAction() {
+    public function avisosClienteAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -2336,7 +2388,8 @@ class Trafico_AjaxController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarFechasAction() {
+    public function guardarFechasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -2442,5 +2495,4 @@ class Trafico_AjaxController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-
 }
