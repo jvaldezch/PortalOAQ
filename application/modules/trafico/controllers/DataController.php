@@ -802,7 +802,7 @@ class Trafico_DataController extends Zend_Controller_Action {
                     "tipoFacturacion" => isset($post["tipoFacturacion"]) ? $post["tipoFacturacion"] : null,
                     "numFactura" => isset($post["numFactura"]) ? $post["numFactura"] : null,
                     "bl" => isset($post["bl"]) ? $post["bl"] : null,
-                    "peso" => isset($post["peso"]) ? $post["peso"] : null,
+                    "peso" => isset($post["peso"]) ? (float) $post["peso"] : null,
                     "peca" => isset($post["peca"]) ? $post["peca"] : null,
                     "almacen" => isset($post["almacen"]) ? $post["almacen"] : null,
                     "banco" => (isset($post["peca"]) && $post["peca"] == 1) ? null : isset($post["banco"]) ? $post["banco"] : null,
