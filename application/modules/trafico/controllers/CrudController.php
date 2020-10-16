@@ -2,7 +2,8 @@
 
 require_once "Spout/Autoloader/autoload.php";
 
-class Trafico_CrudController extends Zend_Controller_Action {
+class Trafico_CrudController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
@@ -12,7 +13,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
     protected $_res;
     protected $_firephp;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -22,7 +24,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated !== true) {
             $this->getResponse()->setRedirect($this->_appconfig->getParam("link-logout"));
@@ -31,7 +34,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         $this->_res = $referencias->restricciones($this->_session->id, $this->_session->role);
     }
 
-    protected function _update($id, $arr) {
+    protected function _update($id, $arr)
+    {
         try {
             $stmt = $this->_db->update("traficos", $arr, array("id = ?" => $id));
             if ($stmt) {
@@ -42,8 +46,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    public function guardarFechasAction() {
+
+    public function guardarFechasAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -53,27 +58,27 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     "pedimento" => "Digits",
                 );
                 $v = array(
-                    "idTrafico" =>                array("NotEmpty", new Zend_Validate_Int()),
-                    "pedimento" =>                array("NotEmpty", new Zend_Validate_Int()),
-                    "fechaEta" =>                 array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 10
-                    "fechaEtaAlmacen" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 28
-                    "fechaPago" =>                array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 2
-                    "fechaEntrada" =>             array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 1
-                    "fechaPresentacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
-                    "fechaEir" =>                 array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
-                    "fechaLiberacion" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 8
-                    "fechaNotificacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 9
-                    "fechaRevalidacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 20
-                    "fechaPrevio" =>              array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 21
-                    "fechaDeposito" =>            array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 22
-                    "fechaRecepcionDocs" =>       array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 11
-                    "fechaPresentacion" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
-                    "fechaCitaDespacho" =>        array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 25
-                    "fechaVistoBueno" =>          array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 29
+                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                    "pedimento" => array("NotEmpty", new Zend_Validate_Int()),
+                    "fechaEta" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 10
+                    "fechaEtaAlmacen" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 28
+                    "fechaPago" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 2
+                    "fechaEntrada" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 1
+                    "fechaPresentacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
+                    "fechaEir" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
+                    "fechaLiberacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 8
+                    "fechaNotificacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 9
+                    "fechaRevalidacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 20
+                    "fechaPrevio" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 21
+                    "fechaDeposito" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 22
+                    "fechaRecepcionDocs" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 11
+                    "fechaPresentacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
+                    "fechaCitaDespacho" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 25
+                    "fechaVistoBueno" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 29
                     "fechaInstruccionEspecial" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 54
-                    "fechaEnvioProforma" =>       array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 26
-                    "fechaEnvioDocumentos" =>     array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 27
-                    "horaRecepcionDocs" =>        array("NotEmpty", new Zend_Validate_Regex("/(\d{2}):(\d{2}) (AM|PM)/")),
+                    "fechaEnvioProforma" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 26
+                    "fechaEnvioDocumentos" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 27
+                    "horaRecepcionDocs" => array("NotEmpty", new Zend_Validate_Regex("/(\d{2}):(\d{2}) (AM|PM)/")),
                 );
                 $i = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($i->isValid("idTrafico")) {
@@ -89,7 +94,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                         if ($trafico->actualizarFecha(2, $i->fechaPago, $this->_session->username)) {
                             $traffics->actualizarFechaPago($i->idTrafico, $i->fechaPago);
                         }
-                    }                    
+                    }
                     if ($i->isValid("fechaPresentacion")) {
                         $trafico->actualizarFecha(5, $i->fechaPresentacion, $this->_session->username);
                     }
@@ -132,13 +137,13 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     if ($i->isValid("fechaInstruccionEspecial")) {
                         $trafico->actualizarFecha(54, $i->fechaInstruccionEspecial, $this->_session->username);
                     }
-                    
+
                     $this->_db->query("UPDATE traficos AS t SET t.diasRetraso = DATEDIFF(t.fechaPago, t.fechaEta) WHERE t.fechaPago IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
                     $this->_db->query("UPDATE traficos AS t SET t.diasDespacho = DATEDIFF(fechaLiberacion, fechaEta) WHERE t.fechaLiberacion IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
 
                     $this->_helper->json(array("success" => true));
                 } else {
-                    $this->_helper->json(array("success" => false));                    
+                    $this->_helper->json(array("success" => false));
                 }
             } else {
                 throw new Exception("Invalid request type!");
@@ -148,7 +153,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerFechasAction() {
+    public function obtenerFechasAction()
+    {
         try {
             $f = array(
                 "idTrafico" => array("StringTrim", "StripTags", "Digits"),
@@ -159,17 +165,17 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("idTrafico")) {
                 $sql = $this->_db->select()
-                        ->from(array("t" => "traficos"), array(
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d %H:%i') AS fechaEta"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %H:%i') AS fechaEnvioDocumentos"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %H:%i') AS fechaVistoBueno"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d %H:%i') AS fechaRevalidacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %H:%i') AS fechaPrevio"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %H:%i') AS fechaPago"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %H:%i') AS fechaLiberacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d %H:%i') AS fechaEtaAlmacen")
-                        ))
-                        ->where("t.id = ?", $input->idTrafico);
+                    ->from(array("t" => "traficos"), array(
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d %H:%i') AS fechaEta"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %H:%i') AS fechaEnvioDocumentos"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %H:%i') AS fechaVistoBueno"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d %H:%i') AS fechaRevalidacion"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %H:%i') AS fechaPrevio"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %H:%i') AS fechaPago"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %H:%i') AS fechaLiberacion"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d %H:%i') AS fechaEtaAlmacen"),
+                    ))
+                    ->where("t.id = ?", $input->idTrafico);
                 $stmt = $this->_db->fetchRow($sql);
                 if ($stmt) {
                     return $this->_helper->json(array("success" => true, "dates" => $stmt));
@@ -184,79 +190,80 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _todos($page, $rows, $filterRules = null, $cookies = null, $tipoAduana = null, $bodega = null) {
+    protected function _todos($page, $rows, $filterRules = null, $cookies = null, $tipoAduana = null, $bodega = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "id",
-                        "estatus",
-                        "patente",
-                        "aduana",
-                        "pedimento",
-                        "referencia",
-                        "cvePedimento",
-                        "regimen",
-                        "rfcCliente",
-                        "ie",
-                        "blGuia",
-                        "contenedorCaja",
-                        "ordenCompra",
-                        "carrierNaviera",
-                        "proveedores",
-                        "facturas",
-                        "cantidadFacturas",
-                        "cantidadPartes",
-                        "tipoCarga",
-                        "almacen",
-                        "observaciones",
-                        "ccConsolidado",
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
-                        // new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaVistoBuenoTercero,'%Y-%m-%d %T') AS fechaVistoBuenoTercero"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
-                        new Zend_Db_Expr("diasDespacho"),
-                        new Zend_Db_Expr("diasRetraso"),
-                        // new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEta), 0) AS diasDespacho"),
-                        // new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
-                        "estatusRepositorio",
-                        "cumplimientoAdministrativo",
-                        "cumplimientoOperativo",
-                        "idPlanta",
-                        "idUsuario",
-                        "semaforo",
-                        "coves",
-                        "edocuments",
-                        "revisionAdministracion",
-                        "revisionOperaciones",
-                        "completo",
-                        new Zend_Db_Expr("CASE WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NULL THEN 1 WHEN t.revisionAdministracion IS NULL AND t.revisionOperaciones IS NOT NULL THEN 2 WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NOT NULL THEN 3 ELSE 0 END AS estatusExpdnt"),
-                    ))
-                    ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
-                    ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
-                    ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
-                    ->where("t.estatus <> 4")
-                    ->order(array("fechaEta DESC"))
-                    ->limit($rows, ($page - 1) * $rows);
+                ->from(array("t" => "traficos"), array(
+                    "id",
+                    "estatus",
+                    "patente",
+                    "aduana",
+                    "pedimento",
+                    "referencia",
+                    "cvePedimento",
+                    "regimen",
+                    "rfcCliente",
+                    "ie",
+                    "blGuia",
+                    "contenedorCaja",
+                    "ordenCompra",
+                    "carrierNaviera",
+                    "proveedores",
+                    "facturas",
+                    "cantidadFacturas",
+                    "cantidadPartes",
+                    "tipoCarga",
+                    "almacen",
+                    "observaciones",
+                    "ccConsolidado",
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
+                    // new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaVistoBuenoTercero,'%Y-%m-%d %T') AS fechaVistoBuenoTercero"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
+                    new Zend_Db_Expr("diasDespacho"),
+                    new Zend_Db_Expr("diasRetraso"),
+                    // new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEta), 0) AS diasDespacho"),
+                    // new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
+                    "estatusRepositorio",
+                    "cumplimientoAdministrativo",
+                    "cumplimientoOperativo",
+                    "idPlanta",
+                    "idUsuario",
+                    "semaforo",
+                    "coves",
+                    "edocuments",
+                    "revisionAdministracion",
+                    "revisionOperaciones",
+                    "completo",
+                    new Zend_Db_Expr("CASE WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NULL THEN 1 WHEN t.revisionAdministracion IS NULL AND t.revisionOperaciones IS NOT NULL THEN 2 WHEN t.revisionAdministracion IS NOT NULL AND t.revisionOperaciones IS NOT NULL THEN 3 ELSE 0 END AS estatusExpdnt"),
+                ))
+                ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
+                ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
+                ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
+                ->where("t.estatus <> 4")
+                ->order(array("fechaEta DESC"))
+                ->limit($rows, ($page - 1) * $rows);
             if (isset($bodega)) {
                 $sql->where("t.pedimento IS NULL");
             } else {
@@ -281,14 +288,15 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    protected function _total($filterRules = null, $cookies = null, $tipoAduana = null, $bodega = null) {
+
+    protected function _total($filterRules = null, $cookies = null, $tipoAduana = null, $bodega = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array("count(*) AS total"))
-                    ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"));
+                ->from(array("t" => "traficos"), array("count(*) AS total"))
+                ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"));
             if (isset($bodega)) {
                 $sql->where("t.pedimento IS NULL");
             } else {
@@ -313,47 +321,48 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
+
     /*public function traficosAction() {
-        try {
-            if (!$this->getRequest()->isXmlHttpRequest()) {
-                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
-            }
-            $r = $this->getRequest();
-            if ($r->isPost()) {
-                $f = array(
-                    "*" => array("StringTrim", "StripTags"),
-                    "page" => array("Digits"),
-                    "rows" => array("Digits"),
-                    "tipoAduana" => array("Digits"),
-                );
-                $v = array(
-                    "page" => array(new Zend_Validate_Int(), "default" => 1),
-                    "rows" => array(new Zend_Validate_Int(), "default" => 10),
-                    "tipoAduana" => array(new Zend_Validate_Int(), "NotEmpty"),
-                    "filterRules" => "NotEmpty",
-                    "bodega" => "NotEmpty",
-                );
-                $input = new Zend_Filter_Input($f, $v, $r->getPost());
-                if ($input->isValid("page") && $input->isValid("rows")) {
-                    $rows = $this->_todos($input->page, $input->rows, $input->filterRules, $this->_cookies(), $input->tipoAduana, $input->bodega);
-                    $arr = array(
-                        "total" => $this->_total($input->filterRules, $this->_cookies(), $input->tipoAduana, $input->bodega),
-                        "rows" => empty($rows) ? array() : $rows,
-                    );
-                    $this->_helper->json($arr);
-                } else {
-                    throw new Exception("Invalid input!");
-                }
-            } else {
-                throw new Exception("Invalid request type!");
-            }
-        } catch (Exception $ex) {
-            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
-        }
+    try {
+    if (!$this->getRequest()->isXmlHttpRequest()) {
+    throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+    }
+    $r = $this->getRequest();
+    if ($r->isPost()) {
+    $f = array(
+    "*" => array("StringTrim", "StripTags"),
+    "page" => array("Digits"),
+    "rows" => array("Digits"),
+    "tipoAduana" => array("Digits"),
+    );
+    $v = array(
+    "page" => array(new Zend_Validate_Int(), "default" => 1),
+    "rows" => array(new Zend_Validate_Int(), "default" => 10),
+    "tipoAduana" => array(new Zend_Validate_Int(), "NotEmpty"),
+    "filterRules" => "NotEmpty",
+    "bodega" => "NotEmpty",
+    );
+    $input = new Zend_Filter_Input($f, $v, $r->getPost());
+    if ($input->isValid("page") && $input->isValid("rows")) {
+    $rows = $this->_todos($input->page, $input->rows, $input->filterRules, $this->_cookies(), $input->tipoAduana, $input->bodega);
+    $arr = array(
+    "total" => $this->_total($input->filterRules, $this->_cookies(), $input->tipoAduana, $input->bodega),
+    "rows" => empty($rows) ? array() : $rows,
+    );
+    $this->_helper->json($arr);
+    } else {
+    throw new Exception("Invalid input!");
+    }
+    } else {
+    throw new Exception("Invalid request type!");
+    }
+    } catch (Exception $ex) {
+    $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+    }
     }*/
-    
-    public function traficosAction() {
+
+    public function traficosAction()
+    {
         try {
             $r = $this->getRequest();
             if ($r->isPost()) {
@@ -389,11 +398,12 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _clientes() {
+    protected function _clientes()
+    {
         try {
             $sql = $this->_db->select()
-                    ->from("trafico_clientes", array("id", "rfc", "nombre"))
-                    ->order(array("nombre ASC"));
+                ->from("trafico_clientes", array("id", "rfc", "nombre"))
+                ->order(array("nombre ASC"));
             $stmt = $this->_db->fetchAll($sql);
             if ($stmt) {
                 return $stmt;
@@ -403,18 +413,19 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    public function misTraficosAction() {
+
+    public function misTraficosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
             }
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array("id", "estatus", "patente", "aduana", "pedimento", "referencia"))
-                    ->where("pedimento IS NOT NULL")
-                    ->where("estatus NOT IN (3, 4)")
-                    ->where("idUsuario = ?", $this->_session->id)
-                    ->orWhere("idUsuarioModif = ?", $this->_session->id);
+                ->from(array("t" => "traficos"), array("id", "estatus", "patente", "aduana", "pedimento", "referencia"))
+                ->where("pedimento IS NOT NULL")
+                ->where("estatus NOT IN (3, 4)")
+                ->where("idUsuario = ?", $this->_session->id)
+                ->orWhere("idUsuarioModif = ?", $this->_session->id);
             $stmt = $this->_db->fetchAll($sql);
             if ($stmt) {
                 $this->_helper->json(array("success" => true, "results" => $stmt));
@@ -425,7 +436,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function traficoActualizarAction() {
+    public function traficoActualizarAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -585,21 +597,23 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function traficoBorrarAction() {
+    public function traficoBorrarAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
             }
             $request = $this->getRequest();
             if ($request->isPost()) {
-                
+
             }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function obtenerClientesAction() {
+
+    public function obtenerClientesAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -613,8 +627,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    protected function _filtroReportes(Zend_Db_Select $sql, $filtro = null) {
+
+    protected function _filtroReportes(Zend_Db_Select $sql, $filtro = null)
+    {
         $referencias = new OAQ_Referencias();
         $res = $referencias->restricciones($this->_session->id, $this->_session->role);
         if ($this->_session->role == "inhouse") {
@@ -623,7 +638,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if (!empty($res["idsAduana"])) {
                 $sql->where("t.idAduana IN (?)", $res["idsAduana"]);
             }
-        }        
+        }
         if ((int) $filtro == 1) {
             $sql->where("t.fechaPago IS NOT NULL");
         }
@@ -632,7 +647,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _reporteIncompletos($page, $rows, $idAduana, $fechaInicio, $fechaFin, $idCliente = null) {
+    protected function _reporteIncompletos($page, $rows, $idAduana, $fechaInicio, $fechaFin, $idCliente = null)
+    {
         try {
             $fields = array(
                 "t.aduana",
@@ -645,21 +661,21 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "DATE_FORMAT(t.fechaLiberacion,'%Y-%m-%d') AS fechaLiberacion",
                 "DATE_FORMAT(t.fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion",
                 "DATE_FORMAT(t.fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos",
-                "u.nombre AS usuario"
+                "u.nombre AS usuario",
             );
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), $fields)
-                    ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
-                    ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("(t.fechaEntrada IS NULL OR t.fechaPago IS NULL OR t.fechaLiberacion IS NULL OR t.fechaRevalidacion IS NULL OR t.fechaEnvioDocumentos IS NULL)")
-                    ->where("t.pedimento IS NOT NULL");
+                ->from(array("t" => "traficos"), $fields)
+                ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
+                ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("(t.fechaEntrada IS NULL OR t.fechaPago IS NULL OR t.fechaLiberacion IS NULL OR t.fechaRevalidacion IS NULL OR t.fechaEnvioDocumentos IS NULL)")
+                ->where("t.pedimento IS NOT NULL");
             $count = $this->_db->select()
-                    ->from(array("t" => "traficos"), array("count(*) as total"))
-                    ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("(t.fechaEntrada IS NULL OR t.fechaPago IS NULL OR t.fechaLiberacion IS NULL OR t.fechaRevalidacion IS NULL OR t.fechaEnvioDocumentos IS NULL)")
-                    ->where("t.pedimento IS NOT NULL");
+                ->from(array("t" => "traficos"), array("count(*) as total"))
+                ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("(t.fechaEntrada IS NULL OR t.fechaPago IS NULL OR t.fechaLiberacion IS NULL OR t.fechaRevalidacion IS NULL OR t.fechaEnvioDocumentos IS NULL)")
+                ->where("t.pedimento IS NOT NULL");
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -688,8 +704,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    protected function _reporteCandados($page, $rows, $idAduana, $fechaInicio, $fechaFin, $idCliente = null) {
+
+    protected function _reporteCandados($page, $rows, $idAduana, $fechaInicio, $fechaFin, $idCliente = null)
+    {
         try {
             $fields = array(
                 "t.aduana",
@@ -701,21 +718,21 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "DATE_FORMAT(fechaPago,'%Y-%m-%d') AS fechaPago",
             );
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), $fields)
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array(""))
-                    ->joinLeft(array("cc" => "trafico_candados"), "cc.idTrafico = t.id", array("numero"))
-                    ->joinLeft(array("ct" => "trafico_trans"), "ct.idTrafico = t.id", array("placas"))
-                    ->where("cc.numero IS NOT NULL")
-                    ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("t.pedimento IS NOT NULL");
+                ->from(array("t" => "traficos"), $fields)
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array(""))
+                ->joinLeft(array("cc" => "trafico_candados"), "cc.idTrafico = t.id", array("numero"))
+                ->joinLeft(array("ct" => "trafico_trans"), "ct.idTrafico = t.id", array("placas"))
+                ->where("cc.numero IS NOT NULL")
+                ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("t.pedimento IS NOT NULL");
             $count = $this->_db->select()
-                    ->from(array("t" => "traficos"), array("count(*) as total"))
-                    ->joinLeft(array("cc" => "trafico_candados"), "cc.idTrafico = t.id", array("numero"))
-                    ->where("cc.numero IS NOT NULL")
-                    ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("t.pedimento IS NOT NULL");
+                ->from(array("t" => "traficos"), array("count(*) as total"))
+                ->joinLeft(array("cc" => "trafico_candados"), "cc.idTrafico = t.id", array("numero"))
+                ->where("cc.numero IS NOT NULL")
+                ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("t.pedimento IS NOT NULL");
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -744,8 +761,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    public function reporteInventariosAction() {
+
+    public function reporteInventariosAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -790,36 +808,37 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    protected function _reporteInventario($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null, $tipoOperacion = null) {
+
+    protected function _reporteInventario($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null, $tipoOperacion = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "id",
-                        "patente",
-                        "aduana",
-                        "pedimento",
-                        "referencia",
-                        "rfcCliente",
-                        "ie",
-                        "estatus",
-                        "cvePedimento",
-                        "regimen",
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                        "observacionSemaforo",
-                        "semaforo",
-                        "contenedorCaja",
-                        "contenedorCajaEntrada",
-                        "contenedorCajaSalida",
-                    ))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinLeft(array("r" => "repositorio_index"), "r.patente = t.patente AND r.aduana = t.aduana AND r.pedimento = t.pedimento", array("revisionOperaciones"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->where("t.estatus <> 4")
-                    ->where("t.fechaLiberacion IS NULL")
-                    ->where("t.pedimento IS NOT NULL")
-                    ->order(array("t.patente", "t.aduana", "t.pedimento", "t.referencia"));
+                ->from(array("t" => "traficos"), array(
+                    "id",
+                    "patente",
+                    "aduana",
+                    "pedimento",
+                    "referencia",
+                    "rfcCliente",
+                    "ie",
+                    "estatus",
+                    "cvePedimento",
+                    "regimen",
+                    new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                    "observacionSemaforo",
+                    "semaforo",
+                    "contenedorCaja",
+                    "contenedorCajaEntrada",
+                    "contenedorCajaSalida",
+                ))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinLeft(array("r" => "repositorio_index"), "r.patente = t.patente AND r.aduana = t.aduana AND r.pedimento = t.pedimento", array("revisionOperaciones"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->where("t.estatus <> 4")
+                ->where("t.fechaLiberacion IS NULL")
+                ->where("t.pedimento IS NOT NULL")
+                ->order(array("t.patente", "t.aduana", "t.pedimento", "t.referencia"));
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -851,65 +870,66 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _reporte($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null, $tipoOperacion = null) {
+    protected function _reporte($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null, $tipoOperacion = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "id",
-                        "patente",
-                        "aduana",
-                        "pedimento",
-                        "referencia",
-                        "rfcCliente",
-                        "ie",
-                        "blGuia",
-                        "contenedorCaja",
-                        "ordenCompra",
-                        "proveedores",
-                        "facturas",
-                        "cantidadFacturas",
-                        "cantidadPartes",
-                        "almacen",
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
-                        new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEntrada), 0) AS diasDespacho"),
-                        new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
-                        "estatus",
-                        "cvePedimento",
-                        "regimen",
-                        "idUsuario",
-                        "observacionSemaforo",
-                        "semaforo",
-                        "coves",
-                        "edocuments",
-                    ))
-                    ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
-                    ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
-                    ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
-                    ->where("t.estatus <> 4")
-                    ->where("t.pedimento IS NOT NULL")
-                    ->order(array("fechaEta DESC"));
+                ->from(array("t" => "traficos"), array(
+                    "id",
+                    "patente",
+                    "aduana",
+                    "pedimento",
+                    "referencia",
+                    "rfcCliente",
+                    "ie",
+                    "blGuia",
+                    "contenedorCaja",
+                    "ordenCompra",
+                    "proveedores",
+                    "facturas",
+                    "cantidadFacturas",
+                    "cantidadPartes",
+                    "almacen",
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
+                    new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEntrada), 0) AS diasDespacho"),
+                    new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
+                    "estatus",
+                    "cvePedimento",
+                    "regimen",
+                    "idUsuario",
+                    "observacionSemaforo",
+                    "semaforo",
+                    "coves",
+                    "edocuments",
+                ))
+                ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
+                ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
+                ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
+                ->where("t.estatus <> 4")
+                ->where("t.pedimento IS NOT NULL")
+                ->order(array("fechaEta DESC"));
             if (isset($tipoAduana)) {
                 if ($tipoAduana == 1) {
                     $sql->where("a.tipoAduana = 1 AND t.cvePedimento IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3')");
@@ -922,20 +942,20 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if (isset($rows) && isset($page)) {
                 $sql->limit($rows, $rows * ($page - 1));
             }
-            
+
             if (isset($filtro)) {
                 if ($filtro == 3) {
                     $sql->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                            ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                            ->where("fechaLiberacion IS NULL");
+                        ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                        ->where("fechaLiberacion IS NULL");
                 } else {
                     $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                            ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+                        ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
                     $this->_filtroReportes($sql, $filtro);
                 }
             } else {
                 $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                        ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+                    ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
             }
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
@@ -956,43 +976,44 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _reporteLiberados($idAduana, $fecha, $tipoAduana = null, $idCliente = null, $tipoOperacion = null, $pagados = null) {
+    protected function _reporteLiberados($idAduana, $fecha, $tipoAduana = null, $idCliente = null, $tipoOperacion = null, $pagados = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "id",
-                        "patente",
-                        "aduana",
-                        "pedimento",
-                        "referencia",
-                        "rfcCliente",
-                        "ie",
-                        "blGuia",
-                        "contenedorCaja",
-                        "ordenCompra",
-                        "proveedores",
-                        "facturas",
-                        "cantidadFacturas",
-                        "cantidadPartes",
-                        "almacen",
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
-                        "estatus",
-                        "cvePedimento",
-                        "regimen",
-                        "idUsuario",
-                        "observacionSemaforo",
-                        "semaforo",
-                        "coves",
-                        "edocuments",
-                    ))
-                    ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->where("t.estatus <> 4")
-                    ->where("t.pedimento IS NOT NULL")
-                    ->order(array("pedimento ASC"));
+                ->from(array("t" => "traficos"), array(
+                    "id",
+                    "patente",
+                    "aduana",
+                    "pedimento",
+                    "referencia",
+                    "rfcCliente",
+                    "ie",
+                    "blGuia",
+                    "contenedorCaja",
+                    "ordenCompra",
+                    "proveedores",
+                    "facturas",
+                    "cantidadFacturas",
+                    "cantidadPartes",
+                    "almacen",
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                    "estatus",
+                    "cvePedimento",
+                    "regimen",
+                    "idUsuario",
+                    "observacionSemaforo",
+                    "semaforo",
+                    "coves",
+                    "edocuments",
+                ))
+                ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->where("t.estatus <> 4")
+                ->where("t.pedimento IS NOT NULL")
+                ->order(array("pedimento ASC"));
             if (!$pagados) {
                 $sql->where("t.fechaLiberacion IS NOT NULL")
                     ->where("t.fechaLiberacion BETWEEN '{$fecha} 00:00:00' AND '{$fecha} 23:59:59' ");
@@ -1029,7 +1050,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
     }
 
     /**
-     * 
+     *
      * @param int $page
      * @param int $rows
      * @param int $idAduana
@@ -1042,64 +1063,65 @@ class Trafico_CrudController extends Zend_Controller_Action {
      * @return type
      * @throws Exception
      */
-    protected function _reporteAperturados($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null, $tipoOperacion = null) {
+    protected function _reporteAperturados($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null, $tipoOperacion = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "id",
-                        "patente",
-                        "aduana",
-                        "pedimento",
-                        "referencia",
-                        "rfcCliente",
-                        "ie",
-                        "blGuia",
-                        "contenedorCaja",
-                        "ordenCompra",
-                        "proveedores",
-                        "facturas",
-                        "cantidadFacturas",
-                        "cantidadPartes",
-                        "almacen",
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
-                        new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEntrada), 0) AS diasDespacho"),
-                        new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
-                        "estatus",
-                        "cvePedimento",
-                        "regimen",
-                        "idUsuario",
-                        "observacionSemaforo"
-                    ))
-                    ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
-                    ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
-                    ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
-                    ->where("t.estatus <> 4")
-                    ->where("t.pedimento IS NOT NULL")
-                    ->where("t.creado >= ?", date("Y-m-d", strtotime($fechaInicio)) . ' 00:00:00')
-                    ->where("t.creado <= ?", date("Y-m-d", strtotime($fechaFin)) . ' 23:59:59')
-                    ->order(array("patente ASC", "aduana ASC"));
+                ->from(array("t" => "traficos"), array(
+                    "id",
+                    "patente",
+                    "aduana",
+                    "pedimento",
+                    "referencia",
+                    "rfcCliente",
+                    "ie",
+                    "blGuia",
+                    "contenedorCaja",
+                    "ordenCompra",
+                    "proveedores",
+                    "facturas",
+                    "cantidadFacturas",
+                    "cantidadPartes",
+                    "almacen",
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
+                    new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEntrada), 0) AS diasDespacho"),
+                    new Zend_Db_Expr("IF (fechaPago IS NOT NULL, DATEDIFF(fechaPago, fechaEta), 0) AS diasRetraso"),
+                    "estatus",
+                    "cvePedimento",
+                    "regimen",
+                    "idUsuario",
+                    "observacionSemaforo",
+                ))
+                ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
+                ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
+                ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
+                ->where("t.estatus <> 4")
+                ->where("t.pedimento IS NOT NULL")
+                ->where("t.creado >= ?", date("Y-m-d", strtotime($fechaInicio)) . ' 00:00:00')
+                ->where("t.creado <= ?", date("Y-m-d", strtotime($fechaFin)) . ' 23:59:59')
+                ->order(array("patente ASC", "aduana ASC"));
             if (isset($tipoAduana)) {
                 if ($tipoAduana == 1) {
                     $sql->where("a.tipoAduana = 1 AND t.cvePedimento IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3')");
@@ -1131,64 +1153,65 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _reporteSinfacturar($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null) {
+    protected function _reporteSinfacturar($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "id",
-                        "patente",
-                        "aduana",
-                        "pedimento",
-                        "referencia",
-                        "rfcCliente",
-                        "ie",
-                        "blGuia",
-                        "contenedorCaja",
-                        "ordenCompra",
-                        "proveedores",
-                        "facturas",
-                        "cantidadFacturas",
-                        "cantidadPartes",
-                        "almacen",
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
-                        new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
-                        new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEntrada), 0) AS diasDespacho"),
-                        "estatus",
-                        "cvePedimento",
-                        "regimen",
-                        "idUsuario",
-                        "observacionSemaforo"
-                    ))
-                    ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
-                    ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
-                    ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
-                    ->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("t.fechaFacturacion IS NULL")
-                    ->where("t.estatus <> 4")
-                    ->where("t.pedimento IS NOT NULL")
-                    ->order(array("fechaEta DESC"));
+                ->from(array("t" => "traficos"), array(
+                    "id",
+                    "patente",
+                    "aduana",
+                    "pedimento",
+                    "referencia",
+                    "rfcCliente",
+                    "ie",
+                    "blGuia",
+                    "contenedorCaja",
+                    "ordenCompra",
+                    "proveedores",
+                    "facturas",
+                    "cantidadFacturas",
+                    "cantidadPartes",
+                    "almacen",
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaDeposito,'%Y-%m-%d') AS fechaDeposito"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaProformaTercero,'%Y-%m-%d %T') AS fechaProformaTercero"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaSolicitudTransfer,'%Y-%m-%d %T') AS fechaSolicitudTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaArriboTransfer,'%Y-%m-%d %T') AS fechaArriboTransfer"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtaAlmacen,'%Y-%m-%d') AS fechaEtaAlmacen"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaComprobacion,'%Y-%m-%d') AS fechaComprobacion"),
+                    new Zend_Db_Expr("DATE_FORMAT(fechaEtd,'%Y-%m-%d') AS fechaEtd"),
+                    new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEntrada), 0) AS diasDespacho"),
+                    "estatus",
+                    "cvePedimento",
+                    "regimen",
+                    "idUsuario",
+                    "observacionSemaforo",
+                ))
+                ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
+                ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
+                ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
+                ->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("t.fechaFacturacion IS NULL")
+                ->where("t.estatus <> 4")
+                ->where("t.pedimento IS NOT NULL")
+                ->order(array("fechaEta DESC"));
             if (isset($tipoAduana)) {
                 if ($tipoAduana == 1) {
                     $sql->where("a.tipoAduana = 1 AND t.cvePedimento IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3')");
@@ -1217,14 +1240,15 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _totalReporteInventario($idAduana, $fechaInicio, $fechaFin, $filtro = null) {
+    protected function _totalReporteInventario($idAduana, $fechaInicio, $fechaFin, $filtro = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array("count(*) AS total"))
-                    ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("t.estatus <> 4")
-                    ->where("t.pedimento IS NOT NULL");
+                ->from(array("t" => "traficos"), array("count(*) AS total"))
+                ->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("t.estatus <> 4")
+                ->where("t.pedimento IS NOT NULL");
             if ((int) $idAduana != 0) {
                 $sql->where("t.idAduana = ?", $idAduana);
             }
@@ -1240,14 +1264,15 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    protected function _totalReporte($idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null) {
+
+    protected function _totalReporte($idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array("count(*) AS total"))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->where("t.estatus <> 4")
-                    ->where("t.pedimento IS NOT NULL");
+                ->from(array("t" => "traficos"), array("count(*) AS total"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->where("t.estatus <> 4")
+                ->where("t.pedimento IS NOT NULL");
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -1263,20 +1288,20 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if ((int) $idAduana != 0) {
                 $sql->where("t.idAduana = ?", $idAduana);
             }
-            
+
             if (isset($filtro)) {
                 if ($filtro == 3) {
                     $sql->where("t.fechaPago >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                            ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                            ->where("fechaLiberacion IS NULL");
+                        ->where("t.fechaPago <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                        ->where("fechaLiberacion IS NULL");
                 } else {
                     $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                            ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+                        ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
                     $this->_filtroReportes($sql, $filtro);
                 }
             } else {
                 $sql->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                        ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+                    ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
             }
             $stmt = $this->_db->fetchRow($sql);
             if ($stmt) {
@@ -1287,8 +1312,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    public function traficoNuevoAction() {
+
+    public function traficoNuevoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1304,17 +1330,18 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("pedimento")) {
-                    $this->_helper->json(array("success" => true));                    
+                    $this->_helper->json(array("success" => true));
                 } else {
                     $this->_helper->json(array("success" => false, "message" => "Invalid Input!"));
-                }                
+                }
             }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function reporteTraficosAction() {
+
+    public function reporteTraficosAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1344,13 +1371,13 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                 $reportes = new OAQ_ExcelReportes();
                 if ($input->tipoReporte == 1 || $input->tipoReporte == 5 || $input->tipoReporte == 6 || $input->tipoReporte == 7 || $input->tipoReporte == 8) {
-                    if ($dexcel === false) {                        
+                    if ($dexcel === false) {
                         $rows = $this->_reporte($input->page, $input->rows, $input->idAduana, $input->fechaInicio, $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente);
                         $arr = array(
                             "total" => $this->_totalReporte($input->idAduana, $input->fechaInicio, $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente),
                             "rows" => empty($rows) ? array() : $rows,
                         );
-                        $this->_helper->json($arr);                        
+                        $this->_helper->json($arr);
                     } else {
                         $rows = $this->_reporte(null, null, $input->idAduana, $input->fechaInicio, $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente);
                         $reportes->reportesTrafico($input->tipoReporte, $rows);
@@ -1367,8 +1394,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 }
                 if ($input->tipoReporte == 3) {
                     $arr = array(
-                        "errorMsg" => "Reporte no disponible."
-                    );                    
+                        "errorMsg" => "Reporte no disponible.",
+                    );
                 }
                 if ($input->tipoReporte == 4) {
                     if ($dexcel === false) {
@@ -1409,7 +1436,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     $sql = $this->_reporteMvhc($input->fechaInicio, $input->fechaFin, $input->idAduana, $input->idCliente);
                     $arr = $this->_db->fetchAll($sql);
                     $reportes->reportesTrafico(73, $arr);
-                }                
+                }
                 if ($input->tipoReporte == 75) {
                     if ($dexcel === true) {
                         $rows = $this->_reporteTraficosFacturacion(null, null, $input->idAduana, $input->fechaInicio, $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente);
@@ -1433,7 +1460,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 }
                 if ($input->tipoReporte == 78) {
                     $mppr = new Trafico_Model_SellosClientes();
-                    $rows = $mppr->reporte();                
+                    $rows = $mppr->reporte();
                     $reportes->reportesTrafico($input->tipoReporte, $rows);
                 }
             } else {
@@ -1443,8 +1470,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function reporteTraficosSinfacturarAction() {
+
+    public function reporteTraficosSinfacturarAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1489,8 +1517,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function reporteTraficosFacturacionAction() {
+
+    public function reporteTraficosFacturacionAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1517,16 +1546,16 @@ class Trafico_CrudController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("tipoReporte") && $input->isValid("idAduana") && $input->isValid("fechaInicio") && $input->isValid("fechaFin")) {
-                
-                $rows = $this->_reporteTraficosFacturacion($input->page, $input->rows, 
-                        $input->idAduana, $input->fechaInicio, $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente);
+
+                $rows = $this->_reporteTraficosFacturacion($input->page, $input->rows,
+                    $input->idAduana, $input->fechaInicio, $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente);
                 $arr = array(
-                    "total" => $this->_totalReporteTraficosFacturacion($input->idAduana, $input->fechaInicio, 
-                            $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente),
+                    "total" => $this->_totalReporteTraficosFacturacion($input->idAduana, $input->fechaInicio,
+                        $input->fechaFin, $input->filtro, $input->tipoAduana, $input->idCliente),
                     "rows" => empty($rows) ? array() : $rows,
                 );
                 $this->_helper->json($arr);
-                
+
             } else {
                 $this->_helper->json(array("success" => false, "message" => "Invalid Input!"));
             }
@@ -1534,13 +1563,14 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function aduanasAction() {
+
+    public function aduanasAction()
+    {
         try {
             $sql = $this->_db->select()
-                    ->from("trafico_aduanas", array("id", "CONCAT(patente, '-', aduana, ' ', nombre) AS aduana"))
-                    ->where("activo = 1 AND visible = 1")
-                    ->order(array("patente ASC"));
+                ->from("trafico_aduanas", array("id", "CONCAT(patente, '-', aduana, ' ', nombre) AS aduana"))
+                ->where("activo = 1 AND visible = 1")
+                ->order(array("patente ASC"));
             $stmt = $this->_db->fetchAll($sql);
             if ($stmt) {
                 return $this->_helper->json($stmt);
@@ -1550,13 +1580,14 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function clientesAction() {
+
+    public function clientesAction()
+    {
         try {
             $sql = $this->_db->select()
-                    ->from("trafico_clientes", array("id", "nombre AS razonSocial"))
-                    ->where("activo = 1")
-                    ->order(array("nombre ASC"));
+                ->from("trafico_clientes", array("id", "nombre AS razonSocial"))
+                ->where("activo = 1")
+                ->order(array("nombre ASC"));
             $stmt = $this->_db->fetchAll($sql);
             if ($stmt) {
                 return $this->_helper->json($stmt);
@@ -1566,8 +1597,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function tipoCargaAction() {
+
+    public function tipoCargaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1583,9 +1615,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("patente") && $input->isValid("aduana")) {
                 $sql = $this->_db->select()
-                        ->from(array("t" => "trafico_tipocarga"), array("id", "tipoCarga"))
-                        ->where("activo = 1")
-                        ->order(array("t.tipoCarga DESC"));
+                    ->from(array("t" => "trafico_tipocarga"), array("id", "tipoCarga"))
+                    ->where("activo = 1")
+                    ->order(array("t.tipoCarga DESC"));
                 if ($input->isValid("tipoAduana")) {
                     $sql->where("tipoAduana = ?", $input->tipoAduana);
                 } else {
@@ -1600,8 +1632,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function plantasAction() {
+
+    public function plantasAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1616,9 +1649,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $arr = $mppr->encabezado($input->idTrafico);
                 if (!empty($arr)) {
                     $sql = $this->_db->select()
-                            ->from(array("p" => "trafico_clientes_plantas"), array("id", "descripcion"))
-                            ->where("idCliente = ?", $arr["idCliente"])
-                            ->order(array("descripcion ASC"));
+                        ->from(array("p" => "trafico_clientes_plantas"), array("id", "descripcion"))
+                        ->where("idCliente = ?", $arr["idCliente"])
+                        ->order(array("descripcion ASC"));
                     $stmt = $this->_db->fetchAll($sql);
                     if (!empty($stmt)) {
                         $this->_helper->json($stmt);
@@ -1634,7 +1667,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function almacenesAction() {
+    public function almacenesAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1647,7 +1681,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("patente") && $input->isValid("aduana")) {
-                $this->_helper->json(array());                
+                $this->_helper->json(array());
             } else {
                 $this->_helper->json(array());
             }
@@ -1655,8 +1689,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function navierasAction() {
+
+    public function navierasAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -1674,9 +1709,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             if ($input->isValid("patente") && $input->isValid("aduana")) {
                 $arr = $mapper->obtenerPorAduana($input->patente, $input->aduana);
                 if (isset($arr)) {
-                    $this->_helper->json($arr);                
+                    $this->_helper->json($arr);
                 }
-                $this->_helper->json(array());                
+                $this->_helper->json(array());
             } else {
                 if ($input->isValid("idNaviera")) {
                     $arr = $mapper->get($input->idNaviera);
@@ -1689,7 +1724,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function traficosInventarioAction() {
+    public function traficosInventarioAction()
+    {
         try {
             $f = array(
                 "fechaIni" => array("StringTrim", "StripTags"),
@@ -1698,7 +1734,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "idCliente" => array("StringTrim", "StripTags", "Digits"),
                 "idAduana" => array("StringTrim", "StripTags", "Digits"),
                 "tipoOperacion" => array("StringTrim", "StripTags", "StringToUpper"),
-                "excel" => array("StringTrim", "StripTags", "StringToLower")
+                "excel" => array("StringTrim", "StripTags", "StringToLower"),
             );
             $v = array(
                 "fechaIni" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")),
@@ -1708,13 +1744,13 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
                 "tipoAduana" => array("NotEmpty", new Zend_Validate_Int()),
                 "tipoOperacion" => array("NotEmpty"),
-                "excel" => array("NotEmpty")
+                "excel" => array("NotEmpty"),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("fechaIni") && $input->isValid("fechaFin") && $input->isValid("tipo") && $input->isValid("tipoAduana")) {
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                 $view = new Zend_View();
-                
+
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
                 $rows = $this->_reporteInventario(null, null, $input->idAduana, $input->fechaIni, $input->fechaFin, 99, $input->tipoAduana, $input->idCliente, $input->tipoOperacion);
                 $view->fechaIni = $input->fechaIni;
@@ -1725,15 +1761,15 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $view->idAduana = $input->idAduana;
                 $view->tipoAduana = $input->tipoAduana;
                 $view->tipoOperacion = $input->tipoOperacion;
-                
+
                 $view->url = "/trafico/crud/traficos-inventario";
-                
+
                 if ($dexcel === true) {
                     $reportes = new OAQ_ExcelReportes();
                     $reportes->reportesTrafico($input->tipo, $rows);
                     return;
                 }
-                
+
                 $mppr = new Trafico_Model_ClientesMapper();
                 $view->clientes = $mppr->obtenerClientes();
 
@@ -1750,34 +1786,35 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function traficosLiberadosAction() {
+    public function traficosLiberadosAction()
+    {
         try {
             $f = array(
-                "fecha" => array("StringTrim", "StripTags"), 
+                "fecha" => array("StringTrim", "StripTags"),
                 "tipo" => "Digits",
                 "idCliente" => array("StringTrim", "StripTags", "Digits"),
                 "idAduana" => array("StringTrim", "StripTags", "Digits"),
                 "tipoOperacion" => array("StringTrim", "StripTags", "StringToUpper"),
                 "excel" => array("StringToLower"),
-                "pagados" => array("StringToLower")
+                "pagados" => array("StringToLower"),
             );
             $v = array(
-                "fecha" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")), 
+                "fecha" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")),
                 "tipo" => array("NotEmpty", new Zend_Validate_Int()),
                 "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                 "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
                 "tipoOperacion" => array("NotEmpty"),
                 "pagados" => array("NotEmpty"),
-                "excel" => array("NotEmpty")
+                "excel" => array("NotEmpty"),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("fecha") && $input->isValid("tipo")) {
-                
+
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                 $rows = $this->_reporteLiberados($input->idAduana, $input->fecha, $input->tipo, $input->idCliente, $input->tipoOperacion, $input->pagados);
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-                
+
                 $view->fecha = $input->fecha;
                 $view->results = $rows;
                 $view->tipo = $input->tipo;
@@ -1785,21 +1822,21 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $view->idAduana = $input->idAduana;
                 $view->tipoOperacion = $input->tipoOperacion;
                 $view->pagados = $input->pagados;
-                
+
                 $view->url = "/trafico/crud/traficos-liberados";
-                
+
                 if ($dexcel === true) {
                     $reportes = new OAQ_ExcelReportes();
                     $reportes->reportesTrafico($input->tipo, $rows);
                     return;
                 }
-                
+
                 $mppr = new Trafico_Model_ClientesMapper();
                 $view->clientes = $mppr->obtenerClientes();
 
                 $mpprc = new Trafico_Model_TraficoAduanasMapper();
                 $view->aduanas = $mpprc->obtenerTodas();
-                
+
                 echo $view->render("traficos-liberados.phtml");
                 return;
             } else {
@@ -1810,23 +1847,24 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function traficosAperturadosAction() {
+    public function traficosAperturadosAction()
+    {
         try {
             $f = array(
-                "fecha" => array("StringTrim", "StripTags"), 
-                "tipo" => "Digits", 
+                "fecha" => array("StringTrim", "StripTags"),
+                "tipo" => "Digits",
                 "idCliente" => array("StringTrim", "StripTags", "Digits"),
                 "idAduana" => array("StringTrim", "StripTags", "Digits"),
                 "tipoOperacion" => array("StringTrim", "StripTags", "StringToUpper"),
-                "excel" => array("StringToLower")
+                "excel" => array("StringToLower"),
             );
             $v = array(
-                "fecha" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")), 
-                "tipo" => array("NotEmpty", new Zend_Validate_Int()), 
+                "fecha" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")),
+                "tipo" => array("NotEmpty", new Zend_Validate_Int()),
                 "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                 "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
                 "tipoOperacion" => array("NotEmpty"),
-                "excel" => array("NotEmpty")
+                "excel" => array("NotEmpty"),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("fecha") && $input->isValid("tipo")) {
@@ -1834,28 +1872,28 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $rows = $this->_reporteAperturados(null, null, $input->idAduana, $input->fecha, $input->fecha, 99, null, $input->idCliente, $input->tipoOperacion);
                 $view = new Zend_View();
                 $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
-                
+
                 $view->fecha = $input->fecha;
                 $view->results = $rows;
                 $view->tipo = $input->tipo;
                 $view->idCliente = $input->idCliente;
                 $view->idAduana = $input->idAduana;
                 $view->tipoOperacion = $input->tipoOperacion;
-                
+
                 $view->url = "/trafico/crud/traficos-aperturados";
-                
+
                 if ($dexcel === true) {
                     $reportes = new OAQ_ExcelReportes();
                     $reportes->reportesTrafico($input->tipo, $rows);
                     return;
                 }
-                
+
                 $mppr = new Trafico_Model_ClientesMapper();
                 $view->clientes = $mppr->obtenerClientes();
 
                 $mpprc = new Trafico_Model_TraficoAduanasMapper();
                 $view->aduanas = $mpprc->obtenerTodas();
-                
+
                 echo $view->render("traficos-aperturados.phtml");
                 return;
             } else {
@@ -1865,37 +1903,38 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
-    public function _reporteIndicadores($fechaInicio, $fechaFin, $idAduana = null, $idCliente = null) {
+
+    public function _reporteIndicadores($fechaInicio, $fechaFin, $idAduana = null, $idCliente = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "t.id",
-                        "t.patente",
-                        "t.aduana",
-                        "t.pedimento",
-                        "t.referencia",
-                        "t.cvePedimento",
-                        "t.ie",
-                        "DATE_FORMAT(t.fechaEta,'%Y-%m-%d %T') AS fechaEta",
-                        "DATE_FORMAT(t.fechaPago,'%Y-%m-%d %T') AS fechaPago",
-                        "DATE_FORMAT(t.fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion",
-                        "DATE_FORMAT(t.fechaFacturacion,'%Y-%m-%d %T') AS fechaFacturacion",
-                        "t.semaforo",
-                        "t.observacionSemaforo",
-                        "t.observaciones",
-                        "t.ccConsolidado",
-                    ))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->joinInner(array("ta" => "trafico_tipoaduana"), "ta.id = a.tipoAduana", array("tipoAduana"))
-                    ->joinLeft(array("l" => "trafico_clientes"), "l.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinLeft(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
-                    ->joinLeft(array("x" => "repositorio_index"), "x.idTrafico = t.id", array("revisionAdministracion", "revisionOperaciones", "completo"))
-                    ->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("t.estatus = 3")
-                    ->where("t.pedimento IS NOT NULL")
-                    ->where("t.idAduana IS NOT NULL");
+                ->from(array("t" => "traficos"), array(
+                    "t.id",
+                    "t.patente",
+                    "t.aduana",
+                    "t.pedimento",
+                    "t.referencia",
+                    "t.cvePedimento",
+                    "t.ie",
+                    "DATE_FORMAT(t.fechaEta,'%Y-%m-%d %T') AS fechaEta",
+                    "DATE_FORMAT(t.fechaPago,'%Y-%m-%d %T') AS fechaPago",
+                    "DATE_FORMAT(t.fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion",
+                    "DATE_FORMAT(t.fechaFacturacion,'%Y-%m-%d %T') AS fechaFacturacion",
+                    "t.semaforo",
+                    "t.observacionSemaforo",
+                    "t.observaciones",
+                    "t.ccConsolidado",
+                ))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->joinInner(array("ta" => "trafico_tipoaduana"), "ta.id = a.tipoAduana", array("tipoAduana"))
+                ->joinLeft(array("l" => "trafico_clientes"), "l.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinLeft(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
+                ->joinLeft(array("x" => "repositorio_index"), "x.idTrafico = t.id", array("revisionAdministracion", "revisionOperaciones", "completo"))
+                ->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("t.estatus = 3")
+                ->where("t.pedimento IS NOT NULL")
+                ->where("t.idAduana IS NOT NULL");
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -1908,7 +1947,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function reporteIndicadoresAction() {
+    public function reporteIndicadoresAction()
+    {
         try {
             $f = array(
                 "fechaInicio" => array("StringTrim", "StripTags"),
@@ -1944,16 +1984,17 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function _reporteMvhc($fechaInicio, $fechaFin, $idAduana = null, $idCliente = null) {
+
+    public function _reporteMvhc($fechaInicio, $fechaFin, $idAduana = null, $idCliente = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("r" => "repositorio_index"), array(
-                        "*",
-                    ))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.rfc = r.rfcCliente", array("nombre AS nombreCliente"))
-                    ->where("r.creado >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("r.creado <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+                ->from(array("r" => "repositorio_index"), array(
+                    "*",
+                ))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.rfc = r.rfcCliente", array("nombre AS nombreCliente"))
+                ->where("r.creado >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("r.creado <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -1965,8 +2006,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
-    public function reporteEstatusMvhcAction() {
+
+    public function reporteEstatusMvhcAction()
+    {
         try {
             $f = array(
                 "fechaInicio" => array("StringTrim", "StripTags"),
@@ -2002,30 +2044,31 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function _reporteEntrega($page, $rows, $fechaInicio, $fechaFin, $idAduana = null, $idCliente = null) {
+
+    public function _reporteEntrega($page, $rows, $fechaInicio, $fechaFin, $idAduana = null, $idCliente = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("r" => "repositorio_index"), array(
-                        "t.id",
-                        "t.patente",
-                        "t.aduana",
-                        "t.pedimento",
-                        "t.referencia",
-                        "t.cvePedimento",
-                        "r.revisionAdministracion",
-                        "r.revisionOperaciones",
-                        "r.completo",
-                        "r.mvhcCliente",
-                        "r.mvhcFirmada",
-                        "DATE_FORMAT(t.fechaPago,'%Y-%m-%d') AS fechaPago",
-                    ))
-                    ->joinLeft(array("t" => "traficos"), "t.id = r.idTrafico", array(""))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.rfc = r.rfcCliente", array("nombre AS nombreCliente"))
-                    ->where("r.revisionOperaciones = 1")
-                    ->where("r.revisionAdministracion IS NULL")
-                    ->where("r.creado >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("r.creado <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
+                ->from(array("r" => "repositorio_index"), array(
+                    "t.id",
+                    "t.patente",
+                    "t.aduana",
+                    "t.pedimento",
+                    "t.referencia",
+                    "t.cvePedimento",
+                    "r.revisionAdministracion",
+                    "r.revisionOperaciones",
+                    "r.completo",
+                    "r.mvhcCliente",
+                    "r.mvhcFirmada",
+                    "DATE_FORMAT(t.fechaPago,'%Y-%m-%d') AS fechaPago",
+                ))
+                ->joinLeft(array("t" => "traficos"), "t.id = r.idTrafico", array(""))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.rfc = r.rfcCliente", array("nombre AS nombreCliente"))
+                ->where("r.revisionOperaciones = 1")
+                ->where("r.revisionAdministracion IS NULL")
+                ->where("r.creado >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("r.creado <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)));
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -2040,8 +2083,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
-    public function reporteEntregaAction() {
+
+    public function reporteEntregaAction()
+    {
         try {
             $f = array(
                 "fechaInicio" => array("StringTrim", "StripTags"),
@@ -2062,7 +2106,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $sql = $this->_reporteEntrega($input->page, $input->rows, $input->fechaInicio, $input->fechaFin, $input->idAduana);
                 $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($sql));
                 $paginator->setCurrentPageNumber($input->page);
-                $paginator->setItemCountPerPage($input->rows);                
+                $paginator->setItemCountPerPage($input->rows);
                 $resp = array(
                     "total" => $paginator->getTotalItemCount(),
                     "rows" => (array) $paginator->getCurrentItems(),
@@ -2076,7 +2120,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function reporteVucemAction() {
+    public function reporteVucemAction()
+    {
         try {
             $f = array(
                 "fechaInicio" => array("StringTrim", "StripTags"),
@@ -2095,7 +2140,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "rows" => array(new Zend_Validate_Int(), "default" => 20),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            if ($input->isValid("fechaInicio") && $input->isValid("fechaFin") && $input->isValid("tipoReporte") && $input->isValid("idAduana")) {                
+            if ($input->isValid("fechaInicio") && $input->isValid("fechaFin") && $input->isValid("tipoReporte") && $input->isValid("idAduana")) {
                 if ($input->tipoReporte == 70) {
                     $mppr = new Vucem_Model_VucemSolicitudesMapper();
                     $sql = $mppr->reportePorUsuario($input->fechaInicio, $input->fechaFin, true);
@@ -2128,7 +2173,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function facturacionAction() {
+    public function facturacionAction()
+    {
         try {
             $sica = new OAQ_SicaDb("192.168.200.5", "sa", "adminOAQ123", "SICA", 1433, "SqlSrv");
             $arr = $sica->facturacion();
@@ -2141,7 +2187,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $resp = array(
                     "total" => 0,
                     "rows" => array(),
-                );                
+                );
             }
             $this->_helper->json($resp);
         } catch (Exception $ex) {
@@ -2149,7 +2195,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    public function getMenuAction() {
+    public function getMenuAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -2161,21 +2208,21 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("idTrafico")) {
                 $sql = $this->_db->select()
-                        ->from(array("t" => "traficos"), array(
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
-                            new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion")
-                        ))
-                        ->where("t.id = ?", $input->idTrafico);
+                    ->from(array("t" => "traficos"), array(
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEta,'%Y-%m-%d') AS fechaEta"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaNotificacion,'%Y-%m-%d %T') AS fechaNotificacion"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d %T') AS fechaEnvioDocumentos"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEntrada,'%Y-%m-%d') AS fechaEntrada"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaPresentacion,'%Y-%m-%d') AS fechaPresentacion"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaInstruccionEspecial,'%Y-%m-%d %T') AS fechaInstruccionEspecial"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaEnvioProforma,'%Y-%m-%d %T') AS fechaEnvioProforma"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaVistoBueno,'%Y-%m-%d %T') AS fechaVistoBueno"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaRevalidacion,'%Y-%m-%d') AS fechaRevalidacion"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaPrevio,'%Y-%m-%d %T') AS fechaPrevio"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaPago,'%Y-%m-%d %T') AS fechaPago"),
+                        new Zend_Db_Expr("DATE_FORMAT(fechaLiberacion,'%Y-%m-%d %T') AS fechaLiberacion"),
+                    ))
+                    ->where("t.id = ?", $input->idTrafico);
                 $stmt = $this->_db->fetchRow($sql);
                 if ($stmt) {
                     $html = '<ul>';
@@ -2196,8 +2243,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    protected function _cookies() {
+
+    protected function _cookies()
+    {
         $request = new Zend_Controller_Request_Http();
         $filtrosCookies = array(
             "allOperations" => filter_var($request->getCookie("allOperations"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
@@ -2208,19 +2256,20 @@ class Trafico_CrudController extends Zend_Controller_Action {
             "fdates" => filter_var($request->getCookie("fdates"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "ninvoices" => filter_var($request->getCookie("ninvoices"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
             "checklist" => filter_var($request->getCookie("checklist"), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
-            "dateini" => filter_var($request->getCookie("dateini"), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=> "/^\d{4}\-\d{2}\-\d{2}$/"))),
-            "dateend" => filter_var($request->getCookie("dateend"), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=> "/^\d{4}\-\d{2}\-\d{2}$/"))),
+            "dateini" => filter_var($request->getCookie("dateini"), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^\d{4}\-\d{2}\-\d{2}$/"))),
+            "dateend" => filter_var($request->getCookie("dateend"), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^\d{4}\-\d{2}\-\d{2}$/"))),
         );
         return $filtrosCookies;
     }
-    
-    protected function _filters(Zend_Db_Select $sql, $filterRules = null, $filtrosCookies = null) {
+
+    protected function _filters(Zend_Db_Select $sql, $filterRules = null, $filtrosCookies = null)
+    {
         $referencias = new OAQ_Referencias();
         $res = $referencias->restricciones($this->_session->id, $this->_session->role);
         if ($this->_session->role == "inhouse") {
             $sql->where("t.rfcCliente IN (?)", $res["rfcs"])
-                    ->where("t.idAduana IN (?)", $res["idsAduana"]);
-            
+                ->where("t.idAduana IN (?)", $res["idsAduana"]);
+
         } else if (in_array($this->_session->role, array("super", "trafico_operaciones", "trafico", "trafico_aero", "trafico_ejecutivo", "gerente"))) {
             if (!empty($res["idsAduana"])) {
                 $sql->where("t.idAduana IN (?)", $res["idsAduana"]);
@@ -2235,7 +2284,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
         if (isset($filterRules)) {
             $filter = json_decode(html_entity_decode($filterRules));
-            foreach ($filter AS $item) {
+            foreach ($filter as $item) {
                 if ($item->field == "pedimento" && $item->value != "") {
                     $sql->where("t.pedimento LIKE ?", "%" . trim($item->value) . "%");
                 }
@@ -2332,8 +2381,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $sql->where("t.idAduana IN (?)", $this->_res["idsAduana"]);
         }
     }
-    
-    public function graficaUsuariosAction() {
+
+    public function graficaUsuariosAction()
+    {
         try {
             $f = array(
                 '*' => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
@@ -2351,10 +2401,10 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid('year') && $input->isValid('month')) {
                 $sql = $this->_db->select()
-                        ->from(array("t" => "traficos"), array("count(*) AS y"))
-                        ->where("YEAR(t.fechaLiberacion) = ?", $input->year)
-                        ->where("MONTH(t.fechaLiberacion) = ?", $input->month)
-                        ->where("t.estatus NOT IN (1,2,4)");
+                    ->from(array("t" => "traficos"), array("count(*) AS y"))
+                    ->where("YEAR(t.fechaLiberacion) = ?", $input->year)
+                    ->where("MONTH(t.fechaLiberacion) = ?", $input->month)
+                    ->where("t.estatus NOT IN (1,2,4)");
                 if ($input->isValid('idCliente')) {
                     $sql->where('t.idCliente = ?', $input->idCliente);
                 }
@@ -2364,12 +2414,12 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 $total = $this->_db->fetchRow($sql);
                 if ($total['y'] != 0) {
                     $sql = $this->_db->select()
-                            ->from(array("t" => "traficos"), array("count(*) AS y"))
-                            ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre AS name"))
-                            ->where("YEAR(t.fechaLiberacion) = ?", $input->year)
-                            ->where("MONTH(t.fechaLiberacion) = ?", $input->month)
-                            ->where("t.estatus NOT IN (1,2,4)")
-                            ->group("u.nombre");
+                        ->from(array("t" => "traficos"), array("count(*) AS y"))
+                        ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre AS name"))
+                        ->where("YEAR(t.fechaLiberacion) = ?", $input->year)
+                        ->where("MONTH(t.fechaLiberacion) = ?", $input->month)
+                        ->where("t.estatus NOT IN (1,2,4)")
+                        ->group("u.nombre");
                     if ($input->isValid('idCliente')) {
                         $sql->where('t.idCliente = ?', $input->idCliente);
                     }
@@ -2394,8 +2444,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function graficaCumplimientoAction() {
+
+    public function graficaCumplimientoAction()
+    {
         try {
             $f = array(
                 '*' => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
@@ -2413,15 +2464,15 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid('year') && $input->isValid('month')) {
                 $sql = $this->_db->select()
-                        ->from(array("t" => "traficos"), array(
-                            new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo = 1 THEN 1 ELSE 0 END) AS cumplimientoOperativo"),
-                            new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo = 0 THEN 1 ELSE 0 END) AS noCumplimientoOperativo"),
-                            new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo IS NULL AND t.cumplimientoAdministrativo IS NULL THEN 1 ELSE 0 END) AS sinEvaluacion"),
-                            new Zend_Db_Expr("count(*) AS total"),
-                        ))
-                        ->where("YEAR(t.fechaLiberacion) = ?", $input->year)
-                        ->where("MONTH(t.fechaLiberacion) = ?", $input->month)
-                        ->where("t.estatus NOT IN (1, 2, 4)");
+                    ->from(array("t" => "traficos"), array(
+                        new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo = 1 THEN 1 ELSE 0 END) AS cumplimientoOperativo"),
+                        new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo = 0 THEN 1 ELSE 0 END) AS noCumplimientoOperativo"),
+                        new Zend_Db_Expr("SUM(CASE WHEN t.cumplimientoOperativo IS NULL AND t.cumplimientoAdministrativo IS NULL THEN 1 ELSE 0 END) AS sinEvaluacion"),
+                        new Zend_Db_Expr("count(*) AS total"),
+                    ))
+                    ->where("YEAR(t.fechaLiberacion) = ?", $input->year)
+                    ->where("MONTH(t.fechaLiberacion) = ?", $input->month)
+                    ->where("t.estatus NOT IN (1, 2, 4)");
                 if ($input->isValid('idCliente')) {
                     $sql->where('t.idCliente = ?', $input->idCliente);
                 }
@@ -2439,7 +2490,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                     foreach ($stmt as $key => $value) {
                         $arr[] = array(
                             "name" => $key,
-                            "y" => ((int)$total === 0) ? 0 : floatval(number_format(($value / $total) * 100, 2)),
+                            "y" => ((int) $total === 0) ? 0 : floatval(number_format(($value / $total) * 100, 2)),
                         );
                     }
                     $this->_helper->json(array("success" => true, "results" => $arr));
@@ -2451,7 +2502,8 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _semaforos($year, $idCliente, $idAduana) {
+    protected function _semaforos($year, $idCliente, $idAduana)
+    {
         $fields = array(
             new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 1 THEN 1 ELSE 0 END) AS Ene"),
             new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 2 THEN 1 ELSE 0 END) AS Feb"),
@@ -2467,10 +2519,10 @@ class Trafico_CrudController extends Zend_Controller_Action {
             new Zend_Db_Expr("SUM(CASE WHEN MONTH(fechaLiberacion) = 12 THEN 1 ELSE 0 END) AS Dic"),
         );
         $sql = $this->_db->select()
-                ->from(array("t" => "traficos"), $fields)
-                ->where("YEAR(t.fechaLiberacion) = ?", $year)
-                ->where("t.estatus NOT IN (1,2,4)")
-                ->where("t.semaforo = 2");
+            ->from(array("t" => "traficos"), $fields)
+            ->where("YEAR(t.fechaLiberacion) = ?", $year)
+            ->where("t.estatus NOT IN (1,2,4)")
+            ->where("t.semaforo = 2");
         if ($idCliente) {
             $sql->where('t.idCliente = ?', $idCliente);
         }
@@ -2487,8 +2539,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
         return $data;
     }
-    
-    public function graficaSemaforosAction() {
+
+    public function graficaSemaforosAction()
+    {
         try {
             $f = array(
                 '*' => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
@@ -2507,7 +2560,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
 
                 $arr = array(
                     $this->_semaforos($input->year - 1, $input->idCliente, $input->idAduana),
-                    $this->_semaforos($input->year, $input->idCliente, $input->idAduana)
+                    $this->_semaforos($input->year, $input->idCliente, $input->idAduana),
                 );
 
                 $this->_helper->json(array("success" => true, "data" => $arr));
@@ -2517,41 +2570,42 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _reporteTraficosFacturacion($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null) {
+    protected function _reporteTraficosFacturacion($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "t.id",
-                        "t.patente",
-                        "t.aduana",
-                        "t.pedimento",
-                        "t.referencia",
-                        "t.cvePedimento",
-                        "t.rfcCliente",
-                        "t.ie",
-                        "t.blGuia",
-                        "t.contenedorCaja",
-                        "(CASE WHEN a.tipoAduana = 3 THEN t.nombreBuque ELSE 'N/A' END) AS nombreBuque",
-                        "i.folio",
-                        "DATE_FORMAT(i.fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion",
-                        "DATE_FORMAT(i.fechaPago,'%Y-%m-%d') AS fechaPago",
-                        "i.honorarios",
-                        "i.iva",
-                        "i.subTotal",
-                        "(SELECT sum(c.importe) FROM rpt_cuenta_conceptos AS c WHERE c.idCuenta = i.id AND c.tipo = 'C') AS pagoHechos",
-                        "(SELECT sum(c.importe) FROM rpt_cuenta_conceptos AS c WHERE c.idCuenta = i.id AND c.tipo = 'S') AS sinComprobar",
-                        "i.pagada"
-                    ))
-                    ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
-                    ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                    ->joinInner(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
-                    ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                    ->where("i.fechaFacturacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("i.fechaFacturacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("t.estatus <> 4")
-                    ->where("i.cancelada IS NULL")
-                    ->where("i.pagada IS NULL")
-                    ->order(array("t.patente ASC", "t.aduana ASC"));
+                ->from(array("t" => "traficos"), array(
+                    "t.id",
+                    "t.patente",
+                    "t.aduana",
+                    "t.pedimento",
+                    "t.referencia",
+                    "t.cvePedimento",
+                    "t.rfcCliente",
+                    "t.ie",
+                    "t.blGuia",
+                    "t.contenedorCaja",
+                    "(CASE WHEN a.tipoAduana = 3 THEN t.nombreBuque ELSE 'N/A' END) AS nombreBuque",
+                    "i.folio",
+                    "DATE_FORMAT(i.fechaFacturacion,'%Y-%m-%d') AS fechaFacturacion",
+                    "DATE_FORMAT(i.fechaPago,'%Y-%m-%d') AS fechaPago",
+                    "i.honorarios",
+                    "i.iva",
+                    "i.subTotal",
+                    "(SELECT sum(c.importe) FROM rpt_cuenta_conceptos AS c WHERE c.idCuenta = i.id AND c.tipo = 'C') AS pagoHechos",
+                    "(SELECT sum(c.importe) FROM rpt_cuenta_conceptos AS c WHERE c.idCuenta = i.id AND c.tipo = 'S') AS sinComprobar",
+                    "i.pagada",
+                ))
+                ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
+                ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinInner(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
+                ->where("i.fechaFacturacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("i.fechaFacturacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("t.estatus <> 4")
+                ->where("i.cancelada IS NULL")
+                ->where("i.pagada IS NULL")
+                ->order(array("t.patente ASC", "t.aduana ASC"));
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -2571,18 +2625,19 @@ class Trafico_CrudController extends Zend_Controller_Action {
         }
     }
 
-    protected function _totalReporteTraficosFacturacion($idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null) {
+    protected function _totalReporteTraficosFacturacion($idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null)
+    {
         try {
             $sql = $this->_db->select()
-                    ->from(array("t" => "traficos"), array(
-                        "t.id"
-                    ))
-                    ->joinInner(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
-                    ->where("i.fechaFacturacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                    ->where("i.fechaFacturacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
-                    ->where("t.estatus <> 4")
-                    ->where('i.cancelada IS NULL')
-                    ->where('i.pagada IS NULL');
+                ->from(array("t" => "traficos"), array(
+                    "t.id",
+                ))
+                ->joinInner(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
+                ->where("i.fechaFacturacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
+                ->where("i.fechaFacturacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->where("t.estatus <> 4")
+                ->where('i.cancelada IS NULL')
+                ->where('i.pagada IS NULL');
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
             }
@@ -2598,8 +2653,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }
     }
-    
-    public function sellosAction() {
+
+    public function sellosAction()
+    {
         try {
             $f = array(
                 "tipoReporte" => array("StringTrim", "StripTags", "Digits"),
@@ -2612,7 +2668,7 @@ class Trafico_CrudController extends Zend_Controller_Action {
                 "rows" => array(new Zend_Validate_Int(), "default" => 20),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            if ($input->isValid("tipoReporte")) {                
+            if ($input->isValid("tipoReporte")) {
                 if ($input->tipoReporte == 77) {
                     $mppr = new Trafico_Model_SellosAgentes();
                     $sql = $mppr->reporte(true);
@@ -2644,8 +2700,9 @@ class Trafico_CrudController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function contarCovesEdocumentsAction() {
+
+    public function contarCovesEdocumentsAction()
+    {
         try {
             $f = array(
                 "idTrafico" => array("StringTrim", "StripTags", "Digits"),

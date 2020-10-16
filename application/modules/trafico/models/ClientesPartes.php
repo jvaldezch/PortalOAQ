@@ -119,7 +119,7 @@ class Trafico_Model_ClientesPartes {
                 'tlc' => (isset($data["tlc"]) && $data["tlc"] == 'on') ? 'S' : null,
                 'tlcue' => (isset($data["tlcue"]) && $data["tlcue"] == 'on') ? 'S' : null,
                 'prosec' => (isset($data["prosec"]) && $data["prosec"] == 'on') ? 'S' : null,
-                'advalorem' => isset($data["advalorem"]) ? $data["advalorem"] : null,
+                'advalorem' => isset($data["advalorem"]) ? (float) $data["advalorem"] : null,
                 'paisOrigen' => isset($data["paisOrigen"]) ? $data["paisOrigen"] : null,
                 'paisVendedor' => isset($data["paisVendedor"]) ? $data["paisVendedor"] : null,
                 'observaciones' => isset($data["observaciones"]) ? $data["observaciones"] : null,

@@ -291,6 +291,7 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                 $view->paisOrigen = $row["paisOrigen"];
                 $view->paisVendedor = $row["paisVendedor"];
                 $view->observaciones = $row["observaciones"];
+                
                 $this->_helper->json(array("success" => true, "html" => $view->render("editar-parte.phtml")));
             } else {
                 throw new Exception("Invalid input!");
@@ -645,19 +646,19 @@ class Trafico_FacturasController extends Zend_Controller_Action {
                     $mppr = new Trafico_Model_FactProd();
                     $mdl = new Trafico_Model_ClientesPartes();
                     $arr = array(
-                        "orden" => $post["orden"],
+                        "orden" => (int) $post["orden"],
                         "numParte" => $post["numParte"],
                         "fraccion" => $post["fraccion"],
                         "descripcion" => $post["descripcion"],
-                        "precioUnitario" => $post["precioUnitario"],
-                        "cantidadFactura" => $post["cantidadFactura"],
-                        "valorComercial" => $post["valorComercial"],
+                        "precioUnitario" => (float) $post["precioUnitario"],
+                        "cantidadFactura" => (float) $post["cantidadFactura"],
+                        "valorComercial" => (float) $post["valorComercial"],
                         "umc" => $post["umc"],
-                        "cantidadOma" => $post["cantidadOma"],
+                        "cantidadOma" => (float) $post["cantidadOma"],
                         "oma" => $post["oma"],
-                        "cantidadOma" => $post["cantidadOma"],
+                        "cantidadOma" => (float) $post["cantidadOma"],
                         "umt" => $post["umt"],
-                        "cantidadTarifa" => $post["cantidadTarifa"],
+                        "cantidadTarifa" => (float) $post["cantidadTarifa"],
                         "marca" => $post["marca"],
                         "modelo" => $post["modelo"],
                         "subModelo" => $post["subModelo"],

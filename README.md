@@ -15,6 +15,6 @@ upload_max_filesize=20M
 ### PHP dependencies ###
 
 ```
-sudo apt install php7.x php7.x-curl php7.x-mbstring php7.x-zip php7.x-soap php7.x-xml
+sudo apt install php7.x php7.x-curl php7.x-mbstring php7.x-zip php7.x-soap php7.x-xml php7.x-bcmath
 ```
 

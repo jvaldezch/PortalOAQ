@@ -464,7 +464,6 @@ class Trafico_PostController extends Zend_Controller_Action {
                             if (APPLICATION_ENV == "production") {
                                 $emails = new OAQ_EmailNotifications();
                                 $mensaje = "El usuario " . $this->_session->nombre . " (" . $this->_session->email . ") ha agregado un comentario al trafico (" . $i->idTrafico . ") referencia " . $t->getReferencia() . " operación " . $t->getAduana() . "-" . $t->getPatente() . "-" . $t->getPedimento() . " del cliente " . $c["nombre"] . "<br><p><em>&ldquo;{$i->comment}&rdquo;</em></p>";
-                                //$emails->nuevaNotificacion($t->getIdAduana(), $t->getPedimento(), $t->getReferencia(), $this->_session->id, $t->getIdUsuario(), $mensaje, "notificacion-comentario");
                                 if (($id = $emails->nuevaNotificacion($t->getIdAduana(), $t->getPedimento(), $t->getReferencia(), $this->_session->id, $t->getIdUsuario(), $mensaje, "notificacion-comentario", $i->idTrafico))) {
                                     $this->_helper->json(array("success" => true, "id" => $id, "idc" => $idc));
                                 }
@@ -2703,15 +2702,17 @@ class Trafico_PostController extends Zend_Controller_Action {
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $upload->addValidator("Count", false, array("min" => 1, "max" => 1))
                         ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
-                        ->addValidator("Extension", false, array("extension" => "xls,xlsx", "case" => false));
+                        ->addValidator("Extension", false, array("extension" => "xls,xlsx", "case" => false));                
+
                 if (APPLICATION_ENV == "production") {
                     $directory = $this->_appconfig->getParam("tmpDir");
                 } else {
-                    $directory = "D:\\xampp\\tmp";
+                    $directory = "/tmp";
                 }
                 if (!file_exists($directory)) {
                     throw new Exception("Directorio base no existe para subir plantilla en servidor.");
                 }
+
                 $upload->setDestination($directory);
                 $files = $upload->getFileInfo();
                 
@@ -2723,8 +2724,7 @@ class Trafico_PostController extends Zend_Controller_Action {
                         $upload->addFilter('Rename', $filename, $fieldname);
                         $upload->receive($fieldname);
                     }
-                    if (file_exists($directory . DIRECTORY_SEPARATOR . $filename)) {
-                        
+                    if (file_exists($directory . DIRECTORY_SEPARATOR . $filename)) {                        
                         $plantilla = new OAQ_Archivos_PlantillaFacturas($directory . DIRECTORY_SEPARATOR . $filename);
                         $plantilla->set_idTrafico($input->idTrafico);
                         $plantilla->set_idUsuario($this->_session->id);
@@ -2733,12 +2733,17 @@ class Trafico_PostController extends Zend_Controller_Action {
                             // set replace to false when no overwrite required
                             $plantilla->set_replace(false);
                         }
-                        if ($plantilla->analizar() == true) {
-                            $this->_helper->json(array("success" => true));
+                        try {
+                            if ($plantilla->analizar() == true) {
+                                $this->_helper->json(array("success" => true));
+                            }
+                        } catch (Exception $e) {
+                            throw new Exception($e);
                         }
                         $this->_helper->json(array("success" => true));
+                    } else {
+                        $this->_helper->json(array("success" => false));
                     }
-                    $this->_helper->json(array("success" => false));
                 }
             } else {
                 throw new Exception("Invalid request type!");

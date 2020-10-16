@@ -23,7 +23,7 @@ class Bodega_PostController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
+        $this->_session = null ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
             $session->actualizar();
@@ -133,7 +133,7 @@ class Bodega_PostController extends Zend_Controller_Action
                         "estado" => ($input->isValid("estado")) ? $input->estado : null,
                         "codigoPostal" => $input->codigoPostal,
                         "pais" => $input->pais,
-                        "creado" => date("Y-m-d H:i:s")
+                        "creado" => date("Y-m-d H:i:s"),
                     );
 
                     if (($mppr->agregar($arr))) {
@@ -608,7 +608,7 @@ class Bodega_PostController extends Zend_Controller_Action
                     "id",
                     "idTrafico",
                     "estatus",
-                    new Zend_Db_Expr("CASE WHEN t.fechaDescarga IS NOT NULL THEN 2 
+                    new Zend_Db_Expr("CASE WHEN t.fechaDescarga IS NOT NULL THEN 2
                     WHEN t.fechaDescarga IS NOT NULL AND t.fechaRevision IS NOT NULL THEN 3
                     WHEN t.fechaCarga IS NOT NULL THEN 4
                     ELSE 1 END AS estatusCarga"),
@@ -631,7 +631,7 @@ class Bodega_PostController extends Zend_Controller_Action
                     new Zend_Db_Expr("DATE_FORMAT(fechaEnvioDocumentos,'%Y-%m-%d') AS fechaEnvioDocumentos"),
                     new Zend_Db_Expr("IF (fechaLiberacion IS NOT NULL, DATEDIFF(fechaLiberacion, fechaEta), 0) AS diasDespacho"),
                     "idPlanta",
-                    "idUsuario"
+                    "idUsuario",
                 ))
                 ->joinInner(array("u" => "usuarios"), "u.id = t.idUsuario", array("nombre"))
                 ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
@@ -658,8 +658,8 @@ class Bodega_PostController extends Zend_Controller_Action
         try {
             $sql = $this->_db->select()
                 ->from(array("t" => "traficos"), array("count(*) AS total"))
-                // ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-                // ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
+            // ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
+            // ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
                 ->where("t.idBodega IN (?)", $warehouses);
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchRow($sql);
@@ -844,7 +844,7 @@ class Bodega_PostController extends Zend_Controller_Action
             if ($r->isPost()) {
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
-                    "idMaster" => "Digits"
+                    "idMaster" => "Digits",
                 );
                 $v = array(
                     "idMaster" => "NotEmpty",
@@ -882,7 +882,7 @@ class Bodega_PostController extends Zend_Controller_Action
             if ($r->isPost()) {
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
-                    "id" => "Digits"
+                    "id" => "Digits",
                 );
                 $v = array(
                     "id" => "NotEmpty",
@@ -1804,7 +1804,7 @@ class Bodega_PostController extends Zend_Controller_Action
                         "observacion" => $input->observacion,
                         "dano" => $input->isValid("damage") ? 1 : null,
                         "escaneado" => $input->isValid("escaneado") ? date("Y-m-d H:i:s") : null,
-                        "actualizado" => date("Y-m-d H:i:s")
+                        "actualizado" => date("Y-m-d H:i:s"),
                     );
 
                     if (($model->actualizar($input->idBulto, $arr))) {
@@ -1870,7 +1870,7 @@ class Bodega_PostController extends Zend_Controller_Action
                     "idTrafico" => "Digits",
                 );
                 $v = array(
-                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int())
+                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("idTrafico")) {
@@ -1891,7 +1891,7 @@ class Bodega_PostController extends Zend_Controller_Action
                         "idUsuario" => $this->_session->id,
                         "numBulto" => $ultimoBulto + 1,
                         "uuid" => $misc->getUuid($row['referencia'] . $row['rfcCliente'] . ($ultimoBulto + 1)),
-                        "creado" => date("Y-m-d H:i:s")
+                        "creado" => date("Y-m-d H:i:s"),
                     );
 
                     if (($id = $model->agregar($arr))) {
@@ -1918,13 +1918,13 @@ class Bodega_PostController extends Zend_Controller_Action
                     "*" => array("StringTrim", "StripTags"),
                     "id" => "Digits",
                     "bultos_restantes" => "Digits",
-                    "n_referencia" => "StringToUpper"
+                    "n_referencia" => "StringToUpper",
                 );
                 $v = array(
                     "id" => array("NotEmpty", new Zend_Validate_Int()),
                     "bultos_restantes" => array("NotEmpty", new Zend_Validate_Int()),
                     "ids" => array("NotEmpty"),
-                    "n_referencia" => array("NotEmpty")
+                    "n_referencia" => array("NotEmpty"),
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("id") && $input->isValid("ids")) {
@@ -1998,14 +1998,14 @@ class Bodega_PostController extends Zend_Controller_Action
                     "aduana" => "Digits",
                     "operacion" => "StringToUpper",
                     "cvePedimento" => "StringToUpper",
-                    "pedimento" => "Digits"
+                    "pedimento" => "Digits",
                 );
                 $v = array(
                     "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
-                    "aduana"  => array("NotEmpty"),
+                    "aduana" => array("NotEmpty"),
                     "operacion" => array("NotEmpty"),
                     "cvePedimento" => array("NotEmpty"),
-                    "pedimento" => array("NotEmpty")
+                    "pedimento" => array("NotEmpty"),
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("idTrafico")) {

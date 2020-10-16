@@ -33,7 +33,7 @@ class Application_View_Helper_NewMenu {
                 $mainMenu .= "\n<li class=\"{$active}\"><a href=\"/{$m["modulo"]}/{$m["controlador"]}/{$m["accion"]}\">{$m["menu"]}</a></li>";
             }
         }
-        $mainMenu .= "<span class=\"label label-success\" style=\"margin-top: 7px; margin-left: 5px\"><a href=\"https://oaq.dnsalias.net/soporte\" target=\"_blank\" style=\"color: #fff;\">Tickets</a></span>";
+        $mainMenu .= "<span class=\"label label-success\" style=\"margin-top: 7px; margin-left: 5px\"><a href=\"https://oaq.dnsalias.net/soporte/?lang=es_MX\" target=\"_blank\" style=\"color: #fff;\">Tickets</a></span>";
         return $mainMenu;
     }
 

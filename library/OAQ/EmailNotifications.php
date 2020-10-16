@@ -5,7 +5,8 @@
  *
  * @author Jaime E. Valdez <jvaldezch@gmail.com>
  */
-class OAQ_EmailNotifications {
+class OAQ_EmailNotifications
+{
 
     protected $_smtp;
     protected $_user;
@@ -16,9 +17,10 @@ class OAQ_EmailNotifications {
     protected $_transport;
     protected $_email;
 
-    function __construct($email = null, $username = null, $name = null) {
+    public function __construct($email = null, $username = null, $name = null)
+    {
         try {
-            if(isset($email) && isset($username) && isset($name)) {
+            if (isset($email) && isset($username) && isset($name)) {
                 $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
                 if (!$email && !$username) {
                     $this->_smtp = "mail.oaq.com.mx";
@@ -46,7 +48,8 @@ class OAQ_EmailNotifications {
         }
     }
 
-    public function sendForgotPasswordEmail($username, $password, $email) {
+    public function sendForgotPasswordEmail($username, $password, $email)
+    {
         try {
             require_once 'simple_html_dom.php';
             $this->_html = file_get_html(APPLICATION_PATH . '/../library/OAQ/Templates/password.html');
@@ -59,7 +62,8 @@ class OAQ_EmailNotifications {
         }
     }
 
-    public function sendUpdatedPasswordEmail($username, $password, $email) {
+    public function sendUpdatedPasswordEmail($username, $password, $email)
+    {
         try {
             require_once 'simple_html_dom.php';
             $this->_html = file_get_html(APPLICATION_PATH . '/../library/OAQ/Templates/passwordUpdate.html');
@@ -72,35 +76,37 @@ class OAQ_EmailNotifications {
         }
     }
 
-    protected function sendEmail($email, $from, $subject) {
+    protected function sendEmail($email, $from, $subject)
+    {
         try {
             if (APPLICATION_ENV == 'development') {
                 $subject = "[DEV] " . $subject;
             }
             $mailSend = new Zend_Mail("UTF-8");
             $mailSend->setBodyHtml($this->_html)
-                    ->setFrom($this->_user, $from)
-                    ->addTo($email)
-                    ->setReplyTo("no-responder@" . "localhost")
-                    ->setSubject($subject);
+                ->setFrom($this->_user, $from)
+                ->addTo($email)
+                ->setReplyTo("no-responder@" . "localhost")
+                ->setSubject($subject);
             $mailSend->send($this->_transport);
         } catch (Exception $e) {
             throw new Exception("Exception found while sending email" . $e->getMessage());
         }
     }
 
-    protected function sendEmailAndAttach($email, $name, $from, $subject, $filepath, $filename) {
+    protected function sendEmailAndAttach($email, $name, $from, $subject, $filepath, $filename)
+    {
         try {
             if (APPLICATION_ENV == 'development') {
                 $subject = "[DEV] " . $subject;
             }
             $mailSend = new Zend_Mail('UTF-8');
             $mailSend->setBodyHtml($this->_html)
-                    ->setFrom($this->_user, isset($this->_name) ? $this->_name : $from)
-                    ->addTo($email, $name)
-                    ->addBcc($this->_user)
-                    ->setReplyTo('no-responder@oaq.com.mx')
-                    ->setSubject($subject);
+                ->setFrom($this->_user, isset($this->_name) ? $this->_name : $from)
+                ->addTo($email, $name)
+                ->addBcc($this->_user)
+                ->setReplyTo('no-responder@oaq.com.mx')
+                ->setSubject($subject);
             $attach = new Zend_Mime_Part(file_get_contents($filepath));
             $attach->type = 'application/octet-stream';
             $attach->disposition = Zend_Mime::DISPOSITION_INLINE;
@@ -113,7 +119,8 @@ class OAQ_EmailNotifications {
         }
     }
 
-    public function sendEmailWithAttachment($emails, $filename, $filepath, $subject, $template) {
+    public function sendEmailWithAttachment($emails, $filename, $filepath, $subject, $template)
+    {
         try {
             require_once 'simple_html_dom.php';
             $this->_html = file_get_html(APPLICATION_PATH . '/../library/OAQ/Templates/' . $template);
@@ -125,19 +132,20 @@ class OAQ_EmailNotifications {
             throw new Exception("Exception found while sending email at " . __METHOD__ . ": " . $e->getMessage() . $e->getLine());
         }
     }
-    
-    public function sendInfraEmail($subject, $body) {
+
+    public function sendInfraEmail($subject, $body)
+    {
         try {
             if (APPLICATION_ENV == "development") {
                 $subject = "[DEV] " . $subject;
             }
             $mailSend = new Zend_Mail('UTF-8');
             $mailSend->setBodyHtml($body)
-                    ->setFrom($this->_config->app->infra->email)
-                    ->addTo("sistemas@oaq.com.mx", "Vianey Noya")
-                    ->addCc("jvaldezch@gmail.com", "Jaime E. Valdez")
-                    ->setReplyTo('no-responder@oaq.com.mx')
-                    ->setSubject($subject);
+                ->setFrom($this->_config->app->infra->email)
+                ->addTo("sistemas@oaq.com.mx", "Vianey Noya")
+                ->addCc("jvaldezch@gmail.com", "Jaime E. Valdez")
+                ->setReplyTo('no-responder@oaq.com.mx')
+                ->setSubject($subject);
             $config = array('auth' => 'login',
                 'username' => $this->_config->app->infra->email,
                 'password' => $this->_config->app->infra->pass,
@@ -148,8 +156,9 @@ class OAQ_EmailNotifications {
             throw new Exception('<b>Exception found while sending email at ' . __METHOD__ . '</b>' . $e->getMessage() . $e->getLine());
         }
     }
-    
-    public function nuevaNotificacion($idAduana, $pedimento, $referencia, $de, $para, $mensaje, $tipo, $idTrafico = null) {
+
+    public function nuevaNotificacion($idAduana, $pedimento, $referencia, $de, $para, $mensaje, $tipo, $idTrafico = null)
+    {
         $ns = new Trafico_Model_NotificacionesMapper();
         $id = $ns->agregar(array(
             "idAduana" => $idAduana,
@@ -161,7 +170,7 @@ class OAQ_EmailNotifications {
             "para" => $para,
             "tipo" => $tipo,
             "estatus" => null,
-            "creado" => date("Y-m-d H:i:s")
+            "creado" => date("Y-m-d H:i:s"),
         ));
         if ($id) {
             $sender = new OAQ_WorkerSender("emails");

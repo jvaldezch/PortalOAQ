@@ -7,3 +7,5 @@ application/library/Zend/*
 # PHP storm
 .idea/
 .idea/*
+
+public/sgc2015/*
