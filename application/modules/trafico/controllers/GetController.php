@@ -3038,7 +3038,6 @@ class Trafico_GetController extends Zend_Controller_Action
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->id));
                 $zipFilename = $trafico->crearZip($this->_session->id, $this->_session->role);
                 if (file_exists($zipFilename)) {
-
                     if (!is_file($zipFilename)) {
                         header($this->getRequest()->getServer('SERVER_PROTOCOL') . " 404 Not Found");
                         echo "File not found";

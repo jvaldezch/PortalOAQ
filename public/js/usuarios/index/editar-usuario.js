@@ -12,7 +12,7 @@ function cargarDatos(id, url) {
         url: url,
         type: "post",
         dataType: "json",
-        data: {id: $("#idUsuario").val()},
+        data: { id: $("#idUsuario").val() },
         timeout: 3000,
         success: function (res) {
             if (res.success === true) {
@@ -49,12 +49,12 @@ function currentActive(current) {
 }
 
 $(document).ready(function () {
-    
+
     var arr = [];
-    $("#traffic-tabs li a").each(function() {        
+    $("#traffic-tabs li a").each(function () {
         arr.push($(this).attr("href"));
     });
-    
+
     $("#traffic-tabs li a").on('click', function () {
         var href = $(this).attr('href');
         Cookies.set('active', href);

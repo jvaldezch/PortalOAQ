@@ -1,12 +1,14 @@
 <?php
 
-class Usuarios_GetController extends Zend_Controller_Action {
+class Usuarios_GetController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -15,7 +17,8 @@ class Usuarios_GetController extends Zend_Controller_Action {
         $this->_logger = Zend_Registry::get("logDb");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -26,7 +29,8 @@ class Usuarios_GetController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerFirmaAction() {
+    public function obtenerFirmaAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -55,12 +59,13 @@ class Usuarios_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
+
     /**
      * /usuarios/get/descarga-edocument?idFiel=121&edocument=04361706CXZ36
      * @throws Exception
      */
-    public function descargaEdocumentAction() {
+    public function descargaEdocumentAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -76,14 +81,14 @@ class Usuarios_GetController extends Zend_Controller_Action {
                 $sello = $mapper->obtenerDetalleFirmanteId($input->idFiel);
                 $xml = new OAQ_Xml(false, false, true);
                 $xml->documentoDigitalizado($sello["rfc"], $sello["ws_pswd"], $input->edocument);
-                $xmlh = trim(preg_replace("/<\\?xml.*\\?>/",'', $xml->getXml(),1));
-                
+                $xmlh = trim(preg_replace("/<\\?xml.*\\?>/", '', $xml->getXml(), 1));
+
                 Zend_Debug::dump($xml->getXml());
                 /*$servicios = new OAQ_Servicios();
                 $servicios->setXml($xmlh);
                 $servicios->descargaEdocument();
                 $resp = $servicios->getResponse();*/
-                
+
                 /*$dom = new DOMDocument;
                 $dom->preserveWhiteSpace = FALSE;
                 $dom->loadXML($resp);
@@ -94,10 +99,10 @@ class Usuarios_GetController extends Zend_Controller_Action {
                 if (!empty($resp)) {
                     file_put_contents($this->_appconfig->getParam("tmpDir") . DIRECTORY_SEPARATOR . "EDOC_DIG_" . $input->edocument . ".xml", $response);
                 }*/
-                
+
                 $ejem = new OAQ_RespuestasEjemplos();
                 Zend_Debug::dump($ejem->ejemploRespuesta(37));
-                
+
                 $respuestas = new OAQ_VucemRespuestas();
                 $r = $respuestas->analizarRespuestaEdocument($ejem->ejemploRespuesta(37));
                 Zend_Debug::dump($r);
@@ -108,8 +113,9 @@ class Usuarios_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function obtenerDocumentosAction() {
+
+    public function obtenerDocumentosAction()
+    {
         try {
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
@@ -132,8 +138,9 @@ class Usuarios_GetController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function actividadesUsuariosAction() {
+
+    public function actividadesUsuariosAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -151,11 +158,11 @@ class Usuarios_GetController extends Zend_Controller_Action {
                     $html = '';
                     foreach ($arr as $item) {
                         $html .= '<tr style="border: 1px #f3f3f3 solid" class="activityRow_' . $item["id"] . '">'
-                                . '<td>' . $item["nombreUsuario"] . '</td>'
-                                . '<td style="padding: 3px; cursor: pointer" class="activityRow" data-id="' . $item["id"] . '"><strong>' . mb_strtoupper($item["titulo"]) . '</strong><br>' . $item["observaciones"] . '</td>'
-                                . '<td>' . date('Y-m-d', strtotime($item["fecha"])) . '</td>'
-                                . '<td>' . $item["creado"] . '</td>'
-                                . '</tr>';
+                            . '<td>' . $item["nombreUsuario"] . '</td>'
+                            . '<td style="padding: 3px; cursor: pointer" class="activityRow" data-id="' . $item["id"] . '"><strong>' . mb_strtoupper($item["titulo"]) . '</strong><br>' . $item["observaciones"] . '</td>'
+                            . '<td>' . date('Y-m-d', strtotime($item["fecha"])) . '</td>'
+                            . '<td>' . $item["creado"] . '</td>'
+                            . '</tr>';
                     }
                     $this->_helper->json(array("success" => true, "html" => $html));
                 } else {
@@ -169,4 +176,95 @@ class Usuarios_GetController extends Zend_Controller_Action {
         }
     }
 
+    public function agregarEquipoAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $f = array(
+                "*" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
+                "idUsuario" => array(new Zend_Filter_Digits())
+            );
+            $v = array(
+                "idUsuario" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("idUsuario")) {
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+                $view->idUsuario = $input->idUsuario;
+                $this->_helper->json(array("success" => true, "html" => $view->render("agregar-equipo.phtml")));
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => true, "html" => $ex->getMessage()));
+        }
+    }
+
+    public function editarEquipoAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $f = array(
+                "*" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
+                "id" => array(new Zend_Filter_Digits())
+            );
+            $v = array(
+                "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id")) {
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+                $view->id = $input->id;
+
+                $mppr = new Usuarios_Model_UsuarioEquipos();
+                $row = $mppr->obtenerEquipo($input->id);
+
+                $this->_helper->json(array("success" => true, "html" => $view->render("editar-equipo.phtml")));
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => true, "html" => $ex->getMessage()));
+        }
+    }
+
+    public function imprimirComprobanteAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $f = array(
+                "*" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
+                "id" => array(new Zend_Filter_Digits())
+            );
+            $v = array(
+                "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id")) {
+
+                $arr = array(
+                    "actualizacion" => "10/04/2013",
+                    "title_logo" => "pdf_logo.jpg",
+                    "autor" => "Jaime E. Valdez",
+                    "version" => "1.0",
+                    "filename" => "COMPROBANTE_.pdf",
+                );                
+
+                $print = new OAQ_Imprimir_EntregaEquipo($arr, "P", "pt", "LETTER");
+                $print->set_filename($arr['filename']);
+                $print->Create();
+                $print->Output($arr['filename'], "I");
+
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => true, "html" => $ex->getMessage()));
+        }
+    }
 }

@@ -8,26 +8,26 @@ function removerBodega(id, idUsuario) {
         cache: false,
         url: "/usuarios/post/remover-bodega",
         type: "post",
-        data: {id: id, idUsuario: idUsuario},
+        data: { id: id, idUsuario: idUsuario },
         dataType: "json",
         success: function (res) {
             if (res.success === true) {
                 cargarDatos("#usuarioBodegas", "/usuarios/post/obtener-bodegas");
             } else {
-                $.alert({title: "Advertencia", type: "orange", content: res.message, boxWidth: "350px", useBootstrap: false});
+                $.alert({ title: "Advertencia", type: "orange", content: res.message, boxWidth: "350px", useBootstrap: false });
             }
         }
     });
 }
 
 $(document).ready(function () {
-    
+
     $("#formWarehouse").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -51,7 +51,7 @@ $(document).ready(function () {
                         $("#formWarehouse").trigger("reset");
                         cargarDatos("#usuarioBodegas", "/usuarios/post/obtener-bodegas");
                     } else {
-                        $.alert({title: "Advertencia", type: "orange", content: res.message, boxWidth: "350px", useBootstrap: false});
+                        $.alert({ title: "Advertencia", type: "orange", content: res.message, boxWidth: "350px", useBootstrap: false });
                     }
                 }
             });

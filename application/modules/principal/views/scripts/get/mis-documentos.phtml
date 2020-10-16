@@ -1,13 +1,16 @@
 <table class="traffic-table">
     <tr>
+        <th colspan="4" class="traffic-table-title">DOCUMENTOS</th>
+    </tr>
+    <tr>
         <th style="width: 28px">
-            <div class="traffic-icon traffic-icon-reload traffic-btn-right" onclick="misDocumentos();"></div>
+            <i class="fas fa-sync-alt" onclick="misDocumentos();"></i>
         </th>
         <th>Nombre de archivo</th>
         <th>Tipo de archivo</th>
         <th>Creado</th>
     </tr>
-    <?php if (isset($this->archivos) && !empty($this->archivos)) { ?>           
+    <?php if (isset($this->archivos) && !empty($this->archivos)) { ?>
         <?php foreach ($this->archivos as $item) { ?>
             <tr>
                 <td><?= (file_exists($item["ubicacion"])) ? '' : '<span><a title="El archivo no existe en el sistema, volver a subir." style="margin-left: 3px; color:red; cursor: pointer;"><strong>!</strong></a></span>' ?></td>
@@ -27,13 +30,13 @@
                 <td style="width: 120px;">
                     <?= date('d/m/Y H:i a', strtotime($item["creado"])) ?>
                 </td>
-            </tr>            
-        <?php } ?>        
+            </tr>
+        <?php } ?>
     <?php } else { ?>
         <tr>
             <td colspan="4">
                 <em>No hay documentos.</em>
             </td>
         </tr>
-    <?php } ?>        
+    <?php } ?>
 </table>

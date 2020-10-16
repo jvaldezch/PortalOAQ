@@ -23,8 +23,9 @@ class Usuarios_IndexController extends Zend_Controller_Action
             ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
             ->appendFile("/js/common/jquery-1.9.1.min.js")
-            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-            ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")           
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
             ->appendFile("/js/common/jquery.form.min.js")
             ->appendFile("/js/common/jquery.validate.min.js")
             ->appendFile("/js/common/jquery.dataTables.min.js")
@@ -173,6 +174,7 @@ class Usuarios_IndexController extends Zend_Controller_Action
             ->appendFile("/js/usuarios/index/editar-usuario-inhouse.js?" . time())
             ->appendFile("/js/usuarios/index/editar-usuario-proveedor.js?" . time())
             ->appendFile("/js/usuarios/index/editar-usuario-bodega.js?" . time())
+            ->appendFile("/js/usuarios/index/editar-usuario-equipos.js?" . time())
             ->appendFile("/js/usuarios/index/editar-usuario.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
@@ -231,6 +233,9 @@ class Usuarios_IndexController extends Zend_Controller_Action
                 }
 
                 $mppr = new Bodega_Model_Bodegas();
+
+                $equip = new Usuarios_Model_UsuarioEquipos();
+                $this->view->equipos = $equip->obtenerTodo($input->id);
 
                 $bodegas = new Usuarios_Form_Bodegas(array("bodegas" => $mppr->obtenerTodos()));
                 $this->view->bodegas = $bodegas;

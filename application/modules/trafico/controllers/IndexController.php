@@ -266,12 +266,11 @@ class Trafico_IndexController extends Zend_Controller_Action
             //     $paginator->setCurrentPageNumber($page);
             //     $this->view->paginator = $paginator;
             // }
-            $select = $model->obtenerSolicitudesTraficoSelect($res["idsAduana"], isset($search) ? $search : null, $comp, $adu, $pend, $dep, $war, $idCliente);            
+            $select = $model->obtenerSolicitudesTraficoSelect($res["idsAduana"], isset($search) ? $search : null, $comp, $adu, $pend, $dep, $war, $idCliente);
             $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
             $paginator->setItemCountPerPage($pageSize);
             $paginator->setCurrentPageNumber($page);
             $this->view->paginator = $paginator;
-            
         }
         $this->view->form = $form;
     }
@@ -1621,7 +1620,7 @@ class Trafico_IndexController extends Zend_Controller_Action
 
     public function graficasAction()
     {
-        setlocale(LC_TIME, 'es_ES','es_ES.UTF-8');
+        setlocale(LC_TIME, 'es_ES', 'es_ES.UTF-8');
 
         $this->view->title = $this->_appconfig->getParam("title") . " Gráficas";
         $this->view->headMeta()->appendName("description", "");

@@ -1170,7 +1170,7 @@ class OAQ_Trafico
                     $arr_prod = $this->_productosFactura($client, $numFactura);
 
                     // $this->_firephp->info($arr_prod);
-                    
+
                     if ($arr_prod !== false) {
                         $arr_inv[0]["productos"] = $arr_prod;
                     }
@@ -1922,7 +1922,7 @@ class OAQ_Trafico
                     if (($con->analizarRespuesaAcuse($xml_res_acuse, $f_xml_acuse_pdf))) {
                         $res['pdf'] = $f_xml_acuse_pdf;
                     }
-                } else{
+                } else {
                     $res['pdf'] = $f_xml_acuse_pdf;
                 }
             }

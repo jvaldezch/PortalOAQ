@@ -1635,7 +1635,7 @@ class Trafico_PostController extends Zend_Controller_Action {
                                         "idFactura" => $idFactura,
                                         "numFactura" => $invoice["numeroFactura"],
                                         "instruccion" => "Generar COVE.",
-                                        "creado" => date("Y-m-d H:is")
+                                        "creado" => date("Y-m-d H:i:s")
                                     );
                                     if(!($factura->agregar($arr))) {
                                         $this->_helper->json(array("success" => false, "message" => "Unable to add invoice"));

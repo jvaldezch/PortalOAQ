@@ -1,0 +1,87 @@
+<form id="edit-equipment">
+    <table class="traffic-table traffic-table-left">
+        <input type="hidden" value="<?= $this->id ?>" id="id" name="id">
+        <tr>
+            <th style="width: 120px; text-align: right;">Marca</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="marca" id="marca" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right;">Modelo</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="modelo" id="modelo" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right;">Num. serie</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="numeroSerie" id="numeroSerie" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right;">Nombre (de red)</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="nombre" id="nombre" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right;">Accesorios adicionales</th>
+            <td>
+                <textarea class="traffic-textarea-medium" name="accesorios" id="accesorios"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right;">Estado del equipo</th>
+            <td>
+                <div class="traffic-radio-block" style="padding-left: 10px; padding-bottom: 5px; float: left; display: table-cell">
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="0" id="estado" name="estado" checked="true">&nbsp;<p>Equipo nuevo</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="1" id="estado" name="estado">&nbsp;<p>Equipo usado</p>
+                    </div>
+                    <div class="traffic-radio-input">
+                        <input type="radio" value="3" id="estado" name="estado">&nbsp;<p>Equipo reparado</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align: right;">Observaciones</th>
+            <td>
+                <textarea class="traffic-textarea-medium" name="observaciones" id="observaciones"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 120px; text-align: right;">Entregó</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="entrego" id="entrego" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 120px; text-align: right;">Recibió</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="recibio" id="recibio" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 120px; text-align: right;">Autorizó</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="autorizo" id="autorizo" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 120px; text-align: right;">Fecha de entrega</th>
+            <td>
+                <input type="text" class="traffic-input-medium" name="entregada" id="entregada" autocomplete="off" />
+            </td>
+        </tr>
+    </table>
+</form>
+<style>
+    .jconfirm {
+        z-index: 80 !important;
+    }
+</style>
+<script src="/js/usuarios/get/editar-equipo.js"></script>

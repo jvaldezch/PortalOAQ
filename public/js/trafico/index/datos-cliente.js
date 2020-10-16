@@ -17,7 +17,6 @@ function removerContacto(idContacto) {
 }
 
 function removeCustom(id) {
-    console.log("id: " + id);
 }
 
 window.removerRfcConsulta = function (id) {
@@ -148,7 +147,7 @@ window.obtenerSellos = function (idCliente) {
         url: '/trafico/get/obtener-sellos-cliente', type: "GET",
         data: { idCliente: idCliente },
         beforeSend: function () {
-            $("#customer-vucem").LoadingOverlay("show", {color: "rgba(255, 255, 255, 0.9)"});
+            $("#customer-vucem").LoadingOverlay("show", { color: "rgba(255, 255, 255, 0.9)" });
             $("#sellos-cliente").html('');
         },
         success: function (res) {

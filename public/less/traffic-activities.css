@@ -1,0 +1,43 @@
+table.activities {
+  width: 100%;
+}
+table.activities th,
+table.activities-form th {
+  font-size: 12px;
+  background: #f5f5f5;
+  color: #333;
+  height: 18px;
+  line-height: 18px;
+  top: 2px;
+  padding: 0 3px;
+  border-radius: 4px 4px 4px 4px;
+  font-family: sans-serif !important;
+}
+table.activities th.subtitle {
+  background: #fafafa;
+  color: #8d8d8d;
+}
+table.activities-form th,
+table.activities-form td {
+  padding: 2px 2px;
+  text-align: left;
+}
+table.activities tr {
+  background: #fdfdfd;
+}
+table.activities td {
+  font-size: 12px;
+  color: #333;
+  height: 18px;
+  line-height: 18px;
+  top: 2px;
+  padding: 0 3px;
+  border-radius: 4px 4px 4px 4px;
+  font-family: sans-serif !important;
+}
+table.activities tr:hover {
+  background-color: #ffffdd;
+}
+tr.activityRow {
+  cursor: pointer;
+}

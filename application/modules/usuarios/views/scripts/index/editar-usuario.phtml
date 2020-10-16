@@ -6,9 +6,10 @@
         <li><a href="#validator" data-toggle="tab">Validador</a></li>
         <li><a href="#repository" data-toggle="tab">Expediente Digital</a></li>
         <li><a href="#warehouse" data-toggle="tab">Bodegas</a></li>
+        <li><a href="#equipment" data-toggle="tab">Equipos y mantenimientos</a></li>
         <?php if (isset($this->inhouse)) { ?>
-            <li><a href="#inhouseTab" data-toggle="tab">RFC Cliente</a></li>    
-            <li><a href="#documentosTab" data-toggle="tab">Documentos</a></li>    
+            <li><a href="#inhouseTab" data-toggle="tab">RFC Cliente</a></li>
+            <li><a href="#documentosTab" data-toggle="tab">Documentos</a></li>
         <?php } ?>
     </ul>
     <div class="tab-content">
@@ -102,14 +103,18 @@
                     </tr>
                     <tr>
                         <td><?= $this->fiel->razonSocial ?></td>
-                        <td><div id="patentesFiel"><?= $this->fiel->patenteFiel ?></div></td>
-                        <td><div id="aduanasFiel"><?= $this->fiel->aduanaFiel ?></div></td>
+                        <td>
+                            <div id="patentesFiel"><?= $this->fiel->patenteFiel ?></div>
+                        </td>
+                        <td>
+                            <div id="aduanasFiel"><?= $this->fiel->aduanaFiel ?></div>
+                        </td>
                         <td>
                             <button id="agregarFiel" class="traffic-btn traffic-btn-right" style="">
                                 <i class="fas fa-plus-circle"></i> Asignar
                             </button>
                         </td>
-                    </tr>                    
+                    </tr>
                 </table>
             </form>
             <div id="usuarioSellos" style="display: none; max-height: 350px; overflow-y: scroll"></div>
@@ -127,8 +132,12 @@
                         <th>&nbsp;</th>
                     </tr>
                     <tr>
-                        <td><div id="traficoAduanas"><?= $this->selectAduanas("idAduana") ?></div></td>
-                        <td><div id="traficoClientes"><?= $this->clientes ?></div></td>
+                        <td>
+                            <div id="traficoAduanas"><?= $this->selectAduanas("idAduana") ?></div>
+                        </td>
+                        <td>
+                            <div id="traficoClientes"><?= $this->clientes ?></div>
+                        </td>
                         <td>
                             <button id="agregarTrafico" class="traffic-btn traffic-btn-right" style="">
                                 <i class="fas fa-plus-circle"></i> Asignar
@@ -151,7 +160,9 @@
                         <th>&nbsp;</th>
                     </tr>
                     <tr>
-                        <td><div id="divIdAduanas"><?= $this->selectValidador("idAduanaValidador") ?></div></td>
+                        <td>
+                            <div id="divIdAduanas"><?= $this->selectValidador("idAduanaValidador") ?></div>
+                        </td>
                         <td>
                             <button id="addValidador" class="traffic-btn traffic-btn-right" style="">
                                 <i class="fas fa-plus-circle"></i> Asignar
@@ -164,7 +175,7 @@
                         </td>
                     </tr>
                 </table>
-            </form>        
+            </form>
             <div id="usuarioValidador" style="display: none"></div>
         </div><!-- validator -->
         <div class="tab-pane" id="repository">
@@ -180,18 +191,22 @@
                         <th colspan="2">&nbsp;</th>
                     </tr>
                     <tr>
-                        <td><div id="divpatentes"><?= $this->repositorio->patentesExpediente ?></div></td>
-                        <td><div id="divaduanas"><?= $this->repositorio->aduanasExpediente ?></div></td>
+                        <td>
+                            <div id="divpatentes"><?= $this->repositorio->patentesExpediente ?></div>
+                        </td>
+                        <td>
+                            <div id="divaduanas"><?= $this->repositorio->aduanasExpediente ?></div>
+                        </td>
                         <td>
                             <input id="allCustoms" name="allCustoms" type="checkbox" style="float: left; margin-right: 5px">
-                            <label  style="float: left; margin-left: 5px; font-size: 11px !important" class="checkbox-label">Todas las aduanas</label>
+                            <label style="float: left; margin-left: 5px; font-size: 11px !important" class="checkbox-label">Todas las aduanas</label>
                         </td>
                         <td>
                             <button id="agregarRepositorio" class="traffic-btn traffic-btn-right" style="">
                                 <i class="fas fa-plus-circle"></i> Asignar
                             </button>
                         </td>
-                    </tr>                    
+                    </tr>
                     <tr>
                         <td colspan="4">
                             <div id="archiveErrors"></div>
@@ -214,7 +229,9 @@
                         <th colspan="2">&nbsp;</th>
                     </tr>
                     <tr>
-                        <td><div id="divpatentes"><?= $this->bodegas->idBodega ?></div></td>
+                        <td>
+                            <div id="divpatentes"><?= $this->bodegas->idBodega ?></div>
+                        </td>
                         <td>
                             &nbsp;
                         </td>
@@ -228,6 +245,76 @@
             </form>
             <div id="usuarioBodegas" style="display: none; max-height: 390px"></div>
         </div><!-- warehouse -->
+
+        <div class="tab-pane" id="equipment">
+
+            <table class="traffic-table traffic-table-center">
+                <thead>
+                    <tr>
+                        <th colspan="8" class="traffic-table-title">EQUIPOS ASIGNADOS</th>
+                    </tr>
+                    <tr>
+                        <th>NOMBRE (de red)</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
+                        <th>NUM. SERIE</th>
+                        <th>ESTADO</th>
+                        <th>ENTREGADA</th>
+                        <th>REGRESADA</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (isset($this->equipos) && !empty($this->equipos)) { ?>
+                        <?php foreach ($this->equipos as $item) { ?>
+                            <tr>
+                                <td style="width: 120px"><?= $item['nombre'] ?></td>
+                                <td><?= $item['marca'] ?></td>
+                                <td><?= $item['modelo'] ?></td>
+                                <td><?= $item['numeroSerie'] ?></td>
+                                <td>
+                                    <?php if ($item['numeroSerie'] == 0) { ?>
+                                        Equipo nuevo
+                                    <?php } else if ($item['numeroSerie'] == 1) { ?>
+                                        Equipo usado
+                                    <?php } else { ?>
+                                        Equipo reparado
+                                    <?php } ?>
+                                </td>
+                                <td><?= isset($item['entregada']) ? date("d/m/Y", strtotime($item['entregada'])) : '&nbsp;' ?></td>
+                                <td><?= isset($item['regresada']) ? date("d/m/Y", strtotime($item['regresada'])) : '&nbsp;' ?></td>
+                                <td style="font-size: 1.2rem !important; width: 140px">
+                                    <i class="fas fa-pencil-alt edit-equipment" style="cursor: pointer;" data-id="<?= $item['id'] ?>"></i>
+                                    &nbsp;
+                                    <i class="far fa-trash-alt"></i>
+                                    &nbsp;
+                                    <i class="fas fa-plus"></i>
+                                    &nbsp;
+                                    <a target="_blank" href="/usuarios/get/imprimir-comprobante?id=<?= $item['id'] ?>">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <tr>
+                            <td colspan="8" style="text-align: center;">
+                                <em>El usuario no tiene equipos asignados.</em>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    <tr>
+                        <td colspan="8">
+                            <button class="traffic-btn-right traffic-btn add-equipment" data-id="<?= $this->idUsuario ?>">
+                                <i class="far fa-save"></i> Agregar equipo
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div><!-- equipment -->
 
         <?php if (isset($this->inhouse)) { ?>
             <div class="tab-pane" id="inhouseTab">
@@ -288,14 +375,14 @@
                                                 </tr>
                                             <?php } ?>
                                         <?php } ?>
-                                    </table> 
+                                    </table>
                                 </div>
                             </td>
                         </tr>
-                    </table>                
+                    </table>
                 </form>
             </div>
-        <?php } ?>    
+        <?php } ?>
     </div>
     <div class="traffic-clear-5"></div>
     <a href="/usuarios/index/usuarios" class="traffic-btn" tabindex="99">

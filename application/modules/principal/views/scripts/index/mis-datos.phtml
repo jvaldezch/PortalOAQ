@@ -1,112 +1,267 @@
-<div>
-    <div class="traffic-col-50">
-        <form method="post" id="formUsuario">
-            <table id="user-data" class="traffic-table traffic-table-left">
-                <tr>
-                    <th style="width: 200px"><label for="nombre">Nombre:</label></th>
-                    <td>
-                        <?= $this->form->nombre ?>
-                        <a href="/principal/index/mis-documentos" class="traffic-btn-right traffic-btn-success">Doctos.</a>
-                        <a href="/principal/index/mis-actividades" class="traffic-btn-right traffic-btn-add">Actividades</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th><label for="email">Email:</label></th>
-                    <td><?= $this->form->email ?></td>
-                </tr>
-                <tr>
-                    <th><label for="usuario">Usuario:</label></th>
-                    <td><?= $this->form->usuario ?></td>
-                </tr>
-                <tr>
-                    <th><label for="empresa">Empresa:</label></th>
-                    <td><?= $this->form->empresa ?></td>
-                </tr>
-                <tr>
-                    <th><label for="departamento">Departamento:</label></th>
-                    <td><?= $this->form->departamento ?></td>
-                </tr>
-                <tr>
-                    <th><label for="telefono">Teléfono:</label></th>
-                    <td><?= $this->form->telefono ?></td>
-                </tr>
-                <tr>
-                    <th><label for="extension">Extensión:</label></th>
-                    <td><?= $this->form->extension ?></td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                        <button id="update" class="traffic-btn-right traffic-btn-save">Guardar</button>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <div>
-            <form method="post" id="formRequest">
+<div class="row-fluid">
+
+    <ul class="nav nav-tabs" id="traffic-tabs" style="margin-bottom: 0; margin-top: 5px">
+        <li>
+            <a href="#misdatos" data-toggle="tab">Mis datos</a>
+        </li>
+        <li>
+            <a href="#misactividades" data-toggle="tab">Mis actividades</a>
+        </li>
+        <li>
+            <a href="#misdocumentos" data-toggle="tab">Mis documentos</a>
+        </li>
+        <li>
+            <a href="#misequipos" data-toggle="tab">Mis equipos</a>
+        </li>
+        <li>
+            <a href="#directorio" data-toggle="tab">Directorio de personal</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div class="tab-pane" id="misdatos">
+
+            <form method="post" id="formUsuario">
                 <table id="user-data" class="traffic-table traffic-table-left">
                     <tr>
-                        <th style="width: 200px">
-                            <label>Solicitud:</label>                            
-                        </th>
+                        <th colspan="2" class="traffic-table-title">DATOS PERSONALES</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 200px"><label for="nombre">Nombre:</label></th>
                         <td>
-                            <?php if(isset($this->tipoSolicitudes)) { ?>
-                                <select name="idSolicitud" id="idSolicitud" class="traffic-select-large">
-                                    <option value="">---</option>
-                                    <?php foreach ($this->tipoSolicitudes as $item) { ?>
-                                        <option value="<?= $item["id"] ?>"><?= $item["tipoSolicitud"] ?></option>
-                                    <?php } ?>
-                                </select>
-                            <?php } ?>
+                            <?= $this->form->nombre ?>
+                            <a href="/principal/index/mis-actividades" class="traffic-btn-right traffic-btn">Actividades</a>
                         </td>
+                    </tr>
+                    <tr>
+                        <th><label for="email">Email:</label></th>
+                        <td><?= $this->form->email ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="usuario">Usuario:</label></th>
+                        <td><?= $this->form->usuario ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="empresa">Empresa:</label></th>
+                        <td><?= $this->form->empresa ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="departamento">Departamento:</label></th>
+                        <td><?= $this->form->departamento ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="telefono">Teléfono:</label></th>
+                        <td><?= $this->form->telefono ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="extension">Extensión:</label></th>
                         <td>
-                            <button type="submit" id="submit" class="traffic-btn">Crear</button>
+                            <button id="update" class="traffic-btn-right traffic-btn">
+                                <i class="fas fa-save"></i>&nbsp;Guardar
+                            </button>
+                            <?= $this->form->extension ?>
                         </td>
                     </tr>
                 </table>
             </form>
-            <table id="solicitudes" class="traffic-table traffic-table-left">
+        </div>
+
+        <div class="tab-pane" id="misactividades" style="background: #f3f7fa;">
+            <div class="span4" style="padding: 5px">
+                <div id="cc" style="width: 100%"></div>
+                <table class="activities" style="margin-top: 5px">
+                    <thead>
+                        <tr style="border-top: 1px #f3f3f3 solid; border-left: 1px #f3f3f3 solid; border-right: 1px #f3f3f3 solid">
+                            <th colspan="2" style="text-align: left">Mis actividades&nbsp;<div id="selectedDate" style="float: right"><?= date("Y-m-d") ?></div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="subtitle" style="border-left: 1px #f3f3f3 solid; border-right: 1px #f3f3f3 solid; text-align: right" colspan="2">
+                                <i class="fas fa-plus addActivity" style="cursor: pointer; font-size: 1.2em; margin-right: 3px; color: #333333"></i>
+                            </th>
+                        </tr>
+                        <tr id="newActivity" style="display: none">
+                            <td>
+                                <input type="text" id="textActivity" style="width: 90%; margin-bottom: 5px" />
+                            </td>
+                            <td>
+                                <i class="fas fa-save saveActivity" style="cursor: pointer; font-size: 1.2em; margin: 3px 3px 0 3px"></i>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="myActivities">
+                        <?php if (isset($this->actividades)) { ?>
+                            <?php foreach ($this->actividades as $item) { ?>
+                                <tr style="border: 1px #f3f3f3 solid">
+                                    <td style="padding: 3px; cursor: pointer" class="activityRow" data-id="<?= $item["id"] ?>"><?= mb_strtoupper($item["titulo"]) ?></td>
+                                    <td style="width: 20px; text-align: right">
+                                        <i data-id="<?= $item["id"] ?>" class="fas fa-trash-alt deleteActivity" style="cursor: pointer; font-size: 1.2em; margin: 3px 3px 0 0"></i>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr style="border: 1px #f3f3f3 solid">
+                                <td colspan="2" style="padding: 3px">
+                                    <em>No hay actividades.</em>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div><!-- span4 -->
+
+            <div class="span8" style="padding: 5px">
+                <form id="activityForm">
+                    <table class="activities-form" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th colspan="2">&nbsp;</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; width: 150px">Id:</th>
+                                <th style="text-align: left">
+                                    <input type="text" id="idActividad" name="idActividad" class="traffic-input-tiny" readonly="true" style="width: 50px" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left">Titulo:</th>
+                                <th style="text-align: left">
+                                    <input type="text" id="titulo" name="titulo" class="traffic-input-large" disabled="true" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left">Departamento:</th>
+                                <th style="text-align: left">
+                                    <select id="idDepto" name="idDepto" class="traffic-select-large" disabled="true">
+                                        <option value="">---</option>
+                                        <?php if (isset($this->empresas)) { ?>
+                                            <?php foreach ($this->empresas as $item) { ?>
+                                                <option value="<?= $item["id"] ?>"><?= mb_strtoupper($item["descripcion"]) ?></option>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    </select>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div id="formulario"></div>
+                    <table class="activities-form" style="width: 100%">
+                        <tbody>
+                            <tr>
+                                <th colspan="2">Observaciones:</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">
+                                    <textarea id="observaciones" name="observaciones"></textarea>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <button style="float: right" id="submit" class="traffic-btn traffic-btn" disabled="true">
+                                        <i class="fas fa-save"></i>&nbsp;Guardar
+                                    </button>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div><!-- span8 -->
+
+            <div class="traffic-clear-5"></div>
+        </div>
+
+        <div class="tab-pane" id="misdocumentos">
+            <div id="doctos" style="min-height: 200px"></div>
+        </div>
+
+        <div class="tab-pane" id="misequipos">
+
+            <table class="traffic-table traffic-table-center">
                 <thead>
                     <tr>
-                        <th colspan="4" class="traffic-table-subtitle">MIS SOLICITUDES</th>
+                        <th colspan="8" class="traffic-table-title">EQUIPOS ASIGNADOS</th>
                     </tr>
                     <tr>
-                        <th style="width: 24px">&nbsp;</th>
-                        <th>Tipo solicitud</th>
-                        <th style="width: 120px">Creado</th>
-                        <th style="width: 130px">&nbsp;</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
+                        <th>NUM. SERIE</th>
+                        <th>ESTADO</th>
+                        <th>ENTREGADA</th>
+                        <th>REGRESADA</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-    <div class="traffic-col-50">
-        <div class="traffic-clear-5"></div>
-        <table class="traffic-table traffic-table-left" id="directory">
-            <thead>
-                <tr>
-                    <th colspan="4">Directorio de personal</th>
-                </tr>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Ext.</th>
-                </tr>
-            </thead>            
-            <tbody>
-                <?php if (isset($this->directorio)) { ?>
-                    <?php foreach ($this->directorio as $item) { ?>
+                <tbody>
+                    <?php if (isset($this->equipos) && !empty($this->equipos)) { ?>
+                        <?php foreach ($this->equipos as $item) { ?>
+                            <tr>
+                                <td><?= $item['marca'] ?></td>
+                                <td><?= $item['modelo'] ?></td>
+                                <td><?= $item['numeroSerie'] ?></td>
+                                <td>
+                                    <?php if ($item['numeroSerie'] == 0) { ?>
+                                        Equipo nuevo
+                                    <?php } else if ($item['numeroSerie'] == 1) { ?>
+                                        Equipo usado
+                                    <?php } else { ?>
+                                        Equipo reparado
+                                    <?php } ?>
+                                </td>
+                                <td><?= isset($item['entregada']) ? date("d/m/Y", strtotime($item['entregada'])) : '&nbsp;' ?></td>
+                                <td><?= isset($item['regresada']) ? date("d/m/Y", strtotime($item['regresada'])) : '&nbsp;' ?></td>
+                                <td style="font-size: 1.2rem !important; width: 120px">
+                                    <!-- <i class="fas fa-pencil-alt edit-equipment" style="cursor: pointer;" data-id="<?= $item['id'] ?>"></i>
+                                    &nbsp;
+                                    <i class="far fa-trash-alt"></i>
+                                    &nbsp;
+                                    <i class="fas fa-plus"></i> -->
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    <?php } else { ?>
                         <tr>
-                            <td><?= $item["nombre"] ?></td>
-                            <td><?= $item["email"] ?></td>
-                            <td><?= $item["telefono"] ?></td>
-                            <td><?= $item["extension"] ?></td>
+                            <td colspan="7" style="text-align: center;">
+                                <em>El usuario no tiene equipos asignados.</em>
+                            </td>
                         </tr>
                     <?php } ?>
-                <?php } ?>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="tab-pane" id="directorio">
+            <table class="traffic-table traffic-table-left">
+                <tr>
+                    <th colspan="4" class="traffic-table-title">Directorio</th>
+                </tr>
+            </table>
+            <div class="traffic-clear-5"></div>
+            <table class="traffic-table traffic-table-left" id="directory">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Ext.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (isset($this->directorio)) { ?>
+                        <?php foreach ($this->directorio as $item) { ?>
+                            <tr>
+                                <td><?= $item["nombre"] ?></td>
+                                <td><?= $item["email"] ?></td>
+                                <td><?= $item["telefono"] ?></td>
+                                <td><?= $item["extension"] ?></td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+
     </div>
+
 </div>

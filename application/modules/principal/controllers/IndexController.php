@@ -1,6 +1,7 @@
 <?php
 
-class Principal_IndexController extends Zend_Controller_Action {
+class Principal_IndexController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_soapClient;
@@ -8,22 +9,23 @@ class Principal_IndexController extends Zend_Controller_Action {
     protected $_appconfig;
     protected $_redirector;
 
-    public function init() {
+    public function init()
+    {
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/date.js")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery.blockUI.js")
-                ->appendFile("/js/common/mensajero.js?" . time())
-                ->appendFile("/js/common/principal.js?" . time());
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/date.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/mensajero.js?" . time())
+            ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $context = stream_context_create(array(
             "ssl" => array(
@@ -35,7 +37,8 @@ class Principal_IndexController extends Zend_Controller_Action {
         $this->_soapClient = new Zend_Soap_Client($this->_config->app->endpoint, array("stream_context" => $context));
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -61,63 +64,34 @@ class Principal_IndexController extends Zend_Controller_Action {
         $this->view->noticias = $news->obtenerTodos();
     }
 
-    public function misActividadesAction() {
-        $this->view->title = $this->_appconfig->getParam("title") . " Mis actividades";
-        $this->view->headMeta()->appendName("description", "");
-        $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/easyui/themes/material/easyui.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
-        $this->view->headScript()
-                ->appendFile("/tinymce/tiny_mce/tiny_mce.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/principal/index/mis-actividades.js?" . time());
-        $mppr = new Principal_Model_UsuariosActividades();
-        $arr = $mppr->obtenerPorFecha($this->_session->id, date("Y-m-d"));
-        if (!empty($arr)) {
-            $this->view->actividades = $arr;
-        }
-        $emp = new Rrhh_Model_Empleados();
-        $usr = $emp->obtenerPorUsuario($this->_session->id);
-        if (isset($usr["idEmpresa"])) {
-            $mpp = new Rrhh_Model_EmpresaDepartamentos();
-            $dpts = $mpp->obtener($usr["idEmpresa"]);
-            $this->view->empresas = $dpts;
-            $cust = new Trafico_Model_ClientesMapper();
-            $cts = $cust->obtenerPorEmpresa($usr["idEmpresa"]);
-            $this->view->clientes = $cts;
-            $mppa = new Rrhh_Model_EmpresaDeptoActividades();
-            $acts = $mppa->obtener($usr["idPuesto"]);
-            $this->view->misActividades = $acts;
-        }
-    }
-    
-    public function misDatosAction() {
+    public function misDatosAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Mis datos";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/nuevo-estilo.css")
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/css/DT_bootstrap.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/css/nuevo-estilo.css")
+            ->appendStylesheet("/easyui/themes/material/easyui.css")
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/css/DT_bootstrap.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time())
+            ->appendStylesheet("/less/traffic-activities.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/principal/index/mis-datos.js?" . time());        
-        $mapper = new Usuarios_Model_UsuariosMapper();            
+            ->appendFile("/tinymce/tiny_mce/tiny_mce.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/DT_bootstrap.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/principal/index/mis-datos.js?" . time());
+        $mapper = new Usuarios_Model_UsuariosMapper();
         $form = new Principal_Form_MisDatos(array("edit" => true));
         $arr = $mapper->obtenerUsuario($this->_session->id);
         if (isset($arr) && !empty($arr)) {
@@ -136,38 +110,41 @@ class Principal_IndexController extends Zend_Controller_Action {
         $this->view->form = $form;
         $directorio = $mapper->directorio();
         $this->view->directorio = $directorio;
+
+        $mppr = new Principal_Model_UsuariosActividades();
+        $arr = $mppr->obtenerPorFecha($this->_session->id, date("Y-m-d"));
+        if (!empty($arr)) {
+            $this->view->actividades = $arr;
+        }
+        $emp = new Rrhh_Model_Empleados();
+        $usr = $emp->obtenerPorUsuario($this->_session->id);
+        if (isset($usr["idEmpresa"])) {
+            $mpp = new Rrhh_Model_EmpresaDepartamentos();
+            $dpts = $mpp->obtener($usr["idEmpresa"]);
+            $this->view->empresas = $dpts;
+            $cust = new Trafico_Model_ClientesMapper();
+            $cts = $cust->obtenerPorEmpresa($usr["idEmpresa"]);
+            $this->view->clientes = $cts;
+            $mppa = new Rrhh_Model_EmpresaDeptoActividades();
+            $acts = $mppa->obtener($usr["idPuesto"]);
+            $this->view->misActividades = $acts;
+        }
+
+        $equip = new Usuarios_Model_UsuarioEquipos();
+        $this->view->equipos = $equip->obtenerTodo($this->_session->id);
     }
 
-    public function misDocumentosAction() {
-        $this->view->title = $this->_appconfig->getParam("title") . " Mis documentos";
-        $this->view->headMeta()->appendName("description", "");
-        $this->view->headLink()
-                ->appendStylesheet("/css/nuevo-estilo.css")
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/css/DT_bootstrap.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
-        $this->view->headScript()
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/principal/index/mis-documentos.js?" . time());
-    }
-
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . "Panel principal";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/css/nuevo-estilo.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time())
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/css/mobile-style.css?" . time());
+            ->appendStylesheet("/css/nuevo-estilo.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time())
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/css/mobile-style.css?" . time());
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js");
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js");
         $model = new Application_Model_TipoCambio();
         $tipo = $model->obtener(date("Y-m-d"));
         if ($tipo !== false) {
@@ -176,11 +153,12 @@ class Principal_IndexController extends Zend_Controller_Action {
         $this->view->role = $this->_session->role;
     }
 
-    public function oeaAction() {
+    public function oeaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . "OEA";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/principal/index/oea.js?" . time());
+            ->appendFile("/js/principal/index/oea.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
         );
@@ -201,7 +179,8 @@ class Principal_IndexController extends Zend_Controller_Action {
     }
 
 
-    public function oaqTeEscuchaAction() {
+    public function oaqTeEscuchaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . "te escucha";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
@@ -216,12 +195,13 @@ class Principal_IndexController extends Zend_Controller_Action {
             ->appendFile("/js/common/toast/jquery.toast.min.js?")
             ->appendFile("/js/principal/index/oaq-te-escucha.js?" . time());
     }
-    
-    public function isoAction() {
+
+    public function isoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . "SGC 2015";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/principal/index/iso.js?" . time());
+            ->appendFile("/js/principal/index/iso.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
         );
@@ -255,8 +235,10 @@ class Principal_IndexController extends Zend_Controller_Action {
             $dr = $this->_buscarParentArray($i->directorio);
             $this->view->navigator = $dr;
             if ($i->directorio == 'be12223f8d48eaef222c432cfc3b5590b908d198') {
-                $arr_browsers = ["Firefox", "Chrome", "Safari", "Opera",
-                    "MSIE", "Trident", "Edge"];
+                $arr_browsers = [
+                    "Firefox", "Chrome", "Safari", "Opera",
+                    "MSIE", "Trident", "Edge"
+                ];
                 $agent = $_SERVER['HTTP_USER_AGENT'];
                 $user_browser = '';
                 foreach ($arr_browsers as $browser) {
@@ -284,13 +266,14 @@ class Principal_IndexController extends Zend_Controller_Action {
                 }
                 // echo "You are using " . $user_browser . " browser";
                 $this->view->videos = array(
-                     array("url" => "/videos/Capacitacion_CASA.mp4", "titulo" => "Capacitación sistema de pedimentos CASA", "compatible" => $compatible),
+                    array("url" => "/videos/Capacitacion_CASA.mp4", "titulo" => "Capacitación sistema de pedimentos CASA", "compatible" => $compatible),
                 );
             }
         }
     }
 
-    protected function _buscarParent($directorio) {
+    protected function _buscarParent($directorio)
+    {
         $rel = new Rrhh_Model_IsoRelCarpetas();
         $p = $rel->obtenerParent($directorio);
         if ($p["previo"]) {
@@ -299,7 +282,8 @@ class Principal_IndexController extends Zend_Controller_Action {
         return;
     }
 
-    protected function _buscarParentArray($directorio) {
+    protected function _buscarParentArray($directorio)
+    {
         $rel = new Rrhh_Model_IsoRelCarpetas();
         $p = $rel->obtenerParentArray($directorio);
         if ($p["previo"]) {
@@ -309,5 +293,4 @@ class Principal_IndexController extends Zend_Controller_Action {
         $p = $folders->obtener($directorio);
         return array("directorio" => $p["carpeta"], "nombreCarpeta" => $p["nombreCarpeta"]);
     }
-
 }

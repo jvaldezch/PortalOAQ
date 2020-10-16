@@ -1,13 +1,15 @@
 <?php
 
-class Usuarios_PostController extends Zend_Controller_Action {
+class Usuarios_PostController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_firephp;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -15,12 +17,13 @@ class Usuarios_PostController extends Zend_Controller_Action {
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $ajaxContext = $this->_helper->getHelper("AjaxContext");
         $ajaxContext->setAutoJsonSerialization(false)
-                ->addActionContext("encriptacion-sello", array("json"))
-                ->initContext();
+            ->addActionContext("encriptacion-sello", array("json"))
+            ->initContext();
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -31,7 +34,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function cambiarAlertaAction() {
+    public function cambiarAlertaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -100,7 +104,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarAlertaAction() {
+    public function agregarAlertaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -116,7 +121,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function enviarComunicadoAction() {
+    public function enviarComunicadoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -133,7 +139,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarClienteInhouseAction() {
+    public function agregarClienteInhouseAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -169,7 +176,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerClientesAction() {
+    public function obtenerClientesAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -204,7 +212,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function todasAduanasAction() {
+    public function todasAduanasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -242,7 +251,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerBodegasAction() {
+    public function obtenerBodegasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -259,7 +269,7 @@ class Usuarios_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($filters, $validators, $request->getPost());
                 if ($input->isValid("id")) {
                     $view = new Zend_View();
-                    $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/post/");                    
+                    $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/post/");
                     $mppr = new Bodega_Model_BodegasUsuarios();
                     $view->data = $mppr->obtenerTodos($input->id);
                     $view->idUsuario = $input->id;
@@ -272,7 +282,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarBodegaAction() {
+    public function agregarBodegaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -291,15 +302,14 @@ class Usuarios_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($filters, $validators, $request->getPost());
                 if ($input->isValid("idUsuario") && $input->isValid("idBodega")) {
                     $mppr = new Bodega_Model_BodegasUsuarios();
-                    
+
                     if (!($mppr->verificar($input->idUsuario, $input->idBodega))) {
-                        
+
                         if (($mppr->agregar($input->idUsuario, $input->idBodega))) {
                             $this->_helper->json(array("success" => true));
                         } else {
                             throw new Exception("El usuario ya cuenta con la bodega asignada.");
                         }
-                        
                     } else {
                         throw new Exception("El usuario ya cuenta con la bodega asignada.");
                     }
@@ -312,7 +322,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function removerBodegaAction() {
+    public function removerBodegaAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -331,13 +342,12 @@ class Usuarios_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($filters, $validators, $request->getPost());
                 if ($input->isValid("idUsuario") && $input->isValid("id")) {
                     $mppr = new Bodega_Model_BodegasUsuarios();
-                    
+
                     if (($mppr->borrar($input->idUsuario, $input->id))) {
                         $this->_helper->json(array("success" => true));
                     } else {
                         throw new Exception("No se pudo borrar.");
                     }
-                    
                 } else {
                     throw new Exception("Invalid input!");
                 }
@@ -347,7 +357,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerAduanasAction() {
+    public function obtenerAduanasAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -377,7 +388,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerPatentesSellosAction() {
+    public function obtenerPatentesSellosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -413,7 +425,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerAduanasSellosAction() {
+    public function obtenerAduanasSellosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -451,7 +464,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarInhouseRfcAction() {
+    public function borrarInhouseRfcAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -483,7 +497,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarPermisoSelloAction() {
+    public function agregarPermisoSelloAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -527,7 +542,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarUsuarioAction() {
+    public function agregarUsuarioAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -578,7 +594,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarUsuarioAction() {
+    public function actualizarUsuarioAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -634,7 +651,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerPasswordAction() {
+    public function obtenerPasswordAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -667,7 +685,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarDocumentosAction() {
+    public function actualizarDocumentosAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -699,7 +718,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function cerrarSesionAction() {
+    public function cerrarSesionAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -717,7 +737,7 @@ class Usuarios_PostController extends Zend_Controller_Action {
                 if ($input->isValid("id")) {
                     $mppr = new Application_Model_UsuarioSesiones();
                     if ($mppr->borrar($input->id)) {
-                        $this->_helper->json(array("success" => true));                        
+                        $this->_helper->json(array("success" => true));
                     }
                 } else {
                     throw new Exception("Invalid input!");
@@ -729,8 +749,9 @@ class Usuarios_PostController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function aplicacionSubirAction() {
+
+    public function aplicacionSubirAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -751,8 +772,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
                     $mppr = new Webservice_Model_AppVersion();
                     $upload = new Zend_File_Transfer_Adapter_Http();
                     $upload->addValidator("Count", false, array("min" => 1, "max" => 1))
-                            ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
-                            ->addValidator("Extension", false, array("extension" => "apk", "case" => false));
+                        ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                        ->addValidator("Extension", false, array("extension" => "apk", "case" => false));
                     $files = $upload->getFileInfo();
                     if (APPLICATION_ENV == "production") {
                         $directory = "/home/samba-share/app";
@@ -778,7 +799,7 @@ class Usuarios_PostController extends Zend_Controller_Action {
                                     if ($mppr->agregar($arr)) {
                                         $this->_helper->json(array("success" => true));
                                     } else {
-                                        $this->_helper->json(array("success" => false, "message" => "No se pudo agregar."));                                        
+                                        $this->_helper->json(array("success" => false, "message" => "No se pudo agregar."));
                                     }
                                 } else {
                                     $this->_helper->json(array("success" => false, "message" => "Ya existe el archivo."));
@@ -799,7 +820,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function purgarQueueAction() {
+    public function purgarQueueAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -832,7 +854,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarContactosAction() {
+    public function actualizarContactosAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -872,7 +895,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarContactoAction() {
+    public function borrarContactoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -905,7 +929,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function nuevoContactoAction() {
+    public function nuevoContactoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -931,7 +956,8 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function agregarContactoAction() {
+    public function agregarContactoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -948,8 +974,10 @@ class Usuarios_PostController extends Zend_Controller_Action {
                     "tipoContacto" => array("NotEmpty"),
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
-                if ($input->isValid("nombre") && $input->isValid("email")
-                    && $input->isValid("idAduana") && $input->isValid("tipoContacto")) {
+                if (
+                    $input->isValid("nombre") && $input->isValid("email")
+                    && $input->isValid("idAduana") && $input->isValid("tipoContacto")
+                ) {
 
                     $mppr = new Trafico_Model_ContactosMapper();
 
@@ -965,7 +993,6 @@ class Usuarios_PostController extends Zend_Controller_Action {
                     if (($mppr->agregar($arr))) {
                         $this->_helper->json(array("success" => true));
                     }
-
                 } else {
                     throw new Exception("Datos de solicitud no son válidos.");
                 }
@@ -977,4 +1004,118 @@ class Usuarios_PostController extends Zend_Controller_Action {
         }
     }
 
+    public function agregarEquipoAction()
+    {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
+                    "idUsuario" => array(new Zend_Filter_Digits())
+                );
+                $v = array(
+                    "idUsuario" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+                    "nombre" => array(new Zend_Validate_NotEmpty()),
+                    "marca" => array(new Zend_Validate_NotEmpty()),
+                    "modelo" => array(new Zend_Validate_NotEmpty()),
+                    "numeroSerie" => array(new Zend_Validate_NotEmpty()),
+                    "accesorios" => array(new Zend_Validate_NotEmpty()),
+                    "estado" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+                    "observaciones" => array(new Zend_Validate_NotEmpty()),
+                    "entrego" => array(new Zend_Validate_NotEmpty()),
+                    "recibio" => array(new Zend_Validate_NotEmpty()),
+                    "autorizo" => array(new Zend_Validate_NotEmpty()),
+                    "entregada" => array(new Zend_Validate_NotEmpty()),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("idUsuario")) {
+                    $mppr = new Usuarios_Model_UsuarioEquipos();
+                    $arr = array(
+                        "idUsuario" => $input->idUsuario,
+                        "nombre" => $input->nombre,
+                        "marca" => $input->marca,
+                        "modelo" => $input->modelo,
+                        "numeroSerie" => $input->numeroSerie,
+                        "accesorios" => $input->accesorios,
+                        "estado" => $input->estado,
+                        "observaciones" => $input->observaciones,
+                        "entrego" => $input->entrego,
+                        "recibio" => $input->recibio,
+                        "autorizo" => $input->autorizo,
+                        "entregada" => $input->entregada,
+                        "creado" => date("Y-m-d H:is")
+                    );
+                    if (($mppr->agregar($arr))) {
+                        $this->_helper->json(array("success" => true));
+                    }
+                } else {
+                    throw new Exception("Datos de solicitud no son válidos.");
+                }
+            } else {
+                throw new Exception("Tipo de solicitud no es válida.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function editarEquipoAction()
+    {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array(new Zend_Filter_StringTrim(), new Zend_Filter_StripTags()),
+                    "id" => array(new Zend_Filter_Digits()),
+                );
+                $v = array(
+                    "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+                    "nombre" => array(new Zend_Validate_NotEmpty()),
+                    "marca" => array(new Zend_Validate_NotEmpty()),
+                    "modelo" => array(new Zend_Validate_NotEmpty()),
+                    "numeroSerie" => array(new Zend_Validate_NotEmpty()),
+                    "accesorios" => array(new Zend_Validate_NotEmpty()),
+                    "estado" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+                    "observaciones" => array(new Zend_Validate_NotEmpty()),
+                    "entrego" => array(new Zend_Validate_NotEmpty()),
+                    "recibio" => array(new Zend_Validate_NotEmpty()),
+                    "autorizo" => array(new Zend_Validate_NotEmpty()),
+                    "entregada" => array(new Zend_Validate_NotEmpty()),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("id")) {
+                    $mppr = new Usuarios_Model_UsuarioEquipos();
+                    $arr = array(
+                        "nombre" => $input->nombre,
+                        "marca" => $input->marca,
+                        "modelo" => $input->modelo,
+                        "numeroSerie" => $input->numeroSerie,
+                        "accesorios" => $input->accesorios,
+                        "estado" => $input->estado,
+                        "observaciones" => $input->observaciones,
+                        "entrego" => $input->entrego,
+                        "recibio" => $input->recibio,
+                        "autorizo" => $input->autorizo,
+                        "entregada" => $input->entregada,
+                        "actualizado" => date("Y-m-d H:is")
+                    );
+                    if (($mppr->actualizar($input->id, $arr))) {
+                        $this->_helper->json(array("success" => true));
+                    }
+                } else {
+                    throw new Exception("Datos de solicitud no son válidos.");
+                }
+            } else {
+                throw new Exception("Tipo de solicitud no es válida.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
 }
