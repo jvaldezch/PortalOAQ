@@ -181,13 +181,13 @@ class Archivo_Model_RepositorioMapper
                 // ->setIntegrityCheck(false)
                 ->from($this->_db_table, array("count(*) AS total"))
                 // ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
-                ->where("a.referencia = ?", $reference)
-                ->where("a.tipo_archivo NOT IN (9999)");
+                ->where("referencia = ?", $reference)
+                ->where("tipo_archivo NOT IN (9999)");
             if (isset($patente)) {
-                $sql->where("a.patente = ?", $patente);
+                $sql->where("patente = ?", $patente);
             }
             if (isset($aduana)) {
-                $sql->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%");
+                $sql->where("aduana LIKE ?", substr($aduana, 0, 2) . "%");
             }
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
