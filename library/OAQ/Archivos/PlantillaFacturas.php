@@ -2,6 +2,9 @@
 
 require_once 'UUID.php';
 require_once "PHPExcel/IOFactory.php";
+
+date_default_timezone_set('UTC');
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -264,7 +267,7 @@ class OAQ_Archivos_PlantillaFacturas
         try {
             $arr = array(
                 "idFactura" => $idFactura,
-                "orden" => isset($producto["ORDEN"]) ? $producto["ORDEN"] : null,
+                "orden" => isset($producto["ORDEN"]) ? (int) $producto["ORDEN"] : null,
                 "consFactura" => null,
                 "numParte" => $this->_trimArray($producto["PARTE"]),
                 "fraccion" => isset($producto["FRACCION"]) ? $producto["FRACCION"] : null,
@@ -296,8 +299,12 @@ class OAQ_Archivos_PlantillaFacturas
 
     protected function _cambiarFecha($fecha)
     {
-        $exp = explode('/', $fecha);
-        return date("Y-m-d H:i:s", strtotime($exp[2] . '-' . $exp[1] . '-' . $exp[0]));
+        if (preg_match('/^(\d{2})/(\d{2})/(\d{4})$/', $fecha)) {
+            $exp = explode('/', $fecha);
+            return date("Y-m-d H:i:s", strtotime($exp[2] . '-' . $exp[1] . '-' . $exp[0]));
+        } else {
+            return date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($fecha));
+        }
     }
 
     protected function _insertProveedor($factura)
@@ -347,7 +354,7 @@ class OAQ_Archivos_PlantillaFacturas
                 "incoterm" => $factura["INCOTERM"],
                 "observaciones" => isset($factura["OBSERVACIONES"]) ? $factura["OBSERVACIONES"] : null,
                 "subdivision" => isset($factura["SUBDIVISION"]) ? $factura["SUBDIVISION"] : null,
-                "ordenFactura" => isset($factura["ORDEN_FACTURA"]) ? $factura["ORDEN_FACTURA"] : null,
+                "ordenFactura" => isset($factura["ORDEN_FACTURA"]) ? (int) $factura["ORDEN_FACTURA"] : null,
                 "valorFacturaUsd" => (float) $factura["VAL_DLS"],
                 "valorFacturaMonExt" => (float) $factura["VAL_EXT"],
                 "divisa" => $factura["DIVISA"],
@@ -442,7 +449,9 @@ class OAQ_Archivos_PlantillaFacturas
                         }
                     }
                 }
-
+                if (trim($tmp["NUM_FACTURA"]) == '') {
+                    continue;
+                }
                 $tmp["NUM_FACTURA"] = trim($tmp["NUM_FACTURA"]);
                 if (!isset($this->_invoices[$tmp["NUM_FACTURA"]])) {
                     $tmp["PRODUCTOS"] = array();
