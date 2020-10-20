@@ -212,8 +212,6 @@ class OAQ_Archivos_PlantillaFacturas
                 }
             }
 
-            $this->_firephp->info($this->_invoices);
-
             if (!empty($this->_invoices)) {
 
                 foreach ($this->_invoices as $factura) {
@@ -245,6 +243,7 @@ class OAQ_Archivos_PlantillaFacturas
             }
             return;
         } catch (Exception $ex) {
+            $this->_firephp->info($ex);
             throw new Exception($ex->getMessage());
         }
     }
@@ -291,6 +290,7 @@ class OAQ_Archivos_PlantillaFacturas
             );
             return $arr;
         } catch (Exception $ex) {
+            $this->_firephp->info($ex);
             throw new Exception($ex->getMessage());
         }
     }
@@ -332,6 +332,7 @@ class OAQ_Archivos_PlantillaFacturas
                 return $arr;
             }
         } catch (Exception $ex) {
+            $this->_firephp->info($ex);
             throw new Exception($ex->getMessage());
         }
     }
@@ -365,6 +366,7 @@ class OAQ_Archivos_PlantillaFacturas
                 return $arr;
             }
         } catch (Exception $ex) {
+            $this->_firephp->info($ex);
             throw new Exception($ex->getMessage());
         }
     }
@@ -395,6 +397,7 @@ class OAQ_Archivos_PlantillaFacturas
                 return $arr;
             }
         } catch (Exception $ex) {
+            $this->_firephp->info($ex);
             throw new Exception($ex->getMessage());
         }
     }
@@ -419,6 +422,7 @@ class OAQ_Archivos_PlantillaFacturas
                 unset($tmp);
             }
         } catch (Exception $ex) {
+            $this->_firephp->info($ex);
             throw new Exception($ex->getMessage());
         }
     }
@@ -565,6 +569,7 @@ class OAQ_Archivos_PlantillaFacturas
             );
             return strtr($string, $chars);
         } catch (Exception $ex) {
+            $this->_firephp->info($ex);
             throw new Exception($ex->getMessage());
         }
     }
