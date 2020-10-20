@@ -406,10 +406,27 @@ class Trafico_DataController extends Zend_Controller_Action
             ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
             ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
             ->appendStylesheet("/less/traffic-module.css?" . time());
-        $model = new Trafico_Model_TraficoSolicitudesMapper();
-        $arr = $model->obtenerMisSolicitudes($this->_session->id);
-        if (count($arr)) {
-            $this->view->data = $arr;
+        $f = array(
+            "*" => array("StringTrim", "StripTags"),
+            "idAduana" => array("Digits"),
+        );
+        $v = array(
+            "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
+        );
+        $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+
+        $s = new OAQ_SolicitudesAnticipo();
+        $s->obtenerPermisos($this->_session->id, $this->_session->role);
+
+        if ($input->isValid("idAduana")) {
+            $ads = $s->get_idCustoms();
+            if (in_array($input->idAduana, $ads)) {
+                $model = new Trafico_Model_TraficoSolicitudesMapper();
+                $arr = $model->obtenerMisSolicitudes($this->_session->id, $input->idAduana);
+                if (count($arr)) {
+                    $this->view->data = $arr;
+                }
+            }
         }
     }
 
@@ -1273,7 +1290,7 @@ class Trafico_DataController extends Zend_Controller_Action
             $concepts = $dbtable->obtener($header["idAduana"]);
 
             $chunk = array_chunk($concepts, 2);
-            
+
             $rows = array();
             $total = 0;
             foreach ($chunk as $item) {
