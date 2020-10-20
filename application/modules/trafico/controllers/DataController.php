@@ -11,6 +11,7 @@ class Trafico_DataController extends Zend_Controller_Action
     protected $_logger;
     protected $_rolesEditarTrafico;
     protected $_todosClientes;
+    protected $_firephp;
 
     public function init()
     {
@@ -20,6 +21,7 @@ class Trafico_DataController extends Zend_Controller_Action
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_logger = Zend_Registry::get("logDb");
+        $this->_firephp = Zend_Registry::get("firephp");
         $contextSwitch = $this->_helper->getHelper("contextSwitch");
         $contextSwitch->addActionContext("recent-coves", "json")
             ->addActionContext("borrar-solicitud-cove", "json")
@@ -837,12 +839,28 @@ class Trafico_DataController extends Zend_Controller_Action
             $r = $this->getRequest();
             if ($r->isPost()) {
                 $post = $r->getPost();
+
+                $f = array(
+                    "*" => array("StringTrim"),
+                    "idSolicitud" => "Digits",
+                    "idPlanta" => "Digits",
+                    "idAduana" => "Digits",
+                    "cvePed" => "StringToUpper",
+                );
+                $v = array(
+                    "idSolicitud" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idPlanta" => array("NotEmpty", new Zend_Validate_Int()),
+                    "cvePed" => array("NotEmpty"),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+
                 $model = new Trafico_Model_TraficoSolDetalleMapper();
                 $row = array(
-                    "idSolicitud" => $post["idSolicitud"],
-                    "idAduana" => $post["idAduana"],
-                    "idPlanta" => isset($post["idPlanta"]) ? $post["idPlanta"] : null,
-                    "cvePed" => $post["cvePed"],
+                    "idSolicitud" => ($input->isValid("idSolicitud")) ? $input->idSolicitud : null,
+                    "idAduana" => ($input->isValid("idAduana")) ? $input->idAduana : null,
+                    "idPlanta" => ($input->isValid("idPlanta")) ? $input->idPlanta : null,
+                    "cvePed" => $input->isValid("cvePed"),
                     "fechaArribo" => isset($post["fechaArribo"]) ? $post["fechaArribo"] : null,
                     "fechaAlmacenaje" => isset($post["fechaAlmacenaje"]) ? $post["fechaAlmacenaje"] : null,
                     "fechaEta" => isset($post["fechaEta"]) ? $post["fechaEta"] : null,
