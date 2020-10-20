@@ -1,10 +1,12 @@
 <?php
 
-class Trafico_Model_TraficoConceptosMapper {
+class Trafico_Model_TraficoConceptosMapper
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_TraficoConceptos();
     }
 
@@ -14,11 +16,12 @@ class Trafico_Model_TraficoConceptosMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtener($idAduana) {
+    public function obtener($idAduana)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idAduana = ?", $idAduana)
-                    ->order("concepto ASC");
+                ->where("idAduana = ?", $idAduana)
+                ->order("concepto ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 foreach ($stmt as $item) {
@@ -31,11 +34,12 @@ class Trafico_Model_TraficoConceptosMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function verificarConceptos($idAduana) {
+
+    public function verificarConceptos($idAduana)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idAduana = ?", $idAduana);
+                ->where("idAduana = ?", $idAduana);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -54,14 +58,15 @@ class Trafico_Model_TraficoConceptosMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtenerConValor($idAduana, $idSolicitud = null) {
+    public function obtenerConValor($idAduana, $idSolicitud = null)
+    {
         try {
             $tbl = new Trafico_Model_TraficoSolConceptoMapper();
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_conceptos"), array("*"))
-                    ->where("c.idAduana = ?", $idAduana)
-                    ->order(array("c.orden", "c.concepto"));
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_conceptos"), array("*"))
+                ->where("c.idAduana = ?", $idAduana)
+                ->order(array("c.orden", "c.concepto"));
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $data = array();
@@ -80,15 +85,16 @@ class Trafico_Model_TraficoConceptosMapper {
         }
     }
 
-    public function obtenerConCuentas($idAduana) {
+    public function obtenerConCuentas($idAduana)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_conceptos"), array("*"))
-                    ->joinLeft(array("a" => "trafico_cuentas"), "a.cuenta = c.idCuenta", array("cuenta as idCuenta", "concepto as nomContable"))
-                    ->joinLeft(array("t" => "trafico_tipoconcepto"), "t.id = a.idTipoConcepto", array("tipoConcepto"))
-                    ->where("c.idAduana = ?", $idAduana)
-                    ->order(array("c.orden", "c.concepto"));
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_conceptos"), array("*"))
+                ->joinLeft(array("a" => "trafico_cuentas"), "a.cuenta = c.idCuenta", array("cuenta as idCuenta", "concepto as nomContable"))
+                ->joinLeft(array("t" => "trafico_tipoconcepto"), "t.id = a.idTipoConcepto", array("tipoConcepto"))
+                ->where("c.idAduana = ?", $idAduana)
+                ->order(array("c.orden", "c.concepto"));
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 foreach ($stmt as $item) {
@@ -109,11 +115,12 @@ class Trafico_Model_TraficoConceptosMapper {
         }
     }
 
-    public function obtenerGenerales() {
+    public function obtenerGenerales()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idAduana = 2")
-                    ->order("concepto ASC");
+                ->where("idAduana = 2")
+                ->order("concepto ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 foreach ($stmt as $item) {
@@ -127,11 +134,12 @@ class Trafico_Model_TraficoConceptosMapper {
         }
     }
 
-    public function verificar($idAduana, $idCuenta) {
+    public function verificar($idAduana, $idCuenta)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idAduana = ?", $idAduana)
-                    ->where("idCuenta = ?", $idCuenta);
+                ->where("idAduana = ?", $idAduana)
+                ->where("idCuenta = ?", $idCuenta);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -142,11 +150,12 @@ class Trafico_Model_TraficoConceptosMapper {
         }
     }
 
-    public function nombreConcepto($idAduana, $id) {
+    public function nombreConcepto($idAduana, $id)
+    {
         try {
             $sql = $this->_db_table->select(array("concepto"))
-                    ->where("id = ?", $id)
-                    ->where("idAduana = ?", $idAduana);
+                ->where("id = ?", $id)
+                ->where("idAduana = ?", $idAduana);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt["concepto"];
@@ -157,7 +166,8 @@ class Trafico_Model_TraficoConceptosMapper {
         }
     }
 
-    public function agregar($data) {
+    public function agregar($data)
+    {
         try {
             $stmt = $this->_db_table->insert($data);
             if ($stmt) {
@@ -169,7 +179,8 @@ class Trafico_Model_TraficoConceptosMapper {
         }
     }
 
-    public function remover($idAduana, $idConcepto) {
+    public function remover($idAduana, $idConcepto)
+    {
         try {
             $stmt = $this->_db_table->delete(array(
                 "idAduana = ?" => $idAduana,
@@ -184,7 +195,8 @@ class Trafico_Model_TraficoConceptosMapper {
         }
     }
 
-    public function actualizarOrden($idConcepto, $orden) {
+    public function actualizarOrden($idConcepto, $orden)
+    {
         try {
             $stmt = $this->_db_table->update(array("orden" => $orden), array("id = ?" => $idConcepto));
             if ($stmt) {
@@ -195,5 +207,4 @@ class Trafico_Model_TraficoConceptosMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-
 }

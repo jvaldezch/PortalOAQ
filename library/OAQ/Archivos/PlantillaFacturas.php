@@ -238,9 +238,7 @@ class OAQ_Archivos_PlantillaFacturas
 
                             $this->_productosTrafico($idFactura, $id_prov, $factura["PRODUCTOS"]);
                         }
-
                     }
-
                 }
             } else {
                 throw new Exception("No invoices found.");
@@ -333,7 +331,6 @@ class OAQ_Archivos_PlantillaFacturas
             if (isset($arr)) {
                 return $arr;
             }
-
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }
@@ -367,7 +364,6 @@ class OAQ_Archivos_PlantillaFacturas
             if (isset($arr)) {
                 return $arr;
             }
-
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }
@@ -398,7 +394,6 @@ class OAQ_Archivos_PlantillaFacturas
             if (isset($arr)) {
                 return $arr;
             }
-
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }
@@ -573,5 +568,4 @@ class OAQ_Archivos_PlantillaFacturas
             throw new Exception($ex->getMessage());
         }
     }
-
 }
