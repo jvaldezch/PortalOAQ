@@ -524,21 +524,34 @@ window.getVucemSignatures = function () {
 };
 
 window.obtenerDefault = function (idCliente) {
-    return $.ajax({
-        url: '/trafico/get/obtener-sello-default', type: "GET",
-        data: { idCliente: idCliente },
-        success: function (res) {
-            if (res.success === true) {
-                $("input[name=sello][value=" + res.id + "]").prop("checked", true);
+
+    let idTrafico = $("#idTrafico").val();
+
+    if (Cookies.get(`portalSelloDefault_${idTrafico}`) !== undefined) {
+        let o = JSON.parse(Cookies.get(`portalSelloDefault_${idTrafico}`));
+        $("input[name=sello][value=" + o.idSello + "]").prop("checked", true);
+        return true;
+    } else {
+        return $.ajax({
+            url: '/trafico/get/obtener-sello-default', type: "GET",
+            data: { idCliente: idCliente },
+            success: function (res) {
+                if (res.success === true) {
+                    $("input[name=sello][value=" + res.id + "]").prop("checked", true);
+                }
             }
-        }
-    });
+        });
+    }
+
 };
 
 window.getVucemLog = function () {
+
+    let idTrafico = $("#idTrafico").val();
+
     $.ajax({
         url: "/trafico/get/vucem-bitacora", dataType: "json", type: "POST",
-        data: { idTrafico: $("#idTrafico").val() },
+        data: { idTrafico: idTrafico },
         success: function (res) {
             if (res.success === true) {
                 $("#vucemLog").html(res.html);
@@ -546,15 +559,29 @@ window.getVucemLog = function () {
             }
         }
     });
+    
 };
 
 window.establecerSello = function (idTrafico, idSello, tipo) {
+
+    let s = {
+        "idTrafico": idTrafico,
+        "idSello": idSello,
+        "tipo": tipo,
+    }
+
+    Cookies.set(`portalSelloDefault_${idTrafico}`, JSON.stringify(s), { expires: 7, path: '' });
+
     return $.ajax({
         url: "/trafico/post/establecer-sello-vucem", cache: false, dataType: "json", type: "POST",
         data: { idTrafico: idTrafico, idSello: idSello, tipo: tipo },
+        beforeSend: function () {
+            $.LoadingOverlay("show", { color: "rgba(255, 255, 255, 0.9)" });
+        },
         success: function (res) {
+            $.LoadingOverlay("hide");
             if (res.success === true) {
-
+                getVucemLog();
             } else {
                 $.alert({ title: "Advertencia", type: "red", content: res.message, boxWidth: "250px", useBootstrap: false });
             }

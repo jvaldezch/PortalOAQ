@@ -690,6 +690,7 @@ class Trafico_IndexController extends Zend_Controller_Action
             ->appendFile("/js/trafico/index/editar-trafico.js?" . time())
             ->appendFile("/js/common/jquery.slidereveal.min.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/moment.min.js")
             ->appendFile("/js/common/mensajero.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
