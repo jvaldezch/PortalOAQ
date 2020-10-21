@@ -5,7 +5,8 @@
  *
  * @author Jaime E. Valdez <jvaldezch@gmail.com>
  */
-class OAQ_SolicitudesAnticipo {
+class OAQ_SolicitudesAnticipo
+{
 
     protected $_log;
     protected $_notifications;
@@ -20,44 +21,96 @@ class OAQ_SolicitudesAnticipo {
     protected $_usernameId;
     protected $_schema;
     protected $_process;
+    protected $_rolesEditarTrafico = array("trafico", "super", "trafico_operaciones", "trafico_aero");
+    protected $_todosClientes = array("trafico", "super", "trafico_operaciones", "trafico_aero");
+    protected $_customs = [];
+    protected $_idCustoms = [];
+    protected $_customers = [];
 
-    function set_username($_username) {
+    function set_username($_username)
+    {
         $this->_username = $_username;
     }
 
-    function set_usernameId($_usernameId) {
+    function set_usernameId($_usernameId)
+    {
         $this->_usernameId = $_usernameId;
     }
-    
-    function get_esquema() {
+
+    function get_esquema()
+    {
         return $this->_esquema;
     }
 
-    function set_esquema($_esquema) {
+    function set_esquema($_esquema)
+    {
         $this->_esquema = $_esquema;
     }
 
-    function set_process($_process) {
+    function set_process($_process)
+    {
         $this->_process = $_process;
     }
 
-    function get_row() {
+    function get_row()
+    {
         return $this->_row;
     }
 
-    function get_header() {
+    function get_header()
+    {
         return $this->_header;
     }
-    
-    function get_prop() {
+
+    function get_prop()
+    {
         return $this->_prop;
     }
 
-    function get_process() {
+    function get_process()
+    {
         return $this->_process;
     }
 
-    function __construct($idSolicitud = null) {
+    public function get_customers()
+    {
+        return $this->_customers;
+    }
+
+    public function get_customs()
+    {
+        return $this->_customs;
+    }
+
+    public function get_idCustoms()
+    {
+        return $this->_idCustoms;
+    }
+
+    public function obtenerPermisos($idUsuario, $role)
+    {
+        if (in_array($role, $this->_todosClientes)) {
+            $model = new Trafico_Model_ClientesMapper();
+            $customs = new Trafico_Model_TraficoAduanasMapper();
+            $this->_customers = $model->obtenerTodos();
+            $this->_customs = $customs->aduanas();
+        } else {
+            $customs = new Application_Model_UsuariosAduanasMapper();
+            $model = new Trafico_Model_TraficoUsuClientesMapper();
+            $this->_customers = $model->obtenerClientes($idUsuario);
+            $this->_customs = $customs->aduanasDeUsuario($idUsuario);
+        }
+        if (!empty($this->_customs)) {
+            foreach ($this->_customs as $k => $v) {
+                if ($k !== '-' && (int) $k !== 0) {
+                    $this->_idCustoms[] = $k;
+                }
+            }
+        }
+    }
+
+    function __construct($idSolicitud = null)
+    {
         $this->_notifications = new Trafico_Model_NotificacionesMapper();
         $this->_log = new Trafico_Model_BitacoraMapper();
         if (isset($idSolicitud)) {
@@ -76,7 +129,8 @@ class OAQ_SolicitudesAnticipo {
         return;
     }
 
-    public function enviarTramite($esquema = null) {
+    public function enviarTramite($esquema = null)
+    {
         $this->_row->setAutorizada(2);
         $this->_row->setTramite(1);
         $this->_row->setEsquema($esquema);
@@ -88,7 +142,8 @@ class OAQ_SolicitudesAnticipo {
         return false;
     }
 
-    public function aprobada($esquema = null) {
+    public function aprobada($esquema = null)
+    {
         $arr = array(
             "autorizada" => 1,
             "esquema" => $esquema,
@@ -108,25 +163,28 @@ class OAQ_SolicitudesAnticipo {
         }
         return false;*/
     }
-    
-    public function cancelar() {
+
+    public function cancelar()
+    {
         $this->_row->setBorrada(1);
         $this->_row->setActualizada(date("Y-m-d H:i:s"));
         return false;
     }
 
-    public function enviarDepositoMultiple($arr) {
+    public function enviarDepositoMultiple($arr)
+    {
         if (($this->_mapper->actualizar($this->_idSolicitud, $arr))) {
             $this->_bitacoraAprobacion();
             if (APPLICATION_ENV == "production") {
-                $this->_email();            
+                $this->_email();
             }
             return true;
         }
         return;
     }
-    
-    public function enviarDeposito($esquema = null) {
+
+    public function enviarDeposito($esquema = null)
+    {
         $arr = array(
             "autorizada" => 3,
             "esquema" => $esquema,
@@ -136,7 +194,7 @@ class OAQ_SolicitudesAnticipo {
         if (($this->_mapper->actualizar($this->_idSolicitud, $arr))) {
             $this->_bitacoraAprobacion();
             if (APPLICATION_ENV == "production") {
-                $this->_email();            
+                $this->_email();
             }
             return true;
         }
@@ -152,8 +210,9 @@ class OAQ_SolicitudesAnticipo {
         }
         return false;*/
     }
-    
-    public function autorizarBanamex($idSolicitud, $esquema = null) {
+
+    public function autorizarBanamex($idSolicitud, $esquema = null)
+    {
         $mppr = new Trafico_Model_TraficoSolicitudesMapper();
         $arr = array(
             "autorizada" => 3,
@@ -167,7 +226,8 @@ class OAQ_SolicitudesAnticipo {
         return;
     }
 
-    public function autorizarHsbc($idSolicitud, $esquema = null) {
+    public function autorizarHsbc($idSolicitud, $esquema = null)
+    {
         $mppr = new Trafico_Model_TraficoSolicitudesMapper();
         $arr = array(
             "autorizada" => 3,
@@ -181,7 +241,8 @@ class OAQ_SolicitudesAnticipo {
         return;
     }
 
-    public function proceso($estatus, $hsbc = null, $banamex = null) {
+    public function proceso($estatus, $hsbc = null, $banamex = null)
+    {
         if ($hsbc) {
             return 5;
         }
@@ -200,20 +261,22 @@ class OAQ_SolicitudesAnticipo {
         return;
     }
 
-    protected function _bitacoraAprobacion() {
+    protected function _bitacoraAprobacion()
+    {
         $log = array(
             "patente" => $this->_header["patente"],
             "aduana" => $this->_header["aduana"],
             "pedimento" => $this->_header["pedimento"],
             "referencia" => $this->_header["referencia"],
-            "bitacora" => (isset($this->_esquema)) ? "SE APROBO SOLICITUD DE ANTICIPO [" . $this->_mapper->decripcionEsquemaFondos($this->_esquema) . "]": null,
+            "bitacora" => (isset($this->_esquema)) ? "SE APROBO SOLICITUD DE ANTICIPO [" . $this->_mapper->decripcionEsquemaFondos($this->_esquema) . "]" : null,
             "usuario" => $this->_username,
             "creado" => date("Y-m-d H:i:s"),
         );
         $this->_log->agregar($log);
     }
-    
-    protected function _bitacoraEnTramite() {
+
+    protected function _bitacoraEnTramite()
+    {
         $log = array(
             "patente" => $this->_header["patente"],
             "aduana" => $this->_header["aduana"],
@@ -226,7 +289,8 @@ class OAQ_SolicitudesAnticipo {
         $this->_log->agregar($log);
     }
 
-    protected function _bitacoraDepositado() {
+    protected function _bitacoraDepositado()
+    {
         $log = array(
             "patente" => $this->_header["patente"],
             "aduana" => $this->_header["aduana"],
@@ -239,7 +303,8 @@ class OAQ_SolicitudesAnticipo {
         $this->_log->agregar($log);
     }
 
-    protected function _email() {
+    protected function _email()
+    {
         $array = array(
             "idAduana" => $this->_prop["idAduana"],
             "contenido" => "Se ha realizado el depósito de la solicitud número " . $this->_idSolicitud . " referencia " . $this->_prop["referencia"] . " pedimento " . $this->_prop["aduana"] . "-" . $this->_prop["patente"] . "-" . $this->_prop["pedimento"] . "<br><p></p>",
@@ -258,5 +323,4 @@ class OAQ_SolicitudesAnticipo {
         $misc->execCurl("enviar-email");
         return true;
     }
-
 }
