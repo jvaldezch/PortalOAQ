@@ -7,6 +7,14 @@
                 <?php } ?>
             </td>
             <td>
+                <?php if(isset($item["rfcCliente"])) { ?>
+                    <?= $item["rfcCliente"] ?>
+                <?php } ?>
+                <?php if(isset($item["rfcAgente"])) { ?>
+                    <?= $item["rfcAgente"] ?>
+                <?php } ?>
+            </td>
+            <td>
                 <div style="font-size:1.2em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
                     <i class="fas fa-code" onclick="vucemPreview(<?= $item["id"] ?>);" style="cursor: pointer" title="Mostrar XML"></i>
                 </div>                

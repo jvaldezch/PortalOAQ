@@ -6,7 +6,8 @@
  * and open the template in the editor.
  */
 
-class OAQ_Archivos_SellosVucem {
+class OAQ_Archivos_SellosVucem
+{
 
     protected $id;
     protected $idCliente;
@@ -32,71 +33,88 @@ class OAQ_Archivos_SellosVucem {
     protected $_log;
     protected $_db;
 
-    function setId($id) {
+    function setId($id)
+    {
         $this->id = $id;
     }
 
-    function setIdCliente($idCliente) {
+    function setIdCliente($idCliente)
+    {
         $this->idCliente = $idCliente;
     }
-    
-    function setIdAgente($idAgente) {
+
+    function setIdAgente($idAgente)
+    {
         $this->idAgente = $idAgente;
     }
-    
-    function setPatente($patente) {
+
+    function setPatente($patente)
+    {
         $this->patente = $patente;
     }
 
-    function setIdSelloCliente($idSelloCliente) {
+    function setIdSelloCliente($idSelloCliente)
+    {
         $this->idSelloCliente = $idSelloCliente;
     }
 
-    function setRfc($rfc) {
+    function setRfc($rfc)
+    {
         $this->rfc = $rfc;
     }
 
-    function setRazonSocial($razonSocial) {
+    function setRazonSocial($razonSocial)
+    {
         $this->razonSocial = $razonSocial;
     }
 
-    function setVuPass($vuPass) {
+    function setVuPass($vuPass)
+    {
         $this->vuPass = $vuPass;
     }
 
-    function setWsPass($wsPass) {
+    function setWsPass($wsPass)
+    {
         $this->wsPass = $wsPass;
     }
 
-    function setKeyFile($keyFile) {
+    function setKeyFile($keyFile)
+    {
         $this->keyFile = $keyFile;
     }
 
-    function setCerFile($cerFile) {
+    function setCerFile($cerFile)
+    {
         $this->cerFile = $cerFile;
     }
 
-    function setCerFileName($cerFileName) {
+    function setCerFileName($cerFileName)
+    {
         $this->cerFileName = $cerFileName;
     }
 
-    function setKeyFileName($keyFileName) {
+    function setKeyFileName($keyFileName)
+    {
         $this->keyFileName = $keyFileName;
     }
 
-    function setTipo($tipo) {
+    function setTipo($tipo)
+    {
         $this->tipo = $tipo;
     }
 
-    function setFigura($figura) {
+    function setFigura($figura)
+    {
         $this->figura = $figura;
     }
 
-    function setUsuario($usuario) {
+    function setUsuario($usuario)
+    {
         $this->usuario = $usuario;
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $method = "set" . $name;
         if (("mapper" == $name) || !method_exists($this, $method)) {
             throw new Exception("Invalid property: " . $name);
@@ -104,7 +122,8 @@ class OAQ_Archivos_SellosVucem {
         $this->$method($value);
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         $method = "get" . $name;
         if (("mapper" == $name) || !method_exists($this, $method)) {
             throw new Exception("Invalid property: " . $name);
@@ -112,7 +131,8 @@ class OAQ_Archivos_SellosVucem {
         return $this->$method();
     }
 
-    public function setOptions(array $options) {
+    public function setOptions(array $options)
+    {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
             $method = "set" . ucfirst($key);
@@ -123,30 +143,32 @@ class OAQ_Archivos_SellosVucem {
         return $this;
     }
 
-    public function __construct(array $options = null) {
+    public function __construct(array $options = null)
+    {
         if (is_array($options)) {
             $this->setOptions($options);
         }
         $this->_log = new Trafico_Model_SellosLogs();
     }
-    
-    public function actualizarWs() {
+
+    public function actualizarWs()
+    {
         $mppr = new Trafico_Model_SellosClientes();
         if (isset($this->id)) {
             $arr["password_ws"] = new Zend_Db_Expr("AES_ENCRYPT('{$this->wsPass}', '{$this->_key}')");
             $arr["actualizado"] = date("Y-m-d H:i:s");
             $arr["actualizadoPor"] = $this->usuario;
             if ($mppr->actualizar($this->id, $arr)) {
-                $this->_addToLog($this->rfc . ": Se contrseña de Servicios Web para sellos con Id {$this->id}.");
+                $this->_addToLog("Se actualizó contraseña de Servicios Web para sellos con Id {$this->id}.");
                 return true;
             }
-            
         } else {
             throw new Exception("Id is not set!");
         }
     }
 
-    public function guardarSello() {
+    public function guardarSello()
+    {
         $mppr = new Trafico_Model_SellosClientes();
         $arr = array(
             "certificado_nom" => basename($this->cerFileName),
@@ -190,7 +212,8 @@ class OAQ_Archivos_SellosVucem {
         return;
     }
 
-    public function guardarSelloAgente() {
+    public function guardarSelloAgente()
+    {
         $mppr = new Trafico_Model_SellosAgentes();
         $arr = array(
             "certificado_nom" => basename($this->cerFileName),
@@ -237,7 +260,8 @@ class OAQ_Archivos_SellosVucem {
         return;
     }
 
-    public function analizarSello() {
+    public function analizarSello()
+    {
         $msg = array(
             "success" => true,
             "messages" => array()
@@ -261,12 +285,14 @@ class OAQ_Archivos_SellosVucem {
         return $msg;
     }
 
-    protected function _replaceExtension($filename, $new_extension, $subfix = null) {
+    protected function _replaceExtension($filename, $new_extension, $subfix = null)
+    {
         $pathinfo = pathinfo($filename);
         return $pathinfo['dirname'] . DIRECTORY_SEPARATOR . $pathinfo['filename'] . (isset($subfix) ? $subfix : '') . '.' . $new_extension;
     }
 
-    protected function _probarKey() {
+    protected function _probarKey()
+    {
 
         $this->pemFile = $this->_replaceExtension($this->keyFile, 'pem');
         $this->spemFile = $this->_replaceExtension($this->keyFile, 'pem', '_secure');
@@ -318,7 +344,8 @@ class OAQ_Archivos_SellosVucem {
         }
     }
 
-    protected function _analizarValidez($output) {
+    protected function _analizarValidez($output)
+    {
         if (isset($output[0])) {
             $exp = explode("=", $output[0]);
             if (isset($exp[1])) {
@@ -333,7 +360,8 @@ class OAQ_Archivos_SellosVucem {
         }
     }
 
-    protected function _probarWs() {
+    protected function _probarWs()
+    {
         $doc = new DOMDocument("1.0", "utf-8");
         $doc->formatOutput = true;
         $root = $doc->createElementNS("http://schemas.xmlsoap.org/soap/envelope/", "soapenv:Envelope");
@@ -382,7 +410,8 @@ class OAQ_Archivos_SellosVucem {
         }
     }
 
-    protected function _addToLog($msg) {
+    protected function _addToLog($msg)
+    {
         $arr = array(
             "idAgente" => isset($this->idAgente) ? $this->idAgente : null,
             "idCliente" => isset($this->idCliente) ? $this->idCliente : null,
@@ -394,8 +423,9 @@ class OAQ_Archivos_SellosVucem {
         );
         $this->_log->agregar($arr);
     }
-    
-    public function actualizarSelloDesdeTrafico($idSelloCliente, $idVucemFirmante) {
+
+    public function actualizarSelloDesdeTrafico($idSelloCliente, $idVucemFirmante)
+    {
         try {
             $this->_db = Zend_Registry::get("oaqintranet");
             $sql = "UPDATE trafico_sellos_clientes AS i, (SELECT
@@ -438,5 +468,4 @@ class OAQ_Archivos_SellosVucem {
             throw new Exception($ex->getMessage());
         }
     }
-
 }

@@ -723,18 +723,23 @@ class OAQ_TraficoVucem {
     }
 
     public function enviarCove($idVucem, $idTrafico, $idFactura, $send = true, $save = false) {
+        
         $sello = $this->_obtenerSello($idVucem);
         
         $uti = new Utilerias_Vucem(true);
+
         $uti->set_patente($this->patente);
         $uti->set_aduana($this->aduana);
         $uti->set_pedimento($this->pedimento);
         $uti->set_referencia($this->referencia);
         
         $rfc = new Trafico_Model_RfcConsultaMapper();
+
         $trafico = $this->_obtenerTrafico($idTrafico);
         $factura = $this->_obtenerFactura($idFactura);
+
         $cliente = $this->_obtenerCliente($trafico["idCliente"]);
+
         if (empty($sello)) {
             throw new Exception("No se encontro sello para cliente con RFC {$trafico["rfc"]}.");
         }
@@ -788,7 +793,9 @@ class OAQ_TraficoVucem {
                 "coveAdenda" => $coveAdenda,
             );
             $productos = $this->_obtenerProductos($idFactura);
+
             $mercancia = array();
+
             foreach ($productos as $prod) {
                 if (isset($prod["cantidadFactura"]) && isset($prod["precioUnitario"])) {
                     $valorTotal = $prod["cantidadFactura"] * $prod["precioUnitario"];                    
@@ -816,11 +823,13 @@ class OAQ_TraficoVucem {
             $this->_proveedorDestinatario($uti, $trafico["ie"], $cliente, $factura["idPro"]);
             if ($send == true) {
                 $this->xml = $uti->xmlCove($this->coveArray, false, $save);
+
                 if (file_exists($uti->get_filename())) {
                     $this->_actualizarArchivo($idFactura, $uti->get_filename());
                     $this->filename = $uti->getXmlFilename();
                 }
                 return $this->_enviarXmlCove();
+
             } else {
                 $xml = $uti->xmlCove($this->coveArray, false, $save);
                 $this->filename = $uti->getXmlFilename();

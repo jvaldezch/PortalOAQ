@@ -1564,14 +1564,29 @@ class Trafico_GetController extends Zend_Controller_Action
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico));
                 $keys = new Trafico_Model_CliSello();
                 $id_sello_cli = $keys->obtenerDefault($trafico->getIdCliente());
+
                 if ($id_sello_cli) {
-                    $mppr->establecerSelloCliente($input->idTrafico, $id_sello_cli);
+
+                    $ss = new Trafico_Model_SellosClientes();
+                    $vigencia = $ss->obtenerVencimientoPorId($id_sello_cli);
+
+                    $now = time();
+                    $your_date = strtotime($vigencia['valido_desde']);
+                    $datediff = $now - $your_date;
+
+                    $r = round($datediff / (60 * 60 * 24));
+
+                    if ($r < 0) {
+                        $mppr->establecerSelloCliente($input->idTrafico, $id_sello_cli);
+                    }
                 }
+
                 $arr = $mppr->obtener($input->idTrafico);
 
                 if (isset($arr) && !empty($arr)) {
                     $view->results = $arr;
                 }
+
                 $view->idTrafico = $input->idTrafico;
                 $this->_helper->json(array("success" => true, "html" => $view->render("vucem-bitacora.phtml")));
             }

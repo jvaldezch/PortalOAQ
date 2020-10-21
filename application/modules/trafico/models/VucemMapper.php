@@ -1,10 +1,12 @@
 <?php
 
-class Trafico_Model_VucemMapper {
+class Trafico_Model_VucemMapper
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_Vucem();
     }
 
@@ -14,7 +16,8 @@ class Trafico_Model_VucemMapper {
      * @return boolean
      * @throws Exception
      */
-    public function agregar($data) {
+    public function agregar($data)
+    {
         try {
             $stmt = $this->_db_table->insert($data);
             if ($stmt) {
@@ -25,8 +28,9 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function actualizar($id, $arr) {
+
+    public function actualizar($id, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
             if ($stmt) {
@@ -45,11 +49,12 @@ class Trafico_Model_VucemMapper {
      * @return boolean
      * @throws Exception
      */
-    public function verificarEdocument($idTrafico, $idArchivo) {
+    public function verificarEdocument($idTrafico, $idArchivo)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idTrafico = ?", $idTrafico)
-                    ->where("idArchivo = ?", $idArchivo);
+                ->where("idTrafico = ?", $idTrafico)
+                ->where("idArchivo = ?", $idArchivo);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -59,7 +64,7 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
+
     /**
      * 
      * @param int $idTrafico
@@ -67,11 +72,12 @@ class Trafico_Model_VucemMapper {
      * @return boolean
      * @throws Exception
      */
-    public function verificarFactura($idTrafico, $idFactura) {
+    public function verificarFactura($idTrafico, $idFactura)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idTrafico = ?", $idTrafico)
-                    ->where("idFactura = ?", $idFactura);
+                ->where("idTrafico = ?", $idTrafico)
+                ->where("idFactura = ?", $idFactura);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -88,14 +94,18 @@ class Trafico_Model_VucemMapper {
      * @return boolean
      * @throws Exception
      */
-    public function obtener($idTrafico) {
+    public function obtener($idTrafico)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("v" => "trafico_vucem"), "*")
-                    ->joinLeft(array("f" => "trafico_factdetalle"), "f.idFactura = v.idFactura", array("archivoCove AS archivoXml"))
-                    ->where("v.idTrafico = ?", $idTrafico)
-                    ->order("v.creado DESC");
+                ->setIntegrityCheck(false)
+                ->from(array("v" => "trafico_vucem"), "*")
+                ->joinLeft(array("f" => "trafico_factdetalle"), "f.idFactura = v.idFactura", array("archivoCove AS archivoXml"))
+                ->joinLeft(array("c" => "trafico_sellos_clientes"), "c.idCliente = v.idSelloCliente", array("rfc AS rfcCliente"))
+                ->joinLeft(array("a" => "trafico_sellos_agentes"), "a.id = v.idSelloAgente", array())
+                ->joinLeft(array("g" => "trafico_agentes"), "g.id = a.idAgente", array("rfc AS rfcAgente"))
+                ->where("v.idTrafico = ?", $idTrafico)
+                ->order("v.creado DESC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $mppr = new Trafico_Model_TraficoVucemLog();
@@ -114,18 +124,19 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
+
     /**
      * 
      * @param int $idTrafico
      * @return boolean
      * @throws Exception
      */
-    public function obtenerConfig($idTrafico) {
+    public function obtenerConfig($idTrafico)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idTrafico = ?", $idTrafico)
-                    ->order("creado DESC");
+                ->where("idTrafico = ?", $idTrafico)
+                ->order("creado DESC");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -135,17 +146,18 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
+
     /**
      * 
      * @param int $idFactura
      * @return boolean
      * @throws Exception
      */
-    public function obtenerPorFactura($idFactura, $cove = null) {
+    public function obtenerPorFactura($idFactura, $cove = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idFactura = ?", $idFactura);
+                ->where("idFactura = ?", $idFactura);
             if (isset($cove)) {
                 $sql->where("edocument = ?", $cove);
             }
@@ -158,17 +170,18 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
+
     /**
      * 
      * @param int $idVucem
      * @return boolean
      * @throws Exception
      */
-    public function obtenerVucem($idVucem) {
+    public function obtenerVucem($idVucem)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("id = ?", $idVucem);
+                ->where("id = ?", $idVucem);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -179,9 +192,10 @@ class Trafico_Model_VucemMapper {
         }
     }
 
-    public function establecerSelloAgente($idTrafico, $idSello) {
+    public function establecerSelloAgente($idTrafico, $idSello)
+    {
         try {
-            $stmt = $this->_db_table->update(array("idSelloAgente" => $idSello, "idSelloCliente" => null), array("idTrafico = ?" => $idTrafico));
+            $stmt = $this->_db_table->update(array("idSelloAgente" => $idSello, "idSelloCliente" => null), array("idTrafico = ?" => $idTrafico, "edocument IS NULL"));
             if ($stmt) {
                 return true;
             }
@@ -191,9 +205,10 @@ class Trafico_Model_VucemMapper {
         }
     }
 
-    public function establecerSelloCliente($idTrafico, $idSello) {
+    public function establecerSelloCliente($idTrafico, $idSello)
+    {
         try {
-            $stmt = $this->_db_table->update(array("idSelloCliente" => $idSello, "idSelloAgente" => null), array("idTrafico = ?" => $idTrafico));
+            $stmt = $this->_db_table->update(array("idSelloCliente" => $idSello, "idSelloAgente" => null), array("idTrafico = ?" => $idTrafico, "edocument IS NULL"));
             if ($stmt) {
                 return true;
             }
@@ -202,8 +217,9 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function borrar($id) {
+
+    public function borrar($id)
+    {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $id));
             if ($stmt) {
@@ -214,8 +230,9 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function borrarIdFactura($idFactura) {
+
+    public function borrarIdFactura($idFactura)
+    {
         try {
             $stmt = $this->_db_table->delete(array("idFactura = ?" => $idFactura));
             if ($stmt) {
@@ -226,5 +243,4 @@ class Trafico_Model_VucemMapper {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-
 }
