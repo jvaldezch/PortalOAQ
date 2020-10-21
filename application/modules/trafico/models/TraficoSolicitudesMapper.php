@@ -141,7 +141,7 @@ class Trafico_Model_TraficoSolicitudesMapper
         }
     }
 
-    public function obtenerMisSolicitudes($idUsuario)
+    public function obtenerMisSolicitudes($idUsuario, $idAduana = null)
     {
         try {
             $det = new Trafico_Model_TraficoSolDetalleMapper();
@@ -152,8 +152,13 @@ class Trafico_Model_TraficoSolicitudesMapper
                 ->joinLeft(array("c" => "trafico_clientes"), "s.idCliente = c.id", array("nombre as nombreCliente"))
                 ->joinLeft(array("a" => "trafico_aduanas"), "s.idAduana = a.id", array("aduana", "patente"))
                 ->where("s.enviada IS NULL")
-                ->where("s.idUsuario = ?", $idUsuario)
+                // ->where("s.idUsuario = ?", $idUsuario)
                 ->order("creado DESC");
+            if (isset($idAduana)) {
+                $sql->where("a.id = ?", $idAduana);
+            } else {
+                $sql->where("s.idUsuario = ?", $idUsuario);
+            }
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $data = array();
