@@ -282,23 +282,19 @@ class Trafico_IndexController extends Zend_Controller_Action
         $this->view->headLink()
             ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
+            ->appendFile("/js/common/bootstrap-datatable.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/moment.min.js")
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
             ->appendFile("/js/trafico/index/crear-nueva-solicitud.js?" . time());
         if (!in_array($this->_session->role, $this->_rolesEditarTrafico)) {
             $this->view->error = "Usted no tiene permisos para consultar esta página.";
         } else {
-            $customs = new Application_Model_UsuariosAduanasMapper();
-            if (in_array($this->_session->role, $this->_todosClientes)) {
-                $model = new Trafico_Model_ClientesMapper();
-                $customers = $model->obtenerTodos();
-                $m = new Trafico_Model_TraficoAduanasMapper();
-                $aduanas = $m->aduanas();
-            } else {
-                $model = new Trafico_Model_TraficoUsuClientesMapper();
-                $customers = $model->obtenerClientes($this->_session->id);
-                $aduanas = $customs->aduanasDeUsuario($this->_session->id);
-            }
-            $form = new Trafico_Form_CrearSolicitud(array("clientes" => $customers, "aduanas" => $aduanas));
+
+            $s = new OAQ_SolicitudesAnticipo();
+            $s->obtenerPermisos($this->_session->id, $this->_session->role);
+
+            $form = new Trafico_Form_CrearSolicitud(array("clientes" => $s->get_customers(), "aduanas" => $s->get_customs()));
             $this->view->form = $form;
         }
     }
@@ -690,6 +686,7 @@ class Trafico_IndexController extends Zend_Controller_Action
             ->appendFile("/js/trafico/index/editar-trafico.js?" . time())
             ->appendFile("/js/common/jquery.slidereveal.min.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/moment.min.js")
             ->appendFile("/js/common/mensajero.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
@@ -1878,6 +1875,7 @@ class Trafico_IndexController extends Zend_Controller_Action
             ->appendFile("/easyui/jquery.easyui.min.js")
             ->appendFile("/easyui/jquery.edatagrid.js")
             ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/js/common/moment.min.js")
             ->appendFile("/easyui/locale/easyui-lang-es.js")
             ->appendFile("/js/trafico/index/editar-traficos.js?" . time())
             ->appendFile("/js/common/jquery.slidereveal.min.js")

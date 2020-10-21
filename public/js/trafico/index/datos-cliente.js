@@ -147,11 +147,11 @@ window.obtenerSellos = function (idCliente) {
         url: '/trafico/get/obtener-sellos-cliente', type: "GET",
         data: { idCliente: idCliente },
         beforeSend: function () {
-            $("#customer-vucem").LoadingOverlay("show", { color: "rgba(255, 255, 255, 0.9)" });
+            $("body").LoadingOverlay("show", { color: "rgba(255, 255, 255, 0.9)" });
             $("#sellos-cliente").html('');
         },
         success: function (res) {
-            $("#customer-vucem").LoadingOverlay("hide");
+            $("body").LoadingOverlay("hide");
             if (res.success === true) {
                 $("#sellos-cliente").html(res.html);
                 return true;

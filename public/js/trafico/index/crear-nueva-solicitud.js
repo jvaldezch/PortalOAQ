@@ -3,31 +3,83 @@
  * 2015.may.14
  */
 
+let id_aduana;
+let id_cliente;
+
+window.allCustomsRequests = function (idAduana) {
+    $.ajax({
+        url: "/trafico/post/solicitudes",
+        cache: false,
+        type: "post",
+        dataType: "json",
+        data: { idAduana: idAduana },
+        beforeSend: function () {
+            $('body').LoadingOverlay('show', { color: 'rgba(255, 255, 255, 0.9)' });
+        },
+        success: function (res) {
+            $('body').LoadingOverlay('hide');
+            $("#mis-solicitudes").html('');
+            if (res.success === true) {
+                for (var i = 0; i < res.results.length; i++) {
+                    var row = res.results[i];
+                    let html = '<tr>';
+                    if (row.detalle && row.conceptos) {
+                        html += `<td style="text-align: center; color: #2f3b58"><i title="Enviar solicitud" style="cursor: pointer; font-size: 1.4em" class="fas fa-inbox" onclick="sendRequest(${row.id},${row.idAduana});"></i></td>`;
+                    } else {
+                        html += '<td>&nbsp;</td>';
+                    }
+                    html += `<td>${row.nombreCliente}</td>`;
+                    html += `<td style="text-align: center">${row.aduana}-${row.patente}-${row.pedimento}</td>`;
+                    html += `<td style="text-align: center">${row.referencia}</td>`;
+                    html += `<td style="text-align: center">${row.complemento == null ? '' : 'S'}</td>`;
+                    html += `<td style="text-align: center">${moment(row.creado).format('MM/DD/YYYY hh:mm a')}</td>`;
+                    html += `<td style="text-align: center; color: #2f3b58; padding: 3px !important">`;
+                    html += `<i class="fas fa-pencil-alt" onclick="editRequest(${row.id},${row.idAduana});" style="cursor: pointer; font-size: 1.4em; margin-right: 5px"></i>`;
+                    html += `<i class="far fa-trash-alt" onclick="deletePreRequest(${row.id});" style="cursor: pointer; font-size: 1.4em"></i>`;
+                    html += `</td>`;
+                    html += '</tr>';
+                    $("#mis-solicitudes").append(html);
+                }
+
+            } else {
+                $("#mis-solicitudes").append(`<tr><td colspan="7" style="text-align: center;"><em>${res.message}</em></td></tr>`);
+            }
+        }
+    }).done(function (res) {
+    });
+}
 
 $(document).ready(function () {
 
     $(document.body).on("change", "select[name^='aduana']", function () {
+        id_aduana = $("#aduana").val();
+        Cookies.set("portalSolicitudAduana", id_aduana);
+        allCustomsRequests(id_aduana);
+
         $.ajax({
             url: "/trafico/data/obtain-my-ops",
             cache: false,
             type: "post",
             dataType: "json",
-            data: {aduana: $("#aduana").val()}
+            data: { aduana: id_aduana }
         }).done(function (data) {
             if (data.success === true) {
                 $("#divops").html(data.html);
             }
         });
+
     });
-    
+
     $(document.body).on("change", "select[name^='cliente']", function () {
+        id_cliente = $("#cliente").val();
+        Cookies.set("portalSolicitudCliente", id_cliente);
         $.ajax({
             url: "/trafico/post/rfc-sociedad",
             cache: false,
             type: "POST",
             dataType: "json",
-            data: {idCliente: $("#cliente").val()},
-            success: function(res) {
+            data: { idCliente: id_cliente },
+            success: function (res) {
                 if (res.plantas !== null) {
                     $("#divplanta").html(res.plantas);
                 } else {
@@ -40,9 +92,9 @@ $(document).ready(function () {
     $("#form-requests").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -51,9 +103,11 @@ $(document).ready(function () {
             aduana: "required",
             operacion: "required",
             planta: {
-                required: {depends: function(elm) {
-                    return $(this).is(":not(:disabled)");
-                }}
+                required: {
+                    depends: function (elm) {
+                        return $(this).is(":not(:disabled)");
+                    }
+                }
             },
             pedimento: {
                 required: true,
@@ -68,10 +122,10 @@ $(document).ready(function () {
             operacion: "Campo necesario",
             planta: "Campo necesario",
             pedimento: {
-                    required: "Campo necesario",
-                    minlength: "Pedimento debe ser de 7 digitos",
-                    maxlength: "Pedimento dede ser de 7 digitos",
-                    digits: "No debe contener letras"
+                required: "Campo necesario",
+                minlength: "Pedimento debe ser de 7 digitos",
+                maxlength: "Pedimento dede ser de 7 digitos",
+                digits: "No debe contener letras"
             },
             referencia: "Campo necesario"
         }
@@ -85,14 +139,14 @@ $(document).ready(function () {
                 type: "post",
                 dataType: "json",
                 timeout: 3000,
-                success: reloadIframe
+                success: reloadData
             });
         }
     });
 
-    function reloadIframe(res, statusText, xhr, $form) {
+    function reloadData(res, statusText, xhr, $form) {
         if (res.success === true) {
-            document.getElementById("requests-frame").contentDocument.location.reload(true);
+            allCustomsRequests(id_aduana);
         } else {
             $.alert({
                 title: "¡Advertencia!",
@@ -100,7 +154,7 @@ $(document).ready(function () {
             });
         }
     }
-    
+
     $("#referencia").on("input", function (evt) {
         var input = $(this);
         var start = input[0].selectionStart;
@@ -109,6 +163,12 @@ $(document).ready(function () {
         });
         input[0].selectionStart = input[0].selectionEnd = start;
     });
+
+    id_aduana = Cookies.get('portalSolicitudAduana');
+    if (id_aduana) {
+        $("select[name^='aduana']").val(id_aduana);
+        allCustomsRequests(id_aduana);
+    }
 
 });
 
@@ -122,7 +182,7 @@ function sendRequest(id) {
         cache: false,
         type: "post",
         dataType: "json",
-        data: {id: id},
+        data: { id: id },
         success: function (res) {
             if (res.success === true) {
                 document.getElementById("requests-frame").contentDocument.location.reload(true);
@@ -139,7 +199,7 @@ function deleteRequest(id) {
             cache: false,
             type: "post",
             dataType: "json",
-            data: {id: id},
+            data: { id: id },
             success: function (res) {
                 if (res.success === true) {
                     document.getElementById("requests-frame").contentDocument.location.reload(true);
@@ -155,7 +215,7 @@ function deletePreRequest(id) {
         cache: false,
         type: 'post',
         dataType: 'json',
-        data: {id: id},
+        data: { id: id },
         success: function (res) {
             if (res.success === true) {
                 document.getElementById("requests-frame").contentDocument.location.reload(true);
