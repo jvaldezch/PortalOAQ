@@ -41,6 +41,7 @@ $(document).ready(function () {
         if ($("#form").valid()) {
             $("#form").ajaxSubmit({
                 dataType: "json",
+                url: "/trafico/ajax/nuevo-cliente",
                 success: function (res) {
                     if (res.success === true) {
                         window.location.replace("/trafico/index/clientes");

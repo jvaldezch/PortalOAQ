@@ -69,7 +69,7 @@ class Trafico_AjaxController extends Zend_Controller_Action
                 if ($input->isValid("idEmpresa") && $input->isValid("rfc") && $input->isValid("nombre")) {
                     $model = new Trafico_Model_ClientesMapper();
                     if (!($model->buscar($input->rfc))) {
-                        $data = array(
+                        $arr = array(
                             "idEmpresa" => $input->idEmpresa,
                             "rfc" => $input->rfc,
                             "rfcSociedad" => html_entity_decode($input->rfcSociedad),
@@ -77,7 +77,7 @@ class Trafico_AjaxController extends Zend_Controller_Action
                             "creado" => date("Y-m-d H:i:s"),
                             "usuario" => $this->_session->username,
                         );
-                        $added = $model->nuevoCliente($data);
+                        $added = $model->nuevoCliente($arr);
                         if ($added === true) {
                             $this->_helper->json(array("success" => true));
                         } else {

@@ -232,7 +232,7 @@ class Trafico_Model_ClientesMapper {
             if ($stmt) {
                 return true;
             }
-            return false;
+            return;
         } catch (Zend_Db_Adapter_Exception $e) {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
