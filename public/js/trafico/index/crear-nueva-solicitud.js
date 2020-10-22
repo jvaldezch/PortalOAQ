@@ -40,6 +40,29 @@ window.allCustomsRequests = function (idAduana) {
                     html += '</tr>';
                     $("#mis-solicitudes").append(html);
                 }
+                $('#requests-table').DataTable({
+                    "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+                    "language": {
+                        "decimal": "",
+                        "emptyTable": "No data available in table",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        "infoEmpty": "Showing 0 to 0 of 0 entries",
+                        "infoFiltered": "(filtered from _MAX_ total entries)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Mostrando _MENU_ registros",
+                        "loadingRecords": "Cargando ...",
+                        "processing": "Procesando ...",
+                        "search": "Buscar:",
+                        "zeroRecords": "No matching records found",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Sig.",
+                            "previous": "Ant."
+                        }
+                    }
+                });
 
             } else {
                 $("#mis-solicitudes").append(`<tr><td colspan="7" style="text-align: center;"><em>${res.message}</em></td></tr>`);

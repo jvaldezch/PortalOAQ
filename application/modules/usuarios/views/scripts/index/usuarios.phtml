@@ -1,7 +1,7 @@
 <div class="row-fluid">
     <div class="traffic-clear-5"></div>
     <?php if ($this->paginator) { ?>
-        <table class="traffic-table hover" id="example">
+        <table class="traffic-table hover" id="users-table">
             <thead>
                 <tr>
                     <th>Aduana</th>
@@ -35,80 +35,9 @@
                 <?php } ?>
             </tbody>
         </table>
-        <a class="traffic-btn" href="/usuarios/index/agregar-usuario">
-            <i class="fas fa-file"></i> Añadir usuario
-        </a>
         <div class="traffic-clear-10"></div>
-    <?php } ?>
-    <script>
-        $(document).ready(function() {
-            $('#example').dataTable({
-                "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
-                "sPaginationType": "bootstrap",
-                "oLanguage": {
-                    "sLengthMenu": "_MENU_ registros por página"
-                },
-                "iDisplayLength": 10,
-                "aaSorting": [
-                    [10, "desc"]
-                ]
-            });
-        });
-
-        function deleteUser(value) {
-            var resp = confirm("¿Esta seguro que desea borrar el usuario?");
-            if (resp === true) {
-                $.ajax({
-                    url: "/usuarios/index/delete-user",
-                    context: document.body,
-                    data: {
-                        id: value
-                    },
-                    type: 'GET'
-                }).done(function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    if (obj.success === true) {
-                        window.location.href = "/usuarios/index/usuarios";
-                    } else if (obj.success === false) {
-                        alert("Ocurrio un error al borrar el usuario.");
-                    }
-                });
-            }
-        }
-    </script>
-    <div class="traffic-clear-10"></div>
-</div>
-<div class="row-fluid-mobile">
-    <?php if ($this->paginator) { ?>
-        <table class="traffic-table hover" id="example">
-            <thead>
-                <tr>
-                    <th>Aduana</th>
-                    <th>Usuario</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($this->paginator as $item) { ?>
-                    <tr>
-                        <td><?= $item["patente"] . '-' . $item["aduana"] ?></td>
-                        <td>
-                            <?= $item["nombre"] ?><br>
-                            <a href="/usuarios/index/editar-usuario?id=<?= $item["id"] ?>" style="display: float">
-                                <?= $item["usuario"] ?>
-                            </a>
-                        </td>
-                        <td style="text-align: center; width: 24px">
-                            <a href="/usuarios/index/editar-usuario?id=<?= $item["id"] ?>" style="font-size: 1.2em; margin-right: 5px">
-                                <i class="fas fa-pencil-alt" style="cursor: pointer"></i>
-                            </a>
-                        </td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-        <a class="traffic-btn" href="/usuarios/index/agregar-usuario">
-            <i class="fas fa-file"></i> Añadir usuario
+        <a class="traffic-btn traffic-btn-right" href="/usuarios/index/agregar-usuario">
+            <i class="fas fa-plus"></i>&nbsp;Añadir usuario
         </a>
         <div class="traffic-clear-10"></div>
     <?php } ?>

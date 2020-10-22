@@ -5,18 +5,32 @@
  */
 
 $(document).ready(function () {
-    
-    $('#table').dataTable({
-        "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
-        "sPaginationType": "bootstrap",
-        "oLanguage": {
-            "sLengthMenu": "_MENU_ registros por página"
-        },
-        "iDisplayLength": 10,
-        "aaSorting": [[10, "desc"]]
+
+    $('#users-table').DataTable({
+        "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]],
+        "language": {
+            "decimal": "",
+            "emptyTable": "No data available in table",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrando _MENU_ registros",
+            "loadingRecords": "Cargando ...",
+            "processing": "Procesando ...",
+            "search": "Buscar:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Sig.",
+                "previous": "Ant."
+            }
+        }
     });
-    
-    $(document.body).on("click", ".closeSession",function (ev) {
+
+    $(document.body).on("click", ".closeSession", function (ev) {
         ev.preventDefault();
         var id = $(this).data("id");
         $.confirm({
@@ -25,19 +39,20 @@ $(document).ready(function () {
                 si: {
                     btnClass: "btn-red",
                     action: function () {
-                        $.ajax({url: "/usuarios/post/cerrar-sesion", cache: false, type: "post", dataType: "json", data: {id: id}
+                        $.ajax({
+                            url: "/usuarios/post/cerrar-sesion", cache: false, type: "post", dataType: "json", data: { id: id }
                         }).done(function (res) {
                             if (res.success === true) {
                                 $('#row_' + id).hide();
                             } else {
-                                $.alert({title: "Error", type: "red", content: res.message, boxWidth: "250px", useBootstrap: false});
+                                $.alert({ title: "Error", type: "red", content: res.message, boxWidth: "250px", useBootstrap: false });
                             }
                         });
                     }
                 },
-                no: function () {}
+                no: function () { }
             }
         });
     });
-    
+
 });
