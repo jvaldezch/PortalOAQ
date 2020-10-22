@@ -22,7 +22,7 @@ class OAQ_SolicitudesAnticipo
     protected $_schema;
     protected $_process;
     protected $_rolesEditarTrafico = array("trafico", "super", "trafico_operaciones", "trafico_aero");
-    protected $_todosClientes = array("trafico", "super", "trafico_operaciones", "trafico_aero");
+    protected $_todosClientes = array("trafico", "super", "trafico_operaciones", "trafico_aero", "gerente");
     protected $_customs = [];
     protected $_idCustoms = [];
     protected $_customers = [];
