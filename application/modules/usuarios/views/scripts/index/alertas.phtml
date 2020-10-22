@@ -1,39 +1,40 @@
-<div class="traffic-clear-5"></div>
-<div style="overflow-y: auto; height: 450px">
-    <table class="traffic-table hover" id="example">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>&nbsp;</th>
-                <th>Desde</th>
-                <th>Hasta</th>
-                <th>Alerta</th>
-                <th>Contenido</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (isset($this->arr) && !empty($this->arr)) { ?>
-                <?php foreach ($this->arr as $item) { ?>
-                    <tr data-id="<?= $item["id"] ?>">
-                        <td style="width: 30px"><?= $item["id"] ?></td>
-                        <td style="width: 30px">
-                            <input type="checkbox" value="<?= $item["id"] ?>" class="activate" <?= ($item["estatus"] != 1) ? : 'checked="true"' ?>>
-                        </td>
-                        <td style="width: 100px">
-                            <input data-id="<?= $item["id"] ?>" value="<?= date("Y-m-d", strtotime($item["validoDesde"])) ?>" class="dateFrom traffic-input-date" />
-                        </td>
-                        <td style="width: 100px">
-                            <input data-id="<?= $item["id"] ?>" value="<?= date("Y-m-d", strtotime($item["validoHasta"])) ?>" class="dateTo traffic-input-date" />
-                        </td>
-                        <td style="width: 150px">
-                            <input data-id="<?= $item["id"] ?>" value="<?= $item["alerta"] ?>" type="text" class="alert traffic-input-medium" />
-                        </td>
-                        <td>
-                            <textarea data-id="<?= $item["id"] ?>" class="content traffic-textarea-large" style="display: table-cell; width: 97%"><?= $item["contenido"] ?></textarea>
-                        </td>
-                    </tr>
-                <?php } ?>
+<div class="traffic-clear-10"></div>
+<table class="traffic-table hover" id="alerts-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>&nbsp;</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Alerta</th>
+            <th>Contenido</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->arr) && !empty($this->arr)) { ?>
+            <?php foreach ($this->arr as $item) { ?>
+                <tr data-id="<?= $item["id"] ?>">
+                    <td style="width: 30px"><?= $item["id"] ?></td>
+                    <td style="width: 30px">
+                        <input type="checkbox" value="<?= $item["id"] ?>" class="activate" <?= ($item["estatus"] != 1) ?: 'checked="true"' ?>>
+                    </td>
+                    <td style="width: 100px">
+                        <input data-id="<?= $item["id"] ?>" value="<?= date("Y-m-d", strtotime($item["validoDesde"])) ?>" class="dateFrom traffic-input-date" />
+                    </td>
+                    <td style="width: 100px">
+                        <input data-id="<?= $item["id"] ?>" value="<?= date("Y-m-d", strtotime($item["validoHasta"])) ?>" class="dateTo traffic-input-date" />
+                    </td>
+                    <td style="width: 150px">
+                        <input type="text" data-id="<?= $item["id"] ?>" value="<?= $item["alerta"] ?>" class="alert traffic-input-medium" />
+                    </td>
+                    <td>
+                        <textarea data-id="<?= $item["id"] ?>" class="content traffic-textarea-large" style="display: table-cell; width: 97%"><?= $item["contenido"] ?></textarea>
+                    </td>
+                </tr>
             <?php } ?>
-    </table>
-    <button type="button" class="traffic-btn-save traffic-btn-right" id='add'>Agregar</button>
-</div>
+        <?php } ?>
+</table>
+<div class="traffic-clear-10"></div>
+<button type="button" class="traffic-btn traffic-btn-right" id='add'>
+    <i class="fas fa-plus"></i>&nbsp;Agregar
+</button>

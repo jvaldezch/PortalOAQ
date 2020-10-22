@@ -18,20 +18,17 @@ class Usuarios_IndexController extends Zend_Controller_Action
         $this->view->headLink()
             ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
             ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-            ->appendStylesheet("/css/DT_bootstrap.css")
             ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
             ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
             ->appendFile("/js/common/jquery-1.9.1.min.js")
-            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")           
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
             ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
             ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
             ->appendFile("/js/common/jquery.form.min.js")
             ->appendFile("/js/common/jquery.validate.min.js")
-            ->appendFile("/js/common/jquery.dataTables.min.js")
             ->appendFile("/js/common/js.cookie.js")
             ->appendFile("/js/common/jquery.blockUI.js")
-            ->appendFile("/js/common/DT_bootstrap.js")
             ->appendFile("/js/common/mensajero.js?" . time())
             ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
@@ -67,7 +64,10 @@ class Usuarios_IndexController extends Zend_Controller_Action
         $this->view->title = $this->_appconfig->getParam("title") . " Usuarios del sistema";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-            ->appendStylesheet("/css/mobile-style.css?" . time());
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css");
+        $this->view->headScript()
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+            ->appendFile("/js/usuarios/index/usuarios.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
@@ -94,38 +94,18 @@ class Usuarios_IndexController extends Zend_Controller_Action
         }
     }
 
-    public function dashboardAction()
-    {
-        $this->view->title = $this->_appconfig->getParam("title") . " Dashboard RabbitMQ";
-        $this->view->headMeta()->appendName("description", "");
-        $this->view->headLink()
-            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
-        $this->view->headScript()
-            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-            ->appendFile("/js/common/toast/jquery.toast.min.js?")
-            ->appendFile("/js/usuarios/index/dashboard.js?" . time());
-        if ($this->_session->role != "super") {
-            throw new Zend_Controller_Action_Exception("Forbidden", 403);
-        }
-        if (APPLICATION_ENV == "production") {
-            $rabbit = new OAQ_Workers_Queues();
-            if (($arr = $rabbit->queues())) {
-                $this->view->queues = $arr;
-            }
-        }
-    }
-
     public function usuariosEnLineaAction()
     {
         $this->view->title = $this->_appconfig->getParam("title") . " Usuarios en línea";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
             ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css");
         $this->view->headScript()
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
             ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
             ->appendFile("/js/usuarios/index/usuarios-en-linea.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
@@ -270,21 +250,6 @@ class Usuarios_IndexController extends Zend_Controller_Action
         }
     }
 
-    public function menusAction()
-    {
-        $this->view->title = $this->_appconfig->getParam("title") . " " . " Editar Menus";
-        $this->view->headMeta()->appendName("description", "");
-        $this->view->headScript()
-            ->appendFile("/js/usuarios/index/menus.js?" . time());
-        $mapper = new Application_Model_RolesMapper();
-        $this->view->roles = $mapper->todos();
-        $mapper = new Application_Model_MenusMapper();
-        $modules = $mapper->obtenerModulos();
-        $controllers = $mapper->obtenerControladores();
-        $this->view->modules = $modules;
-        $this->view->controllers = $controllers;
-    }
-
     public function misDatosAction()
     {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Editar usuario";
@@ -298,12 +263,15 @@ class Usuarios_IndexController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
-    public function fielAction()
+    public function sellosAction()
     {
-        $this->view->title = $this->_appconfig->getParam("title") . " " . " FIEL (VU)";
+        $this->view->title = $this->_appconfig->getParam("title") . " " . " Sellos (VU)";
         $this->view->headMeta()->appendName("description", "");
+        $this->view->headLink()
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css");
         $this->view->headScript()
-            ->appendFile("/js/usuarios/index/fiel.js?" . time());
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+            ->appendFile("/js/usuarios/index/sellos.js?" . time());
         if ($this->_session->role != "super") {
             throw new Zend_Controller_Action_Exception("Forbidden", 403);
         }
@@ -742,7 +710,10 @@ class Usuarios_IndexController extends Zend_Controller_Action
     {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Prefijos";
         $this->view->headMeta()->appendName("description", "");
+        $this->view->headLink()
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css");
         $this->view->headScript()
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
             ->appendFile("/js/usuarios/index/prefijos.js?" . time());
         try {
             if ($this->_session->role != "super") {
@@ -761,10 +732,12 @@ class Usuarios_IndexController extends Zend_Controller_Action
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Alertas";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css");
         $this->view->headScript()
             ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
             ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
             ->appendFile("/js/usuarios/index/alertas.js?" . time());
         try {
             if ($this->_session->role != "super") {
@@ -814,28 +787,6 @@ class Usuarios_IndexController extends Zend_Controller_Action
                 $this->view->paginator = $paginator;
                 $this->view->buscar = $input->buscar;
             }
-        } catch (Exception $ex) {
-            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
-        }
-    }
-
-    public function aplicacionesAction()
-    {
-        $this->view->title = $this->_appconfig->getParam("title") . " " . " Aplicaciones";
-        $this->view->headMeta()->appendName("description", "");
-        $this->view->headLink()
-            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
-        $this->view->headScript()
-            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-            ->appendFile("/js/common/additional-methods.min.js")
-            ->appendFile("/js/usuarios/index/aplicaciones.js?" . time());
-        try {
-            if ($this->_session->role != "super") {
-                throw new Zend_Controller_Action_Exception("Forbidden", 403);
-            }
-            $mppr = new Webservice_Model_AppVersion();
-            $this->view->aplicaciones = $mppr->todasVersiones();
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }

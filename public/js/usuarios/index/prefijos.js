@@ -16,6 +16,31 @@ function load(id, url) {
         success: function (res) {
             if (res.success === true) {
                 $(id).html(res.html);
+
+                $('#prefix-table').DataTable({
+                    "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]],
+                    "language": {
+                        "decimal": "",
+                        "emptyTable": "No data available in table",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        "infoEmpty": "Showing 0 to 0 of 0 entries",
+                        "infoFiltered": "(filtered from _MAX_ total entries)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Mostrando _MENU_ registros",
+                        "loadingRecords": "Cargando ...",
+                        "processing": "Procesando ...",
+                        "search": "Buscar:",
+                        "zeroRecords": "No matching records found",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Sig.",
+                            "previous": "Ant."
+                        }
+                    }
+                });
+
             }
         }
     });
@@ -28,15 +53,15 @@ $(document).ready(function () {
     $("#form").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("label[for='" + element.attr("id") + "']")
-                    .append(error);
+                .closest("form")
+                .find("label[for='" + element.attr("id") + "']")
+                .append(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
         rules: {
-            idDocumento: {required: true},
-            prefijo: {required: true}
+            idDocumento: { required: true },
+            prefijo: { required: true }
         },
         messages: {
             idDocumento: "Selec. documento",
@@ -48,8 +73,8 @@ $(document).ready(function () {
         e.preventDefault();
         if ($("#form").valid()) {
             $("#form").ajaxSubmit({
-                success: function(res) {
-                    if(res.success === true) {
+                success: function (res) {
+                    if (res.success === true) {
                         load("#result", "/usuarios/ajax/obtener-prefijos");
                     } else {
                         $("#prefijoError").html(styleError(res.error));
@@ -58,7 +83,7 @@ $(document).ready(function () {
             });
         }
     });
-    
+
     $("#prefijo").on('input', function (evt) {
         var input = $(this);
         var start = input[0].selectionStart;

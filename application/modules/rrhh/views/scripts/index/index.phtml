@@ -2,11 +2,11 @@
     <table class="traffic-table traffic-table-left">
         <?php if (isset($this->empresas)) { ?>
             <tr>
-                <th>Empresa:</th>    
+                <th>Empresa:</th>
                 <td>
                     <select id="id" name="id" class="traffic-select-large">
                         <?php foreach ($this->empresas as $k => $v) { ?>
-                            <option value="<?= $k ?>"<?= (isset($this->id) && $this->id == $k) ? ' selected="true"' : '' ?>><?= $v ?></option>
+                            <option value="<?= $k ?>" <?= (isset($this->id) && $this->id == $k) ? ' selected="true"' : '' ?>><?= $v ?></option>
                         <?php } ?>
                     </select>
                 </td>
@@ -40,18 +40,18 @@
 </form>
 <div class="traffic-clear-5"></div>
 <?php if ($this->paginator) { ?>
-    <table class="traffic-table traffic-table-left hover" id="employees">
+    <table class="traffic-table traffic-table-left hover" id="employees-table">
         <thead>
             <tr>
                 <th style="width: 32px">&nbsp;</th>
                 <th style="text-align: left">Empresa</th>
                 <th style="text-align: left">Nombre</th>
                 <th style="text-align: left">Email</th>
-                <th style="text-align: left">Email Personal</th>                
-                <th style="text-align: left">Telefono</th>                
-                <th style="text-align: left">Capacit.</th>                
-                <th style="text-align: left">Doctos.</th>                
-                <th style="text-align: left">Estatus</th>                
+                <th style="text-align: left">Email Personal</th>
+                <th style="text-align: left">Telefono</th>
+                <th style="text-align: left">Capacit.</th>
+                <th style="text-align: left">Doctos.</th>
+                <th style="text-align: left">Estatus</th>
             </tr>
         </thead>
         <tbody>
@@ -62,22 +62,23 @@
                             <i class="fas fa-folder-open" style="font-size: 1.3em"></i>
                         </a>
                     </td>
-                    <td><?= $item["razonSocial"] ?></td> 
+                    <td><?= $item["razonSocial"] ?></td>
                     <td>
                         <a href="/rrhh/index/informacion-empleado?id=<?= $item["id"] ?>"><?= mb_strtoupper($item["apellido"]) . ", " . mb_strtoupper($item["nombre"]) ?></a>
                     </td>
-                    <td><?= $item["emailEmpresa"] ?></td> 
-                    <td><?= $item["emailPersonal"] ?></td> 
-                    <td><?= $item["telefono"] ?></td> 
-                    <td style="text-align: center"><?= ($item["capacitacion"] == 1) ? '<img src="/images/icons/active.png" />' : '<img src="/images/icons/inactive.png" />' ?></td> 
-                    <td style="text-align: center"><?= ($item["documentacion"] == 1) ? '<img src="/images/icons/active.png" />' : '<img src="/images/icons/inactive.png" />' ?></td> 
-                    <td style="text-align: center"><?= ($item["estatus"] == 1) ? '<img src="/images/icons/active.png" />' : '<img src="/images/icons/inactive.png" />' ?></td> 
+                    <td><?= $item["emailEmpresa"] ?></td>
+                    <td><?= $item["emailPersonal"] ?></td>
+                    <td><?= $item["telefono"] ?></td>
+                    <td style="text-align: center"><?= ($item["capacitacion"] == 1) ? '<img src="/images/icons/active.png" />' : '<img src="/images/icons/inactive.png" />' ?></td>
+                    <td style="text-align: center"><?= ($item["documentacion"] == 1) ? '<img src="/images/icons/active.png" />' : '<img src="/images/icons/inactive.png" />' ?></td>
+                    <td style="text-align: center"><?= ($item["estatus"] == 1) ? '<img src="/images/icons/active.png" />' : '<img src="/images/icons/inactive.png" />' ?></td>
                 </tr>
             <?php } ?>
         </tbody>
     </table>
+    <div class="traffic-clear-5"></div>
     <a class="traffic-btn-right traffic-btn" href="/rrhh/index/alta-empleado">
-        <i class="fas fa-file"></i> Alta de empleado
+        <i class="fas fa-plus"></i>&nbsp;Alta de empleado
     </a>
     <div class="traffic-clear-5"></div>
 <?php } ?>

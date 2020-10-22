@@ -1,13 +1,27 @@
 $(document).ready(function () {
 
-    $("#example").dataTable({
-        "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
-        "sPaginationType": "bootstrap",
-        "oLanguage": {
-            "sLengthMenu": "_MENU_ registros por página"
-        },
-        "iDisplayLength": 10,
-        "aaSorting": [[10, "desc"]]
+    $("#alerts-table").DataTable({
+        "lengthMenu": [[5, 15, 25, 50, -1], [5, 15, 25, 50, "All"]],
+        "language": {
+            "decimal": "",
+            "emptyTable": "No data available in table",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrando _MENU_ registros",
+            "loadingRecords": "Cargando ...",
+            "processing": "Procesando ...",
+            "search": "Buscar:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Sig.",
+                "previous": "Ant."
+            }
+        }
     });
 
     $(".activate").bind("change", function () {

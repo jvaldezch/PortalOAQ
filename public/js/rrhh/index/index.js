@@ -46,20 +46,34 @@ function getAllUrlParams(url) {
 }
 
 $(document).ready(function () {
-    
-    $('#employees').dataTable({
-        "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
-        "sPaginationType": "bootstrap",
-        "oLanguage": {
-            "sLengthMenu": "_MENU_ registros por página"
-        },
-        "iDisplayLength": 10,
-        "aaSorting": [[10, "desc"]]
+
+    $('#employees-table').DataTable({
+        "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]],
+        "language": {
+            "decimal": "",
+            "emptyTable": "No data available in table",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrando _MENU_ registros",
+            "loadingRecords": "Cargando ...",
+            "processing": "Procesando ...",
+            "search": "Buscar:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Sig.",
+                "previous": "Ant."
+            }
+        }
     });
-    
+
     $(document.body).on("click", "#report", function (ev) {
         ev.preventDefault();
         location.replace('/rrhh/get/reporte-empleados?id=' + getAllUrlParams().id + "&filter=" + getAllUrlParams().filter);
     });
-    
+
 });

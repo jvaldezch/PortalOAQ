@@ -280,9 +280,12 @@ class Trafico_IndexController extends Zend_Controller_Action
         $this->view->title = $this->_appconfig->getParam("title") . " Crear nueva solicitud de anticipo";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
+            // ->appendStylesheet("/js/common/bootstrap3/datatables/datatables.css")
             ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
-            ->appendFile("/js/common/bootstrap-datatable.js")
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+            // ->appendFile("/js/common/bootstrap3/datatables/datatables.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
             ->appendFile("/js/common/moment.min.js")
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")

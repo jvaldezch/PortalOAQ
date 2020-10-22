@@ -1,38 +1,39 @@
 <?php
 
-class Rrhh_IndexController extends Zend_Controller_Action {
+class Rrhh_IndexController extends Zend_Controller_Action
+{
 
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_redirector;
 
-    public function init() {
+    public function init()
+    {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
-        $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));        
+        $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-                ->appendStylesheet("/css/DT_bootstrap.css")
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/jquery.dataTables.min.js")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery.blockUI.js")
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/js/common/mensajero.js?" . time())
-                ->appendFile("/js/common/principal.js?" . time()); 
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/bootstrap/datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/jquery.dataTables.min.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/mensajero.js?" . time())
+            ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -48,13 +49,16 @@ class Rrhh_IndexController extends Zend_Controller_Action {
         $news = new Application_Model_NoticiasInternas();
         $this->view->noticias = $news->obtenerTodos();
     }
-    
-    public function indexAction() {
+
+    public function indexAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " " . " Empleados";
         $this->view->headMeta()->appendName("description", "");
+        $this->view->headLink()
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css");
         $this->view->headScript()
-                ->appendFile("/js/common/DT_bootstrap.js")
-                ->appendFile("/js/rrhh/index/index.js?" . time());
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
+            ->appendFile("/js/rrhh/index/index.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -81,24 +85,25 @@ class Rrhh_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function informacionEmpleadoAction() {
+    public function informacionEmpleadoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Información de empleado";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/fullcalendar/fullcalendar.min.css")
-                ->appendStylesheet("/fullcalendar/fullcalendar.min.css")
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/fullcalendar/fullcalendar.min.css")
+            ->appendStylesheet("/fullcalendar/fullcalendar.min.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css");
         $this->view->headScript()
-                ->appendFile("/js/common/toast/jquery.toast.min.js")
-                ->appendFile("/fullcalendar/lib/moment.min.js")
-                ->appendFile("/fullcalendar/fullcalendar.min.js")
-                ->appendFile("/fullcalendar/locale/es.js")
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/rrhh/index/informacion-empleado.js?" . time());
+            ->appendFile("/js/common/toast/jquery.toast.min.js")
+            ->appendFile("/fullcalendar/lib/moment.min.js")
+            ->appendFile("/fullcalendar/fullcalendar.min.js")
+            ->appendFile("/fullcalendar/locale/es.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/rrhh/index/informacion-empleado.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -132,33 +137,36 @@ class Rrhh_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function cambiarPerfilAction() {
+    public function cambiarPerfilAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Cambiar perfil";
         $this->view->headMeta()->appendName("description", "");
     }
-    
-    public function altaEmpleadoAction() {
+
+    public function altaEmpleadoAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Alta de empleado";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/js/rrhh/index/alta-empleado.js?" . time());
+            ->appendFile("/js/rrhh/index/alta-empleado.js?" . time());
         $companies = new Application_Model_UsuariosEmpresas();
         $com = $companies->selectEmpresasDeUsuario($this->_session->id);
         if (isset($com) && !empty($com)) {
             $this->view->empresas = $com;
         }
     }
-    
-    public function empresasAction() {
+
+    public function empresasAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Empresas";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/rrhh/index/empresas.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/rrhh/index/empresas.js?" . time());
         $mppr = new Application_Model_UsuariosEmpresas();
         $arr = $mppr->selectEmpresasDeUsuario($this->_session->id);
         if (isset($arr) && !empty($arr)) {
@@ -166,7 +174,8 @@ class Rrhh_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function buzonAction() {
+    public function buzonAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Buzón de quejas y denuncias";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
@@ -199,7 +208,8 @@ class Rrhh_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function verQuejaDenunciaAction() {
+    public function verQuejaDenunciaAction()
+    {
         $this->view->title = $this->_appconfig->getParam("title") . " Queja o denuncia";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
@@ -221,5 +231,4 @@ class Rrhh_IndexController extends Zend_Controller_Action {
 
         $mppr = new Principal_Model_OaqTeEscucha();
     }
-
 }

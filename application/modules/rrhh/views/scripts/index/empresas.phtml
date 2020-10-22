@@ -2,6 +2,7 @@
     .traffic-btn-small {
         min-width: 60px;
     }
+
     .traffic-btn-small:disabled {
         min-width: 60px;
         font-size: 10px;
@@ -18,7 +19,7 @@
         <th style="text-align: right; width: 80px">Empresa:</th>
         <td colspan="5">
             <select id="idEmpresa" name="idEmpresa" class="traffic-select-large">
-                <?php if(isset($this->results)) { ?>
+                <?php if (isset($this->results)) { ?>
                     <?php foreach ($this->results as $k => $v) { ?>
                         <option value="<?= $k ?>"><?= $v ?></option>
                     <?php } ?>
@@ -38,24 +39,38 @@
                 <select multiple="" style="height: 180px"></select>
             </div>
             <!--<button id="agregarDepto" class="traffic-btn traffic-btn-add">Agregar</button>-->
-            <button id="editarDepto" class="traffic-btn-small traffic-btn-create">Editar</button>
+            <button id="editarDepto" class="traffic-btn-small traffic-btn">
+                <i class="fas fa-pencil-alt"></i></i>&nbsp;Editar
+            </button>
             <!--<button id="borrarDepto" class="traffic-btn traffic-btn-close">Borrar</button>-->
         </td>
         <td>
             <div id="puestos" style="padding: 2px">
                 <select multiple="" style="height: 180px"></select>
             </div>
-            <button id="agregarPuesto" class="traffic-btn-small traffic-btn-add">Agregar</button>
-            <button id="editarPuesto" class="traffic-btn-small traffic-btn-create">Editar</button>
-            <button id="borrarPuesto" class="traffic-btn-small traffic-btn-close">Borrar</button>
+            <button id="agregarPuesto" class="traffic-btn-small traffic-btn">
+                <i class="fas fa-plus"></i>&nbsp;Agregar
+            </button>
+            <button id="editarPuesto" class="traffic-btn-small traffic-btn">
+                <i class="fas fa-pencil-alt"></i></i>&nbsp;Editar
+            </button>
+            <button id="borrarPuesto" class="traffic-btn-small traffic-btn">
+                <i class="fas fa-trash-alt"></i>&nbsp;Borrar
+            </button>
         </td>
         <td>
             <div id="actividades" style="padding: 2px">
                 <select multiple="" style="height: 180px"></select>
             </div>
-            <button id="agregarActividad" class="traffic-btn-small traffic-btn-add">Agregar</button>
-            <button id="editarActividad" class="traffic-btn-small traffic-btn-create">Editar</button>
-            <button id="borrarActividad" class="traffic-btn-small traffic-btn-close">Borrar</button>
+            <button id="agregarActividad" class="traffic-btn-small traffic-btn">
+                <i class="fas fa-plus"></i>&nbsp;Agregar
+            </button>
+            <button id="editarActividad" class="traffic-btn-small traffic-btn">
+                <i class="fas fa-pencil-alt"></i></i>&nbsp;Editar
+            </button>
+            <button id="borrarActividad" class="traffic-btn-small traffic-btn">
+                <i class="fas fa-trash-alt"></i>&nbsp;Borrar
+            </button>
         </td>
         <td>
             <div id="edit"></div>
