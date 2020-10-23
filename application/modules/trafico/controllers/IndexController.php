@@ -307,29 +307,40 @@ class Trafico_IndexController extends Zend_Controller_Action
         $this->view->title = $this->_appconfig->getParam("title") . " Solicitudes de corresponsal";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
             ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/moment.min.js")
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
             ->appendFile("/js/trafico/index/solicitudes-corresponsal.js?" . time());
         $mdl = new Application_Model_UsuariosAduanasMapper();
         $aduanas = $mdl->aduanasUsuario($this->_session->id);
         $tbl = new Trafico_Model_TraficoCliAduanasMapper();
 
-        $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
-        if (in_array($this->_session->role, $this->_todosClientes)) {
-            $customs = $mppr->aduanasDeUsuario();
-        } else {
-            $customs = $mppr->aduanasDeUsuario($this->_session->id);
-        }
+        // $mppr = new Trafico_Model_TraficoUsuAduanasMapper();
+        // if (in_array($this->_session->role, $this->_todosClientes)) {
+        //     $customs = $mppr->aduanasDeUsuario();
+        // } else {
+        //     $customs = $mppr->aduanasDeUsuario($this->_session->id);
+        // }
+
+
+        $s = new OAQ_SolicitudesAnticipo();
+        $s->obtenerPermisos($this->_session->id, $this->_session->role);
+
+        // $form = new Trafico_Form_CrearSolicitud(array("clientes" => $s->get_customers(), "aduanas" => $s->get_customs()));
 
         $tipoOperacion = array(
             "TOCE.IMP" => "Importación",
             "TOCE.EXP" => "Exportación",
         );
+
         if (count($aduanas)) {
             $cli = $tbl->clientesPorAduana($aduanas["patente"], $aduanas["aduana"]);
             $adu = $mdl->aduanasDeUsuario($this->_session->id);
-            $form = new Trafico_Form_CrearSolicitud(array("clientes" => $cli, "aduanas" => $adu, "operacion" => $tipoOperacion));
+            $form = new Trafico_Form_CrearSolicitud(array("clientes" => $cli, "aduanas" => $s->get_customs(), "operacion" => $tipoOperacion));
             $this->view->form = $form;
         } else if (count($customs)) {
             $adu['-'] = "---";
@@ -337,7 +348,7 @@ class Trafico_IndexController extends Zend_Controller_Action
                 $adu[$c['id']] = $c['patente'] . '-' . $c['aduana'] . ' ' . $c["nombre"];
             }
             $cli['-'] = "---";
-            $form = new Trafico_Form_CrearSolicitud(array("clientes" => $cli, "aduanas" => $adu, "operacion" => $tipoOperacion));
+            $form = new Trafico_Form_CrearSolicitud(array("clientes" => $cli, "aduanas" => $s->get_customs(), "operacion" => $tipoOperacion));
             $this->view->form = $form;
         } else {
             $this->view->error = "No tiene aduanas asignadas";
@@ -669,6 +680,7 @@ class Trafico_IndexController extends Zend_Controller_Action
             ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css")
             ->appendStylesheet("/js/common/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css")
             ->appendStylesheet("/css/jquery.timepicker.css")
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css")
             ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
             ->appendFile("/js/common/jquery.timepicker.min.js")
@@ -688,6 +700,7 @@ class Trafico_IndexController extends Zend_Controller_Action
             ->appendFile("/easyui/locale/easyui-lang-es.js")
             ->appendFile("/js/trafico/index/editar-trafico.js?" . time())
             ->appendFile("/js/common/jquery.slidereveal.min.js")
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
             ->appendFile("/js/common/moment.min.js")
             ->appendFile("/js/common/mensajero.js?" . time());

@@ -102,11 +102,12 @@ class OAQ_SolicitudesAnticipo
         }
         if (!empty($this->_customs)) {
             foreach ($this->_customs as $k => $v) {
-                if ($k !== '-' && (int) $k !== 0) {
+                if ((int) $k !== 0) {
                     $this->_idCustoms[] = $k;
                 }
             }
         }
+        // Zend_Debug::dump($this->_customs);
     }
 
     function __construct($idSolicitud = null)

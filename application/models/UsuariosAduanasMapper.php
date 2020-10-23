@@ -28,6 +28,7 @@ class Application_Model_UsuariosAduanasMapper {
                     }
                 } else {
                     $item = $stmt->toArray();
+                    $data = array("-" => "---");
                     $data[$item[0]["idAduana"]] = $item[0]["patente"] . "-" . $item[0]["aduana"] . " " . $item[0]["nombre"];
                 }
                 return $data;

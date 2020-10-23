@@ -7,7 +7,7 @@ function redirectPage(res) {
     if (res.success === true) {
         window.location.replace("/usuarios/index/editar-usuario?id=" + res.id);
     } else {
-        if(res.message) {
+        if (res.message) {
             $("#error-messages").html("<span class=\"traffic-error\">" + res.message + "</span>");
         }
     }
@@ -17,9 +17,9 @@ $(document).ready(function () {
     $("#formUsuario").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -75,22 +75,22 @@ $(document).ready(function () {
                 url: "/usuarios/post/agregar-usuario",
                 type: "post",
                 dataType: "json",
-                success: function(res) {
-                    if(res.success === true) {
+                success: function (res) {
+                    if (res.success === true) {
                         window.location.replace("/usuarios/index/editar-usuario?id=" + res.id);
                     }
                 }
             });
         }
     });
-    
+
     $(document.body).on("change", "#formUsuario #patenteUsuario", function () {
         $.ajax({
             url: "/usuarios/post/obtener-aduanas",
             cache: false,
             type: "post",
             dataType: "json",
-            data: {patente: $(this).val()}
+            data: { patente: $(this).val() }
         }).done(function (res) {
             if (res.success === true) {
                 $("#formUsuario #aduanaUsuario").empty();
@@ -101,10 +101,10 @@ $(document).ready(function () {
             }
         });
     });
-    
-    $(document.body).on("focusout", "#nombre", function(){
+
+    $(document.body).on("focusout", "#nombre", function () {
         var str = $(this).val();
-        str = str.toLowerCase().replace(/^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g, function(letter) {
+        str = str.toLowerCase().replace(/^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g, function (letter) {
             return letter.toUpperCase();
         });
         $(this).val(str);

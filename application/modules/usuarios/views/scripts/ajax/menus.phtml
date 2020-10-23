@@ -1,29 +1,29 @@
 <table class="traffic-table traffic-table-left">
-    <?php if (isset($this->menu)) { ?>
+    <?php if (isset($this->menu)) {?>
         <tr>
-            <?php foreach ($this->menu as $item) { ?>
+            <?php foreach ($this->menu as $item) {?>
                 <td>
-                    <strong><?= $item["nombre"] ?></strong>
-                    <?php foreach ($item["acciones"] as $m) { ?>
+                    <strong><?=$item["nombre"]?></strong>
+                    <?php foreach ($item["acciones"] as $m) {?>
                         <div style="display: block; float: left; width: 100%">
                             <div style="float:left; display: inline-block; padding: 2px">
-                                <p style="font-family: sans-serif; font-size: 10px; cursor: pointer" onclick="edit(<?= $m["id"] ?>);"><?= $m["orden"] ?>&nbsp;-&nbsp;<?= $m["nombre"] ?></p>
+                                <p style="font-family: sans-serif; font-size: 10px; cursor: pointer" onclick="edit(<?=$m["id"]?>);"><?=$m["orden"]?>&nbsp;-&nbsp;<?=$m["nombre"]?></p>
                             </div>
                             <div style="float:right; min-width: 8px">
-                                <?php if ($m["presencia"] === false) { ?>
-                                    <div class="traffic-icon-small traffic-icon-add" onclick="agregarMenu(<?= $m["id"] ?>, <?= $this->rol ?>);"></div>
-                                <?php } else { ?>
-                                    <div class="traffic-icon-small traffic-icon-remove" onclick="removerMenu(<?= $m["id"] ?>, <?= $this->rol ?>);"></div>
-                                <?php } ?>
+                                <?php if ($m["presencia"] === false) {?>
+                                    <div class="traffic-icon-small traffic-icon-add" onclick="agregarMenu(<?=$m["id"]?>, <?=$this->rol?>);"></div>
+                                <?php } else {?>
+                                    <div class="traffic-icon-small traffic-icon-remove" onclick="removerMenu(<?=$m["id"]?>, <?=$this->rol?>);"></div>
+                                <?php }?>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php }?>
                 </td>
-            <?php } ?>
+            <?php }?>
         </tr>
-    <?php } else { ?>
+    <?php } else {?>
         <tr>
             <td>NO HAY MENÚ</td>
         </tr>
-    <?php } ?>
+    <?php }?>
 </table>

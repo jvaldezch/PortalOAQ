@@ -8,7 +8,7 @@ function borrarRepositorio(id) {
         cache: false,
         url: "/usuarios/ajax/borrar-repositorio",
         type: "post",
-        data: {id: id},
+        data: { id: id },
         dataType: "json",
         success: function (res) {
             if (res.success === true) {
@@ -19,7 +19,7 @@ function borrarRepositorio(id) {
 }
 
 $(document).ready(function () {
-    
+
     $(document.body).on("change", "#formRepositorio #allCustoms", function () {
         var checked = true;
         if ($(this).is(":checked")) {
@@ -31,25 +31,25 @@ $(document).ready(function () {
             cache: false,
             type: "post",
             dataType: "json",
-            data: {idUsuario: $("#idUsuario").val(), checked: checked}
+            data: { idUsuario: $("#idUsuario").val(), checked: checked }
         }).done(function (res) {
             if (res.success === true) {
                 cargarDatos("#usuarioRepositorio", "/usuarios/ajax/obtener-repositorios");
             }
         });
     });
-    
+
     $(document.body).on("change", "#formRepositorio #patentesExpediente", function () {
         $.ajax({
             url: "/usuarios/post/obtener-aduanas",
             cache: false,
             type: "post",
             dataType: "json",
-            data: {patente: $(this).val()}
+            data: { patente: $(this).val() }
         }).done(function (res) {
             if (res.success === true) {
                 $("#aduanasExpediente").empty()
-                        .removeAttr("disabled");
+                    .removeAttr("disabled");
                 $("#aduanasExpediente").append('<option value="">---</option>');
                 $.each(jQuery.parseJSON(res.aduanas), function (key, value) {
                     $("#aduanasExpediente").append('<option value=' + value.aduana + '>' + value.aduana + ' - ' + value.nombre + '</option>');
@@ -57,13 +57,13 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $("#formRepositorio").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",

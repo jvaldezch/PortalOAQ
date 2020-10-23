@@ -8,7 +8,7 @@ function removerClienteTrafico(idUsuario, idAduana, idCliente) {
         cache: false,
         url: "/usuarios/ajax/remover-cliente-usuario",
         type: "post",
-        data: {idUsuario: idUsuario, idAduana: idAduana, idCliente: idCliente},
+        data: { idUsuario: idUsuario, idAduana: idAduana, idCliente: idCliente },
         dataType: "json",
         success: function (res) {
             if (res.success === true) {
@@ -24,9 +24,9 @@ $(document).ready(function () {
     $("#formTraffic").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",

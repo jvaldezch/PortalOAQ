@@ -7,35 +7,48 @@
         </tr>
     </thead>
     <tbody>
-        <?php if ($this->data) { ?>
-            <?php foreach ($this->data as $item) { ?>
+        <?php if ($this->data) {?>
+            <?php foreach ($this->data as $item) {?>
                 <tr>
-                    <td style="text-align: left"><?= $item["patente"] . "-" . $item["aduana"] . " " . $item["nombreAduana"] ?></td>
-                    <td><?= ($item["patente"] != 0) ? $item["nombre"] : "TODAS" ?></td>
+                    <td style="text-align: left"><?=$item["patente"] . "-" . $item["aduana"] . " " . $item["nombreAduana"]?></td>
+                    <td><?=($item["patente"] != 0) ? $item["nombre"] : "TODAS"?></td>
                     <td>
-                        <!--<a style="cursor: pointer;" onclick="removerClienteTrafico(<?= $this->idUsuario ?>, <?= $item["idAduana"] ?>, <?= $item["idCliente"] ?>);"><img src="/images/icons/small_delete.png" /></a>-->
-                        <i class="far fa-trash-alt" onclick="removerClienteTrafico(<?= $this->idUsuario ?>, <?= $item["idAduana"] ?>, <?= $item["idCliente"] ?>);" style="font-size: 1.3em; color: #2f3b58; cursor: pointer"></i>
+                        <!--<a style="cursor: pointer;" onclick="removerClienteTrafico(<?=$this->idUsuario?>, <?=$item["idAduana"]?>, <?=$item["idCliente"]?>);"><img src="/images/icons/small_delete.png" /></a>-->
+                        <i class="far fa-trash-alt" onclick="removerClienteTrafico(<?=$this->idUsuario?>, <?=$item["idAduana"]?>, <?=$item["idCliente"]?>);" style="font-size: 1.3em; color: #2f3b58; cursor: pointer"></i>
                     </td>
                 </tr>
-            <?php } ?>
-        <?php } else { ?>
+            <?php }?>
+        <?php } else {?>
             <tr>
                 <td colspan="3" style="text-align: center"><em>El usuario no tiene aduanas asignadas.</em></td>
             </tr>
-        <?php } ?>
+        <?php }?>
     </tbody>
 </table>
-<?php if ($this->data) { ?>
-    <script type="text/javascript">    
-        $("#customersList").dataTable({
-            "sDom": "<'traffic-cols'<'traffic-col-50'l><'traffic-col-50'f><'traffic-clear-5'>t<'traffic-clear-5'><'traffic-col-50'i><'traffic-col-50'p><'traffic-clear-5'>>",
-            "sPaginationType": "bootstrap",
-            "oLanguage": {
-                "sLengthMenu": "_MENU_ registros por página"
-            },
-            "iDisplayLength": 15,
-            "aaSorting": [[15, "desc"]]
-        });    
+<?php if ($this->data) {?>
+    <script type="text/javascript">
+        $("#customersList").DataTable({
+        "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]],
+        "language": {
+            "decimal": "",
+            "emptyTable": "No data available in table",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrando _MENU_ registros",
+            "loadingRecords": "Cargando ...",
+            "processing": "Procesando ...",
+            "search": "Buscar:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Sig.",
+                "previous": "Ant."
+            }
+        }
+    });
     </script>
-<?php } ?>
-    
+<?php }?>

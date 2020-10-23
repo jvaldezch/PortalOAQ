@@ -8,9 +8,9 @@ $(document).ready(function () {
     $("#formUsuario").validate({
         errorPlacement: function (error, element) {
             $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
+                .closest("form")
+                .find("#" + element.attr("id"))
+                .after(error);
         },
         errorElement: "span",
         errorClass: "traffic-error",
@@ -49,7 +49,7 @@ $(document).ready(function () {
             cache: false,
             type: "post",
             dataType: "json",
-            data: {patente: $(this).val()}
+            data: { patente: $(this).val() }
         }).done(function (res) {
             if (res.success === true) {
                 $("#aduanaUsuario").empty();
@@ -69,27 +69,27 @@ $(document).ready(function () {
             useBootstrap: false,
             boxWidth: "350px",
             content: '' +
-            '<form action="" class="formName" method="post">' +
-            '<div class="form-group">' +
-            '<label>Proporcionar contraseña:</label>' +
-            '<input type="password" placeholder="Password" class="name form-control" required />' +
-            '</div>' +
-            '</form>' +
-            '<script type="text/javascript">$("form.formName .name").focus();</script>',
+                '<form action="" class="formName" method="post">' +
+                '<div class="form-group">' +
+                '<label>Proporcionar contraseña:</label>' +
+                '<input type="password" placeholder="Password" class="name form-control" required />' +
+                '</div>' +
+                '</form>' +
+                '<script type="text/javascript">$("form.formName .name").focus();</script>',
             buttons: {
                 formSubmit: {
                     text: "Submit",
                     btnClass: "btn-blue",
                     action: function () {
-                        $.post("/usuarios/post/obtener-password", {idUsuario: idUsuario, password: this.$content.find(".name").val()})
-                                .done(function (res) {
-                                    if (res.success === true) {
-                                        $.alert({title: "Resultados", content: res.pass, useBootstrap: false, boxWidth: "350px"});
-                                    }
-                                });
+                        $.post("/usuarios/post/obtener-password", { idUsuario: idUsuario, password: this.$content.find(".name").val() })
+                            .done(function (res) {
+                                if (res.success === true) {
+                                    $.alert({ title: "Resultados", content: res.pass, useBootstrap: false, boxWidth: "350px" });
+                                }
+                            });
                     }
                 },
-                cancel: function () {}
+                cancel: function () { }
             },
             onContentReady: function () {
                 var jc = this;
@@ -100,7 +100,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $(document.body).on("click", "#formUsuario #actualizarUsuario", function (e) {
         e.preventDefault();
         if ($("#formUsuario").valid()) {
@@ -110,7 +110,7 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (res) {
                     if (res.success === true) {
-                        $.toast({text: "<strong>Guardado</strong>", bgColor: "green", stack : 3, position : "bottom-right"});
+                        $.toast({ text: "<strong>Guardado</strong>", bgColor: "green", stack: 3, position: "bottom-right" });
                     }
                 }
             });
