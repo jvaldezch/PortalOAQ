@@ -3650,9 +3650,11 @@ class Trafico_PostController extends Zend_Controller_Action
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
                     "idAduana" => "Digits",
+                    "idCliente" => "Digits",
                 );
                 $v = array(
                     "idAduana" => new Zend_Validate_Int(),
+                    "idCliente" => new Zend_Validate_Int(),
                 );
                 $i = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($i->isValid("idAduana")) {
@@ -3661,7 +3663,7 @@ class Trafico_PostController extends Zend_Controller_Action
                     $s->obtenerPermisos($this->_session->id, $this->_session->role);
 
                     $model = new Trafico_Model_TraficoSolicitudesMapper();
-                    $rows = $model->obtenerMisSolicitudes($this->_session->id, $i->idAduana);
+                    $rows = $model->obtenerMisSolicitudes($this->_session->id, $i->idAduana, $i->idCliente);
 
                     if (!empty($rows)) {
                         $this->_helper->json(array("success" => true, "results" => $rows));

@@ -182,12 +182,14 @@ class Trafico_IndexController extends Zend_Controller_Action
         $this->view->headLink()
             ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
             ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
-            ->appendStylesheet("/css/jqModal.css");
+            ->appendStylesheet("/css/jqModal.css")
+            ->appendStylesheet("//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css");
         $this->view->headScript()
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
             ->appendFile("/js/common/jqModal.js")
             ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
             ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js")
             ->appendFile("/js/trafico/index/ultimas-solicitudes.js?" . time());
 
         $referencias = new OAQ_Referencias();

@@ -6,14 +6,15 @@
 
 let id_aduana;
 let id_cliente;
+let dt;
 
-window.allCustomsRequests = function (idAduana) {
+window.allCustomsRequests = function () {
     $.ajax({
         url: "/trafico/post/solicitudes",
         cache: false,
         type: "post",
         dataType: "json",
-        data: { idAduana: idAduana },
+        data: { idAduana: id_aduana, idCliente: id_cliente },
         beforeSend: function () {
             $('body').LoadingOverlay('show', { color: 'rgba(255, 255, 255, 0.9)' });
         },
@@ -41,29 +42,6 @@ window.allCustomsRequests = function (idAduana) {
                     html += '</tr>';
                     $("#mis-solicitudes").append(html);
                 }
-                $('#requests-table').DataTable({
-                    "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
-                    "language": {
-                        "decimal": "",
-                        "emptyTable": "No data available in table",
-                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                        "infoEmpty": "Showing 0 to 0 of 0 entries",
-                        "infoFiltered": "(filtered from _MAX_ total entries)",
-                        "infoPostFix": "",
-                        "thousands": ",",
-                        "lengthMenu": "Mostrando _MENU_ registros",
-                        "loadingRecords": "Cargando ...",
-                        "processing": "Procesando ...",
-                        "search": "Buscar:",
-                        "zeroRecords": "No matching records found",
-                        "paginate": {
-                            "first": "Primero",
-                            "last": "Último",
-                            "next": "Sig.",
-                            "previous": "Ant."
-                        }
-                    }
-                });
 
             } else {
                 $("#mis-solicitudes").append(`<tr><td colspan="7" style="text-align: center;"><em>${res.message}</em></td></tr>`);
@@ -138,8 +116,10 @@ $(document).ready(function () {
     $(document.body).on("change", "select[name^='aduana']", function () {
 
         id_aduana = $("#aduana").val();
+
         Cookies.set("portalSolicitudAduana", id_aduana);
-        allCustomsRequests(id_aduana);
+
+        allCustomsRequests();
 
         $.ajax({
             url: '/trafico/get/clientes-corresponsal', cache: false, type: 'get', dataType: 'json',
@@ -155,6 +135,11 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+    $(document.body).on("change", "#cliente", function () {
+        id_cliente = $("#cliente").val();        
+        allCustomsRequests();
     });
 
     $("#form-requests").validate({
@@ -214,10 +199,43 @@ $(document).ready(function () {
         input[0].selectionStart = input[0].selectionEnd = start;
     });
 
+    dt = $('#requests-table').DataTable({
+        "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]],
+        "language": {
+            "decimal": "",
+            "emptyTable": "No data available in table",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrando _MENU_ registros",
+            "loadingRecords": "Cargando ...",
+            "processing": "Procesando ...",
+            "search": "Buscar:",
+            "zeroRecords": "No matching records found",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Sig.",
+                "previous": "Ant."
+            }
+        },
+        "columns": [
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false }
+        ]
+    });
+
     id_aduana = Cookies.get('portalSolicitudAduana');
     if (id_aduana) {
-        $("select[name^='aduana']").val(id_aduana);
-        allCustomsRequests(id_aduana);
+        $("#aduana").val(id_aduana);
+        allCustomsRequests();
     }
 
 });
