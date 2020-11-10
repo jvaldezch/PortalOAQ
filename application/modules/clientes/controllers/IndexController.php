@@ -34,7 +34,7 @@ class Clientes_IndexController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $this->_session = NULL ? $this->_session = new Zend_Session_Namespace('') : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
+        $this->_session = null ? $this->_session = new Zend_Session_Namespace('') : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $this->_session->setExpirationSeconds($this->_appconfig->getParam('session-exp'));
         } else {
@@ -163,7 +163,7 @@ class Clientes_IndexController extends Zend_Controller_Action
                                 }
                                 $this->view->downloadZip = array(
                                     "size" => $quantity . " " . $measure,
-                                    "message" => "Tamaño del expediente: "
+                                    "message" => "Tamaño del expediente: ",
                                 );
                             }
                         }
@@ -234,7 +234,7 @@ class Clientes_IndexController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $search = NULL ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQCtaGastos');
+        $search = null ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQCtaGastos');
 
         if ($search->desglose == '0') {
             $headers = array(
@@ -333,7 +333,7 @@ class Clientes_IndexController extends Zend_Controller_Action
         $this->view->headMeta()->appendName('description', '');
         $this->view->headScript()
             ->appendFile("/js/clientes/index/archivos-xml.js?" . time());
-        $search = NULL ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQCtaGastos');
+        $search = null ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQCtaGastos');
         $page = $this->_request->getParam('page', 1);
         $archive = new Archivo_Model_CuentasGastosMapper();
         $form = new Clientes_Form_CtaGastos(array('desglose' => false));
@@ -385,7 +385,7 @@ class Clientes_IndexController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        $search = NULL ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQPedimentos');
+        $search = null ? $search = new Zend_Session_Namespace('') : $search = new Zend_Session_Namespace('OAQPedimentos');
 
         $headers = array(
             'Patente' => 'patente',
@@ -421,7 +421,7 @@ class Clientes_IndexController extends Zend_Controller_Action
             ->appendFile("/js/clientes/index/reporte-anexo-24.js?" . time());
         $this->view->rfc = $this->_session->username;
         $custs = new Trafico_Model_ClientesMapper();
-        $cust  = $custs->buscarRfc($this->_session->username);
+        $cust = $custs->buscarRfc($this->_session->username);
         $this->view->idCliente = $cust["id"];
         $mppr = new Trafico_Model_TraficoAduanasMapper();
         $arr = $mppr->obtenerReporteo();
@@ -430,7 +430,7 @@ class Clientes_IndexController extends Zend_Controller_Action
             $array[$value["id"]] = array(
                 "patente" => $value["patente"],
                 "aduana" => $value["aduana"],
-                "nombre" => $value["nombre"]
+                "nombre" => $value["nombre"],
             );
         }
         $this->view->arr = $array;

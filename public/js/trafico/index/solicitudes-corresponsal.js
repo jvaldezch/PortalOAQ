@@ -102,7 +102,7 @@ function deletePreRequest(id) {
 
 function reloadData(res, statusText, xhr, $form) {
     if (res.success === true) {
-        allCustomsRequests(id_aduana);
+        allCustomsRequests();
     } else {
         $.alert({
             title: "¡Advertencia!",

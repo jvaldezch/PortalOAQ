@@ -574,21 +574,26 @@ class Bodega_PostController extends Zend_Controller_Action
                 );
                 $input = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($input->isValid("page") && $input->isValid("rows")) {
+
                     $mppr = new Bodega_Model_BodegasUsuarios();
                     $bs = $mppr->obtenerBodegas($this->_session->id);
+
                     $b = array();
                     if (!empty($bs)) {
                         foreach ($bs as $item) {
-                            $b[] = $item['idBodega'];
+                            $b[] = (int) $item['idBodega'];
                         }
                     }
+
                     $rows = $this->_todos($input->page, $input->rows, $b, $input->filterRules, $this->_cookies());
                     $total = $this->_total($b, $input->filterRules, $this->_cookies());
+
                     $arr = array(
                         "total" => $total,
                         "rows" => empty($rows) ? array() : $rows,
                     );
                     $this->_helper->json($arr);
+
                 } else {
                     throw new Exception("Invalid input!");
                 }
@@ -658,13 +663,12 @@ class Bodega_PostController extends Zend_Controller_Action
         try {
             $sql = $this->_db->select()
                 ->from(array("t" => "traficos"), array("count(*) AS total"))
-            // ->joinInner(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
-            // ->joinLeft(array("u" => "usuarios"), "u.id = t.idUsuario", array(""))
                 ->where("t.idBodega IN (?)", $warehouses);
+
             $this->_filters($sql, $filterRules, $cookies);
             $stmt = $this->_db->fetchRow($sql);
             if ($stmt) {
-                return (int) $stmt->total;
+                return (int) $stmt['total'];
             }
             return;
         } catch (Zend_Db_Exception $ex) {

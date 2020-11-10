@@ -9,7 +9,7 @@ function zeroPad(num, places) {
     return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
-window.abrir = function() {
+window.abrir = function () {
     let row = $('#dg').datagrid('getSelected');
     if (row) {
         let win = window.open('/bodega/index/editar-entrada?id=' + row.id, '_blank');
@@ -17,7 +17,7 @@ window.abrir = function() {
     }
 };
 
-window.formatEstatus = function(val, row) {
+window.formatEstatus = function (val, row) {
     if (parseInt(val) === 1) {
         return '<div class="semaphore-black"></div>';
     } else if (parseInt(val) === 2) {
@@ -26,18 +26,18 @@ window.formatEstatus = function(val, row) {
         return '<div class="semaphore-blue"></div>';
     } else if (parseInt(val) === 4) {
         return '<div class="semaphore-green"></div>';
-    } 
+    }
 };
 
-window.formatMensajero = function(val, row) {
+window.formatMensajero = function (val, row) {
     return '<i class="fas fa-envelope mensajero" data-id="' + row.id + '" style="font-size: 1.2em; color: #2f3b58; cursor: pointer"></i>';
 };
 
-window.formatLink = function(val, row) {
+window.formatLink = function (val, row) {
     return '<a href="/trafico/index/editar-trafico?id=' + row.id + '">' + row.referencia + '</a>';
 };
 
-window.formatImpo = function(val, row) {
+window.formatImpo = function (val, row) {
     if (row.ie === "TOCE.IMP") {
         return '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>';
     } else {
@@ -72,7 +72,8 @@ $.extend($.fn.combobox.defaults, {
         let opts = $(target).combobox('options');
         if (!opts.url)
             return false;
-        $.ajax({type: opts.method, url: opts.url, data: param, dataType: 'json',
+        $.ajax({
+            type: opts.method, url: opts.url, data: param, dataType: 'json',
             success: function (data) {
                 if ($(target).parent().length) {
                     success(data);
@@ -145,137 +146,149 @@ function formatLinkWarehouse(val, row) {
     return '<a href="/bodega/index/editar-entrada?id=' + row.id + '">' + row.referencia + '</a>';
 }
 
-window.consolidasTraficos = function(idMaster, ids) {
-    return $.ajax({url: "/bodega/post/consolidar-traficos", dataType: "json", timeout: 10000, type: "POST",
-        data: {idMaster: idMaster, ids: ids}
+window.consolidasTraficos = function (idMaster, ids) {
+    return $.ajax({
+        url: "/bodega/post/consolidar-traficos", dataType: "json", timeout: 10000, type: "POST",
+        data: { idMaster: idMaster, ids: ids }
     });
 };
 
 let dg;
 
-window.consolidar = function () {    
+window.consolidar = function () {
     let ids = [];
     let rows = dg.datagrid('getSelections');
     for (let i = 0; i < rows.length; i++) {
         ids.push(rows[i].id);
     }
     if (ids.length > 1) {
-        $.confirm({title: "Consolidar tráficos", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
+        $.confirm({
+            title: "Consolidar tráficos", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
             buttons: {
-                si: {btnClass: "btn-blue", action: function () {
+                si: {
+                    btnClass: "btn-blue", action: function () {
                         let idMaster = $('input[name=master]:checked').val();
                         let ids = $("#ids").val();
-                        $.when( consolidasTraficos(idMaster, ids) ).done(function( res ) {
+                        $.when(consolidasTraficos(idMaster, ids)).done(function (res) {
                             if (res.success === true) {
                                 dg.edatagrid("reload");
                                 return true;
                             } else {
-                                $.alert({title: "Error", type: "red", content: res.message, boxWidth: "350px", useBootstrap: false});
+                                $.alert({ title: "Error", type: "red", content: res.message, boxWidth: "350px", useBootstrap: false });
                             }
                         });
                         return false;
-                }},
-                no: {action: function () {}}
+                    }
+                },
+                no: { action: function () { } }
             },
             content: function () {
                 let self = this;
                 return $.ajax({
                     url: "/bodega/get/consolidar-traficos",
                     method: "get",
-                    data: {ids: ids}
+                    data: { ids: ids }
                 }).done(function (res) {
                     self.setContent(res.html);
                 }).fail(function () {
                     self.setContent("Something went wrong.");
                 });
             }
-        });        
+        });
     } else {
-        $.alert({title: "Advertencia", type: "red", content: "Debe seleccionar más de una referencia para consolidar.", boxWidth: "250px", useBootstrap: false});
+        $.alert({ title: "Advertencia", type: "red", content: "Debe seleccionar más de una referencia para consolidar.", boxWidth: "250px", useBootstrap: false });
     }
 };
 
-window.enviarATrafico = function () {    
+window.enviarATrafico = function () {
     let ids = [];
     let rows = dg.datagrid('getSelections');
     for (let i = 0; i < rows.length; i++) {
         ids.push(rows[i].id);
     }
     if (ids.length === 1) {
-        $.confirm({title: "Enviar a tráfico", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
+        $.confirm({
+            title: "Enviar a tráfico", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
             buttons: {
-                si: {btnClass: "btn-blue", action: function () {
+                si: {
+                    btnClass: "btn-blue", action: function () {
                         if ($("#sendTraffic").valid()) {
-                            $("#sendTraffic").ajaxSubmit({url: "/bodega/post/enviar-a-trafico", cache: false, dataType: "json", timeout: 3000, type: "POST",
+                            $("#sendTraffic").ajaxSubmit({
+                                url: "/bodega/post/enviar-a-trafico", cache: false, dataType: "json", timeout: 3000, type: "POST",
                                 success: function (res) {
                                     if (res.success === true) {
                                         window.location.href = "/trafico/index/editar-trafico?id=" + res.id;
                                     }
                                 }
                             });
-                            
+
                         }
                         return false;
-                }},
-                no: {action: function () {}}
+                    }
+                },
+                no: { action: function () { } }
             },
             content: function () {
                 let self = this;
                 return $.ajax({
                     url: "/bodega/get/enviar-a-trafico",
                     method: "get",
-                    data: {id: ids[0]}
+                    data: { id: ids[0] }
                 }).done(function (res) {
                     self.setContent(res.html);
                 }).fail(function () {
                     self.setContent("Something went wrong.");
                 });
             }
-        });        
+        });
     } else {
-        $.alert({title: "Advertencia", type: "red", content: "Solo es posible enviar un tráfico.", boxWidth: "250px", useBootstrap: false});
+        $.alert({ title: "Advertencia", type: "red", content: "Solo es posible enviar un tráfico.", boxWidth: "250px", useBootstrap: false });
     }
 };
 
-window.ordenCarga = function() {
+window.ordenCarga = function () {
     let ids = [];
     let rows = dg.datagrid('getSelections');
     for (let i = 0; i < rows.length; i++) {
         ids.push(rows[i].id);
     }
     if (ids.length >= 1) {
-        $.confirm({title: "Asignar orden de carga", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
+        $.confirm({
+            title: "Asignar orden de carga", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "blue",
             buttons: {
-                si: {btnClass: "btn-blue", action: function () {
-                    if ($("#loadOrder").valid()) {
-                        $("#loadOrder").ajaxSubmit({url: "/bodega/post/asignar-orden-carga", dataType: "json", timeout: 3000, type: "POST",
-                            success: function (res) {
-                                if (res.success === true) {
-                                    dg.edatagrid("reload");
+                si: {
+                    btnClass: "btn-blue", action: function () {
+                        if ($("#loadOrder").valid()) {
+                            $("#loadOrder").ajaxSubmit({
+                                url: "/bodega/post/asignar-orden-carga", dataType: "json", timeout: 3000, type: "POST",
+                                success: function (res) {
+                                    if (res.success === true) {
+                                        dg.edatagrid("reload");
+                                    }
                                 }
-                            }
-                        });
-                    } else {
-                        return false;
+                            });
+                        } else {
+                            return false;
+                        }
                     }
-                }},
-                no: {action: function () {}}
+                },
+                no: { action: function () { } }
             },
             content: function () {
                 let self = this;
                 return $.ajax({
                     url: "/bodega/get/orden-carga",
                     method: "get",
-                    data: {ids: ids}
+                    data: { ids: ids }
                 }).done(function (res) {
                     self.setContent(res.html);
                 }).fail(function () {
                     self.setContent("Something went wrong.");
                 });
             }
-        });        
+        });
     } else {
-        $.alert({title: "Advertencia", type: "red", content: "Debe seleccionar más de una referencia para consolidar.", boxWidth: "250px", useBootstrap: false});
+        $.alert({ title: "Advertencia", type: "red", content: "Debe seleccionar más de una referencia para consolidar.", boxWidth: "250px", useBootstrap: false });
     }
 };
 
@@ -296,11 +309,11 @@ $(document).ready(function () {
         },
         url: "/bodega/post/entradas",
         updateUrl: "/bodega/post/entrada-actualizar",
-        rowStyler: function (index, row) {},
-        onClickRow: function (index, row) {},
+        rowStyler: function (index, row) { },
+        onClickRow: function (index, row) { },
         onBeginEdit: function (index, row) {
         },
-        onBeforeEdit: function (index, row) {},
+        onBeforeEdit: function (index, row) { },
         onAfterEdit: function (index, row) {
             $(this).datagrid("refreshRow", index);
         },
@@ -308,7 +321,7 @@ $(document).ready(function () {
             row.editing = false;
             $(this).datagrid("refreshRow", index);
         },
-        onAdd: function (index, row) {},
+        onAdd: function (index, row) { },
         onRowContextMenu: function (e, index, row) {
             e.preventDefault();
             $("#mm").menu("show", {
@@ -380,50 +393,50 @@ $(document).ready(function () {
         ],
         columns: [
             [
-                {field: "siglas", width: 50, title: "Bodega"},
-                {field: "nombreCliente", width: 300, title: "Nombre Cliente"},
-                {field: "ordenCarga", width: 120, title: "Orden de carga"},
-                {field: "nombre", width: 120, title: "Usuario"},
-                {field: "bultos", width: 50, title: "Bultos"},
+                { field: "siglas", width: 50, title: "Bodega" },
+                { field: "nombreCliente", width: 300, title: "Nombre Cliente" },
+                { field: "ordenCarga", width: 120, title: "Orden de carga" },
+                { field: "nombre", width: 120, title: "Usuario" },
+                { field: "bultos", width: 50, title: "Bultos" },
                 {
                     field: "fechaEta",
                     width: 100,
                     title: "F. ETA",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: { type: "datetimebox" },
+                    options: { required: false, validType: "datetime" }
                 },
                 {
                     field: "fechaEnvioDocumentos",
                     width: 105,
                     title: "F. Envio Doctos.",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: { type: "datetimebox" },
+                    options: { required: false, validType: "datetime" }
                 },
                 {
                     field: "fechaPago",
                     width: 95,
                     title: "F. Pago",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: { type: "datetimebox" },
+                    options: { required: false, validType: "datetime" }
                 },
                 {
                     field: "fechaLiberacion",
                     width: 95,
                     title: "F. Liberación",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: { type: "datetimebox" },
+                    options: { required: false, validType: "datetime" }
                 },
                 {
                     field: "blGuia",
                     width: 150,
                     title: "BL/Guía",
-                    editor: {type: "text"}
+                    editor: { type: "text" }
                 },
                 {
                     field: "contenedorCaja",
                     width: 150,
                     title: "Cont./Caja",
-                    editor: {type: "text"}
+                    editor: { type: "text" }
                 },
                 {
                     field: "idPlanta",
@@ -456,7 +469,7 @@ $(document).ready(function () {
                     field: "observaciones",
                     width: 250,
                     title: "Observaciones",
-                    editor: {type: "text"}
+                    editor: { type: "text" }
                 }
             ]
         ]

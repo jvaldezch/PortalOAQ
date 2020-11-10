@@ -19,7 +19,7 @@ class Clientes_GetController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
+        $this->_session = null ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
             $session->actualizar();
@@ -70,7 +70,7 @@ class Clientes_GetController extends Zend_Controller_Action
                         if ($download === false) {
                             $view->aduana = $input->aduana;
                             $view->year = $input->year;
-                            $view->mes =  $input->mes;
+                            $view->mes = $input->mes;
                             $view->result = $result;
                             echo $view->render("reporte-iva.phtml");
                         } else {
@@ -143,6 +143,10 @@ class Clientes_GetController extends Zend_Controller_Action
 
     public function reporteAction()
     {
+        // error_reporting(E_ALL ^ E_DEPRECATED);
+        // error_reporting(E_ALL & ~E_USER_DEPRECATED);
+        // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+        error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
         try {
             date_default_timezone_set('America/Mexico_City');
             $this->_helper->layout()->disableLayout();
@@ -164,9 +168,9 @@ class Clientes_GetController extends Zend_Controller_Action
                         array(
                             "min" => 2012,
                             "max" => 2025,
-                            "inclusive" => true
+                            "inclusive" => true,
                         )
-                    )
+                    ),
                 ),
                 "month" => array(
                     "Digits", new Zend_Validate_Int(),
@@ -174,9 +178,9 @@ class Clientes_GetController extends Zend_Controller_Action
                         array(
                             "min" => 1,
                             "max" => 12,
-                            "inclusive" => true
+                            "inclusive" => true,
                         )
-                    )
+                    ),
                 ),
                 "rfc" => new Zend_Validate_StringLength(array("max" => 25)),
                 "tipo" => new Zend_Validate_StringLength(array("max" => 25)),
@@ -236,9 +240,9 @@ class Clientes_GetController extends Zend_Controller_Action
                         array(
                             "min" => 2012,
                             "max" => 2025,
-                            "inclusive" => true
+                            "inclusive" => true,
                         )
-                    )
+                    ),
                 ),
                 "month" => array(
                     "Digits", new Zend_Validate_Int(),
@@ -246,9 +250,9 @@ class Clientes_GetController extends Zend_Controller_Action
                         array(
                             "min" => 1,
                             "max" => 12,
-                            "inclusive" => true
+                            "inclusive" => true,
                         )
-                    )
+                    ),
                 ),
                 "rfc" => new Zend_Validate_StringLength(array("max" => 25)),
                 "tipo" => new Zend_Validate_StringLength(array("max" => 25)),
@@ -329,7 +333,7 @@ class Clientes_GetController extends Zend_Controller_Action
                     $zipFilename = 'C:\\wamp64\\tmp' . DIRECTORY_SEPARATOR . $zipName;
                 }
                 $zip = new ZipArchive();
-                if ($zip->open($zipFilename, ZIPARCHIVE::CREATE) !== TRUE) {
+                if ($zip->open($zipFilename, ZIPARCHIVE::CREATE) !== true) {
                     return null;
                 }
                 foreach ($files as $file) {
@@ -495,11 +499,11 @@ class Clientes_GetController extends Zend_Controller_Action
                 $index = $trafico->verificarIndexRepositorios();
 
                 if (in_array($this->_session->role, array("super", "gerente", "trafico_ejecutivo", "trafico"))) {
-                    $view->canDelete = true;
+                $view->canDelete = true;
                 }
                 $val = new OAQ_ArchivosValidacion();
                 if (isset($array["pedimento"])) {
-                    $view->validacion = $val->archivosDePedimento($array["patente"], $array["aduana"], $array["pedimento"]);
+                $view->validacion = $val->archivosDePedimento($array["patente"], $array["aduana"], $array["pedimento"]);
                 }*/
                 $arr = array();
                 foreach ($archivos as $item) {
@@ -510,7 +514,7 @@ class Clientes_GetController extends Zend_Controller_Action
                             'nom_archivo' => $item['nom_archivo'],
                             'tipo_archivo' => (int) $item['tipo_archivo'],
                             'creado' => $item['creado'],
-                            'usuario' => $item['usuario']
+                            'usuario' => $item['usuario'],
                         );
                     }
                 }

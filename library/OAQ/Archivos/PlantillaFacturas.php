@@ -351,7 +351,7 @@ class OAQ_Archivos_PlantillaFacturas
                 "fechaFactura" => $this->_cambiarFecha($factura["FECHA_FACTURA"]),
                 "incoterm" => $factura["INCOTERM"],
                 "observaciones" => isset($factura["OBSERVACIONES"]) ? $factura["OBSERVACIONES"] : null,
-                "subdivision" => isset($factura["SUBDIVISION"]) ? $factura["SUBDIVISION"] : null,
+                "subdivision" => isset($factura["SUBDIVISION"]) ? (int) $factura["SUBDIVISION"] : null,
                 "ordenFactura" => isset($factura["ORDEN_FACTURA"]) ? (int) $factura["ORDEN_FACTURA"] : null,
                 "valorFacturaUsd" => (float) $factura["VAL_DLS"],
                 "valorFacturaMonExt" => (float) $factura["VAL_EXT"],

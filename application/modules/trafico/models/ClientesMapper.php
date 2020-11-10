@@ -1,18 +1,21 @@
 <?php
 
-class Trafico_Model_ClientesMapper {
+class Trafico_Model_ClientesMapper
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_Clientes();
     }
 
-    public function obtenerId($rfcCliente) {
+    public function obtenerId($rfcCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from(array("c" => "trafico_clientes"), array("id"))
-                    ->where("c.rfc = ?", $rfcCliente);
+                ->from(array("c" => "trafico_clientes"), array("id"))
+                ->where("c.rfc = ?", $rfcCliente);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 $data = $stmt->toArray();
@@ -25,18 +28,19 @@ class Trafico_Model_ClientesMapper {
     }
 
     /**
-     * 
+     *
      * @param string $rfc
      * @return boolean
      * @throws Exception
      */
-    public function buscarRfc($rfc) {
+    public function buscarRfc($rfc)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("*"))
-                    ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
-                    ->where("c.rfc = ?", $rfc);
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("*"))
+                ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
+                ->where("c.rfc = ?", $rfc);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -47,13 +51,14 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function datosCliente($id) {
+    public function datosCliente($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("*"))
-                    ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
-                    ->where("c.id = ?", $id);
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("*"))
+                ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
+                ->where("c.id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -64,13 +69,14 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function datosClientes($rfcs) {
+    public function datosClientes($rfcs)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("*"))
-                    ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
-                    ->where("c.rfc IN (?)", $rfcs);
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("*"))
+                ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
+                ->where("c.rfc IN (?)", $rfcs);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -81,14 +87,15 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function datosClienteDomicilio($id) {
+    public function datosClienteDomicilio($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("*", "nombre AS razonSocial"))
-                    ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
-                    ->joinLeft(array("d" => "trafico_clidom"), "d.idCliente = c.id", array("*"))
-                    ->where("c.id = ?", $id);
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("*", "nombre AS razonSocial"))
+                ->joinLeft(array("f" => "trafico_clisello"), "f.idCliente = c.id", array("idSello"))
+                ->joinLeft(array("d" => "trafico_clidom"), "d.idCliente = c.id", array("*"))
+                ->where("c.id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -99,15 +106,16 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function obtener($todos = true, $filter = null) {
+    public function obtener($todos = true, $filter = null)
+    {
         try {
             $vucem = new Zend_Db_Expr("(SELECT f.figura FROM vucem_firmante f WHERE f.rfc = c.rfc LIMIT 1) as vucem");
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("id", "nombre", "rfc", "activo", $vucem))
-                    ->joinLeft(array("l" => "checklist_clientes"), "l.idCliente = c.id", array("completo AS expedienteCompleto"))
-                    ->joinLeft(array("t" => "tarifas"), "t.idCliente = c.id AND t.estatus = 2", array("estatus AS estatusTarifa"))
-                    ->order("c.nombre ASC");
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("id", "nombre", "rfc", "activo", $vucem))
+                ->joinLeft(array("l" => "checklist_clientes"), "l.idCliente = c.id", array("completo AS expedienteCompleto"))
+                ->joinLeft(array("t" => "tarifas"), "t.idCliente = c.id AND t.estatus = 2", array("estatus AS estatusTarifa"))
+                ->order("c.nombre ASC");
             if (isset($filter)) {
                 if ((int) $filter == 1) {
                     $sql->where("activo = 0");
@@ -120,7 +128,7 @@ class Trafico_Model_ClientesMapper {
                 } elseif ((int) $filter == 6) {
                     $sql->where("l.completo = 0");
                 } elseif ((int) $filter != 0) {
-                    
+
                 }
             }
             if ($todos == true) {
@@ -136,11 +144,12 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function obtenerPorEmpresa($idEmpresa) {
+    public function obtenerPorEmpresa($idEmpresa)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idEmpresa = ?", $idEmpresa)
-                    ->order("nombre ASC");
+                ->where("idEmpresa = ?", $idEmpresa)
+                ->order("nombre ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -150,12 +159,13 @@ class Trafico_Model_ClientesMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function obtenerClientes($rfcs = null, $idClientes = null) {
+
+    public function obtenerClientes($rfcs = null, $idClientes = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("activo = 1")
-                    ->order("nombre ASC");
+                ->where("activo = 1")
+                ->order("nombre ASC");
             if (isset($rfcs) && !empty($rfcs)) {
                 $sql->where("rfc IN (?)", $rfcs);
             }
@@ -171,12 +181,13 @@ class Trafico_Model_ClientesMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function obtenerTodos() {
+
+    public function obtenerTodos()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("activo = 1")
-                    ->order("nombre ASC");
+                ->where("activo = 1")
+                ->order("nombre ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $data[""] = "---";
@@ -191,10 +202,11 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function buscar($rfc) {
+    public function buscar($rfc)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("rfc = ?", $rfc);
+                ->where("rfc = ?", $rfc);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -205,17 +217,18 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function busqueda($string) {
+    public function busqueda($string)
+    {
         try {
             $vucem = new Zend_Db_Expr("(SELECT f.figura FROM vucem_firmante f WHERE f.rfc = c.rfc LIMIT 1) as vucem");
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("id", "nombre", "rfc", "activo", $vucem))
-                    ->joinLeft(array("l" => "checklist_clientes"), "l.idCliente = c.id", array("completo AS expedienteCompleto"))
-                    ->joinLeft(array("t" => "tarifas"), "t.idCliente = c.id AND t.estatus = 2", array("estatus AS estatusTarifa"))
-                    ->where("c.rfc LIKE ?", "%" . $string . "%")
-                    ->orWhere("c.nombre LIKE ?", "%" . $string . "%")
-                    ->order("c.nombre ASC");
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("id", "nombre", "rfc", "activo", $vucem))
+                ->joinLeft(array("l" => "checklist_clientes"), "l.idCliente = c.id", array("completo AS expedienteCompleto"))
+                ->joinLeft(array("t" => "tarifas"), "t.idCliente = c.id AND t.estatus = 2", array("estatus AS estatusTarifa"))
+                ->where("c.rfc LIKE ?", "%" . $string . "%")
+                ->orWhere("c.nombre LIKE ?", "%" . $string . "%")
+                ->order("c.nombre ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -226,7 +239,8 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function nuevoCliente($data) {
+    public function nuevoCliente($data)
+    {
         try {
             $stmt = $this->_db_table->insert($data);
             if ($stmt) {
@@ -238,7 +252,8 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function pecaDefault($idCliente, $peca) {
+    public function pecaDefault($idCliente, $peca)
+    {
         try {
             $data = array(
                 "peca" => $peca,
@@ -256,7 +271,8 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function esquemaDefault($idCliente, $esquema) {
+    public function esquemaDefault($idCliente, $esquema)
+    {
         try {
             $data = array(
                 "esquema" => $esquema,
@@ -274,7 +290,8 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function tipoCliente($idCliente, $esquema) {
+    public function tipoCliente($idCliente, $esquema)
+    {
         try {
             $data = array(
                 "tipoCliente" => $esquema,
@@ -292,7 +309,8 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function actualizarNombre($idCliente, $nombre, $rfcSociedad) {
+    public function actualizarNombre($idCliente, $nombre, $rfcSociedad)
+    {
         try {
             $data = array(
                 "nombre" => $nombre,
@@ -311,7 +329,8 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function actualizar($idCliente, $arr) {
+    public function actualizar($idCliente, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, ["id = ?" => $idCliente]);
             if ($stmt) {
@@ -323,7 +342,8 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function cambiarEstatus($activo, $rfc) {
+    public function cambiarEstatus($activo, $rfc)
+    {
         try {
             $data = array(
                 "activo" => (isset($activo) && $activo == 1) ? 1 : 0,
@@ -342,17 +362,18 @@ class Trafico_Model_ClientesMapper {
     }
 
     /**
-     * 
+     *
      * @param string $name
      * @return array|null
      * @throws Exception
      */
-    public function buscarCliente($name) {
+    public function buscarCliente($name)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("nombre LIKE ?", "%" . $name . "%")
-                    ->order("nombre ASC")
-                    ->limit(10);
+                ->where("nombre LIKE ?", "%" . $name . "%")
+                ->order("nombre ASC")
+                ->limit(10);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $arr = array();
@@ -367,10 +388,11 @@ class Trafico_Model_ClientesMapper {
         }
     }
 
-    public function buscarPorNombre($nombre) {
+    public function buscarPorNombre($nombre)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("nombre LIKE ?", "%" . $nombre . "%");
+                ->where("nombre LIKE ?", "%" . $nombre . "%");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -382,17 +404,18 @@ class Trafico_Model_ClientesMapper {
     }
 
     /**
-     * 
+     *
      * @param string $name
      * @return array|null
      * @throws Exception
      */
-    public function rfcDeCliente($name) {
+    public function rfcDeCliente($name)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("rfc"))
-                    ->where("nombre LIKE ?", "%" . $name . "%")
-                    ->limit(1);
+                ->from($this->_db_table, array("rfc"))
+                ->where("nombre LIKE ?", "%" . $name . "%")
+                ->limit(1);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -404,22 +427,23 @@ class Trafico_Model_ClientesMapper {
     }
 
     /**
-     * 
+     *
      * @param string $rfc
      * @param string $nombre
      * @param string $sistema
      * @return type
      * @throws Exception
      */
-    public function sistema($rfc, $nombre, $sistema) {
+    public function sistema($rfc, $nombre, $sistema)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("id"))
-                    ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array("identificador"))
-                    ->where("c.rfc = ?", $rfc)
-                    ->where("c.nombre = ?", $nombre)
-                    ->where("s.sistema = ?", $sistema);
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("id"))
+                ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array("identificador"))
+                ->where("c.rfc = ?", $rfc)
+                ->where("c.nombre = ?", $nombre)
+                ->where("s.sistema = ?", $sistema);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -431,19 +455,20 @@ class Trafico_Model_ClientesMapper {
     }
 
     /**
-     * 
+     *
      * @param int $idCliente
      * @return type
      * @throws Exception
      */
-    public function sica($idCliente) {
+    public function sica($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("id"))
-                    ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array("identificador"))
-                    ->where("c.id = ?", $idCliente)
-                    ->where("s.sistema = 'sica'");
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("id"))
+                ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array("identificador"))
+                ->where("c.id = ?", $idCliente)
+                ->where("s.sistema = 'sica'");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->identificador;
@@ -455,19 +480,20 @@ class Trafico_Model_ClientesMapper {
     }
 
     /**
-     * 
+     *
      * @param int $idCliente
      * @return type
      * @throws Exception
      */
-    public function accesoPortal($idCliente) {
+    public function accesoPortal($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("id"))
-                    ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array(new Zend_Db_Expr("AES_DECRYPT(`password`,'oaqlkjkj3asdjaksdjqweuiuyyASDQWEksald') AS `password`")))
-                    ->where("c.id = ?", $idCliente)
-                    ->where("s.sistema = 'portal'");
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("id"))
+                ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array(new Zend_Db_Expr("AES_DECRYPT(`password`,'oaqlkjkj3asdjaksdjqweuiuyyASDQWEksald') AS `password`")))
+                ->where("c.id = ?", $idCliente)
+                ->where("s.sistema = 'portal'");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->password;
@@ -479,19 +505,20 @@ class Trafico_Model_ClientesMapper {
     }
 
     /**
-     * 
+     *
      * @param int $idCliente
      * @return type
      * @throws Exception
      */
-    public function accesoDashboard($idCliente) {
+    public function accesoDashboard($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("c" => "trafico_clientes"), array("id"))
-                    ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array("identificador"))
-                    ->where("c.id = ?", $idCliente)
-                    ->where("s.sistema = 'dashboard'");
+                ->setIntegrityCheck(false)
+                ->from(array("c" => "trafico_clientes"), array("id"))
+                ->joinLeft(array("s" => "trafico_cliente_dbs"), "s.idCliente = c.id", array("identificador"))
+                ->where("c.id = ?", $idCliente)
+                ->where("s.sistema = 'dashboard'");
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->identificador;
@@ -501,12 +528,13 @@ class Trafico_Model_ClientesMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function obtenerRfcCliente($idCliente) {
+
+    public function obtenerRfcCliente($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("rfc"))
-                    ->where("id = ?", $idCliente);
+                ->from($this->_db_table, array("rfc"))
+                ->where("id = ?", $idCliente);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->rfc;

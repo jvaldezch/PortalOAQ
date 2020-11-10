@@ -1,26 +1,29 @@
 <?php
 
-class Trafico_Model_TraficoAduanasMapper {
+class Trafico_Model_TraficoAduanasMapper
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_TraficoAduanas();
     }
 
     /**
-     * 
+     *
      * @param int $patente
      * @param int $aduana
      * @return boolean
      * @throws Exception
      */
-    public function idAduana($patente, $aduana) {
+    public function idAduana($patente, $aduana)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id"))
-                    ->where("patente = ?", $patente)
-                    ->where("aduana = ?", $aduana);
+                ->from($this->_db_table, array("id"))
+                ->where("patente = ?", $patente)
+                ->where("aduana = ?", $aduana);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->id;
@@ -32,21 +35,22 @@ class Trafico_Model_TraficoAduanasMapper {
     }
 
     /**
-     * 
+     *
      * @param int $tipoAduana
      * @return boolean
      * @throws Exception
      */
-    public function obtener($tipoAduana = null) {
+    public function obtener($tipoAduana = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id", "patente", "aduana", "nombre", "corresponsal", "tipoAduana"))
-                    ->where("activo = 1")
-                    ->where("visible = 1")
-                    ->order(array("patente", "aduana"));
+                ->from($this->_db_table, array("id", "patente", "aduana", "nombre", "corresponsal", "tipoAduana"))
+                ->where("activo = 1")
+                ->where("visible = 1")
+                ->order(array("patente", "aduana"));
             if (isset($tipoAduana)) {
                 $sql->where("tipoAduana = ?", $tipoAduana)
-                        ->where("patente <> 9999");
+                    ->where("patente <> 9999");
             }
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
@@ -57,15 +61,16 @@ class Trafico_Model_TraficoAduanasMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . " > " . $e->getMessage());
         }
     }
-    
-    public function obtenerReporteo() {
+
+    public function obtenerReporteo()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id", "patente", "aduana", "nombre", "corresponsal", "tipoAduana"))
-                    ->where("activo = 1")
-                    ->where("visible = 1")
-                    ->where("reportes = 1")
-                    ->order(array("patente", "aduana"));
+                ->from($this->_db_table, array("id", "patente", "aduana", "nombre", "corresponsal", "tipoAduana"))
+                ->where("activo = 1")
+                ->where("visible = 1")
+                ->where("reportes = 1")
+                ->order(array("patente", "aduana"));
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -76,10 +81,11 @@ class Trafico_Model_TraficoAduanasMapper {
         }
     }
 
-    public function aduana($id) {
+    public function aduana($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("id = ?", $id);
+                ->where("id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -90,13 +96,14 @@ class Trafico_Model_TraficoAduanasMapper {
         }
     }
 
-    public function aduanas() {
+    public function aduanas()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("visible = 1")
-                    ->where("activo = 1")
-                    ->where("aduana NOT IN (645, 646)")
-                    ->order(array("patente", "aduana"));
+                ->where("visible = 1")
+                ->where("activo = 1")
+                ->where("aduana NOT IN (645, 646)")
+                ->order(array("patente", "aduana"));
             $stmt = $this->_db_table->fetchAll($sql);
             if (count($stmt)) {
                 $arr = array("-" => "---");
@@ -110,21 +117,22 @@ class Trafico_Model_TraficoAduanasMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function aduanasDashboard() {
+
+    public function aduanasDashboard()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("visible = 1")
-                    ->where("activo = 1")
-                    ->where("aduana NOT IN (645, 646)")
-                    ->order(array("patente", "aduana"));
+                ->where("visible = 1")
+                ->where("activo = 1")
+                ->where("aduana NOT IN (645, 646)")
+                ->order(array("patente", "aduana"));
             $stmt = $this->_db_table->fetchAll($sql);
             if (count($stmt)) {
                 foreach ($stmt->toArray() as $item) {
                     if ((int) $item["patente"] == 0) {
                         $arr[$item["id"]] = $item["nombre"];
                     } else {
-                        $arr[$item["id"]] = $item["patente"] . "-" . $item["aduana"] . " " . $item["nombre"];                        
+                        $arr[$item["id"]] = $item["patente"] . "-" . $item["aduana"] . " " . $item["nombre"];
                     }
                 }
                 return $arr;
@@ -136,16 +144,17 @@ class Trafico_Model_TraficoAduanasMapper {
     }
 
     /**
-     * 
+     *
      * @param array $ids
      * @return boolean
      * @throws Exception
      */
-    public function obtenerTodas($ids = null) {
+    public function obtenerTodas($ids = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("(activo = 1 AND visible = 1)")
-                    ->order("patente");
+                ->where("(activo = 1 AND visible = 1)")
+                ->order("patente");
             if (isset($ids) && is_array($ids)) {
                 $sql->where("id IN (?)", $ids);
             }
@@ -158,14 +167,15 @@ class Trafico_Model_TraficoAduanasMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . " > " . $e->getMessage());
         }
     }
-    
-    public function obtenerPatentes() {
+
+    public function obtenerPatentes()
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("patente"))
-                    ->group("patente")
-                    ->where("visible = 1")
-                    ->where("activo = 1");
+                ->from($this->_db_table, array("patente"))
+                ->group("patente")
+                ->where("visible = 1")
+                ->where("activo = 1");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -175,15 +185,16 @@ class Trafico_Model_TraficoAduanasMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . " > " . $e->getMessage());
         }
     }
-    
-    public function obtenerAduanas($patente) {
+
+    public function obtenerAduanas($patente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("aduana", "nombre"))
-                    ->order("aduana ASC")
-                    ->where("visible = 1")
-                    ->where("activo = 1")
-                    ->where("patente = ?", $patente);
+                ->from($this->_db_table, array("aduana", "nombre"))
+                ->order("aduana ASC")
+                ->where("visible = 1")
+                ->where("activo = 1")
+                ->where("patente = ?", $patente);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -193,19 +204,20 @@ class Trafico_Model_TraficoAduanasMapper {
             throw new Exception("DB Exception found on " . __METHOD__ . " > " . $e->getMessage());
         }
     }
-    
+
     /**
-     * 
+     *
      * @param array $ids
      * @return boolean
      * @throws Exception
      */
-    public function obtenerActivas($ids = null, $tipoAduana = null) {
+    public function obtenerActivas($ids = null, $tipoAduana = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("activo = 1")
-                    ->where("visible = 1")
-                    ->order(array("patente", "aduana"));
+                ->where("activo = 1")
+                ->where("visible = 1")
+                ->order(array("patente", "aduana"));
             if (isset($tipoAduana)) {
                 $sql->where("tipoAduana = ?", $tipoAduana);
             }
@@ -223,18 +235,19 @@ class Trafico_Model_TraficoAduanasMapper {
     }
 
     /**
-     * 
+     *
      * @param int $patente
      * @param int $aduana
      * @return boolean
      * @throws Exception
      */
-    public function infoAduana($patente, $aduana) {
+    public function infoAduana($patente, $aduana)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from(array("a" => "trafico_aduanas"), array("*"))
-                    ->where("a.patente = ?", $patente)
-                    ->where("a.aduana = ?", $aduana);
+                ->from(array("a" => "trafico_aduanas"), array("*"))
+                ->where("a.patente = ?", $patente)
+                ->where("a.aduana = ?", $aduana);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -245,11 +258,12 @@ class Trafico_Model_TraficoAduanasMapper {
         }
     }
 
-    public function obtenerAduana($idAduana) {
+    public function obtenerAduana($idAduana)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from(array("a" => "trafico_aduanas"), array("*"))
-                    ->where("a.id = ?", $idAduana);
+                ->from(array("a" => "trafico_aduanas"), array("*"))
+                ->where("a.id = ?", $idAduana);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -260,12 +274,13 @@ class Trafico_Model_TraficoAduanasMapper {
         }
     }
 
-    public function find(Trafico_Model_Table_Aduanas $tbl) {
+    public function find(Trafico_Model_Table_Aduanas $tbl)
+    {
         try {
             $stmt = $this->_db_table->fetchRow(
-                    $this->_db_table->select()
-                            ->where("patente = ?", $tbl->getPatente())
-                            ->where("aduana = ?", $tbl->getAduana())
+                $this->_db_table->select()
+                    ->where("patente = ?", $tbl->getPatente())
+                    ->where("aduana = ?", $tbl->getAduana())
             );
             if (0 == count($stmt)) {
                 return;
@@ -276,7 +291,8 @@ class Trafico_Model_TraficoAduanasMapper {
         }
     }
 
-    public function save(Trafico_Model_Table_Aduanas $tbl) {
+    public function save(Trafico_Model_Table_Aduanas $tbl)
+    {
         try {
             $arr = array(
                 "patente" => $tbl->getPatente(),
@@ -298,11 +314,12 @@ class Trafico_Model_TraficoAduanasMapper {
         }
     }
 
-    public function tipoAduana($id) {
+    public function tipoAduana($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("tipoAduana"))
-                    ->where("id = ?", $id);
+                ->from($this->_db_table, array("tipoAduana"))
+                ->where("id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->tipoAduana;
