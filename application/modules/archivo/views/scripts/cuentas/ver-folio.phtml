@@ -1,0 +1,114 @@
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Patente</th>
+            <th>Aduana</th>
+            <th>Pedimento</th>
+            <th>Referencia</th>
+            <th>Folio</th>
+            <th>RFC Cliente</th>
+            <th>Nom. Cliente</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->row['patente'] ?></td>
+            <td><?= $this->row['aduana'] ?></td>
+            <td><?= $this->row['pedimento'] ?></td>
+            <td><?= $this->row['referencia'] ?></td>
+            <td><?= $this->row['folio'] ?></td>
+            <td><?= $this->row['rfcCliente'] ?></td>
+            <td><?= $this->row['nomCliente'] ?></td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>F. Facturación</th>
+            <th>F. Pago</th>
+            <th>Anticipo</th>
+            <th>Subtotal</th>
+            <th>% IVA</th>
+            <th>IVA</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->row['fechaFacturacion'] ?></td>
+            <td><?= $this->row['fechaPago'] ?></td>
+            <td><?= $this->row['anticipo'] ?></td>
+            <td><?= $this->row['subtotal'] ?></td>
+            <td><?= $this->row['porcentajeIva'] ?></td>
+            <td><?= $this->row['iva'] ?></td>
+            <td><?= $this->row['total'] ?></td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="traffic-table">
+    <thead>
+        <tr>
+            <th>Contenido</th>
+            <th>Bultos</th>
+            <th>Observaciones</th>
+            <th>Honorarios</th>
+            <th>Tipo Cambio</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $this->row['contenido'] ?></td>
+            <td><?= $this->row['bultos'] ?></td>
+            <td><?= $this->row['observaciones'] ?></td>
+            <td><?= $this->row['honorarios'] ?></td>
+            <td><?= $this->row['tipoCambio'] ?></td>
+        </tr>
+    </tbody>
+</table>
+
+<?php if (isset($this->row['conceptos']) && !empty($this->row['conceptos'])) { ?>
+    <table class="traffic-table">
+        <thead>
+            <tr>
+                <th class="traffic-table-subtitle" colspan="4">CONCEPTOS</th>
+            </tr>
+            <tr>
+                <th class="traffic-td-left">Concepto</th>
+                <th>Importe</th>
+                <th>Cantidad</th>
+                <th>IVA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->row['conceptos'] as $item) { ?>
+                <tr>
+                    <td class="traffic-td-left"><?= $item['nomConcepto'] ?></td>
+                    <td><?= number_format($item['importe'], 2) ?></td>
+                    <td><?= number_format($item['cantidad'], 2) ?></td>
+                    <td><?= number_format($item['iva'], 2) ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <table class="traffic-table">
+        <thead>
+            <tr>
+                <th>CONCEPTOS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center;">
+                    <em>El folio no tiene conceptos.</em>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<?php } ?>
+
+<a href="/archivo/cuentas" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i> Regresar</a>

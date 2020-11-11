@@ -17,7 +17,7 @@ class Archivo_GetController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
+        $this->_session = null ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
             $session->actualizar();
@@ -171,7 +171,7 @@ class Archivo_GetController extends Zend_Controller_Action
                 } else if (in_array($this->_session->role, array("cliente"))) {
                     $files = $model->getFilesByReferenceCustomers($arr["referencia"], $arr["patente"], $arr["aduana"]);
                 }
-                
+
                 $complementos = $model->complementosReferencia($arr["referencia"]);
 
                 if (count($files)) {
@@ -188,7 +188,7 @@ class Archivo_GetController extends Zend_Controller_Action
                         unlink($zipFilename);
                     }
                     $zip = new ZipArchive();
-                    if ($zip->open($zipFilename, ZIPARCHIVE::CREATE) !== TRUE) {
+                    if ($zip->open($zipFilename, ZIPARCHIVE::CREATE) !== true) {
                         return null;
                     }
                     foreach ($files as $file) {
@@ -230,7 +230,7 @@ class Archivo_GetController extends Zend_Controller_Action
                         }
                     }
 
-                    if (($zip->close()) === TRUE) {
+                    if (($zip->close()) === true) {
                         $closed = true;
                     }
                     if ($closed === true) {
@@ -379,7 +379,7 @@ class Archivo_GetController extends Zend_Controller_Action
             );
             $v = array(
                 "id" => array("NotEmpty", new Zend_Validate_Int()),
-                "view" => array("NotEmpty", new Zend_Validate_InArray(array(true, false)))
+                "view" => array("NotEmpty", new Zend_Validate_InArray(array(true, false))),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id")) {
@@ -424,7 +424,7 @@ class Archivo_GetController extends Zend_Controller_Action
             );
             $v = array(
                 "id" => array("NotEmpty", new Zend_Validate_Int()),
-                "view" => array("NotEmpty", new Zend_Validate_InArray(array(true, false)))
+                "view" => array("NotEmpty", new Zend_Validate_InArray(array(true, false))),
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("id")) {
@@ -994,6 +994,38 @@ class Archivo_GetController extends Zend_Controller_Action
             } else {
                 throw new Exception("Invalid input!");
             }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    public function cuentasGastosAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "page" => array("Digits"),
+                "rows" => array("Digits"),
+            );
+            $v = array(
+                "page" => array(new Zend_Validate_Int(), "default" => 1),
+                "rows" => array(new Zend_Validate_Int(), "default" => 20),
+                "filterRules" => "NotEmpty",
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+
+            $ctas = new OAQ_Cuentas_Gastos();
+
+            $paginator = $ctas->obtenerCuentas($input->rows, $input->page, $input->filterRules);
+
+            $arr = array(
+                "total" => $paginator->getTotalItemCount(),
+                "rows" => iterator_to_array($paginator),
+                "paginator" => $paginator->getPages(),
+            );
+            
+            $this->_helper->json($arr);
+
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
