@@ -563,6 +563,30 @@ class Archivo_GetController extends Zend_Controller_Action
         }
     }
 
+    public function linkFtpAction() {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $f = array(
+                "id" => array("StringTrim", "StripTags", "Digits"),
+            );
+            $v = array(
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($i->isValid("id")) {
+                $ftp = new OAQ_Archivos_FtpDescarga($i->id, $this->_appconfig->getParam("ftpfolder"));
+                if (($link = $ftp->obtenerArchivo())) {
+                    $g = new OAQ_Google_Storage();
+                    $url = $g->copy($this->_appconfig->getParam("ftpfolder") . DIRECTORY_SEPARATOR . $link);
+                    echo "<p style=\"font-size: 12px\">Debido a que el expediente es muy grande utilice el siguiente link para descargar:<br><br><a href=\"{$url}\" target=\"_blank\">{$url}</a><br><br>Este link será removido en un lapso de 24 horas.</p>";
+                }                
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function mvhcEstatusObtenerAction()
     {
         try {

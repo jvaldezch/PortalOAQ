@@ -18,14 +18,14 @@ $(document).ready(function() {
     
     $(document.body).on("click", "#ftpLink", function (ev) {
         var id = $(this).data("id");
-        $.confirm({ title: "FTP", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "green",
+        $.confirm({ title: "Enlace de descarga", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "green",
             buttons: {
                 cerrar: {btnClass: "btn-green", action: function () {}}
             },
             content: function () {
                 var self = this;
                 return $.ajax({
-                    url: "/clientes/data/descargar-ftp?id=" + id,
+                    url: "/clientes/get/link-ftp?id=" + id,
                     method: "get"
                 }).done(function (res) {
                     self.setContent(res);

@@ -3,6 +3,11 @@ let dg;
 let dateini;
 let dateend;
 
+window.zeroPad = function (num, places) {
+    let zero = places - num.toString().length + 1;
+    return Array(+(zero > 0 && zero)).join("0") + num;
+}
+
 window.formatLink = function (val, row) {
     return '<a href="/archivo/cuentas/ver-folio?id=' + row.id + '">' + row.folio + '</a>';
 }
