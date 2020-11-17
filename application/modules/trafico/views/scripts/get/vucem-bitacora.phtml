@@ -39,7 +39,11 @@
             <td><?= $item["numeroOperacion"] ?></td>
             <?php if (isset($item["idArchivo"]) && isset($item["nombreArchivo"])) { ?>
                 <td style="text-align: left">
-                    <?= $item["nombreArchivo"] ?>
+                    <?php if (isset($item["ubicacion"]) && file_exists($item["ubicacion"])) { ?>
+                        <a href="/trafico/get/descarga-digitalizado?id=<?= $item["id"] ?>"><?= $item["nombreArchivo"] ?></a>
+                    <?php } else { ?>
+                        <?= $item["nombreArchivo"] ?>
+                    <?php } ?>
                     <?= (isset($item["ubicacion"]) && file_exists($item["ubicacion"])) ? $this->fileSize($item['ubicacion']) : ' <i class="fas fa-exclamation" style="color: #2f3b58" title="El archivo ha sido borrado o se ha transmitido de manera correcta.Si ya cuenta con número de EDocument hacre caso omiso de está advertencia."></i>' ?><br>
                     <strong>Tipo: </strong><?= $item["tipoDocumento"] ?><br>
                 </td>
