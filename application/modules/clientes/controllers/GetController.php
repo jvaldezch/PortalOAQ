@@ -143,10 +143,9 @@ class Clientes_GetController extends Zend_Controller_Action
 
     public function reporteAction()
     {
-        // error_reporting(E_ALL ^ E_DEPRECATED);
-        // error_reporting(E_ALL & ~E_USER_DEPRECATED);
-        // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
         error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+
         try {
             date_default_timezone_set('America/Mexico_City');
             $this->_helper->layout()->disableLayout();

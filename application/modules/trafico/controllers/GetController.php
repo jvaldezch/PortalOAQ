@@ -1595,6 +1595,34 @@ class Trafico_GetController extends Zend_Controller_Action
         }
     }
 
+    public function descargaDigitalizadoAction()
+    {
+        try {
+            $f = array(
+                "id" => array("StringTrim", "StripTags", "Digits"),
+            );
+            $v = array(
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id")) {
+
+                $mppr = new Trafico_Model_VucemMapper();
+                $row = $mppr->obtenerVucem($input->id);                
+                if (isset($row["ubicacion"]) && file_exists($row["ubicacion"])) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+                    header("Content-Type: application/zip");
+                    header("Content-Transfer-Encoding: Binary");
+                    header("Content-Length: " . filesize($row["ubicacion"]));
+                    header("Content-Disposition: attachment; filename=\"" . basename($row["ubicacion"]) . "\"");
+                    readfile($row["ubicacion"]);
+                }
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function vucemFirmasAction()
     {
         try {

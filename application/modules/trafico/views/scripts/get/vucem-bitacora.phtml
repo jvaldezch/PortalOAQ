@@ -40,7 +40,7 @@
             <?php if (isset($item["idArchivo"]) && isset($item["nombreArchivo"])) { ?>
                 <td style="text-align: left">
                     <?php if (isset($item["ubicacion"]) && file_exists($item["ubicacion"])) { ?>
-                        <a href="/trafico/get/descarga-digitalizado?id=<?= $item["id"] ?>"><?= $item["nombreArchivo"] ?></a>
+                        <a href="/trafico/get/descarga-digitalizado?id=<?= $item["id"] ?>" target="_blank"><?= $item["nombreArchivo"] ?></a>
                     <?php } else { ?>
                         <?= $item["nombreArchivo"] ?>
                     <?php } ?>
