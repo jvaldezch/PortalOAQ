@@ -11,16 +11,14 @@
     <div class="col"><strong>CLIENTE:</strong> <?= $this->row['nombreCliente'] ?></div>
     <div class="w-100"></div>
     <div class="col"><strong>BULTOS:</strong> <?= $this->row['bultos'] ?></div>
-    <div class="col"><strong>IMP/EXP:</strong> <?= ($this->row["ie"] == 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>' : '<i class="fas fa-arrow-circle-up" style="color: #2f3b58"></i>' ?></div>
+    <div class="col"><strong>PLACAS:</strong> <?= $this->row['contenedorCaja'] ?></div>
     <div class="w-100"></div>
     <div class="col"><strong>CANDADOS:</strong> <?= $this->row['candados'] ?></div>
-    <div class="col"><strong>PLACAS:</strong> <?= $this->row['contenedorCaja'] ?></div>
+    <div class="col"><strong>UBICACIÓN:</strong> <?= $this->row['ubicacion'] ?></div>
     <div class="w-100"></div>
     <div class="col"><strong>LÍNEA:</strong> <?= $this->row['lineaTransporte'] ?></div>
     <div class="w-100"></div>
     <div class="col"><strong>PROVEEDOR:</strong> <?= $this->row['proveedores'] ?></div>
-    <div class="w-100"></div>
-    <div class="col"><strong>UBICACIÓN:</strong> <?= $this->row['ubicacion'] ?></div>
     <div class="w-100"></div>
     <div class="col"><strong>PESO KG:</strong> <?= $this->row['pesoKg'] ?></div>
     <div class="col"><strong>PESO LBS:</strong> <?= $this->row['pesoLbs'] ?></div>
@@ -28,15 +26,14 @@
     <div class="col"><strong>CAJA ENTRADA:</strong> <?= $this->row['contenedorCajaEntrada'] ?></div>
     <div class="col"><strong>CAJA SALIDA:</strong> <?= $this->row['contenedorCajaSalida'] ?></div>
     <div class="w-100"></div>
-    <div class="col"><strong>USUARIO:</strong> <?= mb_strtoupper($this->row['nombre']) ?><br><br></div>
-    <div class="w-100"></div>
-    <div class="col">
+    <br>
+    <div class="col ml-1">
         <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-            <a href="/mobile/traficos/trafico?id=<?= $this->row['id'] ?>" class="btn btn-primary active">Básico</a>
-            <a href="/mobile/traficos/archivos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Archivos</a>
-            <a href="/mobile/traficos/fotos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Fotos</a>
-            <a href="/mobile/traficos/comentarios?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Comentarios</a>
-            <a href="/mobile/traficos/bitacora?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Bitacora</a>
+            <a href="/mobile/bodega/entrada?id=<?= $this->row['id'] ?>" class="btn btn-primary active">Básico</a>
+            <a href="/mobile/bodega/archivos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Archivos</a>
+            <a href="/mobile/bodega/fotos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Fotos</a>
+            <a href="/mobile/bodega/comentarios?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Comentarios</a>
+            <a href="/mobile/bodega/bitacora?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Bitacora</a>
         </div>
         <br><br>
     </div>
@@ -46,7 +43,7 @@
             <thead>
                 <tr class="table-active">
                     <th colspan="3" class="">
-                        FACTURAS <a href="/mobile/traficos/agregar-factura?id=<?= $this->row['id'] ?>"><i class="fas fa-plus-square float-right" style="font-size: 20px"></i></a>
+                        FACTURAS <a href="/mobile/bodega/agregar-factura?id=<?= $this->row['id'] ?>"><i class="fas fa-plus-square float-right" style="font-size: 20px"></i></a>
                     </th>
                 </tr>
                 <tr>
@@ -64,7 +61,7 @@
             <thead>
                 <tr class="table-active">
                     <th colspan="3" class="">
-                        BULTOS  <a href="/mobile/bodega/agregar-bulto?id=<?= $this->row['id'] ?>"><i class="fas fa-plus-square float-right" style="font-size: 20px"></i></a>
+                        BULTOS <a href="/mobile/bodega/agregar-bulto?id=<?= $this->row['id'] ?>"><i class="fas fa-plus-square float-right" style="font-size: 20px"></i></a>
                     </th>
                 </tr>
                 <tr>
@@ -75,30 +72,19 @@
             </thead>
             <tbody></tbody>
         </table>
-        <form id="form-packages" method="post" enctype="multipart/form-data">
-            <input type="hidden" id="id" name="id" value="<?= $this->row['id'] ?>" />
-            <label for="camera" class="btn btn-success">
-                <i class="fas fa-qrcode"></i> Escanear
-            </label>
-            <input type="file" accept="image/*" capture="camera" id="camera" class="inputfile">
-        </form>
-        <!--<img id="frame" src="/mobile/20190829_182013.png" style="width: 80%">-->
-        <img id="frame" class="img-fluid">
+
+        <!-- <img id="frame" class="img-fluid">
         <canvas id="canvas" width="1024" class="img-fluid" style="display: none"></canvas>
-<!--        <br>
-        <button id="qr" class="btn btn-success" onclick="analizarCodigo()">
-            <i class="fas fa-qrcode"></i> Escanear
-        </button>
-        <br><br>-->
+        
         <script>
             var camera = document.getElementById('camera');
             var frame = document.getElementById('frame');
-            
+
             var canvas = document.getElementById("canvas");
             var ctx = canvas.getContext("2d");
             var img = new Image();
-            
-            img.onload = function () {
+
+            img.onload = function() {
                 // set size proportional to image
                 canvas.height = canvas.width * (img.height / img.width);
 
@@ -115,24 +101,23 @@
 
                 // step 3, resize to final size
                 ctx.drawImage(oc, 0, 0, oc.width * 0.5, oc.height * 0.5,
-                0, 0, canvas.width, canvas.height);
-                
+                    0, 0, canvas.width, canvas.height);
+
                 var dataurl = canvas.toDataURL("image/png");
                 document.getElementById('frame').src = dataurl;
             };
 
-            camera.addEventListener('change', function (e) {
-                var file = e.target.files[0]; 
+            camera.addEventListener('change', function(e) {
+                var file = e.target.files[0];
                 frame.src = URL.createObjectURL(file);
                 img.src = URL.createObjectURL(file);
-                
-                analizarCodigo();                
+
+                analizarCodigo();
             });
-            
+
             function mostrarQr(obj) {
                 alert(obj.uuid);
             }
-
         </script>
         <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
         <script type="text/javascript">
@@ -147,12 +132,12 @@
                     //console.log(JSON.parse(result));
                     var obj = JSON.parse(result);
                     mostrarQr(obj);
-                    
+
                 } catch (err) {
                     console.error(err);
                 }
             }
-        </script>
+        </script> -->
     </div>
 </div>
 <style>
@@ -166,4 +151,8 @@
     }
 </style>
 
-<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary"><i class="fas fa-angle-left"></i> Regresar</a>
+<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary ml-1">
+    <i class="fas fa-angle-left"></i> Regresar</a>
+
+<a href="/mobile/bodega/escanear?id=<?= $this->row['id'] ?>" class="btn btn-sm btn-success mr-1 float-right">
+    <i class="fas fa-qrcode"></i> Escanear</a>

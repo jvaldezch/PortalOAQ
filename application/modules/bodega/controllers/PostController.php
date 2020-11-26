@@ -1028,7 +1028,7 @@ class Bodega_PostController extends Zend_Controller_Action
             if (APPLICATION_ENV == "production") {
                 $misc->set_baseDir($this->_appconfig->getParam("expdest"));
             } else {
-                $misc->set_baseDir("D:\\xampp\\tmp\\expedientes");
+                $misc->set_baseDir("/tmp/expedientes");
             }
 
             $traffic = new OAQ_Bodega(array("idTrafico" => $input->idTrafico));

@@ -1,0 +1,68 @@
+<style>
+    .row {
+        font-size: 14px;
+    }
+</style>
+<input type="hidden" id="id" name="id" value="<?= $this->row['id'] ?>" />
+<div class="row">
+    <div class="col"><strong>REFERENCIA:</strong> <?= $this->row['referencia'] ?></div>
+    <div class="col"><strong>RFC:</strong> <?= $this->row['rfcCliente'] ?></div>
+    <div class="w-100"></div>
+    <div class="col"><strong>CLIENTE:</strong> <?= $this->row['nombreCliente'] ?></div>
+    <div class="w-100"></div>
+    <br>
+    <div class="col ml-1">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+            <a href="/mobile/bodega/entrada?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Básico</a>
+            <a href="/mobile/bodega/archivos?id=<?= $this->row['id'] ?>" class="btn btn-primary active">Archivos</a>
+            <a href="/mobile/bodega/fotos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Fotos</a>
+            <a href="/mobile/bodega/comentarios?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Comentarios</a>
+            <a href="/mobile/bodega/bitacora?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Bitacora</a>
+        </div>
+        <br><br>
+    </div>
+    <div class="w-100"></div>
+    <div class="col">
+        <form id="form-files" method="post" action="/mobile/post/subir-archivos-bodega" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" value="<?= $this->row['id'] ?>" />
+            <input type="hidden" id="referencia" name="referencia" value="<?= $this->row['referencia'] ?>" />
+            <input type="hidden" id="rfcCliente" name="rfcCliente" value="<?= $this->row['rfcCliente'] ?>" />
+            <input type="hidden" id="idBodega" name="idBodega" value="<?= $this->row['idBodega'] ?>" />
+            <input type="file" name="files[]" id="files" accept="application/*" class="ml-2">
+            <button type="submit" id="upload" class="btn btn-sm btn-success float-right mr-2">
+                Subir
+            </button>
+        </form>
+        <br>
+        <br>
+    </div>
+    <div class="w-100"></div>
+    <div class="col">
+        <table class="table table-sm table-striped facturas">
+            <thead>
+                <tr>
+                    <th>NOMBRE</th>
+                    <th>FECHA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($this->archivos)) { ?>
+                    <?php foreach ($this->archivos as $item) { ?>
+                        <tr>
+                            <td><a href="/mobile/get/download-file?id=<?= $item['id'] ?>"><?= (strlen($item['nom_archivo']) < 20) ? $item['nom_archivo'] : substr($item['nom_archivo'], 0, 20) . '...' ?></a></td>
+                            <td><?= date("d/m/Y", strtotime($item['creado'])) ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="2"><em>No hay archivos cargados</em></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="w-100"></div>
+</div>
+
+<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary ml-1">
+    <i class="fas fa-angle-left"></i> Regresar</a>

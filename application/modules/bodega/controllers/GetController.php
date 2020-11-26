@@ -616,7 +616,6 @@ class Bodega_GetController extends Zend_Controller_Action
                         $orden_carga = $ordenc->agregar($input->ids[0], $this->_session->id);
                     }
                     $view->ordenCarga = $orden_carga;
-
                 }
                 $view->ids = implode(",", $input->ids);
 
@@ -1152,7 +1151,6 @@ class Bodega_GetController extends Zend_Controller_Action
                 $print->Create();
                 $print->Output($data['filename'] . ".pdf");
             } else {
-
             }
         } catch (Zend_Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
@@ -1208,9 +1206,7 @@ class Bodega_GetController extends Zend_Controller_Action
                 $print->crear();
                 $print->set_filename($filename);
                 $print->Output($print->get_filename(), "I");
-
             } else {
-
             }
         } catch (Zend_Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
@@ -1266,9 +1262,7 @@ class Bodega_GetController extends Zend_Controller_Action
                 $print->crear();
                 $print->set_filename($filename);
                 $print->Output($print->get_filename(), "I");
-
             } else {
-
             }
         } catch (Zend_Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
@@ -1542,5 +1536,4 @@ class Bodega_GetController extends Zend_Controller_Action
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-
 }

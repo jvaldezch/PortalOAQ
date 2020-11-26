@@ -3670,7 +3670,6 @@ class Trafico_PostController extends Zend_Controller_Action
                     } else {
                         throw new Exception("No hay solicitudes para la aduana seleccionada.");
                     }
-                    
                 } else {
                     throw new Exception("Invalid input.");
                 }

@@ -16,9 +16,8 @@
     <div class="col"><strong>CLAVE:</strong> <?= $this->row['cvePedimento'] ?></div>
     <div class="col"><strong>IMP/EXP:</strong> <?= ($this->row["ie"] == 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>' : '<i class="fas fa-arrow-circle-up" style="color: #2f3b58"></i>' ?></div>
     <div class="w-100"></div>
-    <div class="col"><strong>USUARIO:</strong> <?= mb_strtoupper($this->row['nombre']) ?><br><br></div>
-    <div class="w-100"></div>
-    <div class="col">
+    <br>
+    <div class="col ml-1">
         <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
             <a href="/mobile/traficos/trafico?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Básico</a>
             <a href="/mobile/traficos/archivos?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Archivos</a>
@@ -58,4 +57,5 @@
     <div class="w-100"></div>
 </div>
 
-<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary"><i class="fas fa-angle-left"></i> Regresar</a>
+<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary ml-1">
+    <i class="fas fa-angle-left"></i> Regresar</a>

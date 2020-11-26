@@ -4,13 +4,13 @@
         <input type="text" class="form-control" id="search" name="search" 
                placeholder="Buscar referencia o pedimento" value="<?= $this->search ?>">
     </div>
-    <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+    <button type="submit" class="btn btn-primary mb-2 ml-2">Buscar</button>
 </form>
 <table class="table table-sm table-striped">
     <thead>
         <tr class="table-active">
             <th scope="col">Aduana</th>
-            <th scope="col">Referencias</th>
+            <th scope="col">Referencia</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -18,8 +18,12 @@
         <?php if (isset($this->paginator)) { ?>
             <?php foreach ($this->paginator as $item) { ?>
                 <tr>
-                    <td><?= $item["aduana"] . '-' . $item["patente"] ?></td>
-                    <td><?= $item["referencia"] ?></td>
+                    <td>
+                        <a href="/mobile/traficos/trafico?id=<?= $item['id'] ?>"><?= $item["aduana"] . '-' . $item["patente"] ?></a>
+                    </td>
+                    <td>
+                        <a href="/mobile/traficos/trafico?id=<?= $item['id'] ?>"><?= $item["referencia"] ?></a>
+                    </td>
                     <td>
                         <a href="/mobile/traficos/trafico?id=<?= $item['id'] ?>"><i class="fas fa-pencil-alt"></i></a>
                     </td>

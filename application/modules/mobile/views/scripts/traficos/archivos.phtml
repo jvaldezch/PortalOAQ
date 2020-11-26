@@ -16,9 +16,8 @@
     <div class="col"><strong>CLAVE:</strong> <?= $this->row['cvePedimento'] ?></div>
     <div class="col"><strong>IMP/EXP:</strong> <?= ($this->row["ie"] == 'TOCE.IMP') ? '<i class="fas fa-arrow-circle-down" style="color: #2f3b58"></i>' : '<i class="fas fa-arrow-circle-up" style="color: #2f3b58"></i>' ?></div>
     <div class="w-100"></div>
-    <div class="col"><strong>USUARIO:</strong> <?= mb_strtoupper($this->row['nombre']) ?><br><br></div>
-    <div class="w-100"></div>
-    <div class="col">
+    <br>
+    <div class="col ml-1">
         <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
             <a href="/mobile/traficos/trafico?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Básico</a>
             <a href="/mobile/traficos/archivos?id=<?= $this->row['id'] ?>" class="btn btn-primary active">Archivos</a>
@@ -27,6 +26,23 @@
             <a href="/mobile/traficos/bitacora?id=<?= $this->row['id'] ?>" class="btn btn-secondary">Bitacora</a>
         </div>
         <br><br>
+    </div>
+    <div class="w-100"></div>
+    <div class="col">
+        <form id="form-files" method="post" action="/mobile/post/subir-archivos-trafico" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" value="<?= $this->row['id'] ?>" />
+            <input type="hidden" id="patente" name="patente" value="<?= $this->row['patente'] ?>" />
+            <input type="hidden" id="aduana" name="aduana" value="<?= $this->row['aduana'] ?>" />
+            <input type="hidden" id="pedimento" name="pedimento" value="<?= $this->row['pedimento'] ?>" />
+            <input type="hidden" id="referencia" name="referencia" value="<?= $this->row['referencia'] ?>" />
+            <input type="hidden" id="rfcCliente" name="rfcCliente" value="<?= $this->row['rfcCliente'] ?>" />
+            <input type="file" name="files[]" id="files" accept="application/*" class="ml-2">
+            <button type="submit" id="upload" class="btn btn-sm btn-success float-right mr-2">
+                Subir
+            </button>
+        </form>
+        <br>
+        <br>
     </div>
     <div class="w-100"></div>
     <div class="col">
@@ -56,4 +72,5 @@
     <div class="w-100"></div>
 </div>
 
-<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary"><i class="fas fa-angle-left"></i> Regresar</a>
+<a href="javascript:window.history.back();" class="btn btn-sm btn-secondary ml-1">
+    <i class="fas fa-angle-left"></i> Regresar</a>
