@@ -1269,6 +1269,7 @@ class Trafico_IndexController extends Zend_Controller_Action
         $this->view->title = $this->_appconfig->getParam("title") . " Catalogos";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
+            ->appendFile("/js/common/loadingoverlay.min.js")
             ->appendFile("/js/trafico/index/catalogos.js?" . time());
     }
 

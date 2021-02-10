@@ -855,7 +855,7 @@ class OAQ_Trafico
             if (($arr = $mppr->obtener($row["idServicio"]))) {
                 $client = new Zend_Rest_Client($arr['url']);
                 $httpClient = $client->getHttpClient();
-                $httpClient->setConfig(array('timeout' => 60));
+                $httpClient->setConfig(array('timeout' => 120));
                 $client->setHttpClient($httpClient);
                 $this->sistema = $arr['sistema'];
             }
@@ -1132,7 +1132,15 @@ class OAQ_Trafico
     public function importarFacturaDesdeSistema($numFactura, $sistema = null)
     {
         $this->_obtenerTrafico();
+
+        
+        if (in_array($this->patente, array(3589, 3574)) && in_array($this->aduana, array(240, 800))) {
+            $api = new Aduanet_Pedimentos();
+            return $api->importarFactura($this->idTrafico, $numFactura);
+        }
+
         $client = null;
+
         if (!isset($sistema)) {
             $client = $this->_buscarSistema();
         } else {
@@ -1146,7 +1154,7 @@ class OAQ_Trafico
                 $arr_inv = $this->_detalleFactura($client, $numFactura);
 
                 if ($arr_inv !== false) {
-                    if ($arr_inv[0]["tipoOperacion"] == 1) {
+                    if ((int) $arr_inv[0]["tipoOperacion"] == 1) {
                         $arr_prov = $this->_proveedorFactura($client, $arr_inv[0]["cvePro"], $arr_inv[0]["numFactura"]);
 
                         if ($arr_prov !== false) {
@@ -1159,6 +1167,7 @@ class OAQ_Trafico
                             $arr_inv[0]["destinatario"] = $arr_prov[0];
                         }
                     }
+
                     $arr_prod = $this->_productosFactura($client, $numFactura);
 
                     if ($arr_prod !== false) {
@@ -2105,6 +2114,25 @@ class OAQ_Trafico
             return $arr;
         }
         return;
+    }
+
+    public function enviarFacturas()
+    {
+        if (in_array((int) $this->patente, array(3589)) && in_array((int) $this->aduana, array(240))) {
+
+            $mppr = new Trafico_Model_TraficoFacturasMapper();
+            $rows = $mppr->obtenerFacturas($this->idTrafico);
+
+            $api = new Aduanet_Pedimentos();
+            
+            foreach ($rows as $row) {
+                if ($row['cove']) {
+                    $r = $api->actualizarCove($this->patente, $this->aduana, $this->pedimento, $row['numFactura'], $row['cove']);
+                    $j = json_decode($r, true);
+                    $this->_firephp->info($j);
+                }
+            }
+        }
     }
 
     public function obtenerFacturasPedimento()

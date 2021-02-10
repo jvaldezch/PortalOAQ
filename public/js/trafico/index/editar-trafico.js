@@ -1,10 +1,47 @@
 
 let emailData = {};
+let idTrafico;
 
 emailData["emails"] = {};
 emailData["archivos"] = {};
 
 let base = "/trafico/index/editar-trafico";
+
+window.preguntaEnviarFacturas = function() {
+    $.confirm({
+        title: "Enviar COVEs", escapeKey: "cerrar", boxWidth: "450px", useBootstrap: false, type: "red",
+        buttons: {
+            si: {
+                btnClass: "btn-red", action: function () {
+                    enviarFacturas();
+                }
+            },
+            no: { action: function () { } }
+        },
+        content: "¿Está seguro que desea enviar COVEs al sistema de pedimentos? <br><br><b>Advertencia</b>: Este proceso sobreescribe los datos existentes en las facturas de la base de datos destino y no es reversible."
+    });
+};
+
+window.enviarFacturas = function() {
+    idTrafico = $("#idTrafico").val();
+    $.ajax({
+        url: '/trafico/facturas/enviar-facturas',
+        data: { idTrafico: idTrafico },
+        type: "POST",
+        beforeSend: function () {
+            $.LoadingOverlay("show", { color: "rgba(255, 255, 255, 0.9)" });
+        },
+        success: function (res) {
+            if (res.success === true) {
+                $.LoadingOverlay("hide");
+                // loadInvoices();
+            } else {
+                $.LoadingOverlay("hide");
+                // $.alert({ title: "Error", type: "red", content: res.message, boxWidth: "350px", useBootstrap: false });
+            }
+        }
+    });
+};
 
 function importarFactura(idFactura) {
     $.ajax({

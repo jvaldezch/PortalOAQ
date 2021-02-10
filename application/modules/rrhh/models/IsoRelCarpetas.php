@@ -75,7 +75,7 @@ class Rrhh_Model_IsoRelCarpetas {
                     ->from(array("r" => "iso_relcarpetas"), array(""))
                     ->joinLeft(array("cc" => "iso_carpetas"), "cc.id = r.idCarpeta", array("nombreCarpeta"))
                     ->joinLeft(array("p" => new Zend_Db_Expr("(SELECT id, carpeta FROM iso_carpetas)")), "p.id = r.idParent", array("carpeta AS previo"))
-                    ->group("previo");
+                    ->group(array("nombreCarpeta", "previo"));
             if (isset($directory)) {
                 $sql->where("cc.carpeta = ?", $directory);
             } else {

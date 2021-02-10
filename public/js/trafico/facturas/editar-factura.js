@@ -370,7 +370,23 @@ window.productos = function () {
                     var html = '<div class="divTableRow" id="' + row.id + '">';
                     html += '<div class="divTableCell">' + ((row.orden !== null) ? row.orden : '') + '</div>';
                     html += '<div class="divTableCell">' + ((row.fraccion !== null) ? row.fraccion : '') + '</div>';
-                    html += '<div class="divTableCell">' + ((row.numParte !== null) ? row.numParte : '') + '</div>';
+
+                    var f = '';
+                    if (row.fraccion_2020) {
+                        f = row.fraccion_2020;
+                    }
+                    var n = '';
+                    if (row.nico) {
+                        n = row.nico;
+                    }
+                    var np = '';
+                    if (row.numParte) {
+                        np = row.numParte;
+                    }
+
+                    html += `<div class="divTableCell">${f}</div>`;
+                    html += `<div class="divTableCell">${n}</div>`;
+                    html += `<div class="divTableCell">${np}</div>`;
                     html += '<div class="divTableCell" style="text-align: left">' + row.descripcion;
                     if (row.marca || row.modelo || row.subModelo || row.numSerie) {
                         html += '<br><span>';

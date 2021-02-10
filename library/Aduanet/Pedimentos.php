@@ -133,8 +133,6 @@ class Aduanet_Pedimentos
 
             $e = new OAQ_ExcelReportes();
             $e->csvAduanet($arr['patente'], $arr['aduana'], $arr['pedimento'], $arr['referencia'], $partidas);
-
-            
         } catch (Exception $e) {
             throw new Exception("Exception on " . __METHOD__ . ": " . $e->getMessage());
         }
@@ -155,7 +153,7 @@ class Aduanet_Pedimentos
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_POSTFIELDS => "fraccion=" . $fraccion, 
+                CURLOPT_POSTFIELDS => "fraccion=" . $fraccion,
                 CURLOPT_HTTPHEADER => array(
                     "Content-Type: application/x-www-form-urlencoded"
                 ),
@@ -177,4 +175,33 @@ class Aduanet_Pedimentos
         }
     }
 
+    public function importarFactura($idTrafico, $numFactura)
+    {
+        $ch = curl_init();        
+        $nf = urlencode($numFactura);
+
+        curl_setopt($ch, CURLOPT_URL, "https://oaq.dnsalias.net/cgi-bin/cgi_facturas.py?id_trafico={$idTrafico}&num_factura={$nf}");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+
+        curl_close($ch);
+
+        return null;
+    }
+
+    public function actualizarCove($patente, $aduana, $pedimento, $numFactura, $cove)
+    {
+        $ch = curl_init();
+        $nf = urlencode($numFactura);
+
+        curl_setopt($ch, CURLOPT_URL, "https://oaq.dnsalias.net/cgi-bin/cgi_coves.py?patente={$patente}&aduana={$aduana}&pedimento={$pedimento}&cove={$cove}&num_factura={$nf}");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+
+        curl_close($ch);
+
+        return $server_output;
+    }
 }

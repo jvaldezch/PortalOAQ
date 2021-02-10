@@ -5,6 +5,9 @@
  *
  * @author Jaime
  */
+
+error_reporting(E_ERROR & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_USER_NOTICE & ~E_USER_ERROR);
+
 class OAQ_Reportes {
 
     protected $_excel;

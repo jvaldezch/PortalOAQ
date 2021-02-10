@@ -185,6 +185,10 @@
                     <th style="text-align: left"><label for="numFactura">Num. Factura:</label></th>
                     <th>                        
                         <div style="font-size:1.4em; color: #2f3b58; float: right; margin-right: 5px; margin-top: 2px">
+                            <?php if ($this->basico["pagado"] == null) { ?>
+                                <i class="fas fa-paper-plane" style="cursor: pointer" onclick="preguntaEnviarFacturas();" title="Enviar COVES a sistema de pedimentos"></i>
+                                &nbsp;
+                            <?php } ?>
                             <i class="fas fa-code" id="cargarXml" style="cursor: pointer" title="Subir CDFi (XML)"></i>
                             &nbsp;
                             <i class="fas fa-file-excel" id="loadTemplate" style="cursor: pointer" title="Cargar plantilla"></i>

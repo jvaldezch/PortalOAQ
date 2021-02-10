@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_USER_NOTICE & ~E_USER_ERROR);
+
 class Clientes_GetController extends Zend_Controller_Action
 {
 
@@ -143,14 +145,14 @@ class Clientes_GetController extends Zend_Controller_Action
 
     public function reporteAction()
     {
-
-        error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
-
         try {
             date_default_timezone_set('America/Mexico_City');
+
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(false);
+
             ini_set("soap.wsdl_cache_enabled", 0);
+            
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
                 "idAduana" => "Digits",

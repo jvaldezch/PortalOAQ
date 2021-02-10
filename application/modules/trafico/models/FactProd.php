@@ -204,7 +204,9 @@ class Trafico_Model_FactProd
                     "marca",
                     "modelo",
                     "subModelo",
-                    "numSerie"
+                    "numSerie",
+                    "fraccion_2020",
+                    "nico"
                 ))
                 ->where('idFactura = ?', $idFactura)
                 ->order("ordenProducto ASC");

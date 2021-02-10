@@ -1722,6 +1722,9 @@ class Trafico_GetController extends Zend_Controller_Action
                         $this->_helper->json(array("success" => false));
                     }
                 }
+
+                throw new Exception("Not a valid option");
+                
             } else {
                 throw new Exception("Invalid input");
             }
@@ -2722,7 +2725,7 @@ class Trafico_GetController extends Zend_Controller_Action
 
                 switch ($arr['pedimento']) {
                     case (preg_match('/^1/', $arr['pedimento']) ? true : false):
-                        $year = 2011;
+                        $year = 2021;
                         break;
                     case (preg_match('/^2/', $arr['pedimento']) ? true : false):
                         $year = 2012;

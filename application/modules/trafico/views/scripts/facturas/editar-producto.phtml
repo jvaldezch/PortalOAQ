@@ -30,6 +30,18 @@
             </tr>
             <tr>
                 <td>
+                    <div style="float: left">                        
+                        <label style="float: left; width: 120px; text-align: right">Fracción (2020):<span style="color:red"> *</span>&nbsp;</label>
+                        <input style="float: left; width: 110px" type="text" name="fraccion_2020" id="fraccion_2020" value="<?= $this->fraccion_2020 ?>">
+                    </div>
+                    <div style="float: left">
+                        <label style="float: left; width: 140px; text-align: right">NICO:<span style="color:red"> *</span>&nbsp;</label>
+                        <input style="float: left; width: 150px" type="text" name="nico" id="nico" value="<?= $this->nico ?>">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <label style="float: left; width: 120px; text-align: right">Método val.:&nbsp;</label>
                     <select name="metodoValoracion" id="metodoValoracion" style="float: left; width: 200px">
                         <option value="">---</option>
@@ -205,50 +217,4 @@
         </tbody>
     </table>
 </form>
-<script type="text/javascript">
-    
-    $("#frmProduct").validate({
-        errorPlacement: function (error, element) {
-            $(element)
-                    .closest("form")
-                    .find("#" + element.attr("id"))
-                    .after(error);
-        },
-        errorElement: "span",
-        errorClass: "errorlabel",
-        rules: {
-            numParte: {required: true},
-            fraccion: {required: true},
-            descripcion: {required: true}
-        },
-        messages: {
-            numParte: "SE REQUIERE",
-            fraccion: "SE REQUIERE",
-            descripcion: "SE REQUIERE"
-        }
-    });
-    
-    $(document.body).on("change, focusout", "#precioUnitario, #cantidadFactura", function (evt) {
-        var precioUnitario = $("#precioUnitario").val();
-        var cantidadFactura = $("#cantidadFactura").val();
-        if (precioUnitario !== '' && cantidadFactura !== '') {
-            var valorComercial = parseFloat(precioUnitario) * parseFloat(cantidadFactura);
-            $("#valorComercial").val(valorComercial);
-        }
-    });
-    
-    $(document.body).on("input", "#marca, #modelo, #subModelo, #numSerie, #descripcion, #fraccion, #numParte, #observaciones", function (evt) {
-        var input = $(this);
-        var start = input[0].selectionStart;
-        $(this).val(function (_, val) {
-            return val.toUpperCase();
-        });
-        input[0].selectionStart = input[0].selectionEnd = start;
-    });
-    
-    $.when(paises('#paisOrigen'), paises('#paisVendedor')).done(function () {
-        $('#paisOrigen').val('<?= $this->paisOrigen ?>');
-        $('#paisVendedor').val('<?= $this->paisVendedor ?>');
-    });
-    
-</script>
+<script type="text/javascript" src="/js/trafico/facturas/editar-producto.js?<?= time() ?>"></script>

@@ -494,10 +494,16 @@ class OAQ_TraficoVucem {
 
     public function actualizarCoveEnFactura($idVucem, $edocument, $adenda = null) {
         $mppr = new Trafico_Model_VucemMapper();
+
         if (($arr = $mppr->obtenerVucem($idVucem))) {
             if ($arr["idFactura"]) {
                 $inv = new Trafico_Model_TraficoFacturasMapper();
                 $inv->actualizar($arr["idFactura"], array("cove" => $edocument, "coveAdenda" => $adenda));
+                
+                if (in_array($this->patente, array(3589)) && in_array($this->aduana, array(240, 800))) {
+                    $api = new Aduanet_Pedimentos();
+                    $api->actualizarCove($this->patente, $this->aduana, $this->pedimento, $this->numFactura, $edocument);
+                }
             }
         }
     }
@@ -755,7 +761,7 @@ class OAQ_TraficoVucem {
             if (!isset($rfcConsulta)) {
                 $rfcConsulta = array("OAQ030623UL8");
             }
-            if ($sello["rfc"] !== $trafico["rfc"] && ($trafico["rfc"] != 'PRUE09329833')) {
+            if ($sello["rfc"] !== $trafico["rfc"] && ($trafico["rfc"] != 'PRUE09329833' && $trafico["rfc"] != 'EXTR920901TS4')) {
                 if (!in_array($trafico["rfc"], $rfcConsulta)) {
                     array_push($rfcConsulta, $trafico["rfc"]);
                 }
@@ -819,8 +825,11 @@ class OAQ_TraficoVucem {
                     "numeroSerie" => (isset($prod["numSerie"]) && $prod["numSerie"] !== "") ? $this->_cleanString($prod["numSerie"]) : null,
                 );
             }
+
             $this->coveArray["mercancias"] = $mercancia;
+
             $this->_proveedorDestinatario($uti, $trafico["ie"], $cliente, $factura["idPro"]);
+
             if ($send == true) {
                 $this->xml = $uti->xmlCove($this->coveArray, false, $save);
 
@@ -873,7 +882,7 @@ class OAQ_TraficoVucem {
             );
         } else if ($tipoOperacion === "TOCE.EXP") {
             $this->coveArray["emisor"] = array(
-                "tipoIdentificador" => 1,
+                "tipoIdentificador" => $uti->tipoIdentificador($cliente["identificador"], $cliente["pais"]),
                 "identificacion" => $cliente["rfc"],
                 "nombre" => $this->_cleanString($cliente["razonSocial"]),
                 "calle" => $this->_cleanString($cliente["calle"]),
@@ -1157,6 +1166,7 @@ class OAQ_TraficoVucem {
         $resp = $this->consultaRespuesta($idVucem, $numeroOperacion);
         if (!empty($resp)) {
             if (isset($resp["edocument"]) && $resp["error"] == false) {
+
                 $mppr->actualizar($idLog, array(
                     "edocument" => $resp["edocument"],
                     "adenda" => isset($resp["numeroAdenda"]) ? $resp["numeroAdenda"] : null,
@@ -1164,24 +1174,31 @@ class OAQ_TraficoVucem {
                     "procesado" => 1,
                     "actualizado" => date('Y-m-d H:i:s'),
                 ));
+
                 $this->actualizarCoveEnFactura($idVucem, $resp["edocument"], isset($resp["numeroAdenda"]) ? $resp["numeroAdenda"] : null);
+
                 $vu->actualizar($idVucem, array(
                     "edocument" => $resp["edocument"],
                     "adenda" => isset($resp["numeroAdenda"]) ? $resp["numeroAdenda"] : null,
                 ));
-                //$this->guardarFacturaEnExpediente($idVucem, $username, $idUsuario, $resp["edocument"]);
+
                 $this->guardarDetalleCoveXmlPdf($idVucem, $username, $idUsuario);
+
                 return true;
+
             } else if (!isset($resp["edocument"]) && $resp["error"] == true) {
+
                 if (isset($resp["messages"]) && is_array($resp["messages"])) {
                     $msgs = '';
                     foreach ($resp["messages"] as $item) {
                         $msgs .= utf8_decode($item);
                     }
                 } 
+
                 if (isset($resp["message"])) {
                     $msgs = $resp["message"];
                 }
+
                 $mppr->actualizar($idLog, array(
                     "edocument" => null,
                     "error" => 1,
@@ -1189,6 +1206,7 @@ class OAQ_TraficoVucem {
                     "mensajeError" => $msgs,
                     "actualizado" => date('Y-m-d H:i:s'),
                 ));
+
                 return true;
             }
         }

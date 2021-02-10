@@ -118,7 +118,7 @@ class Trafico_PostController extends Zend_Controller_Action
                 $paginator->setItemCountPerPage($input->size);
                 $paginator->setCurrentPageNumber($input->page);
                 $view->paginator = $paginator;
-                $view->funcion = "clavePedimento";
+                $view->funcion = "claves";
                 $view->busqueda = $input->buscar;
                 $this->_helper->json(array("success" => true, "html" => $view->render("claves.phtml"), "pagina" => $input->page, "funcion" => "clavePedimento"));
             }

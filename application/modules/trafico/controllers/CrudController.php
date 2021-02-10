@@ -420,12 +420,12 @@ class Trafico_CrudController extends Zend_Controller_Action
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
             }
+            $u_id = $this->_session->id;
             $sql = $this->_db->select()
                 ->from(array("t" => "traficos"), array("id", "estatus", "patente", "aduana", "pedimento", "referencia"))
-                ->where("pedimento IS NOT NULL")
-                ->where("estatus NOT IN (3, 4)")
-                ->where("idUsuario = ?", $this->_session->id)
-                ->orWhere("idUsuarioModif = ?", $this->_session->id);
+                ->where("t.pedimento IS NOT NULL")
+                ->where("t.estatus NOT IN (3, 4)")
+                ->where("(t.idUsuario = $u_id OR t.idUsuarioModif = $u_id)");
             $stmt = $this->_db->fetchAll($sql);
             if ($stmt) {
                 $this->_helper->json(array("success" => true, "results" => $stmt));
