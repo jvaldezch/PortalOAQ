@@ -1,23 +1,25 @@
 <?php
 
-class Trafico_Model_ClientesPartes {
-
+class Trafico_Model_ClientesPartes
+{
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_ClientesPartes();
     }
 
-    public function buscar($idPro, $tipoOperacion, $fraccion, $numParte, $paisOrigen, $paisVendedor) {
+    public function buscar($idPro, $tipoOperacion, $fraccion, $numParte, $paisOrigen, $paisVendedor)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id"))
-                    ->where("idPro = ?", $idPro)
-                    ->where("tipoOperacion = ?", $tipoOperacion)
-                    ->where("fraccion = ?", $fraccion)
-                    ->where("numParte = ?", $numParte)
-                    ->where("paisOrigen = ?", $paisOrigen)
-                    ->where("paisVendedor = ?", $paisVendedor);
+                ->from($this->_db_table, array("id"))
+                ->where("idPro = ?", $idPro)
+                ->where("tipoOperacion = ?", $tipoOperacion)
+                ->where("fraccion = ?", $fraccion)
+                ->where("numParte = ?", $numParte)
+                ->where("paisOrigen = ?", $paisOrigen)
+                ->where("paisVendedor = ?", $paisVendedor);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->id;
@@ -28,10 +30,11 @@ class Trafico_Model_ClientesPartes {
         }
     }
 
-    public function obtener($id) {
+    public function obtener($id)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("id = ?", $id);
+                ->where("id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -41,29 +44,12 @@ class Trafico_Model_ClientesPartes {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function obtenerPorCliente($idCliente) {
+
+    public function obtenerPorCliente($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idCliente = ?", $idCliente);
-            $stmt = $this->_db_table->fetchAll($sql);
-            if ($stmt) {
-                return $stmt->toArray();
-            }
-            return;
-        } catch (Zend_Db_Adapter_Exception $e) {
-            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
-        }
-    }
-    
-    public function obtenerDetallePorCliente($idCliente) {
-        try {
-            $sql = $this->_db_table->select()
-                    ->setIntegrityCheck(false)
-                    ->from(array("p" => "trafico_clientes_partes"), array('*'))
-                    ->joinLeft(array("v" => "trafico_factpro"), "p.idPro = v.id", array('identificador', 'nombre AS nombreProveedor'))
-                    ->where("p.idCliente = ?", $idCliente)
-                    ->order("v.nombre ASC");
+                ->where("idCliente = ?", $idCliente);
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -74,7 +60,27 @@ class Trafico_Model_ClientesPartes {
         }
     }
 
-    public function agregar($arr) {
+    public function obtenerDetallePorCliente($idCliente)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("p" => "trafico_clientes_partes"), array('*'))
+                ->joinLeft(array("v" => "trafico_factpro"), "p.idPro = v.id", array('identificador', 'nombre AS nombreProveedor'))
+                ->where("p.idCliente = ?", $idCliente)
+                ->order("v.nombre ASC");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function agregar($arr)
+    {
         try {
             $stmt = $this->_db_table->insert($arr);
             if ($stmt) {
@@ -85,8 +91,9 @@ class Trafico_Model_ClientesPartes {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
-    
-    public function actualizar($idProducto, $arr) {
+
+    public function actualizar($idProducto, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $idProducto));
             if ($stmt) {
@@ -98,14 +105,30 @@ class Trafico_Model_ClientesPartes {
         }
     }
 
-    public function prepareDataFromRest($idCliente, $tipoOperacion, $idProv, $data) {
+    public function prepareDataFromRest($idCliente, $tipoOperacion, $idProv, $data)
+    {
+
+        $mppr = new Trafico_Model_Nicos();
+
         if (isset($data) && $data !== false && !empty($data)) {
+
+            $t = null;
+            $n = null;
+
+            $f = $mppr->buscar($data["fraccion"]);
+            if ($f) {
+                $t = $f['tigie_2020'];
+                $n = $f['nico'];
+            }
+
             $array = array(
                 'idCliente' => $idCliente,
                 'tipoOperacion' => $tipoOperacion,
                 'idPro' => $idProv,
                 'numParte' => isset($data["numParte"]) ? $data["numParte"] : null,
                 'fraccion' => isset($data["fraccion"]) ? $data["fraccion"] : null,
+                'fraccion_2020' => $t,
+                'nico' => $n,
                 'subFraccion' => isset($data["subFraccion"]) ? $data["subFraccion"] : null,
                 'descripcion' => isset($data["descripcion"]) ? $data["descripcion"] : null,
                 'oma' => isset($data["oma"]) ? $data["oma"] : null,
@@ -132,5 +155,4 @@ class Trafico_Model_ClientesPartes {
             return $array;
         }
     }
-
 }

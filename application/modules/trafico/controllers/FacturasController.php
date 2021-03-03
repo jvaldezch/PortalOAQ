@@ -418,8 +418,10 @@ class Trafico_FacturasController extends Zend_Controller_Action
                 $oma = new Vucem_Model_VucemUnidadesMapper();
                 $view->omaSelect = $oma->getAllUnits();
                 if ($input->isValid("idProducto")) {
+
                     $view->idProducto = $input->idProducto;
                     $mppr = new Trafico_Model_FactProd();
+
                     if (($row = $mppr->obtenerProducto($input->idProducto))) {
                         $view->orden = $row["orden"];
                         $view->numParte = $row["numParte"];
@@ -774,6 +776,8 @@ class Trafico_FacturasController extends Zend_Controller_Action
                         "orden" => (int) $post["orden"],
                         "numParte" => $post["numParte"],
                         "fraccion" => $post["fraccion"],
+                        "fraccion_2020" => $post["fraccion_2020"],
+                        "nico" => $post["nico"],
                         "descripcion" => $post["descripcion"],
                         "precioUnitario" => (float) $post["precioUnitario"],
                         "cantidadFactura" => (float) $post["cantidadFactura"],
@@ -796,6 +800,7 @@ class Trafico_FacturasController extends Zend_Controller_Action
                         "paisVendedor" => isset($post["paisVendedor"]) ? $post["paisVendedor"] : null,
                         "observaciones" => isset($post["observaciones"]) ? $post["observaciones"] : null,
                     );
+
                     if ($input->isValid("idProducto")) {
                         $arr["modificado"] = date("Y-m-d H:i:s");
                         $mppr->actualizar($input->idProducto, $arr);
@@ -804,12 +809,14 @@ class Trafico_FacturasController extends Zend_Controller_Action
                         $arr["idFactura"] = $input->idFactura;
                         $mppr->agregar($arr);
                     }
+
                     $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "idUsuario" => $this->_session->id));
                     if ($trafico->getTipoOperacion() == 'TOCE.IMP') {
                         $tipoOperacion = 1;
                     } else {
                         $tipoOperacion = 2;
                     }
+                    
                     if (!($id = $mdl->buscar($input->idProveedor, $tipoOperacion, $post["fraccion"], $post["numParte"], $post["paisOrigen"], $post["paisVendedor"]))) {
                         $array = $mdl->prepareDataFromRest($trafico->getIdCliente(), $tipoOperacion, $input->idProveedor, $arr);
                         $mdl->agregar($array);

@@ -288,13 +288,27 @@ class Trafico_Model_FactProd
 
     public function prepareDataFromRest($data, $idFactura = null)
     {
+        $mppr = new Trafico_Model_Nicos();
+
         if (isset($data) && $data !== false && !empty($data)) {
+
+            $t = null;
+            $n = null;
+
+            $f = $mppr->buscar($data["fraccion"]);
+            if ($f) {
+                $t = $f['tigie_2020'];
+                $n = $f['nico'];
+            }
+
             $array = array(
                 'numParte' => isset($data["numParte"]) ? $data["numParte"] : null,
                 'orden' => isset($data["ordenFraccion"]) ? $data["ordenFraccion"] : null,
                 'consFactura' => isset($data["consFactura"]) ? $data["consFactura"] : null,
                 'ordenProducto' => isset($data["ordenProducto"]) ? $data["ordenProducto"] : null,
                 'fraccion' => isset($data["fraccion"]) ? $data["fraccion"] : null,
+                'fraccion_2020' => $t,
+                'nico' => $n,
                 'subFraccion' => isset($data["subFraccion"]) ? $data["subFraccion"] : null,
                 'descripcion' => isset($data["descripcion"]) ? $data["descripcion"] : null,
                 'precioUnitario' => isset($data["precioUnitario"]) ? (float) $data["precioUnitario"] : null,

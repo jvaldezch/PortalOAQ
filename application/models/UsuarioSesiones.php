@@ -107,7 +107,7 @@ class Application_Model_UsuarioSesiones {
                     ->where("usuario = ?", $usuario)
                     ->where("ip = ?", $ip);
             $stmt = $this->_db_table->fetchRow($sql);
-            if (count($stmt)) {
+            if ($stmt) {
                 return $stmt->id;
             }
             return;

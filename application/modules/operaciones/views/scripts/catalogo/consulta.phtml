@@ -5,19 +5,31 @@
     <div>Salir</div>
 </div>
 <input id="idCliente" type="hidden" value="<?= $this->idCliente ?>">
-<div class="traffic-cols">
-    <div class="traffic-col-30">
-        <div class="easyui-panel" title="Proveedor" style="width:100%; padding:20px 30px; height: 345px">
+<style>
+    .pcontainer {
+        display: flex;
+        flex-direction: row;
+    }
+    .pcontent {
+        width: 100%;
+    }
+    .psidebar {
+        flex: 0 0 350px;
+    }
+</style>
+<div class="pcontainer">
+    <div class="psidebar">
+        <div class="easyui-panel" title="Proveedor" style="width:100%; padding:10px 5px; height: 345px">
             <form id="fmprov" method="post">
                 <div style="margin-bottom:10px">
                     <label>Identificador (TaxID, RUT, etc.):</label>
-                    <input name="identificador" class="easyui-textbox" required="true" style="width: 170px" >
+                    <input name="identificador" class="easyui-textbox" required="true" style="width: 170px">
                 </div>
                 <div style="margin-bottom:10px">
                     <label>Nombre del proveedor:</label>
-                    <input name="nombre" class="easyui-textbox" required="true" style="width: 250px" >
+                    <input name="nombre" class="easyui-textbox" required="true" style="width: 250px">
                 </div>
-<!--                <div style="margin-bottom:10px">
+                <!--                <div style="margin-bottom:10px">
                     <label>Clave SITA:</label>
                     <input name="clave" class="easyui-textbox" required="true" style="width: 100px">
                 </div>-->
@@ -27,14 +39,14 @@
             </div>
         </div>
     </div>
-    <div class="traffic-col-70">
-        <table id="providers"></table>        
+    <div class="pcontent">
+        <table id="providers"></table>
     </div>
 </div>
 <div class="traffic-clear-10"></div>
-<div class="traffic-cols">
-    <div class="traffic-col-30">
-        <div class="easyui-panel" title="Producto" style="width:100%; padding:20px 30px; height: 400px">
+<div class="pcontainer">
+    <div class="psidebar">
+        <div class="easyui-panel" title="Producto" style="width:100%; padding:10px 5px; height: 400px">
             <form id="fm" method="post">
                 <input type="hidden" name="idCliente" id="idCliente" value="<?= $this->idCliente ?>">
                 <input type="hidden" name="idProveedor" id="idProveedor" required="true">
@@ -48,11 +60,11 @@
                 </div>
                 <div style="margin-bottom:10px">
                     <label>Numero de parte cliente:</label>
-                    <input name="numParteCliente" class="easyui-textbox" required="true"  style="width: 150px">
+                    <input name="numParteCliente" class="easyui-textbox" required="true" style="width: 150px">
                 </div>
                 <div style="margin-bottom:10px">
                     <label>Descripción:</label>
-                    <input name="descripcion" class="easyui-textbox" required="true"  style="width: 320px">
+                    <input name="descripcion" class="easyui-textbox" required="true" style="width: 320px">
                 </div>
             </form>
             <div id="dlg-buttons">
@@ -60,12 +72,12 @@
             </div>
         </div>
     </div>
-    <div class="traffic-col-70">
+    <div class="pcontent">
         <table id="parts"></table>
     </div>
 </div>
 <div id="dlg" style="display: none">
-    <div class="easyui-panel" style="width:100%;padding:10px 20px;">        
+    <div class="easyui-panel" style="width:100%;padding:10px 20px;">
         <form id="fmimage" method="post" enctype="multipart/form-data">
             <input type="hidden" name="idProducto" id="idProducto" required="true">
             <input name="file" id="fb" class="easyui-filebox" style="width:100%" data-options="prompt:'Seleccionar archivo...'">
@@ -75,12 +87,24 @@
         </form>
     </div>
 </div>
-<div id="dlgimg" style="display: none">        
+<div id="dlgimg" style="display: none">
     <img id="sourceImage" src="" />
 </div>
-<div id="dlgimgs" style="display: none">        
-    
+<div id="dlgimgs" style="display: none">
+
 </div>
 <div class="traffic-clear-5"></div>
 <a href="/operaciones/catalogo/index" class="traffic-btn">
     <i class="fas fa-angle-double-left"></i> Regresar</a>
+
+<?php if (isset($this->edit) && $this->edit == true) { ?>
+    <script>
+        edit = true;
+    </script>
+<?php } ?>
+
+<?php if (isset($this->idCliente) && $this->idCliente == true) { ?>
+    <script>
+        idCliente = <?= $this->idCliente ?>;
+    </script>
+<?php } ?>

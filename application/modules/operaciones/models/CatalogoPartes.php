@@ -1,17 +1,19 @@
 <?php
 
-class Operaciones_Model_CatalogoPartes {
-
+class Operaciones_Model_CatalogoPartes
+{
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_ClientesPartes();
     }
 
-    protected function _filters(Zend_Db_Select $sql, $filterRules) {
+    protected function _filters(Zend_Db_Select $sql, $filterRules)
+    {
         if (isset($filterRules)) {
             $filter = json_decode(html_entity_decode($filterRules));
-            foreach ($filter AS $item) {
+            foreach ($filter as $item) {
                 if ($item->field == "fraccion" && $item->value != "") {
                     $sql->where("fraccion LIKE ?", "%" . trim($item->value) . "%");
                 }
@@ -25,12 +27,13 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
-    protected function _totalProductos($idCliente, $idProveedor, $filterRules = null) {
+    protected function _totalProductos($idCliente, $idProveedor, $filterRules = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("count(*) as total"))
-                    ->where("idCliente = ?", $idCliente)
-                    ->where("idPro = ?", $idProveedor);
+                ->from($this->_db_table, array("count(*) as total"))
+                ->where("idCliente = ?", $idCliente)
+                ->where("idPro = ?", $idProveedor);
             $this->_filters($sql, $filterRules);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
@@ -42,13 +45,14 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
-    public function verificar($idCliente, $idProveedor, $fraccion, $numParte) {
+    public function verificar($idCliente, $idProveedor, $fraccion, $numParte)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idCliente = ?", $idCliente)
-                    ->where("idPro = ?", $idProveedor)
-                    ->where("fraccion = ?", $fraccion)
-                    ->where("numParte = ?", $numParte);
+                ->where("idCliente = ?", $idCliente)
+                ->where("idPro = ?", $idProveedor)
+                ->where("fraccion = ?", $fraccion)
+                ->where("numParte = ?", $numParte);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return true;
@@ -59,22 +63,23 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
-    public function todos($idCliente, $idProveedor, $page = null, $rows = null, $filterRules = null) {
+    public function todos($idCliente, $idProveedor, $page = null, $rows = null, $filterRules = null)
+    {
         try {
             $mppr = new Operaciones_Model_CatalogoPartesImagenes();
-            
+
             $sql = $this->_db_table->select()
-                    ->where("idCliente = ?", $idCliente)
-                    ->where("idPro = ?", $idProveedor)
-                    ->order("numParte ASC");
-            
+                ->where("idCliente = ?", $idCliente)
+                ->where("idPro = ?", $idProveedor)
+                ->order("numParte ASC");
+
             if (isset($page) && isset($rows)) {
                 $sql->limit($rows, ($page - 1) * $rows);
             }
             if (isset($filterRules)) {
                 $this->_filters($sql, $filterRules);
             }
-            
+
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 $arr = [];
@@ -93,7 +98,8 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
-    public function agregar($idCliente, $idProveedor, $fraccion, $numParte, $descripcion, $usuario) {
+    public function agregar($idCliente, $idProveedor, $fraccion, $numParte, $descripcion, $usuario)
+    {
         try {
             $arr = array(
                 "idCliente" => $idCliente,
@@ -114,7 +120,8 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
-    public function actualizar($id, $arr) {
+    public function actualizar($id, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
             if ($stmt) {
@@ -126,7 +133,8 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
-    public function borrar($id) {
+    public function borrar($id)
+    {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $id));
             if ($stmt) {
@@ -138,7 +146,8 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
-    public function borrarTodoDeProveedor($idProveedor) {
+    public function borrarTodoDeProveedor($idProveedor)
+    {
         try {
             $stmt = $this->_db_table->delete(array("idProveedor = ?" => $idProveedor));
             if ($stmt) {
@@ -150,4 +159,52 @@ class Operaciones_Model_CatalogoPartes {
         }
     }
 
+    public function obtener($id)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->where("id = ?", $id);
+            $stmt = $this->_db_table->fetchRow($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function valido($id, $username)
+    {
+        try {
+            $stmt = $this->_db_table->update(array(
+                "valido" => 1,
+                "validado_por" => $username,
+                "validado" => date("Y-m-d H:i:s")
+            ), array("id = ?" => $id));
+            if ($stmt) {
+                return true;
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function no_valido($id)
+    {
+        try {
+            $stmt = $this->_db_table->update(array(
+                "valido" => null,
+                "validado_por" => null,
+                "validado" => null
+            ), array("id = ?" => $id));
+            if ($stmt) {
+                return true;
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
 }

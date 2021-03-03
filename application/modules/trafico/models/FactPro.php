@@ -1,17 +1,20 @@
 <?php
 
-class Trafico_Model_FactPro {
+class Trafico_Model_FactPro
+{
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Trafico_Model_DbTable_FactPro();
     }
 
-    protected function _filters(Zend_Db_Select $sql, $filterRules) {
+    protected function _filters(Zend_Db_Select $sql, $filterRules)
+    {
         if (isset($filterRules)) {
             $filter = json_decode(html_entity_decode($filterRules));
-            foreach ($filter AS $item) {
+            foreach ($filter as $item) {
                 if ($item->field == "nombre" && $item->value != "") {
                     $sql->where("nombre LIKE ?", "%" . trim($item->value) . "%");
                 }
@@ -25,11 +28,12 @@ class Trafico_Model_FactPro {
         }
     }
 
-    protected function _totalProveedores($idCliente, $filterRules = null) {
+    protected function _totalProveedores($idCliente, $filterRules = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("count(*) as total"))
-                    ->where("idCliente = ?", $idCliente);
+                ->from($this->_db_table, array("count(*) as total"))
+                ->where("idCliente = ?", $idCliente);
             $this->_filters($sql, $filterRules);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
@@ -41,12 +45,13 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function verificar($idCliente, $identificador) {
+    public function verificar($idCliente, $identificador)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id"))
-                    ->where("idCliente = ?", $idCliente)
-                    ->where("identificador = ?", $identificador);
+                ->from($this->_db_table, array("id"))
+                ->where("idCliente = ?", $idCliente)
+                ->where("identificador = ?", $identificador);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return (int) $stmt->id;
@@ -57,12 +62,13 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function proveedoresCliente($idCliente) {
+    public function proveedoresCliente($idCliente)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id", "nombre AS text"))
-                    ->where("idCliente = ?", $idCliente)
-                    ->order("nombre ASC");
+                ->from($this->_db_table, array("id", "nombre AS text"))
+                ->where("idCliente = ?", $idCliente)
+                ->order("nombre ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -73,19 +79,20 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function obtenerPorCliente($idCliente, $page = null, $rows = null, $filterRules = null) {
+    public function obtenerPorCliente($idCliente, $page = null, $rows = null, $filterRules = null)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("idCliente = ?", $idCliente)
-                    ->order("nombre ASC");
-            
+                ->where("idCliente = ?", $idCliente)
+                ->order("nombre ASC");
+
             if (isset($page) && isset($rows)) {
                 $sql->limit($rows, ($page - 1) * $rows);
             }
             if (isset($filterRules)) {
                 $this->_filters($sql, $filterRules);
             }
-            
+
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return array(
@@ -99,7 +106,8 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function actualizar($id, $arr) {
+    public function actualizar($id, $arr)
+    {
         try {
             $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
             if ($stmt) {
@@ -111,10 +119,11 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function obtener($idPro) {
+    public function obtener($idPro)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where("id = ?", $idPro);
+                ->where("id = ?", $idPro);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -125,7 +134,8 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function agregar($arr) {
+    public function agregar($arr)
+    {
         try {
             $stmt = $this->_db_table->insert($arr);
             if ($stmt) {
@@ -137,7 +147,8 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function prepareData($data, $idCliente = null) {
+    public function prepareData($data, $idCliente = null)
+    {
         if (isset($data) && $data !== false && !empty($data)) {
             $array = array(
                 "clave" => $this->_tipoIdentificador($data["taxId"], $data["domicilio"]["pais"]),
@@ -166,7 +177,8 @@ class Trafico_Model_FactPro {
      * @param string $pais
      * @return int
      */
-    protected function _tipoIdentificador($identificador, $pais) {
+    protected function _tipoIdentificador($identificador, $pais)
+    {
         $regRfc = "/^[A-Z]{3,4}([0-9]{2})(1[0-2]|0[1-9])([0-3][0-9])([A-Z0-9]{3,4})$/";
         if (($pais == "MEX" || $pais == "MEXICO") && preg_match($regRfc, str_replace(" ", "", trim($identificador)))) {
             if ($identificador != "EXTR920901TS4") {
@@ -188,14 +200,15 @@ class Trafico_Model_FactPro {
             return 0;
         }
     }
-    
-    public function verificarProveedor($idCliente, $cvePro, $identificador) {
+
+    public function verificarProveedor($idCliente, $cvePro, $identificador)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array("id"))
-                    ->where("idCliente = ?", $idCliente)
-                    ->where("clave = ?", $cvePro)
-                    ->where("identificador = ?", $identificador);
+                ->from($this->_db_table, array("id"))
+                ->where("idCliente = ?", $idCliente)
+                ->where("clave = ?", $cvePro)
+                ->where("identificador = ?", $identificador);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {
                 return (int) $stmt->id;
@@ -206,7 +219,8 @@ class Trafico_Model_FactPro {
         }
     }
 
-    public function borrar($id) {
+    public function borrar($id)
+    {
         try {
             $stmt = $this->_db_table->delete(array("id = ?" => $id));
             if ($stmt) {
@@ -218,4 +232,37 @@ class Trafico_Model_FactPro {
         }
     }
 
+    public function valido($id, $username)
+    {
+        try {
+            $stmt = $this->_db_table->update(array(
+                "valido" => 1,
+                "validado_por" => $username,
+                "validado" => date("Y-m-d H:i:s")
+            ), array("id = ?" => $id));
+            if ($stmt) {
+                return true;
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
+    public function no_valido($id)
+    {
+        try {
+            $stmt = $this->_db_table->update(array(
+                "valido" => null,
+                "validado_por" => null,
+                "validado" => null
+            ), array("id = ?" => $id));
+            if ($stmt) {
+                return true;
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
 }

@@ -2,9 +2,11 @@
 
 require 'tcpdf.php';
 
-class Trafico extends TCPDF {
+class Trafico extends TCPDF
+{
 
-    function __construct($data, $orientation, $unit, $format) {
+    function __construct($data, $orientation, $unit, $format)
+    {
         parent::__construct($orientation, $unit, $format, true, 'UTF-8', false);
 
         $this->invoiceData = $data;
@@ -21,7 +23,8 @@ class Trafico extends TCPDF {
         $this->setLanguageArray($l);
     }
 
-    public function Header() {
+    public function Header()
+    {
 
         $this->SetFont('helvetica', 'C', 7);
         $this->SetY(20, true);
@@ -37,7 +40,8 @@ class Trafico extends TCPDF {
         $this->Line(55, 30, $this->getPageWidth() - 55, 30);
     }
 
-    public function Footer() {
+    public function Footer()
+    {
         $this->SetLineStyle(array('width' => 0.5, 'color' => $this->invoiceData["colors"]["line"]));
         $this->Line(55, $this->getPageHeight() - 35, $this->getPageWidth() - 55, $this->getPageHeight() - 35);
         $this->SetFont('helvetica', '', 7);
@@ -53,7 +57,8 @@ class Trafico extends TCPDF {
         $this->writeHTML($tbl, true, false, false, false, '');
     }
 
-    public function SolicitudAnticipo() {
+    public function SolicitudAnticipo()
+    {
         $this->AddPage();
         $this->SetFont('helvetica', '', 7);
         $this->SetY(40, true);
@@ -69,12 +74,14 @@ class Trafico extends TCPDF {
 
         $this->SetFillColor($wf[0], $wf[1], $wf[2]);
 
+        $dir = "ORGANIZACIÓN ADUANAL DE QUERÉTARO\nRFC: OAQ030623UL8\nC. Primer Retorno Blvd. Universitario No. 1\nCondominio Terra Business Park 43B, Col. La Pradera\nEl Marqués, Queretaro. C.P. 76269 Tel. 442-2160870";
+
         $this->Cell(15);
-        $this->MultiCell(240, 0, "ORGANIZACIÓN ADUANAL DE QUERÉTARO\n\nRFC: OAQ030623UL8\nMariano Perrusquia No. 102 int. 7 Col. San Angel\nQuerétaro, Queretaro. C.P. 76030 Tel. 442-2160870", 0, 'L', 1, 0, '', '', true, 0, false, true, 0);
+        $this->MultiCell(240, 0, $dir, 0, 'L', 1, 0, '', '', true, 0, false, true, 0);
 
         $this->SetFillColor($wf[0], $wf[1], $wf[2]);
         $this->Cell(15);
-        $this->MultiCell(130, 15, "SOLICITUD ANTICPO", 1, 'C', 1, 0, '', '', true, 0, false, true, 0);
+        $this->MultiCell(130, 15, "SOLICITUD ANTICIPO", 1, 'C', 1, 0, '', '', true, 0, false, true, 0);
         $this->Ln();
         $this->SetFillColor($gf[0], $gf[1], $gf[2]);
         $this->Cell(370);
@@ -137,7 +144,7 @@ class Trafico extends TCPDF {
         $this->MultiCell(110, $lineHeight, $this->invoiceData["detalle"]["tipoFacturacion"], 1, 'C', 1, 0, '', '', true, 0, false, true, 0);
         $this->MultiCell(75, $lineHeight, ($this->invoiceData["detalle"]["peca"] == '1') ? 'SI' : 'NO', 1, 'C', 1, 0, '', '', true, 0, false, true, 0);
         $this->MultiCell(155, $lineHeight, $this->invoiceData["detalle"]["bl"], 1, 'C', 1, 0, '', '', true, 0, false, true, 0);
-        
+
         $this->Ln();
         $lineHeight = 12;
         $this->SetFillColor($gf[0], $gf[1], $gf[2]);
@@ -281,5 +288,4 @@ class Trafico extends TCPDF {
 
         $this->lastPage();
     }
-
 }

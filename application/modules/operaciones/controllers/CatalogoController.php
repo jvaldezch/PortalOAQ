@@ -1,34 +1,36 @@
 <?php
 
-class Operaciones_CatalogoController extends Zend_Controller_Action {
-
+class Operaciones_CatalogoController extends Zend_Controller_Action
+{
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_redirector;
 
-    public function init() {
+    public function init()
+    {
         $this->_appconfig = new Application_Model_ConfigMapper();
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->view->headLink()
-                ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
-                ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")                
-                ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
-                ->appendStylesheet("/less/traffic-module.css?" . time());
+            ->appendStylesheet("/js/common/bootstrap/css/bootstrap.min.css")
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/css/fontawesome/css/fontawesome-all.min.css")
+            ->appendStylesheet("/less/traffic-module.css?" . time());
         $this->view->headScript()
-                ->appendFile("/js/common/jquery-1.9.1.min.js")
-                ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
-                ->appendFile("/js/common/jquery.form.min.js")
-                ->appendFile("/js/common/jquery.validate.min.js")
-                ->appendFile("/js/common/additional-methods.min.js")
-                ->appendFile("/js/common/js.cookie.js")
-                ->appendFile("/js/common/jquery.blockUI.js")
-                ->appendFile("/js/common/principal.js?" . time());
+            ->appendFile("/js/common/jquery-1.9.1.min.js")
+            ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
+            ->appendFile("/js/common/jquery.form.min.js")
+            ->appendFile("/js/common/jquery.validate.min.js")
+            ->appendFile("/js/common/additional-methods.min.js")
+            ->appendFile("/js/common/js.cookie.js")
+            ->appendFile("/js/common/jquery.blockUI.js")
+            ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -43,11 +45,12 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         $this->view->rol = $this->_session->role;
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . " Indice de clientes";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headScript()
-                ->appendFile("/js/operaciones/catalogo/index.js?" . time());
+            ->appendFile("/js/operaciones/catalogo/index.js?" . time());
         $request = new Zend_Controller_Request_Http();
         $filter = $request->getCookie("filter");
         $f = array(
@@ -77,21 +80,22 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         $this->view->paginator = $paginator;
     }
 
-    public function consultaAction() {
+    public function consultaAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Consulta del catalogo";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/easyui/themes/metro/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/easyui/themes/color.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/easyui/themes/metro/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/easyui/themes/color.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/operaciones/catalogo/consulta.js?" . time());
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/operaciones/catalogo/consulta.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => "Digits",
@@ -102,10 +106,16 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
         if ($input->isValid("id")) {
             $this->view->idCliente = $input->id;
+            if (in_array($this->_session->role, array("gerente", "super"))) {
+                $this->view->edit = true;
+            } else {
+                $this->view->edit = false;
+            }
         }
     }
 
-    public function imagenesAction() {
+    public function imagenesAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -129,7 +139,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function umcAction() {
+    public function umcAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -141,7 +152,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function omaAction() {
+    public function omaAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -153,7 +165,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function paisesAction() {
+    public function paisesAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -165,7 +178,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function productoGuardarAction() {
+    public function productoGuardarAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -174,7 +188,7 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                 $f = array(
                     "*" => array("StringTrim", "StripTags"),
                     "id" => "Digits",
-                    "numParteCliente" => array("StringToUpper"),
+                    "numParte" => array("StringToUpper"),
                     "numParteProveedor" => array("StringToUpper"),
                     "descripcion" => array("StringToUpper"),
                     "paisOrigen" => array("StringToUpper"),
@@ -185,7 +199,9 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                 $v = array(
                     "id" => array("NotEmpty", new Zend_Validate_Int()),
                     "fraccion" => array("NotEmpty"),
-                    "numParteCliente" => array("NotEmpty"),
+                    "fraccion_2020" => array("NotEmpty"),
+                    "nico" => array("NotEmpty"),
+                    "numParte" => array("NotEmpty"),
                     "numParteProveedor" => array("NotEmpty"),
                     "descripcion" => array("NotEmpty"),
                     "paisOrigen" => array("NotEmpty"),
@@ -198,7 +214,9 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                     $mppr = new Operaciones_Model_CatalogoPartes();
                     $arr = array(
                         "fraccion" => $input->isValid("fraccion") ? $input->fraccion : null,
-                        "numParteCliente" => $input->isValid("numParteCliente") ? $input->numParteCliente : null,
+                        "fraccion_2020" => $input->isValid("fraccion_2020") ? $input->fraccion_2020 : null,
+                        "nico" => $input->isValid("nico") ? $input->nico : null,
+                        "numParte" => $input->isValid("numParte") ? $input->numParte : null,
                         "numParteProveedor" => $input->isValid("numParteProveedor") ? $input->numParteProveedor : null,
                         "descripcion" => $input->isValid("descripcion") ? $input->descripcion : null,
                         "paisOrigen" => $input->isValid("paisOrigen") ? $input->paisOrigen : null,
@@ -221,7 +239,86 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function productoBorrarAction() {
+    public function validarProductoAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                    "idCliente" => "Digits",
+                );
+                $v = array(
+                    "id" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("id") && $input->isValid("idCliente")) {
+                    $mppr = new Operaciones_Model_CatalogoPartes();
+                    $r = $mppr->obtener($input->id);
+                    if ($r) {
+                        if ($r['valido']) {
+                            $mppr->no_valido($input->id);
+                        } else {
+                            $mppr->valido($input->id, $this->_session->username);
+                        }
+                    }
+                    $this->_helper->json(array("success" => true));
+                } else {
+                    throw new Exception("Invalid Input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("errorMsg" => $ex->getMessage()));
+        }
+    }
+
+    public function validarProveedorAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $r = $this->getRequest();
+            if ($r->isPost()) {
+                $f = array(
+                    "*" => array("StringTrim", "StripTags"),
+                    "id" => "Digits",
+                    "idCliente" => "Digits",
+                );
+                $v = array(
+                    "id" => array("NotEmpty", new Zend_Validate_Int()),
+                    "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
+                );
+                $input = new Zend_Filter_Input($f, $v, $r->getPost());
+                if ($input->isValid("id") && $input->isValid("idCliente")) {
+                    $mppr = new Trafico_Model_FactPro();
+                    $r = $mppr->obtener($input->id);
+                    if ($r) {
+                        if ($r['valido']) {
+                            $mppr->no_valido($input->id);
+                        } else {
+                            $mppr->valido($input->id, $this->_session->username);
+                        }
+                    }
+                    $this->_helper->json(array("success" => true));
+                } else {
+                    throw new Exception("Invalid Input!");
+                }
+            } else {
+                throw new Exception("Invalid request type!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("errorMsg" => $ex->getMessage()));
+        }
+    }
+
+    public function productoBorrarAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -253,7 +350,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function productoNuevoAction() {
+    public function productoNuevoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -289,7 +387,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function proveedorBorrarAction() {
+    public function proveedorBorrarAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -319,7 +418,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function proveedorGuardarAction() {
+    public function proveedorGuardarAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -388,7 +488,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function proveedorNuevoAction() {
+    public function proveedorNuevoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -429,7 +530,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function productosAction() {
+    public function productosAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -451,13 +553,13 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("idCliente") && $input->isValid("idProveedor")) {
-                
+
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-                
+
                 $mppr = new Operaciones_Model_CatalogoPartes();
                 if ($dexcel == false) {
                     $arr = $mppr->todos($input->idCliente, $input->idProveedor, $input->page, $input->rows, $input->filterRules);
-                    
+
                     if (isset($arr)) {
                         $this->_helper->json($arr);
                     } else {
@@ -465,7 +567,7 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                     }
                 } else {
                     $arr = $mppr->todos($input->idCliente, $input->idProveedor);
-                    
+
                     $reportes = new OAQ_ExcelReportes();
                     $reportes->reportesTrafico(82, $arr['rows']);
                 }
@@ -477,11 +579,12 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function proveedoresAction() {
+    public function proveedoresAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
-            
+
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
                 "idCliente" => array("Digits"),
@@ -489,7 +592,7 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                 "rows" => array("Digits"),
                 "excel" => array("StringToLower"),
             );
-            
+
             $v = array(
                 "idCliente" => array("NotEmpty", new Zend_Validate_Int()),
                 "page" => array(new Zend_Validate_Int(), "default" => 1),
@@ -497,15 +600,15 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                 "filterRules" => "NotEmpty",
                 "excel" => array("NotEmpty"),
             );
-            
+
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-            
+
             if ($input->isValid("idCliente")) {
-                
+
                 $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-                
+
                 $mppr = new Trafico_Model_FactPro();
-                
+
                 if ($dexcel == false) {
                     $arr = $mppr->obtenerPorCliente($input->idCliente, $input->page, $input->rows, $input->filterRules);
                     if (isset($arr)) {
@@ -515,17 +618,18 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                     }
                 } else {
                     $arr = $mppr->obtenerPorCliente($input->idCliente);
-                    
+
                     $reportes = new OAQ_ExcelReportes();
                     $reportes->reportesTrafico(81, $arr['rows']);
                 }
-            }            
+            }
         } catch (Exception $ex) {
             $this->_helper->json(array("errorMsg" => $ex->getMessage()));
         }
     }
 
-    public function subirFotosAction() {
+    public function subirFotosAction()
+    {
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
@@ -546,8 +650,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
                 $mppr = new Operaciones_Model_CatalogoPartesImagenes();
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                        ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
-                        ->addValidator("Extension", false, array("extension" => "jpg,jpeg", "case" => false));
+                    ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                    ->addValidator("Extension", false, array("extension" => "jpg,jpeg", "case" => false));
                 $path = APPLICATION_PATH . "/../public/imagenes/" . date("Y") . DIRECTORY_SEPARATOR . str_pad(date("m"), 2, '0', STR_PAD_LEFT) . DIRECTORY_SEPARATOR . str_pad(date("d"), 2, '0', STR_PAD_LEFT);
                 if (!file_exists($path)) {
                     mkdir($path, 0777, true);
@@ -576,74 +680,77 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
         }
     }
 
-    public function cartaInstruccionesAction() {
+    public function cartaInstruccionesAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Carta de instrucciones";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/easyui/themes/metro/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/easyui/themes/color.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/easyui/themes/metro/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/easyui/themes/color.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/operaciones/catalogo/carta-instrucciones.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/operaciones/catalogo/carta-instrucciones.js?" . time());
     }
 
-    public function deliveriesAction() {
+    public function deliveriesAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Deliveries";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/easyui/themes/metro/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/easyui/themes/color.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/easyui/themes/metro/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/easyui/themes/color.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/operaciones/catalogo/deliveries.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/operaciones/catalogo/deliveries.js?" . time());
     }
 
-    public function editarCartaInstruccionesAction() {
+    public function editarCartaInstruccionesAction()
+    {
         $this->view->title = $this->_appconfig->getParam('title') . ' ' . " Editar carta de instrucciones";
         $this->view->headMeta()->appendName('description', '');
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
-                ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
-                ->appendStylesheet("/easyui/themes/metro/easyui.css")
-                ->appendStylesheet("/easyui/themes/icon.css")
-                ->appendStylesheet("/easyui/themes/color.css")
-                ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css")
+            ->appendStylesheet("/easyui/themes/metro/easyui.css")
+            ->appendStylesheet("/easyui/themes/icon.css")
+            ->appendStylesheet("/easyui/themes/color.css")
+            ->appendStylesheet("/js/common/contentxmenu/jquery.contextMenu.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/easyui/jquery.easyui.min.js")
-                ->appendFile("/easyui/jquery.edatagrid.js")
-                ->appendFile("/easyui/datagrid-filter.js")
-                ->appendFile("/easyui/locale/easyui-lang-es.js")
-                ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-                ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
-                ->appendFile("/js/common/toast/jquery.toast.min.js?")
-                ->appendFile("/js/operaciones/catalogo/editar-carta-instrucciones.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/easyui/jquery.easyui.min.js")
+            ->appendFile("/easyui/jquery.edatagrid.js")
+            ->appendFile("/easyui/datagrid-filter.js")
+            ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/js/common/contentxmenu/jquery.contextMenu.min.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
+            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
+            ->appendFile("/js/operaciones/catalogo/editar-carta-instrucciones.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "id" => array("Digits"),
@@ -658,5 +765,4 @@ class Operaciones_CatalogoController extends Zend_Controller_Action {
             $this->view->arr = $arr;
         }
     }
-
 }

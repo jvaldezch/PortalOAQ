@@ -2,6 +2,7 @@
 
 error_reporting(0);
 
+
 /**
  * Zend Framework
  *
