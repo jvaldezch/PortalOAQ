@@ -1,8 +1,6 @@
 <?php
 
-error_reporting(E_ERROR ^ E_WARNING);
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-error_reporting(E_ALL ^ E_DEPRECATED);
+error_reporting(0);
 
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));

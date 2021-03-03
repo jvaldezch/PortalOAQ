@@ -7,12 +7,14 @@
 #RewriteRule ^.*$ - [redirect=503,last]
 
 #--- active site
+
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 RewriteRule ^.*$ index.php [NC,L]
+
 <filesMatch "\.(html|htm|js|css)$">
   FileETag None
   <ifModule mod_headers.c>

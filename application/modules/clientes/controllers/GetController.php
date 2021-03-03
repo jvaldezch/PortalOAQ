@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_USER_NOTICE & ~E_USER_ERROR);
+// error_reporting(0);
 
 class Clientes_GetController extends Zend_Controller_Action
 {
@@ -152,7 +152,7 @@ class Clientes_GetController extends Zend_Controller_Action
             $this->_helper->viewRenderer->setNoRender(false);
 
             ini_set("soap.wsdl_cache_enabled", 0);
-            
+
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
                 "idAduana" => "Digits",
@@ -160,6 +160,7 @@ class Clientes_GetController extends Zend_Controller_Action
                 "year" => "Digits",
                 "month" => "Digits",
             );
+
             $v = array(
                 "idAduana" => array("Digits", new Zend_Validate_Int()),
                 "idCliente" => array("Digits", new Zend_Validate_Int()),
@@ -545,7 +546,8 @@ class Clientes_GetController extends Zend_Controller_Action
         }
     }
 
-    public function linkFtpAction() {
+    public function linkFtpAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -562,7 +564,7 @@ class Clientes_GetController extends Zend_Controller_Action
                     $g = new OAQ_Google_Storage();
                     $url = $g->copy($this->_appconfig->getParam("ftpfolder") . DIRECTORY_SEPARATOR . $link);
                     echo "<p style=\"font-size: 12px\">Debido a que el expediente es muy grande utilice el siguiente link para descargar:<br><br><a href=\"{$url}\" target=\"_blank\">{$url}</a><br><br>Este link será removido en un lapso de 24 horas.</p>";
-                }                
+                }
             }
         } catch (Exception $ex) {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));

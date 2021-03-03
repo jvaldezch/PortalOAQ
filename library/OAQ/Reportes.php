@@ -6,7 +6,7 @@
  * @author Jaime
  */
 
-error_reporting(E_ERROR & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_USER_NOTICE & ~E_USER_ERROR);
+// error_reporting(0);
 
 class OAQ_Reportes {
 
@@ -28,7 +28,7 @@ class OAQ_Reportes {
     }
 
     function __construct() {
-        error_reporting(E_ALL);
+    
         ini_set("include_path", ini_get("include_path") . ";../Classes/");
         include "PHPExcel.php";
         include "PHPExcel/Writer/Excel2007.php";
