@@ -208,17 +208,6 @@ class Zend_Registry extends ArrayObject
     public function offsetExists($index)
     {
         return array_key_exists($index, $this);
-
-        // if (isset($this->$index)) {
-        //     return true;
-        // }
-        // return false;
-
-        // return property_exists($index, $this);
-
-        // return isset($index[$this]);
-
-        // return isset($this->$index);
     }
 
 }
