@@ -4,6 +4,14 @@
  * and open the template in the editor.
  */
 
+window.proforma = function () {
+
+    let id = $('#idFactura').val();
+    let id_trafico = $('#idTrafico').val();
+    
+    window.open(`/trafico/facturas/proforma?id=${id}&id_trafico=${id_trafico}`);
+};
+
 function number_format(number, decimals, dec_point, thousands_sep) {
     number = (number + '').replace(/[^0-9+-Ee.]/g, '');
     var n = !isFinite(+number) ? 0 : +number,

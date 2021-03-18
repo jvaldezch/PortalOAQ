@@ -1975,6 +1975,9 @@ class OAQ_Trafico
         }
 
         $ped_filename = $this->_nombreArchivo('PEDIMENTO');
+
+        $this->_firephp->info($ped_filename);
+
         if (!file_exists($ped_filename)) {
 
             $serv->consumirPedimento();
@@ -1995,7 +1998,65 @@ class OAQ_Trafico
                 return $resp;
             }
         } else {
-            $this->_analizar($ped_filename);
+            $arr = $this->_analizar($ped_filename);
+
+            if (isset($arr['partidas']) && isset($arr['numeroOperacion'])) {
+
+                for ($j=1; $j < (int) $arr['partidas'] + 1; $j++) { 
+                    # code...
+
+                    $res_filename = $this->_nombreArchivo('PARTIDA_' . str_pad($j, 3, '0', STR_PAD_LEFT));
+                    $con_filename = $this->_nombreArchivo('PARTIDA_CONSULTA_' . str_pad($j, 3, '0', STR_PAD_LEFT));
+
+                    if (file_exists($res_filename)) {
+                        continue;
+                    }
+
+                    $xml = new OAQ_XmlPedimentos(true);
+    
+                    $arr["usuario"] = array(
+                        "username" => $sello["rfc"],
+                        "password" => $sello["ws_pswd"],
+                        "certificado" => null,
+                        "key" => null,
+                        "new" => null,
+                    );
+
+                    $xml->set_array($arr);
+    
+                    $xml->set_aduana($this->aduana);
+                    $xml->set_patente($this->patente);
+                    $xml->set_pedimento($this->pedimento);
+                    $xml->set_numeroOperacion($arr['numeroOperacion']);
+                    $xml->set_partida($j);
+
+                    $xml->consultaPartida();
+                
+                    if (!file_exists($con_filename)) {
+                        $this->_guardarArchivoXml($con_filename, $xml->getXml());
+                    }
+
+                    $serv->setXml($xml->getXml());
+                    $serv->consumirPartida();
+    
+                    $res = new OAQ_Respuestas();
+                    $resp = $res->analizarRespuestaPedimento($serv->getResponse());
+    
+                    if ($resp["error"] == false) {
+                        $this->_guardarArchivoXml($res_filename, $this->misc->formatXmlString($serv->getResponse()));
+                    }
+                }
+
+                for ($j=1; $j < (int) $arr['partidas'] + 1; $j++) {
+                    $res_filename = $this->_nombreArchivo('PARTIDA_' . str_pad($j, 3, '0', STR_PAD_LEFT));
+                    
+                    if (file_exists($res_filename)) {
+                        $this->_analizarPartida($res_filename, 92);
+                    }
+                }
+
+            }
+
             return array(
                 "success" => true,
                 "message" => "El pedimento ya existe en el repositorio.",
@@ -2010,6 +2071,42 @@ class OAQ_Trafico
             $this->_agregarDb($array);
             $this->_agregarArchivoEnRepositorio(91, $xmlPedimento);
         }
+        return $array;
+    }
+
+    protected function _analizarPartida($xmlPartida)
+    {
+        $array = $this->_datosXmlPartida($xmlPartida);
+        if (!empty($array)) {
+            $this->_agregarDb($array);
+            $this->_agregarArchivoEnRepositorio(92, $xmlPartida);
+        }
+        return $array;
+    }
+
+    protected function _datosXmlPartida($xmlPartida)
+    {
+
+        $vu = new OAQ_VucemEnh();
+        $array = $vu->xmlStrToArray(file_get_contents($xmlPartida));
+
+        if (isset($array["Body"]["consultarPartidaRespuesta"])) {
+            $body = $array["Body"]["consultarPartidaRespuesta"];
+
+            $arr = [];
+
+            if (isset($body["partida"]) && !empty($body["partida"])) {
+                $arr["partida"] = (int) $body["partida"]['numeroPartida'];
+            }
+
+            $res = $body["partida"];
+
+            $arr['fraccion'] = $res['fraccionArancelaria'];
+            $arr['descripcion'] = $res['descripcionMercancia'];
+
+            return $arr;
+        }
+        return;
     }
 
     protected function _datosXmlPedimento($xmlPedimento)

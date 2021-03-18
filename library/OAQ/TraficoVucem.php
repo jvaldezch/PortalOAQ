@@ -749,6 +749,7 @@ class OAQ_TraficoVucem {
         if (empty($sello)) {
             throw new Exception("No se encontro sello para cliente con RFC {$trafico["rfc"]}.");
         }
+
         if (isset($trafico["id"]) && isset($factura["id"])) {            
             $this->coveArray["usuario"] = array(
                 "username" => $sello["rfc"],
@@ -845,6 +846,112 @@ class OAQ_TraficoVucem {
                 return $xml;
             }
         } else {
+
+        }
+    }
+
+    public function datosFactura($idTrafico, $idFactura) {
+        
+        $uti = new Utilerias_Vucem(true);
+
+        $uti->set_patente($this->patente);
+        $uti->set_aduana($this->aduana);
+        $uti->set_pedimento($this->pedimento);
+        $uti->set_referencia($this->referencia);
+        
+        $rfc = new Trafico_Model_RfcConsultaMapper();
+
+        $trafico = $this->_obtenerTrafico($idTrafico);
+        $factura = $this->_obtenerFactura($idFactura);
+
+        $cliente = $this->_obtenerCliente($trafico["idCliente"]);
+        
+        if (isset($trafico["id"]) && isset($factura["id"])) {            
+            
+            $this->coveArray["usuario"] = array(
+                "username" => null,
+                "password" => null,
+                "certificado" => null,
+                "key" => null,
+                "new" => null,
+            );
+
+            $rfcConsulta = $rfc->rfcEdocument($trafico["idCliente"]);
+            if (!isset($rfcConsulta)) {
+                $rfcConsulta = array("OAQ030623UL8");
+            }
+
+            if (($trafico["rfc"] != 'PRUE09329833' && $trafico["rfc"] != 'EXTR920901TS4')) {
+                if (!in_array($trafico["rfc"], $rfcConsulta)) {
+                    array_push($rfcConsulta, $trafico["rfc"]);
+                }
+            }
+
+            if ($this->patente == 3574) {
+                array_push($rfcConsulta, 'PEPJ561122765');
+            }
+            if ($this->patente == 3920) {
+                array_push($rfcConsulta, 'NOGI660213BI0');
+            }
+            if ($this->patente == 3878) {
+                array_push($rfcConsulta, 'JABM5408097G2');
+            }
+            $coveAdenda = null;
+            if ((int) $factura["adenda"] == 1) {
+                if (isset($factura["coveAdenda"]) && $factura["coveAdenda"] != null) {
+                    $coveAdenda = $factura["coveAdenda"];
+                }
+            }
+            $this->coveArray["trafico"] = array(
+                "tipoOperacion" => $trafico["ie"],
+                "numeroFacturaOriginal" => $factura["numFactura"],
+                "fechaExpedicion" => date("Y-m-d", strtotime($factura["fechaFactura"])),
+                "certificadoOrigen" => $factura["certificadoOrigen"],
+                "numExportador" => $factura["numExportador"],
+                "subdivision" => $factura["subdivision"],
+                "divisa" => $factura["divisa"],
+                "observaciones" => ($factura["observaciones"] !== "") ? $this->_cleanString($factura["observaciones"]) : null,
+                "factorMonExt" => $factura["factorMonExt"],
+                "patenteAduanal" => $trafico["patente"],
+                "paisFactura" => $factura["paisFactura"],
+                "tipoFigura" => null,
+                "correoElectronico" => "soporte@oaq.com.mx",
+                "rfcConsulta" => $rfcConsulta,
+                "coveAdenda" => $coveAdenda,
+            );
+            $productos = $this->_obtenerProductos($idFactura);
+
+            $mercancia = array();
+
+            foreach ($productos as $prod) {
+                if (isset($prod["cantidadFactura"]) && isset($prod["precioUnitario"])) {
+                    $valorTotal = $prod["cantidadFactura"] * $prod["precioUnitario"];                    
+                }
+                if (isset($factura["factorMonExt"]) && isset($valorTotal)) {
+                    $valorDolares = $factura["factorMonExt"] * $valorTotal;
+                }
+                $mercancia[] = array(
+                    "descripcionGenerica" => isset($prod["descripcion"]) ? $this->_cleanString($prod["descripcion"]) : null,
+                    "numParte" => isset($prod["numParte"]) ? $this->_cleanString($prod["numParte"]) : null,
+                    "secuencial" => isset($prod["orden"]) ? $prod["orden"] : null,
+                    "claveUnidadMedida" => isset($prod["oma"]) ? $prod["oma"] : null,
+                    "tipoMoneda" => $this->coveArray["trafico"]["divisa"],
+                    "cantidad" => isset($prod["cantidadFactura"]) ? number_format($prod["cantidadFactura"], 3, ".", "") : null,
+                    "valorUnitario" => isset($prod["precioUnitario"]) ? number_format($prod["precioUnitario"], 6, ".", "") : null,
+                    "valorTotal" => isset($valorTotal) ? number_format($valorTotal, 6, ".", "") : null,
+                    "valorDolares" => isset($valorDolares) ? number_format($valorDolares, 4, ".", "") : null,
+                    "marca" => (isset($prod["marca"]) && $prod["marca"] !== "") ? $this->_cleanString($prod["marca"]) : null,
+                    "modelo" => (isset($prod["modelo"]) && $prod["modelo"] !== "") ? $this->_cleanString($prod["modelo"]) : null,
+                    "subModelo" => (isset($prod["subModelo"]) && $prod["subModelo"] !== "") ? $this->_cleanString($prod["subModelo"]) : null,
+                    "numeroSerie" => (isset($prod["numSerie"]) && $prod["numSerie"] !== "") ? $this->_cleanString($prod["numSerie"]) : null,
+                );
+            }
+
+            $this->coveArray["mercancias"] = $mercancia;
+
+            $this->_proveedorDestinatario($uti, $trafico["ie"], $cliente, $factura["idPro"]);
+
+            return $this->coveArray;
 
         }
     }

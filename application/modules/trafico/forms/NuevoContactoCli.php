@@ -25,12 +25,14 @@ class Trafico_Form_NuevoContactoCli extends Twitter_Bootstrap_Form_Horizontal {
         $this->addElement("text", "nombre", array(
             "placeholder" => "Nombre de contacto",
             "class" => "traffic-input-large",
+            "autocomplete" => "off",
             "decorators" => $decorators
         ));
 
         $this->addElement("text", "email", array(
             "placeholder" => "Email de contacto",
             "class" => "traffic-input-large",
+            "autocomplete" => "off",
             "decorators" => $decorators
         ));
 

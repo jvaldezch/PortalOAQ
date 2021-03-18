@@ -645,6 +645,57 @@ class Trafico_FacturasController extends Zend_Controller_Action
         }
     }
 
+    public function proformaAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "id" => array("Digits"),
+                "id_trafico" => array("Digits"),
+            );
+            $v = array(
+                "id" => array(new Zend_Validate_Int(), "NotEmpty"),
+                "id_trafico" => array(new Zend_Validate_Int(), "NotEmpty"),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id") && $input->isValid("id_trafico")) {
+
+                $trafico = new OAQ_Trafico(array(
+                    "idTrafico" => $input->id_trafico, 
+                    "usuario" => $this->_session->username, 
+                    "idUsuario" => $this->_session->id)
+                );
+
+                $vucem = new OAQ_TraficoVucem();
+
+                $vucem->setPatente($trafico->getPatente());
+                $vucem->setAduana($trafico->getAduana());
+                $vucem->setPedimento($trafico->getPedimento());
+                $vucem->setReferencia($trafico->getReferencia());
+
+                $data = $vucem->datosFactura($input->id_trafico, $input->id);
+
+                if (isset($data)) {
+
+                    $data['filename'] = $trafico->getAduana() . "-" . $trafico->getPatente() . "-" . $trafico->getPedimento() . "_" . $data['trafico']['numeroFacturaOriginal'] . ".pdf";
+
+                    $this->_firephp->info($data);
+
+                    $print = new OAQ_Imprimir_Proforma($data, "P", "pt", "LETTER");
+                    $print->set_filename($data['filename']);
+                    $print->Create();
+                    $print->Output($data['filename'], "I");
+
+                }
+                
+            } else {
+                throw new Exception("Invalid input!");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function guardarProveedorAction()
     {
         try {

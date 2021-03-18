@@ -1,3 +1,4 @@
+
 window.descargaXmlpedimento = function () {
   $.ajax({
     url: "/trafico/pedimentos/descarga-xml",
@@ -7,7 +8,11 @@ window.descargaXmlpedimento = function () {
       idTrafico: $("#idTrafico").val(),
     },
     type: "GET",
+    beforeSend: function() {
+        $("body").LoadingOverlay("show", {color: "rgba(255, 255, 255, 0.9)"});
+    },
     success: function (res) {
+      $("body").LoadingOverlay("hide");
       if (res.success === true) {
         if (res.message) {
           $.alert({

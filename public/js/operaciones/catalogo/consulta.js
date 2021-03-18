@@ -248,6 +248,12 @@ $(document).ready(function () {
             handler: function () {
                 exportPartsToExcel($("#idCliente").val(), $("#idProveedor").val());
             }
+        }, {
+            text: 'Importar',
+            iconCls: 'icon-download',
+            handler: function () {
+                exportPartsToExcel($("#idCliente").val(), $("#idProveedor").val());
+            }
         }],
         destroyMsg: {
             norecord: {
