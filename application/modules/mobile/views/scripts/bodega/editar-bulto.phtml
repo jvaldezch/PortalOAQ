@@ -12,11 +12,15 @@
         z-index: -1;
     }
 </style>
+
+<input type="hidden" id="id" name="id" value="<?= $this->id ?>" />
+<input type="hidden" id="estatus" name="estatus" value="<?= $this->estatus ?>" />
+
 <div class="row">
     <div class="col">
         <div id="reader" width="600px"></div>
     </div>
 </div>
 
-<a href="/mobile/bodega/escanear?id=<?= $this->row['idTrafico'] ?>" class="btn btn-sm btn-secondary ml-1 mt-2">
-    <i class="fas fa-angle-left"></i> Regresar</a>
+<a href="/mobile/bodega/entrada?id=<?= $this->id ?>&estatus=<?= $this->estatus ?>" class="btn btn-sm btn-secondary ml-1 mt-2">
+    <i class="fas fa-angle-left"></i> Regresar <?= $this->id ?></a>

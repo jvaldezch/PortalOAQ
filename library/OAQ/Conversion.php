@@ -110,8 +110,10 @@ class OAQ_Conversion {
         }
     }
 
-    public function rfConsulta(OAQ_VucemEnh $vucem, $factura, $rfcConsulta) {
+    public function rfConsulta(OAQ_VucemEnh $vucem, $factura, $rfcConsulta)
+    {
         $rfcConsulta[] = "OAQ030623UL8";
+        
         if ($factura["Patente"] == 3920) {
             $rfcConsulta[] = "NOGI660213BI0";
         }

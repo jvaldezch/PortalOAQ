@@ -1935,10 +1935,10 @@ class OAQ_Trafico
 
         if (isset($idCliente)) {
             $mpp = new Trafico_Model_SellosClientes();
-            $sello = $mpp->obtenerPorId($idCliente);
+            $sello = $mpp->obtenerPorIdCliente($idCliente);
         }
 
-        if (isset($patente)) {
+        if (isset($patente) && !isset($sello)) {
             if ($patente == 3589) {
                 $firmantes = new Vucem_Model_VucemFirmanteMapper();
                 $sello = $firmantes->obtenerDetalleFirmante("MALL640523749");

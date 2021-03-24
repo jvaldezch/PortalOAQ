@@ -25,19 +25,20 @@
 
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body" style="padding: 0;">
-
                 <table class="table table-sm table-striped">
                     <tbody>
-                        <?php if (isset($this->paginator)) { ?>
-                            <?php foreach ($this->paginator as $item) { ?>
-                                <tr>
-                                    <td>
-                                        <a href="/mobile/bodega/entrada?id=<?= $item['id'] ?>"><?= $item["referencia"] ?></a>
-                                    </td>
-                                    <td>
-                                        <a href="/mobile/bodega/entrada?id=<?= $item['id'] ?>"><i class="fas fa-pencil-alt"></i></a>
-                                    </td>
-                                </tr>
+                        <?php if (isset($this->rows)) { ?>
+                            <?php foreach ($this->rows as $row) { ?>
+                                <?php if ($row['fechaDescarga'] == null) { ?>
+                                    <tr>
+                                        <td>
+                                            <a href="/mobile/bodega/entrada?id=<?= $row['id'] ?>&estatus=descarga"><?= $row["referencia"] ?></a>
+                                        </td>
+                                        <td>
+                                            <a href="/mobile/bodega/entrada?id=<?= $row['id'] ?>&estatus=descarga"><i class="fas fa-pencil-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                             <?php } ?>
                         <?php } else { ?>
                         <?php } ?>
@@ -57,8 +58,26 @@
             </h5>
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-                
+            <div class="card-body" style="padding: 0;">
+                <table class="table table-sm table-striped">
+                    <tbody>
+                        <?php if (isset($this->rows)) { ?>
+                            <?php foreach ($this->rows as $row) { ?>
+                                <?php if ($row['fechaDescarga'] != null && $row['fechaRevision'] == null) { ?>
+                                    <tr>
+                                        <td>
+                                            <a href="/mobile/bodega/entrada?id=<?= $row['id'] ?>&estatus=revision"><?= $row["referencia"] ?></a>
+                                        </td>
+                                        <td>
+                                            <a href="/mobile/bodega/entrada?id=<?= $row['id'] ?>&estatus=revision"><i class="fas fa-pencil-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } ?>
+                        <?php } else { ?>
+                        <?php } ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -72,8 +91,26 @@
             </h5>
         </div>
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-            <div class="card-body">
-                
+            <div class="card-body" style="padding: 0;">
+                <table class="table table-sm table-striped">
+                    <tbody>
+                        <?php if (isset($this->rows)) { ?>
+                            <?php foreach ($this->rows as $row) { ?>
+                                <?php if ($row['fechaDescarga'] != null && $row['fechaRevision'] != null && $row['fechaCarga'] == null) { ?>
+                                    <tr>
+                                        <td>
+                                            <a href="/mobile/bodega/entrada?id=<?= $row['id'] ?>&estatus=carga"><?= $row["referencia"] ?></a>
+                                        </td>
+                                        <td>
+                                            <a href="/mobile/bodega/entrada?id=<?= $row['id'] ?>&estatus=carga"><i class="fas fa-pencil-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } ?>
+                        <?php } else { ?>
+                        <?php } ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

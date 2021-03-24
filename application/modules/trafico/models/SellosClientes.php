@@ -5,10 +5,12 @@ class Trafico_Model_SellosClientes
 
     protected $_db_table;
     protected $_key = "5203bfec0c3db@!b2295";
+    protected $_firephp;
 
     public function __construct()
     {
         $this->_db_table = new Trafico_Model_DbTable_SellosClientes();
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function verificar($idCliente)
@@ -110,7 +112,7 @@ class Trafico_Model_SellosClientes
                 ->joinLeft(array("a" => "trafico_clientes"), "a.id = s.idCliente", array("rfc", "nombre AS razon"))
                 ->where("s.id = ?", $id)
                 ->limit(1);
-            $stmt = $this->_db_table->fetchRow($sql);
+            $stmt = $this->_db_table->fetchRow($sql);            
             if ($stmt) {
                 return array(
                     "figura" => 5,

@@ -1358,6 +1358,7 @@ class OAQ_BodegaVucem {
                 "correoElectronico" => "soporte@oaq.com.mx",
                 "rfcConsulta" => "OAQ030623UL8"
             );
+            
             $ed["usuario"] = array(
                 "username" => $sello["rfc"],
                 "password" => $sello["ws_pswd"],

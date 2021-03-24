@@ -7,6 +7,7 @@ class Mobile_BodegaController extends Zend_Controller_Action
     protected $_config;
     protected $_appconfig;
     protected $_redirector;
+    protected $_firephp;
 
     public function init()
     {
@@ -15,7 +16,6 @@ class Mobile_BodegaController extends Zend_Controller_Action
         $this->_redirector = $this->_helper->getHelper("Redirector");
         $this->view->headScript()
             ->appendFile("/js/common/jquery-1.9.1.min.js")
-            //                ->appendFile("/mobile/jquery-3.3.1.slim.min.js")
             ->appendFile("/mobile/bootstrap/js/bootstrap.min.js")
             ->appendFile("/mobile/popper.js/dist/umd/popper.min.js")
             ->appendFile("/js/common/jquery.form.min.js")
@@ -28,6 +28,7 @@ class Mobile_BodegaController extends Zend_Controller_Action
             ->appendStylesheet("/mobile/common/styles.css");
         $this->view->headLink(array("rel" => "icon shortcut", "href" => "/favicon.png"));
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
+        $this->_firephp = Zend_Registry::get("firephp");
     }
 
     public function preDispatch()
@@ -49,13 +50,9 @@ class Mobile_BodegaController extends Zend_Controller_Action
 
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "page" => array("Digits"),
-            "size" => array("Digits"),
             "search" => array("StringToUpper")
         );
         $v = array(
-            "page" => array(new Zend_Validate_Int(), "default" => 1),
-            "size" => array(new Zend_Validate_Int(), "default" => 20),
             "search" => "NotEmpty"
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
@@ -64,12 +61,9 @@ class Mobile_BodegaController extends Zend_Controller_Action
         }
 
         $mppr = new Mobile_Model_Traficos();
-        $select = $mppr->getSelectWarehouse($input->page, $input->size, $this->_session->id, $input->search);
+        $rows = $mppr->obtenerReferenciasBodega($input->search);
 
-        $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
-        $paginator->setItemCountPerPage($input->size);
-        $paginator->setCurrentPageNumber($input->page);
-        $this->view->paginator = $paginator;
+        $this->view->rows = $rows;
     }
 
     public function entradaAction()
@@ -77,7 +71,7 @@ class Mobile_BodegaController extends Zend_Controller_Action
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
@@ -85,16 +79,19 @@ class Mobile_BodegaController extends Zend_Controller_Action
             ->appendFile("/mobile/common/bodega/entrada.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($input->id);
             $this->view->row = $arr;
+            $this->view->estatus = $input->estatus;
         }
     }
 
@@ -103,7 +100,7 @@ class Mobile_BodegaController extends Zend_Controller_Action
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
@@ -111,14 +108,19 @@ class Mobile_BodegaController extends Zend_Controller_Action
             ->appendFile("/mobile/common/bodega/escanear.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
             $this->view->id = $input->id;
+            $this->view->estatus = $input->estatus;
+        } else {
+            throw new Exception("Invalid input!");
         }
     }
 
@@ -127,7 +129,7 @@ class Mobile_BodegaController extends Zend_Controller_Action
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
             ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
@@ -135,45 +137,53 @@ class Mobile_BodegaController extends Zend_Controller_Action
             ->appendFile("/mobile/common/bodega/editar-bulto.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
             $this->view->id = $input->id;
 
             $mppr = new Bodega_Model_Bultos();
             $row = $mppr->obtenerBulto($input->id);
 
             $this->view->row = $row;
+            $this->view->estatus = $input->estatus;
 
-            Zend_Debug::dump($row);
+            // Zend_Debug::dump($row);
         }
     }
 
-    public function archivosAction() {
+    public function archivosAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/mobile/common/bodega/archivos.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/mobile/common/bodega/archivos.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($input->id);
+            
             $this->view->row = $arr;
+            $this->view->estatus = $input->estatus;
 
             $mppr = new Trafico_Model_TraficosMapper();
             $array = $mppr->obtenerPorId($input->id);
@@ -198,111 +208,172 @@ class Mobile_BodegaController extends Zend_Controller_Action
             if (in_array($this->_session->role, array("super", "gerente", "trafico_ejecutivo", "trafico"))) {
                 $this->view->canDelete = true;
             }
+        } else {
+            throw new Exception("Invalid input!");
         }
     }
 
-    public function fotosAction() {
+    public function fotosAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
-                ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css");
         $this->view->headScript()
-                ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
-                ->appendFile("/js/common/loadingoverlay.min.js")
-                ->appendFile("/mobile/common/bodega/fotos.js?" . time());
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/mobile/common/bodega/fotos.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
 
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($input->id);
+
             $this->view->row = $arr;
+            $this->view->estatus = $input->estatus;
 
             $gallery = new Trafico_Model_Imagenes();
             $thumbs = $gallery->miniaturas($input->id);
             $this->view->gallery = $thumbs;
-
+        } else {
+            throw new Exception("Invalid input!");
         }
     }
 
-    public function comentariosAction() {
+    public function comentariosAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/mobile/common/bodega/comentarios.js?" . time());
+            ->appendFile("/mobile/common/bodega/comentarios.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($input->id);
+
             $this->view->row = $arr;
+            $this->view->estatus = $input->estatus;
+
             $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
             $this->view->comments = $trafico->obtenerComentarios();;
+        } else {
+            throw new Exception("Invalid input!");
         }
     }
 
-    public function bitacoraAction() {
+    public function bitacoraAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/mobile/common/bodega/comentarios.js?" . time());
+            ->appendFile("/mobile/common/bodega/comentarios.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($input->id);
+            
             $this->view->row = $arr;
+            $this->view->estatus = $input->estatus;
+
             $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
             $this->view->bitacora = $trafico->obtenerBitacoraBodega();
+        } else {
+            throw new Exception("Invalid input!");
         }
     }
 
-    public function agregarFacturaAction() {
+    public function agregarFacturaAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/mobile/common/bodega/agregar-factura.js?" . time());
+            ->appendFile("/mobile/common/bodega/agregar-factura.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
-            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {
+        if ($input->isValid("id") && $input->isValid("estatus")) {
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($input->id);
+
             $this->view->row = $arr;
+            $this->view->estatus = $input->estatus;
         }
     }
 
-    public function editarFacturaAction() {
+    public function agregarBultoAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/mobile/common/bodega/agregar-factura.js?" . time());
+            ->appendFile("/mobile/common/bodega/agregar-bulto.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
+        );
+        $v = array(
+            "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty()),
+            "estatus" => array(new Zend_Validate_NotEmpty()),
+        );
+        $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+        if ($input->isValid("id") && $input->isValid("estatus")) {
+            $this->view->id = $input->id;
+            
+            $mppr = new Mobile_Model_Traficos();
+            $arr = $mppr->obtener($input->id);
+
+            $this->view->row = $arr;            
+            $this->view->estatus = $input->estatus;
+
+        } else {
+            throw new Exception("Invalid input!");
+        }
+    }
+
+    public function editarFacturaAction()
+    {
+        $this->view->title = "Bodega";
+        $this->view->headMeta()->appendName("description", "");
+        $this->view->headScript()
+            ->appendFile("/mobile/common/bodega/agregar-factura.js?" . time());
+        $f = array(
+            "*" => array("StringTrim", "StripTags"),
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
             "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
@@ -311,41 +382,45 @@ class Mobile_BodegaController extends Zend_Controller_Action
         if ($input->isValid("id")) {
             $mppr = new Trafico_Model_TraficoFacturasMapper();
             $row = $mppr->informacionFactura($input->id);
-            
+
             $mdl = new Mobile_Model_Traficos();
             $arr = $mdl->obtener($row['idTrafico']);
             $this->view->row = $arr;
         }
     }
 
-    public function agregarGuiaAction() {
+    public function agregarGuiaAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/mobile/common/bodega/agregar-guia.js?" . time());
+            ->appendFile("/mobile/common/bodega/agregar-guia.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
             "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
         );
         $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
-        if ($input->isValid("id")) {                    
+        if ($input->isValid("id")) {
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($input->id);
             $this->view->row = $arr;
         }
     }
 
-    public function editarGuiaAction() {
+    public function editarGuiaAction()
+    {
         $this->view->title = "Bodega";
         $this->view->headMeta()->appendName("description", "");
         $this->view->headScript()
-                ->appendFile("/mobile/common/bodega/agregar-guia.js?" . time());
+            ->appendFile("/mobile/common/bodega/agregar-guia.js?" . time());
         $f = array(
             "*" => array("StringTrim", "StripTags"),
-            "id" => array("Digits")
+            "id" => array("Digits"),
+            "estatus" => array("StringToLower"),
         );
         $v = array(
             "id" => array(new Zend_Validate_Int(), new Zend_Validate_NotEmpty())
@@ -354,7 +429,7 @@ class Mobile_BodegaController extends Zend_Controller_Action
         if ($input->isValid("id")) {
             $model = new Trafico_Model_TraficoGuiasMapper();
             $row = $model->obtenerGuia($input->id);
-                    
+
             $mppr = new Mobile_Model_Traficos();
             $arr = $mppr->obtener($row['idTrafico']);
             $this->view->row = $arr;

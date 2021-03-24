@@ -728,8 +728,8 @@ class OAQ_TraficoVucem {
         return trim(str_replace(array("\r", "\n", "\r\n"), '', $string));
     }
 
-    public function enviarCove($idVucem, $idTrafico, $idFactura, $send = true, $save = false) {
-        
+    public function enviarCove($idVucem, $idTrafico, $idFactura, $send = true, $save = false)
+    {        
         $sello = $this->_obtenerSello($idVucem);
         
         $uti = new Utilerias_Vucem(true);
@@ -1070,7 +1070,9 @@ class OAQ_TraficoVucem {
             $rfcConsulta = $rfc->rfcEdocument($trafico["idCliente"]);
 
             if (!$rfcConsulta) {
+
                 $rfcConsulta = 'OAQ030623UL8';
+
                 if ($sello["tipo"] == 'agente') {
                     $rfcConsulta = $trafico['rfcCliente'];
                 }
@@ -1097,8 +1099,8 @@ class OAQ_TraficoVucem {
         }
     }
 
-    public function enviarEdocument($idVucem, $idTrafico, $idArchivo, $tipoDocumento, $send = true) {
-        
+    public function enviarEdocument($idVucem, $idTrafico, $idArchivo, $tipoDocumento, $send = true)
+    {        
         $sello = $this->_obtenerSello($idVucem);
         
         $uti = new Utilerias_Vucem(false, true);
@@ -1108,15 +1110,19 @@ class OAQ_TraficoVucem {
         $trafico = $mdl->obtenerPorId($idTrafico);
         
         $archivo = $mdd->getFileById($idArchivo);
+
         if (empty($sello)) {
             throw new Exception("No se encontro sello para cliente con RFC {$trafico["rfc"]}.");
         }
+
         if (isset($trafico["id"]) && isset($archivo["id"])) {
+
             if ($sello["figura"] == 1) {
                 $rfcConsulta["rfc"] = $trafico["rfcCliente"];    
             } else {
                 $rfcConsulta["rfc"] = $rfc->rfcEdocument($trafico["idCliente"]);
             }
+            
             $nombreDocumento = substr($archivo["nom_archivo"], 0, -4);
             
             $tbl = new Trafico_Model_VucemMapper();
@@ -1524,6 +1530,7 @@ class OAQ_TraficoVucem {
                 "correoElectronico" => "soporte@oaq.com.mx",
                 "rfcConsulta" => "OAQ030623UL8"
             );
+
             $ed["usuario"] = array(
                 "username" => $sello["rfc"],
                 "password" => $sello["ws_pswd"],

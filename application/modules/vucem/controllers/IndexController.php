@@ -217,9 +217,12 @@ class Vucem_IndexController extends Zend_Controller_Action {
      * 
      * @return boolean
      */
-    public function nuevaSolicitudAction() {
+    public function nuevaSolicitudAction() 
+    {
+
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
+
         $vucem = new OAQ_VucemEnh();
         $debug = $this->_request->getParam("debug", null);
         $misc = new OAQ_Misc();

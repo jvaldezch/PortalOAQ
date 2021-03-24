@@ -84,17 +84,27 @@ class Trafico_PedimentosController extends Zend_Controller_Action
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("idTrafico")) {
+                
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
-                if (($res = $trafico->descargaPedimento($trafico->getIdCliente())) === true) {
-                    $this->_helper->json(array("success" => true));
+
+                $idCliente = $trafico->getIdCliente();
+                $res = $trafico->descargaPedimento($idCliente);
+
+                if (!empty($res)) {
+                    
+                    $this->_helper->json(array("success" => true, "message" => $res['message']));
+
                 } else {
+
                     $res = $trafico->descargaPedimento(null, $trafico->getPatente());
+
                     if ($res['success'] == true) {
                         $this->_helper->json(array("success" => true, "message" => $res['message']));
                     } else {
                         $this->_helper->json(array("success" => false, "message" => $res));
                     }
                 }
+
             } else {
                 throw new Exception("Invalid input!");
             }
