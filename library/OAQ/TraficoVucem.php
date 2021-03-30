@@ -102,7 +102,12 @@ class OAQ_TraficoVucem {
         if (is_array($options)) {
             $this->setOptions($options);
         }
+
         $this->_firephp = Zend_Registry::get("firephp");
+
+        if ($this->username == 'jvaldez') {
+            $this->_firephp->info("Hi programmer");
+        }
     }
 
     public function __set($name, $value) {
@@ -1107,6 +1112,7 @@ class OAQ_TraficoVucem {
         $mdl = new Trafico_Model_TraficosMapper();
         $mdd = new Archivo_Model_RepositorioMapper();
         $rfc = new Trafico_Model_RfcConsultaMapper();
+
         $trafico = $mdl->obtenerPorId($idTrafico);
         
         $archivo = $mdd->getFileById($idArchivo);
@@ -1155,6 +1161,21 @@ class OAQ_TraficoVucem {
                 "key" => openssl_get_privatekey(base64_decode($sello["spem"]), $sello["spem_pswd"]),
                 "new" => isset($sello["sha"]) ? true : false,
             );
+
+            if ($this->username == 'jvaldez') {
+                unset($data['archivo']['archivo']);
+
+                $this->_firephp->info($sello);
+                $this->_firephp->info($trafico);
+                $this->_firephp->info($rfcConsulta);
+                $this->_firephp->info($data);
+
+                $xml = $uti->xmlEdocument($data);
+
+                $this->_firephp->info($xml);
+
+                return false;
+            }
             
             if ($send == true) {
                 $this->xml = $uti->xmlEdocument($data);

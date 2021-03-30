@@ -244,11 +244,13 @@ class OAQ_Trafico_Referencias
                 ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
                 ->where("t.estatus <> 4")
                 ->order(array("fechaEta DESC"));
+
             if (isset($bodega)) {
                 $sql->where("t.pedimento IS NULL");
             } else {
                 $sql->where("t.pedimento IS NOT NULL");
             }
+            
             if (isset($tipoAduana)) {
                 if ($tipoAduana == 1) {
                     $sql->where("a.tipoAduana = 1 AND t.cvePedimento IN ('V1', 'G1', 'E1', 'V5', 'F4', 'F5', 'A3')");
@@ -257,8 +259,9 @@ class OAQ_Trafico_Referencias
                 } else {
                     $sql->where('a.tipoAduana = ?', $tipoAduana);
                 }
-            }
+            }            
             $this->_filters($sql, $filterRules, $cookies);
+            $this->_firephp->info($sql->assemble());
             return $sql;
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());

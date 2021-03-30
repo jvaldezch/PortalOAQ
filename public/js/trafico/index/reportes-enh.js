@@ -723,26 +723,27 @@ function submitForm() {
                         {field: 'referencia', width: 100, title: 'Referencia'}
                     ]],
                 columns: [[
+                        {field: 'semaforo', width: 70, title: 'Semaforo', 
+                            formatter(value, row){
+                                if (value == 1) {
+                                    return 'Verde';
+                                } else if (value == 2) {
+                                    return 'Rojo';
+                                } else {
+                                    return '';
+                                }
+                            }},
                         {field: 'ie', width: 70, title: 'I/E'},
                         {field: 'cvePedimento', width: 40, title: 'Cve.'},
                         {field: 'nombreCliente', width: 300, title: 'Nombre Cliente'},
                         {field: 'nombre', width: 300, title: 'Usuario'},
-                        {field: 'fechaEta', width: 100, title: 'ETA'},
-                        {field: 'fechaNotificacion', width: 140, title: 'F. Notificación'},
-                        {field: 'fechaEnvioDocumentos', width: 140, title: 'F. Envio Doctos.'},
-                        {field: 'fechaEntrada', width: 140, title: 'F. Entrada'},
-                        {field: 'fechaPresentacion', width: 140, title: 'F. Presentación'},
-                        {field: 'fechaEnvioProforma', width: 140, title: 'F. Envio Proforma'},
-                        {field: 'fechaVistoBueno', width: 140, title: 'F. VoBo'},
-                        {field: 'fechaRevalidacion', width: 100, title: 'F. Revalidación'},
-                        {field: 'fechaPrevio', width: 145, title: 'F. Previo'},
                         {field: 'fechaPago', width: 145, title: 'F. Pago'},
                         {field: 'fechaLiberacion', width: 145, title: 'F. Liberación'},
                         {field: 'fechaEtaAlmacen', width: 145, title: 'ETA Almacen'},
-                        {field: 'fechaFacturacion', width: 100, title: 'F. Facturación'},
                         {field: 'blGuia', width: 150, title: 'BL/Guía'},
-                        {field: 'nombreAlmacen', width: 150, title: 'Almacen'},
-                        {field: 'descripcionPlanta', width: 150, title: 'Planta'}
+                        {field: 'descripcionPlanta', width: 150, title: 'Planta'},
+                        {field: 'observaciones_checklist', width: 200, title: 'Observaciones'},
+                        {field: 'observacionSemaforo', width: 200, title: 'Observaciones Semaforo'},
                     ]]
             });
         }

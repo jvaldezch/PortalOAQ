@@ -18,6 +18,7 @@
         <link href="/less/traffic-module.css?<?= time() ?>" media="screen" rel="stylesheet" type="text/css" >
         <link href="/js/common/highlight/styles/github.css" media="screen" rel="stylesheet" type="text/css" >
         <script type="text/javascript" src="/js/common/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="/js/common/loadingoverlay.min.js"></script>
         <script type="text/javascript" src="/js/common/highlight/highlight.pack.js"></script>        
     </head>
     <body>
@@ -33,6 +34,7 @@
             $("pre code").each(function(i, block) {
                 hljs.highlightBlock(block);
             });
+            $.LoadingOverlay("hide");
         });
     </script>
 </html>

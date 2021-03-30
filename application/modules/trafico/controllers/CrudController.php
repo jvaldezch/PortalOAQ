@@ -1199,16 +1199,15 @@ class Trafico_CrudController extends Zend_Controller_Action
                     "regimen",
                     "idUsuario",
                     "observacionSemaforo",
+                    "semaforo",
                 ))
                 ->joinLeft(array("u" => "usuarios"), "t.idUsuario = u.id", array("nombre"))
                 ->joinLeft(array("c" => "trafico_clientes"), "c.id = t.idCliente", array("nombre AS nombreCliente"))
                 ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
-                ->joinLeft(array("tc" => "trafico_tipocarga"), "tc.id = t.tipoCarga", array("tipoCarga AS carga"))
                 ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
-                ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
-                ->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
-                ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
+                ->joinInner(array("cl" => "checklist_referencias"), "cl.idTrafico = t.id", array("observaciones AS observaciones_checklist"))
                 ->where("t.fechaFacturacion IS NULL")
+                ->where("t.revisionOperaciones IS NOT NULL")
                 ->where("t.estatus <> 4")
                 ->where("t.pedimento IS NOT NULL")
                 ->order(array("fechaEta DESC"));
@@ -1221,20 +1220,24 @@ class Trafico_CrudController extends Zend_Controller_Action
                     $sql->where('a.tipoAduana = ?', $tipoAduana);
                 }
             }
-            if (isset($rows) && isset($page)) {
-                $sql->limit($rows, ($page - 1));
-            }
+            
             if (isset($filtro)) {
                 $this->_filtroReportes($sql, $filtro);
             }
             if ((int) $idAduana != 0) {
                 $sql->where("t.idAduana = ?", $idAduana);
             }
-            $stmt = $this->_db->fetchAll($sql);
-            if ($stmt) {
-                return $stmt;
-            }
-            return;
+
+            $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($sql));
+            $paginator->setCurrentPageNumber($page);
+            $paginator->setItemCountPerPage($rows);
+
+            $resp = array(
+                "total" => $paginator->getTotalItemCount(),
+                "rows" => (array) $paginator->getCurrentItems(),
+            );
+            $this->_helper->json($resp);
+
         } catch (Zend_Db_Exception $ex) {
             throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
         }

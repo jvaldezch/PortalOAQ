@@ -1690,7 +1690,8 @@ class Trafico_GetController extends Zend_Controller_Action
 
                 $mppr = new Trafico_Model_VucemMapper();
                 $arr = $mppr->obtenerVucem($input->id);
-                $vucem = new OAQ_TraficoVucem();
+
+                $vucem = new OAQ_TraficoVucem(array("username" => $this->_session->username));
 
                 $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
                 if (isset($arr["idFactura"])) {
