@@ -446,4 +446,26 @@ class OAQ_SicaDb {
         }
     }
 
+    public function movimientosReferencia($referencia) {
+        try {
+            $sql = $this->_db->select()
+                    ->from(array("D" => "Diario"), array(
+                        "D.MovimientoID", 
+                        "D.PolizaID", 
+                        "D.Cargo AS cargo", 
+                        "D.Abono AS abono", 
+                        new Zend_Db_Expr("CAST(D.CuentaID AS varchar) AS cuenta"),
+                    ))
+                    ->where("D.Estatus = 'A'")
+                    ->where("D.Referencia = ?", $referencia);
+            $stmt = $this->_db->fetchAll($sql);
+            if ($stmt) {
+                return $stmt;
+            }
+            return;
+        } catch (Zend_Db_Adapter_Exception $e) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
+        }
+    }
+
 }

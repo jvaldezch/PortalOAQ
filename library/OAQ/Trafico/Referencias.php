@@ -243,7 +243,7 @@ class OAQ_Trafico_Referencias
                 ->joinLeft(array("p" => "trafico_clientes_plantas"), "p.id = t.idPlanta", array("descripcion AS descripcionPlanta"))
                 ->joinLeft(array("l" => "trafico_almacen"), "l.id = t.almacen", array("nombre AS nombreAlmacen"))
                 ->where("t.estatus <> 4")
-                ->order(array("fechaEta DESC"));
+                ->order(array("t.fechaEta DESC"));
 
             if (isset($bodega)) {
                 $sql->where("t.pedimento IS NULL");

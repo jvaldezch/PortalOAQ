@@ -127,6 +127,30 @@ class Trafico_GetController extends Zend_Controller_Action
         }
     }
 
+    public function movimientosSicaAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "referencia" => "StringToUpper",
+            );
+            $v = array(
+                "referencia" => array("NotEmpty"),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("referencia")) {
+
+                $sica = new OAQ_SicaDb("192.168.200.5", "sa", "adminOAQ123", "SICA", 1433, "SqlSrv");
+                $details = $sica->movimientosReferencia($input->referencia);
+
+                $this->_helper->json(array("success" => true, "details" => $details));
+                
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
     public function reporteClientesAction()
     {
         try {

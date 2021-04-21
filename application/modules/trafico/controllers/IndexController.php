@@ -1279,12 +1279,15 @@ class Trafico_IndexController extends Zend_Controller_Action
         $this->view->headMeta()->appendName("description", "");
         $this->view->headLink()
             ->appendStylesheet("/easyui/themes/default/easyui.css")
+            ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
             ->appendStylesheet("/easyui/themes/icon.css");
         $this->view->headScript()
             ->appendFile("/easyui/jquery.easyui.min.js")
             ->appendFile("/easyui/jquery.edatagrid.js")
             ->appendFile("/easyui/datagrid-filter.js")
             ->appendFile("/easyui/locale/easyui-lang-es.js")
+            ->appendFile("/v2/js/common/confirm/jquery-confirm.min.js")
+            ->appendFile("/js/common/loadingoverlay.min.js")
             ->appendFile("/js/trafico/index/reportes-enh.js?" . time());
         if ($this->_session->role == "super") {
             $this->view->menur = array(
@@ -1308,6 +1311,7 @@ class Trafico_IndexController extends Zend_Controller_Action
                 "74" => "Reporte pendientes de facturar",
                 "75" => "Reporte tráfico y facturación",
                 "76" => "Reporte entrega de expedientes",
+                "79" => "Reporte de garantias",
                 "77" => "Sellos de agentes",
                 "78" => "Sellos de clientes",
             );

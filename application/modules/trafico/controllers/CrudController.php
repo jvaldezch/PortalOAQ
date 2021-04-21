@@ -809,6 +809,116 @@ class Trafico_CrudController extends Zend_Controller_Action
         }
     }
 
+    public function reporteGarantiasAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "tipoReporte" => "Digits",
+                "idAduana" => "Digits",
+                "page" => array("Digits"),
+                "rows" => array("Digits"),
+                "filtro" => array("Digits"),
+                "excel" => array("StringToLower"),
+            );
+            $v = array(
+                "page" => array(new Zend_Validate_Int(), "default" => 1),
+                "rows" => array(new Zend_Validate_Int(), "default" => 20),
+                "tipoReporte" => array("NotEmpty", new Zend_Validate_Int()),
+                "idAduana" => array("NotEmpty", new Zend_Validate_Int()),
+                "fechaInicio" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")),
+                "fechaFin" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}-\d{2}-\d{2}$/")),
+                "filtro" => array("NotEmpty", new Zend_Validate_Int()),
+                "excel" => array("NotEmpty"),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("tipoReporte") && $input->isValid("idAduana") && $input->isValid("fechaInicio") && $input->isValid("fechaFin")) {
+                $dexcel = filter_var($input->excel, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                $reportes = new OAQ_ExcelReportes();
+                if ($input->tipoReporte == 79) {
+                    if ($dexcel === false) {
+                        $rows = $this->_reporteGarantias($input->page, $input->rows, $input->idAduana);
+                        $arr = array(
+                            "total" => $this->_totalReporteGarantias($input->idAduana),
+                            "rows" => empty($rows) ? array() : $rows,
+                        );
+                        $this->_helper->json($arr);
+                    } else {
+                        $rows = $this->_reporteGarantias(null, null, $input->idAduana);
+                        $reportes->reportesTrafico(79, $rows);
+                    }
+                }
+            } else {
+                $this->_helper->json(array("success" => false, "message" => "Invalid Input!"));
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
+    protected function _reporteGarantias($page, $rows, $idAduana)
+    {
+        try {
+            $sql = $this->_db->select()
+                ->from(array("s" => "trafico_solicitudes"), array(
+                    "s.id",
+                    "a.patente",
+                    "a.aduana",
+                    "s.pedimento",
+                    "s.referencia",
+                    "c.rfc",
+                    "s.reembolsoCorresponsal",
+                    "s.reembolsoCliente",
+                ))
+                ->joinInner(array("c" => "trafico_clientes"), "c.id = s.idCliente", array("nombre AS nombreCliente"))
+                ->joinInner(array("a" => "trafico_aduanas"), "a.id = s.idAduana", array(""))
+                ->where("s.referencia LIKE '%G'")
+                ->where("s.garantiaPagada IS NULL")
+                ->order(array("a.patente", "a.aduana", "s.pedimento", "s.referencia"));
+            if (isset($idCliente)) {
+                $sql->where("s.idCliente = ?", $idCliente);
+            }
+            if (isset($idAduana) && (int) $idAduana !== 0) {
+                $sql->where("s.idAduana = ?", $idAduana);
+            }
+            if (isset($rows) && isset($page)) {
+                $sql->limit($rows, ($page - 1) * $rows);
+            }
+            $stmt = $this->_db->fetchAll($sql);
+            if ($stmt) {
+                return $stmt;
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
+        }
+    }
+
+    protected function _totalReporteGarantias($idAduana)
+    {
+        try {
+            $sql = $this->_db->select()
+                ->from(array("s" => "trafico_solicitudes"), array(
+                    "s.id",
+                ))
+                ->where("s.referencia LIKE '%G'")
+                ->where("s.garantiaPagada IS NULL");
+            if (isset($idCliente)) {
+                $sql->where("s.idCliente = ?", $idCliente);
+            }
+            if ((int) $idAduana != 0) {
+                $sql->where("s.idAduana = ?", $idAduana);
+            }
+            $stmt = $this->_db->fetchAll($sql);
+            if ($stmt) {
+                return count($stmt);
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
+        }
+    }
+
     protected function _reporteInventario($page, $rows, $idAduana, $fechaInicio, $fechaFin, $filtro = null, $tipoAduana = null, $idCliente = null, $tipoOperacion = null)
     {
         try {
@@ -849,7 +959,7 @@ class Trafico_CrudController extends Zend_Controller_Action
                 $sql->where("t.ie = ?", $tipoOperacion);
             }
             if (isset($rows) && isset($page)) {
-                $sql->limit($rows, ($page - 1));
+                $sql->limit($rows, ($page - 1) * $rows);
             }
             if (isset($tipoAduana) && (int) $tipoAduana != 0) {
                 $sql->where("a.tipoAduana = ?", $tipoAduana);
@@ -940,7 +1050,7 @@ class Trafico_CrudController extends Zend_Controller_Action
                 }
             }
             if (isset($rows) && isset($page)) {
-                $sql->limit($rows, $rows * ($page - 1));
+                $sql->limit($rows, ($page - 1) * $rows);
             }
 
             if (isset($filtro)) {
@@ -1132,7 +1242,7 @@ class Trafico_CrudController extends Zend_Controller_Action
                 }
             }
             if (isset($rows) && isset($page)) {
-                $sql->limit($rows, $rows * ($page - 1));
+                $sql->limit($rows, ($page - 1) * $rows);
             }
             if (isset($idCliente)) {
                 $sql->where("t.idCliente = ?", $idCliente);
@@ -2079,7 +2189,7 @@ class Trafico_CrudController extends Zend_Controller_Action
                 $sql->where("t.idAduana = ?", $idAduana);
             }
             if (isset($rows) && isset($page)) {
-                $sql->limit($rows, $rows * ($page - 1));
+                $sql->limit($rows, ($page - 1) * $rows);
             }
             return $sql;
         } catch (Exception $ex) {
@@ -2616,7 +2726,7 @@ class Trafico_CrudController extends Zend_Controller_Action
                 $sql->where("t.idAduana = ?", $idAduana);
             }
             if (isset($rows) && isset($page)) {
-                $sql->limit($rows, $rows * ($page - 1));
+                $sql->limit($rows, ($page - 1) * $rows);
             }
             $stmt = $this->_db->fetchAll($sql);
             if ($stmt) {
