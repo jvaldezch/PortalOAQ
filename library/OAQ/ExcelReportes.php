@@ -14,7 +14,8 @@ use Box\Spout\Writer\WriterFactory;
  *
  * @author Jaime
  */
-class OAQ_ExcelReportes {
+class OAQ_ExcelReportes
+{
 
     protected $initRow;
     protected $excel;
@@ -62,45 +63,54 @@ class OAQ_ExcelReportes {
         ),
     );
 
-    function getStyle() {
+    function getStyle()
+    {
         return $this->style;
     }
 
-    function getStyleh() {
+    function getStyleh()
+    {
         return $this->styleh;
     }
 
-    function getStylec() {
+    function getStylec()
+    {
         return $this->stylec;
     }
 
-    function setFilename($filename) {
+    function setFilename($filename)
+    {
         $this->filename = $filename;
     }
 
-    function setData($data) {
+    function setData($data)
+    {
         $this->data = $data;
     }
 
-    function setTitles($titles) {
+    function setTitles($titles)
+    {
         $this->titles = $titles;
     }
 
-    function __construct() {
+    function __construct()
+    {
         $this->excel = new PHPExcel();
         $this->appConfig = new Application_Model_ConfigMapper();
     }
 
-    protected function _autosize($i) {
+    protected function _autosize($i)
+    {
         $this->excel->getActiveSheet()->getStyle($this->range[0] . ($this->initRow + 1) . ":{$this->range[1]}{$i}")->applyFromArray($this->stylec);
         foreach (range($this->range[0], $this->range[1]) as $columnID) {
             $this->excel->getActiveSheet()
-                    ->getColumnDimension($columnID)
-                    ->setAutoSize(true);
+                ->getColumnDimension($columnID)
+                ->setAutoSize(true);
         }
     }
 
-    protected function _ini($sheet = null) {
+    protected function _ini($sheet = null)
+    {
         if ($sheet !== null) {
             $this->excel->createSheet();
             $this->excel->setActiveSheetIndex($sheet);
@@ -112,7 +122,8 @@ class OAQ_ExcelReportes {
         $this->excel->getActiveSheet()->getStyle("{$this->range[0]}{$this->initRow}:{$this->range[1]}{$this->initRow}")->applyFromArray($this->style);
     }
 
-    public function reporteCoves() {
+    public function reporteCoves()
+    {
         $this->initRow = 1;
         $i = $this->initRow;
         $this->range = array("A", "G");
@@ -133,7 +144,8 @@ class OAQ_ExcelReportes {
         $this->_autosize($i);
     }
 
-    public function reporteCargoQuin() {
+    public function reporteCargoQuin()
+    {
         $this->initRow = 1;
         $i = $this->initRow;
         $this->range = array("A", "CA");
@@ -149,11 +161,11 @@ class OAQ_ExcelReportes {
             $this->excel->getActiveSheet()->setCellValue("J" . ($item["totalRegistros"] + $initp), $item["sumatoria"]);
             foreach ($item["facturas"] as $fact) {
                 $firsti = true;
-                if(!isset($fact["partes"]) || empty($fact["partes"])) {
+                if (!isset($fact["partes"]) || empty($fact["partes"])) {
                     continue;
                 }
                 foreach ($fact["partes"] as $part) {
-                    if(!isset($part["cantidadFactura"])) {
+                    if (!isset($part["cantidadFactura"])) {
                         continue;
                     }
                     $flete = (float) ($item["fletes"] * $item["tipoCambio"]);
@@ -252,7 +264,8 @@ class OAQ_ExcelReportes {
         $this->_autosize($i);
     }
 
-    public function reporteCargoQuinFracciones($fracciones) {
+    public function reporteCargoQuinFracciones($fracciones)
+    {
         $this->initRow = 1;
         $i = $this->initRow;
         $this->range = array("A", "Q");
@@ -261,7 +274,7 @@ class OAQ_ExcelReportes {
         $this->_ini(1);
         $i++;
         foreach ($fracciones as $item) {
-            if(!isset($item["cantidadFactura"])) {
+            if (!isset($item["cantidadFactura"])) {
                 continue;
             }
             $this->excel->getActiveSheet()->setCellValue("A{$i}", $item["ordenFactura"]);
@@ -285,7 +298,8 @@ class OAQ_ExcelReportes {
         $this->_autosize($i);
     }
 
-    public function reporteCargoQuinPartes($partes) {
+    public function reporteCargoQuinPartes($partes)
+    {
         $this->initRow = 1;
         $i = $this->initRow;
         $this->range = array("A", "G");
@@ -306,71 +320,24 @@ class OAQ_ExcelReportes {
         $this->_autosize($i);
     }
 
-    public function layoutTecnico() {
+    public function layoutTecnico()
+    {
         $border = (new BorderBuilder())
-                ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
-                ->build();
+            ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->build();
         $style = (new StyleBuilder())
-                ->setFontBold()
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->setBackgroundColor("c6d9f0")
-                ->setBorder($border)
-                ->build();
+            ->setFontBold()
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor("c6d9f0")
+            ->setBorder($border)
+            ->build();
         $styles = (new StyleBuilder())
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->build();
-        $writer = WriterFactory::create(Type::XLSX);
-        $writer->openToBrowser($this->filename);
-        $writer->addRowWithStyle($this->titles, $style);
-        $writer->addRowsWithStyle($this->data, $styles);
-        $writer->close();
-    }
-    
-    public function layoutClientes() {
-        $border = (new BorderBuilder())
-                ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
-                ->build();
-        $style = (new StyleBuilder())
-                ->setFontBold()
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->setBackgroundColor("c6d9f0")
-                ->setBorder($border)
-                ->build();
-        $styles = (new StyleBuilder())
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->build();
-        $writer = WriterFactory::create(Type::XLSX);
-        $writer->openToBrowser($this->filename);
-        $writer->addRowWithStyle($this->titles, $style);
-        $writer->addRowsWithStyle($this->data, $styles);
-        $writer->close();
-    }
-    
-    public function layoutAnexo24Clientes() {
-        $border = (new BorderBuilder())
-                ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
-                ->build();
-        $style = (new StyleBuilder())
-                ->setFontBold()
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->setBackgroundColor("c6d9f0")
-                ->setBorder($border)
-                ->build();
-        $styles = (new StyleBuilder())
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->build();
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->build();
         $writer = WriterFactory::create(Type::XLSX);
         $writer->openToBrowser($this->filename);
         $writer->addRowWithStyle($this->titles, $style);
@@ -378,14 +345,66 @@ class OAQ_ExcelReportes {
         $writer->close();
     }
 
-    protected function _value($item, $key) {
+    public function layoutClientes()
+    {
+        $border = (new BorderBuilder())
+            ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->build();
+        $style = (new StyleBuilder())
+            ->setFontBold()
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor("c6d9f0")
+            ->setBorder($border)
+            ->build();
+        $styles = (new StyleBuilder())
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->build();
+        $writer = WriterFactory::create(Type::XLSX);
+        $writer->openToBrowser($this->filename);
+        $writer->addRowWithStyle($this->titles, $style);
+        $writer->addRowsWithStyle($this->data, $styles);
+        $writer->close();
+    }
+
+    public function layoutAnexo24Clientes()
+    {
+        $border = (new BorderBuilder())
+            ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->build();
+        $style = (new StyleBuilder())
+            ->setFontBold()
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor("c6d9f0")
+            ->setBorder($border)
+            ->build();
+        $styles = (new StyleBuilder())
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->build();
+        $writer = WriterFactory::create(Type::XLSX);
+        $writer->openToBrowser($this->filename);
+        $writer->addRowWithStyle($this->titles, $style);
+        $writer->addRowsWithStyle($this->data, $styles);
+        $writer->close();
+    }
+
+    protected function _value($item, $key)
+    {
         if (isset($item[$key]) && $item[$key] != "") {
             return $item[$key];
         }
         return "";
     }
 
-    public function download() {
+    public function download()
+    {
         header("Pragma: public");
         header("Expires: 0");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -397,8 +416,9 @@ class OAQ_ExcelReportes {
         $objWriter->setOffice2003Compatibility(true);
         $objWriter->save("php://output");
     }
-    
-    public function semaforo($value) {
+
+    public function semaforo($value)
+    {
         if ((int) $value == 1) {
             return 'Verde';
         }
@@ -407,35 +427,49 @@ class OAQ_ExcelReportes {
         }
         return '';
     }
-    
-    public function reportesTrafico($tipoReporte, $rows = null) {
+
+    public function boolean_val($value)
+    {
+        if ($value !== null) {
+            if ((int) $value == 1) {
+                return 'Si';
+            }
+            if ((int) $value == 0) {
+                return 'No';
+            }
+        }
+        return '';
+    }
+
+    public function reportesTrafico($tipoReporte, $rows = null)
+    {
         $border = (new BorderBuilder())
-                ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
-                ->build();
+            ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->build();
         $tstyle = (new StyleBuilder())
-                ->setFontBold()
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->setBackgroundColor("c6d9f0")
-                ->setBorder($border)
-                ->build();
+            ->setFontBold()
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor("c6d9f0")
+            ->setBorder($border)
+            ->build();
         $dstyle = (new StyleBuilder())
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->build();
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->build();
         $writer = WriterFactory::create(Type::XLSX);
         if (APPLICATION_ENV == "production" || APPLICATION_ENV == "staging") {
-            $writer->setTempFolder($this->appConfig->getParam("tmpDir"));            
+            $writer->setTempFolder($this->appConfig->getParam("tmpDir"));
         } else {
-            $writer->setTempFolder("C:\\wamp64\\tmp");            
+            $writer->setTempFolder("C:\\wamp64\\tmp");
         }
         if ($tipoReporte == 1) {
             $writer->openToBrowser("TRAFICOS_" . time() . ".xlsx");
         }
         if ($tipoReporte == 2) {
-            $writer->openToBrowser("TRAFICOS_CANDADOS_" . time() . ".xlsx");            
+            $writer->openToBrowser("TRAFICOS_CANDADOS_" . time() . ".xlsx");
         }
         if ($tipoReporte == 4) {
             $writer->openToBrowser("TRAFICOSINCOMP_" . time() . ".xlsx");
@@ -477,25 +511,28 @@ class OAQ_ExcelReportes {
             $writer->openToBrowser("REP_EDOC_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 72) { // indicadores
-            $writer->openToBrowser("REP_INDCADORES_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("REP_INDCADORES_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 73) {
-            $writer->openToBrowser("REP_ESTATUS_MVHC_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("REP_ESTATUS_MVHC_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 74) {
-            $writer->openToBrowser("REP_SIN_FACTURAR_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("REP_SIN_FACTURAR_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 75) {
-            $writer->openToBrowser("RPT_TRAFICOS_FACTURACION_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("RPT_TRAFICOS_FACTURACION_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 76) {
-            $writer->openToBrowser("RPT_ENTREGA_EXPEDIENTES_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("RPT_ENTREGA_EXPEDIENTES_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 77) {
-            $writer->openToBrowser("RPT_SELLOS_AGENTES_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("RPT_SELLOS_AGENTES_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 78) {
-            $writer->openToBrowser("RPT_SELLOS_CLIENTES_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("RPT_SELLOS_CLIENTES_" . date("Y-m-d") . "_" . time() . ".xlsx");
+        }
+        if ($tipoReporte == 79) {
+            $writer->openToBrowser("RPT_GARANTIAS_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 80) {
             $writer->openToBrowser("FACT_INV_" . date("Y-m-d") . "_" . time() . ".xlsx");
@@ -510,7 +547,7 @@ class OAQ_ExcelReportes {
             $writer->openToBrowser("CATALOGO_PARTES_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 84) { // // traficos vs facturacion --- desde admin
-            $writer->openToBrowser("RPT_TRAFICOS_FACTURACION_" . date("Y-m-d") . "_" . time() . ".xlsx");            
+            $writer->openToBrowser("RPT_TRAFICOS_FACTURACION_" . date("Y-m-d") . "_" . time() . ".xlsx");
         }
         if ($tipoReporte == 85) { // catalogo de partes clientes
             $writer->openToBrowser("CATALOGO_PARTES_" . date("Y-m-d") . "_" . time() . ".xlsx");
@@ -522,7 +559,7 @@ class OAQ_ExcelReportes {
                 "Trafico",
                 "Pedimento",
                 "Fecha",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["numero"],
@@ -530,7 +567,7 @@ class OAQ_ExcelReportes {
                     $row["referencia"],
                     $row["pedimento"],
                     $row["fechaPago"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 1) {
@@ -564,7 +601,7 @@ class OAQ_ExcelReportes {
                 "Días despacho",
                 "Días retraso",
                 "Semaforo",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -596,7 +633,7 @@ class OAQ_ExcelReportes {
                     $row["diasDespacho"],
                     $row["diasRetraso"],
                     $this->semaforo($row["semaforo"]),
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 5) { // traficos aereos
@@ -623,7 +660,7 @@ class OAQ_ExcelReportes {
                 "Fecha Facturación",
                 "Planta",
                 "Semaforo"
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -646,9 +683,9 @@ class OAQ_ExcelReportes {
                     $row["fechaLiberacion"],
                     $row["fechaEtaAlmacen"],
                     $row["fechaFacturacion"],
-                    $row["descripcionPlanta"],                    
+                    $row["descripcionPlanta"],
                     $this->semaforo($row["semaforo"]),
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 6) { // traficos maritimos
@@ -676,7 +713,7 @@ class OAQ_ExcelReportes {
                 "Tipo de Carga",
                 "Planta",
                 "Semaforo"
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -702,7 +739,7 @@ class OAQ_ExcelReportes {
                     $row["carga"],
                     $row["descripcionPlanta"],
                     $this->semaforo($row["semaforo"]),
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 7) { // traficos ops espec
@@ -723,7 +760,7 @@ class OAQ_ExcelReportes {
                 "Fecha Facturación",
                 "Tipo de Carga",
                 "Semaforo"
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -742,7 +779,7 @@ class OAQ_ExcelReportes {
                     $row["fechaFacturacion"],
                     $row["carga"],
                     $this->semaforo($row["semaforo"])
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 8) { // traficos terrestres
@@ -768,7 +805,7 @@ class OAQ_ExcelReportes {
                 "Almacen",
                 "Planta",
                 "Semaforo"
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -792,7 +829,7 @@ class OAQ_ExcelReportes {
                     $row["nombreAlmacen"],
                     $row["descripcionPlanta"],
                     $this->semaforo($row["semaforo"])
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 4) {
@@ -807,7 +844,7 @@ class OAQ_ExcelReportes {
                 "Fecha Pago",
                 "Fecha Liberación",
                 "Usuario",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -820,7 +857,7 @@ class OAQ_ExcelReportes {
                     $row["fechaPago"],
                     $row["fechaLiberacion"],
                     $row["usuario"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 12) {
@@ -835,7 +872,7 @@ class OAQ_ExcelReportes {
                 "Fecha Diferencia",
                 "Factura",
                 "Cliente",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["FolioID"],
@@ -848,7 +885,7 @@ class OAQ_ExcelReportes {
                     $row["FechaDiff"],
                     $row["Factura"],
                     $row["Nombre"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 14) {
@@ -868,7 +905,7 @@ class OAQ_ExcelReportes {
                 "Octubre",
                 "Noviembre",
                 "Diciembre",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -886,7 +923,7 @@ class OAQ_ExcelReportes {
                     $row["oct"],
                     $row["nov"],
                     $row["dic"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 50 || $tipoReporte == 54) { // ops del día totales
@@ -907,7 +944,7 @@ class OAQ_ExcelReportes {
                 "BL/Guía",
                 "Planta",
                 "Semaforo",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["ie"],
@@ -926,7 +963,7 @@ class OAQ_ExcelReportes {
                     $row["blGuia"],
                     $row["descripcionPlanta"],
                     $this->semaforo($row["semaforo"]),
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 51) { // ops del día aereas
@@ -956,7 +993,7 @@ class OAQ_ExcelReportes {
                 "Planta",
                 "Días Despacho",
                 "Semaforo",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["ie"],
@@ -984,7 +1021,7 @@ class OAQ_ExcelReportes {
                     $row["descripcionPlanta"],
                     $row["diasDespacho"],
                     $this->semaforo($row["semaforo"]),
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 52) { // ops maritimo
@@ -1017,7 +1054,7 @@ class OAQ_ExcelReportes {
                 "Planta",
                 "Días Despacho",
                 "Semaforo",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["ie"],
@@ -1048,7 +1085,7 @@ class OAQ_ExcelReportes {
                     $row["descripcionPlanta"],
                     $row["diasDespacho"],
                     $this->semaforo($row["semaforo"]),
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 53) { // ops especiales
@@ -1072,7 +1109,7 @@ class OAQ_ExcelReportes {
                 "F. Facturación",
                 "Días Despacho",
                 "Semaforo"
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["ie"],
@@ -1094,7 +1131,7 @@ class OAQ_ExcelReportes {
                     $row["fechaFacturacion"],
                     $row["diasDespacho"],
                     $this->semaforo($row["semaforo"]),
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 60) { // ops especiales
@@ -1111,7 +1148,7 @@ class OAQ_ExcelReportes {
                 "RFC Receptor",
                 "Guía",
                 "Nombre Archivo",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["idRepositorio"],
@@ -1126,7 +1163,7 @@ class OAQ_ExcelReportes {
                     $row["rfcReceptor"],
                     $row["guia"],
                     $row["nombreArchivo"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 61) { // empleados
@@ -1139,7 +1176,7 @@ class OAQ_ExcelReportes {
                 "Capacit.",
                 "Doctos.",
                 "Estatus",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["razonSocial"],
@@ -1150,7 +1187,7 @@ class OAQ_ExcelReportes {
                     ($row["capacitacion"] == 1) ? 'Si' : '',
                     ($row["documentacion"] == 1) ? 'Si' : '',
                     ($row["estatus"] == 0) ? 'Ináctivo' : '',
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 70) { // reporte coves
@@ -1159,14 +1196,14 @@ class OAQ_ExcelReportes {
                 "Sin error",
                 "Con error",
                 "Total",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["nombre"],
                     $row["sinError"],
                     $row["conError"],
                     $row["total"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 71) { // reporte edocuments
@@ -1175,14 +1212,14 @@ class OAQ_ExcelReportes {
                 "Sin error",
                 "Con error",
                 "Total",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["nombre"],
                     $row["sinError"],
                     $row["conError"],
                     $row["total"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 72) { // reporte indicadores
@@ -1206,7 +1243,7 @@ class OAQ_ExcelReportes {
                 "Rev. Operaciones",
                 "Rev. Admon.",
                 "Completo",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -1228,7 +1265,7 @@ class OAQ_ExcelReportes {
                     ($row["revisionOperaciones"] == 1) ? 'Si' : '',
                     ($row["revisionAdministracion"] == 1) ? 'Si' : '',
                     ($row["completo"] == 1) ? 'Si' : '',
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 73) { // 
@@ -1245,7 +1282,7 @@ class OAQ_ExcelReportes {
                 "MV/HC Firmada",
                 "MV/HC Enviada",
                 "Num. Guía",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -1260,7 +1297,7 @@ class OAQ_ExcelReportes {
                     ($row["mvhcFirmada"] != null) ? 'Si' : '',
                     ($row["mvhcEnviada"] != null) ? 'Si' : '',
                     $row["numGuia"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 74) { // 
@@ -1287,7 +1324,7 @@ class OAQ_ExcelReportes {
                 "Bl / Guía",
                 "Nom. Almacen",
                 "Desc. Planta",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -1312,7 +1349,7 @@ class OAQ_ExcelReportes {
                     $row["blGuia"],
                     $row["nombreAlmacen"],
                     $row["descripcionPlanta"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 75) { // traficos vs facturacion
@@ -1335,7 +1372,7 @@ class OAQ_ExcelReportes {
                 "I.V.A.",
                 "SubTotal",
                 "Pagada",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -1356,7 +1393,7 @@ class OAQ_ExcelReportes {
                     $row["iva"],
                     $row["subTotal"],
                     ($row["pagada"] != null) ? 'Si' : '',
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 76) { // traficos vs facturacion
@@ -1371,7 +1408,7 @@ class OAQ_ExcelReportes {
                 "Completo",
                 "MV / HC Cliente",
                 "Firmada",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -1384,48 +1421,83 @@ class OAQ_ExcelReportes {
                     ($row["completo"] != null) ? 'Si' : '',
                     ($row["mvhcCliente"] != null) ? 'Si' : '',
                     ($row["mvhcFirmada"] != null) ? 'Si' : '',
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
-        
+
         if ($tipoReporte == 77) { // reporte inventario de traficos
             $writer->addRowWithStyle(array(
                 "Patente",
                 "Nombre",
                 "Válido desde",
                 "Válido hasta"
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
                     $row["nombre"],
                     date("Y-m-d", strtotime($row["valido_desde"])),
                     date("Y-m-d", strtotime($row["valido_hasta"]))
-                        ), $dstyle);
+                ), $dstyle);
             }
             $writer->close();
             die();
         }
-        
+
         if ($tipoReporte == 78) { // // Sellos de clientes
             $writer->addRowWithStyle(array(
                 "RFC",
                 "Razón Social",
                 "Válido desde",
                 "Válido hasta"
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["rfc"],
                     $row["razon"],
                     date("Y-m-d", strtotime($row["valido_desde"])),
                     date("Y-m-d", strtotime($row["valido_hasta"]))
-                        ), $dstyle);
+                ), $dstyle);
             }
             $writer->close();
             die();
-        }  
-        
+        }
+
+        if ($tipoReporte == 79) { // reporte garantias
+            $writer->addRowWithStyle(array(
+                "Patente",
+                "Aduana",
+                "Pedimento",
+                "Referencia",
+                "RFC",
+                "Reembolso Corresponsal",
+                "Reembolso Cliente",
+                "Pagada",
+                "Enviada",
+                "Aprobada",
+                "Depositada",
+                "Actualizada",
+            ), $tstyle);
+            foreach ($rows as $row) {
+                $writer->addRowWithStyle(array(
+                    $row["patente"],
+                    $row["aduana"],
+                    $row["pedimento"],
+                    $row["referencia"],
+                    $row["rfc"],
+                    $this->boolean_val($row["reembolsoCorresponsal"]),
+                    $this->boolean_val($row["reembolsoCliente"]),
+                    $this->boolean_val($row["garantiaPagada"]),
+                    $row["enviada"],
+                    $row["aprobada"],
+                    $row["depositado"],
+                    $row["actualizada"],
+                ), $dstyle);
+            }
+            $writer->close();
+            die();
+        }
+
         if ($tipoReporte == 80) { // reporte inventario de traficos
             $writer->addRowWithStyle(array(
                 "I/E",
@@ -1441,7 +1513,7 @@ class OAQ_ExcelReportes {
                 "Semáforo",
                 "Observaciones",
                 "Expediente",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["ie"],
@@ -1457,10 +1529,10 @@ class OAQ_ExcelReportes {
                     $this->semaforo($row["semaforo"]),
                     $row["observacionSemaforo"],
                     ((int) $row["revisionOperaciones"] == 1) ? 'Sí' : '',
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
-                
+
         if ($tipoReporte == 81) { // Catalogo de partes proveedores
             $writer->addRowWithStyle(array(
                 "Identificador",
@@ -1474,7 +1546,7 @@ class OAQ_ExcelReportes {
                 "Estado",
                 "C.P.",
                 "País",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["identificador"],
@@ -1488,10 +1560,10 @@ class OAQ_ExcelReportes {
                     $row["estado"],
                     $row["codigoPostal"],
                     $row["pais"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
-                
+
         if ($tipoReporte == 82) { // Catalogo de partes proveedores
             $writer->addRowWithStyle(array(
                 "Fraccion",
@@ -1501,7 +1573,7 @@ class OAQ_ExcelReportes {
                 "UMC",
                 "UMT",
                 "OMA",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["fraccion"],
@@ -1511,10 +1583,10 @@ class OAQ_ExcelReportes {
                     $row["umc"],
                     $row["umt"],
                     $row["oma"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
-                
+
         if ($tipoReporte == 83) { // Catalogo de partes clientes
             $writer->addRowWithStyle(array(
                 "Identificador",
@@ -1535,7 +1607,7 @@ class OAQ_ExcelReportes {
                 "UMC",
                 "UMT",
                 "OMA",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["identificador"],
@@ -1556,7 +1628,7 @@ class OAQ_ExcelReportes {
                     $row["umc"],
                     $row["umt"],
                     $row["oma"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == 84) { // traficos vs facturacion --- desde admin
@@ -1579,7 +1651,7 @@ class OAQ_ExcelReportes {
                 "I.V.A.",
                 "SubTotal",
                 "Pagada",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["patente"],
@@ -1600,10 +1672,10 @@ class OAQ_ExcelReportes {
                     $row["iva"],
                     $row["subTotal"],
                     ($row["pagada"] != null) ? 'Si' : '',
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
-        
+
         if ($tipoReporte == 85) { // Catalogo de partes clientes
             $writer->addRowWithStyle(array(
                 "Identificador",
@@ -1615,7 +1687,7 @@ class OAQ_ExcelReportes {
                 "UMC",
                 "UMT",
                 "OMA",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["identificador"],
@@ -1627,12 +1699,12 @@ class OAQ_ExcelReportes {
                     $row["umc"],
                     $row["umt"],
                     $row["oma"],
-                        ), $dstyle);
+                ), $dstyle);
             }
             $writer->close();
             die();
         }
-        
+
         if ($tipoReporte == 100) { // reporte iva
             $writer->addRowWithStyle(array(
                 "Operación",
@@ -1646,7 +1718,7 @@ class OAQ_ExcelReportes {
                 "Desc.",
                 "Valor",
                 "I.V.A.",
-                    ), $tstyle);
+            ), $tstyle);
             foreach ($rows as $row) {
                 $writer->addRowWithStyle(array(
                     $row["operacion"],
@@ -1660,34 +1732,35 @@ class OAQ_ExcelReportes {
                     $row["descripcion"],
                     $row["valor"],
                     $row["iva"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         $writer->close();
     }
-    
-    public function reportesOperaciones($tipoReporte, $fechaIni, $fechaFin, $titles, $rows = null) {
+
+    public function reportesOperaciones($tipoReporte, $fechaIni, $fechaFin, $titles, $rows = null)
+    {
         $border = (new BorderBuilder())
-                ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
-                ->build();
+            ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->build();
         $tstyle = (new StyleBuilder())
-                ->setFontBold()
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->setBackgroundColor("c6d9f0")
-                ->setBorder($border)
-                ->build();
+            ->setFontBold()
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor("c6d9f0")
+            ->setBorder($border)
+            ->build();
         $dstyle = (new StyleBuilder())
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->build();
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->build();
         $writer = WriterFactory::create(Type::XLSX);
         if (APPLICATION_ENV == "production" || APPLICATION_ENV == "staging") {
-            $writer->setTempFolder($this->appConfig->getParam("tmpDir"));            
+            $writer->setTempFolder($this->appConfig->getParam("tmpDir"));
         } else {
-            $writer->setTempFolder("C:\\wamp64\\tmp\\reportes");            
+            $writer->setTempFolder("C:\\wamp64\\tmp\\reportes");
         }
         if ($tipoReporte == "encabezado") {
             $writer->openToBrowser("REPORTE_ENCABEZADOS_" . $fechaIni . "_" . $fechaFin . ".xlsx");
@@ -1731,7 +1804,7 @@ class OAQ_ExcelReportes {
                     $row["totalEfectivo"],
                     $row["pesoBruto"],
                     $row["bultos"],
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         if ($tipoReporte == "anexo") {
@@ -1803,34 +1876,35 @@ class OAQ_ExcelReportes {
                     $row["patenteOrig"],
                     $row["aduanaOrig"],
                     $row["pedimentoOrig"]
-                        ), $dstyle);
+                ), $dstyle);
             }
         }
         $writer->close();
     }
 
-    public function csvAduanet($patente, $aduana, $pedimento, $referencia, $partidas) {
+    public function csvAduanet($patente, $aduana, $pedimento, $referencia, $partidas)
+    {
         $border = (new BorderBuilder())
-                ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
-                ->build();
+            ->setBorderBottom(Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            ->build();
         $tstyle = (new StyleBuilder())
-                ->setFontBold()
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->setBackgroundColor("c6d9f0")
-                ->setBorder($border)
-                ->build();
+            ->setFontBold()
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor("c6d9f0")
+            ->setBorder($border)
+            ->build();
         $dstyle = (new StyleBuilder())
-                ->setFontSize(10)
-                ->setFontName("Arial")
-                ->setFontColor(Color::BLACK)
-                ->build();
+            ->setFontSize(10)
+            ->setFontName("Arial")
+            ->setFontColor(Color::BLACK)
+            ->build();
         $writer = WriterFactory::create(Type::XLSX);
         if (APPLICATION_ENV == "production" || APPLICATION_ENV == "staging") {
-            $writer->setTempFolder($this->appConfig->getParam("tmpDir"));            
+            $writer->setTempFolder($this->appConfig->getParam("tmpDir"));
         } else {
-            $writer->setTempFolder("C:\\wamp64\\tmp");            
+            $writer->setTempFolder("C:\\wamp64\\tmp");
         }
         $writer->openToBrowser("formato_partidas_m3_{$referencia}_" . time() . ".xlsx");
         $writer->addRowWithStyle(array(
@@ -1902,7 +1976,7 @@ class OAQ_ExcelReportes {
             "CVEPAGO",
             "%PAGO",
             "IMPORTEGRAVADO",
-                ), $tstyle);
+        ), $tstyle);
         foreach ($partidas as $row) {
             $writer->addRowWithStyle(array(
                 $patente,
@@ -1973,10 +2047,8 @@ class OAQ_ExcelReportes {
                 "", // CVEPAGO
                 "", // %PAGO
                 "", // IMPORTEGRAVADO
-                    ), $dstyle);
+            ), $dstyle);
         }
         $writer->close();
     }
-    
-
 }

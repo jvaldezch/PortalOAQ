@@ -143,8 +143,11 @@ class Trafico_GetController extends Zend_Controller_Action
                 $sica = new OAQ_SicaDb("192.168.200.5", "sa", "adminOAQ123", "SICA", 1433, "SqlSrv");
                 $details = $sica->movimientosReferencia($input->referencia);
 
-                $this->_helper->json(array("success" => true, "details" => $details));
-                
+                if ($details) {
+                    $this->_helper->json(array("success" => true, "details" => $details));
+                } else {
+                    $this->_helper->json(array("success" => false));
+                }                
             }
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());

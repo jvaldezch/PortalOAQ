@@ -869,6 +869,11 @@ class Trafico_CrudController extends Zend_Controller_Action
                     "c.rfc",
                     "s.reembolsoCorresponsal",
                     "s.reembolsoCliente",
+                    "s.garantiaPagada",
+                    "s.enviada",
+                    "s.aprobada",
+                    "s.depositado",
+                    "s.actualizada",
                 ))
                 ->joinInner(array("c" => "trafico_clientes"), "c.id = s.idCliente", array("nombre AS nombreCliente"))
                 ->joinInner(array("a" => "trafico_aduanas"), "a.id = s.idAduana", array(""))

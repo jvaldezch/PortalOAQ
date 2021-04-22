@@ -1,7 +1,7 @@
 <?php
 
-class Webservice_IndexController extends Zend_Controller_Action {
-
+class Webservice_IndexController extends Zend_Controller_Action
+{
     protected $_wsdl;
     protected $_wsdlped;
     protected $_wsdldata;
@@ -10,7 +10,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
     protected $_baseUrl = "https://oaq.dnsalias.net";
     protected $_config;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
@@ -19,11 +20,13 @@ class Webservice_IndexController extends Zend_Controller_Action {
         $this->_wsdldata = $this->_config->app->wsdldata;
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         echo "This is the OAQ Web Service";
     }
 
-    public function authenticateAction() {
+    public function authenticateAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -37,19 +40,22 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    private function authenticateWSDL() {
+    private function authenticateWSDL()
+    {
         $autodiscover = new Zend_Soap_AutoDiscover();
         $autodiscover->setClass("OAQ_Auth");
         $autodiscover->handle();
     }
 
-    private function authenticateSOAP() {
+    private function authenticateSOAP()
+    {
         $soap = new Zend_Soap_Server($this->_wsdl);
         $soap->setClass("OAQ_Auth");
         $soap->handle();
     }
 
-    public function pedimentosAduanaAction() {
+    public function pedimentosAduanaAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -63,19 +69,22 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    private function pedimentosAduanaWSDL() {
+    private function pedimentosAduanaWSDL()
+    {
         $autodiscover = new Zend_Soap_AutoDiscover();
         $autodiscover->setClass('OAQ_Pedimentos');
         $autodiscover->handle();
     }
 
-    private function pedimentosAduanaSOAP() {
+    private function pedimentosAduanaSOAP()
+    {
         $soap = new Zend_Soap_Server($this->_wsdlped);
         $soap->setClass('OAQ_Pedimentos');
         $soap->handle();
     }
 
-    public function pedimentosAction() {
+    public function pedimentosAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $domtree = new DOMDocument('1.0', 'UTF-8');
@@ -311,10 +320,11 @@ class Webservice_IndexController extends Zend_Controller_Action {
         Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
         $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                ->setBody($output);
+            ->setBody($output);
     }
 
-    public function listadoPedimentosAction() {
+    public function listadoPedimentosAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -500,10 +510,11 @@ class Webservice_IndexController extends Zend_Controller_Action {
         Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
         $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                ->setBody($output);
+            ->setBody($output);
     }
 
-    public function prasadAction() {
+    public function prasadAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -667,10 +678,11 @@ class Webservice_IndexController extends Zend_Controller_Action {
         Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
         $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                ->setBody($output);
+            ->setBody($output);
     }
 
-    protected function isValidMysqlDate($value) {
+    protected function isValidMysqlDate($value)
+    {
         if (preg_match("/^(\d{4})-(\d{2})-(\d{2})/", $value, $matches)) {
             if (checkdate($matches[2], $matches[3], $matches[1])) {
                 return true;
@@ -685,7 +697,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      * /webservice/index/pedimentos-pagados/token/b0ed08d9fb69f9cd23067f51f9d1a70ea0b571c2/rfc/VEN940203EU6/fechaIni/2015-02-02/fechaFin/2015-03-03/aduana/646/patente/3589
      *
      */
-    public function pedimentosPagadosAction() {
+    public function pedimentosPagadosAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $domtree = new DOMDocument("1.0", "UTF-8");
@@ -753,13 +766,14 @@ class Webservice_IndexController extends Zend_Controller_Action {
             Zend_Controller_Action_HelperBroker::getStaticHelper("viewRenderer")->setNoRender(true);
             Zend_Layout::getMvcInstance()->disableLayout();
             $this->_response->setHeader("Content-Type", "text/xml; charset=utf-8")
-                    ->setBody($domtree->saveXML());
+                ->setBody($domtree->saveXML());
         } catch (Zend_Exception $ex) {
             throw new Exception($ex->getMessage());
         }
     }
 
-    protected function estatusPedimento($estatus) {
+    protected function estatusPedimento($estatus)
+    {
         switch ($estatus) {
             case 1:
                 return "POR DESPACHAR";
@@ -774,7 +788,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    protected function tipoFecha($fecha) {
+    protected function tipoFecha($fecha)
+    {
         switch ($fecha) {
             case 1:
                 return "ENTRADA";
@@ -808,7 +823,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      * @param int $pedimento
      * @return type
      */
-    protected function validateData($token, $rfc, $patente, $aduana, $fechaIni, $fechaFin, $pedimento = null) {
+    protected function validateData($token, $rfc, $patente, $aduana, $fechaIni, $fechaFin, $pedimento = null)
+    {
         try {
             $arrErrors = array();
             if (!$rfc) {
@@ -919,7 +935,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    protected function get_client_ip() {
+    protected function get_client_ip()
+    {
         $ipaddress = '';
         if (getenv('HTTP_CLIENT_IP')) {
             $ipaddress = getenv('HTTP_CLIENT_IP');
@@ -939,8 +956,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         return $ipaddress;
     }
 
-    public function pruebaAction() {
-
+    public function pruebaAction()
+    {
     }
 
     /*
@@ -948,7 +965,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      *
      */
 
-    public function historicoAction() {
+    public function historicoAction()
+    {
         $regex = "/^\d{4}\-\d{2}\-\d{2}$/";
         $rfc = filter_var($this->_getParam('rfc', null), FILTER_SANITIZE_STRING);
         $fechaIni = filter_var($this->_getParam('fechaIni', null), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => $regex)));
@@ -958,23 +976,23 @@ class Webservice_IndexController extends Zend_Controller_Action {
         if (isset($patente) && $patente == 3589) {
             $sitawin = new OAQ_AduanetM3(true, 'localhost', 'root', 'mysql11!', 'SAAIWEB', 3306);
             echo '<!doctype html>'
-            . '<html lang="en">'
-            . '<head>'
-            . '<meta charset="utf-8">'
-            . '<title>Historico</title>'
-            . '</head>'
-            . "<style>body {margin:0;padding:0; font-family:sans-serif;}"
-            . "table {border-collapse:collapse; width: 100%;}"
-            . "table.invoices {padding: 0; margin:0;}"
-            . "table th, table td {font-size: 12px; border: 1px #aaa solid; padding: 2px 5px;}"
-            . "table th {background: #f1f1f1; font-weight: bold;}"
-            . "table td.tdinvoice, td.tdparts {padding: 0; border: 0; margin: 0;}"
-            . "table.parts th {background-color: #f3f3f3; border: 1px #aaa solid;}"
-            . "table.parts td {border: 0; border: 1px #aaa solid;}"
-            . "h3 {margin: 0; padding:0;}"
-            . "</style>"
-            . "</head>"
-            . "<body>";
+                . '<html lang="en">'
+                . '<head>'
+                . '<meta charset="utf-8">'
+                . '<title>Historico</title>'
+                . '</head>'
+                . "<style>body {margin:0;padding:0; font-family:sans-serif;}"
+                . "table {border-collapse:collapse; width: 100%;}"
+                . "table.invoices {padding: 0; margin:0;}"
+                . "table th, table td {font-size: 12px; border: 1px #aaa solid; padding: 2px 5px;}"
+                . "table th {background: #f1f1f1; font-weight: bold;}"
+                . "table td.tdinvoice, td.tdparts {padding: 0; border: 0; margin: 0;}"
+                . "table.parts th {background-color: #f3f3f3; border: 1px #aaa solid;}"
+                . "table.parts td {border: 0; border: 1px #aaa solid;}"
+                . "h3 {margin: 0; padding:0;}"
+                . "</style>"
+                . "</head>"
+                . "<body>";
             $html = '<table>';
             $array = array("Patente", "Aduana", "Pedimento", "Trafico", "TipoOperacion", "TransporteEntrada", "TransporteArribo", "TransporteSalida", "FechaEntrada", "FechaPago", "FirmaValidacion", "FirmaBanco", "TipoCambio", "CvePed", "Regimen", "AduanaEntrada", "ValorDolares", "ValorAduana", "Fletes", "Seguros", "Embalajes", "OtrosIncrementales", "DTA", "IVA", "IGI", "PREV", "CNT", "TotalEfectivo", "PesoBruto", "Bultos", "Guias", "BL", "NumFactura", "Cove", "FechaFactura", "Incoterm", "ValorFacturaUsd", "ValorFacturaMonExt", "NomProveedor", "PaisFactura", "TaxId", "Divisa", "FactorMonExt", "NumParte", "Descripcion", "Fraccion", "OrdenFraccion", "ValorMonExt", "CantUMC", "UMC", "CantUMT", "UMT", "PaisOrigen", "PaisVendedor", "TasaAdvalorem", "TLC", "PROSEC", "PatenteOrig", "AduanaOrig", "PedimentoOrig", "CantidadOriginal", "UnidadOriginal", "FechaOriginal");
             $html .= "<tr>";
@@ -1086,7 +1104,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
      * /webservice/index/campa-pedimentos-pagados/token/be53128d5a81786197166c1742f9a3ec7f8f82f9/rfc/NPM940304MC7/fechaIni/2015-06-02/fechaFin/2015-06-30/aduana/640/patente/3589
      * /webservice/index/campa-pedimentos-pagados?token=be53128d5a81786197166c1742f9a3ec7f8f82f9&rfc=NPM940304MC7&fechaIni=2015-06-02&fechaFin=2015-06-30&aduana=640&patente=3589
      **/
-    public function campaPedimentosPagadosAction() 
+    public function campaPedimentosPagadosAction()
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -1108,16 +1126,16 @@ class Webservice_IndexController extends Zend_Controller_Action {
             );
             $i = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($i->isValid("fechaIni") && $i->isValid("fechaFin")) {
-                
+
                 $di = new DateTime($i->fechaIni);
                 $df = new DateTime("2018-05-01");
-                
+
                 if ($di >= $df) {
-                    
+
                     $domtree = new DOMDocument("1.0", "UTF-8");
                     $xmlRoot = $domtree->appendChild($domtree->createElement("pedimentos"));
                     $errorFlag = $this->validateData($i->token, $i->rfc, null, null, $i->fechaIni, $i->fechaFin);
-                        
+
                     $mppr = new Automatizacion_Model_RptPedimentos();
                     $arr = $mppr->wsObtener($i->patente, $i->aduana, $i->rfc, $i->fechaIni, $i->fechaFin);
 
@@ -1128,7 +1146,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                         $root = $domtree->createElement("operaciones");
                         $root->setAttribute("cantidad", ($arr !== false) ? count($arr) : 0);
                         $xmlRoot = $domtree->appendChild($root);
-                        
+
                         foreach ($arr as $item) {
                             $pedimento = $domtree->createElement("pedimento");
                             $pedimento->setAttribute("operacion", $item["aduana"] . '-' . $item["patente"] . '-' . $item["pedimento"]);
@@ -1150,7 +1168,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                     Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                     Zend_Layout::getMvcInstance()->disableLayout();
                     $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                            ->setBody($output);
+                        ->setBody($output);
                     return;
                 }
             }
@@ -1182,7 +1200,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                             } else {
                                 $data = $new;
                             }
-                        }                   
+                        }
                         if (!empty($data) && count($data) != 0) {
                             unset($xmlRoot);
                             unset($domtree);
@@ -1217,7 +1235,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                 Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                 Zend_Layout::getMvcInstance()->disableLayout();
                 $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                        ->setBody($output);
+                    ->setBody($output);
             } else {
                 throw new Exception("Invalid input!");
             }
@@ -1225,12 +1243,13 @@ class Webservice_IndexController extends Zend_Controller_Action {
             throw new Exception($ex->getMessage());
         }
     }
-    
-    protected function _xmlPedimento(DOMDocument $domtree, $data) {
+
+    protected function _xmlPedimento(DOMDocument $domtree, $data)
+    {
         $root = $domtree->createElement("pedimento");
         $xmlRoot = $domtree->appendChild($root);
         $xmlRoot->appendChild($domtree->createElement("patente", $data['patente']));
-        $xmlRoot->appendChild($domtree->createElement("aduana", $data['aduana'] ));
+        $xmlRoot->appendChild($domtree->createElement("aduana", $data['aduana']));
         $xmlRoot->appendChild($domtree->createElement("pedimento", $data['pedimento']));
         $xmlRoot->appendChild($domtree->createElement("referencia", $data['referencia']));
         $xmlRoot->appendChild($domtree->createElement("tipoOperacion", ($data['tipoOperacion'] == 1) ? 'IMP' : 'EXP'));
@@ -1245,16 +1264,16 @@ class Webservice_IndexController extends Zend_Controller_Action {
         $xmlRoot->appendChild($domtree->createElement("cvePed", $data['cvePed']));
         $xmlRoot->appendChild($domtree->createElement("regimen", $data['regimen']));
         $xmlRoot->appendChild($domtree->createElement("aduanaEntrada", $data['aduanaEntrada']));
-        
+
         $xmlRoot->appendChild($domtree->createElement("valorDolares", $data['valorDolares']));
         $xmlRoot->appendChild($domtree->createElement("valorAduana", ($data['tipoOperacion'] == 1) ? $data['valorAduana'] : '0'));
         $xmlRoot->appendChild($domtree->createElement("valorComercial", $data['valorComercial']));
-        
+
         $xmlRoot->appendChild($domtree->createElement("fletes", round($data['fletes'])));
         $xmlRoot->appendChild($domtree->createElement("seguros", round($data['seguros'])));
         $xmlRoot->appendChild($domtree->createElement("embalajes", round($data['embalajes'])));
         $xmlRoot->appendChild($domtree->createElement("otrosIncrementales", round($data['otrosIncrementales'])));
-        
+
         $xmlRoot->appendChild($domtree->createElement("dta", $data['dta']));
         $xmlRoot->appendChild($domtree->createElement("iva", $data['iva']));
         $xmlRoot->appendChild($domtree->createElement("igi", $data['igi']));
@@ -1263,14 +1282,14 @@ class Webservice_IndexController extends Zend_Controller_Action {
         $xmlRoot->appendChild($domtree->createElement("totalEfectivo", $data['totalEfectivo']));
         $xmlRoot->appendChild($domtree->createElement("PesoBruto", $data['pesoBruto']));
         $xmlRoot->appendChild($domtree->createElement("bultos", $data['bultos']));
-        
+
         $mppr = new Automatizacion_Model_RptPedimentoDesglose();
         $facturas = $mppr->wsObtenerFacturas($data['idPedimento']);
-        
+
         if (isset($facturas) && !empty($facturas)) {
             $invoices = $xmlRoot->appendChild($domtree->createElement("facturas"));
             foreach ($facturas as $invoice) {
-                
+
                 $factura = $invoices->appendChild($domtree->createElement("factura"));
                 $factura->appendChild($domtree->createElement("taxId", $invoice["taxId"]));
                 $factura->appendChild($domtree->createElement("numFactura", $invoice["numFactura"]));
@@ -1285,11 +1304,11 @@ class Webservice_IndexController extends Zend_Controller_Action {
                 $factura->appendChild($domtree->createElement("divisa", $invoice["divisa"]));
                 $factura->appendChild($domtree->createElement("factorMonExt", $invoice["factorMonExt"]));
                 $partes = $mppr->wsObtenerPartes($data['idPedimento'], $invoice["numFactura"]);
-                
+
                 if (isset($partes) && !empty($partes)) {
-                    
+
                     $parts = $factura->appendChild($domtree->createElement("partes"));
-                    
+
                     foreach ($partes as $part) {
                         $parte = $parts->appendChild($domtree->createElement("parte"));
                         $parte->appendChild($domtree->createElement("numParte", strtoupper($part["numParte"])));
@@ -1331,9 +1350,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                             $parte->appendChild($domtree->createElement("fechaOriginal", $part["fechaOriginal"]));
                         }
                     }
-                    
                 }
-                
             }
         }
     }
@@ -1344,7 +1361,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      *
      * @return boolean
      */
-    public function campaDetallePedimentoAction() {
+    public function campaDetallePedimentoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $domtree = new DOMDocument("1.0", "UTF-8");
@@ -1359,7 +1377,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
             );
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("patente") && $input->isValid("aduana") && $input->isValid("pedimento")) {
-                
+
                 $misc = new OAQ_Misc();
                 $sitawin = $misc->sitawin($input->patente, $input->aduana);
                 if (!$sitawin) {
@@ -1367,21 +1385,21 @@ class Webservice_IndexController extends Zend_Controller_Action {
                     $xmlRoot = $domtree->appendChild($root);
                     $xmlRoot->appendChild($domtree->createElement("error", 'No existen pedimentos en el periodo.'));
                 } else {
-                    
+
                     $mppr = new Automatizacion_Model_RptPedimentos();
                     $data = $mppr->wsObtenerPedimento($input->patente, $input->aduana, $input->pedimento);
-                    if (!empty($data)) {                       
-                        
+                    if (!empty($data)) {
+
                         $this->_xmlPedimento($domtree, $data);
                         $output = $domtree->saveXML();
                         Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                         Zend_Layout::getMvcInstance()->disableLayout();
                         $this->_response->setHeader("Content-Type", "text/xml; charset=utf-8")
-                                ->setBody($output);
+                            ->setBody($output);
                         return;
                     }
                     if (empty($data)) {
-                        $data = $sitawin->wsDetallePedimento($input->pedimento);                    
+                        $data = $sitawin->wsDetallePedimento($input->pedimento);
                     }
                     if (empty($data) && $input->patente == 3589 && $input->aduana = 240) {
                         $sitawin = new OAQ_Sitawin(true, '192.168.200.5', 'sa', 'adminOAQ123', 'SITAW3589240', 1433, 'Pdo_Mssql');
@@ -1513,7 +1531,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                 Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                 Zend_Layout::getMvcInstance()->disableLayout();
                 $this->_response->setHeader("Content-Type", "text/xml; charset=utf-8")
-                        ->setBody($output);
+                    ->setBody($output);
             } else {
                 throw new Exception("Invalid input");
             }
@@ -1528,7 +1546,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      *
      * @return boolean
      */
-    public function campaDetallePedimentoHtmlAction() {
+    public function campaDetallePedimentoHtmlAction()
+    {
         $gets = $this->_request->getParams();
         if (isset($gets['patente']) && isset($gets["aduana"]) && isset($gets["pedimento"])) {
             try {
@@ -1552,21 +1571,21 @@ class Webservice_IndexController extends Zend_Controller_Action {
             }
             if (isset($data) && !empty($data)) {
                 echo '<!doctype html>'
-                . '<html lang="en">'
-                . '<head>'
-                . '<meta charset="utf-8">'
-                . '<title>Detalle pedimento</title>'
-                . '</head>'
-                . "<style>body {margin:0;padding:0; font-family:sans-serif;}"
-                . "table {border-collapse:collapse; }"
-                . "table th, table td {font-size: 12px; border: 1px #555 solid; padding: 2px 5px;}"
-                . "table th {background: #f1f1f1; font-weight: bold;}"
-                . "h3 {"
-                . "margin: 0; padding:0;"
-                . "}"
-                . "</style>"
-                . "</head>"
-                . "<body>";
+                    . '<html lang="en">'
+                    . '<head>'
+                    . '<meta charset="utf-8">'
+                    . '<title>Detalle pedimento</title>'
+                    . '</head>'
+                    . "<style>body {margin:0;padding:0; font-family:sans-serif;}"
+                    . "table {border-collapse:collapse; }"
+                    . "table th, table td {font-size: 12px; border: 1px #555 solid; padding: 2px 5px;}"
+                    . "table th {background: #f1f1f1; font-weight: bold;}"
+                    . "h3 {"
+                    . "margin: 0; padding:0;"
+                    . "}"
+                    . "</style>"
+                    . "</head>"
+                    . "<body>";
                 $html = '<table>';
                 $array = array("Patente", "Aduana", "Pedimento", "Trafico", "TipoOperacion", "TransporteEntrada", "TransporteArribo", "TransporteSalida", "FechaEntrada", "FechaPago", "FirmaValidacion", "FirmaBanco", "TipoCambio", "CvePed", "Regimen", "AduanaEntrada", "ValorDolares", "ValorAduana", "Fletes", "Seguros", "Embalajes", "OtrosIncrementales", "DTA", "IVA", "IGI", "PREV", "CNT", "TotalEfectivo", "PesoBruto", "Bultos", "Guias", "BL", "NumFactura", "Cove", "FechaFactura", "Incoterm", "ValorFacturaUsd", "ValorFacturaMonExt", "NomProveedor", "PaisFactura", "TaxId", "Divisa", "FactorMonExt", "NumParte", "Descripcion", "Fraccion", "OrdenFraccion", "ValorMonExt", "PrecioUnitario", "CantUMC", "UMC", "CantUMT", "UMT", "PaisOrigen", "PaisVendedor", "TasaAdvalorem", "TLC", "PROSEC", "PatenteOrig", "AduanaOrig", "PedimentoOrig", "CantidadOriginal", "UnidadOriginal", "FechaOriginal");
                 $html .= "<tr>";
@@ -1664,7 +1683,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function campaDetallePedimentoHtmlPrintAction() {
+    public function campaDetallePedimentoHtmlPrintAction()
+    {
         // https://187.188.159.44/webservice/index/campa-detalle-pedimento-html-print/aduana/240/patente/3589/pedimento/5002950
         $gets = $this->_request->getParams();
         if (isset($gets['patente']) && isset($gets["aduana"]) && isset($gets["pedimento"])) {
@@ -1690,23 +1710,23 @@ class Webservice_IndexController extends Zend_Controller_Action {
             }
             if (isset($data) && !empty($data)) {
                 echo '<!doctype html>'
-                . '<html lang="en">'
-                . '<head>'
-                . '<meta charset="utf-8">'
-                . '<title>Detalle pedimento</title>'
-                . '</head>'
-                . "<style>body {margin:0;padding:0; font-family:sans-serif;}"
-                . "table {border-collapse:collapse; width: 100%;}"
-                . "table.invoices {padding: 0; margin:0;}"
-                . "table th, table td {font-size: 12px; border: 1px #aaa solid; padding: 2px 5px;}"
-                . "table th {background: #f1f1f1; font-weight: bold;}"
-                . "table td.tdinvoice, td.tdparts {padding: 0; border: 0; margin: 0;}"
-                . "table.parts th {background-color: #f3f3f3; border: 1px #aaa solid;}"
-                . "table.parts td {border: 0; border: 1px #aaa solid;}"
-                . "h3 {margin: 0; padding:0;}"
-                . "</style>"
-                . "</head>"
-                . "<body>";
+                    . '<html lang="en">'
+                    . '<head>'
+                    . '<meta charset="utf-8">'
+                    . '<title>Detalle pedimento</title>'
+                    . '</head>'
+                    . "<style>body {margin:0;padding:0; font-family:sans-serif;}"
+                    . "table {border-collapse:collapse; width: 100%;}"
+                    . "table.invoices {padding: 0; margin:0;}"
+                    . "table th, table td {font-size: 12px; border: 1px #aaa solid; padding: 2px 5px;}"
+                    . "table th {background: #f1f1f1; font-weight: bold;}"
+                    . "table td.tdinvoice, td.tdparts {padding: 0; border: 0; margin: 0;}"
+                    . "table.parts th {background-color: #f3f3f3; border: 1px #aaa solid;}"
+                    . "table.parts td {border: 0; border: 1px #aaa solid;}"
+                    . "h3 {margin: 0; padding:0;}"
+                    . "</style>"
+                    . "</head>"
+                    . "<body>";
                 $html = '<table>';
                 $html .= "<tr><th colspan=\"6\">ENCABEZADO</th></tr>";
                 $html .= "<tr><th>Patente</th><th>Aduana</th><th>Pedimento</th><th>Referencia</th><th>Tipo Operación</th><th>Aduana Entrada</th></tr>";
@@ -1760,7 +1780,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    public function descargaCoveAction() {
+    public function descargaCoveAction()
+    {
         try {
             $cove = $this->_request->getParam('cove', null);
             $token = $this->_request->getParam('token', null);
@@ -1782,7 +1803,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                     Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                     Zend_Layout::getMvcInstance()->disableLayout();
                     $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                            ->setBody($output);
+                        ->setBody($output);
                 }
             } else {
                 $domtree = new DOMDocument('1.0', 'UTF-8');
@@ -1793,18 +1814,20 @@ class Webservice_IndexController extends Zend_Controller_Action {
                 Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                 Zend_Layout::getMvcInstance()->disableLayout();
                 $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                        ->setBody($output);
+                    ->setBody($output);
             }
         } catch (Exception $ex) {
             echo $ex->getMessage();
         }
     }
 
-    protected function _cleanXml($xml) {
+    protected function _cleanXml($xml)
+    {
         return preg_replace('#<soapenv:Header(.*?)>(.*?)</soapenv:Header>#is', '', $xml);
     }
 
-    public function campaDetallePedimentoCsvAction() {
+    public function campaDetallePedimentoCsvAction()
+    {
         // /webservice/index/campa-detalle-pedimento-html?patente=3589&aduana=640&pedimento=5000713
         // /webservice/index/campa-detalle-pedimento-html?patente=3589&aduana=640&pedimento=5000713
         $gets = $this->_request->getParams();
@@ -1931,7 +1954,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    protected function _tdValue($value, $colspan = null, $rowspan = null) {
+    protected function _tdValue($value, $colspan = null, $rowspan = null)
+    {
         if (isset($colspan)) {
             return '<td colspan="' . $colspan . '">' . (string) $value . '</td>';
         }
@@ -1941,7 +1965,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         return '<td>' . (string) $value . '</td>';
     }
 
-    protected function _thValue($value, $colspan = null, $rowspan = null) {
+    protected function _thValue($value, $colspan = null, $rowspan = null)
+    {
         if (isset($colspan)) {
             return '<th colspan="' . $colspan . '">' . (string) $value . '</th>';
         }
@@ -1951,7 +1976,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
         return '<th>' . (string) $value . '</th>';
     }
 
-    protected function _stringValue($value) {
+    protected function _stringValue($value)
+    {
         return '"' . (string) $value . '",';
     }
 
@@ -1961,7 +1987,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      *
      * @return boolean
      */
-    public function consultaTraficoAction() {
+    public function consultaTraficoAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -2056,7 +2083,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                     Zend_Controller_Action_HelperBroker::getStaticHelper("viewRenderer")->setNoRender(true);
                     Zend_Layout::getMvcInstance()->disableLayout();
                     $this->_response->setHeader("Content-Type", "text/xml; charset=utf-8")
-                            ->setBody($output);
+                        ->setBody($output);
                     return;
                 } else {
                     $errorFlag[] = array(
@@ -2082,7 +2109,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                 Zend_Controller_Action_HelperBroker::getStaticHelper("viewRenderer")->setNoRender(true);
                 Zend_Layout::getMvcInstance()->disableLayout();
                 $this->_response->setHeader("Content-Type", "text/xml; charset=utf-8")
-                        ->setBody($output);
+                    ->setBody($output);
             }
         } catch (Exception $ex) {
             echo $ex->getMessage();
@@ -2095,7 +2122,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      *
      * @return boolean
      */
-    public function desgloseFacturasAction() {
+    public function desgloseFacturasAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $domtree = new DOMDocument('1.0', 'UTF-8');
@@ -2165,7 +2193,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                     Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                     Zend_Layout::getMvcInstance()->disableLayout();
                     $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                            ->setBody($output);
+                        ->setBody($output);
                 } else {
                     echo "No data found";
                 }
@@ -2181,7 +2209,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      *
      * @throws Exception
      */
-    public function pedimentosPagadosEnhAction() {
+    public function pedimentosPagadosEnhAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         try {
@@ -2207,7 +2236,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                 $row = new Webservice_Model_Table_WsTokens(array("rfc" => $input->rfc));
                 $table = new Webservice_Model_WsTokens();
                 $table->find($row);
-                
+
                 if (null === ($row->getId())) {
                     throw new Exception("Token not found. Please contact system administrator.");
                 } else {
@@ -2255,7 +2284,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
                     Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->setNoRender(true);
                     Zend_Layout::getMvcInstance()->disableLayout();
                     $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                            ->setBody($domtree->saveXML());
+                        ->setBody($domtree->saveXML());
                 }
             } else {
                 throw new Exception('Invalid input.');
@@ -2268,7 +2297,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
             $xmlRoot = $domtree->appendChild($root);
             $xmlRoot->appendChild($domtree->createElement("error", $ex->getMessage()));
             $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8')
-                    ->setBody($domtree->saveXML());
+                ->setBody($domtree->saveXML());
         }
     }
 
@@ -2276,7 +2305,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      * /webservice/index/pedimentos-pagados-sociedad-enh?token=e8e49b5f6cd85d34d31d92e8978a90dabc061787&rfc=GTO910508AM7&fechaIni=2016-01-01&fechaFin=2016-01-30&aduana=640&patente=3589
      *
      */
-    public function pedimentosPagadosSociedadEnhAction() {
+    public function pedimentosPagadosSociedadEnhAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $domtree = new DOMDocument("1.0", "ISO-8859-1");
@@ -2373,19 +2403,21 @@ class Webservice_IndexController extends Zend_Controller_Action {
                 Zend_Controller_Action_HelperBroker::getStaticHelper("viewRenderer")->setNoRender(true);
                 Zend_Layout::getMvcInstance()->disableLayout();
                 $this->_response->setHeader("Content-Type", "text/xml; charset=ISO-8859-1")
-                        ->setBody($domtree->saveXML());
+                    ->setBody($domtree->saveXML());
             }
         } catch (Exception $ex) {
             echo $ex->getMessage();
         }
     }
 
-    protected function _value($value) {
+    protected function _value($value)
+    {
         $text = htmlentities(mb_convert_encoding(utf8_encode($value), "UTF-8", "UTF-8"), ENT_COMPAT, "UTF-8");
         return htmlspecialchars($text, ENT_XHTML, "ISO-8859-1");
     }
-    
-    public function encodingAction() {
+
+    public function encodingAction()
+    {
         $domtree = new DOMDocument("1.0", "UTF-8");
         $domtree->preserveWhiteSpace = false;
         $domtree->formatOutput = true;
@@ -2395,7 +2427,7 @@ class Webservice_IndexController extends Zend_Controller_Action {
         Zend_Controller_Action_HelperBroker::getStaticHelper("viewRenderer")->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
         $this->_response->setHeader("Content-Type", "text/xml; charset=ISO-8859-1")
-                ->setBody($domtree->saveXML());
+            ->setBody($domtree->saveXML());
     }
 
     /**
@@ -2404,7 +2436,8 @@ class Webservice_IndexController extends Zend_Controller_Action {
      * @return boolean
      * @throws Exception
      */
-    public function detallePedimentoEnhAction() {
+    public function detallePedimentoEnhAction()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $domtree = new DOMDocument("1.0", "UTF-8");
@@ -2612,13 +2645,14 @@ class Webservice_IndexController extends Zend_Controller_Action {
             Zend_Controller_Action_HelperBroker::getStaticHelper("viewRenderer")->setNoRender(true);
             Zend_Layout::getMvcInstance()->disableLayout();
             $this->_response->setHeader("Content-Type", "text/xml; charset=utf-8")
-                    ->setBody($output);
+                ->setBody($output);
         } catch (Zend_Exception $ex) {
             throw new Exception($ex->getMessage());
         }
     }
 
-    protected function _analizar($contenido, $registro = null, $pedimento = null) {
+    protected function _analizar($contenido, $registro = null, $pedimento = null)
+    {
         try {
             $array = preg_split('/\r\n|\r|\n/', $contenido);
             $content = array();
@@ -2659,20 +2693,23 @@ class Webservice_IndexController extends Zend_Controller_Action {
         }
     }
 
-    protected function _sistemaPedimentos($patente, $aduana) {
+    protected function _sistemaPedimentos($patente, $aduana)
+    {
         $misc = new OAQ_Misc();
         $db = $misc->sitawinTrafico($patente, $aduana);
         return $db;
     }
 
-    protected function _validateToken($token, $value) {
+    protected function _validateToken($token, $value)
+    {
         if (sha1($this->_salt . $value . $this->_pepper) === $token) {
             return true;
         }
         return false;
     }
 
-    public function tokenPedimentoAction() {
+    public function tokenPedimentoAction()
+    {
         $f = array(
             "*" => array("StringTrim", "StripTags"),
             "pedimento" => array("Digits"),
@@ -2685,5 +2722,4 @@ class Webservice_IndexController extends Zend_Controller_Action {
             echo sha1($this->_salt . $i->pedimento . $this->_pepper);
         }
     }
-
 }

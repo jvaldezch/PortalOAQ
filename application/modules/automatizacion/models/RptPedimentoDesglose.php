@@ -1,17 +1,19 @@
 <?php
 
-class Automatizacion_Model_RptPedimentoDesglose {
-
+class Automatizacion_Model_RptPedimentoDesglose
+{
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_db_table = new Automatizacion_Model_DbTable_RptPedimentoDesglose();
     }
 
-    public function verificarDesglosePedimento($idPedimento) {
+    public function verificarDesglosePedimento($idPedimento)
+    {
         try {
             $sql = $this->_db_table->select()
-                    ->where('idPedimento = ?', $idPedimento);
+                ->where('idPedimento = ?', $idPedimento);
             $stmt = $this->_db_table->fetchRow($sql, array());
             if ($stmt) {
                 return true;
@@ -21,30 +23,15 @@ class Automatizacion_Model_RptPedimentoDesglose {
             throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
         }
     }
-    
-    public function wsObtenerFacturas($idPedimento) {
-        try {            
+
+    public function wsObtenerFacturas($idPedimento)
+    {
+        try {
             $sql = $this->_db_table->select()
-                    ->distinct()
-                    ->from($this->_db_table, array('numFactura', 'cove', 'taxId', 'incoterm', 'fechaFactura', 'valorFacturaUsd', 'valorFacturaMonExt', 'paisFactura', 'divisa', 'factorMonExt', 'nomProveedor'))
-                    ->where('idPedimento = ?', $idPedimento)
-                    ->group('numFactura', 'cove');
-            $stmt = $this->_db_table->fetchAll($sql);
-            if ($stmt) {
-                return $stmt->toArray();
-            }
-            return;
-        } catch (Zend_Db_Exception $ex) {
-            throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
-        }
-    }
-    
-    public function wsObtenerPartes($idPedimento, $numFactura) {
-        try {            
-            $sql = $this->_db_table->select()
-                    ->from($this->_db_table, array('*'))
-                    ->where('idPedimento = ?', $idPedimento)
-                    ->where('numFactura = ?', $numFactura);
+                ->distinct()
+                ->from($this->_db_table, array('numFactura', 'cove', 'taxId', 'incoterm', 'fechaFactura', 'valorFacturaUsd', 'valorFacturaMonExt', 'paisFactura', 'divisa', 'factorMonExt', 'nomProveedor'))
+                ->where('idPedimento = ?', $idPedimento);
+                // ->group('numFactura', 'cove');
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();
@@ -55,7 +42,25 @@ class Automatizacion_Model_RptPedimentoDesglose {
         }
     }
 
-    public function agregarDesglosePedimento($idPedimento, $row) {
+    public function wsObtenerPartes($idPedimento, $numFactura)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->from($this->_db_table, array('*'))
+                ->where('idPedimento = ?', $idPedimento)
+                ->where('numFactura = ?', $numFactura);
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
+
+    public function agregarDesglosePedimento($idPedimento, $row)
+    {
         try {
             $arr = array();
             $arr["idPedimento"] = $idPedimento;
@@ -109,7 +114,7 @@ class Automatizacion_Model_RptPedimentoDesglose {
                     $arr[$value] = $this->_check($row, $value);
                 }
             }
-            $arr["creado"] = date('Y-m-d H:i:s');            
+            $arr["creado"] = date('Y-m-d H:i:s');
             $stmt = $this->_db_table->insert($arr);
             if ($stmt) {
                 return true;
@@ -120,11 +125,11 @@ class Automatizacion_Model_RptPedimentoDesglose {
         }
     }
 
-    protected function _check(array $arr, $value) {
+    protected function _check(array $arr, $value)
+    {
         if (isset($arr[$value]) && !is_array(isset($arr[$value]))) {
             return $arr[$value];
         }
         return null;
     }
-
 }

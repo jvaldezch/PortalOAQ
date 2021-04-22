@@ -4,8 +4,14 @@
  * and open the template in the editor.
  */
 
+let dg;
+
 function exportToExcel(datavalues) {
     window.location.href = "/trafico/crud/reporte-traficos?" + datavalues + "&excel=true";
+}
+
+function excelGarantias(datavalues) {
+    window.location.href = "/trafico/crud/reporte-garantias?" + datavalues + "&excel=true";
 }
 
 function exportNoInvoiceToExcel(datavalues) {
@@ -27,8 +33,7 @@ function fecha(value) {
     return date.yyyymmdd();
 }
 
-function verMovimientos(referencia) {
-    console.log(referencia);
+function verMovimientos(garantia_id, referencia) {
     $.ajax({
         url: '/trafico/get/movimientos-sica',
         data: { referencia: referencia },
@@ -85,6 +90,14 @@ function verMovimientos(referencia) {
                     tr.append(td);
                     t_body.append(tr);
                 }
+                var tr = document.createElement("tr");
+                var td = document.createElement("td");
+                td.setAttribute("colspan", "5");
+                td.setAttribute("style", "text-align: right");
+                td.innerHTML = `<input type="checkbox" data-id="${garantia_id}" id="garantia-pagada" name="garantia-pagada" style="float: right" /> Pagada&nbsp;`;
+                tr.append(td);
+                t_body.append(tr);
+
                 table.append(t_body);
 
                 $.confirm({
@@ -93,6 +106,14 @@ function verMovimientos(referencia) {
                         cerrar: { action: function () { } }
                     },
                     content: table
+                });
+            } else {
+                $.confirm({
+                    title: "Movimientos (SICA) - Diario", escapeKey: "cerrar", boxWidth: "650px", useBootstrap: false, type: "blue",
+                    buttons: {
+                        cerrar: { action: function () { } }
+                    },
+                    content: "<p>No hay movimientos registrados para esta referencia.</p>"
                 });
             }
         }
@@ -123,7 +144,9 @@ function formatCurrency(val, row) {
 
 function submitForm() {
     if ($("#ff").form('validate') === true) {
-        var dg = $('#dg').edatagrid();
+
+        dg = $('#dg').edatagrid();
+
         var data = $("#ff").form();
         if (parseInt(data.context.getElementById('tipoReporte').value) === 1) {
             var datavalues = $("#ff").serialize();
@@ -1034,7 +1057,7 @@ function submitForm() {
                     text: 'Guardar',
                     iconCls: 'icon-save',
                     handler: function () {
-                        exportToExcel($("#ff").serialize());
+                        excelGarantias($("#ff").serialize());
                     }
                 }],
                 frozenColumns: [[
@@ -1044,7 +1067,7 @@ function submitForm() {
                     {
                         field: 'referencia', width: 90, title: 'Referencia',
                         formatter: function (value, row) {
-                            return `<a style="cursor: pointer" onclick="verMovimientos('${value}');">${value}</a>`;
+                            return `<a style="cursor: pointer" onclick="verMovimientos(${row.id},'${value}');">${value}</a>`;
                         }
                     }
                 ]],
@@ -1079,6 +1102,10 @@ function submitForm() {
                             }
                         }
                     },
+                    { field: 'enviada', width: 150, title: 'Enviada' },
+                    { field: 'aprobada', width: 150, title: 'Aprobada' },
+                    { field: 'depositado', width: 150, title: 'Depositada' },
+                    { field: 'actualizada', width: 150, title: 'Actualizada' },
                 ]]
             });
         }
@@ -1153,6 +1180,21 @@ $(document).ready(function () {
 
     $('#fechaFin').datebox({
         value: (new Date().toString('dd-MMM-yyyy'))
+    });
+
+    $(document.body).on("click", "#garantia-pagada", function() {
+        $.ajax({
+            url: '/trafico/post/actualizar-garantia',
+            data: { garantia_id: $(this).data("id") },
+            type: "POST",
+            beforeSend: function () {
+                $.LoadingOverlay("show", { color: "rgba(255, 255, 255, 0.9)" });
+            },
+            success: function (res) {
+                $.LoadingOverlay("hide");
+                dg.edatagrid('reload');
+            }
+        });
     });
 
 });

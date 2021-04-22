@@ -2,7 +2,6 @@
 
 class Trafico_Model_TraficoSolicitudesMapper
 {
-
     protected $_db_table;
     protected $_firephp;
 
@@ -413,7 +412,7 @@ class Trafico_Model_TraficoSolicitudesMapper
             $sql = $this->_db_table->select()
                 ->setIntegrityCheck(false)
                 ->from(array("s" => "trafico_solicitudes"), array(
-                    "*", 
+                    "*",
                     new Zend_Db_Expr("(SELECT SUM(CASE WHEN t.concepto <> 'ANTICIPO' THEN t.importe ELSE 0 END) FROM trafico_solconcepto as t WHERE t.idSolicitud = s.id) AS subtotal"),
                     new Zend_Db_Expr("(SELECT SUM(CASE WHEN t.concepto = 'ANTICIPO' THEN t.importe ELSE 0 END) FROM trafico_solconcepto as t WHERE t.idSolicitud = s.id) AS anticipo")
                 ))
@@ -1154,6 +1153,22 @@ class Trafico_Model_TraficoSolicitudesMapper
                 return true;
             }
             return false;
+        } catch (Zend_Db_Adapter_Exception $ex) {
+            throw new Exception("DB Exception found on " . __METHOD__ . ": " . $ex->getMessage());
+        }
+    }
+
+    public function pagada($id)
+    {
+        try {
+            $arr = array(
+                "garantiaPagada" => 1,
+            );
+            $stmt = $this->_db_table->update($arr, array("id = ?" => $id));
+            if ($stmt) {
+                return true;
+            }
+            return;
         } catch (Zend_Db_Adapter_Exception $ex) {
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $ex->getMessage());
         }
