@@ -1,13 +1,14 @@
 <?php
 
-class Archivo_PostController extends Zend_Controller_Action {
-
+class Archivo_PostController extends Zend_Controller_Action
+{
     protected $_session;
     protected $_config;
     protected $_appconfig;
     protected $_firephp;
 
-    public function init() {
+    public function init()
+    {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_appconfig = new Application_Model_ConfigMapper();
@@ -15,7 +16,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         $this->_firephp = Zend_Registry::get("firephp");
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
         $this->_session = NULL ? $this->_session = new Zend_Session_Namespace("") : $this->_session = new Zend_Session_Namespace($this->_config->app->namespace);
         if ($this->_session->authenticated == true) {
             $session = new OAQ_Session($this->_session, $this->_appconfig);
@@ -26,7 +28,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function archivosDeExpedienteAction() {
+    public function archivosDeExpedienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -50,12 +53,10 @@ class Archivo_PostController extends Zend_Controller_Action {
                     $index = new Archivo_Model_RepositorioIndex();
                     $arr = $index->datos($input->id, $res["idsAduana"], $res["rfcs"]);
                     if (count($arr)) {
-                        
+
                         $model = new Archivo_Model_RepositorioMapper();
                         if (!in_array($this->_session->role, array("inhouse", "cliente", "proveedor"))) {
-                            
-                            $files = $model->getFilesByReferenceUsers($arr["referencia"], $arr["patente"], $arr["aduana"]);
-                            
+                            $files = $model->getFilesByReferenceUsers($arr["referencia"], $arr["patente"], $arr["aduana"], null, $this->_session->role);
                         } else if (in_array($this->_session->role, array("proveedor"))) {
                             if ($this->_session->role == "proveedor") {
                                 $view->disableUpload = true;
@@ -66,12 +67,12 @@ class Archivo_PostController extends Zend_Controller_Action {
                         } else if (in_array($this->_session->role, array("cliente"))) {
                             $files = $model->getFilesByReferenceCustomers($arr["referencia"], $arr["patente"], $arr["aduana"]);
                         }
-                        
+
                         if ($this->_session->role == "super") {
                             $view->canDelete = true;
                         }
                         $view->files = $files;
-                        
+
                         // validacion
                         if (!in_array($this->_session->role, array("inhouse", "cliente", "proveedor"))) {
                             $val = new OAQ_ArchivosValidacion();
@@ -83,7 +84,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         $complementos = $model->obtenerComplementos($arr["referencia"], $arr["patente"], $arr["aduana"]);
                         if (!empty($complementos)) {
                             $view->complementos = $complementos;
-                        }                      
+                        }
                         $this->_helper->json(array("success" => true, "html" => $view->render("archivos-de-expediente.phtml")));
                     }
                     $this->_helper->json(array("success" => false));
@@ -98,7 +99,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarAction() {
+    public function borrarAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -138,7 +140,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarAction() {
+    public function guardarAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -207,7 +210,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function cancelarAction() {
+    public function cancelarAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -236,7 +240,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function tiposDeArchivoAction() {
+    public function tiposDeArchivoAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -276,7 +281,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function checklistAction() {
+    public function checklistAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -369,7 +375,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                     }
                     $view->admin = true;
                     $view->operacion = true;
-                    $view->administracion = true;                    
+                    $view->administracion = true;
 
                     $repo = new Archivo_Model_RepositorioMapper();
                     $tipos = $repo->obtenerTiposArchivosReferencia($arr["referencia"]);
@@ -382,7 +388,6 @@ class Archivo_PostController extends Zend_Controller_Action {
                     if (isset($logs) && !empty($logs)) {
                         $view->bitacora = $logs;
                     }
-                    
                 }
                 $this->_helper->json(array("success" => true, "html" => $view->render("checklist.phtml")));
             } else {
@@ -393,7 +398,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarChecklistAction() {
+    public function guardarChecklistAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -425,9 +431,9 @@ class Archivo_PostController extends Zend_Controller_Action {
                 $i = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($i->isValid("patente") && $i->isValid("aduana") && $i->isValid("referencia") && $i->isValid("idRepo")) {
                     $index = new Archivo_Model_RepositorioIndex();
-                    
+
                     $log = new Archivo_Model_ChecklistReferenciasBitacora();
-                    
+
                     $checklist = new OAQ_Checklist();
                     $data = $r->getPost();
                     if ($i->isValid("idTrafico")) {
@@ -449,10 +455,10 @@ class Archivo_PostController extends Zend_Controller_Action {
                     }
                     $row = new Archivo_Model_Table_ChecklistReferencias();
                     $table = new Archivo_Model_ChecklistReferencias();
-                    
+
                     $rev = $checklist->revision($this->_session->username, $this->_session->nombre, "elaboro", $this->_session->role);
-                    if ($i->isValid("idTrafico")) {                        
-                        $row->setIdTrafico($i->idTrafico);                        
+                    if ($i->isValid("idTrafico")) {
+                        $row->setIdTrafico($i->idTrafico);
                         $trafico = new OAQ_Trafico(array("idTrafico" => $i->idTrafico, "idUsuario" => $this->_session->id));
                         $arr = array(
                             "revisionOperaciones" => $i->revisionOperaciones,
@@ -467,8 +473,8 @@ class Archivo_PostController extends Zend_Controller_Action {
                     $row->setPedimento(str_pad($i->pedimento, 7, '0', STR_PAD_LEFT));
                     $row->setObservaciones($i->observaciones);
                     $table->find($row);
-                    
-                    
+
+
                     if ($i->isValid("completo")) {
                         if ($i->completo == 1) {
                             $index->actualizarChecklist($i->idRepo, array("revisionAdministracion" => 1, "revisionOperaciones" => 1, "completo" => 1, "modificado" => date("Y-m-d H:i:s"), "modificadoPor" => $this->_session->username));
@@ -499,7 +505,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         if ($i->isValid("revisionOperaciones")) {
                             $index->actualizarChecklist($i->idRepo, array("revisionOperaciones" => 1, "modificado" => date("Y-m-d H:i:s"), "modificadoPor" => $this->_session->username));
                             $row->setRevisionOperaciones($i->revisionOperaciones);
-                            $row->setFechaRevisionOperaciones(date("Y-m-d H:i:s"));                            
+                            $row->setFechaRevisionOperaciones(date("Y-m-d H:i:s"));
                             $log->agregar(array(
                                 'patente' => $i->patente,
                                 'aduana' => $i->aduana,
@@ -576,7 +582,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function subirArchivosExpedienteAction() {
+    public function subirArchivosExpedienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -600,7 +607,7 @@ class Archivo_PostController extends Zend_Controller_Action {
                         $model = new Archivo_Model_RepositorioMapper();
                         $upload = new Zend_File_Transfer_Adapter_Http();
                         $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                                ->addValidator("Size", false, array("min" => "1", "max" => "20MB"));
+                            ->addValidator("Size", false, array("min" => "1", "max" => "20MB"));
                         if (($path = $misc->nuevoDirectorioExpediente($arr["patente"], $arr["aduana"], $misc->trimUpper($arr["referencia"])))) {
                             $upload->setDestination($path);
                         }
@@ -608,11 +615,11 @@ class Archivo_PostController extends Zend_Controller_Action {
                         foreach ($files as $fieldname => $fileinfo) {
                             if (($upload->isUploaded($fieldname)) && ($upload->isValid($fieldname))) {
                                 if (preg_match('/\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpe?g|bmp|png|msg)(?:[\?\#].*)?$/i', $fileinfo["name"])) {
-                                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));                                    
+                                    $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));
                                     if ($tipoArchivo == 99) {
                                         unlink($fileinfo["name"]);
                                         continue;
-                                    }                                    
+                                    }
                                     $filename = $misc->formatFilename($fileinfo["name"], false);
                                     $verificar = $model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $filename);
                                     if ($verificar == false) {
@@ -655,10 +662,10 @@ class Archivo_PostController extends Zend_Controller_Action {
                                         }
                                         if (preg_match('/^e[0-9]{7}.([0-9]{3})$/i', $fileinfo["name"])) {
                                             $insert["tipo_archivo"] = 1030;
-                                        }                                       
-                                        if(!($model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $fileinfo["name"]))) {
+                                        }
+                                        if (!($model->verificarArchivo($arr["patente"], $misc->trimUpper($arr["referencia"]), $fileinfo["name"]))) {
                                             $model->agregar($insert);
-                                        } else {                                            
+                                        } else {
                                             $errors[] = array(
                                                 "filename" => $fileinfo["name"],
                                                 "errors" =>  "File exists",
@@ -695,7 +702,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function editarExpedienteAction() {
+    public function editarExpedienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -744,7 +752,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function moverExpedienteAction() {
+    public function moverExpedienteAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -815,7 +824,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function actualizarRepositorioAction() {
+    public function actualizarRepositorioAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -902,7 +912,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function validarRepositorioAction() {
+    public function validarRepositorioAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -944,7 +955,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function validarReferenciaAction() {
+    public function validarReferenciaAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -991,7 +1003,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function moverRepositorioAction() {
+    public function moverRepositorioAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -1044,7 +1057,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function borrarRepositorioAction() {
+    public function borrarRepositorioAction()
+    {
         try {
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -1068,7 +1082,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function obtenerFacturasTerminalAction() {
+    public function obtenerFacturasTerminalAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1105,7 +1120,8 @@ class Archivo_PostController extends Zend_Controller_Action {
         }
     }
 
-    public function mvhcEstatusAction() {
+    public function mvhcEstatusAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1121,16 +1137,16 @@ class Archivo_PostController extends Zend_Controller_Action {
                     "estatus" => array("NotEmpty", new Zend_Validate_Int()),
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
-                if ($input->isValid("id")) {                    
-                    $log = new Archivo_Model_ChecklistReferenciasBitacora();                    
+                if ($input->isValid("id")) {
+                    $log = new Archivo_Model_ChecklistReferenciasBitacora();
                     $mppr = new Archivo_Model_RepositorioIndex();
-                    
+
                     $arr = $mppr->datos($input->id);
-                    
+
                     if ((int) $input->estatus === 0) {
-                        $mppr->update($input->id, array("mvhcCliente" => null, "mvhcFirmada" => null));                        
+                        $mppr->update($input->id, array("mvhcCliente" => null, "mvhcFirmada" => null));
                     } else if ((int) $input->estatus === 1) {
-                        $mppr->update($input->id, array("mvhcCliente" => 1, "mvhcFirmada" => null));                        
+                        $mppr->update($input->id, array("mvhcCliente" => 1, "mvhcFirmada" => null));
                         $log->agregar(array(
                             'patente' => $arr["patente"],
                             'aduana' => $arr["aduana"],
@@ -1163,8 +1179,9 @@ class Archivo_PostController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-    
-    public function enviarEmailAction() {
+
+    public function enviarEmailAction()
+    {
         try {
             if (!$this->getRequest()->isXmlHttpRequest()) {
                 throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
@@ -1234,5 +1251,4 @@ class Archivo_PostController extends Zend_Controller_Action {
             $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
         }
     }
-
 }

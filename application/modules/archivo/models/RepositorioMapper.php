@@ -75,6 +75,26 @@ class Archivo_Model_RepositorioMapper
         }
     }
 
+    public function obtenerEdocuments($referencia, $patente, $aduana)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("a" => "repositorio"), array("edocument"))
+                ->where("a.referencia = ?", $referencia)
+                ->where("a.patente = ?", $patente)
+                ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%")
+                ->where("a.tipo_archivo = 27");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
+        }
+    }
+
     public function countFilesByReferenceCustomers($reference, $patente = null, $aduana = null)
     {
         try {
@@ -109,7 +129,7 @@ class Archivo_Model_RepositorioMapper
      * @return type
      * @throws Exception
      */
-    public function getFilesByReferenceUsers($reference, $patente = null, $aduana = null, $filetype = null)
+    public function getFilesByReferenceUsers($reference, $patente = null, $aduana = null, $filetype = null, $rol = null)
     {
         try {
             $sql = $this->_db_table->select()
@@ -117,8 +137,12 @@ class Archivo_Model_RepositorioMapper
                 ->from(array("a" => "repositorio"), array("id", "tipo_archivo", "sub_tipo_archivo", "nom_archivo", "edocument", "creado", "usuario", "ubicacion_pdf", "ubicacion"))
                 ->joinLeft(array("d" => "documentos"), "d.id = a.tipo_archivo", array("d.nombre"))
                 ->where("a.referencia = ?", $reference)
-                ->where("a.tipo_archivo NOT IN (9999)")
                 ->order("d.orden ASC");
+            if (isset($rol) && $rol == 'corresponsal') {
+                $sql->where("a.tipo_archivo NOT IN (2, 9999)");
+            } else {
+                $sql->where("a.tipo_archivo NOT IN (?)", array(9999));
+            }
             if (isset($patente)) {
                 $sql->where("a.patente = ?", $patente);
             }
@@ -2023,16 +2047,19 @@ class Archivo_Model_RepositorioMapper
         }
     }
 
-    public function obtenerArchivosReferencia($referencia, $customer = null, $tiposArchivo = null, $ftp = null)
+    public function obtenerArchivosReferencia($referencia, $customer = null, $tiposArchivo = null, $ftp = null, $rol = null)
     {
         try {
             $sql = $this->_db_table->select()
-                // ->distinct()
                 ->setIntegrityCheck(false)
                 ->from(array("r" => "repositorio"), array("id", "id_trafico", "patente", "aduana", "pedimento", "uuid", "nom_archivo", "ubicacion", "tipo_archivo", "creado", "usuario", "edocument"))
                 ->joinLeft(array("d" => "documentos"), "r.tipo_archivo = d.id", array(""))
-                ->where("r.tipo_archivo NOT IN (?)", array(9999))
                 ->order("d.orden ASC");
+            if (isset($rol) && $rol == 'corresponsal') {
+                $sql->where("r.tipo_archivo NOT IN (2, 9999)");
+            } else {
+                $sql->where("r.tipo_archivo NOT IN (?)", array(9999));
+            }
             if ($ftp) {
                 $sql->where("r.ftp IS NULL");
             }

@@ -322,45 +322,6 @@ class Trafico_CrudController extends Zend_Controller_Action
         }
     }
 
-    /*public function traficosAction() {
-    try {
-    if (!$this->getRequest()->isXmlHttpRequest()) {
-    throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
-    }
-    $r = $this->getRequest();
-    if ($r->isPost()) {
-    $f = array(
-    "*" => array("StringTrim", "StripTags"),
-    "page" => array("Digits"),
-    "rows" => array("Digits"),
-    "tipoAduana" => array("Digits"),
-    );
-    $v = array(
-    "page" => array(new Zend_Validate_Int(), "default" => 1),
-    "rows" => array(new Zend_Validate_Int(), "default" => 10),
-    "tipoAduana" => array(new Zend_Validate_Int(), "NotEmpty"),
-    "filterRules" => "NotEmpty",
-    "bodega" => "NotEmpty",
-    );
-    $input = new Zend_Filter_Input($f, $v, $r->getPost());
-    if ($input->isValid("page") && $input->isValid("rows")) {
-    $rows = $this->_todos($input->page, $input->rows, $input->filterRules, $this->_cookies(), $input->tipoAduana, $input->bodega);
-    $arr = array(
-    "total" => $this->_total($input->filterRules, $this->_cookies(), $input->tipoAduana, $input->bodega),
-    "rows" => empty($rows) ? array() : $rows,
-    );
-    $this->_helper->json($arr);
-    } else {
-    throw new Exception("Invalid input!");
-    }
-    } else {
-    throw new Exception("Invalid request type!");
-    }
-    } catch (Exception $ex) {
-    $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
-    }
-    }*/
-
     public function traficosAction()
     {
         try {
@@ -2045,9 +2006,8 @@ class Trafico_CrudController extends Zend_Controller_Action
                 ))
                 ->joinInner(array("a" => "trafico_aduanas"), "a.id = t.idAduana", array(""))
                 ->joinInner(array("ta" => "trafico_tipoaduana"), "ta.id = a.tipoAduana", array("tipoAduana"))
-                ->joinLeft(array("l" => "trafico_clientes"), "l.id = t.idCliente", array("nombre AS nombreCliente"))
-                ->joinLeft(array("i" => "rpt_cuentas"), "i.idTrafico = t.id", array(""))
-                ->joinLeft(array("x" => "repositorio_index"), "x.idTrafico = t.id", array("revisionAdministracion", "revisionOperaciones", "completo"))
+                ->joinInner(array("l" => "trafico_clientes"), "l.id = t.idCliente", array("nombre AS nombreCliente"))
+                ->joinInner(array("x" => "repositorio_index"), "x.idTrafico = t.id", array("revisionAdministracion", "revisionOperaciones", "completo"))
                 ->where("t.fechaLiberacion >= ?", date("Y-m-d H:i:s", strtotime($fechaInicio)))
                 ->where("t.fechaLiberacion <= ?", date("Y-m-d H:i:s", strtotime($fechaFin)))
                 ->where("t.estatus = 3")

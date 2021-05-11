@@ -1977,7 +1977,15 @@ class OAQ_Misc {
         try {
             $mapper = new Archivo_Model_RepositorioPrefijos();
             $table = new Archivo_Model_Table_RepositorioPrefijos();
+
+            if (preg_match("/(\d{7})_COVE(.*)_COVEXML.xml/i", $basename)) {
+                return 27;
+            }
+            if (preg_match("/(\d{7})_COVE(.*).pdf/i", $basename)) {
+                return 56;
+            }
             $ex = explode("_", $basename);
+
             if (isset($ex[0])) {
                 $table->setPrefijo(strtoupper($ex[0]));
                 $mapper->findPrefix($table);

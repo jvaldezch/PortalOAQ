@@ -1572,7 +1572,7 @@ class OAQ_Trafico
         $res = $referencias->restricciones($idUsuario, $role);
 
         if (!in_array($role, array("inhouse", "cliente", "proveedor"))) {
-            $files = $mppr->getFilesByReferenceUsers($this->referencia, $this->patente, $this->aduana);
+            $files = $mppr->getFilesByReferenceUsers($this->referencia, $this->patente, $this->aduana, null, $role);
         } else if (in_array($role, array("proveedor"))) {
             $files = $mppr->obtener($this->referencia, $this->patente, $this->aduana, json_decode($res["documentos"]));
         } else if (in_array($role, array("inhouse"))) {
@@ -2215,8 +2215,7 @@ class OAQ_Trafico
 
     public function enviarFacturas()
     {
-        if (in_array((int) $this->patente, array(3589)) && in_array((int) $this->aduana, array(240))) {
-
+        if (in_array((int) $this->patente, array(3589, 3574)) && in_array((int) $this->aduana, array(240, 800))) {
             $mppr = new Trafico_Model_TraficoFacturasMapper();
             $rows = $mppr->obtenerFacturas($this->idTrafico);
 
@@ -2226,9 +2225,28 @@ class OAQ_Trafico
                 if ($row['cove']) {
                     $r = $api->actualizarCove($this->patente, $this->aduana, $this->pedimento, $row['numFactura'], $row['cove']);
                     $j = json_decode($r, true);
-                    $this->_firephp->info($j);
                 }
             }
+        }
+    }
+
+    public function enviarEdocuments()
+    {
+        if (in_array((int) $this->patente, array(3589, 3574)) && in_array((int) $this->aduana, array(240, 800))) {
+            $rows = $this->obtenerEdocuments();
+            
+            if ($rows) {
+                $api = new Aduanet_Pedimentos();                
+                foreach ($rows as $row) {
+                    if ($row['edocument']) {
+                        $r = $api->actualizarEdocument($this->patente, $this->aduana, $this->pedimento, $this->referencia, $row['edocument']);
+                        $j = json_decode($r, true);
+                        $this->_firephp->info($j);
+                    }
+                }
+                return true;
+            }
+            return null;
         }
     }
 
@@ -2378,12 +2396,23 @@ class OAQ_Trafico
         return $arr;
     }
 
+    public function obtenerEdocuments()
+    {
+        try {
+            $mppr = new Archivo_Model_RepositorioMapper();
+            $rows = $mppr->obtenerEdocuments($this->referencia, $this->patente, $this->aduana);
+            if ($rows) {
+                return $rows;
+            }
+            return null;
+        } catch (Exception $ex) {
+        }
+    }
+
     public function archivosDeExpediente($customer = null)
     {
         try {
-
             $mppr = new Archivo_Model_RepositorioMapper();
-
             if ($customer) {
                 $files = $mppr->getFilesByReferenceCustomers($this->referencia, $this->patente, $this->aduana);
                 return $files;

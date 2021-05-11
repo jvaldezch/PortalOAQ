@@ -332,7 +332,7 @@ class Clientes_GetController extends Zend_Controller_Action
                 if (APPLICATION_ENV == "production") {
                     $zipFilename = '/tmp' . DIRECTORY_SEPARATOR . $zipName;
                 } else {
-                    $zipFilename = 'C:\\wamp64\\tmp' . DIRECTORY_SEPARATOR . $zipName;
+                    $zipFilename = '/tmp' . DIRECTORY_SEPARATOR . $zipName;
                 }
                 $zip = new ZipArchive();
                 if ($zip->open($zipFilename, ZIPARCHIVE::CREATE) !== true) {
@@ -419,9 +419,9 @@ class Clientes_GetController extends Zend_Controller_Action
 
     public function traficoAction()
     {
-        $this->_helper->layout()->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
         try {
+            $this->_helper->layout()->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
             $f = array(
                 "*" => array("StringTrim", "StripTags"),
                 "page" => array("Digits"),
@@ -439,12 +439,16 @@ class Clientes_GetController extends Zend_Controller_Action
             $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
             if ($input->isValid("fechaIni") && $input->isValid("fechaFin")) {
                 $model = new Clientes_Model_Traficos();
-                $rows = $model->obtenerTraficoCliente($this->_session->username, $input->fechaIni, $input->fechaFin);
-                $arr = array(
-                    "total" => $model->totalTraficoCliente($this->_session->username, $input->fechaIni, $input->fechaFin),
-                    "rows" => empty($rows) ? array() : $rows,
-                );
-                $this->_helper->json($arr);
+                $select = $model->obtenerTraficoCliente($this->_session->username, $input->fechaIni, $input->fechaFin, $input->filterRules);
+
+                $paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($select));
+                $paginator->setCurrentPageNumber($input->page);
+                $paginator->setItemCountPerPage($input->rows);
+
+                $this->_helper->json(array(
+                    "total" => $paginator->getTotalItemCount(),
+                    "rows" => iterator_to_array($paginator),
+                ));
             } else {
                 throw new Exception("Invalid input!");
             }

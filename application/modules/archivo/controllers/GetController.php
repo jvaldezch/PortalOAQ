@@ -163,7 +163,7 @@ class Archivo_GetController extends Zend_Controller_Action
 
                 $res = $referencias->restricciones($this->_session->id, $this->_session->role);
                 if (!in_array($this->_session->role, array("inhouse", "cliente", "proveedor"))) {
-                    $files = $model->getFilesByReferenceUsers($arr["referencia"], $arr["patente"], $arr["aduana"]);
+                    $files = $model->getFilesByReferenceUsers($arr["referencia"], $arr["patente"], $arr["aduana"], null, $this->_session->role);
                 } else if (in_array($this->_session->role, array("proveedor"))) {
                     $files = $model->obtener($arr["referencia"], $arr["patente"], $arr["aduana"], json_decode($res["documentos"]));
                 } else if (in_array($this->_session->role, array("inhouse"))) {

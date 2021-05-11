@@ -2092,7 +2092,7 @@ class Trafico_AjaxController extends Zend_Controller_Action
                     $array = $mppr->obtenerPorId($input->id);
 
                     $repo = new Archivo_Model_RepositorioMapper();
-                    $archivos = $repo->obtenerArchivosReferencia($array["referencia"]);
+                    $archivos = $repo->obtenerArchivosReferencia($array["referencia"], null, null, null, $this->_session->role);
                     $view->archivos = $archivos;
 
                     $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "usuario" => $this->_session->username, "idUsuario" => $this->_session->id));
@@ -2192,6 +2192,7 @@ class Trafico_AjaxController extends Zend_Controller_Action
                         continue;
                     }
                     $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));
+                    
                     if (preg_match('/^A[0-9]{7}.([0-9]{3})$/i', basename($fileinfo["name"]))) {
                         $tipoArchivo = 1030;
                     }

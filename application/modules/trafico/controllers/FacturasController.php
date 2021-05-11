@@ -794,6 +794,38 @@ class Trafico_FacturasController extends Zend_Controller_Action
         }
     }
 
+    public function enviarEdocumentsAction()
+    {
+        try {
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                throw new Zend_Controller_Request_Exception("Not an AJAX request detected");
+            }
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+                $f = array(
+                    "idTrafico" => array("StringTrim", "StripTags", "Digits"),
+                );
+                $v = array(
+                    "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
+                );
+                $input = new Zend_Filter_Input($f, $v, $request->getPost());
+                if ($input->isValid("idTrafico")) {
+
+                    $trafico = new OAQ_Trafico(array("idTrafico" => $input->idTrafico));
+                    $trafico->enviarEdocuments();
+
+                    $this->_helper->json(array("success" => true));
+                } else {
+                    throw new Exception("Invalid input.");
+                }
+            } else {
+                throw new Exception("Invalid request type.");
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function guardarProductoAction()
     {
         try {
@@ -825,6 +857,7 @@ class Trafico_FacturasController extends Zend_Controller_Action
                     $mdl = new Trafico_Model_ClientesPartes();
                     $arr = array(
                         "orden" => (int) $post["orden"],
+                        "ordenProducto" => (int) $post["orden"],
                         "numParte" => $post["numParte"],
                         "fraccion" => $post["fraccion"],
                         "fraccion_2020" => $post["fraccion_2020"],

@@ -177,7 +177,7 @@ class Aduanet_Pedimentos
 
     public function importarFactura($idTrafico, $numFactura)
     {
-        $ch = curl_init();        
+        $ch = curl_init();
         $nf = urlencode($numFactura);
 
         curl_setopt($ch, CURLOPT_URL, "https://oaq.dnsalias.net/cgi-bin/cgi_facturas.py?id_trafico={$idTrafico}&num_factura={$nf}");
@@ -193,10 +193,47 @@ class Aduanet_Pedimentos
     public function actualizarCove($patente, $aduana, $pedimento, $numFactura, $cove)
     {
         $ch = curl_init();
-        $nf = urlencode($numFactura);
 
-        curl_setopt($ch, CURLOPT_URL, "https://oaq.dnsalias.net/cgi-bin/cgi_coves.py?patente={$patente}&aduana={$aduana}&pedimento={$pedimento}&cove={$cove}&num_factura={$nf}");
+        $data = array(
+            "patente" => $patente,
+            "aduana" => $aduana,
+            "pedimento" => $pedimento,
+            "cove" => $cove,
+            "num_factura" => $numFactura,
+        );
+
+        $uri = "http://localhost:5003/enviar-cove-aduanet";
+
+        curl_setopt($ch, CURLOPT_URL, $uri);
         curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+
+        curl_close($ch);
+
+        return $server_output;
+    }
+
+    public function actualizarEdocument($patente, $aduana, $pedimento, $referencia, $edocument)
+    {
+        $ch = curl_init();
+
+        $data = array(
+            "patente" => $patente,
+            "aduana" => $aduana,
+            "pedimento" => $pedimento,
+            "referencia" => $referencia,
+            "edocument" => $edocument,
+        );
+
+        $uri = "http://localhost:5003/enviar-edocuments-aduanet";
+
+        curl_setopt($ch, CURLOPT_URL, $uri);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec($ch);
 

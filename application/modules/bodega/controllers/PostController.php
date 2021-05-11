@@ -1490,7 +1490,7 @@ class Bodega_PostController extends Zend_Controller_Action
                 if (APPLICATION_ENV == "production") {
                     $directory = $this->_appconfig->getParam("tmpDir");
                 } else {
-                    $directory = "C:\\wamp64\\tmp";
+                    $directory = "/tmp";
                 }
                 $upload->setDestination($directory);
                 $files = $upload->getFileInfo();
@@ -1508,7 +1508,6 @@ class Bodega_PostController extends Zend_Controller_Action
                         $plantilla->set_idUsuario($this->_session->id);
                         $plantilla->set_usuario($this->_session->username);
                         if ($input->replace) {
-                            // set replace to false when no overwrite required
                             $plantilla->set_replace(false);
                         }
                         if ($plantilla->analizar() == true) {

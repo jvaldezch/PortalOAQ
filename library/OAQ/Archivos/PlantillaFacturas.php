@@ -265,6 +265,7 @@ class OAQ_Archivos_PlantillaFacturas
             $arr = array(
                 "idFactura" => $idFactura,
                 "orden" => isset($producto["ORDEN"]) ? (int) $producto["ORDEN"] : null,
+                "ordenProducto" => isset($producto["ORDEN"]) ? (int) $producto["ORDEN"] : null,
                 "consFactura" => null,
                 "numParte" => $this->_trimArray($producto["PARTE"]),
                 "fraccion" => isset($producto["FRACCION"]) ? $producto["FRACCION"] : null,

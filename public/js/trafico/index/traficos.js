@@ -59,7 +59,7 @@ $(document).ready(function() {
         queryParams: {
             fechaInicio: dateini,
             fechaFin: dateend
-	},
+	    },
         onClickRow: function (index, row) {},
         onBeginEdit: function (index, row) {
         },

@@ -209,7 +209,7 @@ class Trafico_Model_FactProd
                     "nico"
                 ))
                 ->where('idFactura = ?', $idFactura)
-                ->order("ordenProducto ASC");
+                ->order("orden ASC");
             $stmt = $this->_db_table->fetchAll($sql);
             if ($stmt) {
                 return $stmt->toArray();

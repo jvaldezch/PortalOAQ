@@ -1,7 +1,8 @@
+var dg;
 
 function zeroPad(num, places) {
-  var zero = places - num.toString().length + 1;
-  return Array(+(zero > 0 && zero)).join("0") + num;
+    var zero = places - num.toString().length + 1;
+    return Array(+(zero > 0 && zero)).join("0") + num;
 }
 
 $.fn.datebox.defaults.formatter = function (date) {
@@ -53,7 +54,7 @@ function exportToExcel() {
     window.location.href = baseurl + "?fechaIni=" + dateini + "&fechaFin=" + dateend + "&excel=true";
 }
 
-window.format_dates = function(value, row) {
+window.format_dates = function (value, row) {
     if (value) {
         var dateObj = new Date(value);
         var momentObj = moment(dateObj);
@@ -63,11 +64,11 @@ window.format_dates = function(value, row) {
     }
 };
 
-window.format_link = function(value, row) {
+window.format_link = function (value, row) {
     return '<a href="/clientes/index/ver-trafico?id=' + row.id + '">' + row.referencia + '</a>';
 };
 
-window.format_traffic_light = function(value, row) {
+window.format_traffic_light = function (value, row) {
     if (row.semaforo === 1) {
         return 'Verde';
     } else if (row.semaforo === 2) {
@@ -77,25 +78,25 @@ window.format_traffic_light = function(value, row) {
     }
 };
 
-window.format_impo = function(value, row) {
+window.format_impo = function (value, row) {
     if (row.ie === "TOCE.IMP") {
-        return '<i class="fas fa-arrow-circle-down" style="font-size: 1.2em; color: #2f3b58; padding-top: 2px"></i>';        
+        return '<i class="fas fa-arrow-circle-down" style="font-size: 1.2em; color: #2f3b58; padding-top: 2px"></i>';
     } else {
         return '<i class="fas fa-arrow-circle-up" style="font-size: 1.2em; color: #2e963a; padding-top: 2px"></i>';
     }
 };
 
-    
+
 $(document).ready(function () {
 
-    var dg = $("#dg").edatagrid();
+    dg = $("#dg").edatagrid();
 
     dg.edatagrid({
         pagination: true,
         singleSelect: true,
         striped: true,
-        rownumbers: true,
-        fitColumns: false,
+        rownumbers: false,
+        fitColumns: true,
         pageSize: 20,
         idField: 'id',
         method: 'GET',
@@ -106,41 +107,47 @@ $(document).ready(function () {
         url: baseurl,
         remoteFilter: true,
         toolbar: [{
-                text: 'Guardar en Excel',
-                iconCls: 'icon-download',                
-                handler: function () {
-                    exportToExcel();
-                }
-            }],
+            text: 'Guardar en Excel',
+            iconCls: 'icon-download',
+            handler: function () {
+                exportToExcel();
+            }
+        }],
         frozenColumns: [[
-                {field: 'imex', width: 30, title: 'I/E',
-                    formatter: format_impo},
-                {field: 'patente', width: 50, title: 'Patente'},
-                {field: 'aduana', width: 50, title: 'Aduana'},
-                {field: 'pedimento', width: 80, title: 'Pedimento'},
-                {field: 'referencia', width: 100, title: 'Referencia', 
-                    formatter: format_link}
-            ]],
+            {
+                field: 'imex', width: 30, title: 'I/E',
+                formatter: format_impo
+            },
+            { field: 'patente', width: 50, title: 'Patente' },
+            { field: 'aduana', width: 50, title: 'Aduana' },
+            { field: 'pedimento', width: 80, title: 'Pedimento' },
+            {
+                field: 'referencia', width: 150, title: 'Referencia',
+                formatter: format_link
+            }
+        ]],
         columns: [[
-                {field: "cvePedimento", width: 40, title: "Cve."},
-                {field: "fechaEta", width: 90, title: "F. ETA",
-                    formatter: format_dates},
-                {field: "fechaEnvioDocumentos", width: 105, title: "F. Envio Doctos.",
-                    formatter: format_dates},
-                {field: "fechaPago", width: 85, title: "F. Pago",
-                    formatter: format_dates},
-                {field: "fechaLiberacion", width: 95, title: "F. Liberación",
-                    formatter: format_dates},
-                {field: "fechaFacturacion", width: 105, title: "F. Facturación",
-                    formatter: format_dates},
-                {field: "blGuia", width: 105, title: "BL/Guía"},
-                {field: "contenedorCaja", width: 105, title: "Cont./Caja"},
-                {field: "observaciones", width: 250, title: "Observaciones"},
-                {field: "semaforo", width: 150, title: "Semaforo",
-                    formatter: format_traffic_light}
-            ]]
+            { field: "cvePedimento", width: 40, title: "Cve." },
+            {
+                field: "fechaEta", width: 90, title: "F. ETA",
+                formatter: format_dates
+            },
+            {
+                field: "fechaPago", width: 85, title: "F. Pago",
+                formatter: format_dates
+            },
+            { field: "blGuia", width: 105, title: "BL/Guía" },
+            { field: "contenedorCaja", width: 105, title: "Cont./Caja" },
+            { field: "observaciones", width: 250, title: "Observaciones" },
+            {
+                field: "semaforo", width: 150, title: "Semaforo",
+                formatter: format_traffic_light
+            }
+        ]]
     });
-    
+
+    dg.edatagrid("enableFilter", []);
+
     var customToolbar = '<td style="padding-left: 5px"><span><span class="l-btn-text">Desde</span><input id="dateini" style="width:100px; text-align: center"></span></td>';
     customToolbar += '<td style="padding-left: 5px"><span><span class="l-btn-text">Hasta</span><input id="dateend" style="width:100px; text-align: center"></span></td>';
 
@@ -172,5 +179,19 @@ $(document).ready(function () {
         }
     });
 
+    $.each(['imex', 'msg', 'coves', 'edocuments', 'upl', 'ie', 'estatusExpediente', 'cvePedimento', 'fechaPago', 'estatus', 'fechaEtd', 'fechaLiberacion', 'fechaEntrada', 'fechaPresentacion', 'fechaFacturacion', 'fechaEta', 'fechaRevalidacion', 'fechaPrevio', 'fechaDespacho', 'fechaEtaAlmacen', 'fechaEnvioProforma', 'fechaEnvioDocumentos', 'fechaNotificacion', 'fechaDeposito', 'fechaCitaDespacho', 'fechaProformaTercero', 'fechaArriboTransfer', 'fechaSolicitudTransfer', 'fechaVistoBueno', 'facturas', 'cantidadFacturas', 'cantidadPartes', 'almacen', 'fechaVistoBuenoTercero', 'fechaComprobacion', 'tipoCarga', 'fechaEir', 'fechaInstruccionEspecial', 'idPlanta', 'diasDespacho', 'estatusRepositorio', 'observaciones', 'cumplimientoAdministrativo', 'cumplimientoOperativo', 'ccConsolidado', 'semaforo'], function (index, value) {
+        $(".datagrid-editable-input[name='" + value + "']").hide();
+    });
+
+    $.each(['referencia'], function (index, value) {
+        $(document.body).on("input", ".datagrid-editable-input[name='" + value + "']", function () {
+            var input = $(this);
+            var start = input[0].selectionStart;
+            $(this).val(function (_, val) {
+                return val.toUpperCase();
+            });
+            input[0].selectionStart = input[0].selectionEnd = start;
+        });
+    });
+
 });
-  
