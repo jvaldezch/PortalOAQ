@@ -239,7 +239,7 @@ class Administracion_AjaxController extends Zend_Controller_Action {
                     $this->_helper->json(array("success" => false, "errors" => "Invalid input!"));
                 }
                 $upload = new Zend_File_Transfer_Adapter_Http();
-                $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
+                $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
                         ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
                         ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg", "case" => false));
                 
@@ -383,7 +383,7 @@ class Administracion_AjaxController extends Zend_Controller_Action {
                     $mppr = new Trafico_Model_TraficoSolicitudesMapper();
                     
                     $upload = new Zend_File_Transfer_Adapter_Http();
-                    $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
+                    $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
                             ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
                             ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,png", "case" => false));
                     

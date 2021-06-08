@@ -751,8 +751,8 @@ class OAQ_Trafico
     public function subirArchivoTemporal($idMensaje = null, $idComentario = null)
     {
         $upload = new Zend_File_Transfer_Adapter_Http();
-        $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-            ->addValidator("Size", false, array("min" => "1kB", "max" => "6MB"))
+        $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+            ->addValidator("Size", false, array("min" => "1kB", "max" => "30MB"))
             ->addValidator("Extension", false, array("extension" => "jpg,pdf,jpeg,png", "case" => false));
         if (APPLICATION_ENV === "production") {
             $dir = "/home/samba-share/expedientes/temporal";

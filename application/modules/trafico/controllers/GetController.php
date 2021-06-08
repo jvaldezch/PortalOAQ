@@ -3350,6 +3350,38 @@ class Trafico_GetController extends Zend_Controller_Action
         }
     }
 
+    public function bitacoraExpedienteAction()
+    {
+        try {
+            $f = array(
+                "*" => array("StringTrim", "StripTags"),
+                "id" => array("Digits"),
+            );
+            $v = array(
+                "id" => array("NotEmpty", new Zend_Validate_Int()),
+            );
+            $input = new Zend_Filter_Input($f, $v, $this->_request->getParams());
+            if ($input->isValid("id")) {
+                $trafico = new OAQ_Trafico(array("idTrafico" => $input->id, "idUsuario" => $this->_session->id));                
+                $view = new Zend_View();
+                $view->setScriptPath(realpath(dirname(__FILE__)) . "/../views/scripts/get/");
+                $view->setHelperPath(realpath(dirname(__FILE__)) . "/../views/helpers/");
+                $alog = new Archivo_Model_RepositorioLog(array(
+                    "patente" => $trafico->getPatente(), 
+                    "aduana" => $trafico->getAduana(), 
+                    "pedimento" => $trafico->getPedimento(),
+                    "referencia" => $trafico->getReferencia()
+                ));
+                $view->logs = $alog->bitacora();                
+                $this->_helper->json(array("success" => true, "html" => $view->render("bitacora-expediente.phtml")));
+            } else {
+                $this->_helper->json(array("success" => false, "message" => "Invalid input!"));
+            }
+        } catch (Exception $ex) {
+            $this->_helper->json(array("success" => false, "message" => $ex->getMessage()));
+        }
+    }
+
     public function vucemEnviarMultipleAction()
     {
         try {

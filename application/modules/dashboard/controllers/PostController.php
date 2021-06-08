@@ -39,8 +39,8 @@ class Dashboard_PostController extends Zend_Controller_Action {
                     throw new Exception("Invalid input!");
                 }
                 $upload = new Zend_File_Transfer_Adapter_Http();
-                $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                        ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                        ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                         ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,jpeg", "case" => false));
                 
                 $misc = new OAQ_Misc();                

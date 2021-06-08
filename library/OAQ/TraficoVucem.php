@@ -1369,7 +1369,6 @@ class OAQ_TraficoVucem {
                     "actualizado" => date('Y-m-d H:i:s'),
                 ));
                 $this->actualizarEdocumentEnRepositorio($idVucem, $resp["edocument"]);                            
-                //$this->guardarEdocumentEnExpediente($idVucem, $resp["edocument"], $resp["numeroDeTramite"], $tipoDocumento, $username);
                 $this->guardarEdocumentXmlPdf($idVucem, $username, null);
                 return true;
             } else if (!isset($resp["edocument"]) && $resp["error"] == true) {

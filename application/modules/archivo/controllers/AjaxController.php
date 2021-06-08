@@ -469,7 +469,7 @@ class Archivo_AjaxController extends Zend_Controller_Action {
                     mkdir($directory, 0777, true);
                 }
                 $upload = new Zend_File_Transfer_Adapter_Http();
-                $upload->addValidator("Count", false, array("min" => 1, "max" => 20))
+                $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
                         ->addValidator("Size", false, array('min' => '1kB', 'max' => '6MB'))
                         ->addValidator("Extension", false, array("extension" => "pdf", "case" => false));
                 $upload->setDestination("/tmp/archivos");

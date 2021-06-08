@@ -649,8 +649,8 @@ class Operaciones_CatalogoController extends Zend_Controller_Action
                 $archivos = new OAQ_Archivos_Procesar();
                 $mppr = new Operaciones_Model_CatalogoPartesImagenes();
                 $upload = new Zend_File_Transfer_Adapter_Http();
-                $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                    ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                    ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                     ->addValidator("Extension", false, array("extension" => "jpg,jpeg", "case" => false));
                 $path = APPLICATION_PATH . "/../public/imagenes/" . date("Y") . DIRECTORY_SEPARATOR . str_pad(date("m"), 2, '0', STR_PAD_LEFT) . DIRECTORY_SEPARATOR . str_pad(date("d"), 2, '0', STR_PAD_LEFT);
                 if (!file_exists($path)) {

@@ -1,0 +1,30 @@
+<div style="max-height: 400px; overflow-y: auto;">
+    <table class="traffic-table traffic-table-left">
+        <thead>
+            <tr>
+                <th>Acción</th>
+                <th>Archivo</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($this->logs && !empty($this->logs)) { ?>
+                <?php foreach ($this->logs as $log) { ?>
+                    <tr>
+                        <td><?= $log['accion'] ?></td>
+                        <td><?= basename($log['nombreArchivo']) ?></td>
+                        <td><?= $log['usuario'] ?></td>
+                        <td><?= $log['creado'] ?></td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="4">
+                        <em>No hay movimientos.</em>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>

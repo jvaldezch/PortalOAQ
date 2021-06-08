@@ -47,8 +47,8 @@ class Operaciones_PostController extends Zend_Controller_Action {
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 if ($input->isValid("idDirectorio") && $input->isValid("patente") && $input->isValid("aduana")) {
                     $upload = new Zend_File_Transfer_Adapter_Http();
-                    $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                            ->addValidator("Size", false, array("min" => "1", "max" => "20MB"));
+                    $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                            ->addValidator("Size", false, array("min" => "1", "max" => "30MB"));
                     $mppr = new Application_Model_DirectoriosValidacion();
                     $arr = $mppr->get($input->patente, $input->aduana);
                     if (!empty($arr)) {

@@ -95,6 +95,26 @@ class Archivo_Model_RepositorioMapper
         }
     }
 
+    public function edocuments($referencia, $patente, $aduana)
+    {
+        try {
+            $sql = $this->_db_table->select()
+                ->setIntegrityCheck(false)
+                ->from(array("a" => "repositorio"), array("edocument"))
+                ->where("a.referencia = ?", $referencia)
+                ->where("a.patente = ?", $patente)
+                ->where("a.aduana LIKE ?", substr($aduana, 0, 2) . "%")
+                ->where("a.tipo_archivo IN (22, 27)");
+            $stmt = $this->_db_table->fetchAll($sql);
+            if ($stmt) {
+                return $stmt->toArray();
+            }
+            return;
+        } catch (Zend_Db_Exception $ex) {
+            throw new Exception("DB Exception on " . __METHOD__ . " : " . $ex->getMessage());
+        }
+    }
+
     public function countFilesByReferenceCustomers($reference, $patente = null, $aduana = null)
     {
         try {
@@ -355,7 +375,7 @@ class Archivo_Model_RepositorioMapper
     {
         try {
             $sql = $this->_db_table->select()
-                ->from($this->_db_table, array("ubicacion", "tipo_archivo", "sub_tipo_archivo"))
+                ->from($this->_db_table, array("patente", "aduana", "pedimento", "referencia", "ubicacion", "tipo_archivo", "sub_tipo_archivo"))
                 ->where("id = ?", $id);
             $stmt = $this->_db_table->fetchRow($sql);
             if ($stmt) {

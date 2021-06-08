@@ -275,8 +275,8 @@ class Trafico_PostController extends Zend_Controller_Action
             $misc = new OAQ_Misc();
             $m = new Archivo_Model_DocumentosFiscalMapper();
             $upload = new Zend_File_Transfer_Adapter_Http();
-            $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+            $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                 ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,jpeg", "case" => false));
             $model = new Trafico_Model_ClientesMapper();
             $arr = $model->datosCliente($input->idCliente);
@@ -633,8 +633,8 @@ class Trafico_PostController extends Zend_Controller_Action
                     $info = $tbl->obtenerPorId($data["idTrafico"]);
                     $dir = $misc->crearNuevoDirectorio($this->_appconfig->getParam("expdest"), $info["patente"] . "/" . $info["aduana"] . "/" . $info["referencia"]);
                     $upload = new Zend_File_Transfer_Adapter_Http();
-                    $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                        ->addValidator("Size", false, array("min" => "1kB", "max" => "6MB"))
+                    $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                        ->addValidator("Size", false, array("min" => "1kB", "max" => "30MB"))
                         ->addValidator("Extension", false, array("extension" => "jpg,jpeg", "case" => false));
                     $upload->setDestination($dir);
                     $files = $upload->getFileInfo();
@@ -702,8 +702,8 @@ class Trafico_PostController extends Zend_Controller_Action
                     $misc = new OAQ_Misc();
                     $m = new Archivo_Model_DocumentosFiscalMapper();
                     $upload = new Zend_File_Transfer_Adapter_Http();
-                    $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                        ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                    $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                        ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                         ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,jpeg", "case" => false));
                     $model = new Trafico_Model_ClientesMapper();
                     $arr = $model->datosCliente($input->idCliente);
@@ -875,12 +875,24 @@ class Trafico_PostController extends Zend_Controller_Action
                 if ($i->isValid("id")) {
                     $mapper = new Archivo_Model_RepositorioMapper();
                     $arr = $mapper->getFileInfo($i->id);
+
+                    $alog = new Archivo_Model_RepositorioLog(array(
+                        "patente" => $arr['patente'], 
+                        "aduana" => $arr['aduana'], 
+                        "pedimento" => $arr['pedimento'],
+                        "referencia" => $arr['referencia']
+                    ));
+
+                    $alog->agregar("DELETED", $arr['tipo_archivo'], $arr["ubicacion"], strtoupper($this->_session->username));
+
                     $mapper->removeFileById($i->id);
+
                     if (isset($arr) && file_exists($arr["ubicacion"])) {
                         unlink($arr["ubicacion"]);
                     } else {
                         $this->_helper->json(array("success" => false, "message" => "El archivo no existe."));
                     }
+
                     $this->_helper->json(array("success" => true));
                 }
             }
@@ -2531,8 +2543,8 @@ class Trafico_PostController extends Zend_Controller_Action
                 );
                 $input = new Zend_Filter_Input($f, $v, $request->getPost());
                 $upload = new Zend_File_Transfer_Adapter_Http();
-                $upload->addValidator("Count", false, array("min" => 1, "max" => 20))
-                    ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+                $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                    ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                     ->addValidator("Extension", false, array("extension" => "xml", "case" => false));
                 $upload->setDestination($this->_appconfig->getParam("tmpDir"));
                 $files = $upload->getFileInfo();
@@ -3433,8 +3445,8 @@ class Trafico_PostController extends Zend_Controller_Action
             $model = new Archivo_Model_RepositorioMapper();
 
             $upload = new Zend_File_Transfer_Adapter_Http();
-            $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1", "max" => "25MB"))
+            $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                 ->addValidator("Extension", false, array("extension" => "pdf", "case" => false));
             if (($path = $misc->directorioExpedienteDigital($traffic->getPatente(), $traffic->getAduana(), $traffic->getReferencia()))) {
                 $upload->setDestination($path);

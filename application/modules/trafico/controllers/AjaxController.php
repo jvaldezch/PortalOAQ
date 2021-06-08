@@ -2165,19 +2165,27 @@ class Trafico_AjaxController extends Zend_Controller_Action
             }
             $errors = [];
 
+            $alog = new Archivo_Model_RepositorioLog(array(
+                "patente" => $input->patente, 
+                "aduana" => $input->aduana, 
+                "pedimento" => $input->pedimento,
+                "referencia" => $input->referencia
+            ));
+
             if (!is_writable($this->_appconfig->getParam("expdest"))) {
                 throw new Exception("Directory [" . $this->_appconfig->getParam("expdest") . "] is not writable.");
             }
+
             $misc = new OAQ_Misc();
             if (APPLICATION_ENV == "production") {
                 $misc->set_baseDir($this->_appconfig->getParam("expdest"));
             } else {
-                $misc->set_baseDir("D:\\xampp\\tmp\\expedientes");
+                $misc->set_baseDir("/tmp/expedientes");
             }
             $model = new Archivo_Model_RepositorioMapper();
             $upload = new Zend_File_Transfer_Adapter_Http();
-            $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1", "max" => "25MB"));
+            $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                ->addValidator("Size", false, array("min" => "1", "max" => "30MB"));
             //->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false))
             //->addValidator(new Zend_Validate_Regex('/(.*\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpg|msg))|A[0-9]{7}.([0-9]{3})|E[0-9]{7}.([0-9]{3})|M[0-9]{7}.([0-9]{3})|m[0-9]{7}.err/i'));
             if (($path = $misc->directorioExpedienteDigital($input->patente, $input->aduana, $input->referencia))) {
@@ -2189,6 +2197,7 @@ class Trafico_AjaxController extends Zend_Controller_Action
             foreach ($files as $fieldname => $fileinfo) {
                 if (($upload->isUploaded($fieldname))) {
                     if (!preg_match('/\.(pdf|xml|xls|xlsx|doc|docx|zip|bmp|tif|jpe?g|bmp|png|msg|([0-9]{3})|err)(?:[\?\#].*)?$/i', $fileinfo["name"])) {
+                        $alog->agregar("INVALID", 99, $fileinfo["name"], strtoupper($this->_session->username));
                         continue;
                     }
                     $tipoArchivo = $misc->tipoArchivo(basename($fileinfo["name"]));
@@ -2220,6 +2229,9 @@ class Trafico_AjaxController extends Zend_Controller_Action
                     $filename = $misc->formatFilename($fileinfo["name"], false);
                     $verificar = $model->verificarArchivo($input->patente, $input->referencia, $filename);
                     if ($verificar == false) {
+
+                        $alog->agregar("UPLOADED", $tipoArchivo, $path . DIRECTORY_SEPARATOR . $filename, strtoupper($this->_session->username));
+
                         $upload->receive($fieldname);
                         if (in_array($tipoArchivo, array(1010, 1020, 1030))) {
                             $up[] = $fileinfo["name"];
@@ -2230,6 +2242,8 @@ class Trafico_AjaxController extends Zend_Controller_Action
                             $model->nuevoArchivo($tipoArchivo, null, $input->patente, $input->aduana, $input->pedimento, $input->referencia, $filename, $path . DIRECTORY_SEPARATOR . $filename, $this->_session->username, $input->rfcCliente);
                         }
                     } else {
+                        $alog->agregar("REPEATED", $tipoArchivo, $path . DIRECTORY_SEPARATOR . $filename, strtoupper($this->_session->username));
+
                         $errors[] = array(
                             "filename" => $fileinfo["name"],
                             "errors" => array("errors" => "El archivo ya existe."),

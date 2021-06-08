@@ -104,7 +104,7 @@ class Trafico_Model_TraficosMapper
     {
         try {
             $sql = $this->_db_table->select()
-                ->from("traficos", array("id", "idAduana", "idCliente", "patente", "aduana", "pedimento", "estatus", "ie"))
+                ->from("traficos", array("id", "idAduana", "idCliente", "patente", "aduana", "pedimento", "estatus", "ie", "cvePedimento", "rfcSociedad", "rfcCliente"))
                 ->where("idAduana = ?", $idAduana)
                 ->where("referencia = ?", $referencia);
             $stmt = $this->_db_table->fetchRow($sql);
@@ -284,6 +284,7 @@ class Trafico_Model_TraficosMapper
             throw new Exception("DB Exception found on " . __METHOD__ . ": " . $e->getMessage());
         }
     }
+    
     public function agregar($arr)
     {
         try {

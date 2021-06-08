@@ -1,0 +1,53 @@
+<div style="float: right; margin-top: 7px">
+    <button class="traffic-btn traffic-btn-right" id="import-traffic">
+        Importar de trafico
+    </button>
+</div>
+
+<div style="float: left; margin-left: 2px">
+    <h5 style="float: left; margin-left: 5px" style="margin: 0;">EDITAR MANIFESTACION DE VALOR</h5>
+</div>
+
+<table class="traffic-table traffic-table-left">
+    <tr>
+        <td>
+            <label>Patente</label>
+            <input type="text" class="traffic-input-small" id="patente" name="patente" value="<?= $this->row['patente'] ?>" />
+        </td>
+        <td>
+            <label>Aduana</label>
+            <input type="text" class="traffic-input-xs" id="aduana" name="aduana" value="<?= $this->row['aduana'] ?>" />
+        </td>
+        <td>
+            <label>Pedimento</label>
+            <input type="text" class="traffic-input-small" id="pedimento" name="pedimento" value="<?= $this->row['pedimento'] ?>" />
+        </td>
+        <td>
+            <label>Referencia</label>
+            <input type="text" class="traffic-input-small" id="referencia" name="referencia" value="<?= $this->row['referencia'] ?>" />
+        </td>
+        <td>
+            <label>T. ope.</label>
+            <input type="text" class="traffic-input-small" id="tipoOperacion" name="tipoOperacion" value="<?= $this->row['tipoOperacion'] ?>" />
+        </td>
+        <td>
+            <label>Cve. ped.</label>
+            <input type="text" class="traffic-input-xs" id="cvePedimento" name="cvePedimento" value="<?= $this->row['cvePedimento'] ?>" />
+        </td>
+        <td>
+            <label>Regimen</label>
+            <input type="text" class="traffic-input-xs" id="regimenAduanero" name="regimenAduanero" value="<?= $this->row['regimenAduanero'] ?>" />
+        </td>
+        <td>
+            <label>Cliente</label>
+            <input type="text" class="traffic-input" id="nombreCliente" name="nombreCliente" value="<?= $this->row['nombreCliente'] ?>" />
+        </td>
+    </tr>
+</table>
+
+<div class="traffic-clear-5"></div>
+
+<a href="/manifestacion/index/index" class="traffic-btn">
+    <i class="fas fa-angle-double-left"></i> Regresar</a>
+
+<a class="traffic-btn traffic-btn-right" id="save">Guardar</a>

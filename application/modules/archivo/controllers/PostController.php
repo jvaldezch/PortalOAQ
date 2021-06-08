@@ -606,8 +606,8 @@ class Archivo_PostController extends Zend_Controller_Action
                         $misc->set_baseDir($this->_appconfig->getParam("expdest"));
                         $model = new Archivo_Model_RepositorioMapper();
                         $upload = new Zend_File_Transfer_Adapter_Http();
-                        $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                            ->addValidator("Size", false, array("min" => "1", "max" => "20MB"));
+                        $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                            ->addValidator("Size", false, array("min" => "1", "max" => "30MB"));
                         if (($path = $misc->nuevoDirectorioExpediente($arr["patente"], $arr["aduana"], $misc->trimUpper($arr["referencia"])))) {
                             $upload->setDestination($path);
                         }

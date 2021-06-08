@@ -69,8 +69,8 @@ class Mobile_PostController extends Zend_Controller_Action
             $mdl = new Trafico_Model_Imagenes();
 
             $upload = new Zend_File_Transfer_Adapter_Http();
-            $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1kB", "max" => "20MB"))
+            $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                ->addValidator("Size", false, array("min" => "1kB", "max" => "30MB"))
                 ->addValidator("Extension", false, array("extension" => "jpg,png,jpeg", "case" => false));
 
             if (($path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia))) {
@@ -160,8 +160,8 @@ class Mobile_PostController extends Zend_Controller_Action
             $dir = $misc->crearNuevoDirectorio($this->_appconfig->getParam("expdest"), $arr["patente"] . "/" . $arr["aduana"] . "/" . $arr["referencia"]);
 
             $upload = new Zend_File_Transfer_Adapter_Http();
-            $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+            $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                 ->addValidator("Extension", false, array("extension" => "png,jpg,jpeg", "case" => false));
             $upload->setDestination($dir);
 
@@ -249,8 +249,8 @@ class Mobile_PostController extends Zend_Controller_Action
             }
             $model = new Archivo_Model_RepositorioMapper();
             $upload = new Zend_File_Transfer_Adapter_Http();
-            $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1", "max" => "25MB"));
+            $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                ->addValidator("Size", false, array("min" => "1", "max" => "30MB"));
             
             if (($path = $misc->directorioExpedienteDigital($input->patente, $input->aduana, $input->referencia))) {
                 $upload->setDestination($path);
@@ -365,8 +365,8 @@ class Mobile_PostController extends Zend_Controller_Action
 
             $model = new Archivo_Model_RepositorioMapper();
             $upload = new Zend_File_Transfer_Adapter_Http();
-            $upload->addValidator("Count", false, array("min" => 1, "max" => 15))
-                ->addValidator("Size", false, array("min" => "1", "max" => "20MB"))
+            $upload->addValidator("Count", false, array("min" => 1, "max" => 50))
+                ->addValidator("Size", false, array("min" => "1", "max" => "30MB"))
                 ->addValidator("Extension", false, array("extension" => "pdf,xml,xls,xlsx,doc,docx,zip,bmp,tif,jpg,msg", "case" => false));
 
             $path = $misc->directorioExpedienteDigitalBodega($b['siglas'], $t["fechaEta"], $input->referencia);

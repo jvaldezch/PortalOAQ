@@ -1427,6 +1427,33 @@ $(document).ready(function () {
         return false;
     });
 
+    $(document.body).on("click", "#archive-log", function (ev) {    
+        ev.preventDefault();    
+        $.confirm({
+            title: "Bitacora expediente", escapeKey: "cerrar", boxWidth: "650px", useBootstrap: false,
+            buttons: {
+                cerrar: {
+                    btnClass: "btn-red",
+                    action: function () { }
+                }
+            },
+            content: function () {
+                let self = this;
+                return $.ajax({
+                    url: "/trafico/get/bitacora-expediente?id=" + $("#idTrafico").val(), dataType: "json", method: "GET"
+                }).done(function (res) {
+                    let html = "";
+                    if (res.success === true) {
+                        html = res.html;
+                    }
+                    self.setContent(html);
+                }).fail(function () {
+                    self.setContent("Something went wrong.");
+                });
+            }
+        });
+    });
+
     $(document.body).on("click", "#getInvoices", function () {
         $.confirm({
             title: "Facturas de pedimento", escapeKey: "cerrar", boxWidth: "650px", useBootstrap: false,
