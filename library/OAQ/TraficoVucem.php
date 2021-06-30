@@ -102,12 +102,7 @@ class OAQ_TraficoVucem {
         if (is_array($options)) {
             $this->setOptions($options);
         }
-
         $this->_firephp = Zend_Registry::get("firephp");
-
-        if ($this->username == 'jvaldez') {
-            $this->_firephp->info("Hi programmer");
-        }
     }
 
     public function __set($name, $value) {
@@ -1173,13 +1168,11 @@ class OAQ_TraficoVucem {
                 $xml = $uti->xmlEdocument($data);
 
                 $this->_firephp->info($xml);
-
-                return false;
             }
             
             if ($send == true) {
                 $this->xml = $uti->xmlEdocument($data);
-                unset($data);
+
                 return $this->_enviarXmlEdocument();
             } else {
                 $xml = $uti->xmlEdocument($data);
