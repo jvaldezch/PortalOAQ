@@ -2309,10 +2309,12 @@ $(document).ready(function () {
 
         }
     });
-
-    $('#fechaEta, #fechaEnvioDocumentos, #fechaVistoBueno, #fechaRevalidacion, #fechaPrevio, #fechaEtaAlmacen').datetimepicker({
-        language: 'es',
+    
+    $('#fechaEta, #fechaEnvioDocumentos, #fechaVistoBueno, #fechaRevalidacion, #fechaPrevio, #fechaEtaAlmacen').datepicker({
+        calendarWeeks: true,
         autoclose: true,
+        language: "es",
+        format: "yyyy-mm-dd",
     });
 
 });

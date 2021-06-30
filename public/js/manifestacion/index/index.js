@@ -4,7 +4,13 @@
  * and open the template in the editor.
  */
 
-let dg;
+let dg;let dateini;
+let dateend;
+
+window.zeroPad = function (num, places) {
+    let zero = places - num.toString().length + 1;
+    return Array(+(zero > 0 && zero)).join("0") + num;
+}
 
 window.formatLink = function (val, row) {
     return `<a href="/manifestacion/index/editar?id=${row.id}">${row.referencia}</a>`;

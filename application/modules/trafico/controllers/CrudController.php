@@ -60,30 +60,39 @@ class Trafico_CrudController extends Zend_Controller_Action
                 $v = array(
                     "idTrafico" => array("NotEmpty", new Zend_Validate_Int()),
                     "pedimento" => array("NotEmpty", new Zend_Validate_Int()),
-                    "fechaEta" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 10
-                    "fechaEtaAlmacen" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 28
-                    "fechaPago" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 2
+                    "fechaEta" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 10
+                    "fechaEtaAlmacen" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 28
+                    "fechaPago" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 2
                     "fechaEntrada" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 1
                     "fechaPresentacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
                     "fechaEir" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
-                    "fechaLiberacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 8
+                    "fechaLiberacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 8
                     "fechaNotificacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 9
-                    "fechaRevalidacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 20
-                    "fechaPrevio" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 21
+                    "fechaRevalidacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 20
+                    "fechaPrevio" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 21
                     "fechaDeposito" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 22
                     "fechaRecepcionDocs" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 11
                     "fechaPresentacion" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 5
                     "fechaCitaDespacho" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 25
-                    "fechaVistoBueno" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 29
+                    "fechaVistoBueno" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 29
                     "fechaInstruccionEspecial" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 54
                     "fechaEnvioProforma" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 26
-                    "fechaEnvioDocumentos" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}$/")), // 27
+                    "fechaEnvioDocumentos" => array("NotEmpty", new Zend_Validate_Regex("/^\d{4}\-\d{2}\-\d{2}$/")), // 27
                     "horaRecepcionDocs" => array("NotEmpty", new Zend_Validate_Regex("/(\d{2}):(\d{2}) (AM|PM)/")),
                 );
                 $i = new Zend_Filter_Input($f, $v, $r->getPost());
                 if ($i->isValid("idTrafico")) {
                     $trafico = new OAQ_Trafico(array("idTrafico" => $i->idTrafico, "idUsuario" => $this->_session->id, "usuario" => $this->_session->username));
                     $traffics = new Trafico_Model_TraficosMapper();
+
+                    $this->_firephp->info($i->fechaEta);
+                    $this->_firephp->info($i->fechaEnvioDocumentos);
+                    $this->_firephp->info($i->fechaVistoBueno);
+                    $this->_firephp->info($i->fechaRevalidacion);
+                    $this->_firephp->info($i->fechaPrevio);
+                    $this->_firephp->info($i->fechaEtaAlmacen);
+
+
                     if ($i->isValid("fechaEntrada")) {
                         $trafico->actualizarFecha(1, $i->fechaEntrada, $this->_session->username);
                     }
@@ -138,8 +147,8 @@ class Trafico_CrudController extends Zend_Controller_Action
                         $trafico->actualizarFecha(54, $i->fechaInstruccionEspecial, $this->_session->username);
                     }
 
-                    $this->_db->query("UPDATE traficos AS t SET t.diasRetraso = DATEDIFF(t.fechaPago, t.fechaEta) WHERE t.fechaPago IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
-                    $this->_db->query("UPDATE traficos AS t SET t.diasDespacho = DATEDIFF(fechaLiberacion, fechaEta) WHERE t.fechaLiberacion IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->id};");
+                    $this->_db->query("UPDATE traficos AS t SET t.diasRetraso = DATEDIFF(t.fechaPago, t.fechaEta) WHERE t.fechaPago IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->idTrafico};");
+                    $this->_db->query("UPDATE traficos AS t SET t.diasDespacho = DATEDIFF(t.fechaLiberacion, t.fechaEta) WHERE t.fechaLiberacion IS NOT NULL AND t.fechaEta IS NOT NULL AND t.id = {$i->idTrafico};");
 
                     $this->_helper->json(array("success" => true));
                 } else {

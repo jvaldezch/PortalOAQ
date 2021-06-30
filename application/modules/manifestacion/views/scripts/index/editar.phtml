@@ -1,6 +1,20 @@
+<style>
+    .fa-times,
+    .fa-save,
+    .fa-trash,
+    .fa-pencil-alt,
+    .fa-plus-square {
+        font-size:1.3em;
+        color: #2f3b58;
+        cursor: pointer;
+    }
+</style>
 <div style="float: right; margin-top: 7px">
     <button class="traffic-btn traffic-btn-right" id="import-traffic">
         Importar de trafico
+    </button>
+    <button class="traffic-btn traffic-btn-right">
+        <i class="fa fa-code"></i>XML
     </button>
 </div>
 
@@ -8,46 +22,96 @@
     <h5 style="float: left; margin-left: 5px" style="margin: 0;">EDITAR MANIFESTACION DE VALOR</h5>
 </div>
 
+<input type="hidden" id="id" name="id" value="<?= $this->row['id'] ?>" />
+
 <table class="traffic-table traffic-table-left">
     <tr>
+        <th style="width: 60px;">Patente</th>
+        <th style="width: 60px;">Aduana</th>
+        <th style="width: 60px;">Pedimento</th>
+        <th style="width: 60px;">Referencia</th>
+        <th style="width: 60px;">T. ope.</th>
+        <th style="width: 60px;">Cve. ped.</th>
+        <th style="width: 60px;">Regimen</th>
+        <th style="text-align: left;">Nom. Cliente</th>
+    </tr>
+    <tr>
         <td>
-            <label>Patente</label>
-            <input type="text" class="traffic-input-small" id="patente" name="patente" value="<?= $this->row['patente'] ?>" />
+            <input type="text" class="traffic-input-xs" id="patente" name="patente" value="<?= $this->row['patente'] ?>" style="text-align: center" />
         </td>
         <td>
-            <label>Aduana</label>
-            <input type="text" class="traffic-input-xs" id="aduana" name="aduana" value="<?= $this->row['aduana'] ?>" />
+            <input type="text" class="traffic-input-xs" id="aduana" name="aduana" value="<?= $this->row['aduana'] ?>" style="text-align: center" />
         </td>
         <td>
-            <label>Pedimento</label>
-            <input type="text" class="traffic-input-small" id="pedimento" name="pedimento" value="<?= $this->row['pedimento'] ?>" />
+            <input type="text" class="traffic-input-small" id="pedimento" name="pedimento" value="<?= $this->row['pedimento'] ?>" style="text-align: center" />
         </td>
         <td>
-            <label>Referencia</label>
-            <input type="text" class="traffic-input-small" id="referencia" name="referencia" value="<?= $this->row['referencia'] ?>" />
+            <input type="text" class="traffic-input-small" id="referencia" name="referencia" value="<?= $this->row['referencia'] ?>" style="text-align: center" />
         </td>
         <td>
-            <label>T. ope.</label>
-            <input type="text" class="traffic-input-small" id="tipoOperacion" name="tipoOperacion" value="<?= $this->row['tipoOperacion'] ?>" />
+            <input type="text" class="traffic-input-small" id="tipoOperacion" name="tipoOperacion" value="<?= $this->row['tipoOperacion'] ?>" style="text-align: center" />
         </td>
         <td>
-            <label>Cve. ped.</label>
-            <input type="text" class="traffic-input-xs" id="cvePedimento" name="cvePedimento" value="<?= $this->row['cvePedimento'] ?>" />
+            <input type="text" class="traffic-input-xs" id="cvePedimento" name="cvePedimento" value="<?= $this->row['cvePedimento'] ?>" style="text-align: center" />
         </td>
         <td>
-            <label>Regimen</label>
-            <input type="text" class="traffic-input-xs" id="regimenAduanero" name="regimenAduanero" value="<?= $this->row['regimenAduanero'] ?>" />
+            <input type="text" class="traffic-input-xs" id="regimenAduanero" name="regimenAduanero" value="<?= $this->row['regimenAduanero'] ?>" style="text-align: center" />
         </td>
         <td>
-            <label>Cliente</label>
-            <input type="text" class="traffic-input" id="nombreCliente" name="nombreCliente" value="<?= $this->row['nombreCliente'] ?>" />
+            <input type="text" class="traffic-input-large" id="nombreCliente" name="nombreCliente" value="<?= $this->row['nombreCliente'] ?>" />
         </td>
     </tr>
 </table>
+
+<table class="traffic-table" style="width: 30%; float: left">
+    <thead>
+        <tr>
+            <th colspan="3">Edocuments</th>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <th>
+                <i class="fas fa-plus-square add-edocument"></i>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="edocuments">
+    </tbody>
+    <thead>
+        <tr>
+            <th colspan="3">RFC consulta</th>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <th>
+                <i class="fas fa-plus-square add-rfc"></i>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="rfcConsulta">
+    </tbody>
+</table>
+
+<form id="form">
+    <table class="traffic-table" style="width: 70%; float: left">
+        <thead>
+            <tr>
+                <th colspan="6">Edocument</th>
+            </tr>
+        </thead>
+        <tbody id="cove">
+            <tr>
+                <td colspan="6" style="text-align: center;">
+                    <em>Seleccione un COVE para editar</em>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
 
 <div class="traffic-clear-5"></div>
 
 <a href="/manifestacion/index/index" class="traffic-btn">
     <i class="fas fa-angle-double-left"></i> Regresar</a>
 
-<a class="traffic-btn traffic-btn-right" id="save">Guardar</a>
+<!-- <a class="traffic-btn traffic-btn-right" id="save">Guardar</a> -->

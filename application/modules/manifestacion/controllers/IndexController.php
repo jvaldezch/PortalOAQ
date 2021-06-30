@@ -21,7 +21,9 @@ class Manifestacion_IndexController extends Zend_Controller_Action
             ->appendStylesheet("/v2/js/common/confirm/jquery-confirm.min.css")
             ->appendStylesheet("/easyui/themes/default/easyui.css")
             ->appendStylesheet("/easyui/themes/icon.css")
-            ->appendStylesheet("/js/common/bootstrap/bootstrap-datepicker/css/datepicker.css");
+            ->appendStylesheet("/js/common/bootstrap/datepicker/css/datepicker.css")
+            ->appendStylesheet("/js/common/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css")
+            ->appendStylesheet("/js/common/toast/jquery.toast.min.css");
         $this->view->headScript()
             ->appendFile("/js/common/jquery-1.9.1.min.js")
             ->appendFile("/js/common/bootstrap/js/bootstrap.min.js")
@@ -35,10 +37,11 @@ class Manifestacion_IndexController extends Zend_Controller_Action
             ->appendFile("/easyui/jquery.edatagrid.js")
             ->appendFile("/easyui/datagrid-filter.js")
             ->appendFile("/easyui/locale/easyui-lang-es.js")
-            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js")
-            ->appendFile("/js/common/bootstrap/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")
+            ->appendFile("/js/common/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js")
+            ->appendFile("/js/common/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.es.js")
             ->appendFile("/js/common/jquery.timepicker.min.js")
             ->appendFile("/js/common/loadingoverlay.min.js")
+            ->appendFile("/js/common/toast/jquery.toast.min.js?")
             ->appendFile("/js/common/principal.js?" . time());
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . "/configs/application.ini", APPLICATION_ENV);
         $this->_soapClient = new Zend_Soap_Client($this->_config->app->endpoint);

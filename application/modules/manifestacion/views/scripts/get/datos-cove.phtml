@@ -1,0 +1,201 @@
+<tr>
+    <th>
+        COVE
+    </th>
+    <td colspan="5" style="text-align: left;">
+        <?= $this->edocument ?>
+        <i class="fas fa-save save-edocument" data-id="<?= $this->id ?>" data-edocument="<?= $this->edocument ?>" style="float: right; margin-right: 5px"></i>
+    </td>
+</tr>
+<tr>
+    <th>
+        MET.VAL.
+    </th>
+    <td colspan="5" style="text-align: left;">        
+        <select class="traffic-select-large" name="metodoValoracion" id="metodoValoracion">
+            <option value="">---</option>
+            <?php if (isset($this->metodos_valoracion) && !empty($this->metodos_valoracion)) { ?>
+                <?php foreach ($this->metodos_valoracion as $row) { ?>
+                    <option value="<?= $row['clave'] ?>"><?= $row['descripcion'] ?></option>
+                <?php } ?>
+            <?php } ?>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th>Hab.</th>
+    <th style="width: 110px;">Descrip.</th>
+    <th>Importe</th>
+    <th>Tipo</th>
+    <th>Fecha erogación</th>
+    <th>Cargo a importador</th>
+</tr>
+<tr>
+    <td>
+        <input type="checkbox" id="precioPagadoCheck" />
+    </td>
+    <td>
+        Precio pagado
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="precioPagadoImporte" id="precioPagadoImporte" disabled/>
+    </td>
+    <td>
+        <select class="traffic-select-medium" name="precioPagadoTipo" id="precioPagadoTipo" disabled>
+            <option value="">---</option>
+            <?php if (isset($this->formas_pago) && !empty($this->formas_pago)) { ?>
+                <?php foreach ($this->formas_pago as $row) { ?>
+                    <option value="<?= $row['clave'] ?>"><?= $row['descripcion'] ?></option>
+                <?php } ?>
+            <?php } ?>
+        </select>
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="precioPagadoFecha" id="precioPagadoFecha" disabled/>
+    </td>
+    <td></td>
+</tr>
+<tr>
+    <td>
+        <input type="checkbox" id="precioPorPagarCheck" />
+    </td>
+    <td>
+        Precio por pagar
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="precioPorPagarImporte" id="precioPorPagarImporte" disabled/>
+    </td>
+    <td>
+        <select class="traffic-select-medium" name="precioPorPagarTipo" id="precioPorPagarTipo" disabled>
+            <option value="">---</option>
+            <?php if (isset($this->formas_pago) && !empty($this->formas_pago)) { ?>
+                <?php foreach ($this->formas_pago as $row) { ?>
+                    <option value="<?= $row['clave'] ?>"><?= $row['descripcion'] ?></option>
+                <?php } ?>
+            <?php } ?>
+        </select>
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="precioPorPagarFecha" id="precioPorPagarFecha" disabled/>
+    </td>
+    <td></td>
+</tr>
+<tr>
+    <td>
+        <input type="checkbox" id="incrementablesCheck" />
+    </td>
+    <td>
+        Incrementables
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="incrementablesImporte" id="incrementablesImporte" disabled/>
+    </td>
+    <td>
+        <select class="traffic-select-medium" name="incrementablesTipo" id="incrementablesTipo" disabled>
+            <option value="">---</option>
+            <?php if (isset($this->tipo_incrementables) && !empty($this->tipo_incrementables)) { ?>
+                <?php foreach ($this->tipo_incrementables as $row) { ?>
+                    <option value="<?= $row['clave'] ?>"><?= $row['descripcion'] ?></option>
+                <?php } ?>
+            <?php } ?>
+        </select>
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="incrementablesFecha" id="incrementablesFecha" disabled/>
+    </td>
+    <td>
+        <input type="checkbox" name="incrementablesCargoACliente" id="incrementablesCargoACliente" disabled/>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input type="checkbox" id="decrementablesCheck" />
+    </td>
+    <td>
+        Decrementables
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="decrementablesImporte" id="decrementablesImporte" disabled/>
+    </td>
+    <td>
+        <select class="traffic-select-medium" name="decrementablesTipo" id="decrementablesTipo" disabled>
+            <option value="">---</option>
+            <?php if (isset($this->tipo_decrementables) && !empty($this->tipo_decrementables)) { ?>
+                <?php foreach ($this->tipo_decrementables as $row) { ?>
+                    <option value="<?= $row['clave'] ?>"><?= $row['descripcion'] ?></option>
+                <?php } ?>
+            <?php } ?>
+        </select>
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="decrementablesFecha" id="decrementablesFecha" disabled/>
+    </td>
+    <td>
+        <input type="checkbox" name="decrementablesCargoACliente" id="decrementablesCargoACliente" disabled/>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input type="checkbox" id="compensoPagoCheck" />
+    </td>
+    <td>
+        Compenso pago
+    </td>
+    <td>
+        <label><b>MOTIVO</b></label>
+        <input type="text" class="traffic-input-medium" name="motivo" id="motivo" disabled/>
+        <label><b>PRESTACIÓN MERCANCIA</b></label>
+        <input type="text" class="traffic-input-medium" name="prestacionMercancia" id="prestacionMercancia" disabled/>
+    </td>
+    <td>
+        <select class="traffic-select-medium" name="compensoPagoTipo" id="compensoPagoTipo" disabled>
+            <option value="">---</option>
+            <?php if (isset($this->formas_pago) && !empty($this->formas_pago)) { ?>
+                <?php foreach ($this->formas_pago as $row) { ?>
+                    <option value="<?= $row['clave'] ?>"><?= $row['descripcion'] ?></option>
+                <?php } ?>
+            <?php } ?>
+        </select>
+    </td>
+    <td>
+        <input type="text" class="traffic-input-small" name="compensoPagoFecha" id="compensoPagoFecha" disabled/>
+    </td>
+    <td></td>
+</tr>
+<tr>
+    <th colspan="2">Tot. Precio Pagado</th>
+    <td>
+        <input type="text" class="traffic-input-small" name="totalPrecioPagado" id="totalPrecioPagado" />
+    </td>    
+    <td colspan="3"></td>
+</tr>
+<tr>
+    <th colspan="2">Tot. Precio Por Pagar</th>
+    <td>
+        <input type="text" class="traffic-input-small" name="totalPrecioPorPagar" id="totalPrecioPorPagar" />
+    </td>
+    <td colspan="3"></td>
+</tr>
+<tr>
+    <th colspan="2">Tot. Incrementables</th>
+    <td>
+        <input type="text" class="traffic-input-small" name="totalIncrementables" id="totalIncrementables" />
+    </td>
+    <td colspan="3"></td>
+</tr>
+<tr>
+    <th colspan="2">Tot. Decrementables</th>
+    <td>
+        <input type="text" class="traffic-input-small" name="totalDecrementables" id="totalDecrementables" />
+    </td>
+    <td colspan="3"></td>
+</tr>
+<tr>
+    <th colspan="2">Tot. Valor Aduana</th>
+    <td>
+        <input type="text" class="traffic-input-small" name="totalValorAduana" id="totalValorAduana" />
+    </td>
+    <td colspan="3"></td>
+</tr>
+
+<script type="text/javascript" src="/js/manifestacion/get/datos-cove.js?<?= time() ?>"></script>

@@ -175,17 +175,17 @@ $(document).ready(function() {
                 },
                 {
                     field: "fechaPago",
-                    width: 130,
+                    width: 90,
                     title: "F. Pago",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: {type: "datebox"},
+                    options: {required: false, validType: "date"}
                 },
                 {
                     field: "fechaLiberacion",
-                    width: 130,
+                    width: 90,
                     title: "F. Liberación",
-                    editor: {type: "datetimebox"},
-                    options: {required: false, validType: "datetime"}
+                    editor: {type: "datebox"},
+                    options: {required: false, validType: "date"}
                 },
                 {
                     field: "fechaFacturacion",

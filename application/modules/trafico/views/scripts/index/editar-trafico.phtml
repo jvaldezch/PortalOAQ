@@ -468,7 +468,7 @@ $dates = array(
                     <tr>
                         <td><?= $item["label"] ?></td>
                         <td>
-                            <input type="text" style="width: 130px; text-align: center" name="<?= $item["name"] ?>" id="<?= $item["name"] ?>" <?= isset($item["readonly"]) ? 'readonly="true"' : '' ?> />
+                            <input type="text" style="width: 100px; text-align: center" name="<?= $item["name"] ?>" id="<?= $item["name"] ?>" <?= isset($item["readonly"]) ? 'readonly="true"' : '' ?> />
                         </td>
                     </tr>
                 <?php } ?>
@@ -492,7 +492,7 @@ $dates = array(
     }
     
     function getFormattedDate(value) {
-        return value;
+        return moment(value).format("YYYY-MM-DD")
     }
     
     slider = $("#slider").slideReveal({push: false, position: "right", speed: 600, trigger: $(".handle"), overlay: true, width: '380px',

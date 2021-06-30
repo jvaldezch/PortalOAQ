@@ -70,12 +70,34 @@ class Manifestacion_Trafico
         return $id;
     }
 
+    public function edocuments($id)
+    {
+        $mppr = new Manifestacion_Model_ManifestacionEdocuments();
+        return $mppr->todos($id);
+    }
+
+    public function rfcConsulta($id)
+    {
+        $mppr = new Manifestacion_Model_ManifestacionRfcConsulta();
+        return $mppr->todos($id);
+    }
+
     public function edocumentsTrafico($patente, $aduana, $pedimento, $referencia)
     {
         $mppr = new Archivo_Model_RepositorioMapper();
         $rows = $mppr->edocuments($referencia, $patente, $aduana);
         if ($rows) {
             return $rows;
+        }
+        return;        
+    }
+
+    public function agregarEdocument($id, $edocument)
+    {
+        $mppr = new Manifestacion_Model_ManifestacionEdocuments();
+        $v = $mppr->verificar($id, $edocument);
+        if (!$v) {
+            return $mppr->agregar($id, $edocument);
         }
         return;        
     }
